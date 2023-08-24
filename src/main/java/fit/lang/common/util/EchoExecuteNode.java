@@ -1,0 +1,24 @@
+package fit.lang.common.util;
+
+import fit.lang.aop.ExecuteNodeSimpleAop;
+import fit.lang.common.AbstractExecuteNode;
+import fit.lang.define.base.ExecuteNodeInput;
+import fit.lang.define.base.ExecuteNodeOutput;
+
+/**
+ * 执行节点
+ */
+public class EchoExecuteNode extends AbstractExecuteNode {
+
+    @Override
+    public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
+
+        ExecuteNodeSimpleAop.beforeExecute(input, this, output);
+
+        output.setNodeData(input.getNodeData());
+
+        ExecuteNodeSimpleAop.beforeExecute(input, this, output);
+
+    }
+
+}

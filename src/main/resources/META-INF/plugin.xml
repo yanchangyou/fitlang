@@ -1,0 +1,50 @@
+<idea-plugin>
+    <id>FitLang</id>
+    <name>FitLang</name>
+    <vendor email="yanchangyou@qq.com" url="http://www.321zou.com">yanchangyou</vendor>
+    <idea-version since-build="221" until-build="223.*"/>
+    <description><![CDATA[
+        Fit lang is low code language, description is todo!
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType language="fit" name="fit" patterns="*.fit" implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE"
+                  extensions="fit"/>
+        <lang.parserDefinition language="fit" implementationClass="my.lang.parser.MyLanguageParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="fit"
+                                       implementationClass="my.lang.highlight.MyLanguageSyntaxHighlighterFactory"/>
+        <colorSettingsPage id="fit" implementation="my.lang.highlight.MyLanguageColorSettingsPage"/>
+        <lang.psiStructureViewFactory language="fit"
+                                      implementationClass="my.lang.structure.MyLanguageStructureViewFactory"/>
+        <completion.contributor language="fit"
+                                implementationClass="my.lang.completion.MyLanguageCompletionContributor"/>
+        <lang.formatter language="fit" implementationClass="my.lang.format.MyLanguageFormattingModelBuilder"/>
+<!--        <codeStyleSettingsProvider implementation="my.lang.style.MyLanguageCodeStyleSettingsProvider"/>-->
+        <langCodeStyleSettingsProvider implementation="my.lang.style.MyLanguageLanguageCodeStyleSettingsProvider"/>
+
+        <toolWindow id="FitLang Console" anchor="bottom" order="first"
+                    factoryClass="my.lang.action.ScriptConsoleWindowFactory"/>
+        <lang.commenter language="fit" implementationClass="my.lang.comment.MyLanguageCommenter"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Run FitLang"
+                description="Run fit lang"
+                icon="/my/lang/icon/fit.svg">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut first-keystroke="control shift J" keymap="$default"/>
+        </action>
+
+    </actions>
+
+    <change-notes>
+        <![CDATA[
+        FitLang update list:<br/>
+        <br/>
+        ]]>
+    </change-notes>
+</idea-plugin>

@@ -1,0 +1,98 @@
+package fit.lang;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
+import fit.lang.common.AbstractExecuteNode;
+import fit.lang.define.base.ExecuteNode;
+
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+import static fit.lang.plugin.json.JsonDynamicFlowExecuteEngine.createExecuteNode;
+
+/**
+ * 工具类
+ */
+public class ExecuteNodeUtil {
+
+    /**
+     * uuid
+     *
+     * @return
+     */
+    public static String uuid() {
+        return UUID.randomUUID().toString();
+    }
+
+    /**
+     * 获取时间戳，保留毫秒
+     *
+     * @return
+     */
+    public static String getTimestamp() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+    }
+
+    public static void setExecuteNodeCommonAttribute(ExecuteNode executeNode, JSONObject nodeDefine) {
+        String[] fields = new String[]{ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_UNI, ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_NAME};
+        for (String field : fields) {
+            setExecuteNodeCommonAttribute(executeNode, nodeDefine, field);
+        }
+        if (executeNode.getId() == null) {
+            executeNode.setId(uuid());
+            nodeDefine.put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
+        }
+    }
+
+    public static void setExecuteNodeCommonAttribute(Object object, JSONObject jsonObject, String field) {
+
+        if (jsonObject.getString(field) != null) {
+            try {
+                Field javaField = AbstractExecuteNode.class.getDeclaredField(field);
+                javaField.setAccessible(true);
+                javaField.set(object, jsonObject.getString(field));
+            } catch (Exception e) {
+                throw new ExecuteNodeException("setCommonAttribute error:", e);
+            }
+        }
+    }
+
+    public static void buildChildNode(ExecuteNode executeNode, JSONObject nodeDefine) {
+        Object child = nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_CHILD_NODE);
+        if (child != null) {
+            if (child instanceof JSONObject) {
+                ExecuteNode childNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) child);
+                executeNode.addChildNode(childNode);
+            } else if (child instanceof JSONArray) {
+                for (Object nextNode : ((JSONArray) child)) {
+                    if (nextNode instanceof JSONObject) {
+                        executeNode.addChildNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode));
+                    }
+                }
+            }
+        }
+    }
+
+    public static void buildNextNode(ExecuteNode executeNode, JSONObject nodeDefine) {
+        Object next = nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_NEXT_NODE);
+        if (next != null) {
+            if (next instanceof JSONObject) {
+                ExecuteNode nextNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) next);
+                executeNode.addNextNode(nextNode);
+            } else if (next instanceof JSONArray) {
+                for (Object nextNode : ((JSONArray) next)) {
+                    if (nextNode instanceof JSONObject) {
+                        executeNode.addNextNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode));
+                    }
+                }
+            }
+        }
+    }
+
+    public static String getExecuteNodeBasicInfo(ExecuteNode executeNode) {
+        return executeNode.getUni() + "." + executeNode.getId();
+    }
+}
