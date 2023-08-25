@@ -12,6 +12,9 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         String who = input.getString("who");
+        if (who == null) {
+            who = getNodeJsonDefine().getString("who");
+        }
         String message = "hello, " + who + "!";
 
         output.set("message", message);
