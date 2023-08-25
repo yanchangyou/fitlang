@@ -21,8 +21,6 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -71,7 +69,7 @@ public abstract class RunCodeAction extends AnAction {
 
         initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
 
-        //检查文件后缀名是否满足 .script, .j2s
+        //检查文件后缀名是否满足
         if (!isScriptCode(e)) {
             print("This file can't execute!\n", project, getProjectConsoleViewMap());
             return;
@@ -88,15 +86,12 @@ public abstract class RunCodeAction extends AnAction {
         threadPoolExecutor.submit(() -> {
             String result;
 
-//                    PrintStream oldOut = System.out;
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(byteArrayOutputStream));
             try {
 
                 Object resultObject = executeCode(code);
 
                 if (resultObject == null) {
-                    result = byteArrayOutputStream.toString();
+                    result = resultObject.toString();
                 } else {
                     result = resultObject.toString();
                 }
@@ -185,7 +180,7 @@ public abstract class RunCodeAction extends AnAction {
             return false;
         }
         String filePath = virtualFile.getPath();
-        return filePath.endsWith(LANG_FILE_SUFFIX);
+        return filePath.endsWith(LANG_FILE_SUFFIX) || filePath.endsWith(LANG_FILE_SUFFIX + ".json");
     }
 
 }
