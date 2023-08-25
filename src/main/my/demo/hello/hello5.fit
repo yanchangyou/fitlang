@@ -1,0 +1,18 @@
+{
+    "input": {
+        "who": "world"
+    },
+    "flow": {
+        "uni": "loop",
+        "loopTimes": 10,
+        "child": [
+            {
+                "uni": "hello",
+                "who": "world"
+            },
+            {
+                "uni": "print"
+            }
+        ]
+    }
+}

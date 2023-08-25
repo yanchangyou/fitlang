@@ -3,6 +3,10 @@
         "who": "world"
     },
     "flow": {
-        "uni": "hello"
+        "uni": "loop",
+        "loopTimes": 10,
+        "child": {
+            "uni": "hello"
+        }
     }
 }
