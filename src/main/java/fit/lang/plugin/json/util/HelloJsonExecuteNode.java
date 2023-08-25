@@ -15,8 +15,12 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
         if (who == null) {
             who = getNodeJsonDefine().getString("who");
         }
+        if (who == null) {
+            who = "world";
+        }
         String message = "hello, " + who + "!";
 
         output.set("message", message);
+
     }
 }
