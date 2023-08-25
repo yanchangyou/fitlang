@@ -19,6 +19,7 @@ import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -93,18 +94,8 @@ public abstract class RunCodeAction extends AnAction {
                     System.setOut(new PrintStream(byteArrayOutputStream));
                     try {
 
-                        JsonExecuteContext nodeContext = new JsonExecuteContext();
+                        Object resultObject = executeCode(code);
 
-                        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
-                        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
-
-                        JSONObject fitInput = com.alibaba.fastjson.JSONObject.parseObject(code);
-                        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(fitInput.getJSONObject("flow"));
-                        input.setData(fitInput.getJSONObject("input"));
-                        executeNode.execute(input, output);
-
-                        Object resultObject = output.getData().toJSONString();
-                        ;
                         if (resultObject == null) {
                             result = byteArrayOutputStream.toString();
                         } else {
@@ -126,6 +117,20 @@ public abstract class RunCodeAction extends AnAction {
                     print(result + "\n", project, getProjectConsoleViewMap());
 
                 });
+    }
+
+    @NotNull
+    private String executeCode(String code) {
+        JsonExecuteContext nodeContext = new JsonExecuteContext();
+
+        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
+        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
+
+        JSONObject fitInput = JSONObject.parseObject(code);
+        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(fitInput.getJSONObject("flow"));
+        input.setData(fitInput.getJSONObject("input"));
+        executeNode.execute(input, output);
+        return output.getData().toJSONString();
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString,
