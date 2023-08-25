@@ -85,38 +85,35 @@ public abstract class RunCodeAction extends AnAction {
 
         final String code = document.getText();
 
-        threadPoolExecutor.submit(
-                () -> {
-                    String result;
+        threadPoolExecutor.submit(() -> {
+            String result;
 
 //                    PrintStream oldOut = System.out;
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    System.setOut(new PrintStream(byteArrayOutputStream));
-                    try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(byteArrayOutputStream));
+            try {
 
-                        Object resultObject = executeCode(code);
+                Object resultObject = executeCode(code);
 
-                        if (resultObject == null) {
-                            result = byteArrayOutputStream.toString();
-                        } else {
-                            result = resultObject.toString();
-                        }
+                if (resultObject == null) {
+                    result = byteArrayOutputStream.toString();
+                } else {
+                    result = resultObject.toString();
+                }
 
-                    } catch (Throwable exception) {
-                        exception.printStackTrace();
-                        result = "exception:" + exception.getMessage();
-                        print(result + "\n", project, getProjectConsoleViewMap());
-                        throw exception;
-                    } finally {
-//                        System.setOut(oldOut);
-                    }
+            } catch (Throwable exception) {
+                exception.printStackTrace();
+                result = "exception:" + exception.getMessage();
+                print(result + "\n", project, getProjectConsoleViewMap());
+                throw exception;
+            }
 
-                    System.out.println("execute " + getLanguageName() + " code result:");
-                    System.out.println(result);
+            System.out.println("execute " + getLanguageName() + " code result:");
+            System.out.println(result);
 
-                    print(result + "\n", project, getProjectConsoleViewMap());
+            print(result + "\n", project, getProjectConsoleViewMap());
 
-                });
+        });
     }
 
     @NotNull
@@ -127,30 +124,36 @@ public abstract class RunCodeAction extends AnAction {
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
 
         JSONObject fitInput = JSONObject.parseObject(code);
-        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(fitInput.getJSONObject("flow"));
-        input.setData(fitInput.getJSONObject("input"));
+
+        //支持没有input字段时，整个都是flow
+        JSONObject flow;
+        if (fitInput.getJSONObject("input") != null) {
+            input.setData(fitInput.getJSONObject("input"));
+            flow = fitInput.getJSONObject("flow");
+        } else {
+            input.setData(new JSONObject());
+            flow = fitInput;
+        }
+
+        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
         executeNode.execute(input, output);
         return output.getData().toJSONString();
     }
 
-    public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString,
-                                                          Map<Project, ConsoleView> projectConsoleViewMap) {
+    public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {
         if (isInitiated(project, languageName, projectConsoleViewMap)) {
             return;
         }
 
         System.out.println(logoString);
 
-        ToolWindow toolWindow = ToolWindowManager.getInstance(project)
-                .getToolWindow(languageName + " Console");
-        ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project)
-                .getConsole();
+        ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow(languageName + " Console");
+        ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
 
         projectConsoleViewMap.put(project, consoleView);
 
         consoleView.allowHeavyFilters();
-        Content content = toolWindow.getContentManager().getFactory()
-                .createContent(consoleView.getComponent(), languageName, false);
+        Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), languageName, false);
         toolWindow.getContentManager().addContent(content);
         consoleView.print(logoString + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
