@@ -4,15 +4,10 @@
     },
     "flow": {
         "uni": "loop",
-        "loopTimes": 10,
-        "child": [
-            {
-                "uni": "hello",
-                "who": "world"
-            },
-            {
-                "uni": "print"
-            }
-        ]
+        "loopTimes": 1,
+        "child": {
+            "uni": "hello",
+            "who": "world"
+        }
     }
 }
