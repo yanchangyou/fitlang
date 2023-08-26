@@ -1,10 +1,125 @@
 <idea-plugin>
     <id>FitLang</id>
     <name>FitLang</name>
-    <vendor email="yanchangyou@qq.com" url="http://www.321zou.com">yanchangyou</vendor>
+    <vendor email="yanchangyou@qq.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
     <idea-version since-build="221" until-build="223.*"/>
     <description><![CDATA[
-        Fit lang is low code language, description is todo!
+    English: (后面有中文版)
+    <br/>
+    <br/>
+<p>
+Fit language is a low code programming language that is developer friendly and tool friendly.
+Use AST+JSON to write code, and JSON is the only data type, making plug-in design convenient for extending node functionality.
+</p>
+<br/>
+<p>
+First demo, file name is hello.fit<br/>
+<br/>
+code:<br/>
+<pre>
+{
+    "input": {
+        "who": "world"
+    },
+    "flow": {
+        "uni": "hello"
+    }
+}
+</pre>
+<br/>
+<p>
+The suffix 'hello. fit' ends with 'fit' and inherits the JSON language that comes with IDEA, using JSON<br/>
+<br/>
+input: input parameter definition<br/>
+<br/>
+flow: Definition of processing flow<br/>
+<br/>
+uni Uniform Node Identifier(like URI), distinguishing different processing, internally corresponding to an implementation class<br/>
+<br/>
+In the editor, right-click and select 'Run FitLang' to execute. After the code is executed, it will be output<br/>
+<br/>
+{"message": "hello, world!"}<br/>
+</p>
+<br/>
+<p>
+There are currently three types of plugin implementations: object, map, and JSON. It is recommended to use JSON
+</p>
+<br/>
+<p>
+The nodes that have been implemented so far are as follows:<br/>
+<br/>
+util nodes<br/>
+hello: hello world demo<br/>
+echo: Return input parameters as is<br/>
+add: supports JSON addition<br/>
+convert: Transform node, supports JSON to JSON conversion, using conversion expressions<br/>
+removeField: Remove the JSON field<br/>
+removeEmptyField: Remove an empty field<br/>
+print: Console printing<br/>
+sleep: Process sleep node<br/>
+<br/>
+flow node (with child nodes)<br/>
+sequence: Sequential execution node<br/>
+pipe: pipeline execution node<br/>
+foreach: traverse JSON array field nodes<br/>
+loop: Loop execution node, looptTimes specifies the number of execution times<br/>
+switch: Branch execution node, switchField specifies the branch field<br/>
+<br/>
+<br/>
+中文：<br/>
+<br/>
+<p>
+fit语言是一门低代码编程语言，开发人员友好和工具处理友好。<br/>
+使用AST+JSON来编写代码，并且JSON是唯一的数据类型，插件式设计方便扩展节点功能。<br/>
+</p>
+<br/>
+<p>
+第一个demo：hello.fit<br/>
+内容<br/>
+<pre>
+{
+    "input": {
+        "who": "world"
+    },
+    "flow": {
+        "uni": "hello"
+    }
+}
+</pre>
+<br/>
+<p>
+hello.fit 后缀fit结尾，继承IDEA自带的JSON语言，使用JSON的语法校验、高亮、格式等<br/>
+input：入参定义<br/>
+flow：处理流程定义<br/>
+uni 统一节点描述符，区分不同的处理，内部对应一个实现类<br/>
+编辑器里面，点击右键，选择【Run FitLang】执行，代码执行完将输出<br/>
+{"message":"hello, world!"}<br/>
+</p>
+<br/>
+<p>
+目前有三类插件实现：object、map、json，推荐使用json<br/>
+</p>
+<br/>
+<p>
+目前已经实现的节点如下：<br/>
+<br/>
+实用节点<br/>
+hello: hello world demo<br/>
+echo: 原样返回入参<br/>
+add：支持json相加<br/>
+convert：转换节点，支持json到json的转换，使用转换表达式<br/>
+removeField：移除json字段<br/>
+removeEmptyField：移除空字段<br/>
+print：控制台打印<br/>
+sleep：流程休眠节点<br/>
+<br/>
+流程节点（有child子节点）<br/>
+sequence：顺序执行节点<br/>
+pipe：管道执行节点<br/>
+foreach：遍历json数组字段节点<br/>
+loop：循环执行节点，looptTimes制定执行次数<br/>
+switch：分支执行节点，switchField指定分支字段<br/>
+</p>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -44,6 +159,9 @@
     <change-notes>
         <![CDATA[
         FitLang update list:<br/>
+        <ul>
+            <li>0.1.1 implement base node sequence, pipe, switch, foreach, loop, hello, echo, add, convert, sleep</li>
+        </ul>
         <br/>
         ]]>
     </change-notes>
