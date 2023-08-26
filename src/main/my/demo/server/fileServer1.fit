@@ -1,0 +1,5 @@
+{
+    "uni": "fileServer",
+    "port": 11101,
+    "root": "/opt/test"
+}

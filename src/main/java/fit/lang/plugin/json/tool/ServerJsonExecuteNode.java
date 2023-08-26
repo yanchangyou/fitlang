@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.tool;
 
 import cn.hutool.core.map.multi.ListValueMap;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpUtil;
@@ -28,7 +29,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
 
-    Map<Integer, SimpleServer> serverMap = new HashMap<>();
+    static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -44,15 +45,32 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.addAction("/", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                response.write("{\"message\":\"hello, fit server!(stop this server at path /stop)\"}", ContentType.JSON.getValue());
+                response.write("{\"message\":\"hello, fit server!(/_stop is stop )\"}", ContentType.JSON.getValue());
             }
         });
         Integer serverPort = port;
-        simpleServer.addAction("/stop", new Action() {
+        simpleServer.addAction("/_stop", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                response.write("{\"message\":\"stop OK!\"}");
-                serverMap.get(serverPort).getRawServer().stop(1);
+                int stopPort = serverPort;
+                String port = request.getParam("port");
+                if (port != null) {
+                    if (NumberUtil.isInteger(port)) {
+                        stopPort = Integer.parseInt(port);
+                    } else {
+                        response.write("{\"message\":\"port must be a int number, but found: " + port + "!\"}");
+                        return;
+                    }
+                }
+
+                SimpleServer server = serverMap.get(stopPort);
+                if (server == null) {
+                    response.write("{\"message\":\"count found server at port: " + port + "!\"}");
+                    return;
+                }
+                response.write("{\"message\":\"stop " + stopPort + " OK!\"}");
+                server.getRawServer().stop(1);
+                serverMap.remove(stopPort);
             }
         });
 

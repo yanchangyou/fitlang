@@ -8,7 +8,8 @@ public class ServerJsonExecuteNodeTest extends TestCase {
     public void testExecute() throws InterruptedException {
         String flow = "{" +//
                 "   'uni': 'server'," +
-                "   'port': 11111," +
+                "   'port': 11110," +
+                "   'root': '/opt/log'," +
                 "   'action':{" +
                 "       '/hello':{" +
                 "           'uni':'hello'" +
