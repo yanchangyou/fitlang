@@ -16,7 +16,7 @@ apply plugin: 'java'
 
 //def sinceBuildVersion = "${sinceBuildVersion}"
 //def untilBuildVersion = "${untilBuildVersion}"
-
+// 可以在线访问： https://repo.maven.apache.org/maven2
 repositories {
     mavenLocal()
     maven {
@@ -27,7 +27,9 @@ repositories {
 
 dependencies {
 //    implementation "com.googlecode.aviator:aviator:${aviatorVersion}"
-    implementation "com.alibaba:fastjson:${fastjsonVersion}"
+//    implementation "com.alibaba:fastjson:${fastjsonVersion}"
+    implementation "com.alibaba.fastjson2:fastjson2:${fastjsonVersion2}"
+    implementation "cn.hutool:hutool-all:${hutoolVersion}"
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
