@@ -23,6 +23,12 @@
                     "uni": "hello"
                 }
             }
+        },
+        "/mock": {
+            "uni": "return",
+            "value": {
+                "message": "mock data!"
+            }
         }
     }
 }
