@@ -41,7 +41,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             port = DEFAULT_SERVER_PORT;
         }
 
-        String welcomeMessage = "hello, fit server!  (/_stop is stop)";
+        String welcomeMessage = "hello, fit server!";
 
         if (nodeJsonDefine.getString("welcome") != null) {
             welcomeMessage = nodeJsonDefine.getString("welcome");
