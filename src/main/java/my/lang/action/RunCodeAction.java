@@ -70,11 +70,11 @@ public abstract class RunCodeAction extends AnAction {
 
         final Project project = e.getProject();
 
+        initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
+
         if (windowMap.get(project) != null) {
             windowMap.get(project).show();
         }
-
-        initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
 
         //检查文件后缀名是否满足
         if (!isScriptCode(e)) {
