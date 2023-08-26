@@ -41,14 +41,18 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             port = DEFAULT_SERVER_PORT;
         }
 
+        String welcomeMessage = "hello, fit server!  (/_stop is stop)";
+
+        if (nodeJsonDefine.getString("welcome") != null) {
+            welcomeMessage = nodeJsonDefine.getString("welcome");
+        }
+
         SimpleServer simpleServer = HttpUtil.createServer(port);
-        simpleServer.addAction("/", new Action() {
-            @Override
-            public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                response.write("{\"message\":\"hello, fit server!(/_stop is stop )\"}", ContentType.JSON.getValue());
-            }
-        });
+
         Integer serverPort = port;
+
+        JSONObject actionMap = new JSONObject();
+
         simpleServer.addAction("/_stop", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
@@ -106,9 +110,22 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         }
                     }
                 });
+                actionMap.put(actionPath, "http://127.0.0.1:" + serverPort + actionPath);
             }
         }
 
+        actionMap.put("/_stop", "http://127.0.0.1:" + serverPort + "/_stop");
+
+        String finalWelcomeMessage = welcomeMessage;
+        simpleServer.addAction("/", new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                JSONObject welcome = new JSONObject();
+                welcome.put("message", finalWelcomeMessage);
+                welcome.put("action", actionMap);
+                response.write(welcome.toJSONString(), ContentType.JSON.getValue());
+            }
+        });
         simpleServer.start();
         serverMap.put(serverPort, simpleServer);
         result.put("message", "start server at port: " + port);
