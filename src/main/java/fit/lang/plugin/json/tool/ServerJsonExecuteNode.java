@@ -78,8 +78,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
                             inputJson.put(entry.getKey(), entry.getValue().get(0));
                         }
-                        String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow);
-                        response.write(output, ContentType.JSON.getValue());
+                        try {
+                            String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow);
+                            response.write(output, ContentType.JSON.getValue());
+                        } catch (Exception e) {
+                            JSONObject result = new JSONObject();
+                            result.put("message", "inner error: ".concat(e.getMessage()));
+                            response.write(result.toJSONString(), ContentType.JSON.getValue());
+                        }
                     }
                 });
             }
