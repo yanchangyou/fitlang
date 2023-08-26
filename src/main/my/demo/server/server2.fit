@@ -1,0 +1,10 @@
+{
+    "uni": "server",
+    "port": 11111,
+    "welcome": "welcome to fit lang world!",
+    "action": {
+        "/hello": {
+            "uni": "hello"
+        }
+    }
+}
