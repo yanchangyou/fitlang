@@ -22,6 +22,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -59,6 +60,8 @@ public abstract class RunCodeAction extends AnAction {
      */
     public abstract Map<Project, ConsoleView> getProjectConsoleViewMap();
 
+    public static Map<Project, ToolWindow> windowMap = new HashMap<Project, ToolWindow>();
+
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4, 10, 10, TimeUnit.MINUTES, workQueue);
 
@@ -66,6 +69,10 @@ public abstract class RunCodeAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
 
         final Project project = e.getProject();
+
+        if (windowMap.get(project) != null) {
+            windowMap.get(project).show();
+        }
 
         initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
 
@@ -144,6 +151,8 @@ public abstract class RunCodeAction extends AnAction {
 
         ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow(languageName + " Console");
         ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+
+        windowMap.put(project, toolWindow);
 
         projectConsoleViewMap.put(project, consoleView);
 
