@@ -11,10 +11,16 @@ public class HttpJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
 
         HttpJsonExecuteNode httpJsonExecuteNode = new HttpJsonExecuteNode();
+        String flow = "{" +//
+                "   'url':'https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic'," +
+                "   'header':{" +
+                "       'test':'123'" +
+                "   }" +
+                "}";
+        String input = "{}";
+        httpJsonExecuteNode.setNodeDefine(JSON.parseObject(flow));
 
-        httpJsonExecuteNode.setNodeDefine(JSON.parseObject("{'url':'https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic'}"));
-
-        JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject("{'who':'world'}"), httpJsonExecuteNode);
+        JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject(input), httpJsonExecuteNode);
 
         System.out.println(output);
 
