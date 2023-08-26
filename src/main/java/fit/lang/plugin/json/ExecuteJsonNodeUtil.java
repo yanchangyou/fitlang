@@ -1,6 +1,8 @@
 package fit.lang.plugin.json;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.define.base.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -34,6 +36,30 @@ public class ExecuteJsonNodeUtil {
         node.execute(input, output);
 
         return output.getData();
+    }
+
+    /**
+     * 执行代码
+     *
+     * @param input
+     * @param flow
+     * @return
+     */
+    public static String executeCode(String input, String flow) {
+        JsonExecuteContext nodeContext = new JsonExecuteContext();
+        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
+        if (StrUtil.isBlank(input)) {
+            input = "{}";
+        }
+        JSONObject inputJson = JSONObject.parseObject(input);
+        JSONObject flowDefine = JSONObject.parseObject(flow);
+
+        JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
+        nodeInput.setData(inputJson);
+
+        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flowDefine);
+        executeNode.execute(nodeInput, output);
+        return output.getData().toJSONString();
     }
 
     /**
