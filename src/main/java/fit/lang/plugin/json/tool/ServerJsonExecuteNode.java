@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.tool;
 
+import cn.hutool.core.map.multi.ListValueMap;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.server.HttpServerRequest;
@@ -13,6 +15,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +44,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.addAction("/", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                response.write("{\"message\":\"hello, fit server!\"}", ContentType.JSON.getValue());
+                response.write("{\"message\":\"hello, fit server!(stop this server at path /stop)\"}", ContentType.JSON.getValue());
             }
         });
         Integer serverPort = port;
@@ -67,7 +70,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     @Override
                     public void doAction(HttpServerRequest request, HttpServerResponse response) {
                         String input = request.getBody();
-                        String output = ExecuteJsonNodeUtil.executeCode(input, actionFlow.toJSONString());
+                        if (StrUtil.isBlank(input)) {
+                            input = "{}";
+                        }
+                        JSONObject inputJson = JSONObject.parseObject(input);
+                        ListValueMap<String, String> listValueMap = request.getParams();
+                        for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
+                            inputJson.put(entry.getKey(), entry.getValue().get(0));
+                        }
+                        String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow);
                         response.write(output, ContentType.JSON.getValue());
                     }
                 });
