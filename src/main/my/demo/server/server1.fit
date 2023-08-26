@@ -1,6 +1,7 @@
 {
     "uni": "server",
     "port": 11111,
+    "welcome": "welcome to fit lang world!",
     "action": {
         "/hello": {
             "uni": "hello"
@@ -17,6 +18,9 @@
                 },
                 "2": {
                     "uni": "echo"
+                },
+                "default": {
+                    "uni": "hello"
                 }
             }
         }
