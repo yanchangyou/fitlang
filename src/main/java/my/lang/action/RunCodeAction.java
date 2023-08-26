@@ -14,12 +14,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
-import fit.lang.plugin.json.define.JsonExecuteContext;
-import fit.lang.plugin.json.define.JsonExecuteNodeInput;
-import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import org.jetbrains.annotations.NotNull;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -118,28 +113,21 @@ public abstract class RunCodeAction extends AnAction {
         });
     }
 
-    @NotNull
     private String executeCode(String code) {
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
-
-        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
-        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
 
         JSONObject fitInput = JSONObject.parseObject(code);
 
+        String input = "{}";
+
         //支持没有input字段时，整个都是flow
-        JSONObject flow;
+        JSONObject flow = fitInput;
+
         if (fitInput.getJSONObject("input") != null) {
-            input.setData(fitInput.getJSONObject("input"));
+            input = fitInput.getString("input");
             flow = fitInput.getJSONObject("flow");
-        } else {
-            input.setData(new JSONObject());
-            flow = fitInput;
         }
 
-        ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
-        executeNode.execute(input, output);
-        return output.getData().toJSONString();
+        return ExecuteJsonNodeUtil.executeCode(input, flow.toJSONString());
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {
