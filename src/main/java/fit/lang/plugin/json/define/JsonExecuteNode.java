@@ -14,6 +14,11 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
 
     protected JSONObject nodeJsonDefine;
 
+    public void setNodeDefine(JSONObject nodeJsonDefine) {
+        super.setNodeDefine(new JsonExecuteNodeData(nodeJsonDefine));
+        this.nodeJsonDefine = nodeJsonDefine;
+    }
+
     public void setNodeDefine(ExecuteNodeData nodeDefine) {
         super.setNodeDefine(nodeDefine);
         nodeJsonDefine = (JSONObject) (nodeDefine.getData());
