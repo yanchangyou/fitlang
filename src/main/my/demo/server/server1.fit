@@ -1,4 +1,24 @@
 {
+    "uni": "server",
     "port": 11111,
-    "uni": "server"
+    "action": {
+        "/hello": {
+            "uni": "hello"
+        },
+        "/echo": {
+            "uni": "echo"
+        },
+        "/switch": {
+            "uni": "switch",
+            "switchField": "type",
+            "case": {
+                "1": {
+                    "uni": "hello"
+                },
+                "2": {
+                    "uni": "echo"
+                }
+            }
+        }
+    }
 }
