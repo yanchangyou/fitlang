@@ -18,6 +18,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.tool.HttpJsonExecuteNode;
+import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
 
 import java.util.ArrayList;
@@ -149,6 +150,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //tool
         register("http", HttpJsonExecuteNode.class);
+        register("server", ServerJsonExecuteNode.class);
 
     }
 }
