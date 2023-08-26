@@ -1,8 +1,8 @@
 package fit.lang.plugin.json.util;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPath;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -79,7 +79,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
         JSONArray array = (JSONArray) JSONPath.eval(input.getData(), fromParts[0]);
 
         if (array == null) {
-            JSONPath.set(output.getData(), to.split("\\[]")[0], null);
+            JSONPath.set(output.getData(), to.split("\\[]")[0], (Object)null);
             return;
         }
 

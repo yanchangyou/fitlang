@@ -1,6 +1,6 @@
 package fit.lang.plugin.json.flow;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;

@@ -1,7 +1,7 @@
 package fit.lang.plugin.json.define;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNodeData;
 
 /**

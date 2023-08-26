@@ -1,8 +1,9 @@
 package fit.lang.plugin.json.define;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
+import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 
@@ -11,8 +12,11 @@ import fit.lang.define.base.ExecuteNodeOutput;
  */
 public abstract class JsonExecuteNode extends AbstractExecuteNode {
 
-    public JSONObject getNodeJsonDefine() {
-        return (JSONObject) getNodeDefine().getData();
+    protected JSONObject nodeJsonDefine;
+
+    public void setNodeDefine(ExecuteNodeData nodeDefine) {
+        super.setNodeDefine(nodeDefine);
+        nodeJsonDefine = (JSONObject) (nodeDefine.getData());
     }
 
     @Override

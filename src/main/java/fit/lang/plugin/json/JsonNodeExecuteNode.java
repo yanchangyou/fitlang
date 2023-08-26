@@ -1,6 +1,6 @@
 package fit.lang.plugin.json;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.base.*;
 

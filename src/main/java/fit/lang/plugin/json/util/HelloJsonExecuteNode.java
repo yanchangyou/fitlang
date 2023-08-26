@@ -13,7 +13,7 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         String who = input.getString("who");
         if (who == null) {
-            who = getNodeJsonDefine().getString("who");
+            who = nodeJsonDefine.getString("who");
         }
         if (who == null) {
             who = "world";

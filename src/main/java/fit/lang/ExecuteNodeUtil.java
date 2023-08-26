@@ -1,7 +1,7 @@
 package fit.lang;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.base.ExecuteNode;

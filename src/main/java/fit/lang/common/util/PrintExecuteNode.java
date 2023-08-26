@@ -1,6 +1,6 @@
 package fit.lang.common.util;
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.base.ExecuteNodeInput;

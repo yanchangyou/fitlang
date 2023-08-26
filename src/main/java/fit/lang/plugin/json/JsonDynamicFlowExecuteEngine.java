@@ -1,8 +1,8 @@
 package fit.lang.plugin.json;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeEngineConst;
 import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
@@ -17,6 +17,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import fit.lang.plugin.json.flow.*;
+import fit.lang.plugin.json.tool.HttpJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
 
 import java.util.ArrayList;
@@ -145,6 +146,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("node", JsonNodeExecuteNode.class);
 
         register("sleep", SleepJsonExecuteNode.class);
+
+        //tool
+        register("http", HttpJsonExecuteNode.class);
 
     }
 }
