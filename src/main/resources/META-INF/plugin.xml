@@ -126,8 +126,8 @@ switch：分支执行节点，switchField指定分支字段<br/>
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
     <extensions defaultExtensionNs="com.intellij">
-        <fileType language="fit" name="fit" patterns="*.fit" implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE"
-                  extensions="fit"/>
+        <fileType language="fit" name="fit" patterns="*.fit"
+                  implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE" extensions="fit"/>
         <lang.parserDefinition language="fit" implementationClass="my.lang.parser.MyLanguageParserDefinition"/>
         <lang.syntaxHighlighterFactory language="fit"
                                        implementationClass="my.lang.highlight.MyLanguageSyntaxHighlighterFactory"/>
@@ -137,7 +137,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <completion.contributor language="fit"
                                 implementationClass="my.lang.completion.MyLanguageCompletionContributor"/>
         <lang.formatter language="fit" implementationClass="my.lang.format.MyLanguageFormattingModelBuilder"/>
-<!--        <codeStyleSettingsProvider implementation="my.lang.style.MyLanguageCodeStyleSettingsProvider"/>-->
+        <!--        <codeStyleSettingsProvider implementation="my.lang.style.MyLanguageCodeStyleSettingsProvider"/>-->
         <langCodeStyleSettingsProvider implementation="my.lang.style.MyLanguageLanguageCodeStyleSettingsProvider"/>
 
         <toolWindow id="FitLang Console" anchor="bottom" order="first"
@@ -160,6 +160,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.3 implement tool node: mix, replace, eval; support AviatorScript</li>
             <li>0.2.2 implement tool node: proxy</li>
             <li>0.2.1 implement tool node: return</li>
             <li>0.2.0 implement tool node: http, server, fileServer</li>
