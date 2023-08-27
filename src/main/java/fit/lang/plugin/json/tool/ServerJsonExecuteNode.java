@@ -28,6 +28,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      * 默认服务器端口
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
+    public static final String REQUEST_PATH = "requestPath";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
@@ -100,8 +101,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
                             inputJson.put(entry.getKey(), entry.getValue().get(0));
                         }
+                        JSONObject contextParam = new JSONObject();
+                        contextParam.put(REQUEST_PATH, request.getPath());
                         try {
-                            String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow);
+                            String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow, contextParam);
                             response.write(output, ContentType.JSON.getValue());
                         } catch (Exception e) {
                             JSONObject result = new JSONObject();

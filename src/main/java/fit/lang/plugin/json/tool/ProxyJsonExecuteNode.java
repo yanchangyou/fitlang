@@ -13,14 +13,21 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toStringMap;
 /**
  * 执行节点
  */
-public class HttpJsonExecuteNode extends JsonExecuteNode {
+public class ProxyJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String url = nodeJsonDefine.getString("url");
 
-        HttpRequest request = HttpUtil.createPost(url);
+        String requestPath = (String) input.getNodeContext().getAttribute(ServerJsonExecuteNode.REQUEST_PATH);
+
+        String realUrl = url;
+        if (requestPath != null) {
+            realUrl = url.concat(requestPath);
+        }
+
+        HttpRequest request = HttpUtil.createPost(realUrl);
         JSONObject header = nodeJsonDefine.getJSONObject("header");
         if (header != null && !header.isEmpty()) {
             request.addHeaders(toStringMap(header));
@@ -40,5 +47,6 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         }
 
         output.setData(result);
+
     }
 }

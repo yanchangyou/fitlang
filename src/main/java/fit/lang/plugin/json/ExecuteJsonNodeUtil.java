@@ -46,12 +46,23 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String executeCode(String input, String flow) {
+        return executeCode(input, flow, new JSONObject());
+    }
+
+    /**
+     * 执行代码： 字符串
+     *
+     * @param input
+     * @param flow
+     * @return
+     */
+    public static String executeCode(String input, String flow, JSONObject contextParam) {
         if (StrUtil.isBlank(input)) {
             input = "{}";
         }
         JSONObject inputJson = JSONObject.parseObject(input);
         JSONObject flowDefine = JSONObject.parseObject(flow);
-        return executeCode(inputJson, flowDefine);
+        return executeCode(inputJson, flowDefine, contextParam);
     }
 
     /**
@@ -62,11 +73,19 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String executeCode(JSONObject input, JSONObject flow) {
+        return executeCode(input, flow, new JSONObject());
+    }
+
+    public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam) {
 
         JsonExecuteContext nodeContext = new JsonExecuteContext();
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
+
+        if (contextParam != null && !contextParam.isEmpty()) {
+            nodeInput.getNodeContext().getAllAttribute().putAll(contextParam);
+        }
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
         executeNode.execute(nodeInput, output);
