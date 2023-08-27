@@ -9,7 +9,7 @@ public class FileServerJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'fileServer'," +
                 "   'port': 11101," +
-                "   'root': '/opt/log'" +
+                "   'root': '/opt/test'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
