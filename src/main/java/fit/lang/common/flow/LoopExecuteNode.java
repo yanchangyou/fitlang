@@ -16,6 +16,11 @@ public class LoopExecuteNode extends AbstractExecuteNode {
     int currentIndex = 0;
 
     /**
+     * loop参数处理逻辑，是否pipe模式（出参转下一次入参），默认是否
+     */
+    boolean isPipe;
+
+    /**
      * 获取循环次数
      *
      * @return
@@ -42,6 +47,14 @@ public class LoopExecuteNode extends AbstractExecuteNode {
         this.currentIndex = currentIndex;
     }
 
+    public boolean isPipe() {
+        return isPipe;
+    }
+
+    public void setPipe(boolean pipe) {
+        isPipe = pipe;
+    }
+
     @Override
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
@@ -51,6 +64,9 @@ public class LoopExecuteNode extends AbstractExecuteNode {
             currentIndex++;
             for (ExecuteNode executeNode : childNodes) {
                 executeNode.executeAndNext(input, output);
+                if (isPipe) {
+                    input.setNodeData(output.getNodeData());
+                }
             }
         }
 

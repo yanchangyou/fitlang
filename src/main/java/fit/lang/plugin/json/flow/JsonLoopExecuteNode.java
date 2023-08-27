@@ -18,6 +18,7 @@ public class JsonLoopExecuteNode extends LoopExecuteNode implements ExecuteNodeB
         JSONObject nodeDefine = ((JsonExecuteNodeData) executeNodeData).getData();
 
         setLoopTimes(nodeDefine.getInteger("loopTimes"));
+        setPipe(nodeDefine.getBoolean("isPipe"));
 
         ExecuteNodeUtil.buildChildNode(this, nodeDefine);
     }
