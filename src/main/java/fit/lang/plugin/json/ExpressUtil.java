@@ -34,6 +34,17 @@ public class ExpressUtil {
     }
 
     /**
+     * json封装
+     *
+     * @param expressJson
+     * @param param
+     * @return
+     */
+    public static JSONObject eval(JSONObject expressJson, JSONObject param) {
+        return (JSONObject) eval((Object) expressJson, param);
+    }
+
+    /**
      * 表达式计算
      *
      * @param value
@@ -62,7 +73,6 @@ public class ExpressUtil {
             JSONArray newArray = new JSONArray(oldArray.size());
             for (Object item : oldArray) {
                 Object newItem = eval(item, param);
-                ;
                 newArray.add(newItem);
             }
             newValue = newArray;
