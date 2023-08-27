@@ -29,6 +29,14 @@
             "value": {
                 "message": "mock data!"
             }
+        },
+        "/baiduAI": {
+            "uni": "http",
+            "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+        },
+        "/static": {
+            "uni": "proxy",
+            "url": "http://127.0.0.1:11101/"
         }
     }
 }

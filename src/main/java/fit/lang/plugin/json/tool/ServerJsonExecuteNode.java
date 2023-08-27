@@ -29,6 +29,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
     public static final String REQUEST_PATH = "requestPath";
+    public static final String ACTION_PATH = "actionPath";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
@@ -103,6 +104,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         }
                         JSONObject contextParam = new JSONObject();
                         contextParam.put(REQUEST_PATH, request.getPath());
+                        contextParam.put(ACTION_PATH, actionPath);
                         try {
                             String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow, contextParam);
                             response.write(output, ContentType.JSON.getValue());
