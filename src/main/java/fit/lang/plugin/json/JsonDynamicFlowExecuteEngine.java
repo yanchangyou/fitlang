@@ -88,7 +88,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
             throw new ExecuteNodeException("not register uni: " + uni);
         }
         try {
-            ExecuteNode executeNode = JSON.toJavaObject(nodeDefine, executeNodeClass);
+            ExecuteNode executeNode = JSON.to(executeNodeClass, nodeDefine);
 
             ExecuteNodeUtil.setExecuteNodeCommonAttribute(executeNode, nodeDefine);
 
@@ -150,6 +150,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("mix", MixJsonExecuteNode.class);
         register("replace", ReplaceJsonExecuteNode.class);
         register("eval", EvalJsonExecuteNode.class);
+        register("set", SetJsonExecuteNode.class);
 
         register("node", JsonNodeExecuteNode.class);
 
