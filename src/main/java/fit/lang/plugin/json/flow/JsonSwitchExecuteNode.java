@@ -34,6 +34,9 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
     @Override
     public String getCaseValue(ExecuteNodeInput input) {
         String caseValue = ((JsonExecuteNodeInput) input).getString(switchField);
+        if (caseValue == null) {
+            return null;
+        }
         caseValue = eval(caseValue, ((JsonExecuteNodeInput) input).getInputParamAndContextParam()).toString();
         return caseValue;
     }

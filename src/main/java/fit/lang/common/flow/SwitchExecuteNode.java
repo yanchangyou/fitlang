@@ -35,12 +35,12 @@ public abstract class SwitchExecuteNode extends AbstractExecuteNode {
 
         String caseValue = getCaseValue(input);
 
+        if (caseValue == null) {
+            caseValue = "default";
+        }
+
         ExecuteNode caseNode = getCaseNode(caseValue);
 
-        //TODO
-        if (caseNode == null) {
-            caseNode = getCaseNode("default");
-        }
         if (caseNode == null) {
             throw new ExecuteNodeException("switch case node is empty: " + ExecuteNodeUtil.getExecuteNodeBasicInfo(this));
         }
