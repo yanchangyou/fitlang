@@ -7,16 +7,29 @@ import org.junit.Assert;
 public class SetJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
-        String flow = "{" +//
-                "   'uni': 'set'," +
-                "   'value':{" +
-                "       'hello':'world'" +
-                "   }" +
+        String flow = "{" +
+                "    'uni': 'sequence'," +
+                "    'child': [" +
+                "       {" +
+                "           'uni': 'set'," +
+                "           'key': 'data'," +
+                "           'value':{" +
+                "               'hello':'world'" +
+                "           }" +
+                "        }," +
+                "        {" +
+                "            'uni': 'mix'," +
+                "            'json': {" +
+                "               'hello':\"${data.hello}\"" +
+                "             }" +//
+                "        }" +//
+                "     ]" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
         Assert.assertEquals("{\"hello\":\"world\"}", output);
+
     }
 }
