@@ -34,4 +34,7 @@ public class ReturnJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
         Assert.assertEquals("{\"hello\":\"world\"}", output);
     }
+
+    public void testTestExecute() {
+    }
 }

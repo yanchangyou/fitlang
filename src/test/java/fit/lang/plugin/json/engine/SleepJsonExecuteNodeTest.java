@@ -13,7 +13,7 @@ public class SleepJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         JsonExecuteContext nodeContext = new JsonExecuteContext();
-        JSONObject nodeDefine = JSON.parseObject("{'uni':'sleep','second':2}");
+        JSONObject nodeDefine = JSON.parseObject("{'uni':'sleep','second':1}");
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(nodeDefine);
         JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
         input.set("hello", "world");
