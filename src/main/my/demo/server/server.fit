@@ -6,6 +6,16 @@
         "/hello": {
             "uni": "hello"
         },
+        "/helloSpeed": {
+            "uni": "loop",
+            "loopTimes": 10000,
+            "child": {
+                "uni": "mix",
+                "json": {
+                    "loopIndex": "${loopIndex}"
+                }
+            }
+        },
         "/echo": {
             "uni": "echo"
         },
@@ -49,7 +59,7 @@
             "uni": "web",
             "rawField": "_raw",
             "header": {
-                "contextType":"text/html"
+                "contextType": "text/html"
             },
             "child": {
                 "uni": "proxy",
