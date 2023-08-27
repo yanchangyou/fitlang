@@ -160,12 +160,13 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.5 add web node; loop node support pipe mode</li>
             <li>0.2.4 bugfix</li>
-            <li>0.2.3 implement tool node: mix, replace, eval; support AviatorScript</li>
-            <li>0.2.2 implement tool node: proxy</li>
-            <li>0.2.1 implement tool node: return</li>
-            <li>0.2.0 implement tool node: http, server, fileServer</li>
-            <li>0.1.1 implement base node: sequence, pipe, switch, foreach, loop, hello, echo, add, convert, sleep</li>
+            <li>0.2.3 add node: mix, replace, eval; support AviatorScript</li>
+            <li>0.2.2 add node: proxy</li>
+            <li>0.2.1 add node: return</li>
+            <li>0.2.0 add node: http, server, fileServer</li>
+            <li>0.1.1 add node: sequence, pipe, switch, foreach, loop, hello, echo, add, convert, sleep</li>
         </ul>
         <br/>
         ]]>
