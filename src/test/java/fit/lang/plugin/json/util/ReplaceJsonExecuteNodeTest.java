@@ -1,14 +1,14 @@
-package fit.lang.plugin.json.flow;
+package fit.lang.plugin.json.util;
 
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class ReturnJsonExecuteNodeTest extends TestCase {
+public class ReplaceJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
         String flow = "{" +//
-                "   'uni': 'return'," +
+                "   'uni': 'replace'," +
                 "   'json':{" +
                 "       'hello':'world'" +
                 "   }" +
@@ -23,7 +23,7 @@ public class ReturnJsonExecuteNodeTest extends TestCase {
     public void testTestExecute1() {
 
         String flow = "{" +//
-                "   'uni': 'return'," +
+                "   'uni': 'replace'," +
                 "   'json':{" +
                 "       'hello':\"${who}\"" +
                 "   }" +

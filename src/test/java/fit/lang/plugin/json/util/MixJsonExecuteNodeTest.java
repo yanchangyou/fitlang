@@ -1,14 +1,14 @@
-package fit.lang.plugin.json.flow;
+package fit.lang.plugin.json.util;
 
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class ReturnJsonExecuteNodeTest extends TestCase {
+public class MixJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
         String flow = "{" +//
-                "   'uni': 'return'," +
+                "   'uni': 'mix'," +
                 "   'json':{" +
                 "       'hello':'world'" +
                 "   }" +
@@ -17,13 +17,13 @@ public class ReturnJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
-        Assert.assertEquals("{\"hello\":\"world\"}", output);
+        Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
     }
 
     public void testTestExecute1() {
 
         String flow = "{" +//
-                "   'uni': 'return'," +
+                "   'uni': 'mix'," +
                 "   'json':{" +
                 "       'hello':\"${who}\"" +
                 "   }" +
@@ -32,6 +32,6 @@ public class ReturnJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
         System.out.println(output);
-        Assert.assertEquals("{\"hello\":\"world\"}", output);
+        Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
     }
 }
