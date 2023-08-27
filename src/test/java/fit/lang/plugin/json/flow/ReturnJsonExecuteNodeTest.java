@@ -35,6 +35,19 @@ public class ReturnJsonExecuteNodeTest extends TestCase {
         Assert.assertEquals("{\"hello\":\"world\"}", output);
     }
 
-    public void testTestExecute() {
+    public void testTestExecute2() {
+
+        String flow = "{" +//
+                "   'uni': 'return'," +
+                "   'returnField': 'hello'," +
+                "   'json':{" +
+                "       'hello':\"${who}\"" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("world", output);
     }
 }

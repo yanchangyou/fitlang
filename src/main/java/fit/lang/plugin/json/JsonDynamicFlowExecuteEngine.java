@@ -22,6 +22,7 @@ import fit.lang.plugin.json.tool.HttpJsonExecuteNode;
 import fit.lang.plugin.json.tool.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
+import fit.lang.plugin.json.web.WebJsonExecuteNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,6 +130,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     static {
 
+        // util
         register("hello", HelloJsonExecuteNode.class);
         register("echo", EchoExecuteNode.class);
 
@@ -140,6 +142,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("convert", ConvertJsonExecuteNode.class);
 
+        // flow
         register("pipe", JsonPipeExecuteNode.class);
         register("sequence", JsonSequenceExecuteNode.class);
         register("foreach", JsonForeachExecuteNode.class);
@@ -156,11 +159,15 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("sleep", SleepJsonExecuteNode.class);
 
-        //tool
+        // tool
         register("http", HttpJsonExecuteNode.class);
         register("server", ServerJsonExecuteNode.class);
         register("fileServer", FileServerJsonExecuteNode.class);
         register("proxy", ProxyJsonExecuteNode.class);
+
+        // web
+        register("web", WebJsonExecuteNode.class);
+
 
     }
 }

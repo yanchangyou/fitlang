@@ -107,7 +107,20 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         contextParam.put(ACTION_PATH, actionPath);
                         try {
                             String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow, contextParam);
-                            response.write(output, ContentType.JSON.getValue());
+                            if (isWebNode(actionFlow)) {
+                                JSONObject header = actionFlow.getJSONObject("header");
+                                String contextType = null;
+                                if (header != null) {
+                                    contextType = header.getString("contextType");
+                                }
+                                if (StrUtil.isNotBlank(contextType)) {
+                                    response.write(output, contextType);
+                                } else {
+                                    response.write(output);
+                                }
+                            } else {//默认json类型
+                                response.write(output, ContentType.JSON.getValue());
+                            }
                         } catch (Exception e) {
                             JSONObject result = new JSONObject();
                             result.put("message", "inner error: ".concat(e.getMessage()));
@@ -136,5 +149,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         result.put("message", "start server at port: " + port);
 
         output.setData(result);
+    }
+
+    /**
+     * 是否web节点，有特殊逻辑处理
+     *
+     * @param flow
+     * @return
+     */
+    public static boolean isWebNode(JSONObject flow) {
+        return "web".equals(flow.getString("uni"));
     }
 }

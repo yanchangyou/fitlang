@@ -11,6 +11,8 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.isWebNode;
+
 /**
  * 工具类
  */
@@ -89,6 +91,13 @@ public class ExecuteJsonNodeUtil {
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
         executeNode.execute(nodeInput, output);
+
+        String rawField = flow.getString("rawField");
+        if (isWebNode(flow) && rawField != null) {
+            Object returnValue = output.getData().get(rawField);
+            return (returnValue == null) ? "" : returnValue.toString();
+        }
+
         return output.getData().toJSONString();
     }
 

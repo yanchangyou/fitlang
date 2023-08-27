@@ -14,7 +14,8 @@
             "switchField": "type",
             "case": {
                 "1": {
-                    "uni": "hello"
+                    "uni": "hello",
+                    "message": "${'你好，世界！'}"
                 },
                 "2": {
                     "uni": "echo"
@@ -28,6 +29,16 @@
             "uni": "return",
             "json": {
                 "message": "mock data!"
+            }
+        },
+        "/html": {
+            "uni": "web",
+            "rawField": "html",
+            "child": {
+                "uni": "return",
+                "json": {
+                    "html": "<h1>hello, world!</h1>"
+                }
             }
         },
         "/baiduAI": {
