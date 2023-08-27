@@ -44,4 +44,23 @@ public class JsonLoopExecuteNodeTest extends TestCase {
 
         Assert.assertEquals("{\"times\":1}", output);
     }
+
+    public void testExecute3() {
+        String flow = "{" +//
+                "   'uni': 'loop'," +
+                "   'loopTimes': 10," +
+                "   'child': {" +
+                "       'uni':'mix'," +
+                "       'json':{" +
+                "           'loopIndex':'${loopIndex}'" +
+                "       }" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"loopIndex\":9}", output);
+    }
 }

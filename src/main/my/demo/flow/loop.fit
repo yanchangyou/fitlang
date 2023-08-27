@@ -1,0 +1,10 @@
+{
+    "uni": "loop",
+    "loopTimes": 10,
+    "child": {
+        "uni": "mix",
+        "json": {
+            "loopIndex": "${loopIndex}"
+        }
+    }
+}

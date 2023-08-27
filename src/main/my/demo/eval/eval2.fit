@@ -7,6 +7,7 @@
     "flow": {
         "uni": "loop",
         "loopTimes": 10,
+        "isPipe": true,
         "child": {
             "uni": "mix",
             "json": {

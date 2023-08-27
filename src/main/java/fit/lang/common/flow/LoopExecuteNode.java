@@ -63,15 +63,16 @@ public class LoopExecuteNode extends AbstractExecuteNode {
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
-
+        currentIndex = 0;
         for (int i = 0; i < getLoopTimes(); i++) {
-            currentIndex++;
+            input.getNodeContext().setAttribute("loopIndex", currentIndex);
             for (ExecuteNode executeNode : childNodes) {
                 executeNode.executeAndNext(input, output);
                 if (isPipe) {
                     input.setNodeData(output.getNodeData());
                 }
             }
+            currentIndex++;
         }
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
