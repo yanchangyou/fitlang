@@ -160,6 +160,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.4 bugfix</li>
             <li>0.2.3 implement tool node: mix, replace, eval; support AviatorScript</li>
             <li>0.2.2 implement tool node: proxy</li>
             <li>0.2.1 implement tool node: return</li>
