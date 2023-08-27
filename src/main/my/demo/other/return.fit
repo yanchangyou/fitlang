@@ -1,6 +1,6 @@
 {
     "uni": "return",
-    "value": {
+    "json": {
         "who": "world",
         "message": "mock data"
     }
