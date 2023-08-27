@@ -15,6 +15,6 @@ public class FileServerJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
-        Thread.sleep(1000 * 1000);
+//        Thread.sleep(1000 * 1000);
     }
 }
