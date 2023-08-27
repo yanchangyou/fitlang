@@ -6,7 +6,7 @@ import org.junit.Assert;
 
 public class JsonLoopExecuteNodeTest extends TestCase {
 
-    public void testBuild() {
+    public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'loop'," +
                 "   'isPipe': true," +
@@ -24,5 +24,24 @@ public class JsonLoopExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertEquals("{\"times\":10}", output);
+    }
+
+    public void testExecute2() {
+        String flow = "{" +//
+                "   'uni': 'loop'," +
+                "   'loopTimes': 10," +
+                "   'child': {" +
+                "       'uni':'mix'," +
+                "       'json':{" +
+                "           'times':'${times+1}'" +
+                "       }" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"times\":1}", output);
     }
 }

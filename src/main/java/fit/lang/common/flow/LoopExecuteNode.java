@@ -55,6 +55,10 @@ public class LoopExecuteNode extends AbstractExecuteNode {
         isPipe = pipe;
     }
 
+    public void setPipe(Boolean pipe) {
+        isPipe = Boolean.TRUE.equals(pipe);
+    }
+
     @Override
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
