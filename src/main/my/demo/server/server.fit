@@ -46,8 +46,15 @@
             "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
         },
         "/static": {
-            "uni": "proxy",
-            "url": "http://127.0.0.1:11101/"
+            "uni": "web",
+            "rawField": "_raw",
+            "header": {
+                "contextType":"text/html"
+            },
+            "child": {
+                "uni": "proxy",
+                "url": "http://127.0.0.1:11101/"
+            }
         }
     }
 }
