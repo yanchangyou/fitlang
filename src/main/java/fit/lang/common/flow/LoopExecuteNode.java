@@ -24,6 +24,12 @@ public class LoopExecuteNode extends AbstractExecuteNode {
         return loopTimes;
     }
 
+    public void setLoopTimes(Integer loopTimes) {
+        if (loopTimes != null) {
+            this.loopTimes = loopTimes;
+        }
+    }
+
     public void setLoopTimes(int loopTimes) {
         this.loopTimes = loopTimes;
     }
