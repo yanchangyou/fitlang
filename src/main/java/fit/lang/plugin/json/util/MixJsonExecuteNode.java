@@ -17,7 +17,7 @@ public class MixJsonExecuteNode extends JsonExecuteNode {
         if (mixJson == null) {
             mixJson = new JSONObject();
         }
-        JSONObject mixJsonResult = ExpressUtil.eval(mixJson, input.getData());
+        JSONObject mixJsonResult = ExpressUtil.eval(mixJson, input.getInputParamAndContextParam());
         JSONObject outputJson = input.getData().clone();
         outputJson.putAll(mixJsonResult);
         output.setData(outputJson);

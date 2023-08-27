@@ -18,7 +18,7 @@ public class ReturnJsonExecuteNode extends JsonExecuteNode {
         if (returnJson == null) {
             returnJson = new JSONObject();
         }
-        JSONObject returnJsonResult = ExpressUtil.eval(returnJson, input.getData());
+        JSONObject returnJsonResult = ExpressUtil.eval(returnJson, input.getInputParamAndContextParam());
         output.setData(returnJsonResult);
     }
 }

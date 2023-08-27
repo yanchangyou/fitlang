@@ -17,7 +17,7 @@ public class ReplaceJsonExecuteNode extends JsonExecuteNode {
         if (replaceJson == null) {
             replaceJson = new JSONObject();
         }
-        JSONObject replaceJsonResult = ExpressUtil.eval(replaceJson, input.getData());
+        JSONObject replaceJsonResult = ExpressUtil.eval(replaceJson, input.getInputParamAndContextParam());
         output.setData(replaceJsonResult);
     }
 }
