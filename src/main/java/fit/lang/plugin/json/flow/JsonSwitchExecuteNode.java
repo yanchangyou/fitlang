@@ -14,6 +14,7 @@ import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.define.base.ExecuteNodeInput;
 
 import static fit.lang.ExecuteNodeEngineConst.*;
+import static fit.lang.plugin.json.ExpressUtil.eval;
 
 /**
  * 执行节点
@@ -32,7 +33,9 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
 
     @Override
     public String getCaseValue(ExecuteNodeInput input) {
-        return ((JsonExecuteNodeInput) input).getString(switchField);
+        String caseValue = ((JsonExecuteNodeInput) input).getString(switchField);
+        caseValue = eval(caseValue, ((JsonExecuteNodeInput) input).getInputParamAndContextParam()).toString();
+        return caseValue;
     }
 
     @Override
