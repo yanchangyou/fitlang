@@ -6,10 +6,12 @@ import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
 
+import java.util.List;
+
 /**
  * 执行节点
  */
-public class LoopExecuteNode extends AbstractExecuteNode {
+public abstract class LoopExecuteNode extends AbstractExecuteNode {
 
     int loopTimes = 1;
 
@@ -19,6 +21,13 @@ public class LoopExecuteNode extends AbstractExecuteNode {
      * loop参数处理逻辑，是否pipe模式（出参转下一次入参），默认是否
      */
     boolean isPipe;
+
+    /**
+     * 是否袋子，是：执行结果放入袋子中，否：最后的结果
+     */
+    boolean isBags;
+
+    String bagsName = "list";
 
     /**
      * 获取循环次数
@@ -59,11 +68,28 @@ public class LoopExecuteNode extends AbstractExecuteNode {
         isPipe = Boolean.TRUE.equals(pipe);
     }
 
+    public boolean isBags() {
+        return isBags;
+    }
+
+    public void setBags(boolean bags) {
+        isBags = bags;
+    }
+
+    public String getBagsName() {
+        return bagsName;
+    }
+
+    public void setBagsName(String bagsName) {
+        this.bagsName = bagsName;
+    }
+
     @Override
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
         currentIndex = 0;
+        List bags = getBags(getLoopTimes());
         for (int i = 0; i < getLoopTimes(); i++) {
             input.getNodeContext().setAttribute("loopIndex", currentIndex);
             for (ExecuteNode executeNode : childNodes) {
@@ -72,10 +98,20 @@ public class LoopExecuteNode extends AbstractExecuteNode {
                     input.setNodeData(output.getNodeData());
                 }
             }
+            if (isBags) {
+                bags.add(output.getNodeData().getData());
+            }
             currentIndex++;
         }
 
+        if (isBags) {
+            setBags(bagsName, bags, output);
+        }
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
     }
+
+    public abstract List getBags(int size);
+
+    public abstract void setBags(String bagsFieldName, List list, ExecuteNodeOutput output);
 
 }

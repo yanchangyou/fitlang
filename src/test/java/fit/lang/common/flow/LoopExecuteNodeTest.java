@@ -1,11 +1,14 @@
 package fit.lang.common.flow;
 
 import fit.lang.common.util.PrintExecuteNode;
+import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import junit.framework.TestCase;
 import org.junit.Assert;
+
+import java.util.List;
 
 public class LoopExecuteNodeTest extends TestCase {
 
@@ -18,7 +21,17 @@ public class LoopExecuteNodeTest extends TestCase {
 
         input.getNodeData().getData().put("who", "world");
 
-        LoopExecuteNode loopExecuteNode = new LoopExecuteNode();
+        LoopExecuteNode loopExecuteNode = new LoopExecuteNode() {
+            @Override
+            public List getBags(int size) {
+                return null;
+            }
+
+            @Override
+            public void setBags(String bagsFieldName, List list, ExecuteNodeOutput output) {
+
+            }
+        };
 
         loopExecuteNode.setLoopTimes(2);
 
