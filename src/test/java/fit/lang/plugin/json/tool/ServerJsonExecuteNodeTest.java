@@ -29,13 +29,13 @@ public class ServerJsonExecuteNodeTest extends TestCase {
                 "    \"uni\": \"loop\",\n" +
                 "    \"loopTimes\": 2,\n" +
                 "    \"isPipe\": true,\n" +
-                "    \"isBags\": true,\n" +
+                "    \"isBagsMode\": true,\n" +
                 "    \"bagsName\": 'list',\n" +
                 "    \"child\": [\n" +
                 "        {\n" +
                 "            \"uni\": \"mix\",\n" +
                 "            \"json\": {\n" +
-                "                \"port\": \"${11111+loopIndex}\"\n" +
+                "                \"port\": \"${10111+loopIndex}\"\n" +
                 "            }\n" +
                 "        },\n" +
                 "        {\n" +

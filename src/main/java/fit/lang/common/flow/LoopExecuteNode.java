@@ -23,9 +23,9 @@ public abstract class LoopExecuteNode extends AbstractExecuteNode {
     boolean isPipe;
 
     /**
-     * 是否袋子，是：执行结果放入袋子中，否：最后的结果
+     * 是否袋子模式，是：执行结果放入袋子中，否：最后的结果
      */
-    boolean isBags;
+    boolean isBagsMode;
 
     String bagsName = "list";
 
@@ -68,12 +68,12 @@ public abstract class LoopExecuteNode extends AbstractExecuteNode {
         isPipe = Boolean.TRUE.equals(pipe);
     }
 
-    public boolean isBags() {
-        return isBags;
+    public boolean isBagsMode() {
+        return isBagsMode;
     }
 
-    public void setBags(boolean bags) {
-        isBags = bags;
+    public void setBagsMode(boolean bagsMode) {
+        this.isBagsMode = bagsMode;
     }
 
     public String getBagsName() {
@@ -81,7 +81,9 @@ public abstract class LoopExecuteNode extends AbstractExecuteNode {
     }
 
     public void setBagsName(String bagsName) {
-        this.bagsName = bagsName;
+        if (bagsName != null) {
+            this.bagsName = bagsName;
+        }
     }
 
     @Override
@@ -98,13 +100,13 @@ public abstract class LoopExecuteNode extends AbstractExecuteNode {
                     input.setNodeData(output.getNodeData());
                 }
             }
-            if (isBags) {
+            if (isBagsMode) {
                 bags.add(output.getNodeData().getData());
             }
             currentIndex++;
         }
 
-        if (isBags) {
+        if (isBagsMode) {
             setBags(bagsName, bags, output);
         }
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
