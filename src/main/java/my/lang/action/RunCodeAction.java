@@ -24,6 +24,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import static fit.lang.ExecuteNodeUtil.getAllException;
 import static my.lang.MyLanguage.LANG_FILE_SUFFIX;
 
 /**
@@ -68,7 +69,8 @@ public abstract class RunCodeAction extends AnAction {
         initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
 
         if (windowMap.get(project) != null) {
-            windowMap.get(project).show();
+            windowMap.get(project).show(() -> {
+            });
         }
 
         //检查文件后缀名是否满足
@@ -100,7 +102,7 @@ public abstract class RunCodeAction extends AnAction {
 
             } catch (Throwable exception) {
                 exception.printStackTrace();
-                result = "exception:" + exception.getMessage();
+                result = "exception:" + getAllException(exception);
                 print(result + "\n", project, getProjectConsoleViewMap());
                 throw exception;
             }
