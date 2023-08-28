@@ -9,6 +9,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toStringMap;
+import static fit.lang.plugin.json.ExpressUtil.eval;
 
 /**
  * 执行节点
@@ -19,6 +20,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String url = nodeJsonDefine.getString("url");
+
+        url = (String)eval(url, input.getInputParamAndContextParam());
 
         HttpRequest request = HttpUtil.createPost(url);
         JSONObject header = nodeJsonDefine.getJSONObject("header");
