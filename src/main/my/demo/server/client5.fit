@@ -1,0 +1,18 @@
+{
+    "uni": "loop",
+    "loopTimes": 10,
+    "isPipe": true,
+    "isBagsMode": true,
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "port": "${10111+loopIndex}"
+            }
+        },
+        {
+            "uni": "http",
+            "url": "${'http://127.0.0.1:' + port + '/_stop'}"
+        }
+    ]
+}

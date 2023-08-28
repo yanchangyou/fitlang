@@ -1,0 +1,28 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "set",
+            "key": "times",
+            "value": 1
+        },
+        {
+            "uni": "loop",
+            "loopTimes": 100,
+            "child": {
+                "uni": "thread",
+                "child": {
+                    "uni": "set",
+                    "key": "times",
+                    "value": "${times+1}"
+                }
+            }
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "times": "${times}"
+            }
+        }
+    ]
+}
