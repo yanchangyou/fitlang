@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeEngineConst;
 import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
+import fit.lang.common.flow.ThreadExecuteNode;
 import fit.lang.common.util.EchoExecuteNode;
 import fit.lang.common.util.PrintExecuteNode;
 import fit.lang.define.base.ExecuteNode;
@@ -149,6 +150,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("loop", JsonLoopExecuteNode.class);
         register("switch", JsonSwitchExecuteNode.class);
         register("return", ReturnJsonExecuteNode.class);
+        register("thread", ThreadExecuteNode.class);
 
         register("mix", MixJsonExecuteNode.class);
         register("replace", ReplaceJsonExecuteNode.class);
