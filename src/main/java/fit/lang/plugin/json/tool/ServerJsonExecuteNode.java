@@ -38,7 +38,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject result = new JSONObject();
 
-        Integer port = nodeJsonDefine.getInteger("port");
+        Integer port = input.getInteger("port");
+        if (port == null) {
+            port = nodeJsonDefine.getInteger("port");
+        }
         if (port == null) {
             port = DEFAULT_SERVER_PORT;
         }
