@@ -93,4 +93,20 @@ public class ExecuteNodeUtil {
     public static String getExecuteNodeBasicInfo(ExecuteNode executeNode) {
         return executeNode.getUni() + "." + executeNode.getId();
     }
+
+    /**
+     * 获取所有的异常：包括深度遍历原因
+     *
+     * @param e
+     * @return
+     */
+    public static String getAllException(Throwable e) {
+        if (e == null) {
+            return "";
+        }
+        StringBuilder builder = new StringBuilder();
+        builder.append(e.getMessage()).append("(");
+        builder.append(getAllException(e.getCause())).append(")");
+        return builder.toString();
+    }
 }
