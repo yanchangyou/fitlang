@@ -31,6 +31,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     public static String serverRoot;
 
+    static String ACTION_PREFIX = "/action";
+
     /**
      * 默认服务器端口
      */
@@ -51,6 +53,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONArray actionList = new JSONArray();
 
+        JSONObject stopDefine = addStopAction(simpleServer);
+        actionList.add(stopDefine);
+
         JSONObject actionConfig = nodeJsonDefine.getJSONObject("action");
         loadActionNode(simpleServer, actionConfig, actionList);
 
@@ -61,8 +66,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
         actionList.addAll(actionListInServerNode);
 
-        JSONObject stopDefine = addStopAction(simpleServer);
-        actionList.add(stopDefine);
 
         addRootAction(nodeJsonDefine, simpleServer, actionList);
 
@@ -110,7 +113,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     JSONArray getActionsDisplay(JSONArray actionDefines, Integer serverPort) {
         JSONArray display = new JSONArray();
         for (Object define : actionDefines) {
-            if(define == null) {
+            if (define == null) {
                 continue;
             }
             JSONObject defineJson = (JSONObject) define;
@@ -153,12 +156,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     @NotNull
     private String buildUrl(Integer serverPort, String actionPath) {
-        return "http://127.0.0.1:" + serverPort + actionPath;
+        return "http://127.0.0.1:" + serverPort + ACTION_PREFIX + actionPath;
     }
 
     private JSONObject addStopAction(SimpleServer simpleServer) {
         String stopPath = "/_stop";
-        simpleServer.addAction(stopPath, new Action() {
+        simpleServer.addAction(ACTION_PREFIX + stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 int stopPort = simpleServer.getAddress().getPort();
@@ -199,7 +202,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (StrUtil.isBlank(actionPath) || actionConfig == null || actionConfig.isEmpty()) {
             return;
         }
-        simpleServer.addAction(actionPath, new Action() {
+        simpleServer.addAction(ACTION_PREFIX + actionPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String requestBody = request.getBody();
