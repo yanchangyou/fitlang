@@ -43,7 +43,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public static final String REQUEST_PATH = "requestPath";
     public static final String ACTION_PATH = "actionPath";
 
-    public static final String ACTION_DIR = "action";
+    public static final String ACTION_DIR = "/action";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
@@ -88,7 +88,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
         actionList.addAll(actionListInServerNode);
-
 
         addRootAction(nodeJsonDefine, simpleServer, actionList);
 
@@ -142,6 +141,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             JSONObject defineJson = (JSONObject) define;
             JSONObject actionDisplay = new JSONObject();
             String actionPath = defineJson.getString("path");
+            if (actionPath == null) {
+                continue;
+            }
             actionDisplay.put("path", actionPath);
             actionDisplay.put("url", buildUrl(serverPort, actionPath));
 
