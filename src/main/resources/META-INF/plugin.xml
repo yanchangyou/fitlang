@@ -2,7 +2,7 @@
     <id>FitLang</id>
     <name>FitLang</name>
     <vendor email="yanchangyou@qq.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
-    <idea-version since-build="201" until-build="233.*"/>
+    <idea-version since-build="170.*" until-build="233.*"/>
     <description><![CDATA[
     English: (后面有中文版)
     <br/>
@@ -62,7 +62,7 @@ flow node (with child nodes)<br/>
 sequence: Sequential execution node<br/>
 pipe: pipeline execution node<br/>
 foreach: traverse JSON array field nodes<br/>
-loop: Loop execution node, looptTimes specifies the number of execution times<br/>
+loop: Loop execution node, loopTimes specifies the number of execution times<br/>
 switch: Branch execution node, switchField specifies the branch field<br/>
 <br/>
 <br/>
@@ -160,6 +160,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.7 server node support load action from disk(like JSP)</li>
             <li>0.2.6 add node: thread; server node support port input; loop support bags mode</li>
             <li>0.2.5 add web node; loop node support pipe mode</li>
             <li>0.2.4 bugfix</li>
