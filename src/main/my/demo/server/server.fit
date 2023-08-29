@@ -2,10 +2,11 @@
     "uni": "server",
     "port": 11111,
     "welcome": "welcome to fit lang world!",
+    "actionDir":"action",
     "action": {
-        "/hello": {
-            "uni": "hello"
-        },
+//        "/hello": {
+//            "uni": "hello"
+//        },
         "/helloSpeed": {
             "uni": "loop",
             "loopTimes": 10000,
