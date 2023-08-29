@@ -2,11 +2,8 @@
     "uni": "server",
     "port": 11111,
     "welcome": "welcome to fit lang world!",
-    "actionDir":"action",
+    "actionDir": "/opt/github/fitlang/src/main/my/demo/server/action",
     "action": {
-//        "/hello": {
-//            "uni": "hello"
-//        },
         "/helloSpeed": {
             "uni": "loop",
             "loopTimes": 10000,
