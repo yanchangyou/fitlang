@@ -45,30 +45,83 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject result = new JSONObject();
 
-        Integer port = input.getInteger("port");
-        if (port == null) {
-            port = nodeJsonDefine.getInteger("port");
+        Integer serverPort = input.getInteger("port");
+        if (serverPort == null) {
+            serverPort = nodeJsonDefine.getInteger("port");
         }
-        if (port == null) {
-            port = DEFAULT_SERVER_PORT;
-        }
-
-        String welcomeMessage = "hello, fit server!";
-
-        if (nodeJsonDefine.getString("welcome") != null) {
-            welcomeMessage = nodeJsonDefine.getString("welcome");
+        if (serverPort == null) {
+            serverPort = DEFAULT_SERVER_PORT;
         }
 
-        SimpleServer simpleServer = HttpUtil.createServer(port);
-
-        Integer serverPort = port;
+        SimpleServer simpleServer = HttpUtil.createServer(serverPort);
 
         JSONObject actionMap = new JSONObject();
 
-        simpleServer.addAction("/_stop", new Action() {
+        JSONObject actionConfig = nodeJsonDefine.getJSONObject("action");
+        loadActionNode(simpleServer, actionMap, actionConfig);
+
+        String actionDir = nodeJsonDefine.getOrDefault("actionDir", ACTION_DIR).toString();
+
+        List<String> actionPaths = loadActionDir(actionDir, new File(actionDir), simpleServer);
+        for (String path : actionPaths) {
+            addActionPathInfo(serverPort, path, actionMap);
+        }
+
+        String stopPath = addStopAction(simpleServer);
+        addActionPathInfo(serverPort, stopPath, actionMap);
+        addRootAction(nodeJsonDefine, simpleServer, actionMap);
+
+        simpleServer.start();
+        serverMap.put(serverPort, simpleServer);
+        result.put("message", "start server at port: " + serverPort);
+
+        output.setData(result);
+    }
+
+    private void addRootAction(JSONObject serverConfig, SimpleServer simpleServer, JSONObject actionMap) {
+
+        String welcomeMessage = "hello, fit server!";
+
+        if (serverConfig.getString("welcome") != null) {
+            welcomeMessage = serverConfig.getString("welcome");
+        }
+
+        String finalWelcomeMessage = welcomeMessage;
+        simpleServer.addAction("/", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                int stopPort = serverPort;
+                JSONObject welcome = new JSONObject();
+                welcome.put("message", finalWelcomeMessage);
+                welcome.put("action", actionMap);
+                response.write(welcome.toJSONString(), ContentType.JSON.getValue());
+            }
+        });
+    }
+
+    private void loadActionNode(SimpleServer simpleServer, JSONObject actionMap, JSONObject actionConfig) {
+        if (actionConfig != null) {
+            for (Map.Entry<String, Object> entry : actionConfig.entrySet()) {
+                String actionPath = entry.getKey();
+                JSONObject actionFlow = (JSONObject) entry.getValue();
+                if (actionFlow == null || actionFlow.isEmpty()) {
+                    continue;
+                }
+                registerAction(simpleServer, actionPath, actionFlow);
+                addActionPathInfo(simpleServer.getAddress().getPort(), actionPath, actionMap);
+            }
+        }
+    }
+
+    private void addActionPathInfo(Integer serverPort, String actionPath, JSONObject actionMap) {
+        actionMap.put(actionPath, "http://127.0.0.1:" + serverPort + actionPath);
+    }
+
+    private String addStopAction(SimpleServer simpleServer) {
+        String stopPath = "/_stop";
+        simpleServer.addAction(stopPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                int stopPort = simpleServer.getAddress().getPort();
                 String port = request.getParam("port");
                 if (port != null) {
                     if (NumberUtil.isInteger(port)) {
@@ -89,46 +142,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 serverMap.remove(stopPort);
             }
         });
-
-        JSONObject actionConfig = nodeJsonDefine.getJSONObject("action");
-        if (actionConfig != null) {
-            for (Map.Entry<String, Object> entry : actionConfig.entrySet()) {
-                String actionPath = entry.getKey();
-                JSONObject actionFlow = (JSONObject) entry.getValue();
-                if (actionFlow == null || actionFlow.isEmpty()) {
-                    result.put("message", "action flow is required!");
-                    output.setData(result);
-                    return;
-                }
-                registerAction(simpleServer, actionPath, actionFlow);
-                actionMap.put(actionPath, "http://127.0.0.1:" + serverPort + actionPath);
-            }
-        }
-
-        actionMap.put("/_stop", "http://127.0.0.1:" + serverPort + "/_stop");
-
-        String actionDir = nodeJsonDefine.getOrDefault("actionDir", ACTION_DIR).toString();
-
-        List<String> actionPaths = loadActionDir(actionDir, new File(actionDir), simpleServer);
-        for (String path : actionPaths) {
-            actionMap.put(path, "http://127.0.0.1:" + serverPort + path);
-        }
-
-        String finalWelcomeMessage = welcomeMessage;
-        simpleServer.addAction("/", new Action() {
-            @Override
-            public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                JSONObject welcome = new JSONObject();
-                welcome.put("message", finalWelcomeMessage);
-                welcome.put("action", actionMap);
-                response.write(welcome.toJSONString(), ContentType.JSON.getValue());
-            }
-        });
-        simpleServer.start();
-        serverMap.put(serverPort, simpleServer);
-        result.put("message", "start server at port: " + port);
-
-        output.setData(result);
+        return stopPath;
     }
 
     /**
