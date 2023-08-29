@@ -55,4 +55,18 @@ public class ServerJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 //        Thread.sleep(1000 * 1000);
     }
+
+    public void testExecute2() throws InterruptedException {
+        String flow = "{" +//
+                "   'uni': 'server'," +
+                "   'actionDir': '/opt/github/fitlang/src/main/my/demo/server/action'" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+        Thread.sleep(1000 * 1000);
+    }
+
+
 }
