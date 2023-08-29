@@ -29,7 +29,10 @@ import java.util.Map;
  */
 public class ServerJsonExecuteNode extends JsonExecuteNode {
 
-    public static String serverRoot;
+    /**
+     * server启动文件的路径
+     */
+    public static String serverFilePath;
 
     static String ACTION_PREFIX = "/action";
 
@@ -43,6 +46,21 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public static final String ACTION_DIR = "action";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
+
+    public static void setServerFilePath(String serverFilePath) {
+        ServerJsonExecuteNode.serverFilePath = serverFilePath;
+    }
+
+    public static String getServerFilePath() {
+        return serverFilePath;
+    }
+
+    public static String getServerFileDir() {
+        if (serverFilePath == null) {
+            return null;
+        }
+        return serverFilePath.substring(0, serverFilePath.lastIndexOf(File.separatorChar));
+    }
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -61,7 +79,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         actionList.add(actionConfig);
 
-        String actionDir = nodeJsonDefine.getOrDefault("actionDir", ACTION_DIR).toString();
+        String actionDir = getServerFileDir();
+        if (actionDir == null) {
+            actionDir = nodeJsonDefine.getString("actionDir");
+        } else {
+            actionDir = actionDir + ACTION_DIR;
+        }
 
         List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
         actionList.addAll(actionListInServerNode);

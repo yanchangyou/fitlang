@@ -15,6 +15,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -83,6 +84,12 @@ public abstract class RunCodeAction extends AnAction {
         if (editor == null) {
             return;
         }
+
+        final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        if (virtualFile != null) {
+            ServerJsonExecuteNode.setServerFilePath(virtualFile.getPath());
+        }
+
         final Document document = editor.getDocument();
 
         final String code = document.getText();
