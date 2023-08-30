@@ -303,7 +303,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         } else {
             String actionDefine = FileUtil.readUtf8String(actionFile);
             JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
-            String actionPath = actionFile.getAbsolutePath().replace(actionRootDir, "");
+            String actionPath = actionFile.getAbsolutePath().substring(actionRootDir.length());
             actionDefineJson.put("path", actionPath);
             registerAction(simpleServer, actionPath, actionDefineJson);
             actionDefineList.add(actionDefineJson);
