@@ -59,7 +59,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (serverFilePath == null) {
             return null;
         }
-        return serverFilePath.substring(0, serverFilePath.lastIndexOf(File.separatorChar));
+        int index = serverFilePath.lastIndexOf("/");
+        if (index < 0) {
+            index = serverFilePath.lastIndexOf("\\");
+        }
+        if (index < 0) {
+            return null;
+        }
+        return serverFilePath.substring(0, index);
     }
 
     @Override
@@ -86,9 +93,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             actionDir = actionDir + ACTION_DIR;
         }
 
-        List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
-        actionList.addAll(actionListInServerNode);
-
+        if (actionDir != null) {
+            try {
+                List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
+                actionList.addAll(actionListInServerNode);
+            } catch (Exception e) {
+                System.out.println("loadActionDir error: " + e);
+            }
+        }
         addRootAction(nodeJsonDefine, simpleServer, actionList);
 
         simpleServer.start();
