@@ -169,7 +169,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
             actionDisplay.put("path", actionPath);
             actionDisplay.put("url", buildUrl(serverPort, actionPath));
-
+            actionDisplay.put("loadType", defineJson.getString("loadType"));
             actionDisplay.put("description", defineJson.get("description"));
             display.add(actionDisplay);
         }
@@ -186,6 +186,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
                 JSONObject actionDefine = buildStandardActionDefine(actionFlow);
                 actionDefine.put("path", actionPath);
+                actionDefine.put("loadType", "serverNode");
                 registerAction(simpleServer, actionPath, actionDefine);
                 actionDefines.add(actionDefine);
             }
@@ -320,6 +321,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
             String actionPath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
             actionDefineJson.put("path", actionPath);
+            actionDefineJson.put("loadType", "fileSystem");
             registerAction(simpleServer, actionPath, actionDefineJson);
             actionDefineList.add(actionDefineJson);
         }
