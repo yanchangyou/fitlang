@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>FitLang</id>
     <name>FitLang</name>
-    <vendor email="yanchangyou@qq.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
+    <vendor email="yanchangyou@gmail.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
     <idea-version since-build="182.*" until-build="253.*"/>
     <description><![CDATA[
     English: (后面有中文版)
@@ -38,12 +38,14 @@ uni Uniform Node Identifier(like URI), distinguishing different processing, inte
 <br/>
 In the editor, right-click and select 'Run FitLang' to execute. After the code is executed, it will be output<br/>
 <br/>
-{"message": "hello, world!"}<br/>
+{"message": "hello, world!"}
+<br/>
 </p>
 <br/>
 <p>
-There are currently three types of plugin implementations: object, map, and JSON. It is recommended to use JSON
+<a href='https://github.com/yanchangyou/fitlang-demo'>more demo</a>
 </p>
+<br/>
 <br/>
 <p>
 The nodes that have been implemented so far are as follows:<br/>
@@ -58,12 +60,18 @@ removeEmptyField: Remove an empty field<br/>
 print: Console printing<br/>
 sleep: Process sleep node<br/>
 <br/>
-flow node (with child nodes)<br/>
+flow nodes (with child nodes)<br/>
 sequence: Sequential execution node<br/>
 pipe: pipeline execution node<br/>
 foreach: traverse JSON array field nodes<br/>
-loop: Loop execution node, loopTimes specifies the number of execution times<br/>
-switch: Branch execution node, switchField specifies the branch field<br/>
+loop: loop execution node, loopTimes specifies the number of execution times<br/>
+switch: branch execution node, switchField specifies the branch field<br/>
+<br/>
+tool nodes<br/>
+hTTP: supports HTTP client request<br/>
+server: server node<br/>
+fileServer: static file server<br/>
+proxy: proxy node<br/>
 <br/>
 <br/>
 中文：<br/>
@@ -96,9 +104,8 @@ uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一�
 {"message":"hello, world!"}<br/>
 </p>
 <br/>
-<p>
-目前有三类插件实现：object、map、json，推荐使用json<br/>
-</p>
+<a href='https://github.com/yanchangyou/fitlang-demo'>更多demo</a>
+<br/>
 <br/>
 <p>
 目前已经实现的节点如下：<br/>
@@ -117,8 +124,15 @@ sleep：流程休眠节点<br/>
 sequence：顺序执行节点<br/>
 pipe：管道执行节点<br/>
 foreach：遍历json数组字段节点<br/>
-loop：循环执行节点，looptTimes制定执行次数<br/>
+loop：循环执行节点，loopTimes制定执行次数<br/>
 switch：分支执行节点，switchField指定分支字段<br/>
+
+<br/>
+工具节点<br/>
+http：支持http-client请求<br/>
+server：服务端节点<br/>
+fileServer：静态文件服务器<br/>
+proxy：代理节点<br/>
 </p>
     ]]></description>
 
@@ -160,6 +174,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.12 description optimization</li>
             <li>0.2.11 server node bugfix: load only fit file end with .fit or .fit.json</li>
             <li>0.2.10 server node bugfix: meta info list is duplicate</li>
             <li>0.2.9 server node bugfix in windows OS</li>
