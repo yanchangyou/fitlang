@@ -91,7 +91,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         actionList.add(actionConfig);
 
         String actionDir = getServerFileDir();
-        meta.put("serverDir", actionDir);
+        meta.put("serverFile", getServerFilePath());
 
         if (actionDir == null) {
             actionDir = nodeJsonDefine.getString("actionDir");
