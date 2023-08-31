@@ -160,6 +160,8 @@ switch：分支执行节点，switchField指定分支字段<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.10 server node bugfix</li>
+            <li>0.2.9 server node bugfix in windows OS</li>
             <li>0.2.8 server node bugfix; IDEA plugin support 182+</li>
             <li>0.2.7 server node support load action from disk(like JSP)</li>
             <li>0.2.6 add node: thread; server node support port input; loop support bags mode</li>
