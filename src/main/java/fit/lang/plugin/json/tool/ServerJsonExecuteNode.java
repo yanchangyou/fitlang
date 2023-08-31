@@ -115,6 +115,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         serverMap.put(simpleServer.getAddress().getPort(), simpleServer);
         meta.put("port", simpleServer.getAddress().getPort());
+        meta.put("url", "http://127.0.0.1:".concat(String.valueOf(simpleServer.getAddress().getPort())));
         serverMetaMap.put(simpleServer.getAddress().getPort(), meta);
 
         result.put("message", "start server at port: " + simpleServer.getAddress().getPort());
@@ -147,8 +148,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = new JSONObject();
-                welcome.put("serverMeta", serverMetaMap.values());
                 welcome.put("message", finalWelcomeMessage);
+                welcome.put("serverList", serverMetaMap.values());
                 welcome.put("action", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
                 response.write(welcome.toJSONString(), ContentType.JSON.getValue());
             }
