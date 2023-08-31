@@ -100,7 +100,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             actionDir = actionDir + ACTION_DIR;
         }
 
-        meta.put("actionDir", actionDir);
+//        meta.put("actionDir", actionDir);
 
         if (actionDir != null) {
             try {
