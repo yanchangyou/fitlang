@@ -47,6 +47,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
+    static Map<Integer, JSONObject> serverMetaMap = new HashMap<>();
+
     public static void setServerFilePath(String serverFilePath) {
         ServerJsonExecuteNode.serverFilePath = serverFilePath;
     }
@@ -66,13 +68,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (index < 0) {
             return null;
         }
-        return serverFilePath.substring(0, index);
+        return convertPath(serverFilePath.substring(0, index));
     }
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         JSONObject result = new JSONObject();
+
+        JSONObject meta = new JSONObject();
 
         SimpleServer simpleServer = HttpUtil.createServer(buildServerPort(input));
 
@@ -87,11 +91,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         actionList.add(actionConfig);
 
         String actionDir = getServerFileDir();
+        meta.put("serverDir", actionDir);
+
         if (actionDir == null) {
             actionDir = nodeJsonDefine.getString("actionDir");
         } else {
             actionDir = actionDir + ACTION_DIR;
         }
+
+        meta.put("actionDir", actionDir);
 
         if (actionDir != null) {
             try {
@@ -106,6 +114,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.start();
 
         serverMap.put(simpleServer.getAddress().getPort(), simpleServer);
+        meta.put("port", simpleServer.getAddress().getPort());
+        serverMetaMap.put(simpleServer.getAddress().getPort(), meta);
 
         result.put("message", "start server at port: " + simpleServer.getAddress().getPort());
 
@@ -137,6 +147,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = new JSONObject();
+                welcome.put("serverMeta", serverMetaMap.values());
                 welcome.put("message", finalWelcomeMessage);
                 welcome.put("action", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
                 response.write(welcome.toJSONString(), ContentType.JSON.getValue());
@@ -179,6 +190,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 actionDefines.add(actionDefine);
             }
         }
+    }
+
+    static String convertPath(String path) {
+        return path.replace("\\", "/");
     }
 
     JSONObject buildStandardActionDefine(JSONObject actionDefine) {
@@ -303,7 +318,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         } else {
             String actionDefine = FileUtil.readUtf8String(actionFile);
             JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
-            String actionPath = actionFile.getAbsolutePath().substring(actionRootDir.length());
+            String actionPath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
             actionDefineJson.put("path", actionPath);
             registerAction(simpleServer, actionPath, actionDefineJson);
             actionDefineList.add(actionDefineJson);
