@@ -316,7 +316,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 List<JSONObject> subDefineList = loadActionDir(actionRootDir, subFile, simpleServer);
                 actionDefineList.addAll(subDefineList);
             }
-        } else {
+        } else if (actionFile.getName().endsWith(".fit") || actionFile.getName().endsWith(".fit.json")) {
             String actionDefine = FileUtil.readUtf8String(actionFile);
             JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
             String actionPath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
