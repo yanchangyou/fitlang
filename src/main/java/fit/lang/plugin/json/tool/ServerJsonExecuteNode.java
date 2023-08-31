@@ -12,6 +12,7 @@ import cn.hutool.http.server.SimpleServer;
 import cn.hutool.http.server.action.Action;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -151,7 +152,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 welcome.put("message", finalWelcomeMessage);
                 welcome.put("serverList", serverMetaMap.values());
                 welcome.put("action", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
-                response.write(welcome.toJSONString(), ContentType.JSON.getValue());
+                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
         });
     }
