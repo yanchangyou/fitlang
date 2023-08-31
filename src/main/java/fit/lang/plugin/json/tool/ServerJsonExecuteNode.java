@@ -150,7 +150,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = new JSONObject();
                 welcome.put("message", finalWelcomeMessage);
-                welcome.put("serverList", serverMetaMap.values());
+                welcome.put("server", serverMetaMap.values());
                 welcome.put("action", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
