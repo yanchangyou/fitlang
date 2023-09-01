@@ -1,6 +1,7 @@
 {
     "uni": "server",
-    "port": 11111,
+    "port": 11112,
+    "httpPrefix": "http://localhost",
     "welcome": "welcome to fit lang world!",
     "action": {
         "/hello": {
