@@ -33,7 +33,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     /**
      * server启动文件的路径
      */
-    public static String serverFilePath;
+    public static String currentServerFilePath;
 
     /**
      * 默认服务器端口
@@ -46,51 +46,77 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     static Map<Integer, JSONObject> serverMetaMap = new HashMap<>();
 
-    public static void setServerFilePath(String serverFilePath) {
-        ServerJsonExecuteNode.serverFilePath = serverFilePath;
+    SimpleServer simpleServer;
+
+    JSONArray serviceList = new JSONArray();
+
+    private String serviceDir;
+
+    private String serviceFile;
+
+    public static void setCurrentServerFilePath(String currentServerFilePath) {
+        ServerJsonExecuteNode.currentServerFilePath = currentServerFilePath;
     }
 
-    public static String getServerFilePath() {
-        return serverFilePath;
+    public static String getCurrentServerFilePath() {
+        return currentServerFilePath;
     }
 
     public static String getServerFileDir() {
-        if (serverFilePath == null) {
+        if (currentServerFilePath == null) {
             return null;
         }
-        int index = serverFilePath.lastIndexOf("/");
+        int index = currentServerFilePath.lastIndexOf("/");
         if (index < 0) {
-            index = serverFilePath.lastIndexOf("\\");
+            index = currentServerFilePath.lastIndexOf("\\");
         }
         if (index < 0) {
             return null;
         }
-        return convertPath(serverFilePath.substring(0, index));
+        return convertPath(currentServerFilePath.substring(0, index));
     }
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
+        simpleServer = HttpUtil.createServer(buildServerPort(input.getData().getInteger("port")));
+
+        JSONObject result = reload();
+
+        simpleServer.start();
+
+        output.setData(result);
+    }
+
+    public JSONObject reload() {
+
         JSONObject result = new JSONObject();
 
         JSONObject meta = new JSONObject();
 
-        SimpleServer simpleServer = HttpUtil.createServer(buildServerPort(input));
-
-        JSONArray serviceList = new JSONArray();
-
-        JSONObject stopDefine = addStopService(simpleServer);
+        JSONObject stopDefine = addStopService();
         serviceList.add(stopDefine);
+
+        JSONObject reloadDefine = addReloadService();
+        serviceList.add(reloadDefine);
 
         JSONObject serviceConfig = nodeJsonDefine.getJSONObject("service");
         if (serviceConfig != null && !serviceConfig.isEmpty()) {
-            loadServiceNode(simpleServer, serviceConfig, serviceList);
+            loadServiceNode(nodeJsonDefine.getJSONObject("service"));
         }
 
         serviceList.add(serviceConfig);
 
-        String serviceDir = getServerFileDir();
-        meta.put("file", getServerFilePath());
+
+        if (serviceFile == null) {
+            serviceFile = getCurrentServerFilePath();
+        }
+        meta.put("file", serviceFile);
+
+
+        if (serviceDir == null) {
+            serviceDir = getServerFileDir();
+        }
 
         if (serviceDir == null) {
             serviceDir = nodeJsonDefine.getString("serviceDir");
@@ -104,9 +130,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 System.out.println("loadServiceDir error: " + e);
             }
         }
-        addRootService(nodeJsonDefine, simpleServer, serviceList);
 
-        simpleServer.start();
+        addRootService();
 
         serverMap.put(simpleServer.getAddress().getPort(), simpleServer);
         meta.put("url", getHttpPrefix().concat(":".concat(String.valueOf(simpleServer.getAddress().getPort()))));
@@ -114,7 +139,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         result.put("message", "start server at port: " + simpleServer.getAddress().getPort());
 
-        output.setData(result);
+        return result;
     }
 
     private String getHttpPrefix() {
@@ -126,8 +151,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     @NotNull
-    private Integer buildServerPort(JsonExecuteNodeInput input) {
-        Integer serverPort = input.getInteger("port");
+    private Integer buildServerPort(Integer inputPort) {
+        Integer serverPort = inputPort;
         if (serverPort == null) {
             serverPort = nodeJsonDefine.getInteger("port");
         }
@@ -137,30 +162,33 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return serverPort;
     }
 
-    private void addRootService(JSONObject serverConfig, SimpleServer simpleServer, JSONArray serviceDefines) {
+    private void addRootService() {
 
-        String welcomeMessage = "hello, fit server!";
-
-        if (serverConfig.getString("welcome") != null) {
-            welcomeMessage = serverConfig.getString("welcome");
-        }
-
-        String finalWelcomeMessage = welcomeMessage;
         simpleServer.addAction("/", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                JSONObject welcome = new JSONObject();
-                welcome.put("message", finalWelcomeMessage);
-                welcome.put("server", serverMetaMap.values());
-                welcome.put("service", getServicesDisplay(serviceDefines, simpleServer.getAddress().getPort()));
+                JSONObject welcome = getWelcomeJson();
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
         });
     }
 
-    JSONArray getServicesDisplay(JSONArray serviceDefines, Integer serverPort) {
+    @NotNull
+    private JSONObject getWelcomeJson() {
+        String welcomeMessage = "hello, fit server!";
+        if (nodeJsonDefine.getString("welcome") != null) {
+            welcomeMessage = nodeJsonDefine.getString("welcome");
+        }
+        JSONObject welcome = new JSONObject();
+        welcome.put("message", welcomeMessage);
+        welcome.put("server", serverMetaMap.values());
+        welcome.put("service", getServicesDisplay());
+        return welcome;
+    }
+
+    JSONArray getServicesDisplay() {
         JSONArray display = new JSONArray();
-        for (Object define : serviceDefines) {
+        for (Object define : serviceList) {
             if (define == null) {
                 continue;
             }
@@ -171,7 +199,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 continue;
             }
             serviceDisplay.put("path", servicePath);
-            serviceDisplay.put("url", buildUrl(serverPort, servicePath));
+            serviceDisplay.put("url", buildUrl(simpleServer.getAddress().getPort(), servicePath));
             serviceDisplay.put("loadType", defineJson.getString("loadType"));
             serviceDisplay.put("description", defineJson.get("description"));
             display.add(serviceDisplay);
@@ -179,9 +207,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return display;
     }
 
-    private void loadServiceNode(SimpleServer simpleServer, JSONObject serviceConfig, JSONArray serviceDefines) {
-        if (serviceConfig != null) {
-            for (Map.Entry<String, Object> entry : serviceConfig.entrySet()) {
+    private void loadServiceNode(JSONObject service) {
+        if (service != null) {
+            for (Map.Entry<String, Object> entry : service.entrySet()) {
                 String servicePath = entry.getKey();
                 JSONObject serviceFlow = (JSONObject) entry.getValue();
                 if (serviceFlow == null || serviceFlow.isEmpty()) {
@@ -191,7 +219,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 serviceDefine.put("path", servicePath);
                 serviceDefine.put("loadType", "serverNode");
                 registerService(simpleServer, servicePath, serviceDefine);
-                serviceDefines.add(serviceDefine);
+                serviceList.add(serviceDefine);
             }
         }
     }
@@ -215,7 +243,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return getHttpPrefix() + ":" + serverPort + servicePath;
     }
 
-    private JSONObject addStopService(SimpleServer simpleServer) {
+    private JSONObject addStopService() {
         String stopPath = "/_stop";
         simpleServer.addAction(stopPath, new Action() {
             @Override
@@ -246,6 +274,23 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         stopDefine.put("path", stopPath);
         stopDefine.put("description", "stop this server");
         return stopDefine;
+    }
+
+    private JSONObject addReloadService() {
+        String reloadPath = "/_reload";
+        simpleServer.addAction(reloadPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                serviceList.clear();
+                reload();
+                JSONObject welcome = getWelcomeJson();
+                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
+            }
+        });
+        JSONObject reloadDefine = new JSONObject();
+        reloadDefine.put("path", reloadPath);
+        reloadDefine.put("description", "reload this server");
+        return reloadDefine;
     }
 
     /**

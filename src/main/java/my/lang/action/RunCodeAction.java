@@ -87,7 +87,7 @@ public abstract class RunCodeAction extends AnAction {
 
         final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
         if (virtualFile != null) {
-            ServerJsonExecuteNode.setServerFilePath(virtualFile.getPath());
+            ServerJsonExecuteNode.setCurrentServerFilePath(virtualFile.getPath());
         }
 
         final Document document = editor.getDocument();
