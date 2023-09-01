@@ -35,7 +35,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      */
     public static String serverFilePath;
 
-    static String ACTION_PREFIX = "/action";
+    static String ACTION_PREFIX = "";
 
     /**
      * 默认服务器端口
@@ -44,7 +44,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public static final String REQUEST_PATH = "requestPath";
     public static final String ACTION_PATH = "actionPath";
 
-    public static final String ACTION_DIR = "/action";
+    public static final String ACTION_DIR = "";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
@@ -92,7 +92,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         actionList.add(actionConfig);
 
         String actionDir = getServerFileDir();
-        meta.put("serverFile", getServerFilePath());
+        meta.put("file", getServerFilePath());
 
         if (actionDir == null) {
             actionDir = nodeJsonDefine.getString("actionDir");
@@ -151,7 +151,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 JSONObject welcome = new JSONObject();
                 welcome.put("message", finalWelcomeMessage);
                 welcome.put("server", serverMetaMap.values());
-                welcome.put("action", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
+                welcome.put("service", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
         });

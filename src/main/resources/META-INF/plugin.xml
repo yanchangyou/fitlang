@@ -46,7 +46,6 @@ In the editor, right-click and select 'Run FitLang' to execute. After the code i
 <a href='https://github.com/yanchangyou/fitlang-demo'>more demo</a>
 </p>
 <br/>
-<br/>
 <p>
 The nodes that have been implemented so far are as follows:<br/>
 <br/>
@@ -174,6 +173,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.2.13 server path refactor</li>
             <li>0.2.12 description optimization</li>
             <li>0.2.11 server node bugfix: load only fit file end with .fit or .fit.json</li>
             <li>0.2.10 server node bugfix: meta info list is duplicate</li>
