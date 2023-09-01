@@ -173,8 +173,9 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.3.0 server node rename action to service</li>
             <li>0.2.13 server path refactor</li>
-            <li>0.2.12 description optimization</li>
+            <li>0.2.12 description improve</li>
             <li>0.2.11 server node bugfix: load only fit file end with .fit or .fit.json</li>
             <li>0.2.10 server node bugfix: meta info list is duplicate</li>
             <li>0.2.9 server node bugfix in windows OS</li>
