@@ -2,7 +2,7 @@
     "uni": "server",
     "port": 11114,
     "welcome": "welcome to fit lang world!",
-    "action": {
+    "service": {
         "/proxy": {
             "uni": "http",
             "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"

@@ -2,7 +2,7 @@
     "uni": "server",
     "port": 11111,
     "welcome": "welcome to fit lang world!",
-    "action": {
+    "service": {
         "/helloSpeed": {
             "uni": "loop",
             "loopTimes": 10000,
@@ -60,7 +60,7 @@
             },
             "child": {
                 "uni": "proxy",
-                "url": "http://127.0.0.1:11101/"
+                "url": "http://127.0.0.1:10111/"
             }
         }
     }

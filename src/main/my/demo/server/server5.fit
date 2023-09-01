@@ -13,7 +13,7 @@
         {
             "uni": "server",
             "welcome": "welcome to fit lang world!",
-            "action": {
+            "service": {
                 "/hello": {
                     "uni": "hello"
                 }

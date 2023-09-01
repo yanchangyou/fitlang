@@ -3,7 +3,7 @@
     "port": 11112,
     "httpPrefix": "http://localhost",
     "welcome": "welcome to fit lang world!",
-    "action": {
+    "service": {
         "/hello": {
             "uni": "hello"
         }

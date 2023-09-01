@@ -1,4 +1,4 @@
 {
     "uni": "server",
-    "actionDir": "/opt/github/fitlang/src/main/my/demo/server/action"
+    "serviceDir": "/opt/github/fitlang/src/main/my/demo/server/service"
 }

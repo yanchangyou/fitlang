@@ -40,9 +40,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
     public static final String REQUEST_PATH = "requestPath";
-    public static final String ACTION_PATH = "servicePath";
-
-    public static final String ACTION_DIR = "";
+    public static final String SERVICE_PATH = "servicePath";
 
     static Map<Integer, SimpleServer> serverMap = new HashMap<>();
 
@@ -79,36 +77,34 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         SimpleServer simpleServer = HttpUtil.createServer(buildServerPort(input));
 
-        JSONArray actionList = new JSONArray();
+        JSONArray serviceList = new JSONArray();
 
-        JSONObject stopDefine = addStopAction(simpleServer);
-        actionList.add(stopDefine);
+        JSONObject stopDefine = addStopService(simpleServer);
+        serviceList.add(stopDefine);
 
-        JSONObject actionConfig = nodeJsonDefine.getJSONObject("action");
-        if (actionConfig != null && !actionConfig.isEmpty()) {
-            loadActionNode(simpleServer, actionConfig, actionList);
+        JSONObject serviceConfig = nodeJsonDefine.getJSONObject("service");
+        if (serviceConfig != null && !serviceConfig.isEmpty()) {
+            loadServiceNode(simpleServer, serviceConfig, serviceList);
         }
 
-        actionList.add(actionConfig);
+        serviceList.add(serviceConfig);
 
-        String actionDir = getServerFileDir();
+        String serviceDir = getServerFileDir();
         meta.put("file", getServerFilePath());
 
-        if (actionDir == null) {
-            actionDir = nodeJsonDefine.getString("actionDir");
-        } else {
-            actionDir = actionDir + ACTION_DIR;
+        if (serviceDir == null) {
+            serviceDir = nodeJsonDefine.getString("serviceDir");
         }
 
-        if (actionDir != null) {
+        if (serviceDir != null) {
             try {
-                List<JSONObject> actionListInServerNode = loadActionDir(actionDir, new File(actionDir), simpleServer);
-                actionList.addAll(actionListInServerNode);
+                List<JSONObject> serviceListInServerNode = loadServiceDir(serviceDir, new File(serviceDir), simpleServer);
+                serviceList.addAll(serviceListInServerNode);
             } catch (Exception e) {
-                System.out.println("loadActionDir error: " + e);
+                System.out.println("loadServiceDir error: " + e);
             }
         }
-        addRootAction(nodeJsonDefine, simpleServer, actionList);
+        addRootService(nodeJsonDefine, simpleServer, serviceList);
 
         simpleServer.start();
 
@@ -141,7 +137,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return serverPort;
     }
 
-    private void addRootAction(JSONObject serverConfig, SimpleServer simpleServer, JSONArray actionDefines) {
+    private void addRootService(JSONObject serverConfig, SimpleServer simpleServer, JSONArray serviceDefines) {
 
         String welcomeMessage = "hello, fit server!";
 
@@ -156,46 +152,46 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 JSONObject welcome = new JSONObject();
                 welcome.put("message", finalWelcomeMessage);
                 welcome.put("server", serverMetaMap.values());
-                welcome.put("service", getActionsDisplay(actionDefines, simpleServer.getAddress().getPort()));
+                welcome.put("service", getServicesDisplay(serviceDefines, simpleServer.getAddress().getPort()));
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
         });
     }
 
-    JSONArray getActionsDisplay(JSONArray actionDefines, Integer serverPort) {
+    JSONArray getServicesDisplay(JSONArray serviceDefines, Integer serverPort) {
         JSONArray display = new JSONArray();
-        for (Object define : actionDefines) {
+        for (Object define : serviceDefines) {
             if (define == null) {
                 continue;
             }
             JSONObject defineJson = (JSONObject) define;
-            JSONObject actionDisplay = new JSONObject();
+            JSONObject serviceDisplay = new JSONObject();
             String servicePath = defineJson.getString("path");
             if (servicePath == null) {
                 continue;
             }
-            actionDisplay.put("path", servicePath);
-            actionDisplay.put("url", buildUrl(serverPort, servicePath));
-            actionDisplay.put("loadType", defineJson.getString("loadType"));
-            actionDisplay.put("description", defineJson.get("description"));
-            display.add(actionDisplay);
+            serviceDisplay.put("path", servicePath);
+            serviceDisplay.put("url", buildUrl(serverPort, servicePath));
+            serviceDisplay.put("loadType", defineJson.getString("loadType"));
+            serviceDisplay.put("description", defineJson.get("description"));
+            display.add(serviceDisplay);
         }
         return display;
     }
 
-    private void loadActionNode(SimpleServer simpleServer, JSONObject actionConfig, JSONArray actionDefines) {
-        if (actionConfig != null) {
-            for (Map.Entry<String, Object> entry : actionConfig.entrySet()) {
+    private void loadServiceNode(SimpleServer simpleServer, JSONObject serviceConfig, JSONArray serviceDefines) {
+        if (serviceConfig != null) {
+            for (Map.Entry<String, Object> entry : serviceConfig.entrySet()) {
                 String servicePath = entry.getKey();
-                JSONObject actionFlow = (JSONObject) entry.getValue();
-                if (actionFlow == null || actionFlow.isEmpty()) {
+                JSONObject serviceFlow = (JSONObject) entry.getValue();
+                if (serviceFlow == null || serviceFlow.isEmpty()) {
                     continue;
                 }
-                JSONObject actionDefine = buildStandardActionDefine(actionFlow);
-                actionDefine.put("path", servicePath);
-                actionDefine.put("loadType", "serverNode");
-                registerAction(simpleServer, servicePath, actionDefine);
-                actionDefines.add(actionDefine);
+                JSONObject serviceDefine = buildStandardServiceDefine(serviceFlow);
+                serviceDefine.put("path", servicePath);
+                serviceDefine.put("loadType", "serverNode");
+                registerService(simpleServer, servicePath, serviceDefine);
+                serviceDefines.add(serviceDefine);
             }
         }
     }
@@ -204,14 +200,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return path.replace("\\", "/");
     }
 
-    JSONObject buildStandardActionDefine(JSONObject actionDefine) {
-        JSONObject standardActionDefine = actionDefine;
-        if (!actionDefine.containsKey("flow")) {
-            standardActionDefine = new JSONObject();
-            standardActionDefine.put("flow", actionDefine);
-            standardActionDefine.put("input", new JSONObject());
+    JSONObject buildStandardServiceDefine(JSONObject serviceDefine) {
+        JSONObject standardServiceDefine = serviceDefine;
+        if (!serviceDefine.containsKey("flow")) {
+            standardServiceDefine = new JSONObject();
+            standardServiceDefine.put("flow", serviceDefine);
+            standardServiceDefine.put("input", new JSONObject());
         }
-        return standardActionDefine;
+        return standardServiceDefine;
     }
 
     @NotNull
@@ -219,7 +215,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return getHttpPrefix() + ":" + serverPort + servicePath;
     }
 
-    private JSONObject addStopAction(SimpleServer simpleServer) {
+    private JSONObject addStopService(SimpleServer simpleServer) {
         String stopPath = "/_stop";
         simpleServer.addAction(stopPath, new Action() {
             @Override
@@ -253,14 +249,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     /**
-     * 注册action
+     * 注册service
      *
      * @param simpleServer
      * @param servicePath
-     * @param actionConfig
+     * @param serviceConfig
      */
-    private void registerAction(SimpleServer simpleServer, String servicePath, JSONObject actionConfig) {
-        if (StrUtil.isBlank(servicePath) || actionConfig == null || actionConfig.isEmpty()) {
+    private void registerService(SimpleServer simpleServer, String servicePath, JSONObject serviceConfig) {
+        if (StrUtil.isBlank(servicePath) || serviceConfig == null || serviceConfig.isEmpty()) {
             return;
         }
         simpleServer.addAction(servicePath, new Action() {
@@ -271,10 +267,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     requestBody = "{}";
                 }
                 JSONObject defaultInput = new JSONObject();
-                JSONObject actionFlow = actionConfig;
-                if (actionConfig.containsKey("input") && actionConfig.containsKey("flow")) {
-                    defaultInput = actionConfig.getJSONObject("input");
-                    actionFlow = actionConfig.getJSONObject("flow");
+                JSONObject serviceFlow = serviceConfig;
+                if (serviceConfig.containsKey("input") && serviceConfig.containsKey("flow")) {
+                    defaultInput = serviceConfig.getJSONObject("input");
+                    serviceFlow = serviceConfig.getJSONObject("flow");
                 }
 
                 JSONObject inputJson = defaultInput;
@@ -289,11 +285,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
                 JSONObject contextParam = new JSONObject();
                 contextParam.put(REQUEST_PATH, request.getPath());
-                contextParam.put(ACTION_PATH, servicePath);
+                contextParam.put(SERVICE_PATH, servicePath);
                 try {
-                    String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow, contextParam);
-                    if (isWebNode(actionFlow)) {
-                        JSONObject header = actionFlow.getJSONObject("header");
+                    String output = ExecuteJsonNodeUtil.executeCode(inputJson, serviceFlow, contextParam);
+                    if (isWebNode(serviceFlow)) {
+                        JSONObject header = serviceFlow.getJSONObject("header");
                         String contextType = null;
                         if (header != null) {
                             contextType = header.getString("contextType");
@@ -315,25 +311,25 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         });
     }
 
-    List<JSONObject> loadActionDir(String actionRootDir, File actionFile, SimpleServer simpleServer) {
+    List<JSONObject> loadServiceDir(String serviceRootDir, File serviceFile, SimpleServer simpleServer) {
 
-        List<JSONObject> actionDefineList = new ArrayList<>();
-        if (actionFile.isDirectory()) {
-            File[] subFiles = actionFile.listFiles();
+        List<JSONObject> serviceDefineList = new ArrayList<>();
+        if (serviceFile.isDirectory()) {
+            File[] subFiles = serviceFile.listFiles();
             for (File subFile : subFiles) {
-                List<JSONObject> subDefineList = loadActionDir(actionRootDir, subFile, simpleServer);
-                actionDefineList.addAll(subDefineList);
+                List<JSONObject> subDefineList = loadServiceDir(serviceRootDir, subFile, simpleServer);
+                serviceDefineList.addAll(subDefineList);
             }
-        } else if (actionFile.getName().endsWith(".fit") || actionFile.getName().endsWith(".fit.json")) {
-            String actionDefine = FileUtil.readUtf8String(actionFile);
-            JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
-            String servicePath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
-            actionDefineJson.put("path", servicePath);
-            actionDefineJson.put("loadType", "fileSystem");
-            registerAction(simpleServer, servicePath, actionDefineJson);
-            actionDefineList.add(actionDefineJson);
+        } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
+            String serviceDefine = FileUtil.readUtf8String(serviceFile);
+            JSONObject serviceDefineJson = buildStandardServiceDefine(JSONObject.parseObject(serviceDefine));
+            String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
+            serviceDefineJson.put("path", servicePath);
+            serviceDefineJson.put("loadType", "fileSystem");
+            registerService(simpleServer, servicePath, serviceDefineJson);
+            serviceDefineList.add(serviceDefineJson);
         }
-        return actionDefineList;
+        return serviceDefineList;
     }
 
     /**

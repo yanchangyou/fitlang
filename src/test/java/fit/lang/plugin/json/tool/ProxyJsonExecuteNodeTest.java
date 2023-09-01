@@ -28,7 +28,7 @@ public class ProxyJsonExecuteNodeTest extends TestCase {
                 "}";
         JSONObject contextParam = new JSONObject();
         contextParam.put(ServerJsonExecuteNode.REQUEST_PATH, "/static/sub/page.html");
-        contextParam.put(ServerJsonExecuteNode.ACTION_PATH, "/static");
+        contextParam.put(ServerJsonExecuteNode.SERVICE_PATH, "/static");
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow, contextParam);
 
         System.out.println(output);
@@ -43,7 +43,7 @@ public class ProxyJsonExecuteNodeTest extends TestCase {
                 "}";
         JSONObject contextParam = new JSONObject();
         contextParam.put(ServerJsonExecuteNode.REQUEST_PATH, "/static/sub/page.html");
-        contextParam.put(ServerJsonExecuteNode.ACTION_PATH, "/static/");
+        contextParam.put(ServerJsonExecuteNode.SERVICE_PATH, "/static/");
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow, contextParam);
 
         System.out.println(output);

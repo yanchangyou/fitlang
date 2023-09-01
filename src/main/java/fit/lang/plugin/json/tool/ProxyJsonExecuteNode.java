@@ -25,7 +25,7 @@ public class ProxyJsonExecuteNode extends JsonExecuteNode {
         String realUrl = url;
         if (requestPath != null) {
             if (url.endsWith("/")) {
-                String actionPath = (String) input.getNodeContext().getAttribute(ServerJsonExecuteNode.ACTION_PATH);
+                String actionPath = (String) input.getNodeContext().getAttribute(ServerJsonExecuteNode.SERVICE_PATH);
                 String proxyPath = requestPath.substring(actionPath.length());
                 if (!actionPath.endsWith("/") && !proxyPath.startsWith("/")) {
                     proxyPath = "/".concat(proxyPath);
