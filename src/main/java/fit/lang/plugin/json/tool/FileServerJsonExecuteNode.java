@@ -15,7 +15,7 @@ public class FileServerJsonExecuteNode extends JsonExecuteNode {
     /**
      * 默认服务器端口
      */
-    public static final int DEFAULT_SERVER_PORT = 11111;
+    public static final int DEFAULT_SERVER_PORT = 10111;
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
