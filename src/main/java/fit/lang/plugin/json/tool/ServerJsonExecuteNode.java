@@ -87,20 +87,23 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         actionList.add(stopDefine);
 
         JSONObject actionConfig = nodeJsonDefine.getJSONObject("action");
-        loadActionNode(simpleServer, actionConfig, actionList);
+        if (actionConfig != null && !actionConfig.isEmpty()) {
+            loadActionNode(simpleServer, actionConfig, actionList);
+        }
 
         actionList.add(actionConfig);
 
         String actionDir = getServerFileDir();
         meta.put("file", getServerFilePath());
 
+        String httpPrefix = getHttpPrefix();
+        meta.put("httpPrefix", httpPrefix);
+
         if (actionDir == null) {
             actionDir = nodeJsonDefine.getString("actionDir");
         } else {
             actionDir = actionDir + ACTION_DIR;
         }
-
-//        meta.put("actionDir", actionDir);
 
         if (actionDir != null) {
             try {
@@ -116,12 +119,20 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         serverMap.put(simpleServer.getAddress().getPort(), simpleServer);
         meta.put("port", simpleServer.getAddress().getPort());
-        meta.put("url", "http://127.0.0.1:".concat(String.valueOf(simpleServer.getAddress().getPort())));
+        meta.put("url", getHttpPrefix().concat(":".concat(String.valueOf(simpleServer.getAddress().getPort()))));
         serverMetaMap.put(simpleServer.getAddress().getPort(), meta);
 
         result.put("message", "start server at port: " + simpleServer.getAddress().getPort());
 
         output.setData(result);
+    }
+
+    private String getHttpPrefix() {
+        String httpPrefix = nodeJsonDefine.getString("httpPrefix");
+        if (StrUtil.isBlank(httpPrefix)) {
+            httpPrefix = "http://127.0.0.1";
+        }
+        return httpPrefix;
     }
 
     @NotNull
@@ -211,7 +222,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     @NotNull
     private String buildUrl(Integer serverPort, String actionPath) {
-        return "http://127.0.0.1:" + serverPort + ACTION_PREFIX + actionPath;
+        return getHttpPrefix() + ":" + serverPort + ACTION_PREFIX + actionPath;
     }
 
     private JSONObject addStopAction(SimpleServer simpleServer) {
