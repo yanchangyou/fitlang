@@ -38,7 +38,9 @@ uni Uniform Node Identifier(like URI), distinguishing different processing, inte
 <br/>
 In the editor, right-click and select 'Run FitLang' to execute. After the code is executed, it will be output<br/>
 <br/>
-{"message": "hello, world!"}
+<pre>
+{"message":"hello, world!"}
+</pre>
 <br/>
 </p>
 <br/>
@@ -100,7 +102,11 @@ input：入参定义<br/>
 flow：处理流程定义<br/>
 uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一个实现类<br/>
 编辑器里面，点击右键，选择【Run FitLang】执行，代码执行完将输出<br/>
-{"message":"hello, world!"}<br/>
+
+<pre>
+{"message":"hello, world!"}
+</pre>
+
 </p>
 <br/>
 <a href='https://github.com/yanchangyou/fitlang-demo'>更多demo</a>
