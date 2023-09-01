@@ -35,14 +35,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      */
     public static String serverFilePath;
 
-    static String ACTION_PREFIX = "";
-
     /**
      * 默认服务器端口
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
     public static final String REQUEST_PATH = "requestPath";
-    public static final String ACTION_PATH = "actionPath";
+    public static final String ACTION_PATH = "servicePath";
 
     public static final String ACTION_DIR = "";
 
@@ -96,9 +94,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         String actionDir = getServerFileDir();
         meta.put("file", getServerFilePath());
 
-        String httpPrefix = getHttpPrefix();
-        meta.put("httpPrefix", httpPrefix);
-
         if (actionDir == null) {
             actionDir = nodeJsonDefine.getString("actionDir");
         } else {
@@ -118,7 +113,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.start();
 
         serverMap.put(simpleServer.getAddress().getPort(), simpleServer);
-        meta.put("port", simpleServer.getAddress().getPort());
         meta.put("url", getHttpPrefix().concat(":".concat(String.valueOf(simpleServer.getAddress().getPort()))));
         serverMetaMap.put(simpleServer.getAddress().getPort(), meta);
 
@@ -176,12 +170,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
             JSONObject defineJson = (JSONObject) define;
             JSONObject actionDisplay = new JSONObject();
-            String actionPath = defineJson.getString("path");
-            if (actionPath == null) {
+            String servicePath = defineJson.getString("path");
+            if (servicePath == null) {
                 continue;
             }
-            actionDisplay.put("path", actionPath);
-            actionDisplay.put("url", buildUrl(serverPort, actionPath));
+            actionDisplay.put("path", servicePath);
+            actionDisplay.put("url", buildUrl(serverPort, servicePath));
             actionDisplay.put("loadType", defineJson.getString("loadType"));
             actionDisplay.put("description", defineJson.get("description"));
             display.add(actionDisplay);
@@ -192,15 +186,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     private void loadActionNode(SimpleServer simpleServer, JSONObject actionConfig, JSONArray actionDefines) {
         if (actionConfig != null) {
             for (Map.Entry<String, Object> entry : actionConfig.entrySet()) {
-                String actionPath = entry.getKey();
+                String servicePath = entry.getKey();
                 JSONObject actionFlow = (JSONObject) entry.getValue();
                 if (actionFlow == null || actionFlow.isEmpty()) {
                     continue;
                 }
                 JSONObject actionDefine = buildStandardActionDefine(actionFlow);
-                actionDefine.put("path", actionPath);
+                actionDefine.put("path", servicePath);
                 actionDefine.put("loadType", "serverNode");
-                registerAction(simpleServer, actionPath, actionDefine);
+                registerAction(simpleServer, servicePath, actionDefine);
                 actionDefines.add(actionDefine);
             }
         }
@@ -221,13 +215,13 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     @NotNull
-    private String buildUrl(Integer serverPort, String actionPath) {
-        return getHttpPrefix() + ":" + serverPort + ACTION_PREFIX + actionPath;
+    private String buildUrl(Integer serverPort, String servicePath) {
+        return getHttpPrefix() + ":" + serverPort + servicePath;
     }
 
     private JSONObject addStopAction(SimpleServer simpleServer) {
         String stopPath = "/_stop";
-        simpleServer.addAction(ACTION_PREFIX + stopPath, new Action() {
+        simpleServer.addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 int stopPort = simpleServer.getAddress().getPort();
@@ -262,14 +256,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      * 注册action
      *
      * @param simpleServer
-     * @param actionPath
+     * @param servicePath
      * @param actionConfig
      */
-    private void registerAction(SimpleServer simpleServer, String actionPath, JSONObject actionConfig) {
-        if (StrUtil.isBlank(actionPath) || actionConfig == null || actionConfig.isEmpty()) {
+    private void registerAction(SimpleServer simpleServer, String servicePath, JSONObject actionConfig) {
+        if (StrUtil.isBlank(servicePath) || actionConfig == null || actionConfig.isEmpty()) {
             return;
         }
-        simpleServer.addAction(ACTION_PREFIX + actionPath, new Action() {
+        simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String requestBody = request.getBody();
@@ -295,7 +289,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
                 JSONObject contextParam = new JSONObject();
                 contextParam.put(REQUEST_PATH, request.getPath());
-                contextParam.put(ACTION_PATH, actionPath);
+                contextParam.put(ACTION_PATH, servicePath);
                 try {
                     String output = ExecuteJsonNodeUtil.executeCode(inputJson, actionFlow, contextParam);
                     if (isWebNode(actionFlow)) {
@@ -333,10 +327,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         } else if (actionFile.getName().endsWith(".fit") || actionFile.getName().endsWith(".fit.json")) {
             String actionDefine = FileUtil.readUtf8String(actionFile);
             JSONObject actionDefineJson = buildStandardActionDefine(JSONObject.parseObject(actionDefine));
-            String actionPath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
-            actionDefineJson.put("path", actionPath);
+            String servicePath = convertPath(actionFile.getAbsolutePath().substring(actionRootDir.length()));
+            actionDefineJson.put("path", servicePath);
             actionDefineJson.put("loadType", "fileSystem");
-            registerAction(simpleServer, actionPath, actionDefineJson);
+            registerAction(simpleServer, servicePath, actionDefineJson);
             actionDefineList.add(actionDefineJson);
         }
         return actionDefineList;
