@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.plugin.json.tool.server.FitServerInstance;
 
 /**
  * 执行节点
@@ -35,7 +36,9 @@ public class FileServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.start();
         result.put("message", "start server at port: " + port);
 
-        ServerJsonExecuteNode.serverMap.put(port, simpleServer);
+        FitServerInstance fitServerInstance = ServerJsonExecuteNode.createFitServerInstance(port);
+        fitServerInstance.setSimpleServer(simpleServer);
+        ServerJsonExecuteNode.serverMap.put(port, fitServerInstance);
 
         output.setData(result);
     }

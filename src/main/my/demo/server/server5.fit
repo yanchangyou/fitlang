@@ -1,13 +1,13 @@
 {
     "uni": "loop",
-    "loopTimes": 20,
+    "loopTimes": 10,
     "isPipe": true,
     "isBagsMode": true,
     "child": [
         {
             "uni": "mix",
             "json": {
-                "port": "${10111+loopIndex}"
+                "port": "${12111+loopIndex}"
             }
         },
         {
