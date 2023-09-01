@@ -238,6 +238,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 response.write("{\"message\":\"stop " + stopPort + " OK!\"}");
                 server.getRawServer().stop(1);
                 serverMap.remove(stopPort);
+                serverMetaMap.remove(stopPort);
             }
         });
         JSONObject stopDefine = new JSONObject();
