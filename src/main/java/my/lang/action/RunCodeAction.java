@@ -1,5 +1,6 @@
 package my.lang.action;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
@@ -7,6 +8,7 @@ import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -17,8 +19,11 @@ import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 
+import java.io.File;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -27,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import static fit.lang.ExecuteNodeUtil.getAllException;
 import static my.lang.MyLanguage.LANG_FILE_SUFFIX;
+import static my.lang.MyLanguage.isMyLanguageFile;
 
 /**
  * 插件父类
@@ -74,51 +80,67 @@ public abstract class RunCodeAction extends AnAction {
             });
         }
 
-        //检查文件后缀名是否满足
-        if (!isScriptCode(e)) {
-            print("This file can't execute!\n", project, getProjectConsoleViewMap());
-            return;
-        }
+
+        VirtualFile virtualFile;
+
+        final List<String> codeList = new ArrayList<>();
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
-        if (editor == null) {
+        VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
+        if (editor != null) {
+
+            virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+            //检查文件后缀名是否满足
+            if (!isScriptCode(virtualFile)) {
+                print("This file can't execute!\n", project, getProjectConsoleViewMap());
+                return;
+            }
+
+            final Document document = editor.getDocument();
+            codeList.add(document.getText());
+
+        } else if (virtualFiles != null) {
+            //多选时，数组长度大于1
+            for (VirtualFile virtualFile1 : virtualFiles) {
+                List<File> files = FileUtil.loopFiles(virtualFile1.getPath());
+                for (File file : files) {
+                    if (isMyLanguageFile(file.getName())) {
+                        String code = FileUtil.readUtf8String(file);
+                        codeList.add(code);
+                    }
+                }
+            }
+            virtualFile = virtualFiles[0];
+        } else {
             return;
         }
 
-        final VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
         if (virtualFile != null) {
             ServerJsonExecuteNode.setCurrentServerFilePath(virtualFile.getPath());
         }
 
-        final Document document = editor.getDocument();
-
-        final String code = document.getText();
-
         threadPoolExecutor.submit(() -> {
-            String result;
 
-            try {
+            for (String code : codeList) {
+                String result;
+                try {
+                    Object resultObject = executeCode(code);
 
-                Object resultObject = executeCode(code);
-
-                if (resultObject == null) {
                     result = resultObject.toString();
-                } else {
-                    result = resultObject.toString();
+
+                } catch (Throwable exception) {
+                    exception.printStackTrace();
+                    result = "exception:" + getAllException(exception);
+                    print(result + "\n", project, getProjectConsoleViewMap());
+                    throw exception;
                 }
 
-            } catch (Throwable exception) {
-                exception.printStackTrace();
-                result = "exception:" + getAllException(exception);
+                System.out.println("execute " + getLanguageName() + " code result:");
+                System.out.println(result);
+
                 print(result + "\n", project, getProjectConsoleViewMap());
-                throw exception;
+
             }
-
-            System.out.println("execute " + getLanguageName() + " code result:");
-            System.out.println(result);
-
-            print(result + "\n", project, getProjectConsoleViewMap());
-
         });
     }
 
@@ -179,14 +201,11 @@ public abstract class RunCodeAction extends AnAction {
         }
     }
 
-    boolean isScriptCode(AnActionEvent event) {
-
-        VirtualFile virtualFile = event.getData(CommonDataKeys.VIRTUAL_FILE);
+    boolean isScriptCode(VirtualFile virtualFile) {
         if (virtualFile == null) {
             return false;
         }
-        String filePath = virtualFile.getPath();
-        return filePath.endsWith(LANG_FILE_SUFFIX) || filePath.endsWith(LANG_FILE_SUFFIX + ".json");
+        return isMyLanguageFile(virtualFile.getName());
     }
 
 }
