@@ -71,18 +71,30 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         FitServerInstance fitServer = createFitServerInstance(buildServerPort(input.getData().getInteger("port")));
 
-        JSONObject result = reload(fitServer);
+        JSONObject result = load(fitServer);
 
         fitServer.getSimpleServer().start();
 
         output.setData(result);
     }
 
-    public JSONObject reload(FitServerInstance fitServer) {
+    public JSONObject load(FitServerInstance fitServer) {
+        return reload(fitServer, false);
+    }
+
+    public JSONObject reload(FitServerInstance fitServer, boolean isFirst) {
 
         JSONArray serviceList = fitServer.getServiceList();
         String serverFile = fitServer.getServerFile();
         String serviceDir = fitServer.getServiceDir();
+
+        if (serverFile == null) {
+            serverFile = getCurrentServerFilePath();
+        } else if (!isFirst) {
+            //支持重新加载文件，不支持修改端口 TODO
+            nodeJsonDefine = JSONObject.parseObject(FileUtil.readUtf8String(serverFile));
+        }
+        fitServer.setServerFile(serverFile);
 
         serviceList.clear();
 
@@ -100,12 +112,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         }
 
         serviceList.add(serviceConfig);
-
-        if (serverFile == null) {
-            serverFile = getCurrentServerFilePath();
-        }
-        fitServer.setServerFile(serverFile);
-
 
         if (serviceDir == null) {
             serviceDir = getServerFileDir();
@@ -154,6 +160,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     private void addRootService(FitServerInstance fitServerInstance) {
 
+        clearContext(fitServerInstance.getSimpleServer(), "/");
         fitServerInstance.getSimpleServer().addAction("/", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
@@ -242,6 +249,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     private JSONObject addStopService(FitServerInstance fitServer) {
         String stopPath = "/_stop";
+        clearContext(fitServer.getSimpleServer(), stopPath);
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
@@ -272,12 +280,21 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return stopDefine;
     }
 
+    private static void clearContext(SimpleServer simpleServer, String stopPath) {
+        try {
+            simpleServer.getRawServer().removeContext(stopPath);
+        } catch (Exception e) {
+            //todo ignore
+        }
+    }
+
     private JSONObject addReloadService(FitServerInstance fitServer) {
         String reloadPath = "/_reload";
+        clearContext(fitServer.getSimpleServer(), reloadPath);
         fitServer.getSimpleServer().addAction(reloadPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                reload(fitServer);
+                reload(fitServer, false);
                 JSONObject welcome = getWelcomeJson(fitServer);
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
@@ -299,6 +316,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (StrUtil.isBlank(servicePath) || serviceConfig == null || serviceConfig.isEmpty()) {
             return;
         }
+        clearContext(simpleServer, servicePath);
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
