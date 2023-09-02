@@ -9,7 +9,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -31,7 +30,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static fit.lang.ExecuteNodeUtil.getAllException;
-import static my.lang.MyLanguage.LANG_FILE_SUFFIX;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
 /**
@@ -80,50 +78,62 @@ public abstract class RunCodeAction extends AnAction {
             });
         }
 
-
-        VirtualFile virtualFile;
-
-        final List<String> codeList = new ArrayList<>();
+        List<String> filePathList = new ArrayList<>();
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
-        if (editor != null) {
 
-            virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        boolean needShowFile = false;
+
+        if (editor != null) {
+            VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
             //检查文件后缀名是否满足
             if (!isScriptCode(virtualFile)) {
-                print("This file can't execute!\n", project, getProjectConsoleViewMap());
+                print("This file can't execute!\n\n", project, getProjectConsoleViewMap());
                 return;
             }
 
-            final Document document = editor.getDocument();
-            codeList.add(document.getText());
+            filePathList.add(virtualFile.getPath());
 
         } else if (virtualFiles != null) {
             //多选时，数组长度大于1
             for (VirtualFile virtualFile1 : virtualFiles) {
+
                 List<File> files = FileUtil.loopFiles(virtualFile1.getPath());
                 for (File file : files) {
                     if (isMyLanguageFile(file.getName())) {
-                        String code = FileUtil.readUtf8String(file);
-                        codeList.add(code);
+                        filePathList.add(file.getPath());
+                    } else {
+                        //检查文件后缀名是否满足
+                        print("This file can't execute, ignore: ".concat(file.getAbsolutePath()).concat("\n\n"), project, getProjectConsoleViewMap());
                     }
                 }
             }
-            virtualFile = virtualFiles[0];
+            if (filePathList.size() > 1) {
+                needShowFile = true;
+            }
         } else {
             return;
         }
 
-        if (virtualFile != null) {
-            ServerJsonExecuteNode.setCurrentServerFilePath(virtualFile.getPath());
+        if (!filePathList.isEmpty()) {
+            ServerJsonExecuteNode.setCurrentServerFilePath(filePathList.get(0));
+        } else {
+            return;
         }
 
+        boolean finalNeedShowFile = needShowFile;
         threadPoolExecutor.submit(() -> {
 
-            for (String code : codeList) {
+            for (String path : filePathList) {
+                String code = FileUtil.readUtf8String(path);
                 String result;
                 try {
+
+                    if (finalNeedShowFile) {
+                        print("run file: " + path + "\n", project, getProjectConsoleViewMap());
+                    }
+
                     Object resultObject = executeCode(code);
 
                     result = resultObject.toString();
@@ -131,14 +141,14 @@ public abstract class RunCodeAction extends AnAction {
                 } catch (Throwable exception) {
                     exception.printStackTrace();
                     result = "exception:" + getAllException(exception);
-                    print(result + "\n", project, getProjectConsoleViewMap());
+                    print(result + "\n\n", project, getProjectConsoleViewMap());
                     throw exception;
                 }
 
                 System.out.println("execute " + getLanguageName() + " code result:");
                 System.out.println(result);
 
-                print(result + "\n", project, getProjectConsoleViewMap());
+                print(result.concat("\n\n"), project, getProjectConsoleViewMap());
 
             }
         });
