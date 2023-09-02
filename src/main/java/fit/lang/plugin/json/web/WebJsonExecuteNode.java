@@ -18,7 +18,9 @@ public class WebJsonExecuteNode extends JsonExecuteNode {
 
         ExecuteNodeUtil.buildChildNode(this, nodeJsonDefine);
 
-        childNodes.get(0).executeAndNext(input, output);
+        if (childNodes != null && !childNodes.isEmpty()) {
+            childNodes.get(0).executeAndNext(input, output);
+        }
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
     }
