@@ -2,7 +2,7 @@
     <id>FitLang</id>
     <name>FitLang</name>
     <vendor email="yanchangyou@gmail.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
-    <idea-version since-build="182.*" until-build="253.*"/>
+    <idea-version since-build="163.*" until-build="253.*"/>
     <description><![CDATA[
     English: (后面有中文版)
     <br/>
@@ -179,6 +179,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.3.6 plugin min version: IDEA-2016.3</li>
             <li>0.3.5 plugin min version: IDEA-2018.2</li>
             <li>0.3.4 plugin min version: IDEA-2019.2</li>
             <li>0.3.3 server node support rerun</li>
