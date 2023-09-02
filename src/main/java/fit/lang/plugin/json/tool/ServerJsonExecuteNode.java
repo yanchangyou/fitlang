@@ -69,11 +69,16 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        FitServerInstance fitServer = createFitServerInstance(buildServerPort(input.getData().getInteger("port")));
-
-        JSONObject result = load(fitServer);
-
-        fitServer.getSimpleServer().start();
+        Integer port = buildServerPort(input.getData().getInteger("port"));
+        FitServerInstance fitServer = serverMap.get(port);
+        JSONObject result;
+        if (fitServer == null) {
+            fitServer = createFitServerInstance(port);
+            result = load(fitServer);
+            fitServer.getSimpleServer().start();
+        } else {
+            result = reload(fitServer, false);
+        }
 
         output.setData(result);
     }
