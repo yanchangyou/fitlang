@@ -8,12 +8,14 @@ public class WebSocketServerJsonExecuteNodeTest extends TestCase {
     public void testExecute() throws InterruptedException {
 
         String flow = "{" +//
-                "   'uni': 'websocket'," +
+                "   'uni': 'websocketServer'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
+
+        Thread.sleep(1000 * 1000);
 
     }
 }

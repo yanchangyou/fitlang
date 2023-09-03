@@ -1,16 +1,15 @@
 package fit.lang.plugin.json.web.websocket;
 
+import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 
-import java.util.Date;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
 /**
  *
@@ -18,6 +17,12 @@ import java.util.Date;
 public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
     private WebSocketServerHandshaker handShaker;
+
+    JSONObject serviceDefine;
+
+    public WebSocketServerHandler(JSONObject serviceDefine) {
+        this.serviceDefine = serviceDefine;
+    }
 
     private static String getWebSocketLocation(FullHttpRequest req) {
         String location = req.headers().get("Host") + "/ws";
@@ -65,8 +70,33 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
         //返回应答消息
         String request = ((TextWebSocketFrame) frame).text();
-        ctx.channel().write(new TextWebSocketFrame(
-                request + ", 欢迎使用Netty WebSocket服务，现在时刻:" + new Date().toString()));
+        System.out.println("receive massage: " + request);
+
+        JSONObject result = new JSONObject();
+
+        result.put("code", 0);
+
+        String resultText = "";
+        if (isJsonText(request)) {
+
+            try {
+                resultText = ExecuteJsonNodeUtil.executeCode(request);
+                result.put("data", resultText);
+
+            } catch (Exception e) {
+                result.put("code", 500);
+                result.put("message", e.getMessage());
+                resultText = result.toJSONString();
+            }
+
+        } else {
+            result.put("code", 400);
+            result.put("message", "only support json!");
+            resultText = result.toJSONString();
+        }
+
+        ctx.channel().write(new TextWebSocketFrame(resultText));
+        ctx.flush();
     }
 
     /**
@@ -126,7 +156,6 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.web;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -19,7 +20,6 @@ import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 /**
  * 执行节点
  * server:  <a href="https://blog.csdn.net/cold___play/article/details/131994054">server</a>
- * client : <a href="https://zhuanlan.zhihu.com/p/418968903">client</a>
  */
 public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
 
@@ -30,22 +30,33 @@ public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
 
         Integer port = buildServerPort(input.getData(), nodeJsonDefine, DEFAULT_SERVER_PORT);
 
-        JSONObject result = new JSONObject();
+        JSONObject serviceDefine = nodeJsonDefine.getJSONObject("service");
 
-        try {
-            run(port);
-        } catch (Exception e) {
-            //TODO
-            throw new RuntimeException(e);
+        if (serviceDefine == null) {
+            serviceDefine = JSON.parseObject("{'uni':'hello'}");
         }
 
+        JSONObject finalServiceDefine = serviceDefine;
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    execute(port, finalServiceDefine);
+                } catch (Exception e) {
+                    //TODO
+                    throw new RuntimeException(e);
+                }
+            }
+        }.start();
+
+        JSONObject result = new JSONObject();
         result.put("port", port);
         result.put("message", "start web socket at port: " + port);
 
         output.setData(result);
     }
 
-    public void run(int port) throws Exception {
+    public void execute(int port, JSONObject serviceDefine) throws Exception {
         EventLoopGroup boosGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -64,7 +75,7 @@ public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
                             //ChunkedWriteHandler，用来向客户端发送HTML5文件，主要用于支持浏览器和服务端进行WebSocket通信
                             pipeline.addLast("http-chunked", new ChunkedWriteHandler());
                             //自定义处理协议内容
-                            pipeline.addLast("handler", new WebSocketServerHandler());
+                            pipeline.addLast("handler", new WebSocketServerHandler(serviceDefine));
                         }
                     });
             Channel ch = server.bind(port).sync().channel();
