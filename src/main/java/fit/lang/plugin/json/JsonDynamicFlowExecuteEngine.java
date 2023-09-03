@@ -25,6 +25,7 @@ import fit.lang.plugin.json.tool.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
 import fit.lang.plugin.json.web.WebJsonExecuteNode;
+import fit.lang.plugin.json.web.WebSocketClientJsonExecuteNode;
 import fit.lang.plugin.json.web.WebSocketServerJsonExecuteNode;
 
 import java.util.ArrayList;
@@ -172,6 +173,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // web
         register("web", WebJsonExecuteNode.class);
         register("websocketServer", WebSocketServerJsonExecuteNode.class);
+        register("websocketClient", WebSocketClientJsonExecuteNode.class);
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
