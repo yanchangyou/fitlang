@@ -30,15 +30,15 @@ public class FileServerJsonExecuteNode extends JsonExecuteNode {
 
         String rootPath = nodeJsonDefine.getString("root");
 
-        SimpleServer simpleServer = HttpUtil.createServer(port);
-        simpleServer.setRoot(rootPath);
-
-        simpleServer.start();
-        result.put("message", "start server at port: " + port);
+        if (rootPath == null) {
+            rootPath = ServerJsonExecuteNode.getServerFileDir();
+        }
 
         FitServerInstance fitServerInstance = ServerJsonExecuteNode.createFitServerInstance(port);
-        fitServerInstance.setSimpleServer(simpleServer);
+        fitServerInstance.getSimpleServer().setRoot(rootPath);
+        fitServerInstance.getSimpleServer().start();
         ServerJsonExecuteNode.serverMap.put(port, fitServerInstance);
+        result.put("message", "start server at port: " + port);
 
         output.setData(result);
     }
