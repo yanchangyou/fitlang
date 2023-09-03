@@ -15,7 +15,7 @@ public class WebSocketServerJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Thread.sleep(1000 * 1000);
+//        Thread.sleep(1000 * 1000);
 
     }
 }

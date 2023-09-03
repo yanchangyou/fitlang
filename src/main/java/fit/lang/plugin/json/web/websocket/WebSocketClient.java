@@ -27,7 +27,6 @@ import java.net.URI;
  */
 public final class WebSocketClient {
 
-    //
     public WebSocketClient(String url) throws Exception {
         URI uri = new URI(url);
         String scheme = uri.getScheme() == null ? "ws" : uri.getScheme();
