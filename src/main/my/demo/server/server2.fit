@@ -6,6 +6,9 @@
     "service": {
         "/hello": {
             "uni": "hello"
+        },
+        "/systemInfo": {
+            "uni": "systemInfo"
         }
     }
 }
