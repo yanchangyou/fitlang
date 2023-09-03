@@ -14,22 +14,29 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.tool.server.FitServerInstance;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
 /**
  * 执行节点
  */
 public class ServerJsonExecuteNode extends JsonExecuteNode {
 
+    public static final String FIELD_NAEM_OF_HTTP_REQUEST = "httpRequest";
     /**
      * server启动文件的路径
      */
@@ -69,7 +76,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        Integer port = buildServerPort(input.getData().getInteger("port"));
+        Integer port = buildServerPort(input.getData(), nodeJsonDefine, DEFAULT_SERVER_PORT);
         FitServerInstance fitServer = serverMap.get(port);
         JSONObject result;
         if (fitServer == null) {
@@ -107,6 +114,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject stopDefine = addStopService(fitServer);
         serviceList.add(stopDefine);
+
+        JSONObject registerDefine = addRegisterCloudService(fitServer);
+        serviceList.add(registerDefine);
 
         JSONObject reloadDefine = addReloadService(fitServer);
         serviceList.add(reloadDefine);
@@ -152,13 +162,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return httpPrefix;
     }
 
-    private Integer buildServerPort(Integer inputPort) {
+    public static Integer buildServerPort(JSONObject input, JSONObject nodeDefine, int defaultPort) {
+        Integer inputPort = input.getInteger("port");
         Integer serverPort = inputPort;
         if (serverPort == null) {
-            serverPort = nodeJsonDefine.getInteger("port");
+            serverPort = nodeDefine.getInteger("port");
         }
         if (serverPort == null) {
-            serverPort = DEFAULT_SERVER_PORT;
+            serverPort = defaultPort;
         }
         return serverPort;
     }
@@ -277,6 +288,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 response.write("{\"message\":\"stop " + stopPort + " OK!\"}");
                 server.getSimpleServer().getRawServer().stop(1);
                 serverMap.remove(stopPort);
+                fitServer.setRunning(false);
             }
         });
         JSONObject stopDefine = new JSONObject();
@@ -284,6 +296,69 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         stopDefine.put("description", "stop this server");
         return stopDefine;
     }
+
+    /**
+     * 注册到云服务中： 使用http的长连接实现
+     *
+     * @param fitServer
+     * @return
+     */
+    private JSONObject addRegisterCloudService(FitServerInstance fitServer) {
+        String reloadPath = "/_register";
+        clearContext(fitServer.getSimpleServer(), reloadPath);
+        fitServer.getSimpleServer().addAction(reloadPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                System.out.println("server come: ".concat(request.getClientIP()));
+                InputStream inputStream = request.getBodyStream();
+                response.send(200, Long.MAX_VALUE);
+                PrintWriter writer = response.getWriter();
+                while (fitServer.isRunning()) {
+
+                    System.out.println("send to server begin!");
+                    writer.write("{'uni':'hello'}");
+
+                    writer.write("{$?!}");
+                    writer.flush();
+                    System.out.println("send to server end!");
+
+                    byte[] data = new byte[1024];
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while (true) {
+                        try {
+                            int length = inputStream.read(data);
+                            System.out.println("read end!");
+                            if (length == -1) {
+                                break;
+                            }
+                            stringBuilder.append(new String(data, 0, length));
+                            int endIndex = stringBuilder.indexOf("}{$?!}");
+                            if (endIndex > -1) {
+                                String code = stringBuilder.substring(0, endIndex + 1);
+
+                                System.out.println("result: " + code);
+
+                                stringBuilder = new StringBuilder(stringBuilder.substring(endIndex + 6));
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    System.out.println(stringBuilder);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+        JSONObject reloadDefine = new JSONObject();
+        reloadDefine.put("path", reloadPath);
+        reloadDefine.put("description", "reload this server");
+        return reloadDefine;
+    }
+
 
     private static void clearContext(SimpleServer simpleServer, String stopPath) {
         try {
@@ -338,7 +413,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
                 JSONObject inputJson = defaultInput;
 
-                if (requestBody.startsWith("{") && requestBody.endsWith("}")) {
+                if (isJsonText(requestBody)) {
                     inputJson.putAll(JSONObject.parseObject(requestBody));
                 }
 
@@ -350,7 +425,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 contextParam.put(REQUEST_PATH, request.getPath());
                 contextParam.put(SERVICE_PATH, servicePath);
                 try {
-                    String output = ExecuteJsonNodeUtil.executeCode(inputJson, serviceFlow, contextParam);
+                    JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
+                    String output = ExecuteJsonNodeUtil.executeCode(inputJson, serviceFlow, contextParam, jsonExecuteContext);
                     if (isWebNode(serviceFlow)) {
                         JSONObject header = serviceFlow.getJSONObject("header");
                         String contextType = null;
@@ -410,6 +486,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         SimpleServer simpleServer = HttpUtil.createServer(port);
         fitServerInstance.setSimpleServer(simpleServer);
         serverMap.put(port, fitServerInstance);
+        fitServerInstance.setRunning(true);
         return fitServerInstance;
     }
 

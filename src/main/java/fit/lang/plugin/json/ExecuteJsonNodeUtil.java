@@ -159,6 +159,9 @@ public class ExecuteJsonNodeUtil {
      */
     public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine) {
         String url = nodeJsonDefine.getString("url");
+        if (url == null) {
+            return "";
+        }
         url = (String) eval(url, inputParamAndContextParam);
         return url;
     }
