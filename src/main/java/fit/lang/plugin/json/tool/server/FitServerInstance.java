@@ -16,6 +16,8 @@ public class FitServerInstance {
 
     private String serverFile;
 
+    private boolean isRunning;
+
 
     public SimpleServer getSimpleServer() {
         return simpleServer;
@@ -61,10 +63,19 @@ public class FitServerInstance {
         this.url = url;
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
     public JSONObject getDisplayInfo() {
         JSONObject info = new JSONObject();
         info.put("file", serverFile);
         info.put("url", url);
         return info;
     }
+
 }
