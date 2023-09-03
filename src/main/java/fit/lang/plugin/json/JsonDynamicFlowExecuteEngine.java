@@ -18,6 +18,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import fit.lang.plugin.json.flow.*;
+import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.tool.FileServerJsonExecuteNode;
 import fit.lang.plugin.json.tool.HttpJsonExecuteNode;
 import fit.lang.plugin.json.tool.ProxyJsonExecuteNode;
@@ -169,6 +170,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         // web
         register("web", WebJsonExecuteNode.class);
+
+        //info
+        register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
 
 
     }
