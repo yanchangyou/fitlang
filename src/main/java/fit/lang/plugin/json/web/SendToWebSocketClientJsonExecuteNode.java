@@ -9,27 +9,16 @@ import fit.lang.plugin.json.web.websocket.WebSocketClient;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
 
 /**
- * 执行节点
- * client : <a href="https://zhuanlan.zhihu.com/p/418968903">client</a>
+ * 执行节点:发送到启动了，webSocketClient, 模拟请求，默认时后台运行无法调用
  */
-public class WebSocketClientJsonExecuteNode extends JsonExecuteNode {
-
-    static WebSocketClient webSocketClient;
-
-    public static WebSocketClient getWebSocketClient() {
-        return webSocketClient;
-    }
+public class SendToWebSocketClientJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
-        try {
-            webSocketClient = new WebSocketClient(url);
-        } catch (Exception e) {
-            //TODO
-            throw new RuntimeException(e);
-        }
+        WebSocketClient webSocketClient = WebSocketClientJsonExecuteNode.getWebSocketClient();
+
+        webSocketClient.send(input.getData().toJSONString());
 
         JSONObject result = new JSONObject();
         result.put("message", "ok");

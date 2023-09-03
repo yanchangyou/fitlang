@@ -75,16 +75,8 @@ public class ExecuteJsonNodeUtil {
         return executeCode(JSONObject.parseObject(input));
     }
 
-    public static String executeCode(JSONObject inputJson) {
-
-        JSONObject input = new JSONObject(0);
-        JSONObject flow = inputJson;
-
-        if (inputJson.containsKey("input") && inputJson.containsKey("flow")) {
-            input = inputJson.getJSONObject("input");
-            flow = inputJson.getJSONObject("flow");
-        }
-        return executeCode(input, flow);
+    public static String executeCode(JSONObject input) {
+        return executeCode(input, new JSONObject(), new JsonExecuteContext());
     }
 
     /**
@@ -100,6 +92,18 @@ public class ExecuteJsonNodeUtil {
 
     public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam) {
         return executeCode(input, flow, contextParam, new JsonExecuteContext());
+    }
+
+    public static String executeCode(JSONObject inputJson, JSONObject contextParam, JsonExecuteContext nodeContext) {
+
+        JSONObject input = new JSONObject(0);
+        JSONObject flow = inputJson;
+
+        if (inputJson.containsKey("input") && inputJson.containsKey("flow")) {
+            input = inputJson.getJSONObject("input");
+            flow = inputJson.getJSONObject("flow");
+        }
+        return executeCode(input, flow, contextParam, nodeContext);
     }
 
     public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam, JsonExecuteContext nodeContext) {

@@ -359,7 +359,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return reloadDefine;
     }
 
-
     private static void clearContext(SimpleServer simpleServer, String stopPath) {
         try {
             simpleServer.getRawServer().removeContext(stopPath);
@@ -400,33 +399,16 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String requestBody = request.getBody();
-                if (StrUtil.isBlank(requestBody)) {
-                    requestBody = "{}";
-                }
-                JSONObject defaultInput = new JSONObject();
-                JSONObject serviceFlow = serviceConfig;
-                if (serviceConfig.containsKey("input") && serviceConfig.containsKey("flow")) {
-                    defaultInput = serviceConfig.getJSONObject("input");
-                    serviceFlow = serviceConfig.getJSONObject("flow");
-                }
 
-                JSONObject inputJson = defaultInput;
+                JSONObject input = buildInput(request, serviceConfig);
 
-                if (isJsonText(requestBody)) {
-                    inputJson.putAll(JSONObject.parseObject(requestBody));
-                }
-
-                ListValueMap<String, String> listValueMap = request.getParams();
-                for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
-                    inputJson.put(entry.getKey(), entry.getValue().get(0));
-                }
                 JSONObject contextParam = new JSONObject();
                 contextParam.put(REQUEST_PATH, request.getPath());
                 contextParam.put(SERVICE_PATH, servicePath);
                 try {
                     JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
-                    String output = ExecuteJsonNodeUtil.executeCode(inputJson, serviceFlow, contextParam, jsonExecuteContext);
+                    String output = ExecuteJsonNodeUtil.executeCode(input, contextParam, jsonExecuteContext);
+                    JSONObject serviceFlow = input.getJSONObject("flow");
                     if (isWebNode(serviceFlow)) {
                         JSONObject header = serviceFlow.getJSONObject("header");
                         String contextType = null;
@@ -448,6 +430,34 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
             }
         });
+    }
+
+    private JSONObject buildInput(HttpServerRequest request, JSONObject serviceConfig) {
+        JSONObject input = new JSONObject(0);
+
+        String requestBody = request.getBody();
+        if (StrUtil.isBlank(requestBody)) {
+            requestBody = "{}";
+        }
+        JSONObject inputJson = new JSONObject();
+        JSONObject serviceFlow = serviceConfig;
+        if (serviceConfig.containsKey("input") && serviceConfig.containsKey("flow")) {
+            input = serviceConfig;
+            inputJson = serviceConfig.getJSONObject("input");
+        } else {
+            input.put("input", inputJson);
+            input.put("flow", serviceFlow);
+        }
+
+        if (isJsonText(requestBody)) {
+            inputJson.putAll(JSONObject.parseObject(requestBody));
+        }
+
+        ListValueMap<String, String> listValueMap = request.getParams();
+        for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
+            inputJson.put(entry.getKey(), entry.getValue().get(0));
+        }
+        return input;
     }
 
     List<JSONObject> loadServiceDir(String serviceRootDir, File serviceFile, SimpleServer simpleServer) {

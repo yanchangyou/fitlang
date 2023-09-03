@@ -1,0 +1,24 @@
+{
+    "uni": "server",
+    "service": {
+        "/sendToWebsocket": {
+            "uni": "pipe",
+            "child": [
+                {
+                    "uni": "mix",
+                    "json": {
+                        "uni": "hello",
+                        "message": "hello, web socket!"
+                    }
+                },
+                {
+                    "uni": "sendToWebsocketClient"
+                }
+            ]
+        },
+        "/startWebSocketClient": {
+            "uni": "websocketClient",
+            "url": "ws://127.0.0.1:10000/ws"
+        }
+    }
+}
