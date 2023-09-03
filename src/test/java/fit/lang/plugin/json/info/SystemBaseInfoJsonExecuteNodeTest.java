@@ -14,9 +14,10 @@ public class SystemBaseInfoJsonExecuteNodeTest extends TestCase {
 
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
-        System.out.println(JSONObject.parse(output).toJSONString(JSONWriter.Feature.PrettyFormat));
+        JSONObject info = JSONObject.parse(output);
+        System.out.println(info.toJSONString(JSONWriter.Feature.PrettyFormat));
 
-        Assert.assertEquals("{\"message\":\"hello, world!\"}", output);
+        Assert.assertTrue(info.containsKey("computerManufacturer"));
 
     }
 
