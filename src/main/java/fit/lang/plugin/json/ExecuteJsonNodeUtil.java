@@ -11,6 +11,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fit.lang.plugin.json.ExpressUtil.eval;
 import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.isWebNode;
 
 /**
@@ -149,4 +150,16 @@ public class ExecuteJsonNodeUtil {
         return responseText != null && responseText.startsWith("{") && responseText.endsWith("}");
     }
 
+    /**
+     * 从节点定义解析url ： 支持入参和配置，支持表达式
+     *
+     * @param inputParamAndContextParam
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine) {
+        String url = nodeJsonDefine.getString("url");
+        url = (String) eval(url, inputParamAndContextParam);
+        return url;
+    }
 }
