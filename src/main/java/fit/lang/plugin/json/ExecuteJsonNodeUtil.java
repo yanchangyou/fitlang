@@ -120,4 +120,14 @@ public class ExecuteJsonNodeUtil {
         return map;
     }
 
+    /**
+     * 大致判断是否json字符串: TODO
+     *
+     * @param responseText
+     * @return
+     */
+    public static boolean isJsonText(String responseText) {
+        return responseText != null && responseText.startsWith("{") && responseText.endsWith("}");
+    }
+
 }
