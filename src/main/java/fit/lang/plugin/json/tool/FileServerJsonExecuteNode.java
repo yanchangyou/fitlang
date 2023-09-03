@@ -1,12 +1,12 @@
 package fit.lang.plugin.json.tool;
 
-import cn.hutool.http.HttpUtil;
-import cn.hutool.http.server.SimpleServer;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.tool.server.FitServerInstance;
+
+import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.addStopService;
 
 /**
  * 执行节点
@@ -37,7 +37,14 @@ public class FileServerJsonExecuteNode extends JsonExecuteNode {
         FitServerInstance fitServerInstance = ServerJsonExecuteNode.createFitServerInstance(port);
         fitServerInstance.getSimpleServer().setRoot(rootPath);
         fitServerInstance.getSimpleServer().start();
+
+        fitServerInstance.setServerFile(ServerJsonExecuteNode.getCurrentServerFilePath());
+        fitServerInstance.setUrl("http://127.0.0.1:" + port);
+
         ServerJsonExecuteNode.serverMap.put(port, fitServerInstance);
+
+        addStopService(fitServerInstance);
+
         result.put("message", "start server at port: " + port);
 
         output.setData(result);

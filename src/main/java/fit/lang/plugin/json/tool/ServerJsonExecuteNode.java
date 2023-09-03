@@ -263,7 +263,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return getHttpPrefix() + ":" + serverPort + servicePath;
     }
 
-    private JSONObject addStopService(FitServerInstance fitServer) {
+    static JSONObject addStopService(FitServerInstance fitServer) {
         String stopPath = "/_stop";
         clearContext(fitServer.getSimpleServer(), stopPath);
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
