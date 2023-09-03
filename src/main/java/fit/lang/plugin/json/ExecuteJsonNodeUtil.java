@@ -67,6 +67,25 @@ public class ExecuteJsonNodeUtil {
         return executeCode(inputJson, flowDefine, contextParam);
     }
 
+    public static String executeCode(String input) {
+        if (!isJsonText(input)) {
+            throw new RuntimeException("input must be json, but found: ".concat(input));
+        }
+        return executeCode(JSONObject.parseObject(input));
+    }
+
+    public static String executeCode(JSONObject inputJson) {
+
+        JSONObject input = new JSONObject(0);
+        JSONObject flow = inputJson;
+
+        if (inputJson.containsKey("input") && inputJson.containsKey("flow")) {
+            input = inputJson.getJSONObject("input");
+            flow = inputJson.getJSONObject("flow");
+        }
+        return executeCode(input, flow);
+    }
+
     /**
      * 执行代码 json对象
      *
