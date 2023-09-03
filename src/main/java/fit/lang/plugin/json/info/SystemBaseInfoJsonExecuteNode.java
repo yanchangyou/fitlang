@@ -1,12 +1,12 @@
 package fit.lang.plugin.json.info;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import oshi.SystemInfo;
 import oshi.hardware.*;
+import oshi.software.os.OperatingSystem;
 
 import java.util.List;
 
@@ -40,8 +40,8 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
         long processorMaxFreq = processor.getMaxFreq();
 
         systemInfoJson.put("processorName", processorName);
-        systemInfoJson.put("physicalProcessorCount", physicalProcessorCount);
-        systemInfoJson.put("logicalProcessorCount", logicalProcessorCount);
+        systemInfoJson.put("processorPhysicalCount", physicalProcessorCount);
+        systemInfoJson.put("processorLogicalCount", logicalProcessorCount);
         systemInfoJson.put("processorMaxFreq", Math.round(10.0 * processorMaxFreq / 1024 / 1024 / 1024) / 10.0 + "G");
 
         //内存
@@ -52,19 +52,15 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
         systemInfoJson.put("memoryTotal", (memoryTotal / 1024 / 1024 / 1024) + "G");
         systemInfoJson.put("memoryAvailable", (memoryAvailable / 1024 / 1024 / 1024) + "G");
 
-        //硬盘
-        List<HWDiskStore> diskStoreList = hardware.getDiskStores();
-
-        JSONArray diskArray = new JSONArray();
-        for (HWDiskStore store : diskStoreList) {
-            JSONObject disk = new JSONObject();
-            disk.put("model", store.getModel());
-            disk.put("name", store.getName());
-            disk.put("size", (store.getSize() / 1024 / 1024 / 1024) + "G");
-            diskArray.add(disk);
-        }
-
-        systemInfoJson.put("disks", diskArray);
+        OperatingSystem os = systemInfo.getOperatingSystem();
+        int osBit = os.getBitness();
+        String osFamily = os.getFamily();
+        String osManufacturer = os.getManufacturer();
+        OperatingSystem.OSVersionInfo osVersion = os.getVersionInfo();
+        systemInfoJson.put("osManufacturer", osManufacturer);
+        systemInfoJson.put("osFamily", osFamily);
+        systemInfoJson.put("osVersion", osVersion.getVersion());
+        systemInfoJson.put("osBit", osBit);
 
         output.setData(systemInfoJson);
 
