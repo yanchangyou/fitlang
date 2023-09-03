@@ -79,8 +79,10 @@ public class ExecuteJsonNodeUtil {
     }
 
     public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam) {
+        return executeCode(input, flow, contextParam, new JsonExecuteContext());
+    }
 
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
+    public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam, JsonExecuteContext nodeContext) {
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
