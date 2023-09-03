@@ -180,6 +180,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.3.8 add systemInfo node support IDEA-2019.1~2022.2</li>
             <li>0.3.7 plugin support run at folder or multiple files</li>
             <li>0.3.6 plugin min version: IDEA-2016.3</li>
             <li>0.3.5 plugin min version: IDEA-2018.2</li>
