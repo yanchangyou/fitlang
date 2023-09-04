@@ -90,6 +90,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         output.setData(result);
     }
 
+    private void setFileServer(FitServerInstance fitServer) {
+        String rootPath = nodeJsonDefine.getString("root");
+
+        if (rootPath == null) {
+            rootPath = ServerJsonExecuteNode.getServerFileDir();
+        }
+        fitServer.getSimpleServer().setRoot(rootPath);
+    }
+
     public JSONObject load(FitServerInstance fitServer) {
         return reload(fitServer, false);
     }
@@ -111,6 +120,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         serviceList.clear();
 
         JSONObject result = new JSONObject();
+
+        setFileServer(fitServer);
 
         JSONObject stopDefine = addStopService(fitServer);
         serviceList.add(stopDefine);
@@ -176,8 +187,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     private void addRootService(FitServerInstance fitServerInstance) {
 
-        clearContext(fitServerInstance.getSimpleServer(), "/");
-        fitServerInstance.getSimpleServer().addAction("/", new Action() {
+        clearContext(fitServerInstance.getSimpleServer(), "/_menu");
+        fitServerInstance.getSimpleServer().addAction("/_menu", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);

@@ -59,7 +59,6 @@ fit语言是一门低代码编程语言，兼具开发人员友好和工具处�
 - http: 实现http请求
 - server: 封装http server服务
 - proxy: 实现代理服务
-- fileServer: 实现简单文件服务器
 
 ## 应用场景
 
