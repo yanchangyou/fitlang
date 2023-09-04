@@ -1,6 +1,7 @@
 package my.lang;
 
 import com.intellij.lang.Language;
+import fit.lang.FitLang;
 
 /**
  * @author yanchangyou
@@ -8,11 +9,8 @@ import com.intellij.lang.Language;
 public class MyLanguage extends Language {
 
     public static final String LANG_STRING_LOGO = "" +
-            "  _____    _    _   \n" +
-            " |  ___|  (_)  | |_ \n" +
-            " | |_     | |  | __|\n" +
-            " |  _|    | |  | |_ \n" +
-            " |_|      |_|   \\__|\n";
+            "FitLang version: " + FitLang.VERSION +
+            "\n";
     public static final String LANG_NAME = "FitLang";
 
     public static final String LANG_FILE_SUFFIX = "fit";

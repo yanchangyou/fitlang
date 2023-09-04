@@ -10,11 +10,9 @@ fit语言是一门低代码编程语言，兼具开发人员友好和工具处�
 
 ```
 {
+    "uni": "hello",
     "input": {
         "who": "world"
-    },
-    "flow": {
-        "uni": "hello"
     }
 }
 

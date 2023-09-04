@@ -1,9 +1,6 @@
 {
+    "uni": "http",
     "input": {
-
     },
-    "flow": {
-        "uni": "http",
-        "url":"https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
-    }
+    "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
 }

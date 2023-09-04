@@ -1,11 +1,9 @@
 {
+    "uni": "loop",
     "input": {
         "a": 1
     },
-    "flow": {
-        "uni": "loop",
-        "child": {
-            "uni": "eval"
-        }
+    "child": {
+        "uni": "eval"
     }
 }

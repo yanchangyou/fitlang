@@ -1,6 +1,6 @@
 {
     "description": "a simple hello world demo",
-    "uni": "hello",
+    "uni": "echo",
     "input": {
         "who": "world"
     }

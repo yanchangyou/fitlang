@@ -1,20 +1,18 @@
 {
+    "uni": "switch",
     "input": {
         "language": "zh"
     },
-    "flow": {
-        "uni": "switch",
-        "switchField": "language",
-        "case": {
-            "zh": {
-                "uni": "hello",
-                "who": "世界",
-                "message": "${'你好，'+who + '！'}"
-            },
-            "en": {
-                "uni": "hello",
-                "who": "world"
-            }
+    "switchField": "language",
+    "case": {
+        "zh": {
+            "uni": "hello",
+            "who": "世界",
+            "message": "${'你好，'+who + '！'}"
+        },
+        "en": {
+            "uni": "hello",
+            "who": "world"
         }
     }
 }

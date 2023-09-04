@@ -1,8 +1,6 @@
 {
+    "uni": "hello",
     "input": {
         "who": "world"
-    },
-    "flow": {
-        "uni": "hello"
     }
 }

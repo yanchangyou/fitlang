@@ -94,19 +94,20 @@ public class ExecuteJsonNodeUtil {
         return executeCode(input, flow, contextParam, new JsonExecuteContext());
     }
 
-    public static String executeCode(JSONObject inputJson, JSONObject contextParam, JsonExecuteContext nodeContext) {
+    public static String executeCode(JSONObject codeJson, JSONObject contextParam, JsonExecuteContext nodeContext) {
 
-        JSONObject input = new JSONObject(0);
-        JSONObject flow = inputJson;
+        JSONObject input;
 
-        if (inputJson.containsKey("input") && inputJson.containsKey("flow")) {
-            input = inputJson.getJSONObject("input");
-            flow = inputJson.getJSONObject("flow");
+        if (codeJson.containsKey("input")) {
+            input = codeJson.getJSONObject("input");
+        } else {
+            input = new JSONObject(0);
         }
-        return executeCode(input, flow, contextParam, nodeContext);
+        return executeCode(input, codeJson, contextParam, nodeContext);
     }
 
     public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam, JsonExecuteContext nodeContext) {
+
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
@@ -151,7 +152,11 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static boolean isJsonText(String responseText) {
-        return responseText != null && responseText.startsWith("{") && responseText.endsWith("}");
+        if (responseText == null) {
+            return false;
+        }
+        responseText = responseText.trim();
+        return responseText.startsWith("{") && responseText.endsWith("}");
     }
 
     /**

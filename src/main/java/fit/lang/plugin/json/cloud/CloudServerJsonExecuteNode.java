@@ -69,15 +69,13 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
                         JSONObject fitInput = JSONObject.parse(code);
 
                         JSONObject defaultInput = new JSONObject();
-                        JSONObject serviceFlow = fitInput;
-                        if (fitInput.containsKey("input") && fitInput.containsKey("flow")) {
+                        if (fitInput.containsKey("input")) {
                             defaultInput = fitInput.getJSONObject("input");
-                            serviceFlow = fitInput.getJSONObject("flow");
                         }
 
                         JSONObject inputJson = defaultInput;
 
-                        String result = ExecuteJsonNodeUtil.executeCode(inputJson, serviceFlow);
+                        String result = ExecuteJsonNodeUtil.executeCode(inputJson, fitInput);
                         System.out.println("result:" + result);
                         outputStream.write(result.getBytes());
                         outputStream.write("{$?!}".getBytes());

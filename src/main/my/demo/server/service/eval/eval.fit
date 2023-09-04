@@ -1,10 +1,8 @@
 {
+    "uni": "eval",
     "input": {
         "a": 1,
         "b": 2,
         "c": "${a+b}"
-    },
-    "flow": {
-        "uni": "eval"
     }
 }

@@ -36,7 +36,8 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
  */
 public class ServerJsonExecuteNode extends JsonExecuteNode {
 
-    public static final String FIELD_NAEM_OF_HTTP_REQUEST = "httpRequest";
+    public static final String FIELD_NAME_OF_RAW = "_raw";
+
     /**
      * server启动文件的路径
      */
@@ -132,12 +133,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         JSONObject reloadDefine = addReloadService(fitServer);
         serviceList.add(reloadDefine);
 
-        JSONObject serviceConfig = nodeJsonDefine.getJSONObject("service");
-        if (serviceConfig != null && !serviceConfig.isEmpty()) {
+        JSONObject serviceDefine = nodeJsonDefine.getJSONObject("service");
+        if (serviceDefine != null && !serviceDefine.isEmpty()) {
             loadServiceNode(nodeJsonDefine.getJSONObject("service"), fitServer);
         }
 
-        serviceList.add(serviceConfig);
+        serviceList.add(serviceDefine);
 
         if (serviceDir == null) {
             serviceDir = getServerFileDir();
@@ -243,11 +244,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (service != null) {
             for (Map.Entry<String, Object> entry : service.entrySet()) {
                 String servicePath = entry.getKey();
-                JSONObject serviceFlow = (JSONObject) entry.getValue();
-                if (serviceFlow == null || serviceFlow.isEmpty()) {
+                JSONObject serviceDefine = (JSONObject) entry.getValue();
+                if (serviceDefine == null || serviceDefine.isEmpty()) {
                     continue;
                 }
-                JSONObject serviceDefine = buildStandardServiceDefine(serviceFlow);
                 serviceDefine.put("path", servicePath);
                 serviceDefine.put("loadType", "serverNode");
                 registerService(fitServer.getSimpleServer(), servicePath, serviceDefine);
@@ -258,16 +258,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     static String convertPath(String path) {
         return path.replace("\\", "/");
-    }
-
-    JSONObject buildStandardServiceDefine(JSONObject serviceDefine) {
-        JSONObject standardServiceDefine = serviceDefine;
-        if (!serviceDefine.containsKey("flow")) {
-            standardServiceDefine = new JSONObject();
-            standardServiceDefine.put("flow", serviceDefine);
-            standardServiceDefine.put("input", new JSONObject());
-        }
-        return standardServiceDefine;
     }
 
     private String buildUrl(Integer serverPort, String servicePath) {
@@ -400,28 +390,28 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      *
      * @param simpleServer
      * @param servicePath
-     * @param serviceConfig
+     * @param serviceDefine
      */
-    private void registerService(SimpleServer simpleServer, String servicePath, JSONObject serviceConfig) {
-        if (StrUtil.isBlank(servicePath) || serviceConfig == null || serviceConfig.isEmpty()) {
+    private void registerService(SimpleServer simpleServer, String servicePath, JSONObject serviceDefine) {
+        if (StrUtil.isBlank(servicePath) || serviceDefine == null || serviceDefine.isEmpty()) {
             return;
         }
         clearContext(simpleServer, servicePath);
+        JSONObject serviceDefineCopy = serviceDefine.clone();
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-
-                JSONObject input = buildInput(request, serviceConfig);
 
                 JSONObject contextParam = new JSONObject();
                 contextParam.put(REQUEST_PATH, request.getPath());
                 contextParam.put(SERVICE_PATH, servicePath);
                 try {
+                    JSONObject input = buildInput(request, serviceDefineCopy);
+                    serviceDefineCopy.put("input", input);
                     JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
-                    String output = ExecuteJsonNodeUtil.executeCode(input, contextParam, jsonExecuteContext);
-                    JSONObject serviceFlow = input.getJSONObject("flow");
-                    if (isWebNode(serviceFlow)) {
-                        JSONObject header = serviceFlow.getJSONObject("header");
+                    String output = ExecuteJsonNodeUtil.executeCode(serviceDefineCopy, contextParam, jsonExecuteContext);
+                    if (isWebNode(serviceDefineCopy)) {
+                        JSONObject header = serviceDefineCopy.getJSONObject("header");
                         String contextType = null;
                         if (header != null) {
                             contextType = header.getString("contextType");
@@ -443,32 +433,27 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         });
     }
 
-    private JSONObject buildInput(HttpServerRequest request, JSONObject serviceConfig) {
-        JSONObject input = new JSONObject(0);
+    static JSONObject buildInput(HttpServerRequest request, JSONObject serviceDefine) {
+
+        JSONObject inputJson;
+        if (serviceDefine.containsKey("input")) {
+            inputJson = serviceDefine.getJSONObject("input").clone();
+        } else {
+            inputJson = new JSONObject();
+        }
 
         String requestBody = request.getBody();
-        if (StrUtil.isBlank(requestBody)) {
-            requestBody = "{}";
-        }
-        JSONObject inputJson = new JSONObject();
-        JSONObject serviceFlow = serviceConfig;
-        if (serviceConfig.containsKey("input") && serviceConfig.containsKey("flow")) {
-            input = serviceConfig;
-            inputJson = serviceConfig.getJSONObject("input");
-        } else {
-            input.put("input", inputJson);
-            input.put("flow", serviceFlow);
-        }
-
         if (isJsonText(requestBody)) {
             inputJson.putAll(JSONObject.parseObject(requestBody));
+        } else {
+            inputJson.put(FIELD_NAME_OF_RAW, requestBody);
         }
 
         ListValueMap<String, String> listValueMap = request.getParams();
         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
             inputJson.put(entry.getKey(), entry.getValue().get(0));
         }
-        return input;
+        return inputJson;
     }
 
     List<JSONObject> loadServiceDir(String serviceRootDir, File serviceFile, SimpleServer simpleServer) {
@@ -481,13 +466,13 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 serviceDefineList.addAll(subDefineList);
             }
         } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
-            String serviceDefine = FileUtil.readUtf8String(serviceFile);
-            JSONObject serviceDefineJson = buildStandardServiceDefine(JSONObject.parseObject(serviceDefine));
+            String serviceDefineText = FileUtil.readUtf8String(serviceFile);
+            JSONObject serviceDefine = JSONObject.parseObject(serviceDefineText);
             String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
-            serviceDefineJson.put("path", servicePath);
-            serviceDefineJson.put("loadType", "fileSystem");
-            registerService(simpleServer, servicePath, serviceDefineJson);
-            serviceDefineList.add(serviceDefineJson);
+            serviceDefine.put("path", servicePath);
+            serviceDefine.put("loadType", "fileSystem");
+            registerService(simpleServer, servicePath, serviceDefine);
+            serviceDefineList.add(serviceDefine);
         }
         return serviceDefineList;
     }

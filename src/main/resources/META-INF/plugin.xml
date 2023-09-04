@@ -18,11 +18,9 @@ First demo, file name is hello.fit<br/>
 code:<br/>
 <pre>
 {
+    "uni": "hello",
     "input": {
         "who": "world"
-    },
-    "flow": {
-        "uni": "hello"
     }
 }
 </pre>
@@ -86,11 +84,9 @@ fit语言是一门低代码编程语言，开发人员友好和工具处理友�
 内容<br/>
 <pre>
 {
+    "uni": "hello",
     "input": {
         "who": "world"
-    },
-    "flow": {
-        "uni": "hello"
     }
 }
 </pre>
@@ -168,7 +164,7 @@ proxy：代理节点<br/>
                 description="Run fit lang"
                 icon="/my/lang/icon/fit.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"></add-to-group>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
             <keyboard-shortcut first-keystroke="control shift J" keymap="$default"/>
         </action>
 
@@ -178,6 +174,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.4.1 remove flow keyword, keep only two keywords: uni and input(breaking change!)</li>
             <li>0.4.0 remove file server, replace by server node</li>
             <li>0.3.9 add node: websocketServer, websocketClient, sendToWebsocketClient</li>
             <li>0.3.8 add systemInfo node support IDEA-2019.1~2022.2(MacOS)</li>

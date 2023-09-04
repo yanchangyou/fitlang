@@ -1,13 +1,11 @@
 {
+    "uni": "loop",
     "input": {
         "who": "world"
     },
-    "flow": {
-        "uni": "loop",
-        "loopTimes": 1,
-        "child": {
-            "uni": "hello",
-            "who": "world"
-        }
+    "loopTimes": 1,
+    "child": {
+        "uni": "hello",
+        "who": "world"
     }
 }

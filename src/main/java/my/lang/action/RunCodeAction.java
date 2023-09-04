@@ -155,20 +155,7 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     private String executeCode(String code) {
-
-        JSONObject fitInput = JSONObject.parseObject(code);
-
-        String input = "{}";
-
-        //支持没有input字段时，整个都是flow
-        JSONObject flow = fitInput;
-
-        if (fitInput.getJSONObject("input") != null) {
-            input = fitInput.getString("input");
-            flow = fitInput.getJSONObject("flow");
-        }
-
-        return ExecuteJsonNodeUtil.executeCode(input, flow.toJSONString());
+        return ExecuteJsonNodeUtil.executeCode(code);
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {

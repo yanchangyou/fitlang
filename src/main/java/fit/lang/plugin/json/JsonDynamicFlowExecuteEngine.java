@@ -56,7 +56,8 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         if (nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_UNI) == null) {
             throw new ExecuteNodeException("node uni is empty!");
         }
-        this.nodeDefine = nodeDefine;
+        //避免修改内部结构
+        this.nodeDefine = nodeDefine.clone();
     }
 
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -179,7 +180,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
-
 
     }
 }
