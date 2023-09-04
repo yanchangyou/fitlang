@@ -71,7 +71,6 @@ switch: branch execution node, switchField specifies the branch field<br/>
 tool nodes<br/>
 hTTP: supports HTTP client request<br/>
 server: server node<br/>
-fileServer: static file server<br/>
 proxy: proxy node<br/>
 <br/>
 <br/>
@@ -136,7 +135,6 @@ switch：分支执行节点，switchField指定分支字段<br/>
 工具节点<br/>
 http：支持http-client请求<br/>
 server：服务端节点<br/>
-fileServer：静态文件服务器<br/>
 proxy：代理节点<br/>
 </p>
     ]]></description>
@@ -180,7 +178,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.3.10 fix fileServer node bug</li>
+            <li>0.4.0 remove file server, replace by server node</li>
             <li>0.3.9 add node: websocketServer, websocketClient, sendToWebsocketClient</li>
             <li>0.3.8 add systemInfo node support IDEA-2019.1~2022.2(MacOS)</li>
             <li>0.3.7 plugin support run at folder or multiple files</li>
