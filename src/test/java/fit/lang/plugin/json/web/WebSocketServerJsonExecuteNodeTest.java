@@ -8,7 +8,7 @@ public class WebSocketServerJsonExecuteNodeTest extends TestCase {
     public void testExecute() throws InterruptedException {
 
         String flow = "{" +//
-                "   'uni': 'websocketServer'," +
+                "   'uni': 'wsServer'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
