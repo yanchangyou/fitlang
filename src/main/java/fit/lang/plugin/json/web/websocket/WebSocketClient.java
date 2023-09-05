@@ -1,6 +1,8 @@
 package fit.lang.plugin.json.web.websocket;
 
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -16,12 +18,13 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
 import java.net.URI;
 
+import static fit.lang.plugin.json.web.websocket.WebSocketClientHandler.messageList;
+import static fit.lang.plugin.json.web.websocket.WebSocketClientHandler.resultList;
+
 /**
  * <a href="https://github.com/netty/netty/blob/4.1/example/src/main/java/io/netty/example/http/websocketx/client/WebSocketClient.java">WebSocketClient</a>
  */
 public final class WebSocketClient {
-
-
     Channel channel;
 
     public WebSocketClient(String url) throws Exception {
@@ -83,6 +86,22 @@ public final class WebSocketClient {
 
             channel = b.connect(uri.getHost(), port).sync().channel();
             handler.handshakeFuture().sync();
+
+//            while (true) {
+//                if (messageList.isEmpty()) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                } else {
+//                    for (String message : messageList) {
+//                        String result = ExecuteJsonNodeUtil.executeCode(message);
+//                        channel.writeAndFlush(result);
+//                    }
+//                    messageList.clear();
+//                }
+//            }
 //
 //            BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 //            while (true) {
@@ -94,11 +113,11 @@ public final class WebSocketClient {
 //                    channel.closeFuture().sync();
 //                    break;
 //                } else if ("ping".equals(msg.toLowerCase())) {
-//                    WebSocketFrame frame = new PingWebSocketFrame(Unpooled.wrappedBuffer(new byte[]{8, 1, 8, 1}));
-//                    channel.writeAndFlush(frame);
+//            WebSocketFrame frame = new PingWebSocketFrame(Unpooled.wrappedBuffer(new byte[]{8, 1, 8, 1}));
+//            channel.writeAndFlush(frame);
 //                } else {
-//                    WebSocketFrame frame = new TextWebSocketFrame(msg);
-//                    channel.writeAndFlush(frame);
+//            WebSocketFrame frame = new TextWebSocketFrame("{'message':'register'}");
+//            channel.writeAndFlush(frame);
 //                }
 //            }
         } finally {

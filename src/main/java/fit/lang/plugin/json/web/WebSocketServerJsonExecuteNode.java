@@ -24,6 +24,9 @@ import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
 
     public static final int DEFAULT_SERVER_PORT = 10000;
+//    static SocketChannel channel;
+
+//    static SocketChannel socketChannel;
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -67,6 +70,7 @@ public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
+//                            channel = ch;
                             ChannelPipeline pipeline = ch.pipeline();
                             //HttpServerCodec，将请求和应答消息编码或者解码为HTTP消息
                             pipeline.addLast("http-codec", new HttpServerCodec());
@@ -76,12 +80,15 @@ public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
                             pipeline.addLast("http-chunked", new ChunkedWriteHandler());
                             //自定义处理协议内容
                             pipeline.addLast("handler", new WebSocketServerHandler(serviceDefine));
+//                            pipeline.addLast("default", globalGroup);
                         }
                     });
-            Channel ch = server.bind(port).sync().channel();
+            Channel channel = server.bind(port).sync().channel();
+
             System.out.println("Web socket server started at port " + port + ".");
             System.out.println("Open your browser and navigate to http://localhost:" + port + "/");
-            ch.closeFuture().sync();
+            channel.closeFuture().sync();
+            System.out.println("channel close!");
         } finally {
             boosGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

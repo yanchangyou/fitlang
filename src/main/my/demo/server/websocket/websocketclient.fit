@@ -1,0 +1,7 @@
+{
+    "uni": "websocketClient",
+    "url": "ws://127.0.0.1:10000",
+    "input": {
+        "uni": "hello"
+    }
+}

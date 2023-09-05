@@ -5,6 +5,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.web.websocket.WebSocketClient;
+import fit.lang.plugin.json.web.websocket.WebSocketClientHandler;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
 
@@ -14,26 +15,43 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
  */
 public class WebSocketClientJsonExecuteNode extends JsonExecuteNode {
 
-    static WebSocketClient webSocketClient;
-
-    public static WebSocketClient getWebSocketClient() {
-        return webSocketClient;
-    }
+    WebSocketClient webSocketClient;
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
-        try {
-            webSocketClient = new WebSocketClient(url);
-        } catch (Exception e) {
-            //TODO
-            throw new RuntimeException(e);
+        if (webSocketClient == null) {
+            String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
+            try {
+                webSocketClient = new WebSocketClient(url);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
+
+        webSocketClient.send(input.getData().toJSONString());
+
+        for (int i = 0; i < 1000; i++) {
+            if (!WebSocketClientHandler.resultList.isEmpty()) {
+                break;
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String data = WebSocketClientHandler.resultList.get(0);
+        WebSocketClientHandler.resultList.remove(0);
 
         JSONObject result = new JSONObject();
         result.put("message", "ok");
+        result.put("data", data);
 
+        if (data == null) {
+            result.put("message", "timeout!");
+        }
         output.setData(result);
     }
 

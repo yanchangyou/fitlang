@@ -5,9 +5,15 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
+import io.netty.util.concurrent.GlobalEventExecutor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
@@ -15,6 +21,12 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
  *
  */
 public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
+
+    public static ChannelGroup CHANNEL_GROUP = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    public static List<String> messageList = new ArrayList<>();
+
+    public static List<String> resultList = new ArrayList<>();
 
     private WebSocketServerHandshaker handShaker;
 
@@ -48,6 +60,9 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
      * @param frame
      */
     private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
+
+        CHANNEL_GROUP.add(ctx.channel());
+
         //判断是否是关闭链路的指令
         if (frame instanceof CloseWebSocketFrame) {
             handShaker.close(ctx.channel(), (CloseWebSocketFrame) frame.retain());
@@ -82,21 +97,17 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
             try {
                 resultText = ExecuteJsonNodeUtil.executeCode(request);
                 result.put("data", resultText);
-
             } catch (Exception e) {
                 result.put("code", 500);
                 result.put("message", e.getMessage());
                 resultText = result.toJSONString();
             }
-
         } else {
             result.put("code", 400);
             result.put("message", "only support json!");
             resultText = result.toJSONString();
         }
-
-        ctx.channel().write(new TextWebSocketFrame(resultText));
-        ctx.flush();
+        ctx.writeAndFlush(new TextWebSocketFrame(resultText));
     }
 
     /**
@@ -126,9 +137,9 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
             ChannelFuture future = handShaker.handshake(ctx.channel(), req);
             if (future.isSuccess()) {
                 //dosomething
+//                future.channel().writeAndFlush(new TextWebSocketFrame("only support web socket!"));
             }
         }
-
     }
 
     /**
@@ -155,7 +166,8 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+
     }
 
     @Override
