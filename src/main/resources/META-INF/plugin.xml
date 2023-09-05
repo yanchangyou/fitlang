@@ -167,7 +167,6 @@ proxy：代理节点<br/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
             <keyboard-shortcut first-keystroke="control shift J" keymap="$default"/>
         </action>
-
     </actions>
 
     <change-notes>
