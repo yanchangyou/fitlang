@@ -9,26 +9,28 @@
     <br>
     <script type="text/javascript">
     var socket;
-    if (!window.WebSocket) {
-        window.WebSocket = window.MozWebSocket;
-    }
-    if (window.WebSocket) {
-        socket = new WebSocket("ws://127.0.0.1:10000/test");
-        socket.onmessage = function (event) {
-            console.log("xxx" + event)
-            var ta = document.getElementById('output');
-            ta.value = event.data;
-        };
-        socket.onopen = function (event) {
-            var ta = document.getElementById('output');
-            ta.value ='{"message":"打开WebSocket服务正常，浏览器支持WebSocket!"}';
-        };
-        socket.onclose = function (event) {
-            var ta = document.getElementById('output');
-            ta.value ='{"message":"WebSocket 关闭!"}';
+    function connectionWs() {
+        if (!window.WebSocket) {
+            window.WebSocket = window.MozWebSocket;
         }
-    } else {
-        alert("抱歉，您的浏览器不支持WebSocket协议!");
+        if (window.WebSocket) {
+            socket = new WebSocket("ws://127.0.0.1:10000/test");
+            socket.onmessage = function (event) {
+                console.log("xxx" + event)
+                var ta = document.getElementById('output');
+                ta.value = event.data;
+            };
+            socket.onopen = function (event) {
+                var ta = document.getElementById('output');
+                ta.value ='{"message":"打开WebSocket服务正常，浏览器支持WebSocket!"}';
+            };
+            socket.onclose = function (event) {
+                var ta = document.getElementById('output');
+                ta.value ='{"message":"WebSocket 关闭!"}';
+            }
+        } else {
+            alert("抱歉，您的浏览器不支持WebSocket协议!");
+        }
     }
 
     function send(message) {
@@ -50,6 +52,7 @@
         request.onreadystatechange = function(message) {
             if (request.readyState == 4 && request.status == 200) {
                 alert(request.responseText);
+                connectionWs();
             }
         };
         request.send(null);
@@ -74,6 +77,7 @@
         <input type="button" value="启动websocket" onclick="start()">
         <input type="button" value="发送执行" onclick="send(this.form.message.value)">
         <input type="button" value="格式化" onclick="format()">
+        &nbsp;&nbsp; <a target="_blank" href="/_menu">api</a><br/><br/>
         <h3>输出结果</h3>
         <textarea id="output" style="width:700px; height: 200px;">{}</textarea>
     </form>
