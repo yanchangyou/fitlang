@@ -30,8 +30,6 @@ The file 'hello. fit' ends with 'fit' and inherits the JSON language plugin that
 <br/>
 input: input parameter definition<br/>
 <br/>
-flow: Definition of processing flow<br/>
-<br/>
 uni Uniform Node Identifier(like URI), distinguishing different processing, internally corresponding to an implementation class<br/>
 <br/>
 In the editor, right-click and select 'Run FitLang' to execute. After the code is executed, it will be output<br/>
@@ -94,7 +92,6 @@ fit语言是一门低代码编程语言，开发人员友好和工具处理友�
 <p>
 hello.fit 后缀以fit结尾，语言插件继承IDEA自带的JSON语言，使用JSON的语法校验、高亮、格式等<br/>
 input：入参定义<br/>
-flow：处理流程定义<br/>
 uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一个实现类<br/>
 编辑器里面，点击右键，选择【Run FitLang】执行，代码执行完将输出<br/>
 

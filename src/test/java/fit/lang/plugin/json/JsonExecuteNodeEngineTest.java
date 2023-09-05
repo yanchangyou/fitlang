@@ -38,7 +38,7 @@ public class JsonExecuteNodeEngineTest extends TestCase {
         try {
             new JsonDynamicFlowExecuteEngine(JSON.parseObject("{}"));
         } catch (Exception e) {
-            Assert.assertEquals("flow define is empty!", e.getMessage());
+            Assert.assertEquals("define is empty!", e.getMessage());
         }
     }
 

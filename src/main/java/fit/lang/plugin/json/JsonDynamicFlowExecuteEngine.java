@@ -48,7 +48,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     public void setNodeDefine(JSONObject nodeDefine) {
         if (nodeDefine == null || nodeDefine.isEmpty()) {
-            throw new ExecuteNodeException("flow define is empty!");
+            throw new ExecuteNodeException("define is empty!");
         }
         if (nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_UNI) == null) {
             throw new ExecuteNodeException("node uni is empty!");
