@@ -171,8 +171,8 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         // web
         register("web", WebJsonExecuteNode.class);
-        register("websocketServer", WebSocketServerJsonExecuteNode.class);
-        register("websocketClient", WebSocketClientJsonExecuteNode.class);
+        register("wsServer", WebSocketServerJsonExecuteNode.class);
+        register("wsClient", WebSocketClientJsonExecuteNode.class);
 //        register("sendToWebsocketClient", SendToWebSocketClientJsonExecuteNode.class);
 //        register("sendToWebsocketServer", SendToWebSocketServerJsonExecuteNode.class);
 //        register("receiveFromWebSocketServer", ReceiveFromWebSocketServerJsonExecuteNode.class);
