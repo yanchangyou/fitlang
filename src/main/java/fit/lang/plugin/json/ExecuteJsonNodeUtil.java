@@ -160,14 +160,23 @@ public class ExecuteJsonNodeUtil {
     }
 
     /**
+     * @param inputParamAndContextParam
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine) {
+        return parseNodeUrl(inputParamAndContextParam, nodeJsonDefine, "url");
+    }
+
+    /**
      * 从节点定义解析url ： 支持入参和配置，支持表达式
      *
      * @param inputParamAndContextParam
      * @param nodeJsonDefine
      * @return
      */
-    public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine) {
-        String url = nodeJsonDefine.getString("url");
+    public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine, String urlFieldName) {
+        String url = nodeJsonDefine.getString(urlFieldName);
         if (url == null) {
             return "";
         }

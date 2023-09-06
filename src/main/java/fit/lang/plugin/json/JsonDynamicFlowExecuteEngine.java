@@ -12,6 +12,7 @@ import fit.lang.common.util.PrintExecuteNode;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
+import fit.lang.plugin.json.cloud.CloudClientJsonExecuteNode;
 import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;
@@ -173,6 +174,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("web", WebJsonExecuteNode.class);
         register("wsServer", WebSocketServerJsonExecuteNode.class);
         register("wsClient", WebSocketClientJsonExecuteNode.class);
+
+        // cloud
+        register("cloudServer", CloudServerJsonExecuteNode.class);
+        register("cloudClient", CloudClientJsonExecuteNode.class);
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);

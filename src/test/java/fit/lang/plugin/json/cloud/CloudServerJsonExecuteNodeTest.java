@@ -8,14 +8,13 @@ public class CloudServerJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
 
-        String flow = "{'uni':'register','registerUrl':'http://127.0.0.1:11111/_register'}";
+        String flow = "{'uni':'cloudServer','port':20000}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"message\":\"hello, world!\"}", output);
+        Assert.assertEquals("{\"port\":20000,\"message\":\"start web socket at port: 20000\"}", output);
 
     }
-
 }
