@@ -2,7 +2,6 @@ package fit.lang.plugin.json.cloud.websocket;
 
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -18,8 +17,6 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
 /**
  *
