@@ -170,6 +170,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.4.4 add node: cloudServer and cloudClient</li>
             <li>0.4.3 rename websocketServer and websocketClient to wsServer and wsClient</li>
             <li>0.4.2 integrate websocketServer and websocketClient node</li>
             <li>0.4.1 remove flow keyword, keep only two keywords: uni and input(breaking change!)</li>

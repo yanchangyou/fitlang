@@ -310,7 +310,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 List<JSONObject> sessionList = CloudServerJsonExecuteNode.getSessionList();
                 JSONObject info = new JSONObject();
-                info.put("sessionList", sessionList);
+                info.put("sessions", sessionList);
                 info.put("onlineCount", sessionList.size());
                 response.write(info.toJSONString());
             }
