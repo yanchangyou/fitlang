@@ -1,6 +1,6 @@
 package fit.lang.plugin.json.cloud;
 
-import com.alibaba.fastjson2.JSON;
+import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.cloud.websocket.CloudWebSocketServerHandler;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -18,6 +18,7 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 
 /**
+ *
  */
 public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
@@ -28,18 +29,11 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
         Integer port = buildServerPort(input.getData(), nodeJsonDefine, DEFAULT_SERVER_PORT);
 
-        JSONObject serviceDefine = nodeJsonDefine.getJSONObject("service");
-
-        if (serviceDefine == null) {
-            serviceDefine = JSON.parseObject("{'uni':'hello'}");
-        }
-
-        JSONObject finalServiceDefine = serviceDefine;
         new Thread() {
             @Override
             public void run() {
                 try {
-                    execute(port, finalServiceDefine);
+                    execute(port);
                 } catch (Exception e) {
                     //TODO
                     throw new RuntimeException(e);
@@ -54,7 +48,7 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
         output.setData(result);
     }
 
-    public void execute(int port, JSONObject serviceDefine) throws Exception {
+    public void execute(int port) throws Exception {
         EventLoopGroup boosGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
@@ -74,7 +68,7 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
                             //ChunkedWriteHandler，用来向客户端发送HTML5文件，主要用于支持浏览器和服务端进行WebSocket通信
                             pipeline.addLast("http-chunked", new ChunkedWriteHandler());
                             //自定义处理协议内容
-                            pipeline.addLast("handler", new CloudWebSocketServerHandler(serviceDefine));
+                            pipeline.addLast("handler", new CloudWebSocketServerHandler());
 //                            pipeline.addLast("default", globalGroup);
                         }
                     });
@@ -88,5 +82,17 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
             boosGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    static JSONObject sessionMap = new JSONObject();
+
+    public static String createSession(JSONObject info) {
+        String sessionId = UUID.randomUUID().toString();
+        sessionMap.put(sessionId, info);
+        return sessionId;
+    }
+
+    public static JSONObject getSessionMap() {
+        return sessionMap;
     }
 }

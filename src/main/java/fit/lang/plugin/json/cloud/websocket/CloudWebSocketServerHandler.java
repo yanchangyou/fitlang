@@ -1,7 +1,7 @@
 package fit.lang.plugin.json.cloud.websocket;
 
-import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -31,10 +31,7 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
     private WebSocketServerHandshaker handShaker;
 
-    JSONObject serviceDefine;
-
-    public CloudWebSocketServerHandler(JSONObject serviceDefine) {
-        this.serviceDefine = serviceDefine;
+    public CloudWebSocketServerHandler() {
     }
 
     private static String getWebSocketLocation(FullHttpRequest req) {
@@ -90,8 +87,8 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
         JSONObject result = new JSONObject();
 
-        String channelId = UUID.randomUUID().toString();
-        result.put("sessionId", channelId);
+        String sessionId = CloudServerJsonExecuteNode.createSession(JSONObject.parseObject(request));
+        result.put("sessionId", sessionId);
 
         CHANNEL_GROUP.add(ctx.channel());
 

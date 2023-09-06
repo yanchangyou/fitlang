@@ -13,6 +13,8 @@ public class CloudClientJsonExecuteNodeTest extends TestCase {
 
         startClient();
 
+        System.out.println(CloudServerJsonExecuteNode.getSessionMap());
+
     }
 
     public void startServer() {
@@ -30,7 +32,7 @@ public class CloudClientJsonExecuteNodeTest extends TestCase {
     private static void startClient() {
         String flow = "{'uni':'cloudClient','cloudServer':'ws://127.0.0.1:20000/'}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{'name':'coder', 'sayHello':'hello, every one!'}", flow);
 
         System.out.println(output);
 
