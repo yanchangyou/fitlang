@@ -15,6 +15,9 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 
 /**
@@ -86,13 +89,24 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
     static JSONObject sessionMap = new JSONObject();
 
+    static List<JSONObject> sessionList = new ArrayList<>();
+
     public static String createSession(JSONObject info) {
         String sessionId = UUID.randomUUID().toString();
         sessionMap.put(sessionId, info);
+        sessionList.add(info);
         return sessionId;
     }
 
     public static JSONObject getSessionMap() {
         return sessionMap;
+    }
+
+    public static List<JSONObject> getSessionList() {
+        return sessionList;
+    }
+
+    public static void setSessionList(List<JSONObject> sessionList) {
+        CloudServerJsonExecuteNode.sessionList = sessionList;
     }
 }

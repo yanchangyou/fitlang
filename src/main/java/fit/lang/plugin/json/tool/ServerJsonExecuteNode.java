@@ -14,6 +14,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -126,6 +127,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject stopDefine = addStopService(fitServer);
         serviceList.add(stopDefine);
+
+        JSONObject cloudDefine = addCloudService(fitServer);
+        serviceList.add(cloudDefine);
 
         JSONObject registerDefine = addRegisterCloudService(fitServer);
         serviceList.add(registerDefine);
@@ -290,6 +294,25 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 server.getSimpleServer().getRawServer().stop(1);
                 serverMap.remove(stopPort);
                 fitServer.setRunning(false);
+            }
+        });
+        JSONObject stopDefine = new JSONObject();
+        stopDefine.put("path", stopPath);
+        stopDefine.put("description", "stop this server");
+        return stopDefine;
+    }
+
+    static JSONObject addCloudService(FitServerInstance fitServer) {
+        String stopPath = "/_cloud";
+        clearContext(fitServer.getSimpleServer(), stopPath);
+        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                List<JSONObject> sessionList = CloudServerJsonExecuteNode.getSessionList();
+                JSONObject info = new JSONObject();
+                info.put("sessionList", sessionList);
+                info.put("onlineCount", sessionList.size());
+                response.write(info.toJSONString());
             }
         });
         JSONObject stopDefine = new JSONObject();
