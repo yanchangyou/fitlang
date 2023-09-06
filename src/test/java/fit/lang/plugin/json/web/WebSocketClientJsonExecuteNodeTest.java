@@ -10,7 +10,7 @@ public class WebSocketClientJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'wsClient'," +
-                "   'url': 'ws://127.0.0.1:10000/ws'," +
+                "   'url': 'ws://127.0.0.1:10001/ws'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -47,7 +47,7 @@ public class WebSocketClientJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'wsClient'," +
-                "   'url': 'ws://127.0.0.1:10000/ws'," +
+                "   'url': 'ws://127.0.0.1:10001/ws'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode(message.toJSONString(), flow);

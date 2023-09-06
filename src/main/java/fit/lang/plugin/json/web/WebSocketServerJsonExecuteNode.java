@@ -23,7 +23,7 @@ import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
  */
 public class WebSocketServerJsonExecuteNode extends JsonExecuteNode {
 
-    public static final int DEFAULT_SERVER_PORT = 10000;
+    public static final int DEFAULT_SERVER_PORT = 10001;
 //    static SocketChannel channel;
 
 //    static SocketChannel socketChannel;

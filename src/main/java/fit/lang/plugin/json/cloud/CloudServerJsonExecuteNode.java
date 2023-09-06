@@ -25,7 +25,7 @@ import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
  */
 public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
-    public static final int DEFAULT_SERVER_PORT = 10000;
+    public static final int DEFAULT_SERVER_PORT = 20000;
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {

@@ -5,7 +5,7 @@
     "service": {
         "/helloSpeed": {
             "uni": "loop",
-            "loopTimes": 10000,
+            "loopTimes": 10001,
             "child": {
                 "uni": "mix",
                 "json": {
