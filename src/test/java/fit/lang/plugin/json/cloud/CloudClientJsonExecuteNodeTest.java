@@ -36,7 +36,7 @@ public class CloudClientJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(JSONObject.parseObject(output).getJSONObject("data").containsKey("sessionId"));
+        Assert.assertTrue(JSONObject.parseObject(output).getJSONObject("meta").containsKey("sessionId"));
 
     }
 

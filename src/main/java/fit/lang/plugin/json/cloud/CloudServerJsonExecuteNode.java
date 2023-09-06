@@ -94,7 +94,10 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
     public static String createSession(JSONObject info) {
         String sessionId = UUID.randomUUID().toString();
         sessionMap.put(sessionId, info);
-        sessionList.add(info);
+        JSONObject sessionInfo = new JSONObject();
+        sessionInfo.put("sessionId", sessionId);
+        sessionInfo.put("info", info);
+        sessionList.add(sessionInfo);
         return sessionId;
     }
 

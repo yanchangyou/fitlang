@@ -1,0 +1,19 @@
+{
+    "uni": "server",
+    "port": 10020,
+    "welcome": "welcome to fit lang world!",
+    "service": {
+        "/cloud/server/start": {
+            "uni": "cloudServer",
+            "port": 20000
+        },
+        "/cloud/client/connect": {
+            "uni": "cloudClient",
+            "cloudServer": "ws://127.0.0.1:20000",
+            "input": {
+                "name": "coder",
+                "sayHello": "hello, everyone!"
+            }
+        }
+    }
+}
