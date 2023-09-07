@@ -404,7 +404,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (isJsonText(requestBody)) {
             inputJson.putAll(JSONObject.parseObject(requestBody));
         } else {
-            inputJson.put(FIELD_NAME_OF_RAW, requestBody);
+            if (StrUtil.isNotBlank(requestBody)) {
+                inputJson.put(FIELD_NAME_OF_RAW, requestBody);
+            }
         }
 
         ListValueMap<String, String> listValueMap = request.getParams();
