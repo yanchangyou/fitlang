@@ -7,7 +7,7 @@
         },
         {
             "uni": "cloudClient",
-            "cloudServer": "ws://127.0.0.1:20000",
+            "cloudServer": "ws://localhost:20000",
             "input": {
                 "name": "coder",
                 "sayHello": "hello, everyone!"

@@ -170,6 +170,7 @@ proxy：代理节点<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.4.5 add node: mixNode support nest data, support json comment; cloud refine</li>
             <li>0.4.4 add node: cloudServer and cloudClient</li>
             <li>0.4.3 rename websocketServer and websocketClient to wsServer and wsClient</li>
             <li>0.4.2 integrate websocketServer and websocketClient node</li>
