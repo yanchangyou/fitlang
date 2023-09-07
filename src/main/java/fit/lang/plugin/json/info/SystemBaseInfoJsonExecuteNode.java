@@ -42,15 +42,15 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
         systemInfoJson.put("processorName", processorName);
         systemInfoJson.put("processorPhysicalCount", physicalProcessorCount);
         systemInfoJson.put("processorLogicalCount", logicalProcessorCount);
-        systemInfoJson.put("processorMaxFreq", Math.round(10.0 * processorMaxFreq / 1024 / 1024 / 1024) / 10.0 + "G");
+        systemInfoJson.put("processorMaxFreq", covertToG(processorMaxFreq) + "G");
 
         //内存
         GlobalMemory memory = hardware.getMemory();
         long memoryTotal = memory.getTotal();//内存大小
         long memoryAvailable = memory.getAvailable();
 
-        systemInfoJson.put("memoryTotal", (memoryTotal / 1024 / 1024 / 1024) + "G");
-        systemInfoJson.put("memoryAvailable", (memoryAvailable / 1024 / 1024 / 1024) + "G");
+        systemInfoJson.put("memoryTotal", covertToG(memoryTotal) + "G");
+        systemInfoJson.put("memoryAvailable", covertToG(memoryAvailable) + "G");
 
         OperatingSystem os = systemInfo.getOperatingSystem();
         int osBit = os.getBitness();
@@ -64,5 +64,9 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
 
         output.setData(systemInfoJson);
 
+    }
+
+    private static double covertToG(long processorMaxFreq) {
+        return Math.round(10.0 * processorMaxFreq / 1024 / 1024 / 1024) / 10.0;
     }
 }
