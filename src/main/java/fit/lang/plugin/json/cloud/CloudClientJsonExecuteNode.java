@@ -7,6 +7,9 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.web.websocket.WebSocketClient;
 import fit.lang.plugin.json.web.websocket.WebSocketClientHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
 
@@ -17,14 +20,18 @@ public class CloudClientJsonExecuteNode extends JsonExecuteNode {
 
     WebSocketClient webSocketClient;
 
-    static String sessionId;
+    /**
+     * 限定，一个服务器url只能连接一次
+     */
+    Map<String, String> serverSessionMap = new HashMap<>();
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
+        String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine, "cloudServer");
+        String sessionId = serverSessionMap.get(url);
         //只能连接一次
         if (sessionId == null) {
-            String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine, "cloudServer");
             try {
                 webSocketClient = new WebSocketClient(url);
             } catch (Exception e) {
@@ -51,8 +58,8 @@ public class CloudClientJsonExecuteNode extends JsonExecuteNode {
             result.put("message", "ok");
             if (isJsonText(data)) {
                 JSONObject responseJson = JSONObject.parse(data);
-//                JSONObject info = responseJson.getJSONObject("info");
                 sessionId = responseJson.getString("sessionId");
+                serverSessionMap.put(url, sessionId);
                 result.put("meta", responseJson);
             } else {
                 result.put("meta", data);
