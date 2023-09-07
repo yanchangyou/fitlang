@@ -131,9 +131,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         JSONObject cloudDefine = addCloudService(fitServer);
         serviceList.add(cloudDefine);
 
-        JSONObject registerDefine = addRegisterCloudService(fitServer);
-        serviceList.add(registerDefine);
-
         JSONObject reloadDefine = addReloadService(fitServer);
         serviceList.add(reloadDefine);
 
@@ -319,68 +316,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         stopDefine.put("path", stopPath);
         stopDefine.put("description", "stop this server");
         return stopDefine;
-    }
-
-    /**
-     * 注册到云服务中： 使用http的长连接实现
-     *
-     * @param fitServer
-     * @return
-     */
-    private JSONObject addRegisterCloudService(FitServerInstance fitServer) {
-        String reloadPath = "/_register";
-        clearContext(fitServer.getSimpleServer(), reloadPath);
-        fitServer.getSimpleServer().addAction(reloadPath, new Action() {
-            @Override
-            public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                System.out.println("server come: ".concat(request.getClientIP()));
-                InputStream inputStream = request.getBodyStream();
-                response.send(200, Long.MAX_VALUE);
-                PrintWriter writer = response.getWriter();
-                while (fitServer.isRunning()) {
-
-                    System.out.println("send to server begin!");
-                    writer.write("{'uni':'hello'}");
-
-                    writer.write("{$?!}");
-                    writer.flush();
-                    System.out.println("send to server end!");
-
-                    byte[] data = new byte[1024];
-                    StringBuilder stringBuilder = new StringBuilder();
-                    while (true) {
-                        try {
-                            int length = inputStream.read(data);
-                            System.out.println("read end!");
-                            if (length == -1) {
-                                break;
-                            }
-                            stringBuilder.append(new String(data, 0, length));
-                            int endIndex = stringBuilder.indexOf("}{$?!}");
-                            if (endIndex > -1) {
-                                String code = stringBuilder.substring(0, endIndex + 1);
-
-                                System.out.println("result: " + code);
-
-                                stringBuilder = new StringBuilder(stringBuilder.substring(endIndex + 6));
-                            }
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    System.out.println(stringBuilder);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        });
-        JSONObject reloadDefine = new JSONObject();
-        reloadDefine.put("path", reloadPath);
-        reloadDefine.put("description", "reload this server");
-        return reloadDefine;
     }
 
     private static void clearContext(SimpleServer simpleServer, String stopPath) {
