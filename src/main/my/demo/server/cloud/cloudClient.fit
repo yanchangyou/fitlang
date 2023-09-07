@@ -2,8 +2,13 @@
     "uni": "pipe",
     "child": [
         {
-            "description": "system info node",
-            "uni": "systemInfo"
+            "uni": "mixNode",
+            "json": {
+                "systemInfo": {
+                    "description": "system info node",
+                    "uni": "systemInfo"
+                }
+            }
         },
         {
             "uni": "cloudClient",
