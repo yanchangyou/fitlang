@@ -18,20 +18,20 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
  */
 public class CloudClientJsonExecuteNode extends JsonExecuteNode {
 
-    WebSocketClient webSocketClient;
-
     /**
      * 限定，一个服务器url只能连接一次
      */
-    Map<String, String> serverSessionMap = new HashMap<>();
+    static Map<String, String> serverSessionMap = new HashMap<>();
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine, "cloudServer");
         String sessionId = serverSessionMap.get(url);
-        //只能连接一次
+        //同一个url只能连接一次
         if (sessionId == null) {
+
+            WebSocketClient webSocketClient;
             try {
                 webSocketClient = new WebSocketClient(url);
             } catch (Exception e) {
@@ -40,6 +40,7 @@ public class CloudClientJsonExecuteNode extends JsonExecuteNode {
 
             webSocketClient.send(input.getData().toJSONString());
 
+            //等待10秒
             for (int i = 0; i < 1000; i++) {
                 if (!WebSocketClientHandler.resultList.isEmpty()) {
                     break;
