@@ -72,6 +72,7 @@ public class ExecuteJsonNodeUtil {
         if (!isJsonText(input)) {
             throw new RuntimeException("input must be json, but found: ".concat(input));
         }
+        input = ExecuteJsonNodeUtil.removeJsonComment(input);
         return executeCode(JSONObject.parseObject(input));
     }
 
@@ -148,15 +149,29 @@ public class ExecuteJsonNodeUtil {
     /**
      * 大致判断是否json字符串: TODO
      *
-     * @param responseText
+     * @param text
      * @return
      */
-    public static boolean isJsonText(String responseText) {
-        if (responseText == null) {
+    public static boolean isJsonText(String text) {
+        if (text == null) {
             return false;
         }
-        responseText = responseText.trim();
-        return responseText.startsWith("{") && responseText.endsWith("}");
+        text = text.trim();
+        return text.startsWith("{") && text.endsWith("}");
+    }
+
+    /**
+     * 去掉json注释
+     *
+     * @param text
+     * @return
+     */
+    public static String removeJsonComment(String text) {
+        if (!isJsonText(text)) {
+            return text;
+        }
+        //去掉注释
+        return text.trim().replaceAll("(\\r\\n|\\r|\\n)//.*", "");
     }
 
     /**
