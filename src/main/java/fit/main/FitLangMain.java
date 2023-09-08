@@ -5,10 +5,9 @@ import cn.hutool.core.util.CharsetUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
-import gherkin.lexer.Fi;
+import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 
 import java.io.File;
-import java.util.Objects;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
@@ -25,14 +24,15 @@ public class FitLangMain {
         File serverFile = new File(serverFilePath);
 
         if (!serverFile.exists()) {
-
-        } else {
-            System.out.println("serer file not existed: " + serverFile.getAbsoluteFile());
+            System.out.println("server file not existed: " + serverFile.getAbsoluteFile());
+            return;
         }
 
         String code = FileUtil.readString((serverFile), CharsetUtil.defaultCharset());
 
-        System.out.println("start server: " + serverFile);
+        System.out.println("start server: " + serverFile.getAbsoluteFile());
+
+        ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
 
         String result = ExecuteJsonNodeUtil.executeCode(code);
         System.out.println(result);
@@ -46,7 +46,7 @@ public class FitLangMain {
             port = resultJson.getInteger("port");
         }
 
-        System.out.println("http://127.0.0.1:" + port + "/_menu");
+        System.out.println("http://127.0.0.1:" + port + "/_api");
 
     }
 }

@@ -1,6 +1,11 @@
 {
     "uni": "server",
     "port": 11111,
+    "enableInnerService": [
+        "_cloud",
+//        "_stop",
+        "_reload"
+    ],
     "service": {
         "/hello": {
             "uni": "hello"
