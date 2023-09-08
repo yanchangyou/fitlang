@@ -329,7 +329,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         });
         JSONObject stopDefine = new JSONObject();
         stopDefine.put("path", stopPath);
-        stopDefine.put("description", "stop this server");
+        stopDefine.put("description", "connect this server by websocket");
         return stopDefine;
     }
 
