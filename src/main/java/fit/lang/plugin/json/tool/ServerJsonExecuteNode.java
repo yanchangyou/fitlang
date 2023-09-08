@@ -22,9 +22,6 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.tool.server.FitServerInstance;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +95,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (rootPath == null) {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
         }
+        if (StrUtil.isNotBlank(rootPath)) {
+            return;
+        }
         fitServer.getSimpleServer().setRoot(rootPath);
     }
 
@@ -163,6 +163,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
         result.put("message", "start server at port: " + fitServer.getPort());
+        result.put("port", fitServer.getPort());
 
         return result;
     }
