@@ -95,7 +95,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         if (rootPath == null) {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
         }
-        if (StrUtil.isNotBlank(rootPath)) {
+        if (StrUtil.isBlank(rootPath)) {
+            System.out.println("rootPath: is not existed: " + rootPath);
             return;
         }
         fitServer.getSimpleServer().setRoot(rootPath);
@@ -125,14 +126,22 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         setFileServer(fitServer);
 
-        JSONObject stopDefine = addStopService(fitServer);
-        serviceList.add(stopDefine);
+        JSONArray enableInnerService = nodeJsonDefine.getJSONArray("enableInnerService");
 
-        JSONObject cloudDefine = addCloudService(fitServer);
-        serviceList.add(cloudDefine);
+        if (enableInnerService != null && enableInnerService.contains("_stop")) {
+            JSONObject stopDefine = addStopService(fitServer);
+            serviceList.add(stopDefine);
+        }
 
-        JSONObject reloadDefine = addReloadService(fitServer);
-        serviceList.add(reloadDefine);
+        if (enableInnerService != null && enableInnerService.contains("_cloud")) {
+            JSONObject cloudDefine = addCloudService(fitServer);
+            serviceList.add(cloudDefine);
+        }
+
+        if (enableInnerService != null && enableInnerService.contains("_reload")) {
+            JSONObject reloadDefine = addReloadService(fitServer);
+            serviceList.add(reloadDefine);
+        }
 
         JSONObject serviceDefine = nodeJsonDefine.getJSONObject("service");
         if (serviceDefine != null && !serviceDefine.isEmpty()) {
@@ -190,8 +199,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     private void addRootService(FitServerInstance fitServerInstance) {
 
-        clearContext(fitServerInstance.getSimpleServer(), "/_menu");
-        fitServerInstance.getSimpleServer().addAction("/_menu", new Action() {
+        clearContext(fitServerInstance.getSimpleServer(), "/_api");
+        fitServerInstance.getSimpleServer().addAction("/_api", new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);
