@@ -172,6 +172,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
         result.put("message", "start server at port: " + fitServer.getPort());
+        result.put("host", nodeJsonDefine.getOrDefault("host", "127.0.0.1"));
         result.put("port", fitServer.getPort());
 
         return result;
