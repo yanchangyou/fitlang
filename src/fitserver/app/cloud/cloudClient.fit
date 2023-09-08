@@ -1,0 +1,22 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "mixNode",
+            "json": {
+                "systemInfo": {
+                    "description": "system info node",
+                    "uni": "systemInfo"
+                }
+            }
+        },
+        {
+            "uni": "cloudClient",
+            "cloudServer": "ws://127.0.0.1:20000",
+            "input": {
+                "name": "coder",
+                "sayHello": "hello, everyone!"
+            }
+        }
+    ]
+}
