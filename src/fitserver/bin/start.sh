@@ -1,5 +1,4 @@
 cd "$(dirname $0)/.."
-echo $(dirname $0)
 
 java -classpath lib/fitlang-0.4.6.jar:\
 lib/hutool-all-5.8.21.jar:\

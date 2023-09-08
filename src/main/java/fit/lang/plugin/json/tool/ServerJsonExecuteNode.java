@@ -172,16 +172,20 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
         result.put("message", "start server at port: " + fitServer.getPort());
-        result.put("host", nodeJsonDefine.getOrDefault("host", "127.0.0.1"));
+        result.put("httpPrefix", getHttpPrefix());
         result.put("port", fitServer.getPort());
 
         return result;
     }
 
+    String getHost() {
+        return (String) nodeJsonDefine.getOrDefault("host", "127.0.0.1");
+    }
+
     private String getHttpPrefix() {
         String httpPrefix = nodeJsonDefine.getString("httpPrefix");
         if (StrUtil.isBlank(httpPrefix)) {
-            httpPrefix = "http://127.0.0.1";
+            httpPrefix = "http://" + getHost();
         }
         return httpPrefix;
     }

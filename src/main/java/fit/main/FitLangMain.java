@@ -41,14 +41,14 @@ public class FitLangMain {
 
         JSONObject resultJson;
         int port = 11111;
-        String host = "127.0.0.1";
+        String httpPrefix = "http://127.0.0.1";
         if (isJsonText(result)) {
             resultJson = JSON.parseObject(result);
             port = resultJson.getInteger("port");
-            host = resultJson.getString("host");
+            httpPrefix = resultJson.getString("httpPrefix");
         }
 
-        System.out.println("http://" + host + ":" + port + "/_api");
+        System.out.println(httpPrefix + ":" + port);
 
     }
 }

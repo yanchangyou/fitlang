@@ -1,5 +1,6 @@
 {
     "uni": "server",
+    "httpPrefix": "http://localhost",
     "port": 11111,
     "enableInnerService": [
         "_cloud",
