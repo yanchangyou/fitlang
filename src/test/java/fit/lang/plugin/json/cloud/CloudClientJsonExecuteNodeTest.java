@@ -15,6 +15,8 @@ public class CloudClientJsonExecuteNodeTest extends TestCase {
 
         System.out.println(CloudServerJsonExecuteNode.getSessionMap());
 
+        CloudServerJsonExecuteNode.stopAll();
+
     }
 
     public void startServer() {

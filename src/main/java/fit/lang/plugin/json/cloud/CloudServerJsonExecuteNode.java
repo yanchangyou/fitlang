@@ -18,7 +18,9 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 
@@ -28,6 +30,10 @@ import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
     public static final int DEFAULT_SERVER_PORT = 20000;
+
+    static Map<Integer, EventLoopGroup[]> eventLoopGroupMap = new HashMap<>();
+    static Map<Integer, Channel> channelMap = new HashMap<>();
+
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -78,15 +84,29 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
                         }
                     });
             Channel channel = server.bind(port).sync().channel();
-
             System.out.println("Web socket server started at port " + port + ".");
             System.out.println("Open your browser and navigate to http://localhost:" + port + "/");
+//            eventLoopGroupMap.put(port, new EventLoopGroup[]{boosGroup, workerGroup});
+            channelMap.put(port, channel);
+
             channel.closeFuture().sync();
             System.out.println("channel close!");
         } finally {
             boosGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    /**
+     * 停止所有的
+     */
+    public static void stopAll() {
+        for (Map.Entry<Integer, Channel> entry : channelMap.entrySet()) {
+            Channel channel = entry.getValue();
+            channel.close();
+            System.out.println("stop websocket: " + entry.getKey());
+        }
+        eventLoopGroupMap.clear();
     }
 
     static JSONObject sessionMap = new JSONObject();
