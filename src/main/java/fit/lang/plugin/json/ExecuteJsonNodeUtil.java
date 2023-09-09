@@ -171,7 +171,7 @@ public class ExecuteJsonNodeUtil {
             return text;
         }
         //去掉注释
-        return text.trim().replaceAll("(\\r\\n|\\r|\\n)//.*", "");
+        return text.trim().replaceAll("(\\r\\n|\\r|\\n)\\s*//.*", "");
     }
 
     /**
