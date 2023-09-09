@@ -7,7 +7,7 @@
         //"_reload",
         "_cloud"
     ],
-    "start": {
+    "init": {
         "uni": "cloudServer",
         "port": 20000
     },

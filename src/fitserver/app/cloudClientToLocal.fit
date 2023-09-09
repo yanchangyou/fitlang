@@ -36,8 +36,7 @@
         },
         {
             "uni": "cloudClient",
-            //            "cloudServer": "ws://127.0.0.1:20000",
-            "cloudServer": "ws://coderonline.321zou.com:20000",
+            "cloudServer": "ws://127.0.0.1:20000",
             "debugMode": true,
             "input": {
                 "name": "coder",
