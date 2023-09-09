@@ -23,13 +23,17 @@ public class CloudClientJsonExecuteNode extends JsonExecuteNode {
      */
     static Map<String, String> serverSessionMap = new HashMap<>();
 
+    boolean isDebugMode() {
+        return Boolean.TRUE.equals(nodeJsonDefine.getBoolean("debugMode"));
+    }
+
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine, "cloudServer");
         String sessionId = serverSessionMap.get(url);
         //同一个url只能连接一次
-        if (sessionId == null) {
+        if (sessionId == null || isDebugMode()) {
 
             WebSocketClient webSocketClient;
             try {
