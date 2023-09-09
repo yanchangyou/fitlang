@@ -292,6 +292,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                String clientIP = request.getClientIP();
+                if (!"127.0.0.1".equals(clientIP)) {
+                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1!\"}");
+                    return;
+                }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
                 String port = request.getParam("port");
                 if (port != null) {
