@@ -5,9 +5,56 @@
 </head>
 <body>
 <center>
-    <h2>fit server</h2>
+    <h2>fit server (websocket version)</h2>
     <br>
-    <a target="_blank" href="/_api">api</a>
+    <script type="text/javascript">
+    var socket;
+    if (!window.WebSocket) {
+        window.WebSocket = window.MozWebSocket;
+    }
+    if (window.WebSocket) {
+        socket = new WebSocket("ws://" + window.location.hostname + ":20000/");
+        socket.onmessage = function (event) {
+            console.log("xxx" + event)
+            var ta = document.getElementById('responseText');
+            ta.value = event.data;
+        };
+        socket.onopen = function (event) {
+            var ta = document.getElementById('responseText');
+            ta.value ='{"message":"打开WebSocket服务正常，浏览器支持WebSocket!"}';
+        };
+        socket.onclose = function (event) {
+            var ta = document.getElementById('responseText');
+            ta.value ='{"message":"WebSocket 关闭!"}';
+        }
+    } else {
+        alert("抱歉，您的浏览器不支持WebSocket协议!");
+    }
+
+    function send(message) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.send(message);
+        }else {
+            alert("WebSocket连接没有建立成功!");
+        }
+    }
+    function viewOnline() {
+        window.open("/_cloud");
+    }
+    </script>
+
+    <form onsubmit="return false;">
+        <h3>输入代码</h3>
+        <textarea type="text" name="message" style="width:700px; height: 200px;">{"uni":"hello"}</textarea>
+        <br/><br/>
+        <input type="button" value="发送执行" onclick="send(this.form.message.value)">
+        <input type="button" value="查看在线" onclick="viewOnline();">
+        <h3>输出结果</h3>
+        <textarea id="responseText" style="width:700px; height: 200px;">{}</textarea>
+    </form>
 </center>
 </body>
 </html>
