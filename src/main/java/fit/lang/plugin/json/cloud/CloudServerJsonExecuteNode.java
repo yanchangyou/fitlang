@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.cloud;
 
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.cloud.websocket.CloudWebSocketServerHandler;
@@ -91,11 +93,13 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
 
     static List<JSONObject> sessionList = new ArrayList<>();
 
-    public static String createSession(JSONObject info) {
+    public static String createSession(JSONObject info, JSONObject attribute) {
         String sessionId = UUID.randomUUID().toString();
         sessionMap.put(sessionId, info);
         JSONObject sessionInfo = new JSONObject();
         sessionInfo.put("sessionId", sessionId);
+        sessionInfo.put("connectTime", DateUtil.now());
+        sessionInfo.putAll(attribute);
         sessionInfo.put("info", info);
         sessionList.add(sessionInfo);
         return sessionId;

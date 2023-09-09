@@ -4,6 +4,16 @@
         {
             "uni": "mixNode",
             "json": {
+                "user": {
+                    "uni": "mix",
+                    "json": {
+                        "name": "coder",
+                        "skills": [
+                            "java",
+                            "javascript"
+                        ]
+                    }
+                },
                 "systemInfo": {
                     "description": "system info node",
                     "uni": "systemInfo"

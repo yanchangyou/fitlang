@@ -15,6 +15,7 @@ import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +88,9 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
 
         JSONObject result = new JSONObject();
 
-        String sessionId = CloudServerJsonExecuteNode.createSession(JSONObject.parseObject(request));
+        JSONObject attribute = new JSONObject();
+        attribute.put("client", ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName());
+        String sessionId = CloudServerJsonExecuteNode.createSession(JSONObject.parseObject(request), attribute);
         result.put("sessionId", sessionId);
 
         CHANNEL_GROUP.add(ctx.channel());
