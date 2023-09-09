@@ -402,7 +402,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      * @return
      */
     JSONObject defaultStartNode() {
-        JSONObject define = nodeJsonDefine.getJSONObject("start");
+        JSONObject define = nodeJsonDefine.getJSONObject("init");
         if (define == null) {
             return null;
         }
