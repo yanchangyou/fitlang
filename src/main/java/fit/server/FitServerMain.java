@@ -1,4 +1,4 @@
-package fit.main;
+package fit.server;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
@@ -11,15 +11,22 @@ import java.io.File;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 
-public class FitLangMain {
+public class FitServerMain {
 
     public static void main(String[] args) {
 
         System.out.println("FitLang-0.4.6");
         String serverFilePath = "server.fit";
+        String httpPrefix = "http://127.0.0.1";
+        int port = 11111;
 
-        if (args != null && args.length > 0) {
-            serverFilePath = args[0];
+        if (args != null) {
+            if (args.length > 0) {
+                serverFilePath = args[0];
+            }
+            if (args.length > 1) {
+                httpPrefix = args[1];
+            }
         }
         File serverFile = new File(serverFilePath);
 
@@ -30,9 +37,10 @@ public class FitLangMain {
 
         String code = FileUtil.readString((serverFile), CharsetUtil.defaultCharset());
 
-        System.out.println("start server: " + serverFile.getAbsoluteFile());
+        System.out.println("start server from " + serverFile.getAbsoluteFile());
 
         ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
+        ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
 
         String result = ExecuteJsonNodeUtil.executeCode(code);
         System.out.println(result);
@@ -40,8 +48,6 @@ public class FitLangMain {
         System.out.println("start OK!");
 
         JSONObject resultJson;
-        int port = 11111;
-        String httpPrefix = "http://127.0.0.1";
         if (isJsonText(result)) {
             resultJson = JSON.parseObject(result);
             port = resultJson.getInteger("port");

@@ -42,9 +42,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public static String currentServerFilePath;
 
     /**
+     * http 前缀
+     */
+    public static String httpPrefix = "http://127.0.0.1";
+
+    /**
      * 默认服务器端口
      */
     public static final int DEFAULT_SERVER_PORT = 11111;
+
     public static final String REQUEST_PATH = "requestPath";
     public static final String SERVICE_PATH = "servicePath";
 
@@ -70,6 +76,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             return null;
         }
         return convertPath(currentServerFilePath.substring(0, index));
+    }
+
+    public static void setHttpPrefix(String httpPrefix) {
+        ServerJsonExecuteNode.httpPrefix = httpPrefix;
     }
 
     @Override
@@ -178,14 +188,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return result;
     }
 
-    String getHost() {
-        return (String) nodeJsonDefine.getOrDefault("host", "127.0.0.1");
-    }
-
     private String getHttpPrefix() {
         String httpPrefix = nodeJsonDefine.getString("httpPrefix");
         if (StrUtil.isBlank(httpPrefix)) {
-            httpPrefix = "http://" + getHost();
+            httpPrefix = ServerJsonExecuteNode.httpPrefix;
         }
         return httpPrefix;
     }

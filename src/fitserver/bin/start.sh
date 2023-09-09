@@ -44,5 +44,5 @@ lib/slf4j-api-2.0.7.jar:\
 lib/netty-codec-haproxy-4.1.97.Final.jar:\
 lib/netty-handler-4.1.97.Final.jar:\
 lib/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar\
- fit.main.FitLangMain app/server.fit &
+ fit.server.FitServerMain app/server.fit $FIT_SERVER_HTTP_PREFIX&
 
