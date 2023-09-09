@@ -4,10 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.*;
@@ -17,12 +14,16 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  */
 public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
+
+    static Map<String, Channel> clientMap = new HashMap<>();
 
     public static ChannelGroup CHANNEL_GROUP = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
@@ -59,7 +60,13 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
      * @param frame
      */
     private void handleWebSocketFrame(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-
+        String clientId = getClientId(ctx);
+        //一个ClientId只允许一个连接，重复连接关闭之前连接
+        if (clientMap.containsKey(clientId)) {
+            clientMap.get(clientId).close();
+            CHANNEL_GROUP.remove(clientMap.get(clientId));
+        }
+        clientMap.put(clientId, ctx.channel());
         CHANNEL_GROUP.add(ctx.channel());
 
         //判断是否是关闭链路的指令
@@ -96,6 +103,10 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
         CHANNEL_GROUP.add(ctx.channel());
 
         ctx.writeAndFlush(new TextWebSocketFrame(result.toJSONString()));
+    }
+
+    private static String getClientId(ChannelHandlerContext ctx) {
+        return ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName();
     }
 
     /**
