@@ -5,8 +5,29 @@
 </head>
 <body>
 <center>
+    <div style="text-align:right;margin-right:50px;">
+        <a target="_blank" href="/_api">api</a>
+        &nbsp;<a target="_blank" href="/_cloud?_jsonFormat=true">online</a>
+        &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/fitlang">doc</a>
+        &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
+    </div>
     <h2>FitServer 0.4.8</h2>
-    <script type="text/javascript">
+
+    <form onsubmit="return false;">
+        <h4>输入代码</h4>
+        <textarea type="text" id="input" name="message" style="width:700px; height: 200px;">{"uni":"hello","message":"hello world!"}</textarea>
+        <br/><br/>
+        <div style="text-align:left;margin-left:60%;">
+            <input type="button" value="执行" onclick="execute();">&nbsp;&nbsp;
+            <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;
+            <input type="button" value="打卡" style="color:green;" onclick="clockIn();">&nbsp;&nbsp;
+        </div>
+        <h4>输出结果</h4>
+        <textarea id="output" style="width:700px; height: 200px;">{}</textarea>
+    </form>
+
+</center>
+<script type="text/javascript">
     var socket;
     function connectionWs() {
         if (!window.WebSocket) {
@@ -97,23 +118,5 @@
     }
     </script>
 
-    <form onsubmit="return false;">
-        <h4>输入代码</h4>
-        <textarea type="text" id="input" name="message" style="width:700px; height: 200px;">{"uni":"hello","message":"hello world!"}</textarea>
-        <br/><br/>
-        <div style="text-align:left;margin-left:50%;">
-            <input type="button" value="打卡" style="color:green;" onclick="clockIn();">
-            <input type="button" value="执行" onclick="execute();">
-            <input type="button" value="格式化" onclick="format()">
-            &nbsp;<a target="_blank" href="/_api">api</a>
-            &nbsp;<a target="_blank" href="/_cloud?_jsonFormat=true">online</a>
-            &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/fitlang">doc</a>
-            &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
-        </div>
-        <h4>输出结果</h4>
-        <textarea id="output" style="width:700px; height: 200px;">{}</textarea>
-    </form>
-
-</center>
 </body>
 </html>
