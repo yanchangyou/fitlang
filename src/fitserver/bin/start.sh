@@ -1,5 +1,7 @@
 cd "$(dirname $0)/.."
 
+curl http://127.0.0.1:11111/_stop
+
 java -classpath lib/fitlang-0.4.6.jar:\
 lib/hutool-all-5.8.21.jar:\
 lib/aviator-5.3.3.jar:\

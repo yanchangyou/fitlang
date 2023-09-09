@@ -293,8 +293,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = request.getClientIP();
-                if (!"127.0.0.1".equals(clientIP)) {
-                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1!\"}");
+                if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
+                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
