@@ -69,16 +69,39 @@
         document.getElementById(domId).value = JSON.stringify(JSON.parse(inputText), 2,'  ');
     }
 
+    function clockIn() {
+        var vendor = navigator.vendor;
+        var platform = navigator.userAgentData.platform;
+        var mobile = navigator.userAgentData.mobile;
+        var brands = navigator.userAgentData.brands;
+        var brand = brands[brands.length-1];
+        var brandName = brand.brand;
+        var brandVersion = brand.version;
+        var data = {
+            "clientInfo":{
+                "clientType":"browser",
+                "vendor":vendor,
+                "platform":platform,
+                "mobile":mobile,
+                "brandName":brandName,
+                "brandVersion":brandVersion,
+            }
+        };
+        send(JSON.stringify(data));
+    }
+
     </script>
 
     <form onsubmit="return false;">
         <h4>输入代码</h4>
         <textarea type="text" id="input" name="message" style="width:700px; height: 200px;">{"uni":"hello","message":"hello world!"}</textarea>
         <br/><br/>
-        <input type="button" value="执行代码" onclick="send(this.form.message.value)">
-        <input type="button" value="格式化" onclick="format()">
-        &nbsp;&nbsp; <a target="_blank" href="/_api">api</a>
-        &nbsp;&nbsp; <a target="_blank" href="/_cloud">online</a>
+        <div style="text-align:left;margin-left:55%;">
+            <input type="button" value="打卡" onclick="clockIn();">
+            <input type="button" value="格式化" onclick="format()">
+            &nbsp;&nbsp; <a target="_blank" href="/_api">api</a>
+            &nbsp;&nbsp; <a target="_blank" href="/_cloud">online</a>
+        </div>
         <h4>输出结果</h4>
         <textarea id="output" style="width:700px; height: 200px;">{}</textarea>
     </form>
