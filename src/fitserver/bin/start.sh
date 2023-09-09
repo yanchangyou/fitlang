@@ -1,7 +1,7 @@
 cd "$(dirname $0)/.."
 
-curl http://127.0.0.1:11111/_stopWs
-curl http://127.0.0.1:11111/_stop
+#curl http://127.0.0.1:11111/_stop
+curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 

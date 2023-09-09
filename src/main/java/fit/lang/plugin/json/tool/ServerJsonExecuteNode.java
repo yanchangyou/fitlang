@@ -138,6 +138,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONArray enableInnerService = nodeJsonDefine.getJSONArray("enableInnerService");
 
+        if (enableInnerService != null && enableInnerService.contains("_shutdown")) {
+            JSONObject define = addShutdownService(fitServer);
+            serviceList.add(define);
+        }
+
         if (enableInnerService != null && enableInnerService.contains("_stop")) {
             JSONObject stopDefine = addStopService(fitServer);
             serviceList.add(stopDefine);
@@ -310,6 +315,40 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return stopDefine;
     }
 
+    static JSONObject addShutdownService(FitServerInstance fitServer) {
+        String stopPath = "/_shutdown";
+        clearContext(fitServer.getSimpleServer(), stopPath);
+        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                String clientIP = request.getClientIP();
+                if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
+                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    return;
+                }
+                response.write("{\"message\":\"server shutdown!\"}");
+
+                //关闭websocket
+                CloudServerJsonExecuteNode.stopAll();
+
+                //关闭simple server
+                int stopPort = fitServer.getSimpleServer().getAddress().getPort();
+                serverMap.get(stopPort).getSimpleServer().getRawServer().stop(0);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.exit(0);
+            }
+        });
+        JSONObject stopDefine = new JSONObject();
+        stopDefine.put("path", stopPath);
+        stopDefine.put("description", "stop this websocket server");
+        return stopDefine;
+    }
+
     static JSONObject addStopService(FitServerInstance fitServer) {
         String stopPath = "/_stop";
         clearContext(fitServer.getSimpleServer(), stopPath);
@@ -322,6 +361,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     return;
                 }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
+
                 String port = request.getParam("port");
                 if (port != null) {
                     if (NumberUtil.isInteger(port)) {
