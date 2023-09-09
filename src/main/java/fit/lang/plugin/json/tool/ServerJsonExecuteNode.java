@@ -10,6 +10,7 @@ import cn.hutool.http.server.HttpServerRequest;
 import cn.hutool.http.server.HttpServerResponse;
 import cn.hutool.http.server.SimpleServer;
 import cn.hutool.http.server.action.Action;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
@@ -308,11 +309,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = request.getClientIP();
                 if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
-                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
                 CloudServerJsonExecuteNode.stopAll();
-                response.write("{\"message\":\"stop all websocket OK!\"}");
+                responseWriteText(request, response, "{\"message\":\"stop all websocket OK!\"}");
             }
         });
         JSONObject stopDefine = new JSONObject();
@@ -329,10 +330,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = request.getClientIP();
                 if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
-                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
-                response.write("{\"message\":\"server shutdown!\"}");
+                responseWriteText(request, response, "{\"message\":\"server shutdown!\"}");
 
                 //关闭websocket
                 CloudServerJsonExecuteNode.stopAll();
@@ -363,7 +364,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = request.getClientIP();
                 if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
-                    response.write("{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
@@ -373,17 +374,17 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     if (NumberUtil.isInteger(port)) {
                         stopPort = Integer.parseInt(port);
                     } else {
-                        response.write("{\"message\":\"port must be a int number, but found: " + port + "!\"}");
+                        responseWriteText(request, response, "{\"message\":\"port must be a int number, but found: " + port + "!\"}");
                         return;
                     }
                 }
 
                 FitServerInstance server = getFitServerInstance(stopPort);
                 if (server == null) {
-                    response.write("{\"message\":\"count found server at port: " + port + "!\"}");
+                    responseWriteText(request, response, "{\"message\":\"count found server at port: " + port + "!\"}");
                     return;
                 }
-                response.write("{\"message\":\"stop " + stopPort + " OK!\"}");
+                responseWriteText(request, response, "{\"message\":\"stop " + stopPort + " OK!\"}");
                 server.getSimpleServer().getRawServer().stop(1);
                 serverMap.remove(stopPort);
                 fitServer.setRunning(false);
@@ -421,7 +422,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 JSONObject info = new JSONObject();
                 info.put("sessions", sessionList);
                 info.put("onlineCount", sessionList.size());
-                response.write(info.toJSONString());
+                responseWriteText(request, response, info.toJSONString());
             }
         });
         JSONObject stopDefine = new JSONObject();
@@ -489,7 +490,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                         if (StrUtil.isNotBlank(contextType)) {
                             response.write(output, contextType);
                         } else {
-                            response.write(output);
+                            responseWriteText(request, response, output);
                         }
                     } else {//默认json类型
                         response.write(output, ContentType.JSON.getValue());
@@ -501,6 +502,22 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
             }
         });
+    }
+
+    /**
+     * 支持传递参数： jsonFormat 标识需要格式化返回
+     *
+     * @param request
+     * @param response
+     * @param output
+     */
+    private static void responseWriteText(HttpServerRequest request, HttpServerResponse response, String output) {
+        String _jsonFormat = request.getParam("_jsonFormat");
+        String text = output;
+        if (isJsonText(text) && StrUtil.isNotBlank(_jsonFormat)) {
+            text = JSON.parseObject(text).toJSONString(JSONWriter.Feature.PrettyFormat);
+        }
+        response.write(text);
     }
 
     static JSONObject buildInput(HttpServerRequest request, JSONObject serviceDefine) {
