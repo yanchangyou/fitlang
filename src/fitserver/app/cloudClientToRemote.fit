@@ -31,6 +31,9 @@
                         //"osVersion",
                         "osBit"
                     ]
+                },
+                "clientInfo": {
+                    "clientType": "java"
                 }
             }
         },
