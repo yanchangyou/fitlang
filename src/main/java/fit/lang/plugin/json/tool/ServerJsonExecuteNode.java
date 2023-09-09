@@ -190,9 +190,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
+        JSONObject defaultResult = defaultStartNode();
+
         result.put("message", "start server at port: " + fitServer.getPort());
         result.put("httpPrefix", getHttpPrefix());
         result.put("port", fitServer.getPort());
+        if (defaultResult != null) {
+            result.put("startResult", defaultResult);
+        }
 
         return result;
     }
@@ -388,6 +393,22 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         stopDefine.put("path", stopPath);
         stopDefine.put("description", "stop this server");
         return stopDefine;
+    }
+
+    /**
+     * 启动默认执行流程
+     *
+     * @return
+     */
+    JSONObject defaultStartNode() {
+        JSONObject define = nodeJsonDefine.getJSONObject("start");
+        if (define == null) {
+            return null;
+        }
+
+        String output = ExecuteJsonNodeUtil.executeCode(define);
+        System.out.println("default start node: " + output);
+        return JSONObject.parse(output);
     }
 
     static JSONObject addCloudService(FitServerInstance fitServer) {
