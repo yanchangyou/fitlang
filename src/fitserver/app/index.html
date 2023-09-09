@@ -76,11 +76,13 @@
     function clockIn() {
         var vendor = navigator.vendor;
         var appVersion = navigator.appVersion;
+        var appCodeName = navigator.appCodeName;
         var data = {
             "clientInfo":{
                 "clientType":"browser",
                 "vendor":vendor,
-                "appVersion":appVersion,
+//                "appVersion":appVersion,
+                "appCodeName":appCodeName,
             }
         };
         send(JSON.stringify(data));
@@ -104,7 +106,7 @@
             <input type="button" value="打卡" onclick="clockIn();">
             <input type="button" value="格式化" onclick="format()">
             &nbsp;<a target="_blank" href="/_api">api</a>
-            &nbsp;<a target="_blank" href="/_cloud">online</a>
+            &nbsp;<a target="_blank" href="/_cloud?_jsonFormat=true">online</a>
             &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/fitlang">doc</a>
             &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
         </div>
