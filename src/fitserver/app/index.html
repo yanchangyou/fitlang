@@ -71,20 +71,12 @@
 
     function clockIn() {
         var vendor = navigator.vendor;
-        var platform = navigator.userAgentData.platform;
-        var mobile = navigator.userAgentData.mobile;
-        var brands = navigator.userAgentData.brands;
-        var brand = brands[brands.length-1];
-        var brandName = brand.brand;
-        var brandVersion = brand.version;
+        var appVersion = navigator.appVersion;
         var data = {
             "clientInfo":{
                 "clientType":"browser",
                 "vendor":vendor,
-                "platform":platform,
-                "mobile":mobile,
-                "brandName":brandName,
-                "brandVersion":brandVersion,
+                "appVersion":appVersion,
             }
         };
         send(JSON.stringify(data));

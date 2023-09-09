@@ -4,14 +4,10 @@
         {
             "uni": "mixNode",
             "json": {
-                "user": {
+                "clientInfo": {
                     "uni": "mix",
                     "json": {
-                        "name": "coder",
-                        "skills": [
-                            "java",
-                            "javascript"
-                        ]
+                        "clientType": "java"
                     }
                 },
                 "systemInfo": {
