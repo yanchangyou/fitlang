@@ -10,7 +10,7 @@ public class SystemBaseInfoJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
 
-        String flow = "{'uni':'systemInfo'}";
+        String flow = "{'uni':'systemInfo','shareFields':['computerManufacturer']}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
