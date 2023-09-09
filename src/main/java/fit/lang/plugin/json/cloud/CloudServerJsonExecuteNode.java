@@ -1,6 +1,5 @@
 package fit.lang.plugin.json.cloud;
 
-import cn.hutool.core.date.DateUnit;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import com.alibaba.fastjson2.JSONObject;
@@ -17,10 +16,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.buildServerPort;
 
@@ -109,31 +105,25 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
         eventLoopGroupMap.clear();
     }
 
-    static JSONObject sessionMap = new JSONObject();
+    static JSONObject clientMap = new JSONObject();
 
-    static List<JSONObject> sessionList = new ArrayList<>();
-
-    public static String createSession(JSONObject info, JSONObject attribute) {
+    public static String createSession(String clientId, JSONObject info, JSONObject attribute) {
         String sessionId = UUID.randomUUID().toString();
-        sessionMap.put(sessionId, info);
         JSONObject sessionInfo = new JSONObject();
         sessionInfo.put("sessionId", sessionId);
         sessionInfo.put("connectTime", DateUtil.now());
         sessionInfo.putAll(attribute);
         sessionInfo.put("info", info);
-        sessionList.add(sessionInfo);
+        clientMap.put(clientId, sessionInfo);
         return sessionId;
     }
 
-    public static JSONObject getSessionMap() {
-        return sessionMap;
+    public static JSONObject getClientMap() {
+        return clientMap;
     }
 
-    public static List<JSONObject> getSessionList() {
-        return sessionList;
+    public static Collection<Object> getSessions() {
+        return clientMap.values();
     }
 
-    public static void setSessionList(List<JSONObject> sessionList) {
-        CloudServerJsonExecuteNode.sessionList = sessionList;
-    }
 }

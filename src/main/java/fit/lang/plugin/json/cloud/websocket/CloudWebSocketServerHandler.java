@@ -96,8 +96,8 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
         JSONObject result = new JSONObject();
 
         JSONObject attribute = new JSONObject();
-        attribute.put("client", ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName());
-        String sessionId = CloudServerJsonExecuteNode.createSession(JSONObject.parseObject(request), attribute);
+        attribute.put("clientId", clientId);
+        String sessionId = CloudServerJsonExecuteNode.createSession(clientId, JSONObject.parseObject(request), attribute);
         result.put("sessionId", sessionId);
 
         CHANNEL_GROUP.add(ctx.channel());

@@ -22,12 +22,10 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.tool.server.FitServerInstance;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.removeJsonComment;
 
 /**
  * 执行节点
@@ -168,20 +166,23 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         serviceList.add(serviceDefine);
 
-        if (serviceDir == null) {
+        if (StrUtil.isBlank(serviceDir)) {
             serviceDir = getServerFileDir();
         }
 
-        if (serviceDir == null) {
+        if (StrUtil.isBlank(serviceDir)) {
             serviceDir = nodeJsonDefine.getString("serviceDir");
         }
 
-        if (serviceDir != null) {
-            try {
-                List<JSONObject> serviceListInServerNode = loadServiceDir(serviceDir, new File(serviceDir), fitServer.getSimpleServer());
-                serviceList.addAll(serviceListInServerNode);
-            } catch (Exception e) {
-                System.out.println("loadServiceDir error: " + e);
+        if (StrUtil.isNotBlank(serviceDir)) {
+            File serverDir = new File(serviceDir);
+            if (serverDir.exists()) {
+                try {
+                    List<JSONObject> serviceListInServerNode = loadServiceDir(serviceDir, serverDir, fitServer.getSimpleServer());
+                    serviceList.addAll(serviceListInServerNode);
+                } catch (Exception e) {
+                    System.out.println("loadServiceDir error: " + e);
+                }
             }
         }
 
@@ -395,7 +396,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                List<JSONObject> sessionList = CloudServerJsonExecuteNode.getSessionList();
+                Collection<Object> sessionList = CloudServerJsonExecuteNode.getSessions();
                 JSONObject info = new JSONObject();
                 info.put("sessions", sessionList);
                 info.put("onlineCount", sessionList.size());
@@ -517,6 +518,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
             String serviceDefineText = FileUtil.readUtf8String(serviceFile);
+            serviceDefineText = removeJsonComment(serviceDefineText);
             JSONObject serviceDefine = JSONObject.parseObject(serviceDefineText);
             String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
             serviceDefine.put("path", servicePath);
