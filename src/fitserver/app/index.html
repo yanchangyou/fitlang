@@ -107,6 +107,10 @@
             }
         };
         send(JSON.stringify(data));
+        var isGoto = confirm("查看在线打开信息");
+        if(isGoto) {
+            window.open("/_cloud?_jsonFormat=true");
+        }
     }
 
     function execute() {
@@ -116,7 +120,7 @@
             document.getElementById('output').value = body;
         });
     }
-    </script>
+</script>
 
 </body>
 </html>
