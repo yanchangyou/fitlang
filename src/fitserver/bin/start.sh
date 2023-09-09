@@ -5,7 +5,7 @@ curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 
-java -classpath lib/fitlang-0.4.6.jar:\
+java -classpath lib/fitlang-0.4.7.jar:\
 lib/hutool-all-5.8.21.jar:\
 lib/aviator-5.3.3.jar:\
 lib/hutool-all-5.8.21.jar:\
@@ -41,7 +41,6 @@ lib/oshi-core-6.4.5.jar:\
 lib/netty-codec-4.1.97.Final.jar:\
 lib/netty-codec-xml-4.1.97.Final.jar:\
 lib/netty-transport-classes-epoll-4.1.97.Final.jar:\
-lib/searchableOptions-0.4.6.jar:\
 lib/netty-codec-dns-4.1.97.Final.jar:\
 lib/netty-common-4.1.97.Final.jar:\
 lib/netty-transport-classes-kqueue-4.1.97.Final.jar:\

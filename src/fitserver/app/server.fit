@@ -3,28 +3,17 @@
     "port": 11111,
     "enableInnerService": [
         "_shutdown",
-        "_stop",
-        "_reload",
+        //"_stop",
+        //"_reload",
         "_cloud"
     ],
+    "start": {
+        "uni": "cloudServer",
+        "port": 20000
+    },
     "service": {
         "/hello": {
             "uni": "hello"
-        },
-        "/echo": {
-            "uni": "echo"
-        },
-        "/cloud/server/start": {
-            "uni": "cloudServer",
-            "port": 20000
-        },
-        "/cloud/client/connect": {
-            "uni": "cloudClient",
-            "cloudServer": "ws://127.0.0.1:20000",
-            "input": {
-                "name": "coder",
-                "sayHello": "hello, everyone!"
-            }
         }
     }
 }

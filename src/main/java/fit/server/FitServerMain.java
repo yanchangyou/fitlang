@@ -10,12 +10,13 @@ import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 import java.io.File;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.removeJsonComment;
 
 public class FitServerMain {
 
     public static void main(String[] args) {
 
-        System.out.println("FitLang-0.4.6");
+        System.out.println("FitLang-0.4.7");
         String serverFilePath = "server.fit";
         String httpPrefix = "http://127.0.0.1";
         int port = 11111;
