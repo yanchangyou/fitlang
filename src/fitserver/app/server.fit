@@ -4,7 +4,7 @@
     "enableInnerService": [
         "_shutdown",
         //"_stop",
-        //"_reload",
+        "_reload",
         "_cloud"
     ],
     "init": {
