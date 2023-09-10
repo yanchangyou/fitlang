@@ -35,10 +35,6 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("readExcel path field is empty!");
         }
 
-        if (StrUtil.isBlank(sheetName)) {
-            throw new ExecuteNodeException("readExcel sheetName field is empty!");
-        }
-
         List<Map<String, String>> list;
         try {
             list = readExcel(path, sheetName, headerIndex);
@@ -46,7 +42,7 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
             throw new RuntimeException(e);
         }
 
-        output.set("sheetData", list);
+        output.set("list", list);
     }
 
 }
