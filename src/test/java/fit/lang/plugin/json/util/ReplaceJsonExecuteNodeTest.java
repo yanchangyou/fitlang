@@ -34,4 +34,19 @@ public class ReplaceJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
         Assert.assertEquals("{\"hello\":\"world\"}", output);
     }
+
+    public void testTestExecute2() {
+
+        String flow = "{" +//
+                "   'uni': 'replace'," +
+                "   'json':{" +
+                "       'json':{'hello':'world'}" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"json\":{\"hello\":\"world\"}}", output);
+    }
 }
