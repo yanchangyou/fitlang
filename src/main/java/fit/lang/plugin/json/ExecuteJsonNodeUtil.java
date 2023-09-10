@@ -149,13 +149,17 @@ public class ExecuteJsonNodeUtil {
     /**
      * 大致判断是否json字符串: TODO
      *
-     * @param text
+     * @param object
      * @return
      */
-    public static boolean isJsonText(String text) {
-        if (text == null) {
+    public static boolean isJsonText(Object object) {
+        if (object == null) {
             return false;
         }
+        if (!(object instanceof String)) {
+            return false;
+        }
+        String text = (String) object;
         text = text.trim();
         return text.startsWith("{") && text.endsWith("}");
     }
@@ -192,8 +196,11 @@ public class ExecuteJsonNodeUtil {
      */
     public static String parseNodeUrl(JSONObject inputParamAndContextParam, JSONObject nodeJsonDefine, String urlFieldName) {
         String url = nodeJsonDefine.getString(urlFieldName);
-        if (url == null) {
-            return "";
+        if (StrUtil.isBlank(url)) {
+            url = inputParamAndContextParam.getString(urlFieldName);
+            if (StrUtil.isBlank(url)) {
+                return "";
+            }
         }
         url = (String) eval(url, inputParamAndContextParam);
         return url;
