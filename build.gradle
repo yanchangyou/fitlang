@@ -36,6 +36,7 @@ dependencies {
     implementation "net.java.dev.jna:jna:${jnaVersion}"
     implementation "io.netty:netty-all:${nettyVersion}"
     implementation "jexcelapi:jxl:${jexcelapiVersion}"
+    implementation "com.alibaba:easyexcel:${easyexcelVersion}"
 }
 
 processResources {
