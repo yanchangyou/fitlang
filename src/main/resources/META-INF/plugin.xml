@@ -175,7 +175,7 @@ cloudClient：client端<br/>
         FitLang update list:<br/>
         <ul>
             <li>0.4.11 add node: writeExcel</li>
-            <li>0.4.10 fix service node reload bug; refine readExcel</li>
+            <li>0.4.10 fix server node reload bug; refine readExcel</li>
             <li>0.4.9 add node: readExcel; remove node: sendToWebsocketClient</li>
             <li>0.4.8 add execute node, refine server mode</li>
             <li>0.4.7 server mode refine</li>
