@@ -105,7 +105,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
         }
         if (StrUtil.isBlank(rootPath)) {
-            System.out.println("rootPath: is not existed: " + rootPath);
+            System.out.println("server start warning: rootPath is not existed: " + rootPath);
             return;
         }
         fitServer.getSimpleServer().setRoot(rootPath);
@@ -468,11 +468,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             return;
         }
         clearContext(simpleServer, servicePath);
-        JSONObject serviceDefineCopy = serviceDefine.clone();
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
 
+                JSONObject serviceDefineCopy = serviceDefine.clone();
                 JSONObject contextParam = new JSONObject();
                 contextParam.put(REQUEST_PATH, request.getPath());
                 contextParam.put(SERVICE_PATH, servicePath);
@@ -524,7 +524,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject inputJson;
         if (serviceDefine.containsKey("input")) {
-            inputJson = serviceDefine.getJSONObject("input").clone();
+            inputJson = serviceDefine.getJSONObject("input");
         } else {
             inputJson = new JSONObject();
         }
@@ -540,6 +540,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         ListValueMap<String, String> listValueMap = request.getParams();
         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
+            if(entry.getKey().startsWith("{")) {
+                continue;
+            }
+            if(entry.getValue().isEmpty()) {
+                continue;
+            }
             inputJson.put(entry.getKey(), entry.getValue().get(0));
         }
         return inputJson;
