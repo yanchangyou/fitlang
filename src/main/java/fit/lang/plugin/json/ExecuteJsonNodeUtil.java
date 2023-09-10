@@ -1,5 +1,6 @@
 package fit.lang.plugin.json;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNode;
@@ -8,6 +9,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -205,4 +207,25 @@ public class ExecuteJsonNodeUtil {
         url = (String) eval(url, inputParamAndContextParam);
         return url;
     }
+
+    /**
+     * 读取节点定义文件 : 去掉注释
+     *
+     * @param serverFile
+     * @return
+     */
+    public static String readNodeDefineFile(File serverFile) {
+        return readNodeDefineFile(serverFile.getAbsolutePath());
+    }
+
+    /**
+     * 读取节点定义文件 : 去掉注释
+     *
+     * @param serverFile
+     * @return
+     */
+    public static String readNodeDefineFile(String serverFile) {
+        return removeJsonComment(FileUtil.readUtf8String(serverFile));
+    }
+
 }
