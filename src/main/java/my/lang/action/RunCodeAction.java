@@ -2,6 +2,7 @@ package my.lang.action;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
@@ -30,6 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static fit.lang.ExecuteNodeUtil.getAllException;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
 /**
@@ -128,10 +130,14 @@ public abstract class RunCodeAction extends AnAction {
             for (String path : filePathList) {
                 String code = FileUtil.readUtf8String(path);
                 String result;
+                boolean needFormatJsonInConsole = false;
                 try {
 
                     if (finalNeedShowFile) {
                         print("run file: " + path + "\n", project, getProjectConsoleViewMap());
+                    }
+                    if (code.contains("_needFormatJsonInConsole")) {
+                        needFormatJsonInConsole = true;
                     }
 
                     Object resultObject = executeCode(code);
@@ -147,6 +153,10 @@ public abstract class RunCodeAction extends AnAction {
 
                 System.out.println("execute " + getLanguageName() + " code result:");
                 System.out.println(result);
+
+                if (needFormatJsonInConsole && isJsonText(result)) {
+                    result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+                }
 
                 print(result.concat("\n\n"), project, getProjectConsoleViewMap());
 
