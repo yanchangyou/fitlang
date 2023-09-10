@@ -31,7 +31,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static fit.lang.ExecuteNodeUtil.getAllException;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
 /**
@@ -128,7 +128,7 @@ public abstract class RunCodeAction extends AnAction {
         threadPoolExecutor.submit(() -> {
 
             for (String path : filePathList) {
-                String code = FileUtil.readUtf8String(path);
+                String code = readNodeDefineFile(path);
                 String result;
                 boolean needFormatJsonInConsole = false;
                 try {
