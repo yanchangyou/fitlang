@@ -11,7 +11,7 @@
         },
         {
             "uni": "readExcel",
-            "headerIndex": 1
+            "titleIndex": 1
         },
         {
             "uni": "foreach",
@@ -33,7 +33,7 @@
                     },
                     {
                         "uni": "readExcel",
-                        "headerIndex": 1
+                        "titleIndex": 1
                     },
                     {
                         "uni": "foreach",

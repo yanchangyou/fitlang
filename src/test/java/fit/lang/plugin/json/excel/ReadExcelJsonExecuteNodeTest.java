@@ -11,7 +11,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'headerIndex': 1," +
+                "   'titleIndex': 1," +
                 "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
 
@@ -30,7 +30,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute2() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'headerIndex': 1," +
+                "   'titleIndex': 1," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'}", flow);
@@ -48,21 +48,21 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute3() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'headerIndex': 0," +
+                "   'titleIndex': 0," +
                 "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
         try {
             ExecuteJsonNodeUtil.executeCode("{}", flow);
         } catch (Exception e) {
             e.printStackTrace();
-            Assert.assertTrue(e.getMessage().contains("excel headerIndex must be great than 0, but found: 0"));
+            Assert.assertTrue(e.getMessage().contains("excel titleIndex must be great than 0, but found: 0"));
         }
     }
 
     public void testExecute5() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'headerIndex': 1," +
+                "   'titleIndex': 1," +
                 "   'sheetName': '接口列表'," +
                 "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
@@ -83,7 +83,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
                 "   'outputListField': 'otherName'," +
-                "   'headerIndex': 1," +
+                "   'titleIndex': 1," +
                 "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
 

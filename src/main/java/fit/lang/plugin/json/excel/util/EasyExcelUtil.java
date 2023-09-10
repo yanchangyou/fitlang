@@ -9,6 +9,7 @@ import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -16,34 +17,37 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 import static org.apache.poi.ss.usermodel.BorderStyle.THIN;
 
 public class EasyExcelUtil {
+
     /**
      * 写Excel
      *
      * @param list
-     * @param fieldConfigMap
+     * @param titleConfig
      * @param defaultWidth
-     * @param outputStream
+     * @param path
      * @throws IOException
      */
-    public static void writeExcel(List<Map<String, String>> list, Map<String, JSONObject> fieldConfigMap, Integer defaultWidth, OutputStream outputStream) throws IOException {
+    public static void writeExcel(JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path) throws IOException {
         List<List<String>> data = new ArrayList<>();
-
         // 设置列头
         List<List<String>> titles = new ArrayList<>();
         List<String> headers = new ArrayList<>();
         Map<Integer, Integer> columnWidthMap = new HashMap<>();
 
+        if (titleConfig == null) {
+            titleConfig = new JSONObject();
+        }
+
         Integer columnIndex = 0;
 
         if (list.isEmpty()) {
-            for (Map.Entry<String, JSONObject> entry : fieldConfigMap.entrySet()) {
-                JSONObject config = entry.getValue();
+            for (Map.Entry<String, Object> entry : titleConfig.entrySet()) {
+                JSONObject config = (JSONObject) entry.getValue();
                 String title = config.getString("title");
                 titles.add(Collections.singletonList(title));
                 headers.add(entry.getKey());
@@ -59,17 +63,17 @@ public class EasyExcelUtil {
             }
         } else {
 
-            Map<String, String> row = list.get(0);
+            JSONObject row = (JSONObject) list.get(0);
 
-            if (fieldConfigMap.isEmpty()) {
-                for (Map.Entry<String, String> entry : row.entrySet()) {
+            if (titleConfig.isEmpty()) {
+                for (Map.Entry<String, Object> entry : row.entrySet()) {
                     String title = entry.getKey();
                     titles.add(Collections.singletonList(title));
                     headers.add(entry.getKey());
                 }
             } else {
-                for (Map.Entry<String, JSONObject> entry : fieldConfigMap.entrySet()) {
-                    JSONObject config = entry.getValue();
+                for (Map.Entry<String, Object> entry : titleConfig.entrySet()) {
+                    JSONObject config = (JSONObject) entry.getValue();
                     String title = config.getString("title");
                     titles.add(Collections.singletonList(title));
                     headers.add(entry.getKey());
@@ -85,9 +89,17 @@ public class EasyExcelUtil {
                 }
             }
 
+            for (Object item : list) {
+                List rowData = new ArrayList();
+                for (String head : headers) {
+                    String value = ((JSONObject) item).getString(head);
+                    rowData.add(value);
+                }
+                data.add(rowData);
+            }
         }
 
-        writeExcel(titles, data, defaultWidth, columnWidthMap, outputStream);
+        writeExcel(titles, data, defaultWidth, columnWidthMap, path);
     }
 
     /**
@@ -97,17 +109,21 @@ public class EasyExcelUtil {
      * @param data
      * @param defaultWidth
      * @param columnWidthMap
-     * @param outputStream
+     * @param path
      * @throws IOException
      */
-    private static void writeExcel(List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, OutputStream outputStream) throws IOException {
+    private static void writeExcel(List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, String path) throws IOException {
 
+        if (defaultWidth == null) {
+            defaultWidth = 30;
+        }
         HorizontalCellStyleStrategy horizontalCellStyleStrategy = exportExcelConfig();
-        EasyExcel.write(outputStream)
+        Integer finalDefaultWidth = defaultWidth;
+        EasyExcel.write(path)
                 .registerWriteHandler(horizontalCellStyleStrategy)
-                .registerWriteHandler(new SimpleColumnWidthStyleStrategy(defaultWidth) {
+                .registerWriteHandler(new SimpleColumnWidthStyleStrategy(finalDefaultWidth) {
                     protected Integer columnWidth(Head head, Integer columnIndex) {
-                        return columnWidthMap.get(columnIndex) == null ? defaultWidth : (columnWidthMap.get(columnIndex) / 6);
+                        return columnWidthMap.get(columnIndex) == null ? finalDefaultWidth : (columnWidthMap.get(columnIndex) / 6);
                     }
                 })
                 .sheet().table().head(titles).doWrite(data);
@@ -145,21 +161,21 @@ public class EasyExcelUtil {
         return new HorizontalCellStyleStrategy(headStyle, contentStyle);
     }
 
-    public static List<Map<String, String>> readExcel(String path, String sheetName, Integer headerIndex) {
+    public static List<Map<String, String>> readExcel(String path, String sheetName, Integer titleIndex) {
         List<Map<Integer, String>> list = new ArrayList<>();
         Map<Integer, String> excelHeader = new LinkedHashMap<>();
-        if (headerIndex == null) {
-            headerIndex = 1;
+        if (titleIndex == null) {
+            titleIndex = 1;
         }
-        if (headerIndex < 1) {
-            throw new ExecuteNodeException("excel headerIndex must be great than 0, but found: " + headerIndex);
+        if (titleIndex < 1) {
+            throw new ExecuteNodeException("excel titleIndex must be great than 0, but found: " + titleIndex);
         }
 
         ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(path, new ExcelService(list, excelHeader));
         if (sheetName != null) {
-            excelReaderBuilder.sheet(sheetName).headRowNumber(headerIndex).doReadSync();
+            excelReaderBuilder.sheet(sheetName).headRowNumber(titleIndex).doReadSync();
         } else {
-            excelReaderBuilder.sheet(0).headRowNumber(headerIndex).doReadSync();
+            excelReaderBuilder.sheet(0).headRowNumber(titleIndex).doReadSync();
         }
 
         return convertExcelData(list, excelHeader);
@@ -167,7 +183,7 @@ public class EasyExcelUtil {
 
     static List<Map<String, String>> convertExcelData(List<Map<Integer, String>> list, Map<Integer, String> excelHeader) {
         if (excelHeader == null || excelHeader.isEmpty()) {
-            throw new ExecuteNodeException("excel must be have header!(config headerIndex field)");
+            throw new ExecuteNodeException("excel must be have header!(config titleIndex field)");
         }
         List<Map<String, String>> result = new ArrayList<>();
         for (Map<Integer, String> row : list) {
@@ -207,27 +223,4 @@ class ExcelService extends AnalysisEventListener<Map<Integer, String>> {
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
     }
-//
-//    static {
-//        System.setProperty("javax.xml.stream.isRepairingNamespaces", "true");
-//        System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
-//        System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
-//        System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
-////        System.setProperty("javax.xml.stream.XMLEventFactory", "org.apache.xerces.stax.XMLEventFactoryImpl");
-////        System.setProperty("javax.xml.stream.XMLEventFactory", "com.sun.xml.internal.stream.events");
-//
-//        System.setProperty(
-//                "org.apache.poi.javax.xml.stream.XMLInputFactory",
-//                "com.fasterxml.aalto.stax.InputFactoryImpl"
-//        );
-//        System.setProperty(
-//                "org.apache.poi.javax.xml.stream.XMLOutputFactory",
-//                "com.fasterxml.aalto.stax.OutputFactoryImpl"
-//        );
-//        System.setProperty(
-//                "org.apache.poi.javax.xml.stream.XMLEventFactory",
-//                "com.fasterxml.aalto.stax.EventFactoryImpl"
-//        );
-//
-//    }
 }

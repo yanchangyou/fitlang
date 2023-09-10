@@ -84,7 +84,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
                 "                }," +
                 "                {" +
                 "                    'uni': 'readExcel'," +
-                "                    'headerIndex': 1" +
+                "                    'titleIndex': 1" +
                 "                }," +
                 "                {" +
                 "                    'uni': 'foreach'," +
@@ -106,7 +106,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
                 "                            }," +
                 "                            {" +
                 "                                'uni': 'readExcel'," +
-                "                                'headerIndex': 1" +
+                "                                'titleIndex': 1" +
                 "                            }," +
                 "                            {" +
                 "                                'uni': 'foreach'," +

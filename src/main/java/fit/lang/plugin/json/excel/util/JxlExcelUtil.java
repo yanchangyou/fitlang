@@ -15,15 +15,15 @@ import java.util.Map;
 
 public class JxlExcelUtil {
 
-    public static List<Map<String, String>> readExcel(String path, String sheetName, Integer headerIndex) throws IOException, BiffException {
+    public static List<Map<String, String>> readExcel(String path, String sheetName, Integer titleIndex) throws IOException, BiffException {
         InputStream is = Files.newInputStream(Paths.get(path));
         jxl.Workbook rwb = Workbook.getWorkbook(is);
 
-        if (headerIndex == null) {
-            headerIndex = 0;
+        if (titleIndex == null) {
+            titleIndex = 0;
         } else {
             //外部约定从1开始，jxl从0开始
-            headerIndex = headerIndex - 1;
+            titleIndex = titleIndex - 1;
         }
         Sheet sheet = rwb.getSheet(0);
         if (sheetName != null) {
@@ -31,7 +31,7 @@ public class JxlExcelUtil {
         }
         List<Map<String, String>> list = new ArrayList<>();
         int rows = sheet.getRows();
-        for (int i = headerIndex; i < rows; i++) {
+        for (int i = titleIndex; i < rows; i++) {
             Map<String, String> row = new HashMap<>();
             int column = sheet.getRow(i).length;
             for (int j = 0; j < column; j++) {
