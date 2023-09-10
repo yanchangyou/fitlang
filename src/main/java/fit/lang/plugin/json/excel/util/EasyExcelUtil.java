@@ -5,6 +5,9 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
+import com.alibaba.excel.util.BooleanUtils;
+import com.alibaba.excel.write.handler.context.CellWriteHandlerContext;
+import com.alibaba.excel.write.handler.impl.FillStyleCellWriteHandler;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
@@ -12,9 +15,7 @@ import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -120,10 +121,47 @@ public class EasyExcelUtil {
         HorizontalCellStyleStrategy horizontalCellStyleStrategy = exportExcelConfig();
         Integer finalDefaultWidth = defaultWidth;
         EasyExcel.write(path)
-                .registerWriteHandler(horizontalCellStyleStrategy)
+//                .registerWriteHandler(horizontalCellStyleStrategy)
+
                 .registerWriteHandler(new SimpleColumnWidthStyleStrategy(finalDefaultWidth) {
                     protected Integer columnWidth(Head head, Integer columnIndex) {
                         return columnWidthMap.get(columnIndex) == null ? finalDefaultWidth : (columnWidthMap.get(columnIndex) / 6);
+                    }
+                })
+                .registerWriteHandler(new FillStyleCellWriteHandler() {
+
+                    Map<String, CellStyle> styleCache = new HashMap();
+
+                    @Override
+                    public void afterCellDispose(CellWriteHandlerContext context) {
+                        if (BooleanUtils.isTrue(context.getIgnoreFillStyle())) {
+                            return;
+                        }
+                        CellStyle cellStyle = context.getCell().getCellStyle();
+                        String stringValue = context.getCell().getStringCellValue();
+                        Workbook workbook = context.getWriteWorkbookHolder().getWorkbook();
+
+                        if ("true".equals(stringValue)) {
+                            CellStyle newCellStyle = styleCache.get("true");
+                            if (newCellStyle == null) {
+                                Font writeFont = workbook.createFont();
+                                newCellStyle = workbook.createCellStyle();
+                                newCellStyle.setFont(writeFont);
+                                writeFont.setColor(IndexedColors.GREEN.getIndex());
+                                styleCache.put("true", newCellStyle);
+                            }
+                            context.getCell().setCellStyle(newCellStyle);
+                        } else if ("false".equals(stringValue)) {
+                            CellStyle newCellStyle = styleCache.get("false");
+                            if (newCellStyle == null) {
+                                Font writeFont = workbook.createFont();
+                                newCellStyle = workbook.createCellStyle();
+                                newCellStyle.setFont(writeFont);
+                                writeFont.setColor(IndexedColors.RED.getIndex());
+                                styleCache.put("false", newCellStyle);
+                            }
+                            context.getCell().setCellStyle(newCellStyle);
+                        }
                     }
                 })
                 .sheet().table().head(titles).doWrite(data);
