@@ -25,8 +25,7 @@ import fit.lang.plugin.json.tool.server.FitServerInstance;
 import java.io.File;
 import java.util.*;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.removeJsonComment;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 
 /**
  * 执行节点
@@ -123,9 +122,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         if (serverFile == null) {
             serverFile = getCurrentServerFilePath();
-        } else if (!isFirst) {
-            //支持重新加载文件，不支持修改端口 TODO
-            nodeJsonDefine = JSONObject.parseObject(FileUtil.readUtf8String(serverFile));
         }
         fitServer.setServerFile(serverFile);
 
@@ -540,10 +536,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         ListValueMap<String, String> listValueMap = request.getParams();
         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
-            if(entry.getKey().startsWith("{")) {
+            if (entry.getKey().startsWith("{")) {
                 continue;
             }
-            if(entry.getValue().isEmpty()) {
+            if (entry.getValue().isEmpty()) {
                 continue;
             }
             inputJson.put(entry.getKey(), entry.getValue().get(0));
@@ -561,8 +557,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 serviceDefineList.addAll(subDefineList);
             }
         } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
-            String serviceDefineText = FileUtil.readUtf8String(serviceFile);
-            serviceDefineText = removeJsonComment(serviceDefineText);
+            String serviceDefineText = readNodeDefineFile(serviceFile);
             JSONObject serviceDefine = JSONObject.parseObject(serviceDefineText);
             String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
             serviceDefine.put("path", servicePath);
