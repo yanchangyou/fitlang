@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -25,7 +26,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (header != null && !header.isEmpty()) {
             request.addHeaders(toStringMap(header));
         }
-        request.body(input.getData().toJSONString());
+        String httpBody;
+        Object httpParam = nodeJsonDefine.get("param");
+        if (httpParam != null) {
+            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
+            if (param != null) {
+                httpBody = param.toString();
+            } else {
+                httpBody = "";
+            }
+        } else {
+            httpBody = input.getData().toJSONString();
+        }
+
+        request.body(httpBody);
         HttpResponse response = request.execute();
         String responseText = response.body();
 
