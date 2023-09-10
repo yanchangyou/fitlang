@@ -5,7 +5,7 @@ curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 
-java -classpath lib/fitlang-0.4.10.jar:\
+java -classpath lib/fitlang-0.4.11.jar:\
 lib/hutool-all-5.8.21.jar:\
 lib/SparseBitSet-1.2.jar:\
 lib/netty-codec-socks-4.1.97.Final.jar:\
@@ -57,7 +57,6 @@ lib/poi-ooxml-schemas-4.1.2.jar:\
 lib/ehcache-3.9.9.jar:\
 lib/netty-codec-mqtt-4.1.97.Final.jar:\
 lib/netty-transport-4.1.97.Final.jar:\
-lib/searchableOptions-0.4.10.jar:\
 lib/fastjson2-2.0.32.jar:\
 lib/netty-codec-redis-4.1.97.Final.jar:\
 lib/netty-transport-classes-epoll-4.1.97.Final.jar:\
