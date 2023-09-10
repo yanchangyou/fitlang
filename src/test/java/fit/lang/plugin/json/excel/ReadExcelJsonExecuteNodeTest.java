@@ -11,7 +11,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xlsx'" +
+                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -22,7 +22,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("sheetData"));
+        Assert.assertNotNull(outputJson.get("sheetData"));
 
     }
 }
