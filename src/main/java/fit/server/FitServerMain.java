@@ -10,7 +10,7 @@ import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
 import java.io.File;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.removeJsonComment;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.readNodeDefineFile;
 
 public class FitServerMain {
 
@@ -36,7 +36,7 @@ public class FitServerMain {
             return;
         }
 
-        String code = FileUtil.readString((serverFile), CharsetUtil.defaultCharset());
+        String code = readNodeDefineFile(serverFile);
 
         System.out.println("start server from " + serverFile.getAbsoluteFile());
 
