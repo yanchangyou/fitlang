@@ -11,6 +11,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
+                "   'headerIndex': 1," +
                 "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
                 "}";
 
@@ -24,5 +25,19 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
         Assert.assertNotNull(outputJson.get("sheetData"));
 
+    }
+
+
+    public void testExecute1() {
+        String flow = "{" +//
+                "   'uni': 'readExcel'," +
+                "   'headerIndex': 0," +
+                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
+                "}";
+        try {
+            ExecuteJsonNodeUtil.executeCode("{}", flow);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains("excel headerIndex must be great than 0, but found: 0"));
+        }
     }
 }

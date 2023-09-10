@@ -10,6 +10,7 @@ import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.alibaba.excel.write.style.column.SimpleColumnWidthStyleStrategy;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
@@ -150,6 +151,9 @@ public class EasyExcelUtil {
         if (headerIndex == null) {
             headerIndex = 1;
         }
+        if (headerIndex < 1) {
+            throw new ExecuteNodeException("excel headerIndex must be great than 0, but found: " + headerIndex);
+        }
 
         ExcelReaderBuilder excelReaderBuilder = EasyExcel.read(path, new ExcelService(list, excelHeader));
         if (sheetName != null) {
@@ -162,6 +166,9 @@ public class EasyExcelUtil {
     }
 
     static List<Map<String, String>> convertExcelData(List<Map<Integer, String>> list, Map<Integer, String> excelHeader) {
+        if (excelHeader == null || excelHeader.isEmpty()) {
+            throw new ExecuteNodeException("excel must be have header!(config headerIndex field)");
+        }
         List<Map<String, String>> result = new ArrayList<>();
         for (Map<Integer, String> row : list) {
             Map<String, String> newRow = new HashMap<>();
