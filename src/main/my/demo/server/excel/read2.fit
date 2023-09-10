@@ -3,7 +3,15 @@
     "child": [
         {
             "uni": "server",
-            "port": 60001
+            "port": 60001,
+            "service": {
+                "/hello": {
+                    "uni": "hello"
+                },
+                "/echo": {
+                    "uni": "echo"
+                }
+            }
         },
         {
             "flag": "_needFormatJsonInConsole",
