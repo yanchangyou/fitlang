@@ -91,7 +91,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             result = load(fitServer);
             fitServer.getSimpleServer().start();
         } else {
-            result = reload(fitServer, false);
+            result = reload(fitServer);
         }
 
         output.setData(result);
@@ -111,10 +111,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     public JSONObject load(FitServerInstance fitServer) {
-        return reload(fitServer, false);
+        return reload(fitServer);
     }
 
-    public JSONObject reload(FitServerInstance fitServer, boolean isFirst) {
+    public JSONObject reload(FitServerInstance fitServer) {
 
         JSONArray serviceList = fitServer.getServiceList();
         String serverFile = fitServer.getServerFile();
@@ -441,7 +441,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(reloadPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                reload(fitServer, false);
+                reload(fitServer);
                 JSONObject welcome = getWelcomeJson(fitServer);
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
             }
