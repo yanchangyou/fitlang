@@ -58,14 +58,29 @@
                                     "child": [
                                         {
                                             "uni": "set",
-                                            "key": "expectedValue",
+                                            "key": "编码",
+                                            "value": "${编码}"
+                                        },
+                                        {
+                                            "uni": "set",
+                                            "key": "名称",
+                                            "value": "${名称}"
+                                        },
+                                        {
+                                            "uni": "set",
+                                            "key": "期望",
                                             "value": "${期望}"
+                                        },
+                                        {
+                                            "uni": "set",
+                                            "key": "输入",
+                                            "value": "${输入}"
                                         },
                                         {
                                             "uni": "mix",
                                             "json": {
                                                 "url": "${url}",
-                                                "expectedValue": "${expectedValue}"
+                                                "expectedValue": "${期望}"
                                             }
                                         },
                                         {
@@ -75,9 +90,44 @@
                                         {
                                             "uni": "assert",
                                             "needToString": true,
-                                            "expected": "${expectedValue}"
+                                            "expected": "${期望}"
+                                        },
+                                        {
+                                            "uni": "mix",
+                                            "json": {
+                                                "编码": "${编码}",
+                                                "名称": "${名称}",
+                                                "输入": "${输入}",
+                                                "期望": "${期望}",
+                                                "是否匹配": "${isMatch}",
+                                                "实际": "${actual}"
+                                            }
                                         }
                                     ]
+                                }
+                            },
+                            {
+                                "uni": "writeExcel",
+                                "path": "/opt/github/fitlang/doc/test/case/自动化测试用例-报告-1.xls",
+                                "titleConfig": {
+                                    "编码": {
+                                        "title": "编码"
+                                    },
+                                    "名称": {
+                                        "title": "名称"
+                                    },
+                                    "输入": {
+                                        "title": "输入"
+                                    },
+                                    "期望": {
+                                        "title": "期望"
+                                    },
+                                    "isMatch": {
+                                        "title": "是否通过"
+                                    },
+                                    "actual": {
+                                        "title": "实际输出"
+                                    }
                                 }
                             }
                         ]

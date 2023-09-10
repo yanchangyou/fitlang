@@ -99,4 +99,101 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
     }
 
+
+    public void testExecute100() {
+
+        String flow = "{" +
+                "    'uni': 'sequence'," +
+                "    'child': [" +
+                "        {" +
+                "            'uni': 'server'," +
+                "            'port': 60003," +
+                "            'service': {'/hello':{'uni':'hello'}}," +
+                "        }," +
+                "        {" +
+                "            'flag': '_needFormatJsonInConsole'," +
+                "            'uni': 'pipe'," +
+                "            'child': [" +
+                "                {" +
+                "                    'uni': 'mix'," +
+                "                    'json': {" +
+                "                        'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'," +
+                "                        'sheetName': '接口列表'" +
+                "                    }" +
+                "                }," +
+                "                {" +
+                "                    'uni': 'readExcel'," +
+                "                    'titleIndex': 1" +
+                "                }," +
+                "                {" +
+                "                    'uni': 'foreach'," +
+                "                    'foreachField': 'list'," +
+                "                    'child': {" +
+                "                        'uni': 'pipe'," +
+                "                        'child': [" +
+                "                            {" +
+                "                                'uni': 'set'," +
+                "                                'key': 'url'," +
+                "                                'value': '${接口URL}'" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'mix'," +
+                "                                'json': {" +
+                "                                    'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'," +
+                "                                    'sheetName': '${接口名称}'" +
+                "                                }" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'readExcel'," +
+                "                                'titleIndex': 1" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'foreach'," +
+                "                                'foreachField': 'list'," +
+                "                                'child': {" +
+                "                                    'uni': 'pipe'," +
+                "                                    'child': [" +
+                "                                        {" +
+                "                                            'uni': 'set'," +
+                "                                            'key': 'expectedValue'," +
+                "                                            'value': '${期望}'" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'mix'," +
+                "                                            'json': {" +
+                "                                                'url': '${url}'," +
+                "                                                'expectedValue': '${expectedValue}'" +
+                "                                            }" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'http'," +
+                "                                            'header': {" +
+                "                                                'contextType': 'application/x-www-form-urlencoded'" +
+                "                                            }," +
+                "                                            'param': '${输入}'" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'assert'," +
+                "                                            'needToString': true," +
+                "                                            'expected': '${expectedValue}'" +
+                "                                        }" +
+                "                                    ]" +
+                "                                }" +
+                "                            }" +
+                "                        ]" +
+                "                    }" +
+                "                }" +
+                "            ]" +
+                "        }" +
+                "    ]" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+
+    }
 }
