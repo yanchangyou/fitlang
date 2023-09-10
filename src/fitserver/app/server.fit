@@ -3,7 +3,7 @@
     "port": 11111,
     "enableInnerService": [
         "_shutdown",
-        //"_stop",
+        "_stop",
         "_reload",
         "_cloud"
     ],
