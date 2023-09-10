@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.excel;
 
+import cn.hutool.core.util.StrUtil;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -20,6 +22,22 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
         String path = nodeJsonDefine.getString("path");
         String sheetName = nodeJsonDefine.getString("sheetName");
         Integer headerIndex = nodeJsonDefine.getInteger("headerIndex");
+
+        if (StrUtil.isBlank(sheetName)) {
+            sheetName = input.getString("sheetName");
+        }
+
+        if (StrUtil.isBlank(path)) {
+            path = input.getString("path");
+        }
+
+        if (StrUtil.isBlank(path)) {
+            throw new ExecuteNodeException("readExcel path field is empty!");
+        }
+
+        if (StrUtil.isBlank(sheetName)) {
+            throw new ExecuteNodeException("readExcel sheetName field is empty!");
+        }
 
         List<Map<String, String>> list;
         try {

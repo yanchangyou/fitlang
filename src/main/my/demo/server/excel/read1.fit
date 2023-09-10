@@ -1,0 +1,37 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "path": "/opt/github/fitlang/doc/test/case/自动化测试用例.xls",
+                "sheetName": "接口列表"
+            }
+        },
+        {
+            "description": "read excel, config param, path: excel file path; sheetName: sheet name, default is first; headerIndex: header row index >=1;",
+            "uni": "readExcel",
+            "headerIndex": 1
+        },
+        {
+            "uni": "foreach",
+            "foreachField": "sheetData",
+            "child": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "mix",
+                        "json": {
+                            "path": "/opt/github/fitlang/doc/test/case/自动化测试用例.xls",
+                            "sheetName": "${接口名称}"
+                        }
+                    },
+                    {
+                        "uni": "readExcel",
+                        "headerIndex": 1
+                    }
+                ]
+            }
+        }
+    ]
+}

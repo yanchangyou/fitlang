@@ -27,8 +27,25 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
     }
 
+    public void testExecute2() {
+        String flow = "{" +//
+                "   'uni': 'readExcel'," +
+                "   'headerIndex': 1," +
+                "}";
 
-    public void testExecute1() {
+        String output = ExecuteJsonNodeUtil.executeCode("{ 'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertNotNull(outputJson.get("sheetData"));
+
+    }
+
+    public void testExecute3() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
                 "   'headerIndex': 0," +
