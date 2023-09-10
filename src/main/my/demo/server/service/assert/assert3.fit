@@ -1,0 +1,8 @@
+{
+    "uni": "assert",
+    "input": {
+        "hello": "world"
+    },
+    "needToString": true,
+    "expected": "${'{\"hello\":\"'+hello+'\"}'}"
+}

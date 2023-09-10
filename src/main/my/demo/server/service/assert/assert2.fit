@@ -1,0 +1,9 @@
+{
+    "uni": "assert",
+    "input": {
+        "hello": "world1"
+    },
+    "expected": {
+        "hello": "world"
+    }
+}

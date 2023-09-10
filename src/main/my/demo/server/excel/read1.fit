@@ -10,16 +10,20 @@
             }
         },
         {
-            "description": "read excel, config param, path: excel file path; sheetName: sheet name, default is first; headerIndex: header row index >=1;",
             "uni": "readExcel",
             "headerIndex": 1
         },
         {
             "uni": "foreach",
-            "foreachField": "sheetData",
+            "foreachField": "list",
             "child": {
                 "uni": "pipe",
                 "child": [
+                    {
+                        "uni": "set",
+                        "key": "url",
+                        "value": "${接口URL}"
+                    },
                     {
                         "uni": "mix",
                         "json": {
@@ -30,6 +34,39 @@
                     {
                         "uni": "readExcel",
                         "headerIndex": 1
+                    },
+                    {
+                        "uni": "foreach",
+                        "foreachField": "list",
+                        "child": {
+                            "uni": "pipe",
+                            "child": [
+                                {
+                                    "uni": "set",
+                                    "key": "expectedValue",
+                                    "value": "${期望}"
+                                },
+                                {
+                                    "uni": "mix",
+                                    "json": {
+                                        "url": "${url}",
+                                        "expectedValue": "${expectedValue}"
+                                    }
+                                }
+//                                {
+//                                    "uni": "http",
+//                                    "header": {
+////                                        "contextType": "application/x-www-form-urlencoded"
+//                                    },
+//                                    "param": "${输入}"
+//                                }
+//                                {
+//                                    "uni": "assert",
+//                                    "needToString": true,
+//                                    "expected": "${expectedValue}"
+//                                }
+                            ]
+                        }
                     }
                 ]
             }

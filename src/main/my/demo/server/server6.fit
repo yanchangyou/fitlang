@@ -1,0 +1,20 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "server",
+            "service": {
+                "/echo": {
+                    "uni": "echo"
+                }
+            }
+        },
+        {
+            "uni": "http",
+            "input": {
+                "hello": "world"
+            },
+            "url": "http://127.0.0.1:11111/echo"
+        }
+    ]
+}
