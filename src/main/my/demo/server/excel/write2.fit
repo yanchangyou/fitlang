@@ -58,23 +58,13 @@
                                     "child": [
                                         {
                                             "uni": "set",
-                                            "key": "编码",
-                                            "value": "${编码}"
-                                        },
-                                        {
-                                            "uni": "set",
-                                            "key": "名称",
-                                            "value": "${名称}"
-                                        },
-                                        {
-                                            "uni": "set",
-                                            "key": "期望",
-                                            "value": "${期望}"
-                                        },
-                                        {
-                                            "uni": "set",
-                                            "key": "输入",
-                                            "value": "${输入}"
+                                            "key": "caseItem",
+                                            "value": {
+                                                "编码": "${编码}",
+                                                "名称": "${名称}",
+                                                "输入": "${输入}",
+                                                "期望": "${期望}"
+                                            }
                                         },
                                         {
                                             "uni": "mix",
@@ -90,17 +80,13 @@
                                         {
                                             "uni": "assert",
                                             "needToString": true,
-                                            "expected": "${期望}"
+                                            "expected": "${caseItem.期望}"
                                         },
                                         {
                                             "uni": "mix",
+                                            "mixField": "caseItem",
                                             "json": {
-                                                "编码": "${编码}",
-                                                "名称": "${名称}",
-                                                "输入": "${输入}",
-                                                "期望": "${期望}",
-                                                "是否通过": "${success}",
-                                                "实际": "${actual}"
+                                                "caseItem": "${caseItem}"
                                             }
                                         }
                                     ]
