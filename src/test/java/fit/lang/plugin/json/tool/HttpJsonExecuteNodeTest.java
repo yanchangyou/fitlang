@@ -21,7 +21,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{'error_code':100,'error_msg':'Invalid parameter'}", output);
+        Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
 
     }
 

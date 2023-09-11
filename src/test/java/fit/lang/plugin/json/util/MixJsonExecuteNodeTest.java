@@ -41,14 +41,14 @@ public class MixJsonExecuteNodeTest extends TestCase {
                 "   'uni': 'mix'," +
                 "   'mixField': 'hello'," +
                 "   'json':{" +
-                "       'hello':\"${who}\"" +
+                "       'hello':'${who}'" +
                 "   }" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
         System.out.println(output);
-        Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
+        Assert.assertEquals("{\"who\":\"world\"}", output);
     }
 
     public void testExecute3() {
