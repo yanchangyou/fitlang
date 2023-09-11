@@ -21,7 +21,7 @@
                         "processorLogicalCount",
                         "processorMaxFreq",
                         "memoryTotal",
-                        //"memoryAvailable",
+                        "memoryAvailable",
                         "osManufacturer",
                         "osFamily",
                         //"osVersion",
