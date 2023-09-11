@@ -34,4 +34,36 @@ public class MixJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
         Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
     }
+
+    public void testExecute2() {
+
+        String flow = "{" +//
+                "   'uni': 'mix'," +
+                "   'mixField': 'hello'," +
+                "   'json':{" +
+                "       'hello':\"${who}\"" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
+    }
+
+    public void testExecute3() {
+
+        String flow = "{" +//
+                "   'uni': 'mix'," +
+                "   'mixField': 'hello'," +
+                "   'json':{" +
+                "       'hello':{'hello':'world'}" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
+    }
 }
