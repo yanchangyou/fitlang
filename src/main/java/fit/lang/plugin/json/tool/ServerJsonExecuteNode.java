@@ -189,9 +189,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject defaultResult = defaultStartNode();
 
-        result.put("message", "server start OK!\n" + buildUrl(fitServer.getPort(), ""));
+        result.put("message", "server start OK!");
         result.put("httpPrefix", getHttpPrefix());
         result.put("port", fitServer.getPort());
+        result.put("url", buildUrl(fitServer.getPort(), ""));
         if (defaultResult != null) {
             result.put("startResult", defaultResult);
         }
