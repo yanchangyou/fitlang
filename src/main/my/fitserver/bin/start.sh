@@ -1,3 +1,6 @@
+
+httpPrefix=$FIT_SERVER_HTTP_PREFIX
+
 cd "$(dirname $0)/.."
 
 #curl http://127.0.0.1:11111/_stop
@@ -64,5 +67,5 @@ lib/slf4j-api-2.0.7.jar:\
 lib/netty-codec-smtp-4.1.97.Final.jar:\
 lib/netty-transport-classes-kqueue-4.1.97.Final.jar:\
 lib/xmlbeans-3.1.0.jar\
- fit.server.FitServerMain app/server.fit $FIT_SERVER_HTTP_PREFIX&
+ fit.server.FitServerMain app/server.fit $httpPrefix &
 
