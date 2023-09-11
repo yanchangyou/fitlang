@@ -1,6 +1,5 @@
 package fit.lang.plugin.json.tool;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
@@ -304,8 +303,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = request.getClientIP();
-                if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
+                String clientIP = getHttpClientIp(request);
+                if (!isLocalIp(clientIP)) {
                     responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
@@ -325,8 +324,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = request.getClientIP();
-                if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
+                String clientIP = getHttpClientIp(request);
+                if (!isLocalIp(clientIP)) {
                     responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }
@@ -359,8 +358,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = request.getClientIP();
-                if (!"127.0.0.1".equals(clientIP) && !"localhost".equals(clientIP)) {
+                String clientIP = getHttpClientIp(request);
+                if (!isLocalIp(clientIP)) {
                     responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
                     return;
                 }

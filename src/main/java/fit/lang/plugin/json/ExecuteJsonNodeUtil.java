@@ -2,6 +2,7 @@ package fit.lang.plugin.json;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.server.HttpServerRequest;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
@@ -226,6 +227,20 @@ public class ExecuteJsonNodeUtil {
      */
     public static String readNodeDefineFile(String serverFile) {
         return removeJsonComment(FileUtil.readUtf8String(serverFile));
+    }
+
+    /**
+     * 是否本地IP： 127.0.0.1
+     *
+     * @param ip
+     * @return
+     */
+    public static boolean isLocalIp(String ip) {
+        return "127.0.0.1".equals(ip);
+    }
+
+    public static String getHttpClientIp(HttpServerRequest request) {
+        return request.getHttpExchange().getRemoteAddress().getAddress().getHostAddress();
     }
 
 }
