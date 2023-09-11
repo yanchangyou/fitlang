@@ -1,0 +1,43 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "mixNode",
+            "json": {
+                "clientInfo": {
+                    "uni": "mix",
+                    "json": {
+                        "clientType": "java"
+                    }
+                },
+                "systemInfo": {
+                    "description": "system info node",
+                    "uni": "systemInfo",
+                    "shareFields": [
+                        "computerManufacturer",
+                        "computerModel",
+                        "processorName",
+                        "processorPhysicalCount",
+                        "processorLogicalCount",
+                        "processorMaxFreq",
+                        "memoryTotal",
+                        "memoryAvailable",
+                        "osManufacturer",
+                        "osFamily",
+//                        "osVersion",
+                        "osBit"
+                    ]
+                }
+            }
+        },
+        {
+            "uni": "cloudClient",
+            "cloudServer": "ws://127.0.0.1:20000",
+            "debugMode": true,
+            "input": {
+                "name": "coder",
+                "sayHello": "hello, everyone!"
+            }
+        }
+    ]
+}

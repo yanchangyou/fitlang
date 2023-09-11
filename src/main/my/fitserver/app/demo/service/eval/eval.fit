@@ -1,0 +1,14 @@
+{
+    "input": {
+        "times": 0
+    },
+    "uni": "loop",
+    "isPipe": true,
+    "loopTimes": 10,
+    "child": {
+        "uni": "mix",
+        "json": {
+            "times": "${times+1}"
+        }
+    }
+}

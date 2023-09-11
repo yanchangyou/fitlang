@@ -186,14 +186,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
-        JSONObject defaultResult = defaultStartNode();
+        JSONObject defaultResult = defaultInitNode();
 
         result.put("message", "server start OK!");
         result.put("httpPrefix", getHttpPrefix());
         result.put("port", fitServer.getPort());
         result.put("url", buildUrl(fitServer.getPort(), ""));
         if (defaultResult != null) {
-            result.put("startResult", defaultResult);
+            result.put("initResult", defaultResult);
         }
 
         return result;
@@ -397,14 +397,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      *
      * @return
      */
-    JSONObject defaultStartNode() {
+    JSONObject defaultInitNode() {
         JSONObject define = nodeJsonDefine.getJSONObject("init");
         if (define == null) {
             return null;
         }
 
         String output = ExecuteJsonNodeUtil.executeCode(define);
-        System.out.println("default start node: " + output);
+        System.out.println("default init node result: " + output);
         return JSONObject.parse(output);
     }
 
