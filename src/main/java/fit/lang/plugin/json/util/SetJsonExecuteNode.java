@@ -15,7 +15,12 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
         String key = nodeJsonDefine.getString("key");
         Object value = nodeJsonDefine.get("value");
 
-        Object newValue = ExpressUtil.eval(value, input.getInputParamAndContextParam());
+        Object newValue;
+        if ("this".equals(value)) {
+            newValue = input.getData();
+        } else {
+            newValue = ExpressUtil.eval(value, input.getInputParamAndContextParam());
+        }
 
         input.getNodeContext().setAttribute(key, newValue);
 
