@@ -1,7 +1,0 @@
-{
-    "description": "a simple hello world demo",
-    "uni": "hello",
-    "input": {
-        "who": "world"
-    }
-}
