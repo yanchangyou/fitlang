@@ -84,7 +84,7 @@
                                         },
                                         {
                                             "uni": "mix",
-                                            "mixField": "caseItem",
+                                            "pickJsonField": "caseItem",
                                             "json": {
                                                 "caseItem": "${caseItem}"
                                             }
