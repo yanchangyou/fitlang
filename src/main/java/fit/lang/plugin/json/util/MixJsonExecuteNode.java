@@ -26,7 +26,7 @@ public class MixJsonExecuteNode extends JsonExecuteNode {
         JSONObject outputJson = input.getData().clone();
         if (StrUtil.isBlank(mixField)) {
             outputJson.putAll(mixJsonResult);
-        } else {
+        } else if (mixJsonResult != null) {
             JSONObject mixValue = mixJsonResult.getJSONObject(mixField);
             if (mixValue != null) {
                 outputJson.putAll(mixValue);
