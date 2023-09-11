@@ -176,6 +176,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.4.13 refine plugin and server mode dir</li>
             <li>0.4.12 refine node: excel support color, assert replace isMatch by success, mix add pickJsonField, http support proxy, server fix local ip bug</li>
             <li>0.4.11 add node: writeExcel</li>
             <li>0.4.10 fix server node reload bug; refine readExcel</li>
