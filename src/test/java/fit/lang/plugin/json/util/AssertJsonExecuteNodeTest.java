@@ -22,7 +22,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("isMatch"));
+        Assert.assertTrue(outputJson.getBoolean("success"));
 
     }
 
@@ -41,7 +41,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("isMatch"));
+        Assert.assertTrue(outputJson.getBoolean("success"));
 
     }
 
@@ -60,7 +60,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("isMatch"));
+        Assert.assertTrue(outputJson.getBoolean("success"));
 
     }
 
@@ -79,7 +79,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertFalse(outputJson.getBoolean("isMatch"));
+        Assert.assertFalse(outputJson.getBoolean("success"));
 
     }
 
@@ -97,7 +97,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertFalse(outputJson.getBoolean("isMatch"));
+        Assert.assertFalse(outputJson.getBoolean("success"));
 
     }
 }

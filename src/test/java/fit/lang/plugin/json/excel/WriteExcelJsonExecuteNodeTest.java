@@ -131,7 +131,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                                                \"名称\": \"${名称}\",\n" +
                 "                                                \"输入\": \"${输入}\",\n" +
                 "                                                \"期望\": \"${期望}\",\n" +
-                "                                                \"是否匹配\": \"${isMatch}\",\n" +
+                "                                                \"是否匹配\": \"${success}\",\n" +
                 "                                                \"实际\": \"${actual}\"\n" +
                 "                                            }\n" +
                 "                                        }\n" +
@@ -154,7 +154,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                                    \"期望\": {\n" +
                 "                                        \"title\": \"期望\"\n" +
                 "                                    },\n" +
-                "                                    \"isMatch\": {\n" +
+                "                                    \"success\": {\n" +
                 "                                        \"title\": \"是否通过\"\n" +
                 "                                    },\n" +
                 "                                    \"actual\": {\n" +

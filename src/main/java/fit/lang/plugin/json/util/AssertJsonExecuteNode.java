@@ -23,16 +23,16 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
         }
         Object evalResult = ExpressUtil.eval(expectedExpress, input.getInputParamAndContextParam());
 
-        boolean isMatch;
+        boolean success;
         if (Boolean.TRUE.equals(needToString) && evalResult != null) {
-            isMatch = input.getData().toJSONString().equals(evalResult.toString());
+            success = input.getData().toJSONString().equals(evalResult.toString());
         } else {
-            isMatch = input.getData().equals(evalResult);
+            success = input.getData().equals(evalResult);
         }
 
         JSONObject result = new JSONObject();
-        result.put("isMatch", isMatch);
-        if (!isMatch) {
+        result.put("success", success);
+        if (!success) {
             if (Boolean.TRUE.equals(needToString)) {
                 result.put("actual", input.getData().toString());
             } else {
