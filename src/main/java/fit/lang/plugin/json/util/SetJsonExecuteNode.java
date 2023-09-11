@@ -16,7 +16,7 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
         Object value = nodeJsonDefine.get("value");
 
         Object newValue;
-        if ("this".equals(value)) {
+        if ("${this}".equals(value)) {
             newValue = input.getData();
         } else {
             newValue = ExpressUtil.eval(value, input.getInputParamAndContextParam());
