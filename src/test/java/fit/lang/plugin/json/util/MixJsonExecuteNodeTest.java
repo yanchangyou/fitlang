@@ -39,7 +39,7 @@ public class MixJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'mix'," +
-                "   'mixField': 'hello'," +
+                "   'pickJsonField': 'hello'," +
                 "   'json':{" +
                 "       'hello':'${who}'" +
                 "   }" +
@@ -55,7 +55,7 @@ public class MixJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'mix'," +
-                "   'mixField': 'hello'," +
+                "   'pickJsonField': 'hello'," +
                 "   'json':{" +
                 "       'hello':{'hello':'world'}" +
                 "   }" +

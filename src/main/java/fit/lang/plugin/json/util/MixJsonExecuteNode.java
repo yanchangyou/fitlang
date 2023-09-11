@@ -16,7 +16,7 @@ public class MixJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         //挑选一个字段mix，此字段值必须是jsonObject
-        String mixField = nodeJsonDefine.getString("mixField");
+        String pickJsonField = nodeJsonDefine.getString("pickJsonField");
 
         JSONObject mixJson = nodeJsonDefine.getJSONObject("json");
         if (mixJson == null) {
@@ -24,10 +24,10 @@ public class MixJsonExecuteNode extends JsonExecuteNode {
         }
         JSONObject mixJsonResult = ExpressUtil.eval(mixJson, input.getInputParamAndContextParam());
         JSONObject outputJson = input.getData().clone();
-        if (StrUtil.isBlank(mixField)) {
+        if (StrUtil.isBlank(pickJsonField)) {
             outputJson.putAll(mixJsonResult);
         } else if (mixJsonResult != null) {
-            Object mixValue = mixJsonResult.get(mixField);
+            Object mixValue = mixJsonResult.get(pickJsonField);
             if (mixValue instanceof JSONObject) {
                 outputJson.putAll((JSONObject) mixValue);
             }
