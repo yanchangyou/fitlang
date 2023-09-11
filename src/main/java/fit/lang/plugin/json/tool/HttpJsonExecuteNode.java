@@ -9,6 +9,10 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.SocketAddress;
+
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 
 /**
@@ -39,6 +43,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             httpBody = input.getData().toJSONString();
         }
 
+        JSONObject proxy = nodeJsonDefine.getJSONObject("proxy");
+        if (proxy != null) {
+            String type = proxy.getString("type");
+            SocketAddress socketAddress = new InetSocketAddress(proxy.getString("host"), proxy.getInteger("port"));
+            Proxy.Type typeEnum;
+            if ("http".equals(type) || "HTTP".equals(type)) {
+                typeEnum = Proxy.Type.HTTP;
+            } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
+                typeEnum = Proxy.Type.SOCKS;
+            } else {
+                typeEnum = Proxy.Type.DIRECT;
+            }
+            request.setProxy(new Proxy(typeEnum, socketAddress));
+        }
         request.body(httpBody);
         HttpResponse response = request.execute();
         String responseText = response.body();
