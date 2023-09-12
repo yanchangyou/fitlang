@@ -3,6 +3,7 @@ package fit.lang.plugin.json.web;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -18,10 +19,14 @@ public class HttpPostJsonJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
+        request(input, output, nodeJsonDefine, Method.POST);
+    }
+
+    public static void request(JsonExecuteNodeInput input, JsonExecuteNodeOutput output, JSONObject nodeJsonDefine, Method method) {
 
         String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
 
-        HttpRequest request = HttpUtil.createPost(url);
+        HttpRequest request = HttpUtil.createRequest(method, url);
 
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
 
@@ -46,6 +51,7 @@ public class HttpPostJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = parseHttpResult(response);
 
         output.setData(result);
+
     }
 
 }
