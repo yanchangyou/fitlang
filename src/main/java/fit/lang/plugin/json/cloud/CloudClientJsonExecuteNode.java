@@ -10,7 +10,7 @@ import fit.lang.plugin.json.web.websocket.WebSocketClientHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseNodeUrl;
 
 /**
@@ -61,7 +61,7 @@ public class CloudClientJsonExecuteNode extends JsonExecuteNode {
 
             JSONObject result = new JSONObject();
             result.put("message", "ok");
-            if (isJsonText(data)) {
+            if (isJsonObjectText(data)) {
                 JSONObject responseJson = JSONObject.parse(data);
                 sessionId = responseJson.getString("sessionId");
                 serverSessionMap.put(url, sessionId);

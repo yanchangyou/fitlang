@@ -7,7 +7,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
  * 执行节点
@@ -24,7 +24,7 @@ public class ReplaceJsonExecuteNode extends JsonExecuteNode {
         JSONObject result;
         if (replaceJsonResult instanceof JSONObject) {
             result = (JSONObject) replaceJsonResult;
-        } else if (isJsonText(replaceJsonResult)) {
+        } else if (isJsonObjectText(replaceJsonResult)) {
             result = JSONObject.parse((String) replaceJsonResult);
         } else {
             throw new ExecuteNodeException("replaceJson node not supported json field value: " + replaceJson);

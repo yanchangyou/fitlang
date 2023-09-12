@@ -8,7 +8,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toStringMap;
 
 /**
@@ -53,7 +53,7 @@ public class ProxyJsonExecuteNode extends JsonExecuteNode {
             responseText = "";
         }
         JSONObject result = new JSONObject(1);
-        if (isJsonText(responseText)) {
+        if (isJsonObjectText(responseText)) {
             result = JSONObject.parseObject(responseText);
         } else {
             result.put("_raw", responseText);

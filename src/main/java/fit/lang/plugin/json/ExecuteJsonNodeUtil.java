@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
@@ -77,7 +78,7 @@ public class ExecuteJsonNodeUtil {
     }
 
     public static String executeCode(String input) {
-        if (!isJsonText(input)) {
+        if (!isJsonObjectText(input)) {
             throw new RuntimeException("input must be json, but found: ".concat(input));
         }
         input = ExecuteJsonNodeUtil.removeJsonComment(input);
@@ -160,7 +161,7 @@ public class ExecuteJsonNodeUtil {
      * @param object
      * @return
      */
-    public static boolean isJsonText(Object object) {
+    public static boolean isJsonObjectText(Object object) {
         if (object == null) {
             return false;
         }
@@ -173,13 +174,31 @@ public class ExecuteJsonNodeUtil {
     }
 
     /**
+     * 大致判断是否json字符串: TODO
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isJsonArrayText(Object object) {
+        if (object == null) {
+            return false;
+        }
+        if (!(object instanceof String)) {
+            return false;
+        }
+        String text = (String) object;
+        text = text.trim();
+        return text.startsWith("[") && text.endsWith("]");
+    }
+
+    /**
      * 去掉json注释
      *
      * @param text
      * @return
      */
     public static String removeJsonComment(String text) {
-        if (!isJsonText(text)) {
+        if (!isJsonObjectText(text)) {
             return text;
         }
         //去掉注释
@@ -313,8 +332,10 @@ public class ExecuteJsonNodeUtil {
             responseText = "";
         }
         JSONObject result = new JSONObject(1);
-        if (isJsonText(responseText)) {
+        if (isJsonObjectText(responseText)) {
             result = JSONObject.parseObject(responseText);
+        } else if (isJsonArrayText(responseText)) {
+            result.put("list", JSON.parseArray(responseText));
         } else {
             result.put("_raw", responseText);
         }

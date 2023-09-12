@@ -154,7 +154,7 @@ public abstract class RunCodeAction extends AnAction {
                 System.out.println("execute " + getLanguageName() + " code result:");
                 System.out.println(result);
 
-                if (needFormatJsonInConsole && isJsonText(result)) {
+                if (needFormatJsonInConsole && isJsonObjectText(result)) {
                     result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat);
                 }
 

@@ -7,7 +7,7 @@ import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.readNodeDefineFile;
 
 public class FitServerMain {
@@ -47,7 +47,7 @@ public class FitServerMain {
         System.out.println("start OK!");
 
         JSONObject resultJson;
-        if (isJsonText(result)) {
+        if (isJsonObjectText(result)) {
             resultJson = JSON.parseObject(result);
             port = resultJson.getInteger("port");
             httpPrefix = resultJson.getString("httpPrefix");

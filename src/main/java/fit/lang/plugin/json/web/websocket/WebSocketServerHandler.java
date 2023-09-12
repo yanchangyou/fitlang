@@ -15,7 +15,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
  *
@@ -92,7 +92,7 @@ public class WebSocketServerHandler extends ChannelInboundHandlerAdapter {
         result.put("code", 0);
 
         String resultText = "";
-        if (isJsonText(request)) {
+        if (isJsonObjectText(request)) {
 
             try {
                 resultText = ExecuteJsonNodeUtil.executeCode(request);

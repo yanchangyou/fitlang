@@ -510,7 +510,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     private static void responseWriteText(HttpServerRequest request, HttpServerResponse response, String output) {
         String _jsonFormat = request.getParam("_jsonFormat");
         String text = output;
-        if (isJsonText(text) && StrUtil.isNotBlank(_jsonFormat)) {
+        if (isJsonObjectText(text) && StrUtil.isNotBlank(_jsonFormat)) {
             text = JSON.parseObject(text).toJSONString(JSONWriter.Feature.PrettyFormat);
         }
         response.write(text);
@@ -526,8 +526,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         }
 
         String requestBody = request.getBody();
-        if (isJsonText(requestBody)) {
+        if (isJsonObjectText(requestBody)) {
             inputJson.putAll(JSONObject.parseObject(requestBody));
+        } else if (isJsonArrayText(requestBody)) {
+            inputJson.put("list", JSON.parseArray(requestBody));
         } else {
             if (StrUtil.isNotBlank(requestBody)) {
                 inputJson.put(FIELD_NAME_OF_RAW, requestBody);
