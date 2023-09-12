@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.tool;
+package fit.lang.plugin.json.web;
 
 import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.util.NumberUtil;
@@ -19,7 +19,7 @@ import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.plugin.json.tool.server.FitServerInstance;
+import fit.lang.plugin.json.web.server.FitServerInstance;
 
 import java.io.File;
 import java.util.*;

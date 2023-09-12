@@ -17,7 +17,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
-import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 import java.lang.reflect.Method;

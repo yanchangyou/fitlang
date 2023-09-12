@@ -2,6 +2,8 @@ package fit.lang.plugin.json;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNode;
@@ -11,11 +13,14 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.SocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 
 import static fit.lang.plugin.json.ExpressUtil.eval;
-import static fit.lang.plugin.json.tool.ServerJsonExecuteNode.isWebNode;
+import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
 
 /**
  * 工具类
@@ -243,4 +248,76 @@ public class ExecuteJsonNodeUtil {
         return request.getHttpExchange().getRemoteAddress().getAddress().getHostAddress();
     }
 
+    /**
+     * 解析http form格式的请求参数
+     *
+     * @param input
+     * @param request
+     * @param httpParam
+     */
+    public static void parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
+        if (httpParam != null) {
+            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
+            if (param instanceof JSONObject) {
+                request.form((JSONObject) param);
+            }
+        } else {
+            request.form(input.getData());
+        }
+    }
+
+    /**
+     * 设置http请求头
+     *
+     * @param header
+     * @param request
+     */
+    public static void setHttpHeader(JSONObject header, HttpRequest request) {
+        if (header != null && !header.isEmpty()) {
+            request.addHeaders(toStringMap(header));
+        }
+    }
+
+    /**
+     * 设置代理
+     *
+     * @param proxyConfig
+     * @param request
+     */
+    public static void setProxy(JSONObject proxyConfig, HttpRequest request) {
+        if (proxyConfig != null) {
+            String type = proxyConfig.getString("type");
+            SocketAddress socketAddress = new InetSocketAddress(proxyConfig.getString("host"), proxyConfig.getInteger("port"));
+            Proxy.Type typeEnum;
+            if ("http".equals(type) || "HTTP".equals(type)) {
+                typeEnum = Proxy.Type.HTTP;
+            } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
+                typeEnum = Proxy.Type.SOCKS;
+            } else {
+                typeEnum = Proxy.Type.DIRECT;
+            }
+            request.setProxy(new Proxy(typeEnum, socketAddress));
+        }
+    }
+
+    /**
+     * 解析http结果
+     *
+     * @param response
+     * @return
+     */
+    public static JSONObject parseHttpResult(HttpResponse response) {
+        String responseText = response.body();
+
+        if (responseText == null) {
+            responseText = "";
+        }
+        JSONObject result = new JSONObject(1);
+        if (isJsonText(responseText)) {
+            result = JSONObject.parseObject(responseText);
+        } else {
+            result.put("_raw", responseText);
+        }
+        return result;
+    }
 }

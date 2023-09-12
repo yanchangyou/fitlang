@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.tool.server;
+package fit.lang.plugin.json.web.server;
 
 import cn.hutool.http.server.SimpleServer;
 import com.alibaba.fastjson2.JSONArray;

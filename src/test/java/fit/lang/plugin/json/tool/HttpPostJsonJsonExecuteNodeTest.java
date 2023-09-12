@@ -4,7 +4,7 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class HttpJsonExecuteNodeTest extends TestCase {
+public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
 
@@ -56,7 +56,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{'hello':'world'}", output);
+        Assert.assertEquals("{\"hello\":\"world\"}", output);
 
     }
 

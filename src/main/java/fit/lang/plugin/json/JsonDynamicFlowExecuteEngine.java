@@ -23,9 +23,9 @@ import fit.lang.plugin.json.excel.ReadExcelJsonExecuteNode;
 import fit.lang.plugin.json.excel.WriteExcelJsonExecuteNode;
 import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
-import fit.lang.plugin.json.tool.HttpJsonExecuteNode;
-import fit.lang.plugin.json.tool.ProxyJsonExecuteNode;
-import fit.lang.plugin.json.tool.ServerJsonExecuteNode;
+import fit.lang.plugin.json.web.HttpPostJsonJsonExecuteNode;
+import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
 import fit.lang.plugin.json.web.*;
 
@@ -172,13 +172,16 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("sleep", SleepJsonExecuteNode.class);
 
-        // tool
-        register("http", HttpJsonExecuteNode.class);
+        // web
+        register("http", HttpPostJsonJsonExecuteNode.class);
+        register("postJson", HttpPostJsonJsonExecuteNode.class);
+        register("postForm", HttpPostFormJsonExecuteNode.class);
+        register("get", HttpGetJsonExecuteNode.class);
+
         register("server", ServerJsonExecuteNode.class);
         register("proxy", ProxyJsonExecuteNode.class);
         register("register", CloudServerJsonExecuteNode.class);
 
-        // web
         register("web", WebJsonExecuteNode.class);
         register("wsServer", WebSocketServerJsonExecuteNode.class);
         register("wsClient", WebSocketClientJsonExecuteNode.class);
