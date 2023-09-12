@@ -1,6 +1,27 @@
 {
-    "uni": "httpDelete",
-    "input": {
-    },
-    "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "server",
+            "port": 50000,
+            "service": {
+                "/hello": {
+                    "uni": "hello"
+                }
+            }
+        },
+        {
+            "uni": "httpDelete",
+            "param": {
+                "who": "httpDelete"
+            },
+            "url": "http://127.0.0.1:50000/hello"
+        },
+        {
+            "uni": "assert",
+            "expected": {
+                "message": "hello, httpDelete!"
+            }
+        }
+    ]
 }
