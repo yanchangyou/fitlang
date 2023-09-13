@@ -1,0 +1,12 @@
+{
+    "uni": "server",
+    "port": 60001,
+    "service": {
+        "/hello": {
+            "uni": "hello"
+        },
+        "/echo": {
+            "uni": "echo"
+        }
+    }
+}

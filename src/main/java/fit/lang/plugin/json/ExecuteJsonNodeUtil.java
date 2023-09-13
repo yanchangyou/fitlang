@@ -7,11 +7,13 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -340,5 +342,26 @@ public class ExecuteJsonNodeUtil {
             result.put("_raw", responseText);
         }
         return result;
+    }
+
+    /**
+     * 构建路径， 支持相对路径和绝对路径
+     *
+     * @param path
+     * @return
+     */
+    public static String buildFilePath(String path) {
+
+        if (StrUtil.isBlank(path)) {
+            throw new ExecuteNodeException("file path is empty!");
+        }
+
+        // 绝对路径
+        if (path.startsWith("/") || path.contains(":")) {
+            // nothing
+        } else { //相对路径
+            path = ServerJsonExecuteNode.getServerFileDir() + "/" + path;
+        }
+        return path;
     }
 }

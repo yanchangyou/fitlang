@@ -5,7 +5,7 @@
         {
             "uni": "mix",
             "json": {
-                "path": "/opt/github/fitlang/doc/test/case/自动化测试用例.xls",
+                "path": "测试用例.xls",
                 "sheetName": "接口列表"
             }
         },
@@ -27,7 +27,7 @@
                     {
                         "uni": "mix",
                         "json": {
-                            "path": "/opt/github/fitlang/doc/test/case/自动化测试用例.xls",
+                            "path": "测试用例.xls",
                             "sheetName": "${接口名称}"
                         }
                     },

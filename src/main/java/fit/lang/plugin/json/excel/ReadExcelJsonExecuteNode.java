@@ -9,6 +9,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.util.List;
 import java.util.Map;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildFilePath;
 import static fit.lang.plugin.json.excel.util.EasyExcelUtil.readExcel;
 
 /**
@@ -37,9 +38,7 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
             path = input.getString("path");
         }
 
-        if (StrUtil.isBlank(path)) {
-            throw new ExecuteNodeException("readExcel path field is empty!");
-        }
+        path = buildFilePath(path);
 
         List<Map<String, String>> list;
         try {

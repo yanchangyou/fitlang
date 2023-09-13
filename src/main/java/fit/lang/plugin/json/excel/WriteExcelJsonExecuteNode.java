@@ -4,12 +4,15 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
+import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.excel.util.EasyExcelUtil;
 
 import java.io.IOException;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildFilePath;
 
 /**
  * 执行节点
@@ -33,9 +36,10 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
             path = input.getString("path");
         }
 
-        if (StrUtil.isBlank(path)) {
-            throw new ExecuteNodeException("writeExcel path field is empty!");
-        }
+        //支持表达式
+        path = (String) ExpressUtil.eval(path, input.getInputParamAndContextParam());
+
+        path = buildFilePath(path);
 
         JSONArray list = input.getJsonArray(listField);
 
