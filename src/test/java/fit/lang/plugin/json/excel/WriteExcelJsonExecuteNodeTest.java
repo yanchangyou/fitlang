@@ -3,17 +3,27 @@ package fit.lang.plugin.json.excel;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
 public class WriteExcelJsonExecuteNodeTest extends TestCase {
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        String path = WriteExcelJsonExecuteNodeTest.class.getResource(".").getFile();
+        ServerJsonExecuteNode.setCurrentServerFilePath(path.replace("/test/classes/fit","/test/resources/fit"));
+        System.out.println(ServerJsonExecuteNode.getServerFileDir());
+    }
+
     public void testExecute() {
+
         String flow = "{" +//
                 "   'uni': 'writeExcel'," +
                 "   'titleIndex': 1," +
                 "   'titleConfig': {'a':{'title':'列名1'}}," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例-测试报告.xls'" +
+                "   'path': 'excel.xls'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{'list':[{'a':1},{'a':2}]}", flow);
@@ -35,7 +45,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "    \"child\": [\n" +
                 "        {\n" +
                 "            \"uni\": \"server\",\n" +
-                "            \"port\": 60002,\n" +
+                "            \"port\": 60001,\n" +
                 "            \"service\": {\n" +
                 "                \"/hello\": {\n" +
                 "                    \"uni\": \"hello\"\n" +
@@ -52,7 +62,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                {\n" +
                 "                    \"uni\": \"mix\",\n" +
                 "                    \"json\": {\n" +
-                "                        \"path\": \"/opt/github/fitlang/doc/test/case/自动化测试用例.xls\",\n" +
+                "                        \"path\": \"testcase.xls\",\n" +
                 "                        \"sheetName\": \"接口列表\"\n" +
                 "                    }\n" +
                 "                },\n" +
@@ -74,7 +84,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                            {\n" +
                 "                                \"uni\": \"mix\",\n" +
                 "                                \"json\": {\n" +
-                "                                    \"path\": \"/opt/github/fitlang/doc/test/case/自动化测试用例.xls\",\n" +
+                "                                    \"path\": \"testcase.xls\",\n" +
                 "                                    \"sheetName\": \"${接口名称}\"\n" +
                 "                                }\n" +
                 "                            },\n" +
@@ -140,7 +150,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                            },\n" +
                 "                            {\n" +
                 "                                \"uni\": \"writeExcel\",\n" +
-                "                                \"path\": \"/opt/github/fitlang/doc/test/case/自动化测试用例-报告-1.xls\",\n" +
+                "                                \"path\": \"testcase-report.xls\",\n" +
                 "                                \"titleConfig\": {\n" +
                 "                                    \"编码\": {\n" +
                 "                                        \"title\": \"编码\"\n" +

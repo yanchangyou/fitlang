@@ -28,6 +28,12 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
         Integer defaultWidth = nodeJsonDefine.getInteger("defaultWidth");
         String listField = nodeJsonDefine.getString(FIELD_NAME_OF_INPUT_LIST_FIELD);
         JSONObject titleConfig = nodeJsonDefine.getJSONObject("titleConfig");
+
+        String sheetName = nodeJsonDefine.getString("sheetName");
+        if (StrUtil.isBlank(sheetName)) {
+            sheetName = input.getString("sheetName");
+        }
+
         if (StrUtil.isBlank(listField)) {
             listField = "list";
         }
@@ -44,7 +50,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
         JSONArray list = input.getJsonArray(listField);
 
         try {
-            EasyExcelUtil.writeExcel(list, titleConfig, defaultWidth, path);
+            EasyExcelUtil.writeExcel(sheetName, list, titleConfig, defaultWidth, path);
         } catch (IOException e) {
             throw new ExecuteNodeException(e.getMessage());
         }

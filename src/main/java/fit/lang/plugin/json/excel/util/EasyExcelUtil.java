@@ -33,7 +33,7 @@ public class EasyExcelUtil {
      * @param path
      * @throws IOException
      */
-    public static void writeExcel(JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path) throws IOException {
+    public static void writeExcel(String sheetName, JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path) throws IOException {
         List<List<String>> data = new ArrayList<>();
         // 设置列头
         List<List<String>> titles = new ArrayList<>();
@@ -100,12 +100,13 @@ public class EasyExcelUtil {
             }
         }
 
-        writeExcel(titles, data, defaultWidth, columnWidthMap, path);
+        writeExcel(sheetName, titles, data, defaultWidth, columnWidthMap, path);
     }
 
     /**
      * 写excel到输出流中
      *
+     * @param sheetName
      * @param titles
      * @param data
      * @param defaultWidth
@@ -113,10 +114,13 @@ public class EasyExcelUtil {
      * @param path
      * @throws IOException
      */
-    private static void writeExcel(List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, String path) throws IOException {
+    private static void writeExcel(String sheetName, List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, String path) throws IOException {
 
         if (defaultWidth == null) {
             defaultWidth = 30;
+        }
+        if (sheetName == null) {
+            sheetName = "data";
         }
         HorizontalCellStyleStrategy horizontalCellStyleStrategy = exportExcelConfig();
         Integer finalDefaultWidth = defaultWidth;
@@ -164,7 +168,7 @@ public class EasyExcelUtil {
                         }
                     }
                 })
-                .sheet().table().head(titles).doWrite(data);
+                .sheet(sheetName).table().head(titles).doWrite(data);
     }
 
     /**
