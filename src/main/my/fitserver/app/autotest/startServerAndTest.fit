@@ -1,4 +1,5 @@
 {
+    "flag": "_needFormatJsonInConsole",
     "uni": "sequence",
     "child": [
         {
@@ -14,19 +15,15 @@
             }
         },
         {
-            "flag": "_needFormatJsonInConsole",
             "uni": "pipe",
+            "input": {
+                "path": "测试用例.xls",
+                "sheetName": "接口列表",
+                "testRepostExcelName": "${'测试报告-'+System.currentTimeMillis()+'.xls'}"
+            },
             "child": [
                 {
-                    "uni": "mix",
-                    "json": {
-                        "path": "测试用例.xls",
-                        "sheetName": "接口列表"
-                    }
-                },
-                {
-                    "uni": "readExcel",
-                    "titleIndex": 1
+                    "uni": "readExcel"
                 },
                 {
                     "uni": "foreach",
@@ -35,20 +32,18 @@
                         "uni": "pipe",
                         "child": [
                             {
+                                "description": "先放入全局变量中，后好获取",
                                 "uni": "set",
-                                "key": "url",
-                                "value": "${接口URL}"
-                            },
-                            {
-                                "uni": "mix",
-                                "json": {
-                                    "path": "测试用例.xls",
-                                    "sheetName": "${接口名称}"
+                                "key": "apiItem",
+                                "value": {
+                                    "url": "${接口URL}",
+                                    "name": "${接口名称}"
                                 }
                             },
                             {
                                 "uni": "readExcel",
-                                "titleIndex": 1
+                                "path": "${input.path}",
+                                "sheetName": "${apiItem.name}"
                             },
                             {
                                 "uni": "foreach",
@@ -67,15 +62,9 @@
                                             }
                                         },
                                         {
-                                            "uni": "mix",
-                                            "json": {
-                                                "url": "${url}",
-                                                "expectedValue": "${期望}"
-                                            }
-                                        },
-                                        {
                                             "uni": "http",
-                                            "param": "${输入}"
+                                            "param": "${输入}",
+                                            "url": "${apiItem.url}"
                                         },
                                         {
                                             "uni": "assert",
@@ -94,26 +83,14 @@
                             },
                             {
                                 "uni": "writeExcel",
-                                "path": "测试报告.xls",
+                                "path": "${input.testRepostExcelName}",
                                 "titleConfig": {
-                                    "编码": {
-                                        "title": "编码"
-                                    },
-                                    "名称": {
-                                        "title": "名称"
-                                    },
-                                    "输入": {
-                                        "title": "输入"
-                                    },
-                                    "期望": {
-                                        "title": "期望"
-                                    },
-                                    "success": {
-                                        "title": "是否通过"
-                                    },
-                                    "actual": {
-                                        "title": "实际输出"
-                                    }
+                                    "编码": "编码",
+                                    "名称": "名称",
+                                    "输入": "输入",
+                                    "期望": "期望",
+                                    "success": "是否通过",
+                                    "actual": "实际输出"
                                 }
                             }
                         ]
