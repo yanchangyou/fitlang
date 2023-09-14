@@ -1,4 +1,19 @@
 {
+    "_flag": "_needFormatJsonInConsole",
     "description": "system info node",
-    "uni": "systemInfo"
+    "uni": "systemInfo",
+    "shareFields": [
+        "computerManufacturer",
+        "computerModel",
+        "processorName",
+        "processorPhysicalCount",
+        "processorLogicalCount",
+        "processorMaxFreq",
+        "memoryTotal",
+        "memoryAvailable",
+        "osManufacturer",
+        "osFamily",
+        //                        "osVersion",
+        "osBit"
+    ]
 }
