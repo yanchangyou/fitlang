@@ -120,6 +120,19 @@ public class ExecuteJsonNodeUtil {
 
     public static String executeCode(JSONObject input, JSONObject flow, JSONObject contextParam, JsonExecuteContext nodeContext) {
 
+        if (input == null || input.isEmpty()) {
+            input = flow.getJSONObject("input");
+        }
+        if (input == null) {
+            input = new JSONObject();
+        }
+
+        input = eval(input, contextParam);
+
+        //入参放入全局变量中
+        nodeContext.setAttribute("input", input);
+        nodeContext.setAttribute("nodeDefine", flow);
+
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
@@ -350,10 +363,10 @@ public class ExecuteJsonNodeUtil {
      * @param path
      * @return
      */
-    public static String buildFilePath(String path) {
+    public static String buildFilePath(String path, String tips) {
 
         if (StrUtil.isBlank(path)) {
-            throw new ExecuteNodeException("file path is empty!");
+            throw new ExecuteNodeException(tips + ": file path is empty!");
         }
 
         // 绝对路径
