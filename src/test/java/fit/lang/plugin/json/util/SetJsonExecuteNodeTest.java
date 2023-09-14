@@ -29,7 +29,7 @@ public class SetJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
-        Assert.assertEquals("{\"hello\":\"world\"}", output);
+        Assert.assertEquals("{\"data\":{\"hello\":\"world\"},\"hello\":\"world\"}", output);
 
     }
 }

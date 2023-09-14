@@ -10,7 +10,10 @@ public class HelloJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
 
-        JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject("{'who':'world'}"), new HelloJsonExecuteNode());
+        HelloJsonExecuteNode helloExecuteNode = new HelloJsonExecuteNode();
+        helloExecuteNode.setNodeDefine(JSONObject.parseObject("{'uni':'hello'}"));
+
+        JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject("{'who':'world'}"), helloExecuteNode);
 
         Assert.assertTrue(!output.isEmpty());
 

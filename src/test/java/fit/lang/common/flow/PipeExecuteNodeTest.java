@@ -1,5 +1,6 @@
 package fit.lang.common.flow;
 
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.common.util.EchoExecuteNode;
 import fit.lang.common.util.PrintExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
@@ -27,6 +28,8 @@ public class PipeExecuteNodeTest extends TestCase {
         PrintExecuteNode printExecuteNode = new PrintExecuteNode();
         EchoExecuteNode echoNode = new EchoExecuteNode();
         HelloJsonExecuteNode helloExecuteNode = new HelloJsonExecuteNode();
+
+        helloExecuteNode.setNodeDefine(JSONObject.parseObject("{'uni':'hello'}"));
 
         pipeExecuteNode.addChildNode(printExecuteNode);
         pipeExecuteNode.addChildNode(echoNode);
@@ -61,6 +64,7 @@ public class PipeExecuteNodeTest extends TestCase {
         PrintExecuteNode printExecuteNode = new PrintExecuteNode();
         EchoExecuteNode echoNode = new EchoExecuteNode();
         HelloJsonExecuteNode helloExecuteNode = new HelloJsonExecuteNode();
+        helloExecuteNode.setNodeDefine(JSONObject.parseObject("{'uni':'hello'}"));
 
         pipeExecuteNode.addChildNode(printExecuteNode);
         pipeExecuteNode.addChildNode(echoNode);
