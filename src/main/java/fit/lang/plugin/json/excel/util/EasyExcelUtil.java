@@ -126,7 +126,8 @@ public class EasyExcelUtil {
         }
         Integer finalDefaultWidth = defaultWidth;
         ExcelWriterBuilder excelWriterBuilder;
-        if (FileUtil.exist(path)) {
+        boolean existedFile = FileUtil.exist(path);
+        if (existedFile) {
             FileUtil.copy(path, path + ".xls", true);
             excelWriterBuilder = EasyExcel.write().withTemplate(path + ".xls").file(path);
         } else {
@@ -173,6 +174,11 @@ public class EasyExcelUtil {
                     }
                 }).autoCloseStream(true)
                 .sheet(sheetName).head(titles).doWrite(data);
+
+        if (existedFile) {
+            //删除临时文件
+            FileUtil.del(path + ".xls");
+        }
     }
 
     /**
