@@ -130,14 +130,24 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         setFileServer(fitServer);
 
-        JSONArray enableInnerService = nodeJsonDefine.getJSONArray("enableInnerService");
+        JSONArray disableInnerServiceConfig = nodeJsonDefine.getJSONArray("disableInnerService");
 
-        if (enableInnerService != null && enableInnerService.contains("_shutdown")) {
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_api")) {
+            // nothing
+        } else {
+            serviceList.add(addApiMenuService(fitServer));
+        }
+
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_shutdown")) {
+            // nothing
+        } else {
             JSONObject define = addShutdownService(fitServer);
             serviceList.add(define);
         }
 
-        if (enableInnerService != null && enableInnerService.contains("_stop")) {
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_stop")) {
+            // nothing
+        } else {
             JSONObject stopDefine = addStopService(fitServer);
             serviceList.add(stopDefine);
 
@@ -145,12 +155,14 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             serviceList.add(stopDefine);
         }
 
-        if (enableInnerService != null && enableInnerService.contains("_cloud")) {
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_cloud")) {
+            // nothing
+        } else {
             JSONObject cloudDefine = addCloudService(fitServer);
             serviceList.add(cloudDefine);
         }
 
-        if (enableInnerService != null && enableInnerService.contains("_reload")) {
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_reload")) {
             JSONObject reloadDefine = addReloadService(fitServer);
             serviceList.add(reloadDefine);
         }
@@ -182,7 +194,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         }
 
-        addRootService(fitServer);
+        //添加默认的根路径
+        addDefaultService(fitServer);
 
         fitServer.setUrl(buildUrl(fitServer.getPort(), ""));
 
@@ -219,16 +232,38 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return serverPort;
     }
 
-    private void addRootService(FitServerInstance fitServerInstance) {
+    private JSONObject addApiMenuService(FitServerInstance fitServerInstance) {
+        return addApiMenuService(fitServerInstance, "/_api");
+    }
 
-        clearContext(fitServerInstance.getSimpleServer(), "/_api");
-        fitServerInstance.getSimpleServer().addAction("/_api", new Action() {
+    private JSONObject addDefaultService(FitServerInstance fitServerInstance) {
+        //不存在index.html，默认使用_api
+        if (!existedIndexHtml()) {
+            return addApiMenuService(fitServerInstance, "/");
+        }
+        return null;
+    }
+
+
+    private JSONObject addApiMenuService(FitServerInstance fitServerInstance, String routePath) {
+
+        clearContext(fitServerInstance.getSimpleServer(), routePath);
+        fitServerInstance.getSimpleServer().addAction(routePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);
                 response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
             }
         });
+
+        JSONObject define = new JSONObject();
+        define.put("path", routePath);
+        define.put("description", "show api menu");
+        return define;
+    }
+
+    boolean existedIndexHtml() {
+        return new File(getServerFileDir() + "/index.html").exists();
     }
 
     private JSONObject getWelcomeJson(FitServerInstance fitServerInstance) {
