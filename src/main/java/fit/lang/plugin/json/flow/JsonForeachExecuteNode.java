@@ -65,6 +65,9 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
             array.add(data == null ? null : data.getData());
         }
         ((JsonExecuteNodeOutput) output).getData().put(foreachField, array);
+
+        //重置index，下次使用
+        currentIndex = -1;
     }
 
     @Override
