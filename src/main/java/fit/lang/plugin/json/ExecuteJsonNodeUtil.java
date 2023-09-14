@@ -127,6 +127,7 @@ public class ExecuteJsonNodeUtil {
             input = new JSONObject();
         }
 
+        contextParam.putAll(input);
         input = eval(input, contextParam);
 
         //入参放入全局变量中
