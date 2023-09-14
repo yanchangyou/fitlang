@@ -62,7 +62,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                {" +
                 "                    'uni': 'mix'," +
                 "                    'json': {" +
-                "                        'path': 'testcase.xls'," +
+                "                        'path': '测试用例.xls'," +
                 "                        'sheetName': '接口列表'" +
                 "                    }" +
                 "                }," +
@@ -84,7 +84,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                            {" +
                 "                                'uni': 'mix'," +
                 "                                'json': {" +
-                "                                    'path': 'testcase.xls'," +
+                "                                    'path': '测试用例.xls'," +
                 "                                    'sheetName': '${接口名称}'" +
                 "                                }" +
                 "                            }," +
@@ -136,7 +136,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "                            }," +
                 "                            {" +
                 "                                'uni': 'writeExcel'," +
-                "                                'path': 'testcase-report.xls'," +
+                "                                'path': '测试报告.xls'," +
                 "                                'titleConfig': {" +
                 "                                    '编码': {" +
                 "                                        'title': '编码'" +
