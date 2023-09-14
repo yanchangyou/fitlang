@@ -1,11 +1,13 @@
 package fit.lang.plugin.json.define;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.plugin.json.ExpressUtil;
 
 /**
  * 执行节点
@@ -37,4 +39,19 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
 
     public abstract void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output);
 
+
+    /**
+     * 解析字段值
+     *
+     * @param fieldName
+     * @param input
+     * @return
+     */
+    protected String parseStringField(String fieldName, JsonExecuteNodeInput input) {
+        String fieldValue = nodeJsonDefine.getString(fieldName);
+        if (StrUtil.isBlank(fieldValue)) {
+            fieldValue = input.getString(fieldName);
+        }
+        return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
+    }
 }
