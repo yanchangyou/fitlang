@@ -1,0 +1,10 @@
+{
+    "uni": "assert",
+    "containJson": {
+        "hello": "world1"
+    },
+    "input": {
+        "hello": "world",
+        "foo": "bar"
+    }
+}
