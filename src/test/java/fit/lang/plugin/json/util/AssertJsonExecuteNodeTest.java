@@ -89,7 +89,82 @@ public class AssertJsonExecuteNodeTest extends TestCase {
                 "   'expected': '${a}'" +
                 "}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{'a':{}}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertFalse(outputJson.getBoolean("success"));
+
+    }
+
+    public void testExecuteContainField1() {
+        String flow = "{" +//
+                "   'uni': 'assert'," +
+                "   'expected': {'message':'hello, world!'}," +
+                "   'containField': ['message']" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'message':'hello, world!'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.getBoolean("success"));
+
+    }
+
+    public void testExecuteContainField2() {
+        String flow = "{" +//
+                "   'uni': 'assert'," +
+                "   'expected': {'message':'hello, world!'}," +
+                "   'containField': ['message1']" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'message':'hello, world!'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertFalse(outputJson.getBoolean("success"));
+
+    }
+
+
+    public void testExecuteContainJson1() {
+        String flow = "{" +//
+                "   'uni': 'assert'," +
+                "   'containJson': {'hello':'world'}" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'hello':'world','foo':'bar'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.getBoolean("success"));
+
+    }
+
+    public void testExecuteContainJson2() {
+        String flow = "{" +//
+                "   'uni': 'assert'," +
+                "   'containJson': {'hello':'world1'}" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'hello':'world','foo':'bar'}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
 
