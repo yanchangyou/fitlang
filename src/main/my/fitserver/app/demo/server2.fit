@@ -17,8 +17,17 @@
         "/hello": {
             "uni": "hello"
         },
-        "/systemInfo": {
-            "uni": "systemInfo"
+        "/headerHello": {
+            "uni": "web",
+            "header": {
+                "contentType": "application/json"
+            },
+            "child": {
+                "uni": "hello"
+            }
         }
+    },
+    "/systemInfo": {
+        "uni": "systemInfo"
     }
 }
