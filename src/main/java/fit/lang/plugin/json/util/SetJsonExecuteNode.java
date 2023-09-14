@@ -20,5 +20,8 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
         input.getNodeContext().setAttribute(key, newValue);
 
         output.setData(input.getData());
+
+        //放入当前输入中
+        output.getData().putIfAbsent(key, newValue);
     }
 }
