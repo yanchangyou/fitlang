@@ -226,7 +226,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);
-                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
+                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
             }
         });
     }
@@ -305,17 +305,21 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = getHttpClientIp(request);
                 if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
                     return;
                 }
                 CloudServerJsonExecuteNode.stopAll();
-                responseWriteText(request, response, "{\"message\":\"stop all websocket OK!\"}");
+                responseWriteText(request, response, "{\"message\":\"stop all websocket OK!\"}", getDefaultContextType());
             }
         });
         JSONObject stopDefine = new JSONObject();
         stopDefine.put("path", stopPath);
         stopDefine.put("description", "stop this websocket server");
         return stopDefine;
+    }
+
+    private static String getDefaultContextType() {
+        return ContentType.JSON.getValue();
     }
 
     static JSONObject addShutdownService(FitServerInstance fitServer) {
@@ -326,10 +330,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = getHttpClientIp(request);
                 if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
                     return;
                 }
-                responseWriteText(request, response, "{\"message\":\"server shutdown!\"}");
+                responseWriteText(request, response, "{\"message\":\"server shutdown!\"}", getDefaultContextType());
 
                 //关闭websocket
                 CloudServerJsonExecuteNode.stopAll();
@@ -360,7 +364,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIP = getHttpClientIp(request);
                 if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"));
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
                     return;
                 }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
@@ -370,17 +374,17 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     if (NumberUtil.isInteger(port)) {
                         stopPort = Integer.parseInt(port);
                     } else {
-                        responseWriteText(request, response, "{\"message\":\"port must be a int number, but found: " + port + "!\"}");
+                        responseWriteText(request, response, "{\"message\":\"port must be a int number, but found: " + port + "!\"}", getDefaultContextType());
                         return;
                     }
                 }
 
                 FitServerInstance server = getFitServerInstance(stopPort);
                 if (server == null) {
-                    responseWriteText(request, response, "{\"message\":\"count found server at port: " + port + "!\"}");
+                    responseWriteText(request, response, "{\"message\":\"count found server at port: " + port + "!\"}", getDefaultContextType());
                     return;
                 }
-                responseWriteText(request, response, "{\"message\":\"stop " + stopPort + " OK!\"}");
+                responseWriteText(request, response, "{\"message\":\"stop " + stopPort + " OK!\"}", getDefaultContextType());
                 server.getSimpleServer().getRawServer().stop(1);
                 serverMap.remove(stopPort);
                 fitServer.setRunning(false);
@@ -418,7 +422,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 JSONObject info = new JSONObject();
                 info.put("sessions", sessionList);
                 info.put("onlineCount", sessionList.size());
-                responseWriteText(request, response, info.toJSONString());
+                responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
             }
         });
         JSONObject stopDefine = new JSONObject();
@@ -443,7 +447,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 reload(fitServer);
                 JSONObject welcome = getWelcomeJson(fitServer);
-                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), ContentType.JSON.getValue());
+                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
             }
         });
         JSONObject reloadDefine = new JSONObject();
@@ -484,17 +488,17 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                             contextType = header.getString("contextType");
                         }
                         if (StrUtil.isNotBlank(contextType)) {
-                            response.write(output, contextType);
+                            responseWriteText(request, response, output, contextType);
                         } else {
-                            responseWriteText(request, response, output);
+                            responseWriteText(request, response, output, getDefaultContextType());
                         }
                     } else {//默认json类型
-                        response.write(output, ContentType.JSON.getValue());
+                        responseWriteText(request, response, output, getDefaultContextType());
                     }
                 } catch (Exception e) {
                     JSONObject result = new JSONObject();
                     result.put("message", "inner error: ".concat(e.getMessage()));
-                    response.write(result.toJSONString(), ContentType.JSON.getValue());
+                    response.write(result.toJSONString(), getDefaultContextType());
                 }
             }
         });
@@ -506,14 +510,20 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
      * @param request
      * @param response
      * @param output
+     * @param contextType
      */
-    private static void responseWriteText(HttpServerRequest request, HttpServerResponse response, String output) {
+    private static void responseWriteText(HttpServerRequest request, HttpServerResponse response, String output, String contextType) {
+        if (StrUtil.isBlank(contextType)) {
+            contextType = getDefaultContextType();
+        }
         String _jsonFormat = request.getParam("_jsonFormat");
         String text = output;
-        if (isJsonObjectText(text) && StrUtil.isNotBlank(_jsonFormat)) {
+        if (isJsonObjectText(text) && "true".equals(_jsonFormat)) {
             text = JSON.parseObject(text).toJSONString(JSONWriter.Feature.PrettyFormat);
+            response.write(text, ContentType.JSON.getValue());
+        } else {
+            response.write(text, contextType);
         }
-        response.write(text);
     }
 
     static JSONObject buildInput(HttpServerRequest request, JSONObject serviceDefine) {
