@@ -40,145 +40,130 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
 
     public void testExecute2() {
 
-        String flow = "{\n" +
-                "    \"flag\": \"_needFormatJsonInConsole\",\n" +
-                "    \"uni\": \"sequence\",\n" +
-                "    \"child\": [\n" +
-                "        {\n" +
-                "            \"uni\": \"server\",\n" +
-                "            \"port\": 60002,\n" +
-                "            \"service\": {\n" +
-                "                \"/hello\": {\n" +
-                "                    \"uni\": \"hello\"\n" +
-                "                },\n" +
-                "                \"/echo\": {\n" +
-                "                    \"uni\": \"echo\"\n" +
-                "                }\n" +
-                "            }\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"flag\": \"_needFormatJsonInConsole\",\n" +
-                "            \"uni\": \"pipe\",\n" +
-                "            \"child\": [\n" +
-                "                {\n" +
-                "                    \"uni\": \"mix\",\n" +
-                "                    \"json\": {\n" +
-                "                        \"path\": \"testcase.xls\",\n" +
-                "                        \"sheetName\": \"接口列表\"\n" +
-                "                    }\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"uni\": \"readExcel\",\n" +
-                "                    \"titleIndex\": 1\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"uni\": \"foreach\",\n" +
-                "                    \"foreachField\": \"list\",\n" +
-                "                    \"child\": {\n" +
-                "                        \"uni\": \"pipe\",\n" +
-                "                        \"child\": [\n" +
-                "                            {\n" +
-                "                                \"uni\": \"set\",\n" +
-                "                                \"key\": \"url\",\n" +
-                "                                \"value\": \"${接口URL}\"\n" +
-                "                            },\n" +
-                "                            {\n" +
-                "                                \"uni\": \"mix\",\n" +
-                "                                \"json\": {\n" +
-                "                                    \"path\": \"testcase.xls\",\n" +
-                "                                    \"sheetName\": \"${接口名称}\"\n" +
-                "                                }\n" +
-                "                            },\n" +
-                "                            {\n" +
-                "                                \"uni\": \"readExcel\",\n" +
-                "                                \"titleIndex\": 1\n" +
-                "                            },\n" +
-                "                            {\n" +
-                "                                \"uni\": \"foreach\",\n" +
-                "                                \"foreachField\": \"list\",\n" +
-                "                                \"child\": {\n" +
-                "                                    \"uni\": \"pipe\",\n" +
-                "                                    \"child\": [\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"set\",\n" +
-                "                                            \"key\": \"编码\",\n" +
-                "                                            \"value\": \"${编码}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"set\",\n" +
-                "                                            \"key\": \"名称\",\n" +
-                "                                            \"value\": \"${名称}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"set\",\n" +
-                "                                            \"key\": \"期望\",\n" +
-                "                                            \"value\": \"${期望}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"set\",\n" +
-                "                                            \"key\": \"输入\",\n" +
-                "                                            \"value\": \"${输入}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"mix\",\n" +
-                "                                            \"json\": {\n" +
-                "                                                \"url\": \"${url}\",\n" +
-                "                                                \"expectedValue\": \"${期望}\"\n" +
-                "                                            }\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"http\",\n" +
-                "                                            \"param\": \"${输入}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"assert\",\n" +
-                "                                            \"needToString\": true,\n" +
-                "                                            \"expected\": \"${期望}\"\n" +
-                "                                        },\n" +
-                "                                        {\n" +
-                "                                            \"uni\": \"mix\",\n" +
-                "                                            \"json\": {\n" +
-                "                                                \"编码\": \"${编码}\",\n" +
-                "                                                \"名称\": \"${名称}\",\n" +
-                "                                                \"输入\": \"${输入}\",\n" +
-                "                                                \"期望\": \"${期望}\",\n" +
-                "                                                \"是否匹配\": \"${success}\",\n" +
-                "                                                \"实际\": \"${actual}\"\n" +
-                "                                            }\n" +
-                "                                        }\n" +
-                "                                    ]\n" +
-                "                                }\n" +
-                "                            },\n" +
-                "                            {\n" +
-                "                                \"uni\": \"writeExcel\",\n" +
-                "                                \"path\": \"testcase-report.xls\",\n" +
-                "                                \"titleConfig\": {\n" +
-                "                                    \"编码\": {\n" +
-                "                                        \"title\": \"编码\"\n" +
-                "                                    },\n" +
-                "                                    \"名称\": {\n" +
-                "                                        \"title\": \"名称\"\n" +
-                "                                    },\n" +
-                "                                    \"输入\": {\n" +
-                "                                        \"title\": \"输入\"\n" +
-                "                                    },\n" +
-                "                                    \"期望\": {\n" +
-                "                                        \"title\": \"期望\"\n" +
-                "                                    },\n" +
-                "                                    \"success\": {\n" +
-                "                                        \"title\": \"是否通过\"\n" +
-                "                                    },\n" +
-                "                                    \"actual\": {\n" +
-                "                                        \"title\": \"实际输出\"\n" +
-                "                                    }\n" +
-                "                                }\n" +
-                "                            }\n" +
-                "                        ]\n" +
-                "                    }\n" +
-                "                }\n" +
-                "            ]\n" +
-                "        }\n" +
-                "    ]\n" +
+        String flow = "{" +
+                "    'uni': 'sequence'," +
+                "    'child': [" +
+                "        {" +
+                "            'uni': 'server'," +
+                "            'port': 60002," +
+                "            'service': {" +
+                "                '/hello': {" +
+                "                    'uni': 'hello'" +
+                "                }," +
+                "                '/echo': {" +
+                "                    'uni': 'echo'" +
+                "                }" +
+                "            }" +
+                "        }," +
+                "        {" +
+                "            'flag': '_needFormatJsonInConsole'," +
+                "            'uni': 'pipe'," +
+                "            'child': [" +
+                "                {" +
+                "                    'uni': 'mix'," +
+                "                    'json': {" +
+                "                        'path': 'testcase.xls'," +
+                "                        'sheetName': '接口列表'" +
+                "                    }" +
+                "                }," +
+                "                {" +
+                "                    'uni': 'readExcel'," +
+                "                    'titleIndex': 1" +
+                "                }," +
+                "                {" +
+                "                    'uni': 'foreach'," +
+                "                    'foreachField': 'list'," +
+                "                    'child': {" +
+                "                        'uni': 'pipe'," +
+                "                        'child': [" +
+                "                            {" +
+                "                                'uni': 'set'," +
+                "                                'key': 'url'," +
+                "                                'value': '${接口URL}'" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'mix'," +
+                "                                'json': {" +
+                "                                    'path': 'testcase.xls'," +
+                "                                    'sheetName': '${接口名称}'" +
+                "                                }" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'readExcel'," +
+                "                                'titleIndex': 1" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'foreach'," +
+                "                                'foreachField': 'list'," +
+                "                                'child': {" +
+                "                                    'uni': 'pipe'," +
+                "                                    'child': [" +
+                "                                        {" +
+                "                                            'uni': 'set'," +
+                "                                            'key': 'caseItem'," +
+                "                                            'value': {" +
+                "                                                '编码': '${编码}'," +
+                "                                                '名称': '${名称}'," +
+                "                                                '输入': '${输入}'," +
+                "                                                '期望': '${期望}'" +
+                "                                            }" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'mix'," +
+                "                                            'json': {" +
+                "                                                'url': '${url}'," +
+                "                                                'expectedValue': '${期望}'" +
+                "                                            }" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'http'," +
+                "                                            'param': '${输入}'" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'assert'," +
+                "                                            'needToString': true," +
+                "                                            'expected': '${caseItem.期望}'" +
+                "                                        }," +
+                "                                        {" +
+                "                                            'uni': 'mix'," +
+                "                                            'pickJsonField': 'caseItem'," +
+                "                                            'json': {" +
+                "                                                'caseItem': '${caseItem}'" +
+                "                                            }" +
+                "                                        }" +
+                "                                    ]" +
+                "                                }" +
+                "                            }," +
+                "                            {" +
+                "                                'uni': 'writeExcel'," +
+                "                                'path': 'testcase-report.xls'," +
+                "                                'titleConfig': {" +
+                "                                    '编码': {" +
+                "                                        'title': '编码'" +
+                "                                    }," +
+                "                                    '名称': {" +
+                "                                        'title': '名称'" +
+                "                                    }," +
+                "                                    '输入': {" +
+                "                                        'title': '输入'" +
+                "                                    }," +
+                "                                    '期望': {" +
+                "                                        'title': '期望'" +
+                "                                    }," +
+                "                                    'success': {" +
+                "                                        'title': '是否通过'" +
+                "                                    }," +
+                "                                    'actual': {" +
+                "                                        'title': '实际输出'" +
+                "                                    }" +
+                "                                }" +
+                "                            }" +
+                "                        ]" +
+                "                    }" +
+                "                }" +
+                "            ]" +
+                "        }" +
+                "    ]" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
