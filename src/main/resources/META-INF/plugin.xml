@@ -176,6 +176,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.4.16 server node support default index; assert node support containField and containJson</li>
             <li>0.4.15 excel node support relative path and express</li>
             <li>0.4.14 http add node: postJson, postForm, httpGet, httpPut, httpDelete; add isJsonArrayText support array input</li>
             <li>0.4.13 refine plugin and server mode dir</li>
