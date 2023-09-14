@@ -94,7 +94,7 @@
                             },
                             {
                                 "uni": "writeExcel",
-                                "path": "${'测试报告-'+System.currentTimeMillis()+'.xls'}",
+                                "path": "测试报告.xls",
                                 "titleConfig": {
                                     "编码": {
                                         "title": "编码"

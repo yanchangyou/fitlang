@@ -50,7 +50,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
         JSONArray list = input.getJsonArray(listField);
 
         try {
-            EasyExcelUtil.writeExcel(sheetName, list, titleConfig, defaultWidth, path);
+            EasyExcelUtil.writeExcel(list, titleConfig, defaultWidth, path, sheetName);
         } catch (IOException e) {
             throw new ExecuteNodeException(e.getMessage());
         }

@@ -13,7 +13,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         String path = WriteExcelJsonExecuteNodeTest.class.getResource(".").getFile();
-        ServerJsonExecuteNode.setCurrentServerFilePath(path.replace("/test/classes/fit","/test/resources/fit"));
+        ServerJsonExecuteNode.setCurrentServerFilePath(path.replace("/test/classes/fit", "/test/resources/fit"));
         System.out.println(ServerJsonExecuteNode.getServerFileDir());
     }
 
@@ -41,11 +41,12 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute2() {
 
         String flow = "{\n" +
+                "    \"flag\": \"_needFormatJsonInConsole\",\n" +
                 "    \"uni\": \"sequence\",\n" +
                 "    \"child\": [\n" +
                 "        {\n" +
                 "            \"uni\": \"server\",\n" +
-                "            \"port\": 60001,\n" +
+                "            \"port\": 60002,\n" +
                 "            \"service\": {\n" +
                 "                \"/hello\": {\n" +
                 "                    \"uni\": \"hello\"\n" +

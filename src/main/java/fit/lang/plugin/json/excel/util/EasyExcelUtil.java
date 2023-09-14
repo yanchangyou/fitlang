@@ -1,11 +1,13 @@
 package fit.lang.plugin.json.excel.util;
 
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.read.builder.ExcelReaderBuilder;
 import com.alibaba.excel.util.BooleanUtils;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.handler.context.CellWriteHandlerContext;
 import com.alibaba.excel.write.handler.impl.FillStyleCellWriteHandler;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
@@ -33,7 +35,7 @@ public class EasyExcelUtil {
      * @param path
      * @throws IOException
      */
-    public static void writeExcel(String sheetName, JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path) throws IOException {
+    public static void writeExcel(JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path, String sheetName) throws IOException {
         List<List<String>> data = new ArrayList<>();
         // 设置列头
         List<List<String>> titles = new ArrayList<>();
@@ -100,7 +102,7 @@ public class EasyExcelUtil {
             }
         }
 
-        writeExcel(sheetName, titles, data, defaultWidth, columnWidthMap, path);
+        writeExcel(titles, data, defaultWidth, columnWidthMap, path, sheetName);
     }
 
     /**
@@ -114,7 +116,7 @@ public class EasyExcelUtil {
      * @param path
      * @throws IOException
      */
-    private static void writeExcel(String sheetName, List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, String path) throws IOException {
+    private static void writeExcel(List<List<String>> titles, List<List<String>> data, Integer defaultWidth, Map<Integer, Integer> columnWidthMap, String path, String sheetName) {
 
         if (defaultWidth == null) {
             defaultWidth = 30;
@@ -122,12 +124,15 @@ public class EasyExcelUtil {
         if (sheetName == null) {
             sheetName = "data";
         }
-        HorizontalCellStyleStrategy horizontalCellStyleStrategy = exportExcelConfig();
         Integer finalDefaultWidth = defaultWidth;
-        EasyExcel.write(path)
-//                .registerWriteHandler(horizontalCellStyleStrategy)
-
-                .registerWriteHandler(new SimpleColumnWidthStyleStrategy(finalDefaultWidth) {
+        ExcelWriterBuilder excelWriterBuilder;
+        if (FileUtil.exist(path)) {
+            FileUtil.copy(path, path + ".xls", true);
+            excelWriterBuilder = EasyExcel.write().withTemplate(path + ".xls").file(path);
+        } else {
+            excelWriterBuilder = EasyExcel.write(path);
+        }
+        excelWriterBuilder.registerWriteHandler(new SimpleColumnWidthStyleStrategy(finalDefaultWidth) {
                     protected Integer columnWidth(Head head, Integer columnIndex) {
                         return columnWidthMap.get(columnIndex) == null ? finalDefaultWidth : (columnWidthMap.get(columnIndex) / 6);
                     }
@@ -141,7 +146,6 @@ public class EasyExcelUtil {
                         if (BooleanUtils.isTrue(context.getIgnoreFillStyle())) {
                             return;
                         }
-                        CellStyle cellStyle = context.getCell().getCellStyle();
                         String stringValue = context.getCell().getStringCellValue();
                         Workbook workbook = context.getWriteWorkbookHolder().getWorkbook();
 
@@ -167,8 +171,8 @@ public class EasyExcelUtil {
                             context.getCell().setCellStyle(newCellStyle);
                         }
                     }
-                })
-                .sheet(sheetName).table().head(titles).doWrite(data);
+                }).autoCloseStream(true)
+                .sheet(sheetName).head(titles).doWrite(data);
     }
 
     /**
