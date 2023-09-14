@@ -50,23 +50,7 @@ public class EasyExcelUtil {
 
         if (list.isEmpty()) {
             for (Map.Entry<String, Object> entry : titleConfig.entrySet()) {
-                String title;
-                if (entry.getValue() instanceof String) {
-                    title = (String) entry.getValue();
-                } else if (entry.getValue() instanceof JSONObject) {
-                    JSONObject config = (JSONObject) entry.getValue();
-                    title = config.getString("title");
-
-                    if (config.containsKey("labelWidth")) {
-                        columnWidthMap.put(columnIndex, config.getIntValue("labelWidth"));
-                    }
-                    //隐藏的字段，默认宽度为0
-                    if (Boolean.TRUE.equals(config.getBoolean("hidden"))) {
-                        columnWidthMap.put(columnIndex, 0);
-                    }
-                } else {
-                    throw new ExecuteNodeException("execute title must be string or json!");
-                }
+                String title = parseTitle(columnWidthMap, columnIndex, entry);
                 titles.add(Collections.singletonList(title));
                 headers.add(entry.getKey());
 
@@ -84,18 +68,11 @@ public class EasyExcelUtil {
                 }
             } else {
                 for (Map.Entry<String, Object> entry : titleConfig.entrySet()) {
-                    JSONObject config = (JSONObject) entry.getValue();
-                    String title = config.getString("title");
+                    String title = parseTitle(columnWidthMap, columnIndex, entry);
+
                     titles.add(Collections.singletonList(title));
                     headers.add(entry.getKey());
 
-                    if (config.containsKey("labelWidth")) {
-                        columnWidthMap.put(columnIndex, config.getIntValue("labelWidth"));
-                    }
-                    //隐藏的字段，默认宽度为0
-                    if (Boolean.TRUE.equals(config.getBoolean("hidden"))) {
-                        columnWidthMap.put(columnIndex, 0);
-                    }
                     columnIndex++;
                 }
             }
@@ -111,6 +88,27 @@ public class EasyExcelUtil {
         }
 
         writeExcel(titles, data, defaultWidth, columnWidthMap, path, sheetName);
+    }
+
+    private static String parseTitle(Map<Integer, Integer> columnWidthMap, Integer columnIndex, Map.Entry<String, Object> entry) {
+        String title;
+        if (entry.getValue() instanceof String) {
+            title = (String) entry.getValue();
+        } else if (entry.getValue() instanceof JSONObject) {
+            JSONObject config = (JSONObject) entry.getValue();
+            title = config.getString("title");
+
+            if (config.containsKey("labelWidth")) {
+                columnWidthMap.put(columnIndex, config.getIntValue("labelWidth"));
+            }
+            //隐藏的字段，默认宽度为0
+            if (Boolean.TRUE.equals(config.getBoolean("hidden"))) {
+                columnWidthMap.put(columnIndex, 0);
+            }
+        } else {
+            throw new ExecuteNodeException("execute title must be string or json!");
+        }
+        return title;
     }
 
     /**
