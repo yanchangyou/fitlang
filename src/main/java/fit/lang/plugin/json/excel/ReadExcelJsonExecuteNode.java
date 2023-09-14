@@ -21,23 +21,16 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String path = nodeJsonDefine.getString("path");
         Integer titleIndex = nodeJsonDefine.getInteger("titleIndex");
         String listField = nodeJsonDefine.getString(FIELD_NAME_OF_OUTPUT_LIST_FIELD);
         if (StrUtil.isBlank(listField)) {
             listField = "list";
         }
 
-        String sheetName = nodeJsonDefine.getString("sheetName");
-        if (StrUtil.isBlank(sheetName)) {
-            sheetName = input.getString("sheetName");
-        }
+        String path = parseStringField("path", input);
+        String sheetName = parseStringField("sheetName", input);
 
-        if (StrUtil.isBlank(path)) {
-            path = input.getString("path");
-        }
-
-        path = buildFilePath(path);
+        path = buildFilePath(path, "readExcel");
 
         List<Map<String, String>> list;
         try {

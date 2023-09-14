@@ -3,16 +3,25 @@ package fit.lang.plugin.json.excel;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
 public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        String path = WriteExcelJsonExecuteNodeTest.class.getResource(".").getFile();
+        ServerJsonExecuteNode.setCurrentServerFilePath(path.replace("/test/classes/fit", "/test/resources/fit"));
+        System.out.println(ServerJsonExecuteNode.getServerFileDir());
+    }
+
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
                 "   'titleIndex': 1," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
+                "   'path': 'testcase.xls'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -33,7 +42,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "   'titleIndex': 1," +
                 "}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("{ 'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'}", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{ 'path': 'testcase.xls'}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
 
@@ -49,7 +58,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
                 "   'titleIndex': 0," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
+                "   'path': 'testcase.xls'" +
                 "}";
         try {
             ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -64,7 +73,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "   'uni': 'readExcel'," +
                 "   'titleIndex': 1," +
                 "   'sheetName': '接口列表'," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
+                "   'path': 'testcase.xls'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -84,7 +93,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "   'uni': 'readExcel'," +
                 "   'outputListField': 'otherName'," +
                 "   'titleIndex': 1," +
-                "   'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'" +
+                "   'path': 'testcase.xls'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -99,7 +108,6 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
     }
 
-
     public void testExecute100() {
 
         String flow = "{" +
@@ -107,7 +115,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "    'child': [" +
                 "        {" +
                 "            'uni': 'server'," +
-                "            'port': 60003," +
+                "            'port': 60002," +
                 "            'service': {'/hello':{'uni':'hello'}}," +
                 "        }," +
                 "        {" +
@@ -117,7 +125,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "                {" +
                 "                    'uni': 'mix'," +
                 "                    'json': {" +
-                "                        'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'," +
+                "                        'path': 'testcase.xls'," +
                 "                        'sheetName': '接口列表'" +
                 "                    }" +
                 "                }," +
@@ -139,7 +147,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "                            {" +
                 "                                'uni': 'mix'," +
                 "                                'json': {" +
-                "                                    'path': '/opt/github/fitlang/doc/test/case/自动化测试用例.xls'," +
+                "                                    'path': 'testcase.xls'," +
                 "                                    'sheetName': '${接口名称}'" +
                 "                                }" +
                 "                            }," +
@@ -186,6 +194,120 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "            ]" +
                 "        }" +
                 "    ]" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+
+    }
+
+
+    public void testExecute101() {
+
+        String flow = "{\n" +
+                "    \"flag\": \"_needFormatJsonInConsole\",\n" +
+                "    \"uni\": \"pipe\",\n" +
+                "    \"input\": {\n" +
+                "        \"path\": \"testcase.xls\",\n" +
+                "        \"sheetName\": \"接口列表\"\n" +
+                "    },\n" +
+                "    \"child\": [\n" +
+                "        {\n" +
+                "            \"uni\": \"readExcel\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"uni\": \"foreach\",\n" +
+                "            \"foreachField\": \"list\",\n" +
+                "            \"child\": {\n" +
+                "                \"uni\": \"pipe\",\n" +
+                "                \"child\": [\n" +
+                "                    {\n" +
+                "                        \"uni\": \"set\",\n" +
+                "                        \"key\": \"apiItem\",\n" +
+                "                        \"value\": {\n" +
+                "                            \"url\": \"${接口URL}\",\n" +
+                "                            \"name\": \"${接口名称}\"\n" +
+                "                        }\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"uni\": \"readExcel\",\n" +
+                "                        \"path\": \"${input.path}\",\n" +
+                "                        \"sheetName\": \"${apiItem.name}\"\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"uni\": \"foreach\",\n" +
+                "                        \"foreachField\": \"list\",\n" +
+                "                        \"child\": {\n" +
+                "                            \"uni\": \"pipe\",\n" +
+                "                            \"child\": [\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"set\",\n" +
+                "                                    \"key\": \"caseItem\",\n" +
+                "                                    \"value\": {\n" +
+                "                                        \"编码\": \"${编码}\",\n" +
+                "                                        \"名称\": \"${名称}\",\n" +
+                "                                        \"输入\": \"${输入}\",\n" +
+                "                                        \"期望\": \"${期望}\"\n" +
+                "                                    }\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"mix\",\n" +
+                "                                    \"json\": {\n" +
+                "                                        \"url\": \"${apiItem.url}\",\n" +
+                "                                        \"expectedValue\": \"${期望}\"\n" +
+                "                                    }\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"http\",\n" +
+                "                                    \"param\": \"${输入}\"\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"assert\",\n" +
+                "                                    \"needToString\": true,\n" +
+                "                                    \"expected\": \"${caseItem.期望}\"\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"mix\",\n" +
+                "                                    \"pickJsonField\": \"caseItem\",\n" +
+                "                                    \"json\": {\n" +
+                "                                        \"caseItem\": \"${caseItem}\"\n" +
+                "                                    }\n" +
+                "                                }\n" +
+                "                            ]\n" +
+                "                        }\n" +
+                "                    },\n" +
+                "                    {\n" +
+                "                        \"uni\": \"writeExcel\",\n" +
+                "                        \"path\": \"${'testcase-report-'+System.currentTimeMillis()+'.xls'}\",\n" +
+                "                        \"titleConfig\": {\n" +
+                "                            \"编码\": {\n" +
+                "                                \"title\": \"编码\"\n" +
+                "                            },\n" +
+                "                            \"名称\": {\n" +
+                "                                \"title\": \"名称\"\n" +
+                "                            },\n" +
+                "                            \"输入\": {\n" +
+                "                                \"title\": \"输入\"\n" +
+                "                            },\n" +
+                "                            \"期望\": {\n" +
+                "                                \"title\": \"期望\"\n" +
+                "                            },\n" +
+                "                            \"success\": {\n" +
+                "                                \"title\": \"是否通过\"\n" +
+                "                            },\n" +
+                "                            \"actual\": {\n" +
+                "                                \"title\": \"实际输出\"\n" +
+                "                            }\n" +
+                "                        }\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ]\n" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
