@@ -229,14 +229,14 @@ public class EasyExcelUtil {
         } else {
             excelReaderBuilder.sheet(0).headRowNumber(titleIndex).doReadSync();
         }
-
+        if (excelHeader.isEmpty()) {
+            throw new ExecuteNodeException("sheet: " + sheetName + " must be have header!(config titleIndex field)");
+        }
         return convertExcelData(list, excelHeader);
     }
 
     static List<Map<String, String>> convertExcelData(List<Map<Integer, String>> list, Map<Integer, String> excelHeader) {
-        if (excelHeader == null || excelHeader.isEmpty()) {
-            throw new ExecuteNodeException("excel must be have header!(config titleIndex field)");
-        }
+
         List<Map<String, String>> result = new ArrayList<>();
         for (Map<Integer, String> row : list) {
             Map<String, String> newRow = new HashMap<>();
