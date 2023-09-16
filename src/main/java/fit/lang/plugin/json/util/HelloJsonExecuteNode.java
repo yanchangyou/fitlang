@@ -13,22 +13,16 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        String message = nodeJsonDefine.getString("message");
-        String who = input.getString("who");
-        if (who == null) {
-            who = nodeJsonDefine.getString("who");
-        }
+        String who = parseStringField("who", input);
         if (who == null) {
             who = "world";
         }
+        input.set("who", who);
+        String message = parseStringField("message", input);
+
         if (message == null) {
             message = "hello, " + who + "!";
-        } else if (message.startsWith("${") && message.endsWith("}")) {
-            JSONObject param = new JSONObject();
-            param.put("who", who);
-            message = ExpressUtil.eval(message, param).toString();
         }
-
         output.set("message", message);
 
     }
