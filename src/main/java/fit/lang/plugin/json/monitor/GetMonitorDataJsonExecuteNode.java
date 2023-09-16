@@ -6,6 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import oshi.hardware.CentralProcessor;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 
@@ -27,7 +28,8 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = new JSONObject();
         result.put("cpuPoints", StartMonitorJsonExecuteNode.getCpuGatherList(second));
         result.put("memoryPoints", StartMonitorJsonExecuteNode.getMemoryGatherList(second));
-        result.put("cpuTotal", covertToG(OshiUtil.getHardware().getProcessor().getMaxFreq()));
+        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
+        result.put("cpuTotal", centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G");
         result.put("second", second);
 
 

@@ -13,7 +13,8 @@
     &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
 </div>
 
-<h2 style="text-align:center;">FitServer monitor &nbsp;&nbsp;
+<h2 style="text-align:center;margin:3px;">FitServer monitor</h2>
+<div style="text-align:left;">
     <select style="font-size:1.15rem;" onchange="fetch(this.value)">
         <option value="1">1秒</option>
         <option value="5">5秒</option>
@@ -32,13 +33,12 @@
         <option value="2592000">1月</option>
         <option value="31536000">1年</option>
     </select>
-    <select style="font-size:1.15rem;" onchange="show(this.value)">
+    <select id="choiceType" style="font-size:1.15rem;" onchange="show(this.value)">
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
     </select> &nbsp;&nbsp;
-    <span id="cpuTotal"></span>
-</h2>
-
+    <span id="cpuTotalWrap">总CPU:<span id="cpuTotal"></span></span>
+</div>
 <div>
     <canvas id="cpuChart"></canvas>
     <canvas id="memoryChart" style="display:none;"></canvas>
@@ -63,6 +63,7 @@
         }
         httpRequest.send(body);
     }
+
 </script>
 <script>
 
@@ -103,9 +104,11 @@
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
 
-           showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
-           showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
-           document.getElementById("cpuTotal").innerText = result.cpuTotal + "G";
+           myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
+           myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
+           document.getElementById("cpuTotal").innerText = result.cpuTotal;
+
+           show(document.getElementById("choiceType").value);
 
         });
     }
@@ -130,8 +133,10 @@
     function show(domId) {
         if(domId === 'cpuChart') {
            document.getElementById('memoryChart').style.display = 'none';
+           document.getElementById('cpuTotalWrap').style.display = '';
         } else {
            document.getElementById('cpuChart').style.display = 'none';
+           document.getElementById('cpuTotalWrap').style.display = 'none';
         }
         document.getElementById(domId).style.display = '';
     }
