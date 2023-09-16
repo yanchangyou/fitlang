@@ -41,16 +41,16 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
 
 
     /**
-     * 解析字段值
+     * 解析字段值: 先从入参获取，然后从配置中获取
      *
      * @param fieldName
      * @param input
      * @return
      */
     protected String parseStringField(String fieldName, JsonExecuteNodeInput input) {
-        String fieldValue = nodeJsonDefine.getString(fieldName);
+        String fieldValue = input.getString(fieldName);
         if (StrUtil.isBlank(fieldValue)) {
-            fieldValue = input.getString(fieldName);
+            fieldValue = nodeJsonDefine.getString(fieldName);
         }
         return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
     }
