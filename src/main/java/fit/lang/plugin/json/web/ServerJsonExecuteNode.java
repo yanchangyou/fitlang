@@ -163,6 +163,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         }
 
         if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_reload")) {
+            // nothing
+        } else {
             JSONObject reloadDefine = addReloadService(fitServer);
             serviceList.add(reloadDefine);
         }

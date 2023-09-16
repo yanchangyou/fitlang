@@ -8,8 +8,17 @@
         "_cloud"
     ],
     "init": {
-        "uni": "cloudServer",
-        "port": 20000
+        "uni": "sequence",
+        "child": [
+            {
+                "uni": "startMonitor",
+                "second": 2
+            },
+            {
+                "uni": "cloudServer",
+                "port": 20000
+            }
+        ]
     },
     "service": {
         "/hello": {
@@ -17,6 +26,9 @@
         },
         "/execute": {
             "uni": "execute"
+        },
+        "/monitor/get": {
+            "uni": "getMonitorData"
         }
     }
 }
