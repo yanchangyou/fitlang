@@ -38,18 +38,7 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static JSONObject execute(JSONObject inputJson, JsonExecuteNode node) {
-
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
-
-        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
-
-        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
-
-        input.setData(inputJson);
-
-        node.execute(input, output);
-
-        return output.getData();
+        return JSONObject.parseObject(executeCode(inputJson, ((JSONObject) node.getNodeDefine().getData())));
     }
 
     /**
@@ -377,5 +366,21 @@ public class ExecuteJsonNodeUtil {
             path = ServerJsonExecuteNode.getServerFileDir() + "/" + path;
         }
         return path;
+    }
+
+    /**
+     * 解析字段， 解析顺序：入参, 配置
+     *
+     * @param fieldName
+     * @param input
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static String parseStringField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
+        String fieldValue = input.getString(fieldName);
+        if (StrUtil.isBlank(fieldValue)) {
+            fieldValue = nodeJsonDefine.getString(fieldName);
+        }
+        return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
     }
 }
