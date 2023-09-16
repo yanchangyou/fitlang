@@ -13,11 +13,14 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
+
         String who = parseStringField("who", input);
+
         if (who == null) {
             who = "world";
         }
         input.set("who", who);
+
         String message = parseStringField("message", input);
 
         if (message == null) {

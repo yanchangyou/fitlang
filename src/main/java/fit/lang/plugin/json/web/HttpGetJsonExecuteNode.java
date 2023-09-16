@@ -18,7 +18,7 @@ public class HttpGetJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
+        String url = parseStringField("url", input);
 
         HttpRequest request = HttpUtil.createGet(url);
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);

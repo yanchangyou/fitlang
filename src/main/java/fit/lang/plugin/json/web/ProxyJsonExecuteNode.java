@@ -19,7 +19,7 @@ public class ProxyJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String url = nodeJsonDefine.getString("url");
+        String url = parseStringField("url", input);
 
         String requestPath = (String) input.getNodeContext().getAttribute(ServerJsonExecuteNode.REQUEST_PATH);
 
