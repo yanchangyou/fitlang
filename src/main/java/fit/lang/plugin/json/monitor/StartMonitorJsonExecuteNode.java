@@ -49,8 +49,8 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                 result.add(row);
             }
         }
-        //最多返回500条，避免过大，太大就间隔采样
-        return filterListByMaxLength(result, 500);
+        //最多返回300条，避免过大，太大就间隔采样
+        return filterListByMaxLength(result, 300);
     }
 
     @Override
