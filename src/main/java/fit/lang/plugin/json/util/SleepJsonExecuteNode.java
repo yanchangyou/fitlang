@@ -25,6 +25,9 @@ public class SleepJsonExecuteNode extends JsonExecuteNode implements ExecuteNode
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
+        String second = parseStringField("second", input);
+        setMillis((long) (Double.parseDouble(second) * 1000));
+
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -36,7 +39,5 @@ public class SleepJsonExecuteNode extends JsonExecuteNode implements ExecuteNode
 
     @Override
     public void build(ExecuteNodeData executeNodeData) {
-
-        millis = (long) (((JsonExecuteNodeData) executeNodeData).getData().getDouble("second") * 1000L);
     }
 }
