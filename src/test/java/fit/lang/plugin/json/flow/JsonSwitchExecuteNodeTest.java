@@ -1,12 +1,7 @@
 package fit.lang.plugin.json.flow;
 
-import com.alibaba.fastjson2.JSON;
-import fit.lang.common.util.EchoExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteContext;
-import fit.lang.plugin.json.define.JsonExecuteNodeData;
-import fit.lang.plugin.json.define.JsonExecuteNodeInput;
-import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.plugin.json.util.HelloJsonExecuteNode;
+import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -14,47 +9,38 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
 
     public void testExecuteCase1() {
 
-        testExecuteCase("1", "message", "hello, world!");
+        testExecute("1", "message", "hello, world!");
 
     }
 
     public void testExecuteCase2() {
 
-        testExecuteCase("2", "who", "world");
+        testExecute("2", "who", "world");
 
     }
 
-    public void testExecuteCase(String type, String outputFieldName, String expect) {
+    public void testExecute(String type, String outputFieldName, String expect) {
+        String flow = "{" +//
+                "   'uni': 'switch'," +
+                "   'switchField': 'type'," +
+                "   'child': [" +
+                "       {" +
+                "           'case':'1'," +
+                "           'uni':'hello'" +
+                "       }," +
+                "       {" +
+                "           'case':'2'," +
+                "           'uni':'echo'" +
+                "       }" +
+                "   ]" +
+                "}";
 
-        JsonSwitchExecuteNode executeNode = new JsonSwitchExecuteNode();
+        String output = ExecuteJsonNodeUtil.executeCode("{'type':'" + type + "'}", flow);
 
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
+        System.out.println(output);
 
-        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
-
-        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
-
-        input.set("who", "world");
-        input.set("type", type);
-
-        HelloJsonExecuteNode helloNode = new HelloJsonExecuteNode();
-        EchoExecuteNode echoNode = new EchoExecuteNode();
-
-        helloNode.setNodeDefine(new JsonExecuteNodeData(JSON.parseObject("{'case':'1'}")));
-        echoNode.setNodeDefine(new JsonExecuteNodeData(JSON.parseObject("{'case':'2'}")));
-
-        executeNode.addCaseNode("1", helloNode);
-        executeNode.addCaseNode("2", echoNode);
-
-        Assert.assertTrue(output.isEmpty());
-
-        executeNode.setSwitchField("type");
-
-        executeNode.execute(input, output);
-
-        System.out.println(output.getData());
-
-        Assert.assertEquals(expect, output.get(outputFieldName));
-
+        JSONObject result = JSONObject.parse(output);
+        Assert.assertEquals(expect, result.get(outputFieldName));
     }
+
 }
