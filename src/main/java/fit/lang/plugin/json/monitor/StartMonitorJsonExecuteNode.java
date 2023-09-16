@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.monitor;
 
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -37,8 +38,12 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         String secondText = parseStringField("second", input);
 
         int second = 5;
-        if (secondText != null) {
+        if (secondText != null && NumberUtil.isInteger(secondText)) {
             second = Integer.parseInt(secondText);
+        }
+        //至少1秒
+        if (second < 1) {
+            second = 1;
         }
 
         if (thread != null && thread.isAlive()) {
@@ -61,7 +66,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                 setName("git-monitor-" + System.currentTimeMillis());
                 while (true) {
                     try {
-                        Thread.sleep(second * 1000L);
+                        Thread.sleep(second * 1000L - 1000);
                     } catch (InterruptedException e) {
                         System.out.println("stop thread" + this.getName());
                         break;
