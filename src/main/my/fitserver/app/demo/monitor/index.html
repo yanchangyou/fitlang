@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
 <div style="text-align:right;margin-right:50px;">
     <a target="_blank" href="/">root</a>
     &nbsp;<a target="_blank" href="/_api">api</a>
@@ -7,7 +13,25 @@
     &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
 </div>
 
-<h2 style="text-align:center;">FitServer monitor CPU</h2>
+<h2 style="text-align:center;">FitServer monitor CPU &nbsp;&nbsp;
+    <select style="font-size:1.15rem;" onchange="fetch(this.value)">
+        <option value="1">1秒</option>
+        <option value="5">5秒</option>
+        <option value="10">10秒</option>
+        <option value="30">30秒</option>
+        <option value="60">1分钟</option>
+        <option value="300">5分钟</option>
+        <option value="600" selected>10分钟</option>
+        <option value="1800">30分钟</option>
+        <option value="3600">1小钟</option>
+        <option value="7200">2小钟</option>
+        <option value="18000">5小钟</option>
+        <option value="36000">10小钟</option>
+        <option value="864000">1天</option>
+        <option value="604800">1周</option>
+        <option value="2592000">1月</option>
+        <option value="31536000">1年</option>
+    </select></h2>
 
 <div>
     <canvas id="myChart"></canvas>
@@ -34,7 +58,8 @@
     }
 </script>
 <script>
-  const ctx = document.getElementById('myChart');
+
+    const ctx = document.getElementById('myChart');
 
     const colorMap = {
         "free": 'rgb(0, 200, 0)',
@@ -56,6 +81,7 @@
         }
     }
 
+    var myChat;
     function fetch(second) {
         var url = "getMonitorData.fit?second=" + second
         request("POST", url, "", function(body){
@@ -67,13 +93,18 @@
                addPoint(["used", "free", "user", "sys", "wait"], data.datasets, result.cpu[i]);
            }
 
-           new Chart(ctx, {
-           type: 'line',
-           data: data,
-         });
+           if(myChat instanceof Chart){
+               myChat.destroy();
+           }
+           myChat = new Chart(ctx, {
+                type: 'line',
+                data: data,
+            });
         });
     }
 
     fetch(600);
-
 </script>
+
+</body>
+</html>
