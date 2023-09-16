@@ -12,6 +12,8 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.filterListByMaxLength;
+
 /**
  * 简单监控器
  */
@@ -38,16 +40,8 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                 result.add(row);
             }
         }
-        //最多返回1000条，避免过大，太大就间隔采样
-        if (result.size() > 500) {
-            List<JSONObject> realResult = new ArrayList<>();
-            int space = (result.size() + 499) / 1000;
-            for (int i = 0; i < result.size(); i += space) {
-                realResult.add(result.get(i));
-            }
-            result = realResult;
-        }
-        return result;
+        //最多返回500条，避免过大，太大就间隔采样
+        return filterListByMaxLength(result, 500);
     }
 
     @Override

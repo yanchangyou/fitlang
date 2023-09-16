@@ -19,7 +19,9 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static fit.lang.plugin.json.ExpressUtil.eval;
@@ -383,4 +385,24 @@ public class ExecuteJsonNodeUtil {
         }
         return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
     }
+
+    /**
+     * 返回数组最大长度，超过长度就采样
+     *
+     * @param result
+     * @param maxLength
+     * @return
+     */
+    public static List<JSONObject> filterListByMaxLength(List<JSONObject> result, int maxLength) {
+        if (result.size() > maxLength) {
+            List<JSONObject> realResult = new ArrayList<>();
+            int space = (result.size() + maxLength - 1) / maxLength;
+            for (int i = 0; i < result.size(); i += space) {
+                realResult.add(result.get(i));
+            }
+            result = realResult;
+        }
+        return result;
+    }
+
 }
