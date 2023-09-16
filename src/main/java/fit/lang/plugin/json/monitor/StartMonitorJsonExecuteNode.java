@@ -24,7 +24,30 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
     static Thread thread;
 
     public static List<JSONObject> getCpuGatherList() {
-        return cpuGatherList;
+        return getCpuGatherList(600);
+    }
+
+    public static List<JSONObject> getCpuGatherList(int second) {
+        if (second < 0) {
+            second = 0;
+        }
+        List<JSONObject> result = new ArrayList<>();
+        long millisecond = System.currentTimeMillis() - second * 1000L;
+        for (JSONObject row : cpuGatherList) {
+            if (row.getLong("timestamp") > millisecond) {
+                result.add(row);
+            }
+        }
+        //最多返回1000条，避免过大，太大就间隔采样
+        if (result.size() > 1000) {
+            List<JSONObject> realResult = new ArrayList<>();
+            int space = (result.size() + 999) / 1000;
+            for (int i = 0; i < result.size(); i += space) {
+                realResult.add(result.get(i));
+            }
+            result = realResult;
+        }
+        return result;
     }
 
     @Override
