@@ -56,6 +56,12 @@ removeField: Remove the JSON field<br/>
 removeEmptyField: Remove an empty field<br/>
 print: Console printing<br/>
 sleep: Process sleep node<br/>
+mix: mix a json object<br/>
+replace: replace output<br/>
+mix: mix a json object<br/>
+mixNode: execute node, and mix<br/>
+execute: execute input node define<br/>
+
 <br/>
 flow nodes (with child nodes)<br/>
 sequence: Sequential execution node<br/>
@@ -63,13 +69,32 @@ pipe: pipeline execution node<br/>
 foreach: traverse JSON array field nodes<br/>
 loop: loop execution node, loopTimes specifies the number of execution times<br/>
 switch: branch execution node, switchField specifies the branch field<br/>
+return: return json value<br/>
+
 <br/>
-tool nodes<br/>
+web nodes<br/>
 hTTP: supports HTTP client request<br/>
 server: server node<br/>
 proxy: proxy node<br/>
+web: config web param, such as response header<br/>
+
+<br/>
+Cloud nodes<br/>
+cloudServer: start web socket<br/>
+cloudClient: connect to web socket<br/>
+
+<br/>
+Excel nodes<br/>
+readExcel: Read Excel<br/>
+writeExcel: Write to Excel<br/>
+<br/>
+
+Monitoring nodes<br/>
+startMonitor: Start monitoring<br/>
+getMonitorData: Get monitoring data: CPU and Memory<br/>
 <br/>
 <br/>
+
 中文：<br/>
 <br/>
 <p>
@@ -116,6 +141,11 @@ removeField：移除json字段<br/>
 removeEmptyField：移除空字段<br/>
 print：控制台打印<br/>
 sleep：流程休眠节点<br/>
+mix: 混入json对象<br/>
+replace: 替换结果输出<br/>
+mix: 混入json对象<br/>
+mixNode: 混入节点执行，用于嵌套字段场景<br/>
+execute: 执行入参传递的流程<br/>
 
 <br/>
 流程节点（有child子节点）<br/>
@@ -126,10 +156,26 @@ loop：循环执行节点，loopTimes制定执行次数<br/>
 switch：分支执行节点，switchField指定分支字段<br/>
 
 <br/>
-工具节点<br/>
-http：支持http-client请求<br/>
+Web节点<br/>
+http：支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete<br/>
 server：服务端节点<br/>
 proxy：代理节点<br/>
+web: 配置web参数，响应头等<br/>
+<br/>
+
+<br/>
+云节点<br/>
+cloudServer: 启动web socket<br/>
+cloudClient: 连接web socket<br/>
+
+Excel节点<br/>
+readExcel：读取Excle<br/>
+writeExcel：写入Excle<br/>
+<br/>
+
+监控节点<br/>
+startMonitor：启动监控<br/>
+getMonitorData：获取监控数据：CPU和Memory<br/>
 
 <br/>
 云节点<br/>
