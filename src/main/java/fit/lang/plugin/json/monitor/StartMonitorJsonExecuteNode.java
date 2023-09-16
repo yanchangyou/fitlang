@@ -39,9 +39,9 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
             }
         }
         //最多返回1000条，避免过大，太大就间隔采样
-        if (result.size() > 1000) {
+        if (result.size() > 500) {
             List<JSONObject> realResult = new ArrayList<>();
-            int space = (result.size() + 999) / 1000;
+            int space = (result.size() + 499) / 1000;
             for (int i = 0; i < result.size(); i += space) {
                 realResult.add(result.get(i));
             }
