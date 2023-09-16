@@ -3,30 +3,48 @@ package fit.lang.plugin.json.flow;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
+import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.common.flow.LoopExecuteNode;
 import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeBuildable;
+import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 
 import java.util.List;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringField;
 
 /**
  * 执行节点
  */
 public class JsonLoopExecuteNode extends LoopExecuteNode implements ExecuteNodeBuildable {
 
+    /**
+     * 静态解析
+     *
+     * @param executeNodeData
+     */
     @Override
     public void build(ExecuteNodeData executeNodeData) {
 
-        JSONObject nodeDefine = ((JsonExecuteNodeData) executeNodeData).getData();
+        JSONObject nodeDefineJson = (JSONObject) nodeDefine.getData();
 
-        setLoopTimes(nodeDefine.getInteger("loopTimes"));
-        setPipe(Boolean.TRUE.equals(nodeDefine.getBoolean("isPipe")));
-        setBagsMode(Boolean.TRUE.equals(nodeDefine.getBoolean("isBagsMode")));
-        setBagsName(nodeDefine.getString("bagsName"));
+        setPipe(Boolean.TRUE.equals(nodeDefineJson.getBoolean("isPipe")));
+        setBagsMode(Boolean.TRUE.equals(nodeDefineJson.getBoolean("isBagsMode")));
+        setBagsName(nodeDefineJson.getString("bagsName"));
 
-        ExecuteNodeUtil.buildChildNode(this, nodeDefine);
+        ExecuteNodeUtil.buildChildNode(this, nodeDefineJson);
+    }
+
+    @Override
+    public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
+
+        //动态解析
+        String loopTimes = parseStringField("loopTimes", (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
+        setLoopTimes(Integer.parseInt(loopTimes));
+
+        super.execute(input, output);
     }
 
     @Override
