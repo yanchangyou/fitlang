@@ -12,7 +12,7 @@ import fit.lang.define.base.ExecuteNodeData;
  */
 public class SleepJsonExecuteNode extends JsonExecuteNode implements ExecuteNodeBuildable {
 
-    long millis;
+    long millis = 1000;
 
     public long getMillis() {
         return millis;
@@ -26,7 +26,9 @@ public class SleepJsonExecuteNode extends JsonExecuteNode implements ExecuteNode
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String second = parseStringField("second", input);
-        setMillis((long) (Double.parseDouble(second) * 1000));
+        if (second != null) {
+            setMillis((long) (Double.parseDouble(second) * 1000));
+        }
 
         try {
             Thread.sleep(millis);

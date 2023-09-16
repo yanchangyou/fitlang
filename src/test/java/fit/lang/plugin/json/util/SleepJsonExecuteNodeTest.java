@@ -1,27 +1,54 @@
 package fit.lang.plugin.json.util;
 
-import fit.lang.plugin.json.define.JsonExecuteContext;
-import fit.lang.plugin.json.define.JsonExecuteNodeInput;
-import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 public class SleepJsonExecuteNodeTest extends TestCase {
 
-    public void testExecute() {
+    public void testExecute1() {
+        String flow = "{" +//
+                "   'uni': 'sleep'," +
+                "   'second': 0.1" +
+                "}";
 
-        SleepJsonExecuteNode executeNode = new SleepJsonExecuteNode();
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
-        executeNode.setMillis(1000);
+        JSONObject outputJson = JSON.parseObject(output);
 
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
+        Assert.assertTrue(!output.isEmpty());
 
-        JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
+        System.out.println(output);
+    }
 
-        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
+    public void testExecute2() {
+        String flow = "{" +//
+                "   'uni': 'sleep'" +
+                "}";
 
-        input.set("who", "world");
+        String output = ExecuteJsonNodeUtil.executeCode("{'second': 0.1}", flow);
 
-        executeNode.execute(input, output);
+        JSONObject outputJson = JSON.parseObject(output);
 
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+    }
+
+    public void testExecute3() {
+        String flow = "{" +//
+                "   'uni': 'sleep'," +
+                "   'second': '${second+0.1}'" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'second': 0.1}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
     }
 }

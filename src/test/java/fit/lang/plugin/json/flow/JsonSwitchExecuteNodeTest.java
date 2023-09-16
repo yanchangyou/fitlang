@@ -15,7 +15,7 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
 
     public void testExecuteCase2() {
 
-        testExecute("2", "who", "world");
+        testExecute("2", "type", "2");
 
     }
 
