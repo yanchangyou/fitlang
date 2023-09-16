@@ -1,5 +1,10 @@
 {
     "flag": "_needFormatJsonInConsole",
+    "input": {
+        "path": "测试用例.xls",
+        "sheetName": "接口列表",
+        "testRepostExcelName": "${'测试报告-'+System.currentTimeMillis()+'.xls'}"
+    },
     "uni": "sequence",
     "child": [
         {
@@ -16,11 +21,6 @@
         },
         {
             "uni": "pipe",
-            "input": {
-                "path": "测试用例.xls",
-                "sheetName": "接口列表",
-                "testRepostExcelName": "${'测试报告-'+System.currentTimeMillis()+'.xls'}"
-            },
             "child": [
                 {
                     "uni": "readExcel"
