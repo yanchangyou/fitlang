@@ -1,0 +1,17 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "description": "monitor cpu",
+            "uni": "startMonitor",
+            "second": 1
+        },
+        {
+            "uni": "sleep",
+            "second": 5
+        },
+        {
+            "uni": "getMonitorData"
+        }
+    ]
+}

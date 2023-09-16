@@ -23,6 +23,8 @@ import fit.lang.plugin.json.excel.ReadExcelJsonExecuteNode;
 import fit.lang.plugin.json.excel.WriteExcelJsonExecuteNode;
 import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
+import fit.lang.plugin.json.monitor.GetMonitorDataJsonExecuteNode;
+import fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode;
 import fit.lang.plugin.json.web.HttpPostJsonJsonExecuteNode;
 import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
@@ -194,6 +196,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
+
+        //monitor
+        register("startMonitor", StartMonitorJsonExecuteNode.class);
+        register("getMonitorData", GetMonitorDataJsonExecuteNode.class);
 
         //excel
         register("readExcel", ReadExcelJsonExecuteNode.class);
