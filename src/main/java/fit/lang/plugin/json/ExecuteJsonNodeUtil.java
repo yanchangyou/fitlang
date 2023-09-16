@@ -405,4 +405,7 @@ public class ExecuteJsonNodeUtil {
         return result;
     }
 
+    public static double covertToG(long processorMaxFreq) {
+        return Math.round(100.0 * processorMaxFreq / 1024 / 1024 / 1024) / 100.0;
+    }
 }

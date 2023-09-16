@@ -8,10 +8,12 @@ import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import oshi.hardware.GlobalMemory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.filterListByMaxLength;
 
 /**
@@ -22,20 +24,27 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
     /**
      * 全局变量
      */
-    static List<JSONObject> cpuGatherList;
+    static List<JSONObject> cpuGatherList = new ArrayList<>();
+
+    static List<JSONObject> memoryGatherList = new ArrayList<>();
+
     static Thread thread;
 
-    public static List<JSONObject> getCpuGatherList() {
-        return getCpuGatherList(600);
+    public static List<JSONObject> getCpuGatherList(int second) {
+        return getCpuGatherList(cpuGatherList, second);
     }
 
-    public static List<JSONObject> getCpuGatherList(int second) {
+    public static List<JSONObject> getMemoryGatherList(int second) {
+        return getCpuGatherList(memoryGatherList, second);
+    }
+
+    public static List<JSONObject> getCpuGatherList(List<JSONObject> list, int second) {
         if (second < 0) {
             second = 0;
         }
         List<JSONObject> result = new ArrayList<>();
         long millisecond = System.currentTimeMillis() - second * 1000L;
-        for (JSONObject row : cpuGatherList) {
+        for (JSONObject row : list) {
             if (row.getLong("timestamp") > millisecond) {
                 result.add(row);
             }
@@ -80,7 +89,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         return new Thread() {
             @Override
             public void run() {
-                setName("git-monitor-" + System.currentTimeMillis());
+                setName("fit-monitor-" + System.currentTimeMillis());
                 while (true) {
                     try {
                         Thread.sleep(second * 1000L - 1000);
@@ -88,19 +97,35 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                         System.out.println("stop thread" + this.getName());
                         break;
                     }
-                    JSONObject current = new JSONObject();
-                    CpuInfo cpuInfo = OshiUtil.getCpuInfo();
-                    current.put("total", cpuInfo.getToTal());
-                    current.put("free", cpuInfo.getFree());
-                    current.put("sys", cpuInfo.getSys());
-                    current.put("used", cpuInfo.getUsed());
-                    current.put("user", cpuInfo.getUser());
-                    current.put("wait", cpuInfo.getWait());
-                    current.put("timestamp", System.currentTimeMillis());
-                    current.put("timestampShow", ExecuteNodeUtil.getNow());
-                    cpuGatherList.add(current);
+                    addCpuPoint();
+                    addMemoryPoint();
                 }
             }
         };
+    }
+
+    private static void addCpuPoint() {
+        JSONObject current = new JSONObject();
+        CpuInfo cpuInfo = OshiUtil.getCpuInfo();
+        current.put("total", cpuInfo.getToTal());
+        current.put("free", cpuInfo.getFree());
+        current.put("sys", cpuInfo.getSys());
+        current.put("used", cpuInfo.getUsed());
+        current.put("user", cpuInfo.getUser());
+        current.put("wait", cpuInfo.getWait());
+        current.put("timestamp", System.currentTimeMillis());
+        current.put("timestampShow", ExecuteNodeUtil.getNow());
+        cpuGatherList.add(current);
+    }
+
+    private static void addMemoryPoint() {
+        JSONObject current = new JSONObject();
+        GlobalMemory globalMemory = OshiUtil.getMemory();
+        current.put("total", covertToG(globalMemory.getTotal()));
+        current.put("available", covertToG(globalMemory.getAvailable()));
+        current.put("used", covertToG(globalMemory.getTotal() - globalMemory.getAvailable()));
+        current.put("timestamp", System.currentTimeMillis());
+        current.put("timestampShow", ExecuteNodeUtil.getNow());
+        memoryGatherList.add(current);
     }
 }

@@ -9,7 +9,7 @@ import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.OperatingSystem;
 
-import java.util.List;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 
 /**
  * 获取系统基本信息：依赖oshi实现
@@ -98,7 +98,4 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
 
     }
 
-    private static double covertToG(long processorMaxFreq) {
-        return Math.round(10.0 * processorMaxFreq / 1024 / 1024 / 1024) / 10.0;
-    }
 }

@@ -13,7 +13,7 @@
     &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
 </div>
 
-<h2 style="text-align:center;">FitServer monitor CPU &nbsp;&nbsp;
+<h2 style="text-align:center;">FitServer monitor &nbsp;&nbsp;
     <select style="font-size:1.15rem;" onchange="fetch(this.value)">
         <option value="1">1秒</option>
         <option value="5">5秒</option>
@@ -31,10 +31,17 @@
         <option value="604800">1周</option>
         <option value="2592000">1月</option>
         <option value="31536000">1年</option>
-    </select></h2>
+    </select>
+    <select style="font-size:1.15rem;" onchange="show(this.value)">
+        <option value="cpuChart">CPU(%)</option>
+        <option value="memoryChart">Memory(G)</option>
+    </select> &nbsp;&nbsp;
+    <span id="cpuTotal"></span>
+</h2>
 
 <div>
-    <canvas id="myChart"></canvas>
+    <canvas id="cpuChart"></canvas>
+    <canvas id="memoryChart" style="display:none;"></canvas>
 </div>
 
 <script src="chart-3.9.1.js"></script>
@@ -59,48 +66,74 @@
 </script>
 <script>
 
-    const ctx = document.getElementById('myChart');
+    const cpuChartCanvas = document.getElementById('cpuChart');
+    const memoryChartCanvas = document.getElementById('memoryChart');
 
-    const colorMap = {
+    const cpuColorMap = {
         "free": 'rgb(0, 200, 0)',
         "used": 'rgb(220, 0, 0)',
         "user": 'rgb(120, 0, 0)',
         "sys": 'rgb(150, 100, 0)',
         "wait": 'rgb(200, 0, 50)',
     };
-    function addPoint(labels, datasets, pointData) {
-        for(var i=0; i<labels.length; i++) {
+    const memoryColorMap = {
+        "total": 'rgb(120, 120, 120)',
+        "available": 'rgb(0, 200, 0)',
+        "used": 'rgb(220, 0, 0)',
+    };
+    function addPoint(colorMap, datasets, pointData) {
+        var i=0;
+        for(var color in colorMap) {
             if(datasets[i] == null) {
                 datasets[i] = {};
                 datasets[i].data = [];
             }
-            datasets[i].label = labels[i];
-            datasets[i].data.push(pointData[labels[i]]);
+            datasets[i].label = color;
+            datasets[i].data.push(pointData[color]);
 
-            datasets[i].borderColor = colorMap[labels[i]];
+            datasets[i].borderColor = colorMap[color];
+            i++;
         }
     }
 
-    var myChat;
+    var myCpuChat;
+    var myMemoryChat;
     function fetch(second) {
         var url = "getMonitorData.fit?second=" + second
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
 
-           var data =  {labels:[],datasets:[]};
-           for(var i=0; i<result.cpu.length; i++) {
-               data.labels[i] = result.cpu[i].timestampShow;
-               addPoint(["used", "free", "user", "sys", "wait"], data.datasets, result.cpu[i]);
-           }
+           showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
+           showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
+           document.getElementById("cpuTotal").innerText = result.cpuTotal + "G";
 
-           if(myChat instanceof Chart){
-               myChat.destroy();
-           }
-           myChat = new Chart(ctx, {
-                type: 'line',
-                data: data,
-            });
         });
+    }
+
+    function showChat(chartCanvas, chartObject, points, colorMap) {
+
+       var data =  {labels:[],datasets:[]};
+       for(var i=0; i<points.length; i++) {
+           data.labels[i] = points[i].timestampShow;
+           addPoint(colorMap, data.datasets, points[i]);
+       }
+
+       if(chartObject instanceof Chart){
+           chartObject.destroy();
+       }
+       return new Chart(chartCanvas, {
+            type: 'line',
+            data: data,
+        });
+    }
+
+    function show(domId) {
+        if(domId === 'cpuChart') {
+           document.getElementById('memoryChart').style.display = 'none';
+        } else {
+           document.getElementById('cpuChart').style.display = 'none';
+        }
+        document.getElementById(domId).style.display = '';
     }
 
     fetch(600);
