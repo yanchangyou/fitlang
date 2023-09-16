@@ -15,7 +15,6 @@
 
 <script src="chart-3.9.1.js"></script>
 <script>
-
     var httpRequest = new XMLHttpRequest();
 
     function request(action, url, input, callback) {
@@ -33,9 +32,6 @@
         }
         httpRequest.send(body);
     }
-
-
-
 </script>
 <script>
   const ctx = document.getElementById('myChart');
@@ -60,8 +56,8 @@
         }
     }
 
-    function fetch() {
-        var url = "/monitor/get"
+    function fetch(second) {
+        var url = "getMonitorData.fit?second=" + second
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
 
@@ -78,6 +74,6 @@
         });
     }
 
-    fetch();
+    fetch(600);
 
 </script>
