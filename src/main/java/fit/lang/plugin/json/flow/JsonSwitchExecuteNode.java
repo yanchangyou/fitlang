@@ -2,18 +2,16 @@ package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
+import fit.lang.define.base.*;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.ExecuteNodeEngineConst;
 import fit.lang.ExecuteNodeException;
 import fit.lang.common.flow.SwitchExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeBuildable;
-import fit.lang.define.base.ExecuteNodeInput;
 
 import static fit.lang.ExecuteNodeEngineConst.*;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringField;
 import static fit.lang.plugin.json.ExpressUtil.eval;
 
 /**
@@ -76,5 +74,13 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
                 addCaseNode(caseValue, child);
             }
         }
+    }
+
+    public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
+
+        //动态解析
+        setSwitchField(parseStringField(DEFINE_KEYWORDS_OF_SWITCH_FIELD_NAME, (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData()));
+
+        super.execute(input, output);
     }
 }
