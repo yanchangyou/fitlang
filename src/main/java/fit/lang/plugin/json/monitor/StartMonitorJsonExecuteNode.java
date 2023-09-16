@@ -3,6 +3,7 @@ package fit.lang.plugin.json.monitor;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -70,9 +71,11 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                     current.put("total", cpuInfo.getToTal());
                     current.put("free", cpuInfo.getFree());
                     current.put("sys", cpuInfo.getSys());
+                    current.put("used", cpuInfo.getUsed());
                     current.put("user", cpuInfo.getUser());
                     current.put("wait", cpuInfo.getWait());
                     current.put("timestamp", System.currentTimeMillis());
+                    current.put("timestampShow", ExecuteNodeUtil.getNow());
                     cpuGatherList.add(current);
                 }
             }

@@ -1,0 +1,12 @@
+{
+    "uni": "server",
+    "init": {
+        "uni": "startMonitor",
+        "second": 1
+    },
+    "service": {
+        "/monitor/get": {
+            "uni": "getMonitorData"
+        }
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "description": "monitor cpu",
+    "uni": "startMonitor",
+    "second": 1
+}

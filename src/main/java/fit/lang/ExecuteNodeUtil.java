@@ -34,6 +34,19 @@ public class ExecuteNodeUtil {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
     }
 
+    /**
+     * 获取时间戳，yyyy-MM-dd HH:mm:ss
+     *
+     * @return
+     */
+    public static String getNow() {
+        return getNow("yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getNow(String format) {
+        return new SimpleDateFormat(format).format(new Date());
+    }
+
     public static void setExecuteNodeCommonAttribute(ExecuteNode executeNode, JSONObject nodeDefine) {
         String[] fields = new String[]{ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_UNI, ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_NAME};
         for (String field : fields) {
