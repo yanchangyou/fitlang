@@ -12,7 +12,7 @@
         "child": [
             {
                 "uni": "startMonitor",
-                "second": 2
+                "second": 5
             },
             {
                 "uni": "cloudServer",

@@ -2,7 +2,7 @@
     "uni": "server",
     "init": {
         "uni": "startMonitor",
-        "second": 2
+        "second": 5
     },
     "service": {
         "/monitor/get": {
