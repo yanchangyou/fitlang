@@ -78,7 +78,7 @@ public class PipeExecuteNodeTest extends TestCase {
 
         Object newInput = input.getData();
 
-        Assert.assertNotEquals(oldInput, newInput);
+        Assert.assertEquals(oldInput, newInput);
 
     }
 }

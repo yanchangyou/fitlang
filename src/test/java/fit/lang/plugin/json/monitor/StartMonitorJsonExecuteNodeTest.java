@@ -10,7 +10,7 @@ public class StartMonitorJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
 
-        String flow = "{'uni':'monitor','second':1}";
+        String flow = "{'uni':'startMonitor','second':1}";
 
         ExecuteJsonNodeUtil.executeCode(flow);
 
