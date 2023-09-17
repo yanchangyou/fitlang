@@ -12,7 +12,8 @@
         "child": [
             {
                 "uni": "startMonitor",
-                "second": 5
+                "second": 5,
+                "pushUrl": "http://127.0.0.1:11111/demo/monitor/receiveClientMonitorData.fit?clientId=localhost"
             },
             {
                 "uni": "cloudServer",

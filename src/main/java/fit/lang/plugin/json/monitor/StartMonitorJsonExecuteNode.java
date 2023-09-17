@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.monitor;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONArray;
@@ -9,6 +10,7 @@ import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.filterListByMaxLength;
+import static fit.lang.plugin.json.monitor.PushClientMonitorDataJsonExecuteNode.pushMonitorData;
 
 /**
  * 简单监控器
@@ -28,6 +31,8 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
     static List<JSONObject> cpuGatherList = new ArrayList<>();
 
     static List<JSONObject> memoryGatherList = new ArrayList<>();
+
+    static String pushUrl;
 
     static Thread thread;
 
@@ -72,6 +77,8 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
 
         String secondText = parseStringField("second", input);
 
+        pushUrl = parseStringField("pushUrl", input);
+
         int second = 5;
         if (secondText != null && NumberUtil.isInteger(secondText)) {
             second = Integer.parseInt(secondText);
@@ -106,14 +113,25 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                         System.out.println("stop thread" + this.getName());
                         break;
                     }
-                    addCpuPoint();
-                    addMemoryPoint();
+                    JSONObject cpuPoint = buildCpuPoint();
+                    cpuGatherList.add(cpuPoint);
+                    JSONObject memoryPoint = buildMemoryPoint();
+                    memoryGatherList.add(memoryPoint);
+
+                    if (StrUtil.isNotBlank(pushUrl)) {
+                        pushMonitorData(pushUrl, null, new JSONObject());
+                    }
                 }
             }
         };
     }
 
-    private static void addCpuPoint() {
+    static String getCpuTotal() {
+        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
+        return centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G";
+    }
+
+    static JSONObject buildCpuPoint() {
         JSONObject current = new JSONObject();
         CpuInfo cpuInfo = OshiUtil.getCpuInfo();
         current.put("total", cpuInfo.getToTal());
@@ -124,10 +142,10 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         current.put("wait", cpuInfo.getWait());
         current.put("timestamp", System.currentTimeMillis());
         current.put("timestampShow", ExecuteNodeUtil.getNow());
-        cpuGatherList.add(current);
+        return current;
     }
 
-    private static void addMemoryPoint() {
+    static JSONObject buildMemoryPoint() {
         JSONObject current = new JSONObject();
         GlobalMemory globalMemory = OshiUtil.getMemory();
         current.put("total", covertToG(globalMemory.getTotal()));
@@ -135,6 +153,6 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         current.put("used", covertToG(globalMemory.getTotal() - globalMemory.getAvailable()));
         current.put("timestamp", System.currentTimeMillis());
         current.put("timestampShow", ExecuteNodeUtil.getNow());
-        memoryGatherList.add(current);
+        return current;
     }
 }
