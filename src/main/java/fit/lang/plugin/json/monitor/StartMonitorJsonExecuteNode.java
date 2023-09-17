@@ -3,6 +3,7 @@ package fit.lang.plugin.json.monitor;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -30,15 +31,23 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
 
     static Thread thread;
 
-    public static List<JSONObject> getCpuGatherList(int second) {
-        return getCpuGatherList(cpuGatherList, second);
+    public static List<JSONObject> getGatherList(int second) {
+        return getGatherList(cpuGatherList, second);
     }
 
     public static List<JSONObject> getMemoryGatherList(int second) {
-        return getCpuGatherList(memoryGatherList, second);
+        return getGatherList(memoryGatherList, second);
     }
 
-    public static List<JSONObject> getCpuGatherList(List<JSONObject> list, int second) {
+    public static List<JSONObject> getGatherList(JSONArray array, int second) {
+        List<JSONObject> list = new ArrayList<>(array.size());
+        for (Object item : array) {
+            list.add((JSONObject) item);
+        }
+        return getGatherList(list, second);
+    }
+
+    public static List<JSONObject> getGatherList(List<JSONObject> list, int second) {
         if (second < 0) {
             second = 0;
         }

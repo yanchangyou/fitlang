@@ -16,7 +16,7 @@ public class StartMonitorJsonExecuteNodeTest extends TestCase {
 
         Thread.sleep(3 * 1000);
 
-        List<JSONObject> cupGathers = StartMonitorJsonExecuteNode.getCpuGatherList(10);
+        List<JSONObject> cupGathers = StartMonitorJsonExecuteNode.getGatherList(10);
 
         System.out.println(cupGathers);
 
