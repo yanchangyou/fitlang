@@ -16,13 +16,23 @@ public class PipeExecuteNode extends AbstractExecuteNode {
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 
+        Object lastOutputData = null;
         for (int i = 0; i < childNodes.size(); i++) {
             ExecuteNode childNode = childNodes.get(i);
-            if (i > 0) {
-                input.setNodeData(output.getNodeData());
+            ExecuteNodeInput itemInput;
+            ExecuteNodeOutput itemOutput;
+            if (i == 0) {
+                itemInput = input;
+            } else {
+                itemInput = input.createInput();
+                itemInput.getNodeData().setData(lastOutputData);
             }
-            childNode.executeAndNext(input, output);
+            itemOutput = output.createOutput();
+            childNode.executeAndNext(itemInput, itemOutput);
+            lastOutputData = itemOutput.getNodeData().getData();
         }
+
+        output.getNodeData().setData(lastOutputData);
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
 
