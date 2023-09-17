@@ -76,10 +76,10 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
         Object value;
         String[] fromParts = from.split("\\[]");
         String[] toParts = to.split("\\[]");
-        JSONArray array = (JSONArray) JSONPath.eval(input.getData(), fromParts[0]);
+        List array = (List) JSONPath.eval(input.getData(), fromParts[0]);
 
         if (array == null) {
-            JSONPath.set(output.getData(), to.split("\\[]")[0], (Object)null);
+            JSONPath.set(output.getData(), to.split("\\[]")[0], (Object) null);
             return;
         }
 
@@ -158,7 +158,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
             String[] parts = path.split("\\.");
             field = parts[parts.length - 1];
         }
-        String valueString = value == null ? "null":value.toString();
+        String valueString = value == null ? "null" : value.toString();
         if (valueMapping != null && valueMapping.containsKey(field)) {
             JSONObject mapping = valueMapping.getJSONObject(field);
             if (mapping != null && mapping.containsKey(valueString)) {
