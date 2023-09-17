@@ -520,6 +520,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                String clientIP = getHttpClientIp(request);
 
                 JSONObject serviceDefineCopy = serviceDefine.clone();
                 JSONObject contextParam = new JSONObject();
@@ -529,6 +530,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     JSONObject input = buildInput(request, serviceDefineCopy);
                     serviceDefineCopy.put("input", input);
                     JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
+                    jsonExecuteContext.setAttribute("clientIP", clientIP);
+
                     String output = ExecuteJsonNodeUtil.executeCode(serviceDefineCopy, contextParam, jsonExecuteContext);
                     if (isWebNode(serviceDefineCopy)) {
                         JSONObject header = serviceDefineCopy.getJSONObject("header");
