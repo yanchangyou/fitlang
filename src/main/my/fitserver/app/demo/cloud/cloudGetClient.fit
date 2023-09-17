@@ -1,0 +1,18 @@
+{
+    "_flag": "_needFormatJsonInConsole",
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "cloudGetClient",
+            "clientId": "127.0.0.1"
+        },
+        {
+            "uni": "replace",
+            "json": {
+                "clientId": "${clientId}",
+                "sessionId": "${client.clientId}",
+                "connectTime": "${client.connectTime}"
+            }
+        }
+    ]
+}
