@@ -1,6 +1,6 @@
 ## 介绍
 
-fit语言是一门低代码编程语言，兼具开发人员友好和工具处理友好。
+fit语言是一门轻量级编程语言，兼具开发人员友好和工具处理友好。
 
 使用AST+JSON来编写代码，并且JSON是唯一的数据类型，插件式设计方便扩展节点功能。
 
@@ -15,23 +15,21 @@ fit语言是一门低代码编程语言，兼具开发人员友好和工具处�
 }
 
 ```
-
 ### 说明
-
 - hello.fit 后缀以fit结尾，语言插件继承IDEA自带的JSON语言，使用JSON的语法校验、高亮、格式等
-- input：入参定义
 - uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一个实现类
+- input：入参json
 
 ## 执行
-
 编辑器里面，点击右键，选择【Run FitLang】执行，代码执行完将输出
 
-`{"message":"hello, world!"}`
+```
+{"message":"hello, world!"}
+```
 
 ### 节点列表
 
-实用节点
-
+#### 实用节点
 - hello: hello world demo
 - echo: 原样返回入参
 - add：支持json相加
@@ -40,46 +38,68 @@ fit语言是一门低代码编程语言，兼具开发人员友好和工具处�
 - removeEmptyField：移除空字段
 - print：控制台打印
 - sleep：流程休眠节点
+- mix: 混入json对象
+- replace: 替换结果输出
+- mix: 混入json对象
+  -mixNode: 混入节点执行，用于嵌套字段场景
+- execute: 执行入参传递的流程
 
-流程节点（有child子节点）
-
+#### 流程节点（有child子节点）
 - sequence：顺序执行节点
 - pipe：管道执行节点
 - foreach：遍历json数组字段节点
-- loop：循环执行节点，looptTimes制定执行次数
+- loop：循环执行节点，loopTimes制定执行次数
 - switch：分支执行节点，switchField指定分支字段
 
-工具节点 （封装hutool）
+#### Web节点
+- http：支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete
+- server：服务端节点
+- proxy：代理节点
+- web: 配置web参数，响应头等
 
-- http: 实现http请求
-- server: 封装http server服务
-- proxy: 实现代理服务
+#### 云节点
+- cloudServer: 启动web socket
+- cloudClient: 连接web socket
+
+#### Excel节点
+- readExcel：读取Excle
+- writeExcel：写入Excle
+
+#### 监控节点
+- startMonitor：启动监控
+- getMonitorData：获取监控数据：CPU和Memory
+- getClientMonitorData: 获取单个客户端监控数据
+- receiveClientMonitorData: 接收客户端监控数据
+- pushClientMonitorData: 推送监控数据
+- getMonitorClient: 获取监控客户端列表
+
+#### 云节点
+- cloudServer：server端
+- cloudClient：client端
 
 ## 应用场景
-
 - mockServer：mock json返回
 - 代理透传
 - 静态文件服务器
 - 微服务
 - http服务调用
+- 自动化测试
+- 服务器简单监控
 
 ## 插件
-
 插件审核通过后，遇到.fit结尾文件时会提示下载，预览版需要下载zip包，然后在IDEA中按照，使用方式如下
 
 [更多插件相关](https://plugins.jetbrains.com/plugin/22593-fitlang/plugin)
 
-![](https://plugins.jetbrains.com/files/22593/screenshot_cc167984-8557-41da-8211-36eeb5864633)
+![](https://plugins.jetbrains.com/files/22593/58337-page/fbf57e79-c760-4055-8252-7e47adedb068)
 
 ## demo
-
 - [demo-hello](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-hello)
 - [demo-mock](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-mock)
 - [demo-server](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-server)
 - [github-all-demo](https://github.com/yanchangyou/fitlang-demo)
 
 ## 后续计划
-
 - 封装更多hutool工具
 - 自动化测试
 - 性能测试
