@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.define;
 
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
@@ -47,6 +48,16 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
      */
     protected String parseStringField(String fieldName, JsonExecuteNodeInput input) {
         return ExecuteJsonNodeUtil.parseStringField(fieldName, input, nodeJsonDefine);
+    }
+
+    protected int parseIntField(String fieldName, JsonExecuteNodeInput input, int defaultValue) {
+        String resultText = parseStringField("fieldName", input);
+
+        int result = defaultValue;
+        if (resultText != null && NumberUtil.isInteger(resultText)) {
+            result = Integer.parseInt(resultText);
+        }
+        return result;
     }
 
 }
