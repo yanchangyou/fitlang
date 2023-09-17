@@ -57,32 +57,31 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         }
 
         JSONObject cpuPoint = input.getJsonObject("cpuPoint");
-        if (cpuPoint != null) {
+        JSONObject memoryPoint = input.getJsonObject("memoryPoint");
+
+        if (cpuPoint != null && !cpuPoint.isEmpty() && memoryPoint != null && !memoryPoint.isEmpty()) {
             //补充缺失的数据
             if (!cpuPoint.containsKey("timestamp")) {
                 cpuPoint.put("timestamp", System.currentTimeMillis());
                 cpuPoint.put("timestampShow", getNow());
             }
             client.getJSONArray("cpuPoints").add(cpuPoint);
-        } else {
-            client.put("message", "cpuPoint data is empty!");
-        }
 
-        JSONObject memoryPoint = input.getJsonObject("memoryPoint");
-        if (memoryPoint != null) {
             //补充缺失的数据
             if (!memoryPoint.containsKey("timestamp")) {
                 memoryPoint.put("timestamp", System.currentTimeMillis());
                 memoryPoint.put("timestampShow", getNow());
             }
             client.getJSONArray("memoryPoints").add(memoryPoint);
+
+            client.put("cpuTotal", cpuTotal);
+
         } else {
-            client.put("message", "memoryPoint data is empty!");
+            client.put("message", "cpuPoint or memoryPoint data is empty!");
         }
 
         client.put("clientId", clientId);
         client.put("clientIp", clientIp);
-        client.put("cpuTotal", cpuTotal);
 
         output.setData(client);
     }

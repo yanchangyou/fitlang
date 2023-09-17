@@ -59,7 +59,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         List<JSONObject> result = new ArrayList<>();
         long millisecond = System.currentTimeMillis() - second * 1000L;
         for (JSONObject row : list) {
-            if (row.getLong("timestamp") > millisecond) {
+            if (row.getLong("timestamp") != null && row.getLong("timestamp") > millisecond) {
                 result.add(row);
             }
         }
