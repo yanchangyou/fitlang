@@ -90,8 +90,12 @@ writeExcel: Write to Excel<br/>
 <br/>
 
 Monitoring nodes<br/>
-startMonitor: Start monitoring<br/>
-getMonitorData: Get monitoring data: CPU and Memory<br/>
+startMonitor: start monitoring<br/>
+getMonitorData: get monitoring data: CPU and Memory<br/>
+getClientMonitorData: get client monitor data<br/>
+receiveClientMonitorData: receive client monitor data<br/>
+pushClientMonitorData: push client monitor data<br/>
+getMonitorClient: get monitor client list<br/>
 <br/>
 <br/>
 
@@ -176,6 +180,10 @@ writeExcel：写入Excle<br/>
 监控节点<br/>
 startMonitor：启动监控<br/>
 getMonitorData：获取监控数据：CPU和Memory<br/>
+getClientMonitorData: 获取单个客户端监控数据<br/>
+receiveClientMonitorData: 接收客户端监控数据<br/>
+pushClientMonitorData: 推送监控数据<br/>
+getMonitorClient: 获取监控客户端列表<br/>
 
 <br/>
 云节点<br/>
