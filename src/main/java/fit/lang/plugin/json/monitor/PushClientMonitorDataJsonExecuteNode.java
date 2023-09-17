@@ -18,10 +18,10 @@ public class PushClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         String clientId = parseStringField("clientId", input);
-        JSONObject pushData = pushMonitorData(nodeJsonDefine.get("pushUrl"), clientId, input.getData());
-        pushData.put("pushUrl", nodeJsonDefine.get("pushUrl"));
+        JSONObject pushResult = pushMonitorData(nodeJsonDefine.get("pushUrl"), clientId, input.getData());
+        pushResult.put("pushUrl", nodeJsonDefine.get("pushUrl"));
 
-        output.setData(pushData);
+        output.setData(pushResult);
     }
 
     public static JSONObject pushMonitorData(Object pushUrl, String clientId, JSONObject pushData) {
@@ -41,7 +41,7 @@ public class PushClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
     static JSONObject pushMonitorData(String pushUrl, String clientId, JSONObject pushData) {
         JSONObject pushOutput = pushMonitorData(new String[]{pushUrl}, clientId, pushData);
         pushOutput.put("pushResult", pushOutput.getJSONArray("pushResult").get(0));
-        return pushData;
+        return pushOutput;
     }
 
     static JSONObject pushMonitorData(String[] pushUrls, String clientId, JSONObject pushData) {

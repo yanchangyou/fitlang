@@ -125,24 +125,24 @@ public class ExecuteJsonNodeUtil {
         nodeContext.setAttribute("input", input);
         nodeContext.setAttribute("nodeDefine", flow);
 
-        JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
+        JsonExecuteNodeOutput nodeOutput = new JsonExecuteNodeOutput(nodeContext);
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
 
         if (contextParam != null && !contextParam.isEmpty()) {
-            nodeInput.getNodeContext().getAllAttribute().putAll(contextParam);
+            nodeContext.getAllAttribute().putAll(contextParam);
         }
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
-        executeNode.execute(nodeInput, output);
+        executeNode.execute(nodeInput, nodeOutput);
 
         String rawField = flow.getString("rawField");
         if (isWebNode(flow) && rawField != null) {
-            Object returnValue = output.getData().get(rawField);
+            Object returnValue = nodeOutput.getData().get(rawField);
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return output.getData().toJSONString();
+        return nodeOutput.getData().toJSONString();
     }
 
     /**
@@ -382,6 +382,11 @@ public class ExecuteJsonNodeUtil {
         String fieldValue = input.getString(fieldName);
         if (StrUtil.isBlank(fieldValue)) {
             fieldValue = nodeJsonDefine.getString(fieldName);
+        }
+        //尝试从上下文获取
+        if (StrUtil.isBlank(fieldValue) && input.getNodeContext().getAttribute(fieldName) != null) {
+            //TODO toString
+            fieldValue = input.getNodeContext().getAttribute(fieldName).toString();
         }
         return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
     }
