@@ -64,6 +64,17 @@
         httpRequest.send(body);
     }
 
+    var urlParam = {};
+    var pageQuery = window.location.search;
+    if(pageQuery.indexOf("?")>-1) {
+        pageQuery = pageQuery.substr(1);
+        var parts = pageQuery.split("&");
+        for(var i=0; i<parts.length; i++) {
+            var items = parts[i].split("=");
+            urlParam[items[0]] = items[1];
+        }
+    }
+
 </script>
 <script>
 
@@ -101,6 +112,9 @@
     var myMemoryChat;
     function fetch(second) {
         var url = "getMonitorData.fit?second=" + second
+        if(urlParam['clientId']) {
+           url = "getCloudClientMonitorData.fit?clientId=" + urlParam['clientId'];
+        }
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
 

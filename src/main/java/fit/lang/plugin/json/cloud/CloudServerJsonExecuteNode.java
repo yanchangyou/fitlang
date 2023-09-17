@@ -122,8 +122,12 @@ public class CloudServerJsonExecuteNode extends JsonExecuteNode {
         return clientMap;
     }
 
-    public static Collection<Object> getSessions() {
+    public static Collection getSessions() {
         return clientMap.values();
+    }
+
+    public static JSONObject getSession(String clientId) {
+        return clientMap.getJSONObject(clientId);
     }
 
 }

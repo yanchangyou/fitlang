@@ -1,43 +1,63 @@
 {
-    "uni": "pipe",
+    "uni": "loop",
+    "loopTimes": 100,
     "child": [
         {
-            "uni": "mixNode",
-            "json": {
-                "clientInfo": {
-                    "uni": "mix",
+            "uni": "pipe",
+            "child": [
+                {
+                    "uni": "mixNode",
                     "json": {
-                        "clientType": "java"
+                        "userInfo": {
+                            "uni": "mix",
+                            "json": {
+                                "userName": "coder"
+                            }
+                        },
+                        "clientInfo": {
+                            "uni": "mix",
+                            "json": {
+                                "clientType": "java"
+                            }
+                        },
+                        "systemInfo": {
+                            "description": "system info node",
+                            "uni": "systemInfo",
+                            "shareFields": [
+                                "computerManufacturer",
+                                "computerModel",
+                                "processorName",
+                                "processorPhysicalCount",
+                                "processorLogicalCount",
+                                "processorMaxFreq",
+                                "memoryTotal",
+                                "memoryAvailable",
+                                "osManufacturer",
+                                "osFamily",
+                                //                        "osVersion",
+                                "osBit"
+                            ]
+                        },
+                        "monitor": {
+                            "uni": "getMonitorData",
+                            "second": 600
+                        }
                     }
                 },
-                "systemInfo": {
-                    "description": "system info node",
-                    "uni": "systemInfo",
-                    "shareFields": [
-                        "computerManufacturer",
-                        "computerModel",
-                        "processorName",
-                        "processorPhysicalCount",
-                        "processorLogicalCount",
-                        "processorMaxFreq",
-                        "memoryTotal",
-                        "memoryAvailable",
-                        "osManufacturer",
-                        "osFamily",
-//                        "osVersion",
-                        "osBit"
-                    ]
+                {
+                    "uni": "cloudClient",
+                    "cloudServer": "ws://127.0.0.1:20000",
+                    "debugMode": true,
+                    "input": {
+                        "name": "coder",
+                        "sayHello": "hello, everyone!"
+                    }
+                },
+                {
+                    "uni": "sleep",
+                    "second": 5
                 }
-            }
-        },
-        {
-            "uni": "cloudClient",
-            "cloudServer": "ws://127.0.0.1:20000",
-            "debugMode": true,
-            "input": {
-                "name": "coder",
-                "sayHello": "hello, everyone!"
-            }
+            ]
         }
     ]
 }

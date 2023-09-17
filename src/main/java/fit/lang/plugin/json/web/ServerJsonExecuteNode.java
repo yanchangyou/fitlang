@@ -455,10 +455,22 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                Collection<Object> sessionList = CloudServerJsonExecuteNode.getSessions();
+
+                String clientId = request.getParam("clientId");
+
                 JSONObject info = new JSONObject();
-                info.put("sessions", sessionList);
-                info.put("onlineCount", sessionList.size());
+                if (StrUtil.isNotBlank(clientId)) {
+                    JSONObject session = CloudServerJsonExecuteNode.getSession(clientId);
+                    info.put("session", session);
+                    info.put("clientId", clientId);
+                    if (session == null) {
+                        info.put("message", "clientId not existed!");
+                    }
+                } else {
+                    Collection sessionList = CloudServerJsonExecuteNode.getSessions();
+                    info.put("onlineCount", sessionList.size());
+                    info.put("sessions", sessionList);
+                }
                 responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
             }
         });

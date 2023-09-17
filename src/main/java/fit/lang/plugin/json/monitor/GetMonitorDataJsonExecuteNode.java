@@ -1,6 +1,5 @@
 package fit.lang.plugin.json.monitor;
 
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -18,15 +17,10 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String secondText = parseStringField("second", input);
-
-        int second = 600;
-        if (secondText != null && NumberUtil.isInteger(secondText)) {
-            second = Integer.parseInt(secondText);
-        }
+        int second = parseIntField("second", input, 500);
 
         JSONObject result = new JSONObject();
-        result.put("cpuPoints", StartMonitorJsonExecuteNode.getCpuGatherList(second));
+        result.put("cpuPoints", StartMonitorJsonExecuteNode.getGatherList(second));
         result.put("memoryPoints", StartMonitorJsonExecuteNode.getMemoryGatherList(second));
         CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
         result.put("cpuTotal", centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G");
