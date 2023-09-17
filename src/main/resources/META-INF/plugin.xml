@@ -8,7 +8,7 @@
     <br/>
     <br/>
 <p>
-Fit language is a low code programming language that is developer friendly and tool friendly.
+Fit language is a lightweight programming language that is developer friendly and tool friendly.
 Use AST + JSON to write code, and JSON is the only data type, making plug-in design convenient for extending node functionality.
 </p>
 <br/>
@@ -98,7 +98,7 @@ getMonitorData: Get monitoring data: CPU and Memory<br/>
 中文：<br/>
 <br/>
 <p>
-fit语言是一门低代码编程语言，开发人员友好和工具处理友好。<br/>
+fit语言是一门轻量级编程语言，开发人员友好和工具处理友好。<br/>
 使用AST+JSON来编写代码，并且JSON是唯一的数据类型，插件式设计方便扩展节点功能。<br/>
 </p>
 <br/>
