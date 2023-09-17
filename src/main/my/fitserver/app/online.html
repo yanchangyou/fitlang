@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<center>
+    <div style="text-align:right;margin-right:50px;">
+        &nbsp;<a target="_blank" href="/">root</a>
+        &nbsp;<a target="_blank" href="/_api">api</a>
+        &nbsp;<a target="_blank" href="/_cloud?_jsonFormat=true">online</a>
+        &nbsp;<a target="_blank" href="/demo/monitor/">monitor</a>
+        &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/fitlang">doc</a>
+        &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
+    </div>
+    <h2>FitServer online users</h2>
+
+    <div id="onlineUsers">
+
+    </div>
+
+
+</center>
+<script type="text/javascript">
+
+    function send(message) {
+        if (!window.WebSocket) {
+            return;
+        }
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.send(message);
+        }else {
+            alert("WebSocket连接没有建立成功!");
+        }
+    }
+
+    var httpRequest = new XMLHttpRequest();
+
+    function request(action, url, input, callback) {
+        httpRequest.open(action, url, true);
+        httpRequest.onreadystatechange = function(message) {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                callback(httpRequest.responseText);
+            }
+        };
+        var body = null;
+        if(typeof(input)==="string") {
+            body = input;
+        } else if(typeof(input)==="object") {
+            body = JSON.stringify(input);
+        }
+        httpRequest.send(body);
+    }
+    var url = "/demo/cloud/cloudGetClient.fit";
+    request("POST", url, {}, function(body) {
+        var result = JSON.parse(body);
+        for(var i=0; i<result.clients.length; i++) {
+            var aDom = document.createElement('a');
+            aDom.href = "/demo/monitor/?clientId="+result.clients[i].clientId;
+            aDom.text = result.clients[i].clientId +"  ("+ result.clients[i].connectTime+")";
+            document.getElementById('onlineUsers').appendChild(aDom);
+            document.getElementById('onlineUsers').appendChild(document.createElement('br'));
+        }
+    });
+
+</script>
+
+</body>
+</html>
