@@ -118,7 +118,8 @@
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
            if(result.message) {
-                alert(result.message);
+                alert(result.mssage);
+                return;
            }
 
            myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
