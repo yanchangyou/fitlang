@@ -54,7 +54,7 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 - 服务器简单监控
 
 ### 中间件
-FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomcat，SpringBoot，网站部署在FitServer上： http://fit.321zou.com
+FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomcat，SpringBoot，网站部署在FitServer上： [http://fit.321zou.com](fit.321zou.com)
 
 ## 后续计划
 - 封装更多hutool工具
