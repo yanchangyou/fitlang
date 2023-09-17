@@ -33,6 +33,7 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
                 result.put("cpuPoints", getGatherList(client.getJSONArray("cpuPoints"), second));
                 result.put("memoryPoints", getGatherList(client.getJSONArray("memoryPoints"), second));
                 result.put("clientInfo", client.get("clientInfo"));
+                result.put("cpuTotal", client.get("cpuTotal"));
             }
         } else {
             result.put("message", "clientId is required!");
