@@ -1,19 +1,22 @@
 {
     "uni": "server",
     "port": 11111,
-//    "disableInnerService": [
-//        "_shutdown",
-//        "_stop",
-//        "_reload",
-//        "_cloud"
-//    ],
+    //    "disableInnerService": [
+    //        "_shutdown",
+    //        "_stop",
+    //        "_reload",
+    //        "_cloud"
+    //    ],
     "init": {
         "uni": "sequence",
         "child": [
             {
                 "uni": "startMonitor",
                 "second": 5,
-                "pushUrl": "http://127.0.0.1:11111/demo/monitor/receiveClientMonitorData.fit?clientId=localhost"
+                "pushUrl": [
+                    "http://127.0.0.1:11111/demo/monitor/receiveClientMonitorData.fit?clientId=localhost",
+                    "http://coderonline.321zou.com:11111/demo/monitor/receiveClientMonitorData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e71"
+                ]
             },
             {
                 "uni": "cloudServer",

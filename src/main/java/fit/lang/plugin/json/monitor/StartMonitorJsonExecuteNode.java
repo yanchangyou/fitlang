@@ -32,7 +32,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
 
     static List<JSONObject> memoryGatherList = new ArrayList<>();
 
-    static String pushUrl;
+    static Object pushUrl;
 
     static Thread thread;
 
@@ -77,7 +77,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
 
         String secondText = parseStringField("second", input);
 
-        pushUrl = parseStringField("pushUrl", input);
+        pushUrl = nodeJsonDefine.get("pushUrl");
 
         int second = 5;
         if (secondText != null && NumberUtil.isInteger(secondText)) {
@@ -118,7 +118,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                     JSONObject memoryPoint = buildMemoryPoint();
                     memoryGatherList.add(memoryPoint);
 
-                    if (StrUtil.isNotBlank(pushUrl)) {
+                    if (pushUrl instanceof JSONArray || pushUrl instanceof String) {
                         pushMonitorData(pushUrl, null, new JSONObject());
                     }
                 }

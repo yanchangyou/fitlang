@@ -1,0 +1,4 @@
+{
+    "uni": "pushClientMonitorData",
+    "pushUrl": "http://coderonline.321zou.com:11111/demo/monitor/receiveClientMonitorData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e71"
+}
