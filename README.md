@@ -91,7 +91,7 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 
 [更多插件相关](https://plugins.jetbrains.com/plugin/22593-fitlang/plugin)
 
-![](https://plugins.jetbrains.com/files/22593/58337-page/fbf57e79-c760-4055-8252-7e47adedb068)
+![](https://plugins.jetbrains.com/files/22593/screenshot_cc167984-8557-41da-8211-36eeb5864633)
 
 ## demo
 - [demo-hello](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-hello)
