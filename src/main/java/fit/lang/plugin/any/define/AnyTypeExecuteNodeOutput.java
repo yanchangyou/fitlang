@@ -33,4 +33,9 @@ public class AnyTypeExecuteNodeOutput implements ExecuteNodeOutput {
     public void setNodeData(ExecuteNodeData executeNodeData) {
         setData((AnyTypeExecuteNodeData) executeNodeData);
     }
+
+    @Override
+    public ExecuteNodeOutput createOutput() {
+        return new AnyTypeExecuteNodeOutput(this.nodeContext);
+    }
 }

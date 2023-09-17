@@ -21,4 +21,10 @@ public interface ExecuteNodeOutput {
 
     void setNodeData(ExecuteNodeData executeNodeData);
 
+    /**
+     * 创建出参
+     * @return
+     */
+    ExecuteNodeOutput createOutput();
+
 }

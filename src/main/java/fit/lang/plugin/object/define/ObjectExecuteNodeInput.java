@@ -32,4 +32,9 @@ public class ObjectExecuteNodeInput implements ExecuteNodeInput {
     public void setNodeData(ExecuteNodeData executeNodeData) {
         this.data = (ObjectExecuteNodeData) executeNodeData;
     }
+
+    @Override
+    public ExecuteNodeInput createInput() {
+        return new ObjectExecuteNodeInput(this.nodeContext);
+    }
 }

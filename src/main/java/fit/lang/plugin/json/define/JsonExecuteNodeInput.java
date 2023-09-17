@@ -32,4 +32,9 @@ public class JsonExecuteNodeInput extends JsonExecuteNodePut implements ExecuteN
         }
         return param;
     }
+
+    @Override
+    public ExecuteNodeInput createInput() {
+        return new JsonExecuteNodeInput(this.nodeContext);
+    }
 }

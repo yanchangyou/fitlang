@@ -36,6 +36,11 @@ public class MapExecuteNodeOutput implements ExecuteNodeOutput {
         setNodeData((MapExecuteNodeData) executeNodeData);
     }
 
+    @Override
+    public ExecuteNodeOutput createOutput() {
+        return new MapExecuteNodeOutput(this.nodeContext);
+    }
+
     public void setNodeData(MapExecuteNodeData nodeData) {
         this.nodeData = nodeData;
     }

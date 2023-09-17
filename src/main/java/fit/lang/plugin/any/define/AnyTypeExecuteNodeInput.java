@@ -11,7 +11,7 @@ public class AnyTypeExecuteNodeInput implements ExecuteNodeInput {
     AnyTypeExecuteContext nodeContext;
 
     public AnyTypeExecuteNodeInput(AnyTypeExecuteContext nodeContext) {
-        this.nodeContext =nodeContext;
+        this.nodeContext = nodeContext;
     }
 
     @Override
@@ -31,5 +31,10 @@ public class AnyTypeExecuteNodeInput implements ExecuteNodeInput {
     @Override
     public void setNodeData(ExecuteNodeData executeNodeData) {
         this.data = (AnyTypeExecuteNodeData) executeNodeData;
+    }
+
+    @Override
+    public ExecuteNodeInput createInput() {
+        return new AnyTypeExecuteNodeInput(this.nodeContext);
     }
 }

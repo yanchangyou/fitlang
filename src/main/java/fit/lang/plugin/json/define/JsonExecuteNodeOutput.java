@@ -14,4 +14,9 @@ public class JsonExecuteNodeOutput extends JsonExecuteNodePut implements Execute
     public JsonExecuteNodeOutput(JsonExecuteNodeData data, JsonExecuteContext nodeContext) {
         super(data, nodeContext);
     }
+
+    @Override
+    public ExecuteNodeOutput createOutput() {
+        return new JsonExecuteNodeOutput(this.nodeContext);
+    }
 }

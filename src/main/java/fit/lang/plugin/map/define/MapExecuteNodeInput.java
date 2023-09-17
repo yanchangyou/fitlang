@@ -36,6 +36,11 @@ public class MapExecuteNodeInput implements ExecuteNodeInput {
         setNodeData((MapExecuteNodeData) executeNodeData);
     }
 
+    @Override
+    public ExecuteNodeInput createInput() {
+        return new MapExecuteNodeInput(this.nodeContext);
+    }
+
     public void setNodeData(MapExecuteNodeData nodeData) {
         this.nodeData = nodeData;
     }
