@@ -106,7 +106,7 @@ public class CloudWebSocketServerHandler extends ChannelInboundHandlerAdapter {
     }
 
     private static String getClientId(ChannelHandlerContext ctx) {
-        return ((InetSocketAddress) ctx.channel().remoteAddress()).getHostName();
+        return ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
     }
 
     /**
