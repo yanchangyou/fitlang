@@ -222,7 +222,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.5.3 add node: getCloudClientMonitorData and support show client monitor data</li>
+            <li>0.5.4 add node: getCloudClientMonitorData and support show client monitor data</li>
             <li>0.5.2 monitor node support memory</li>
             <li>0.5.1 monitor node support second param and refine gui</li>
             <li>0.5.0 add node: monitor</li>
