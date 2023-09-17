@@ -57,7 +57,7 @@
         for(var i=0; i<result.clients.length; i++) {
             var aDom = document.createElement('a');
             aDom.href = "/demo/monitor/?clientId="+result.clients[i].clientId;
-            aDom.text = result.clients[i].clientId + "  ("+ result.clients[i].clientIp+")" + "  ("+ result.clients[i].startTime+")";
+            aDom.text = ""+ result.clients[i].clientIp+"" + "　　("+ result.clients[i].startTime+")";
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
         }
