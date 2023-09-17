@@ -28,7 +28,7 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = new JSONObject();
 
         String clientId = parseStringField("clientId", input);
-        String clientIP = parseStringField("clientIP", input);
+        String clientIp = parseStringField("clientIp", input);
 
         if (StrUtil.isBlank(clientId)) {
             result.put("message", "clientId is empty!");
@@ -49,7 +49,7 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
 
             JSONObject onlyClientInfo = new JSONObject();
             onlyClientInfo.put("clientId", clientId);
-            onlyClientInfo.put("clientIP", clientIP);
+            onlyClientInfo.put("clientIp", clientIp);
             onlyClientInfo.put("startTime", getNow());
             onlyClientInfo.put("clientInfo", clientInfo);
 
@@ -81,7 +81,7 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         }
 
         client.put("clientId", clientId);
-        client.put("clientIP", clientIP);
+        client.put("clientIp", clientIp);
         client.put("cpuTotal", cpuTotal);
 
         output.setData(client);

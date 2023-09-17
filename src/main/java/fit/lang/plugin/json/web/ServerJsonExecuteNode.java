@@ -340,9 +340,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = getHttpClientIp(request);
-                if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
+                String clientIp = getHttpClientIp(request);
+                if (!isLocalIp(clientIp)) {
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIp).concat("\"}"), getDefaultContextType());
                     return;
                 }
                 CloudServerJsonExecuteNode.stopAll();
@@ -365,9 +365,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = getHttpClientIp(request);
-                if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
+                String clientIp = getHttpClientIp(request);
+                if (!isLocalIp(clientIp)) {
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIp).concat("\"}"), getDefaultContextType());
                     return;
                 }
                 responseWriteText(request, response, "{\"message\":\"server shutdown!\"}", getDefaultContextType());
@@ -399,9 +399,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(stopPath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = getHttpClientIp(request);
-                if (!isLocalIp(clientIP)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIP).concat("\"}"), getDefaultContextType());
+                String clientIp = getHttpClientIp(request);
+                if (!isLocalIp(clientIp)) {
+                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIp).concat("\"}"), getDefaultContextType());
                     return;
                 }
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
@@ -520,7 +520,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         simpleServer.addAction(servicePath, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIP = getHttpClientIp(request);
+                String clientIp = getHttpClientIp(request);
 
                 JSONObject serviceDefineCopy = serviceDefine.clone();
                 JSONObject contextParam = new JSONObject();
@@ -530,7 +530,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     JSONObject input = buildInput(request, serviceDefineCopy);
                     serviceDefineCopy.put("input", input);
                     JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
-                    jsonExecuteContext.setAttribute("clientIP", clientIP);
+                    jsonExecuteContext.setAttribute("clientIp", clientIp);
 
                     String output = ExecuteJsonNodeUtil.executeCode(serviceDefineCopy, contextParam, jsonExecuteContext);
                     if (isWebNode(serviceDefineCopy)) {
