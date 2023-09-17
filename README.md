@@ -77,16 +77,12 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 - cloudServer：server端
 - cloudClient：client端
 
-## 应用场景
-- mockServer：mock json返回
-- 代理透传
-- 静态文件服务器
-- 微服务
-- http服务调用
-- 自动化测试
-- 服务器简单监控
+## 中间件
+FitServer 使用fit语言开发的中间件，网站部署在FitServer上： http://fit.321zou.com/
 
 ## 插件
+[IDEA插件](https://plugins.jetbrains.com/plugin/22593-fitlang)
+
 插件审核通过后，遇到.fit结尾文件时会提示下载，预览版需要下载zip包，然后在IDEA中按照，使用方式如下
 
 [更多插件相关](https://plugins.jetbrains.com/plugin/22593-fitlang/plugin)
@@ -98,6 +94,15 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 - [demo-mock](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-mock)
 - [demo-server](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-server)
 - [github-all-demo](https://github.com/yanchangyou/fitlang-demo)
+
+## 应用场景
+- mockServer：mock json返回
+- 代理透传
+- 静态文件服务器
+- 微服务
+- http服务调用
+- 自动化测试
+- 服务器简单监控
 
 ## 后续计划
 - 封装更多hutool工具
