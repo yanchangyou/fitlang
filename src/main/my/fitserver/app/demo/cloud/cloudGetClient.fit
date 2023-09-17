@@ -3,15 +3,15 @@
     "uni": "pipe",
     "child": [
         {
-            "uni": "cloudGetClient",
-            "clientId": "127.0.0.1"
+            "uni": "cloudGetClient"
         },
         {
-            "uni": "replace",
-            "json": {
-                "clientId": "${clientId}",
-                "sessionId": "${client.clientId}",
-                "connectTime": "${client.connectTime}"
+            "uni": "convert",
+            "needCloneInputData": true,
+            "express": {
+                "clients[].clientId": "${clients[].clientId}",
+                "clients[].sessionId": "${clients[].sessionId}",
+                "clients[].connectTime": "${clients[].connectTime}"
             }
         }
     ]
