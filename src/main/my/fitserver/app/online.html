@@ -51,13 +51,13 @@
         }
         httpRequest.send(body);
     }
-    var url = "/demo/cloud/cloudGetClient.fit";
+    var url = "/demo/monitor/getMonitorClient.fit";
     request("POST", url, {}, function(body) {
         var result = JSON.parse(body);
         for(var i=0; i<result.clients.length; i++) {
             var aDom = document.createElement('a');
             aDom.href = "/demo/monitor/?clientId="+result.clients[i].clientId;
-            aDom.text = result.clients[i].clientId +"  ("+ result.clients[i].connectTime+")";
+            aDom.text = result.clients[i].clientId +"  ("+ result.clients[i].startTime+")";
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
         }

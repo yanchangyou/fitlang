@@ -113,10 +113,13 @@
     function fetch(second) {
         var url = "getMonitorData.fit?second=" + second
         if(urlParam['clientId']) {
-           url = "getCloudClientMonitorData.fit?clientId=" + urlParam['clientId'];
+           url = "getClientMonitorData.fit?clientId=" + urlParam['clientId'];
         }
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
+           if(result.message) {
+                alert(result.message);
+           }
 
            myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
            myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
