@@ -21,8 +21,8 @@
         <option value="10">10秒</option>
         <option value="30">30秒</option>
         <option value="60">1分钟</option>
-        <option value="300">5分钟</option>
-        <option value="600" selected>10分钟</option>
+        <option value="300" selected>5分钟</option>
+        <option value="600">10分钟</option>
         <option value="1800">30分钟</option>
         <option value="3600">1小钟</option>
         <option value="7200">2小钟</option>
@@ -127,6 +127,19 @@
        return new Chart(chartCanvas, {
             type: 'line',
             data: data,
+            options:{
+                tension: 0.4,
+                responsive: true,
+                interaction: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+            }
         });
     }
 
