@@ -188,11 +188,12 @@
            clearInterval(intervalObject);
         }
         var fetchSecond = document.getElementById("fetchSecond").value - 0;
+        second = second - 0;
         if(second === 1) {
             fetch(fetchSecond);
             return;
         }
-        if(second<2) {
+        if(second < 2) {
             return;
         }
         intervalObject = setInterval(function(){
