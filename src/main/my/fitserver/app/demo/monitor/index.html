@@ -123,7 +123,7 @@
     function fetch(second) {
         var url = "getMonitorData.fit?second=" + second
         if(urlParam['clientId']) {
-           url = "getClientMonitorData.fit?clientId=" + urlParam['clientId'];
+           url = "getClientMonitorData.fit?clientId=" + urlParam['clientId'] + "&second=" + second;
         }
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
