@@ -115,13 +115,18 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                         System.out.println("stop thread" + this.getName());
                         break;
                     }
-                    JSONObject cpuPoint = buildCpuPoint();
-                    cpuGatherList.add(cpuPoint);
-                    JSONObject memoryPoint = buildMemoryPoint();
-                    memoryGatherList.add(memoryPoint);
+                    try {
 
-                    if (pushUrl instanceof JSONArray || pushUrl instanceof String) {
-                        pushMonitorData(pushUrl, null, new JSONObject(), pushProxy);
+                        JSONObject cpuPoint = buildCpuPoint();
+                        cpuGatherList.add(cpuPoint);
+                        JSONObject memoryPoint = buildMemoryPoint();
+                        memoryGatherList.add(memoryPoint);
+
+                        if (pushUrl instanceof JSONArray || pushUrl instanceof String) {
+                            pushMonitorData(pushUrl, null, new JSONObject(), pushProxy);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("fit-monitor-error: " + e.getMessage());
                     }
                 }
             }
