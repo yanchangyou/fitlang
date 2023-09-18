@@ -1,7 +1,6 @@
 package fit.lang.plugin.json.monitor;
 
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.oshi.CpuInfo;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONArray;
@@ -33,6 +32,8 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
     static List<JSONObject> memoryGatherList = new ArrayList<>();
 
     static Object pushUrl;
+
+    static JSONObject pushProxy;
 
     static Thread thread;
 
@@ -78,6 +79,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         String secondText = parseStringField("second", input);
 
         pushUrl = nodeJsonDefine.get("pushUrl");
+        pushProxy = nodeJsonDefine.getJSONObject("pushProxy");
 
         int second = 5;
         if (secondText != null && NumberUtil.isInteger(secondText)) {
@@ -119,7 +121,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                     memoryGatherList.add(memoryPoint);
 
                     if (pushUrl instanceof JSONArray || pushUrl instanceof String) {
-                        pushMonitorData(pushUrl, null, new JSONObject());
+                        pushMonitorData(pushUrl, null, new JSONObject(), pushProxy);
                     }
                 }
             }
