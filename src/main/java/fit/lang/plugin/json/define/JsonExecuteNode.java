@@ -51,10 +51,10 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
     }
 
     protected int parseIntField(String fieldName, JsonExecuteNodeInput input, int defaultValue) {
-        String resultText = parseStringField("fieldName", input);
+        String resultText = parseStringField(fieldName, input);
 
         int result = defaultValue;
-        if (resultText != null && NumberUtil.isInteger(resultText)) {
+        if (NumberUtil.isInteger(resultText)) {
             result = Integer.parseInt(resultText);
         }
         return result;

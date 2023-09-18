@@ -82,7 +82,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
         pushProxy = nodeJsonDefine.getJSONObject("pushProxy");
 
         int second = 5;
-        if (secondText != null && NumberUtil.isInteger(secondText)) {
+        if (NumberUtil.isInteger(secondText)) {
             second = Integer.parseInt(secondText);
         }
         //至少1秒
@@ -110,7 +110,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                 setName("fit-monitor-" + System.currentTimeMillis());
                 while (true) {
                     try {
-                        Thread.sleep(second * 1000L - 1000);
+                        Thread.sleep(second * 1000L - 1000L);
                     } catch (InterruptedException e) {
                         System.out.println("stop thread" + this.getName());
                         break;
