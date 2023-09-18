@@ -62,7 +62,11 @@ public class PushClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         String[] pushResult = new String[pushUrls.length];
         int i = 0;
         for (String url : pushUrls) {
-            pushResult[i++] = post(url, pushProxy, String.valueOf(pushData)).toJSONString();
+            try {
+                pushResult[i++] = post(url, pushProxy, String.valueOf(pushData)).toJSONString();
+            } catch (Exception e) {
+                pushResult[i++] = e.getMessage();
+            }
         }
 
         JSONObject pushOutput = new JSONObject();
