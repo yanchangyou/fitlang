@@ -15,24 +15,32 @@
 
 <h2 style="text-align:center;margin:3px;">FitServer monitor</h2>
 <div style="text-align:left;">
-    <select style="font-size:1.15rem;" onchange="fetch(this.value)">
-        <option value="1">1秒</option>
-        <option value="5">5秒</option>
-        <option value="10">10秒</option>
-        <option value="30">30秒</option>
-        <option value="60">1分钟</option>
-        <option value="300" selected>5分钟</option>
-        <option value="600">10分钟</option>
-        <option value="1800">30分钟</option>
-        <option value="3600">1小钟</option>
-        <option value="7200">2小钟</option>
-        <option value="18000">5小钟</option>
-        <option value="36000">10小钟</option>
-        <option value="864000">1天</option>
-        <option value="604800">1周</option>
-        <option value="2592000">1月</option>
-        <option value="31536000">1年</option>
-    </select>
+    自动刷新间隔：<select style="font-size:1.15rem;" onchange="setRefreshTime(this.value)">
+    <option value="-1">无</option>
+    <option value="2">2秒</option>
+    <option value="5">5秒</option>
+    <option value="10" selected>10秒</option>
+    <option value="30">30秒</option>
+    <option value="60">1分钟</option>
+</select>
+    显示最近：<select style="font-size:1.15rem;" onchange="fetch(this.value)">
+    <option value="1">1秒</option>
+    <option value="5">5秒</option>
+    <option value="10">10秒</option>
+    <option value="30">30秒</option>
+    <option value="60">1分钟</option>
+    <option value="300" selected>5分钟</option>
+    <option value="600">10分钟</option>
+    <option value="1800">30分钟</option>
+    <option value="3600">1小钟</option>
+    <option value="7200">2小钟</option>
+    <option value="18000">5小钟</option>
+    <option value="36000">10小钟</option>
+    <option value="864000">1天</option>
+    <option value="604800">1周</option>
+    <option value="2592000">1月</option>
+    <option value="31536000">1年</option>
+</select>
     <select id="choiceType" style="font-size:1.15rem;" onchange="show(this.value)">
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
@@ -74,6 +82,7 @@
             urlParam[items[0]] = items[1];
         }
     }
+
 
 </script>
 <script>
@@ -172,7 +181,24 @@
         document.getElementById(domId).style.display = '';
     }
 
+    var intervalObject;
+    function setRefreshTime(second) {
+
+        if(intervalObject) {
+           clearInterval(intervalObject);
+        }
+        if(second<2) {
+            return;
+        }
+        intervalObject = setInterval(function(){
+           fetch(600);
+        }, second*1000);
+    }
+
     fetch(600);
+
+    setRefreshTime(10);
+
 </script>
 
 </body>
