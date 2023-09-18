@@ -319,8 +319,10 @@ public class ExecuteJsonNodeUtil {
                 typeEnum = Proxy.Type.HTTP;
             } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
                 typeEnum = Proxy.Type.SOCKS;
-            } else {
+            } else if ("direct".equals(type) || "DIRECT".equals(type)) {
                 typeEnum = Proxy.Type.DIRECT;
+            } else {
+                typeEnum = Proxy.Type.HTTP;
             }
             request.setProxy(new Proxy(typeEnum, socketAddress));
         }
