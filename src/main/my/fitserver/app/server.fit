@@ -16,7 +16,7 @@
                 "second": 1,
                 "pushUrl": [
                     "http://127.0.0.1:11111/demo/monitor/receiveClientMonitorData.fit?clientId=localhost",
-                    "http://coderonline.321zou.com:11111/demo/monitor/receiveClientMonitorData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e71"
+                    "http://fit.321zou.com/demo/monitor/receiveClientMonitorData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e72"
                 ],
                 "pushProxy": {
 //                    "host":"xxx.com",

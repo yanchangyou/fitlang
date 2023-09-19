@@ -102,8 +102,8 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         return clients;
     }
 
-    public static JSONObject getClient(String clientId) {
-        return clientInfoMap.get(clientId);
+    public static JSONObject getClient(String innerClientId) {
+        return clientInfoMap.get(innerClientId);
     }
 
 }
