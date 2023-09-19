@@ -230,7 +230,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.5.9 clientIp use md5</li>
+            <li>0.5.9 monitor clientIp use md5</li>
             <li>0.5.8 monitor page support auto refresh; push monitor data support proxy; bugfix fetch monitor data with second</li>
             <li>0.5.7 update plugin description</li>
             <li>0.5.6 receiveClientMonitorData node support clientIp; parseStringField support get value from context</li>

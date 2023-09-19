@@ -494,7 +494,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
                 JSONObject info = new JSONObject();
                 info.put("ip", clientIp);
-                info.put("ipMD5", SecureUtil.md5(clientIp));
+                info.put("md5", SecureUtil.md5(clientIp));
 
                 responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
             }

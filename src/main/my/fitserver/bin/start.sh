@@ -8,7 +8,7 @@ curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 
-java -classpath lib/fitlang-0.5.8.jar:\
+java -classpath lib/fitlang-0.5.9.jar:\
 lib/hutool-all-5.8.21.jar:\
 lib/SparseBitSet-1.2.jar:\
 lib/netty-codec-socks-4.1.97.Final.jar:\
