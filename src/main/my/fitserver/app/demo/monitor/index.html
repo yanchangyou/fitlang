@@ -187,18 +187,21 @@
         if(intervalObject) {
            clearInterval(intervalObject);
         }
-        var fetchSecond = document.getElementById("fetchSecond").value - 0;
         second = second - 0;
         if(second === 1) {
-            fetch(fetchSecond);
+            fetch(getFetchSecond());
             return;
         }
         if(second < 2) {
             return;
         }
         intervalObject = setInterval(function(){
-           fetch(fetchSecond);
-        }, second*1000);
+           fetch(getFetchSecond());
+        }, second * 1000);
+    }
+
+    function getFetchSecond() {
+        return document.getElementById("fetchSecond").value;
     }
 
     fetch(300);
