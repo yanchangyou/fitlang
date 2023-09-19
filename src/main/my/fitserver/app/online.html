@@ -65,7 +65,7 @@
 
     setTimeout(function(){
         var url = "/_ip";
-        request("POST", url, {}, function(body) {
+        request("GET", url, {}, function(body) {
             document.getElementById("myInfo").innerText = body;
         });
     }, 2000);
