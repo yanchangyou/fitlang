@@ -2,6 +2,7 @@ package fit.lang.plugin.json;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
@@ -417,4 +418,13 @@ public class ExecuteJsonNodeUtil {
     public static double covertToG(long processorMaxFreq) {
         return Math.round(100.0 * processorMaxFreq / 1024 / 1024 / 1024) / 100.0;
     }
+
+    public static String buildInnerClientIp(String clientIp) {
+        return SecureUtil.md5(clientIp);
+    }
+
+    public static String buildInnerClientId(String clientId, String clientIp) {
+        return clientId + "." + clientIp;
+    }
+
 }

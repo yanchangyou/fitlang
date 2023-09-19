@@ -3,6 +3,7 @@ package fit.lang.plugin.json.web;
 import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.server.HttpServerRequest;
@@ -161,6 +162,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             JSONObject cloudDefine = addCloudService(fitServer);
             serviceList.add(cloudDefine);
         }
+
+        JSONObject ipDefine = addIpService(fitServer);
+        serviceList.add(ipDefine);
 
         if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_reload")) {
             // nothing
@@ -471,6 +475,27 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     info.put("onlineCount", sessionList.size());
                     info.put("sessions", sessionList);
                 }
+                responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
+            }
+        });
+        JSONObject stopDefine = new JSONObject();
+        stopDefine.put("path", stopPath);
+        stopDefine.put("description", "connect this server by websocket");
+        return stopDefine;
+    }
+
+    static JSONObject addIpService(FitServerInstance fitServer) {
+        String stopPath = "/_ip";
+        clearContext(fitServer.getSimpleServer(), stopPath);
+        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                String clientIp = getHttpClientIp(request);
+
+                JSONObject info = new JSONObject();
+                info.put("ip", clientIp);
+                info.put("ipMD5", SecureUtil.md5(clientIp));
+
                 responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
             }
         });

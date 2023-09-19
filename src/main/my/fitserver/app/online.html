@@ -17,11 +17,9 @@
     </div>
     <h2>FitServer online clients</h2>
 
-    <div id="onlineUsers">
+    <div id="onlineUsers"></div>
 
-    </div>
-
-
+    <div style="margin-top:80px;">tips:<span id="myInfo"></span></div>
 </center>
 <script type="text/javascript">
 
@@ -58,13 +56,19 @@
         var result = JSON.parse(body);
         for(var i=0; i<result.clients.length; i++) {
             var aDom = document.createElement('a');
-            aDom.href = "/demo/monitor/?clientId="+result.clients[i].clientId;
+            aDom.href = "/demo/monitor/?innerClientId="+result.clients[i].innerClientId;
             aDom.text = ""+ result.clients[i].clientIp+"" + "　　("+ result.clients[i].startTime+")";
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
         }
     });
 
+    setTimeout(function(){
+        var url = "/_ip";
+        request("POST", url, {}, function(body) {
+            document.getElementById("myInfo").innerText = body;
+        });
+    }, 2000);
 </script>
 
 </body>

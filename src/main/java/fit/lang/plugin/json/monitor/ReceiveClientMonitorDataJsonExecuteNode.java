@@ -1,11 +1,13 @@
 package fit.lang.plugin.json.monitor;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 import static fit.lang.ExecuteNodeUtil.getNow;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientId;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientIp;
 
 /**
  * 接收监控数据
@@ -28,7 +32,6 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = new JSONObject();
 
         String clientId = parseStringField("clientId", input);
-        String clientIp = parseStringField("clientIp", input);
 
         if (StrUtil.isBlank(clientId)) {
             result.put("message", "clientId is empty!");
@@ -36,12 +39,19 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             return;
         }
 
+        String clientIp = parseStringField("clientIp", input);
+
+        //clientIp 敏感信息md5加密
+        clientIp = buildInnerClientIp(clientIp);
+
+        String innerClientId = buildInnerClientId(clientId, clientIp);
+
         String cpuTotal = input.getString("cpuTotal");
         JSONObject clientInfo = input.getJsonObject("clientInfo");
-        JSONObject client = clientInfoMap.get(clientId);
+        JSONObject client = clientInfoMap.get(innerClientId);
         if (client == null) {
             client = new JSONObject();
-            clientInfoMap.put(clientId, client);
+            clientInfoMap.put(innerClientId, client);
             client.put("cpuPoints", new JSONArray());
             client.put("memoryPoints", new JSONArray());
             client.put("cpuTotal", cpuTotal);
@@ -49,6 +59,7 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
 
             JSONObject onlyClientInfo = new JSONObject();
             onlyClientInfo.put("clientId", clientId);
+            onlyClientInfo.put("innerClientId", innerClientId);
             onlyClientInfo.put("clientIp", clientIp);
             onlyClientInfo.put("startTime", getNow());
             onlyClientInfo.put("clientInfo", clientInfo);
@@ -82,6 +93,7 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
 
         client.put("clientId", clientId);
         client.put("clientIp", clientIp);
+        client.put("innerClientId", innerClientId);
 
         output.setData(client);
     }

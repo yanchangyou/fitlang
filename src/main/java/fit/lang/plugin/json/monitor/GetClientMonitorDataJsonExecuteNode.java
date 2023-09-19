@@ -6,6 +6,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientId;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientIp;
 import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.getGatherList;
 
 /**
@@ -16,27 +18,29 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        int second = parseIntField("second", input, 500);
-
         JSONObject result = new JSONObject();
 
-        String clientId = parseStringField("clientId", input);
+        String innerClientId = parseStringField("innerClientId", input);
 
-        result.put("clientId", clientId);
+        if (StrUtil.isBlank(innerClientId)) {
+            result.put("message", "innerClientId is required!");
+            output.setData(result);
+            return;
+        }
+
+        int second = parseIntField("second", input, 500);
+
+        result.put("clientId", innerClientId);
         result.put("second", second);
 
-        if (StrUtil.isNotBlank(clientId)) {
-            JSONObject client = ReceiveClientMonitorDataJsonExecuteNode.getClient(clientId);
-            if (client == null) {
-                result.put("message", "clientId not existed!");
-            } else {
-                result.put("cpuPoints", getGatherList(client.getJSONArray("cpuPoints"), second));
-                result.put("memoryPoints", getGatherList(client.getJSONArray("memoryPoints"), second));
-                result.put("clientInfo", client.get("clientInfo"));
-                result.put("cpuTotal", client.get("cpuTotal"));
-            }
+        JSONObject client = ReceiveClientMonitorDataJsonExecuteNode.getClient(innerClientId);
+        if (client == null) {
+            result.put("message", "client not existed!");
         } else {
-            result.put("message", "clientId is required!");
+            result.put("cpuPoints", getGatherList(client.getJSONArray("cpuPoints"), second));
+            result.put("memoryPoints", getGatherList(client.getJSONArray("memoryPoints"), second));
+            result.put("clientInfo", client.get("clientInfo"));
+            result.put("cpuTotal", client.get("cpuTotal"));
         }
 
         output.setData(result);

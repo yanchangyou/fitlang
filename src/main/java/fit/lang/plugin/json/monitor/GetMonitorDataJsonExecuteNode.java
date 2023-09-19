@@ -26,7 +26,6 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
         result.put("cpuTotal", centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G");
         result.put("second", second);
 
-
         output.setData(result);
     }
 
