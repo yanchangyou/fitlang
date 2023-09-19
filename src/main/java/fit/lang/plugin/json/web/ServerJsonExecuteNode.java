@@ -339,9 +339,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONObject addStopWsService(FitServerInstance fitServer) {
-        String stopPath = "/_stopWs";
-        clearContext(fitServer.getSimpleServer(), stopPath);
-        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+        String path = "/_stopWs";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIp = getHttpClientIp(request);
@@ -354,7 +354,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         });
         JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", stopPath);
+        stopDefine.put("path", path);
         stopDefine.put("description", "stop this websocket server");
         return stopDefine;
     }
@@ -364,9 +364,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONObject addShutdownService(FitServerInstance fitServer) {
-        String stopPath = "/_shutdown";
-        clearContext(fitServer.getSimpleServer(), stopPath);
-        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+        String path = "/_shutdown";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIp = getHttpClientIp(request);
@@ -392,15 +392,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         });
         JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", stopPath);
+        stopDefine.put("path", path);
         stopDefine.put("description", "stop this websocket server");
         return stopDefine;
     }
 
     static JSONObject addStopService(FitServerInstance fitServer) {
-        String stopPath = "/_stop";
-        clearContext(fitServer.getSimpleServer(), stopPath);
-        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+        String path = "/_stop";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIp = getHttpClientIp(request);
@@ -432,7 +432,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         });
         JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", stopPath);
+        stopDefine.put("path", path);
         stopDefine.put("description", "stop this server");
         return stopDefine;
     }
@@ -454,9 +454,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONObject addCloudService(FitServerInstance fitServer) {
-        String stopPath = "/_cloud";
-        clearContext(fitServer.getSimpleServer(), stopPath);
-        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+        String path = "/_cloud";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
 
@@ -479,15 +479,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         });
         JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", stopPath);
+        stopDefine.put("path", path);
         stopDefine.put("description", "connect this server by websocket");
         return stopDefine;
     }
 
     static JSONObject addIpService(FitServerInstance fitServer) {
-        String stopPath = "/_ip";
-        clearContext(fitServer.getSimpleServer(), stopPath);
-        fitServer.getSimpleServer().addAction(stopPath, new Action() {
+        String path = "/_ip";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String clientIp = getHttpClientIp(request);
@@ -499,10 +499,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
             }
         });
-        JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", stopPath);
-        stopDefine.put("description", "connect this server by websocket");
-        return stopDefine;
+        JSONObject define = new JSONObject();
+        define.put("path", path);
+        define.put("description", "get client ip");
+        return define;
     }
 
     private static void clearContext(SimpleServer simpleServer, String stopPath) {
@@ -514,9 +514,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     private JSONObject addReloadService(FitServerInstance fitServer) {
-        String reloadPath = "/_reload";
-        clearContext(fitServer.getSimpleServer(), reloadPath);
-        fitServer.getSimpleServer().addAction(reloadPath, new Action() {
+        String path = "/_reload";
+        clearContext(fitServer.getSimpleServer(), path);
+        fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 reload(fitServer);
@@ -525,7 +525,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             }
         });
         JSONObject reloadDefine = new JSONObject();
-        reloadDefine.put("path", reloadPath);
+        reloadDefine.put("path", path);
         reloadDefine.put("description", "reload this server");
         return reloadDefine;
     }
