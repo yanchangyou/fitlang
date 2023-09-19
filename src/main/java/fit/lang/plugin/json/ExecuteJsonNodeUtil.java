@@ -268,11 +268,11 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static boolean isLocalIp(String ip) {
-        return "127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip);
+        return "localhost".equals(ip) || "127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip);
     }
 
     public static String getHttpClientIp(HttpServerRequest request) {
-        return request.getHttpExchange().getRemoteAddress().getAddress().getHostAddress();
+        return request.getClientIP();
     }
 
     /**
