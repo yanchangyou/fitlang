@@ -61,14 +61,15 @@
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
         }
+        showMyIp();
     });
 
-    setTimeout(function(){
+    function showMyIp() {
         var url = "/_ip";
         request("GET", url, {}, function(body) {
             document.getElementById("myInfo").innerText = body;
         });
-    }, 2000);
+    }
 </script>
 
 </body>
