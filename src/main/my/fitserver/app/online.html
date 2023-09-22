@@ -56,7 +56,7 @@
         var result = JSON.parse(body);
         for(var i=0; i<result.clients.length; i++) {
             var aDom = document.createElement('a');
-            aDom.href = "/demo/monitor/?innerClientId="+result.clients[i].innerClientId;
+            aDom.href = "/demo/monitor/index.html?innerClientId="+result.clients[i].innerClientId;
             aDom.text = ""+ result.clients[i].clientIp+"" + "　　("+ result.clients[i].startTime+")";
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
