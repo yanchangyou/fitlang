@@ -6,9 +6,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientId;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildInnerClientIp;
-import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.getGatherList;
+import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.fetchMonitorDataInLastSecond;
 
 /**
  * 获取cloud场景下，获取client推送的监控信息
@@ -37,8 +35,8 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         if (client == null) {
             result.put("message", "client not existed!");
         } else {
-            result.put("cpuPoints", getGatherList(client.getJSONArray("cpuPoints"), second));
-            result.put("memoryPoints", getGatherList(client.getJSONArray("memoryPoints"), second));
+            result.put("cpuPoints", fetchMonitorDataInLastSecond(client.getJSONArray("cpuPoints"), second));
+            result.put("memoryPoints", fetchMonitorDataInLastSecond(client.getJSONArray("memoryPoints"), second));
             result.put("clientInfo", client.get("clientInfo"));
             result.put("cpuTotal", client.get("cpuTotal"));
         }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.filterListByMaxLength;
+import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.fetchMonitorDataInLastSecond;
 import static fit.lang.plugin.json.monitor.PushClientMonitorDataJsonExecuteNode.pushMonitorData;
 
 /**
@@ -38,34 +38,11 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
     static Thread thread;
 
     public static List<JSONObject> getGatherList(int second) {
-        return getGatherList(cpuGatherList, second);
+        return fetchMonitorDataInLastSecond(cpuGatherList, second);
     }
 
     public static List<JSONObject> getMemoryGatherList(int second) {
-        return getGatherList(memoryGatherList, second);
-    }
-
-    public static List<JSONObject> getGatherList(JSONArray array, int second) {
-        List<JSONObject> list = new ArrayList<>(array.size());
-        for (Object item : array) {
-            list.add((JSONObject) item);
-        }
-        return getGatherList(list, second);
-    }
-
-    public static List<JSONObject> getGatherList(List<JSONObject> list, int second) {
-        if (second < 0) {
-            second = 0;
-        }
-        List<JSONObject> result = new ArrayList<>();
-        long millisecond = System.currentTimeMillis() - second * 1000L;
-        for (JSONObject row : list) {
-            if (row.getLong("timestamp") != null && row.getLong("timestamp") > millisecond) {
-                result.add(row);
-            }
-        }
-        //限制返回数量，避免过大，太大就间隔采样
-        return filterListByMaxLength(result, 512);
+        return fetchMonitorDataInLastSecond(memoryGatherList, second);
     }
 
     @Override
