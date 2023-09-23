@@ -123,7 +123,10 @@ public class JsonExecuteNodeMonitorUtil {
         sumResult.put("total", (free + used));
         double sumFree = ExecuteJsonNodeUtil.round(free / (free + used), 2);
         sumResult.put("sumFree", sumFree);
+
         sumResult.put("allCpuSumFree", ExecuteJsonNodeUtil.round(sumFree * cpuCount, 2));
+
+        sumResult.put("allCpuSumFreeMoney", ExecuteJsonNodeUtil.round(sumFree * cpuCount * 24 * 60 * 60 / 10000, 2));
 
         return sumResult;
     }
@@ -153,6 +156,7 @@ public class JsonExecuteNodeMonitorUtil {
 
         sumResult.put("sumFree", sumFree);
         sumResult.put("allMemorySumFree", ExecuteJsonNodeUtil.round(sumFree * memoryG, 2));
+        sumResult.put("allMemorySumFreeMoney", ExecuteJsonNodeUtil.round(sumFree * memoryG * 24 * 60 * 60 / 100000, 2));
 
         return sumResult;
     }

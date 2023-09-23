@@ -48,8 +48,8 @@
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
     </select> &nbsp;&nbsp;
-    <span id="cpuTotalWrap">闲置CPU：<span id="allCpuSumFree"></span>C(<span id="cpuCount"></span>C)</span>
-    <span id="memoryTotalWrap">闲置内存：<span id="allMemorySumFree"></span>G(<span id="memoryG"></span>G)</span>
+    <span id="cpuTotalWrap">闲置CPU：<span id="allCpuSumFree"></span>C(<span id="cpuCount"></span>C) 估值：<span id="allCpuSumFreeMoney"></span>元/天</span>
+    <span id="memoryTotalWrap">闲置内存：<span id="allMemorySumFree"></span>G(<span id="memoryG"></span>G) 估值：<span id="allMemorySumFreeMoney"></span>元/天</span>
 </div>
 <div>
     <canvas id="cpuChart"></canvas>
@@ -139,6 +139,9 @@
 
            document.getElementById("allCpuSumFree").innerText = result.sumCpuPoints.allCpuSumFree;
            document.getElementById("allMemorySumFree").innerText = result.sumMemoryPoints.allMemorySumFree;
+
+           document.getElementById("allCpuSumFreeMoney").innerText = result.sumCpuPoints.allCpuSumFreeMoney;
+           document.getElementById("allMemorySumFreeMoney").innerText = result.sumMemoryPoints.allMemorySumFreeMoney;
 
            document.getElementById("cpuCount").innerText = result.cpuCount;
            document.getElementById("memoryG").innerText = result.memoryG;
