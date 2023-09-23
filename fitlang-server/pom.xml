@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fitlang</groupId>
     <artifactId>fitlang-server</artifactId>
-    <version>0.5.11-SNAPSHOT</version>
+    <version>0.5.12-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.fitlang</groupId>
             <artifactId>fitlang-core</artifactId>
-            <version>0.5.11-SNAPSHOT</version>
+            <version>0.5.12-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>
