@@ -1,21 +1,12 @@
-//
-//lintOptions {
-//    abortOnError false
-//}
+
 plugins {
     id "org.jetbrains.intellij" version "$ijpVersion"
 }
-//compileOptions {
-//    sourceCompatibility JavaVersion.VERSION_11
-//    targetCompatibility JavaVersion.VERSION_11
-//}
 group 'lang.plugin.idea'
 version "$pluginVersion"
 
 apply plugin: 'java'
 
-//def sinceBuildVersion = "${sinceBuildVersion}"
-//def untilBuildVersion = "${untilBuildVersion}"
 // 可以在线访问： https://repo.maven.apache.org/maven2
 repositories {
     mavenLocal()
@@ -48,15 +39,13 @@ sourceSets {
 
     main {
         java {
-//            srcDir 'src/main/gen'
             srcDir 'fitlang-plugin-idea/src/main/java'
             srcDir 'fitlang-core/src/main/java'
-//            srcDir 'src/main/gen-bnf'
-//            srcDir 'src/main/gen-flex'
+            srcDir 'fitlang-server/src/main/java'
         }
         resources {
             srcDir 'fitlang-plugin-idea/src/main/resources'
-            srcDir 'fitlang-server' exclude(".idea")
+            srcDir 'fitlang-server/fitserver' exclude("**/.idea/**")
         }
     }
 
