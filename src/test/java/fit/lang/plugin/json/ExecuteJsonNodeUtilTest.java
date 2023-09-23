@@ -1,7 +1,10 @@
 package fit.lang.plugin.json;
 
+import com.alibaba.fastjson2.JSONObject;
 import junit.framework.TestCase;
 import org.junit.Assert;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToLong;
 
 public class ExecuteJsonNodeUtilTest extends TestCase {
 
@@ -49,5 +52,13 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
                 "}";
         String result = ExecuteJsonNodeUtil.removeJsonComment(text);
         Assert.assertEquals("{\r\n'a':1\r\n}", result);
+    }
+
+    public void testCovertToLong() {
+        JSONObject item = new JSONObject();
+        item.put("a", 0.99);
+        covertToLong(item);
+        System.out.println(item);
+        Assert.assertEquals(Long.valueOf(1), item.getLong("a"));
     }
 }

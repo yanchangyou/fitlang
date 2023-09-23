@@ -48,7 +48,9 @@
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
     </select> &nbsp;&nbsp;
-    <span id="cpuTotalWrap">总CPU:<span id="cpuTotal"></span></span>
+    <span id="cpuTotalWrap">总CPU:<span id="cpuTotal"></span> &nbsp;&nbsp;
+        闲置CPU：<span id="cupWrap"><span id="cpuSumTotal"></span>GH</span></span>
+    <span id="memoryTotalWrap">闲置内存：<span id="sumWrap"><span id="memorySumTotal"></span>GH</span></span>
 </div>
 <div>
     <canvas id="cpuChart"></canvas>
@@ -85,7 +87,6 @@
             urlParam[items[0]] = items[1];
         }
     }
-
 
 </script>
 <script>
@@ -137,6 +138,8 @@
            myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
            myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
            document.getElementById("cpuTotal").innerText = result.cpuTotal;
+           document.getElementById("cpuSumTotal").innerText = result.sumCpuPoints.total;
+           document.getElementById("memorySumTotal").innerText = result.sumMemoryPoints.total;
 
            show(document.getElementById("choiceType").value);
 
@@ -177,9 +180,12 @@
         if(domId === 'cpuChart') {
            document.getElementById('memoryChart').style.display = 'none';
            document.getElementById('cpuTotalWrap').style.display = '';
+           document.getElementById('memoryTotalWrap').style.display = 'none';
+
         } else {
            document.getElementById('cpuChart').style.display = 'none';
            document.getElementById('cpuTotalWrap').style.display = 'none';
+           document.getElementById('memoryTotalWrap').style.display = '';
         }
         document.getElementById(domId).style.display = '';
     }

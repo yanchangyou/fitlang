@@ -12,6 +12,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseHttpResult;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.setProxy;
+import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.getCpuTotalShow;
 import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.*;
 
 /**
@@ -58,7 +59,7 @@ public class PushClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         }
         pushData.put("cpuPoint", cpuPoint);
         pushData.put("memoryPoint", memoryPoint);
-        pushData.put("cpuTotal", getCpuTotal());
+        pushData.put("cpuTotal", getCpuTotalShow());
         String[] pushResult = new String[pushUrls.length];
         int i = 0;
         for (String url : pushUrls) {

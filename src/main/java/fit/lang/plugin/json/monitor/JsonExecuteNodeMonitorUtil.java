@@ -1,21 +1,30 @@
 package fit.lang.plugin.json.monitor;
 
+import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import oshi.hardware.CentralProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.filterListByMaxLength;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertSecondToHour;
 
 public class JsonExecuteNodeMonitorUtil {
 
+    static String getCpuTotalShow() {
+        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
+        return centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G";
+    }
+
+    static long getCpuTotal() {
+        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
+        return centralProcessor.getPhysicalProcessorCount() * centralProcessor.getMaxFreq();
+    }
+
     public static List<JSONObject> fetchMonitorDataInLastSecond(JSONArray array, int second) {
-        List<JSONObject> list = new ArrayList<>(array.size());
-        for (Object item : array) {
-            list.add((JSONObject) item);
-        }
+        List<JSONObject> list = convertToList(array);
         return fetchMonitorDataInLastSecond(list, second);
     }
 
@@ -39,7 +48,6 @@ public class JsonExecuteNodeMonitorUtil {
         return result;
     }
 
-
     /**
      * 汇总时间积分数据
      *
@@ -47,7 +55,7 @@ public class JsonExecuteNodeMonitorUtil {
      * @param second
      * @return
      */
-    public static JSONObject sumDataInLastSecond(List<JSONObject> list, int second) {
+    public static JSONObject sumDataInLastSecond(List<JSONObject> list, int second, List<String> sumFields) {
 
         List<JSONObject> dataList = fetchMonitorData(list, second);
 
@@ -56,10 +64,7 @@ public class JsonExecuteNodeMonitorUtil {
             return result;
         }
 
-        JSONObject first = list.get(0);
-        Set<String> fields = first.keySet();
-
-        for (String field : fields) {
+        for (String field : sumFields) {
             if (field.contains("timestamp")) {
                 continue;
             }
@@ -72,7 +77,7 @@ public class JsonExecuteNodeMonitorUtil {
                     continue;
                 }
 
-                long timestampDiff = item.getLong("timestamp") - preItem.getLong("timestamp");
+                long timestampDiff = (item.getLong("timestamp") - preItem.getLong("timestamp")) / 1000;
                 double free = item.getDouble(field);
                 sum += timestampDiff * free;
 
@@ -83,4 +88,54 @@ public class JsonExecuteNodeMonitorUtil {
         return result;
     }
 
+    public static JSONObject sumCpuDataInLastSecond(JSONArray array, int second, long frequency) {
+        List<JSONObject> list = convertToList(array);
+        return sumCpuDataInLastSecond(list, second, frequency);
+    }
+
+    public static JSONObject sumCpuDataInLastSecond(List<JSONObject> list, int second, long frequency) {
+        List<String> sumFields = new ArrayList<>();
+        sumFields.add("free");
+        sumFields.add("used");
+        JSONObject sumResult = sumDataInLastSecond(list, second, sumFields);
+
+        if (sumResult.isEmpty()) {
+            return sumResult;
+        }
+
+        //获取的是百分比，需要转换
+        double free = covertSecondToHour(sumResult.getDouble("free") * frequency / 100);
+        double used = covertSecondToHour(sumResult.getDouble("used") * frequency / 100);
+
+        sumResult.put("free", free);
+        sumResult.put("used", used);
+        sumResult.put("total", (free + used));
+
+        return sumResult;
+    }
+
+    public static JSONObject sumMemoryDataInLastSecond(JSONArray array, int second) {
+        List<JSONObject> list = convertToList(array);
+        return sumMemoryDataInLastSecond(list, second);
+    }
+
+    public static JSONObject sumMemoryDataInLastSecond(List<JSONObject> list, int second) {
+        List<String> sumFields = new ArrayList<>();
+        sumFields.add("available");
+        sumFields.add("used");
+        JSONObject sumResult = sumDataInLastSecond(list, second, sumFields);
+
+        if (sumResult.isEmpty()) {
+            return sumResult;
+        }
+
+        double available = covertSecondToHour(sumResult.getDouble("available"));
+        double used = covertSecondToHour(sumResult.getDouble("used"));
+
+        sumResult.put("available", available);
+        sumResult.put("used", used);
+        sumResult.put("total", (available + used));
+
+        return sumResult;
+    }
 }

@@ -30,7 +30,10 @@ public class JsonExecuteNodeMonitorUtilTest extends TestCase {
         item.put("used", 0.5);
         list.add(item);
 
-        JSONObject result = JsonExecuteNodeMonitorUtil.sumDataInLastSecond(list, 100);
+        List<String> sumFields = new ArrayList<>();
+        sumFields.add("free");
+        sumFields.add("used");
+        JSONObject result = JsonExecuteNodeMonitorUtil.sumDataInLastSecond(list, 100, sumFields);
 
         System.out.println(result);
 

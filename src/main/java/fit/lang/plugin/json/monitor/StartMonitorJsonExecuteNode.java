@@ -9,7 +9,6 @@ import fit.lang.ExecuteNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
 
     static Thread thread;
 
-    public static List<JSONObject> getGatherList(int second) {
+    public static List<JSONObject> getCpuGatherList(int second) {
         return fetchMonitorDataInLastSecond(cpuGatherList, second);
     }
 
@@ -108,11 +107,6 @@ public class StartMonitorJsonExecuteNode extends JsonExecuteNode {
                 }
             }
         };
-    }
-
-    static String getCpuTotal() {
-        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
-        return centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G";
     }
 
     static JSONObject buildCpuPoint() {

@@ -7,6 +7,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.define.base.ExecuteNode;
@@ -419,12 +420,45 @@ public class ExecuteJsonNodeUtil {
         return Math.round(100.0 * processorMaxFreq / 1024 / 1024 / 1024) / 100.0;
     }
 
+    public static double covertSecondToHour(double second) {
+        return Math.round(100.0 * second / 3600) / 100.0;
+    }
+
+    public static JSONObject covertToG(JSONObject jsonObject) {
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            Object value = entry.getValue();
+
+            if (value instanceof Double) {
+                value = Math.round(100.0 * ((double) entry.getValue() / 1024 / 1024 / 1024)) / 100.0;
+            } else if (value instanceof Long) {
+                value = Math.round(100.0 * ((long) entry.getValue() / 1024 / 1024 / 1024)) / 100.0;
+            }
+            entry.setValue(value);
+        }
+        return jsonObject;
+    }
+
+    public static JSONObject covertToLong(JSONObject jsonObject) {
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            entry.setValue(Math.round(((Number) entry.getValue()).doubleValue()));
+        }
+        return jsonObject;
+    }
+
     public static String buildInnerClientIp(String clientIp) {
         return SecureUtil.md5(clientIp);
     }
 
     public static String buildInnerClientId(String clientId, String clientIp) {
         return clientId + "." + clientIp;
+    }
+
+    public static List<JSONObject> convertToList(JSONArray array) {
+        List<JSONObject> list = new ArrayList<>(array.size());
+        for (Object item : array) {
+            list.add((JSONObject) item);
+        }
+        return list;
     }
 
 }

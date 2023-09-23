@@ -6,7 +6,9 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.fetchMonitorDataInLastSecond;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToLong;
+import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.*;
 
 /**
  * 获取cloud场景下，获取client推送的监控信息
@@ -39,6 +41,8 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             result.put("memoryPoints", fetchMonitorDataInLastSecond(client.getJSONArray("memoryPoints"), second));
             result.put("clientInfo", client.get("clientInfo"));
             result.put("cpuTotal", client.get("cpuTotal"));
+            result.put("sumCpuPoints", covertToLong(covertToG(sumCpuDataInLastSecond(client.getJSONArray("cpuPoints"), second, JsonExecuteNodeMonitorUtil.getCpuTotal()))));
+            result.put("sumMemoryPoints", covertToLong(sumMemoryDataInLastSecond(client.getJSONArray("memoryPoints"), second)));
         }
 
         output.setData(result);
