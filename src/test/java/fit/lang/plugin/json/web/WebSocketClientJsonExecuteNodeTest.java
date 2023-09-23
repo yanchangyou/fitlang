@@ -6,19 +6,6 @@ import junit.framework.TestCase;
 
 public class WebSocketClientJsonExecuteNodeTest extends TestCase {
 
-    public void testExecute() {
-
-        String flow = "{" +//
-                "   'uni': 'wsClient'," +
-                "   'url': 'ws://127.0.0.1:10001/ws'," +
-                "}";
-
-        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
-
-        System.out.println(output);
-
-    }
-
     public void testServerAndClient() throws InterruptedException {
 
         startWebSocketServer();
@@ -37,6 +24,7 @@ public class WebSocketClientJsonExecuteNodeTest extends TestCase {
     public void startWebSocketServer() {
         String flow = "{" +//
                 "   'uni': 'wsServer'," +
+                "   'port': 11001," +
                 "}";
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
@@ -47,7 +35,7 @@ public class WebSocketClientJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'wsClient'," +
-                "   'url': 'ws://127.0.0.1:10001/ws'," +
+                "   'url': 'ws://127.0.0.1:11001/ws'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode(message.toJSONString(), flow);
