@@ -28,7 +28,7 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
         result.put("second", second);
 
         int cpuCount = JsonExecuteNodeMonitorUtil.getCpuProcessorCount();
-        long memoryG = getMemoryG();
+        double memoryG = getMemoryG();
         result.put("cpuCount", cpuCount);
         result.put("memoryG", memoryG);
 

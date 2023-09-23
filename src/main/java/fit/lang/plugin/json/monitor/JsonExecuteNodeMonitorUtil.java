@@ -27,11 +27,11 @@ public class JsonExecuteNodeMonitorUtil {
 
     static int getCpuProcessorCount() {
         CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
-        return centralProcessor.getPhysicalProcessorCount();
+        return centralProcessor.getLogicalProcessorCount();
     }
 
-    static long getMemoryG() {
-        return OshiUtil.getHardware().getMemory().getTotal() / 1024 / 1024 / 1024;
+    static double getMemoryG() {
+        return round(OshiUtil.getHardware().getMemory().getTotal() / 1024.0 / 1024 / 1024, 2);
     }
 
     public static List<JSONObject> fetchMonitorDataInLastSecond(JSONArray array, int second) {
@@ -131,12 +131,12 @@ public class JsonExecuteNodeMonitorUtil {
         return sumResult;
     }
 
-    public static JSONObject sumMemoryDataInLastSecond(JSONArray array, int second, long memoryG) {
+    public static JSONObject sumMemoryDataInLastSecond(JSONArray array, int second, double memoryG) {
         List<JSONObject> list = convertToList(array);
         return sumMemoryDataInLastSecond(list, second, memoryG);
     }
 
-    public static JSONObject sumMemoryDataInLastSecond(List<JSONObject> list, int second, long memoryG) {
+    public static JSONObject sumMemoryDataInLastSecond(List<JSONObject> list, int second, double memoryG) {
         List<String> sumFields = new ArrayList<>();
         sumFields.add("available");
         sumFields.add("used");
