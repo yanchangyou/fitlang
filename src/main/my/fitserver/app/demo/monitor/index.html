@@ -48,9 +48,8 @@
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
     </select> &nbsp;&nbsp;
-    <span id="cpuTotalWrap">总CPU:<span id="cpuTotal"></span> &nbsp;&nbsp;
-        闲置CPU：<span id="cupWrap"><span id="cpuSumTotal"></span>GH</span></span>
-    <span id="memoryTotalWrap">闲置内存：<span id="sumWrap"><span id="memorySumTotal"></span>GH</span></span>
+    <span id="cpuTotalWrap">闲置CPU：<span id="allCpuSumFree"></span>C(<span id="cpuCount"></span>C)</span>
+    <span id="memoryTotalWrap">闲置内存：<span id="allMemorySumFree"></span>G(<span id="memoryG"></span>G)</span>
 </div>
 <div>
     <canvas id="cpuChart"></canvas>
@@ -137,9 +136,12 @@
 
            myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
            myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
-           document.getElementById("cpuTotal").innerText = result.cpuTotal;
-           document.getElementById("cpuSumTotal").innerText = result.sumCpuPoints.total;
-           document.getElementById("memorySumTotal").innerText = result.sumMemoryPoints.total;
+
+           document.getElementById("allCpuSumFree").innerText = result.sumCpuPoints.allCpuSumFree;
+           document.getElementById("allMemorySumFree").innerText = result.sumMemoryPoints.allMemorySumFree;
+
+           document.getElementById("cpuCount").innerText = result.cpuCount;
+           document.getElementById("memoryG").innerText = result.memoryG;
 
            show(document.getElementById("choiceType").value);
 

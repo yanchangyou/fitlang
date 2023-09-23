@@ -416,6 +416,11 @@ public class ExecuteJsonNodeUtil {
         return result;
     }
 
+    public static double round(double num, int precision) {
+        double base = Math.pow(10, precision);
+        return Math.round(base * num) / base;
+    }
+
     public static double covertToG(long processorMaxFreq) {
         return Math.round(100.0 * processorMaxFreq / 1024 / 1024 / 1024) / 100.0;
     }

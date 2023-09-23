@@ -1,8 +1,10 @@
 package fit.lang.plugin.json.monitor;
 
+import cn.hutool.core.math.MathUtil;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import oshi.hardware.CentralProcessor;
 
 import java.util.ArrayList;
@@ -21,6 +23,15 @@ public class JsonExecuteNodeMonitorUtil {
     static long getCpuTotal() {
         CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
         return centralProcessor.getPhysicalProcessorCount() * centralProcessor.getMaxFreq();
+    }
+
+    static int getCpuProcessorCount() {
+        CentralProcessor centralProcessor = OshiUtil.getHardware().getProcessor();
+        return centralProcessor.getPhysicalProcessorCount();
+    }
+
+    static long getMemoryG() {
+        return OshiUtil.getHardware().getMemory().getTotal() / 1024 / 1024 / 1024;
     }
 
     public static List<JSONObject> fetchMonitorDataInLastSecond(JSONArray array, int second) {
@@ -88,12 +99,12 @@ public class JsonExecuteNodeMonitorUtil {
         return result;
     }
 
-    public static JSONObject sumCpuDataInLastSecond(JSONArray array, int second, long frequency) {
+    public static JSONObject sumCpuDataInLastSecond(JSONArray array, int second, int cpuCount) {
         List<JSONObject> list = convertToList(array);
-        return sumCpuDataInLastSecond(list, second, frequency);
+        return sumCpuDataInLastSecond(list, second, cpuCount);
     }
 
-    public static JSONObject sumCpuDataInLastSecond(List<JSONObject> list, int second, long frequency) {
+    public static JSONObject sumCpuDataInLastSecond(List<JSONObject> list, int second, int cpuCount) {
         List<String> sumFields = new ArrayList<>();
         sumFields.add("free");
         sumFields.add("used");
@@ -104,22 +115,25 @@ public class JsonExecuteNodeMonitorUtil {
         }
 
         //获取的是百分比，需要转换
-        double free = covertSecondToHour(sumResult.getDouble("free") * frequency / 100);
-        double used = covertSecondToHour(sumResult.getDouble("used") * frequency / 100);
+        double free = ExecuteJsonNodeUtil.round(sumResult.getDouble("free") / 100, 2);
+        double used = ExecuteJsonNodeUtil.round(sumResult.getDouble("used") / 100, 2);
 
         sumResult.put("free", free);
         sumResult.put("used", used);
         sumResult.put("total", (free + used));
+        double sumFree = ExecuteJsonNodeUtil.round(free / (free + used), 2);
+        sumResult.put("sumFree", sumFree);
+        sumResult.put("allCpuSumFree", ExecuteJsonNodeUtil.round(sumFree * cpuCount, 2));
 
         return sumResult;
     }
 
-    public static JSONObject sumMemoryDataInLastSecond(JSONArray array, int second) {
+    public static JSONObject sumMemoryDataInLastSecond(JSONArray array, int second, long memoryG) {
         List<JSONObject> list = convertToList(array);
-        return sumMemoryDataInLastSecond(list, second);
+        return sumMemoryDataInLastSecond(list, second, memoryG);
     }
 
-    public static JSONObject sumMemoryDataInLastSecond(List<JSONObject> list, int second) {
+    public static JSONObject sumMemoryDataInLastSecond(List<JSONObject> list, int second, long memoryG) {
         List<String> sumFields = new ArrayList<>();
         sumFields.add("available");
         sumFields.add("used");
@@ -135,6 +149,10 @@ public class JsonExecuteNodeMonitorUtil {
         sumResult.put("available", available);
         sumResult.put("used", used);
         sumResult.put("total", (available + used));
+        double sumFree = ExecuteJsonNodeUtil.round(available / (available + used), 2);
+
+        sumResult.put("sumFree", sumFree);
+        sumResult.put("allMemorySumFree", ExecuteJsonNodeUtil.round(sumFree * memoryG, 2));
 
         return sumResult;
     }

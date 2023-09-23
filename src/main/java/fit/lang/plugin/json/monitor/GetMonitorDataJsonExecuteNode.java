@@ -8,8 +8,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import oshi.hardware.CentralProcessor;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
-import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.sumCpuDataInLastSecond;
-import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.sumMemoryDataInLastSecond;
+import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.*;
 
 /**
  * 获取监控信息
@@ -28,8 +27,13 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
         result.put("cpuTotal", centralProcessor.getPhysicalProcessorCount() + " X " + covertToG(centralProcessor.getMaxFreq()) + "G");
         result.put("second", second);
 
-        result.put("sumCpuPoints", (covertToG(sumCpuDataInLastSecond(StartMonitorJsonExecuteNode.cpuGatherList, second, JsonExecuteNodeMonitorUtil.getCpuTotal()))));
-        result.put("sumMemoryPoints", (sumMemoryDataInLastSecond(StartMonitorJsonExecuteNode.memoryGatherList, second)));
+        int cpuCount = JsonExecuteNodeMonitorUtil.getCpuProcessorCount();
+        long memoryG = getMemoryG();
+        result.put("cpuCount", cpuCount);
+        result.put("memoryG", memoryG);
+
+        result.put("sumCpuPoints", sumCpuDataInLastSecond(StartMonitorJsonExecuteNode.cpuGatherList, second, cpuCount));
+        result.put("sumMemoryPoints", sumMemoryDataInLastSecond(StartMonitorJsonExecuteNode.memoryGatherList, second, memoryG));
 
         output.setData(result);
     }

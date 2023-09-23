@@ -41,8 +41,14 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             result.put("memoryPoints", fetchMonitorDataInLastSecond(client.getJSONArray("memoryPoints"), second));
             result.put("clientInfo", client.get("clientInfo"));
             result.put("cpuTotal", client.get("cpuTotal"));
-            result.put("sumCpuPoints", covertToLong(covertToG(sumCpuDataInLastSecond(client.getJSONArray("cpuPoints"), second, JsonExecuteNodeMonitorUtil.getCpuTotal()))));
-            result.put("sumMemoryPoints", covertToLong(sumMemoryDataInLastSecond(client.getJSONArray("memoryPoints"), second)));
+
+            int cpuCount = client.getInteger("cpuCount");
+            long memoryG = client.getInteger("memoryG");
+            result.put("cpuCount", cpuCount);
+            result.put("memoryG", memoryG);
+
+            result.put("sumCpuPoints", (sumCpuDataInLastSecond(client.getJSONArray("cpuPoints"), second, cpuCount)));
+            result.put("sumMemoryPoints", (sumMemoryDataInLastSecond(client.getJSONArray("memoryPoints"), second, memoryG)));
         }
 
         output.setData(result);

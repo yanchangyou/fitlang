@@ -45,6 +45,8 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         String innerClientId = buildInnerClientId(clientId, clientIp);
 
         String cpuTotal = input.getString("cpuTotal");
+        String cpuCount = input.getString("cpuCount");
+        String memoryG = input.getString("memoryG");
         JSONObject clientInfo = input.getJsonObject("clientInfo");
         JSONObject client = clientInfoMap.get(innerClientId);
         if (client == null) {
@@ -53,6 +55,9 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             client.put("cpuPoints", new JSONArray());
             client.put("memoryPoints", new JSONArray());
             client.put("cpuTotal", cpuTotal);
+            client.put("cpuCount", cpuCount);
+            client.put("memoryG", memoryG);
+
             client.put("clientInfo", clientInfo);
 
             JSONObject onlyClientInfo = new JSONObject();
@@ -84,6 +89,8 @@ public class ReceiveClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             client.getJSONArray("memoryPoints").add(memoryPoint);
 
             client.put("cpuTotal", cpuTotal);
+            client.put("cpuCount", cpuCount);
+            client.put("memoryG", memoryG);
 
         } else {
             client.put("message", "cpuPoint or memoryPoint data is empty!");
