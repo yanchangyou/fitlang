@@ -49,22 +49,23 @@ sourceSets {
     main {
         java {
 //            srcDir 'src/main/gen'
-            srcDir 'src/main/java'
+            srcDir 'fitlang-plugin-idea/src/main/java'
+            srcDir 'fitlang-core/src/main/java'
 //            srcDir 'src/main/gen-bnf'
 //            srcDir 'src/main/gen-flex'
         }
         resources {
-            srcDir 'src/main/resources'
-            srcDir 'src/main/my'
+            srcDir 'fitlang-plugin-idea/src/main/resources'
+            srcDir 'fitlang-server' exclude(".idea")
         }
     }
 
     test {
         java {
-            srcDir 'src/test/java'
+            srcDir 'fitlang-core/src/test/java'
         }
         resources {
-            srcDir 'src/test/resources'
+            srcDir 'fitlang-core/src/test/resources'
         }
     }
 }

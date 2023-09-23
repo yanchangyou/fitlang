@@ -13,7 +13,9 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         String path = WriteExcelJsonExecuteNodeTest.class.getResource(".").getFile();
-        ServerJsonExecuteNode.setCurrentServerFilePath(path.replace("/test/classes/fit", "/test/resources/fit"));
+        ServerJsonExecuteNode.setCurrentServerFilePath(
+                path.replace("/test/classes/fit", "/test/resources/fit")
+                        .replace("/classes/java/test-instrumented/fit", "/resources/test/fit"));
         System.out.println(ServerJsonExecuteNode.getServerFileDir());
     }
 

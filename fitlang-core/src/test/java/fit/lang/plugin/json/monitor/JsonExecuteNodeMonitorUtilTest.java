@@ -37,8 +37,8 @@ public class JsonExecuteNodeMonitorUtilTest extends TestCase {
 
         System.out.println(result);
 
-        Assert.assertEquals(1300.0, result.get("free"));
+        Assert.assertEquals(2.2, result.get("free"));
 
-        Assert.assertEquals(700.0, result.get("used"));
+        Assert.assertEquals(0.8, result.get("used"));
     }
 }
