@@ -30,4 +30,9 @@ public class AnyTypeExecuteNodeData<T> implements ExecuteNodeData {
     public Object cloneData() {
         return data;
     }
+
+    @Override
+    public ExecuteNodeData cloneThis() {
+        return new AnyTypeExecuteNodeData(cloneData());
+    }
 }

@@ -31,4 +31,9 @@ public class ObjectExecuteNodeData implements ExecuteNodeData {
         return data;
     }
 
+    @Override
+    public ExecuteNodeData cloneThis() {
+        return new ObjectExecuteNodeData(cloneData());
+    }
+
 }

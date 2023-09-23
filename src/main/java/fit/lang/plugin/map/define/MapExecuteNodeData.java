@@ -10,6 +10,13 @@ import java.util.Map;
  */
 public class MapExecuteNodeData implements ExecuteNodeData {
 
+    public MapExecuteNodeData() {
+    }
+
+    public MapExecuteNodeData(Map<String, Object> data) {
+        this.data = data;
+    }
+
     Map<String, Object> data = new HashMap<>();
 
     public Map<String, Object> getData() {
@@ -26,6 +33,11 @@ public class MapExecuteNodeData implements ExecuteNodeData {
         Map<String, Object> cloneMap = new HashMap<>();
         cloneMap.putAll(data);
         return cloneMap;
+    }
+
+    @Override
+    public ExecuteNodeData cloneThis() {
+        return new MapExecuteNodeData((Map<String, Object>) cloneData());
     }
 
     public void setData(Map<String, Object> data) {

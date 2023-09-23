@@ -26,4 +26,6 @@ public interface ExecuteNodeData {
      */
     Object cloneData();
 
+    ExecuteNodeData cloneThis();
+
 }

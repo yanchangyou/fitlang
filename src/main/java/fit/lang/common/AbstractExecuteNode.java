@@ -153,7 +153,7 @@ public abstract class AbstractExecuteNode implements ExecuteNode {
 
         //next是否执行采用pipe模式
         if (isPipeNext()) {
-            input.setNodeData(output.getNodeData());
+            input.setNodeData(output.getNodeData().cloneThis());
         }
 
         //顺序执行next节点

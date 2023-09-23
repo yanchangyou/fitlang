@@ -33,6 +33,11 @@ public class JsonExecuteNodeData implements ExecuteNodeData {
         return data.clone();
     }
 
+    @Override
+    public ExecuteNodeData cloneThis() {
+        return new JsonExecuteNodeData((JSONObject) cloneData());
+    }
+
     public void setData(JSONObject data) {
         this.data = data;
     }
