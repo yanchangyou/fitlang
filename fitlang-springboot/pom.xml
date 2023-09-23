@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.3</version>
+        <version>2.7.14</version>
         <!--        <version>2.5.12</version>-->
         <!--        <version>1.5.21.RELEASE</version>-->
     </parent>
@@ -35,6 +35,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fitlang</groupId>
+            <artifactId>fitlang-core</artifactId>
+            <version>0.5.11-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

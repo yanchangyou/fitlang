@@ -1,9 +1,12 @@
 package fit.spring.boot;
 
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -24,6 +27,12 @@ public class FitSpringBootWebApplication {
     @RequestMapping("/hello")
     public Object hello() {
         return "hello, fit!";
+    }
+
+    @RequestMapping("/execute")
+    @ResponseBody
+    public Object execute(@RequestBody String nodeDefine) {
+        return ExecuteJsonNodeUtil.executeCode(nodeDefine);
     }
 
 }

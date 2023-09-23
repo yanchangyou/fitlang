@@ -38,6 +38,16 @@ public class ExecuteJsonNodeUtil {
      * 执行执行json
      *
      * @param inputJson
+     * @return
+     */
+    public static JSONObject execute(JSONObject inputJson) {
+        return JSONObject.parseObject(executeCode(inputJson));
+    }
+
+    /**
+     * 执行执行json
+     *
+     * @param inputJson
      * @param node
      * @return
      */
