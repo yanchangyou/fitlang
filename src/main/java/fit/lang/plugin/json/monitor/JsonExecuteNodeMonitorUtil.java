@@ -80,7 +80,7 @@ public class JsonExecuteNodeMonitorUtil {
                 continue;
             }
 
-            double sum = 0;
+            double sum = dataList.get(0).getDouble(field);
             JSONObject preItem = null;
             for (JSONObject item : dataList) {
                 if (preItem == null) {
