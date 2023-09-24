@@ -21,7 +21,7 @@ public class FitDispatcherServlet extends HttpServlet {
         if ("_api.fit".equals(servletPath)) {
             //TODO
         }
-        File file = ResourceUtils.getFile("classpath:app" + servletPath);
+        File file = ResourceUtils.getFile("classpath:static" + servletPath);
 
         String fitCode = FileUtil.readUtf8String(file);
         String result = ExecuteJsonNodeUtil.executeCode(fitCode);

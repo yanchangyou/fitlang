@@ -28,7 +28,8 @@
         </plugins>
         <resources>
             <resource>
-                <directory>demo/fitserver</directory>
+                <directory>demo/fitserver/app</directory>
+                <targetPath>${project.build.outputDirectory}/static</targetPath>
             </resource>
         </resources>
     </build>
