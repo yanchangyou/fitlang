@@ -14,8 +14,8 @@
 #   更多函数计算案例，可参考：https://github.com/devsapp/awesome/
 #   有问题快来钉钉群问一下吧：33947367
 # ------------------------------------
-edition: 0.5.12
-name: fitlang-serverless
+edition: 1.0.0
+name: fitlang-springboot
 # access 是当前应用所需要的密钥信息配置：
 # 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
 # 密钥使用顺序可以参考：https://www.serverless-devs.com/serverless-devs/tool#密钥使用顺序与规范
@@ -24,7 +24,7 @@ access: 'default'
 vars: # 全局变量
   region: 'cn-hangzhou'
   service:
-    name: 'fitlang-serverless'
+    name: 'fitlang-springboot'
     description: 'Serverless Devs Web Framework Service'
 
 services:
@@ -49,14 +49,14 @@ services:
       function:
         name: 'springboot'
         description: 'Serverless Devs Web Framework Function'
-        codeUri: ./fitlang-springboot
+        codeUri: ./
         runtime: custom
         memorySize: 1024
         timeout: 30
         instanceConcurrency: 100
         customRuntimeConfig:
           command:
-            - ./bootstrap
+            - ./fitlang-springboot/bootstrap
       triggers:
         - name: httpTrigger
           type: http
