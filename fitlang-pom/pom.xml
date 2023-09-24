@@ -15,6 +15,7 @@
     </properties>
     <modules>
         <module>../fitlang-core</module>
+        <module>../fitlang-server</module>
         <module>../fitlang-springboot</module>
     </modules>
 

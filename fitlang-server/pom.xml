@@ -26,5 +26,10 @@
                 </configuration>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>demo/fitserver</directory>
+            </resource>
+        </resources>
     </build>
 </project>
