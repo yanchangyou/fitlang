@@ -56,7 +56,7 @@ services:
         instanceConcurrency: 100
         customRuntimeConfig:
           command:
-            - ./fitlang-springboot/bootstrap
+            - ./fitlang-springboot/bootstrap.sh
       triggers:
         - name: httpTrigger
           type: http
