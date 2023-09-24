@@ -49,7 +49,7 @@ services:
       function:
         name: 'springboot'
         description: 'Serverless Devs Web Framework Function'
-        codeUri: ./fitlang
+        codeUri: ./fitlang-springboot
         runtime: custom
         memorySize: 1024
         timeout: 30
