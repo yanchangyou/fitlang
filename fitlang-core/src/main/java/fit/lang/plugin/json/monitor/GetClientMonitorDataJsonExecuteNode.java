@@ -43,7 +43,7 @@ public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
             result.put("cpuTotal", client.get("cpuTotal"));
 
             int cpuCount = client.getInteger("cpuCount");
-            long memoryG = client.getInteger("memoryG");
+            double memoryG = client.getDouble("memoryG");
             result.put("cpuCount", cpuCount);
             result.put("memoryG", memoryG);
 
