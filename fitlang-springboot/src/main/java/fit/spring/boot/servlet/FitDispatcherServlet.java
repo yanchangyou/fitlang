@@ -1,17 +1,16 @@
 package fit.spring.boot.servlet;
 
+import cn.hutool.core.io.IoUtil;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import org.springframework.util.ResourceUtils;
-import org.springframework.util.StreamUtils;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.InputStream;
 
 @WebServlet(urlPatterns = "*.fit")
 public class FitDispatcherServlet extends HttpServlet {
@@ -23,9 +22,10 @@ public class FitDispatcherServlet extends HttpServlet {
         if ("_api.fit".equals(servletPath)) {
             //TODO
         }
-        File file = ResourceUtils.getFile("classpath:static" + servletPath);
 
-        String fitCode = StreamUtils.copyToString(new FileInputStream(file), Charset.defaultCharset());
+        InputStream inputStream = FitDispatcherServlet.class.getClassLoader().getResourceAsStream("static" + servletPath);
+
+        String fitCode = IoUtil.readUtf8(inputStream);
 
         String result = ExecuteJsonNodeUtil.executeCode(fitCode);
 
