@@ -88,6 +88,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - loop: 循环执行节点，loopTimes制定执行次数
 - switch: 分支执行节点，switchField指定分支字段
 - return: 返回json
+- thread: 多线程执行
 
 ### Web节点
 - postJson: http post json
