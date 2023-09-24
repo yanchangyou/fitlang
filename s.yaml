@@ -15,7 +15,7 @@
 #   有问题快来钉钉群问一下吧：33947367
 # ------------------------------------
 edition: 0.5.12
-name: fitlang-springboot
+name: fitlang-serverless
 # access 是当前应用所需要的密钥信息配置：
 # 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
 # 密钥使用顺序可以参考：https://www.serverless-devs.com/serverless-devs/tool#密钥使用顺序与规范
@@ -24,7 +24,7 @@ access: 'default'
 vars: # 全局变量
   region: 'cn-hangzhou'
   service:
-    name: 'web-framework-fitlang'
+    name: 'fitlang-serverless'
     description: 'Serverless Devs Web Framework Service'
 
 services:
