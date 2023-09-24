@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.excel.util;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -41,5 +43,9 @@ public class JxlExcelUtil {
         }
 
         return list;
+    }
+
+    public static void writeExcel(JSONArray list, JSONObject titleConfig, Integer defaultWidth, String path, String sheetName) throws IOException {
+        return;
     }
 }

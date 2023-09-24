@@ -7,11 +7,11 @@ import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.plugin.json.excel.util.EasyExcelUtil;
 
 import java.io.IOException;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildFilePath;
+import static fit.lang.plugin.json.excel.util.JxlExcelUtil.writeExcel;
 
 /**
  * 执行节点
@@ -38,7 +38,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
         JSONArray list = input.getJsonArray(listField);
 
         try {
-            EasyExcelUtil.writeExcel(list, titleConfig, defaultWidth, path, sheetName);
+            writeExcel(list, titleConfig, defaultWidth, path, sheetName);
         } catch (IOException e) {
             throw new ExecuteNodeException(e.getMessage());
         }
