@@ -59,7 +59,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 [http://fit.321zou.com](http://fit.321zou.com)
 
 ## 后续计划
-- 封装更多hutool工具
+- 封装更多Hutool工具
 - 性能测试
 
 ## 节点列表
@@ -97,8 +97,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - cloudClient: 连接web socket
 
 ### Excel节点
-- readExcel: 读取Excle
-- writeExcel: 写入Excle
+- readExcel: 读取Excel
+- writeExcel: 写入Excel
 
 ### 监控节点
 - startMonitor: 启动监控
