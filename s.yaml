@@ -49,14 +49,14 @@ services:
       function:
         name: 'springboot'
         description: 'Serverless Devs Web Framework Function'
-        codeUri: ./
+        codeUri: ./fitlang-springboot
         runtime: custom
         memorySize: 1024
         timeout: 30
         instanceConcurrency: 100
         customRuntimeConfig:
           command:
-            - ./fitlang-springboot/bootstrap
+            - ./bootstrap
       triggers:
         - name: httpTrigger
           type: http
