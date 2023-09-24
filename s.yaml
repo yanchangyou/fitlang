@@ -14,7 +14,7 @@
 #   更多函数计算案例，可参考：https://github.com/devsapp/awesome/
 #   有问题快来钉钉群问一下吧：33947367
 # ------------------------------------
-edition: 0.5.12
+edition: 1.0.0
 name: fitlang-springboot
 # access 是当前应用所需要的密钥信息配置：
 # 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
