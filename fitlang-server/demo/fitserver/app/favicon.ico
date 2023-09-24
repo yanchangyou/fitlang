@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+    <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+    <g>
+        <circle r="8"
+                cx="8"
+                cy="8"
+                fill="#060"></circle>
+    </g>
+    <g>
+        <text font-weight="bold"
+              style="cursor: move;"
+              xml:space="preserve"
+              text-anchor="start"
+              font-family="'Simonetta', serif"
+              font-size="14"
+              id="svg_1"
+              y="12.6"
+              x="3"
+              stroke-width="0"
+              fill="#efefef">F</text>
+        <text font-weight="bold"
+              style="cursor: move;"
+              xml:space="preserve"
+              text-anchor="start"
+              font-family="'Simonetta', serif"
+              font-size="5"
+              id="svg_2"
+              y="12.4"
+              x="10.8"
+              stroke-width="0"
+              fill="#efefef">it</text>
+    </g>
+</svg>
