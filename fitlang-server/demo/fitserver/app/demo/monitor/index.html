@@ -48,8 +48,10 @@
         <option value="cpuChart">CPU(%)</option>
         <option value="memoryChart">Memory(G)</option>
     </select> &nbsp;&nbsp;
-    <span id="cpuTotalWrap">闲置CPU：<span id="allCpuSumFree"></span>C(<span id="cpuCount"></span>C) 估值：<span id="allCpuSumFreeMoney"></span>元/天</span>
-    <span style="display:none;" id="memoryTotalWrap">闲置内存：<span id="allMemorySumFree"></span>G(<span id="memoryG"></span>G) 估值：<span id="allMemorySumFreeMoney"></span>元/天</span>
+    <span id="cpuTotalWrap">闲置CPU：<span id="allCpuSumFree"></span>C(<span id="cpuCount"></span>C) 估值：<span
+            id="allCpuSumFreeMoney"></span>元/天</span>
+    <span style="display:none;" id="memoryTotalWrap">闲置内存：<span id="allMemorySumFree"></span>G(<span
+            id="memoryG"></span>G) 估值：<span id="allMemorySumFreeMoney"></span>元/天</span>
 </div>
 <div>
     <canvas id="cpuChart"></canvas>
@@ -57,6 +59,8 @@
 </div>
 
 <script src="chart-3.9.1.js"></script>
+<script src="chartjs-adapter-date-fns-3.0.0.min.js"></script>
+
 <script>
     var httpRequest = new XMLHttpRequest();
 
@@ -162,6 +166,8 @@
        if(chartObject instanceof Chart){
            chartObject.destroy();
        }
+       //chartjs适配：https://github.com/chartjs/awesome#adapters
+       //日期时间格式：https://github.com/chartjs/chartjs-adapter-date-fns
        return new Chart(chartCanvas, {
             type: 'line',
             data: data,
@@ -175,7 +181,21 @@
                 scales: {
                   y: {
                     beginAtZero: true
-                  }
+                  },
+                  x: {
+                    type: 'time',
+                    time: {
+                      tooltipFormat: 'yyyy-MM-dd HH:mm:ss',
+                      unit: 'second',
+                      displayFormats: {
+                         second: 'yyyy-MM-dd HH:mm:ss'
+                      },
+                    },
+                    title: {
+                      display: true,
+                      text: 'Date'
+                    }
+                 },
                 }
             }
         });
