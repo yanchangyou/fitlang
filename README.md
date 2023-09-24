@@ -59,6 +59,9 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 [http://fit.321zou.com](http://fit.321zou.com)
 
 ## 后续计划
+- 数据库
+- redis
+- 消息中间件
 - 封装更多Hutool工具
 - 性能测试
 
