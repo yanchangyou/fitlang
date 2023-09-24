@@ -73,11 +73,13 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - removeEmptyField: 移除空字段
 - print: 控制台打印
 - sleep: 流程休眠节点
-- mix: 混入json对象
 - replace: 替换结果输出
 - mix: 混入json对象
-  -mixNode: 混入节点执行，用于嵌套字段场景
+- mixNode: 混入节点执行，用于嵌套字段场景
 - execute: 执行入参传递的流程
+- assert: 断言
+- eval: 表达式计算
+- set: 设置全局变量
 
 ### 流程节点（有child子节点）
 - sequence: 顺序执行节点
@@ -85,20 +87,26 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - foreach: 遍历json数组字段节点
 - loop: 循环执行节点，loopTimes制定执行次数
 - switch: 分支执行节点，switchField指定分支字段
+- return: 返回json
 
 ### Web节点
-- http: 支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete
-- server: 服务端节点
+- postJson: http post json
+- postForm: http post form
+- httpGet: http get
+- httpPut: http put
+- httpDelete: http delete
+- server: 服务端节点, 类属于tomcat
 - proxy: 代理节点
 - web: 配置web参数，响应头等
-
-### 云节点
-- cloudServer: 启动web socket
-- cloudClient: 连接web socket
+- wsServer: web socket server
+- wsClient: web socket client
 
 ### Excel节点
 - readExcel: 读取Excel
 - writeExcel: 写入Excel
+
+### 系统信息节点
+- systemInfo: 获取系统信息(暂时开放字段：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
 
 ### 监控节点
 - startMonitor: 启动监控
