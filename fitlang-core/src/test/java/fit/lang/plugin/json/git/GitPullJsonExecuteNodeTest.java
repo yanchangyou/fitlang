@@ -11,7 +11,7 @@ public class GitPullJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'gitPull'," +
-                "   'path': '/opt/github/fitlang'" +
+                "   'gitPath': '/opt/github/fitlang/'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);

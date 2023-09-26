@@ -15,18 +15,18 @@ public class GitPullJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String path = parseStringField("path", input);
+        String gitPath = parseStringField("gitPath", input);
 
-        if (path == null) {
-            path = ".";
+        if (gitPath == null) {
+            gitPath = ".";
         }
         String message;
-        File file = new File(path);
+        File file = new File(gitPath);
         if (file.exists()) {
-            message = RuntimeUtil.execForStr("git -C ".concat(path).concat(" pull"));
-            output.set("path", file.getAbsolutePath());
+            message = RuntimeUtil.execForStr("git -C ".concat(gitPath).concat(" pull"));
+            output.set("gitPath", file.getAbsolutePath());
         } else {
-            message = "path not exited: ".concat(path);
+            message = "gitPath not exited: ".concat(gitPath);
         }
 
         output.set("message", message);
