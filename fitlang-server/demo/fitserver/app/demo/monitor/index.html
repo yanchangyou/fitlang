@@ -96,6 +96,7 @@
         }
     }
 
+
 </script>
 <script>
 
@@ -195,13 +196,19 @@
                       displayFormats: {
                          second: 'yyyy-MM-dd HH:mm:ss'
                       },
+                      stepSize: getStepSize(),
                     },
                     min: min,
-                    max: max
+                    max: max,
                  },
                 }
             }
         });
+    }
+
+    function getStepSize() {
+        var fetchSecond = document.getElementById("fetchSecond").value;
+        return Math.max(fetchSecond/100,1);
     }
 
     function show(domId) {
@@ -243,6 +250,7 @@
     fetch(300);
 
     setRefreshTime(10);
+
 
 </script>
 
