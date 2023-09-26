@@ -98,12 +98,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     private void setFileServer(FitServerInstance fitServer) {
-        String rootPath = nodeJsonDefine.getString("root");
+        String rootPath = nodeJsonDefine.getString("fitPath");
 
         if (rootPath == null) {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
         }
-        if (StrUtil.isBlank(rootPath)) {
+        if (StrUtil.isBlank(rootPath) || !new File(rootPath).exists()) {
             System.out.println("server start warning: rootPath is not existed: " + rootPath);
             return;
         }
