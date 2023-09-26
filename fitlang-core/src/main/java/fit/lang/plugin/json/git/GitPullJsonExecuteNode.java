@@ -20,10 +20,10 @@ public class GitPullJsonExecuteNode extends JsonExecuteNode {
         if (path == null) {
             path = ".";
         }
-        String message = parseStringField("message", input);
+        String message;
         File file = new File(path);
         if (file.exists()) {
-            message = RuntimeUtil.execForStr("git pull ".concat(path));
+            message = RuntimeUtil.execForStr("git -C ".concat(path).concat(" pull"));
             output.set("path", file.getAbsolutePath());
         } else {
             message = "path not exited: ".concat(path);
