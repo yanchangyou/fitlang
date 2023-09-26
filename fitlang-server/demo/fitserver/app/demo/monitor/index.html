@@ -139,12 +139,12 @@
         request("POST", url, "", function(body){
            var result = JSON.parse(body);
            if(result.message) {
-                alert(result.mssage);
+                alert(result.message);
                 return;
            }
 
-           myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap);
-           myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap);
+           myCpuChat = showChat(cpuChartCanvas, myCpuChat, result.cpuPoints, cpuColorMap, result.min, result.max);
+           myMemoryChat = showChat(memoryChartCanvas, myMemoryChat,result.memoryPoints, memoryColorMap, result.min, result.max);
 
            document.getElementById("allCpuSumFree").innerText = result.sumCpuPoints.allCpuSumFree;
            document.getElementById("allMemorySumFree").innerText = result.sumMemoryPoints.allMemorySumFree;
@@ -160,7 +160,7 @@
         });
     }
 
-    function showChat(chartCanvas, chartObject, points, colorMap) {
+    function showChat(chartCanvas, chartObject, points, colorMap, min, max) {
 
        var data =  {labels:[],datasets:[]};
        for(var i=0; i<points.length; i++) {
@@ -196,10 +196,8 @@
                          second: 'yyyy-MM-dd HH:mm:ss'
                       },
                     },
-                    title: {
-                      display: true,
-                      text: 'Date'
-                    }
+                    min: min,
+                    max: max
                  },
                 }
             }

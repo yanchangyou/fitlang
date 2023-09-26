@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.monitor;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.system.oshi.OshiUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -7,6 +8,9 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import oshi.hardware.CentralProcessor;
 
+import java.util.Date;
+
+import static fit.lang.ExecuteNodeUtil.getNow;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.*;
 
@@ -34,6 +38,8 @@ public class GetMonitorDataJsonExecuteNode extends JsonExecuteNode {
 
         result.put("sumCpuPoints", sumCpuDataInLastSecond(StartMonitorJsonExecuteNode.cpuGatherList, second, cpuCount));
         result.put("sumMemoryPoints", sumMemoryDataInLastSecond(StartMonitorJsonExecuteNode.memoryGatherList, second, memoryG));
+        result.put("min", DateUtil.format(new Date(System.currentTimeMillis() - second * 1000L), "yyyy-MM-dd HH:mm:ss"));
+        result.put("max", getNow());
 
         output.setData(result);
     }
