@@ -1,5 +1,6 @@
 
 httpPrefix=$FIT_SERVER_HTTP_PREFIX
+fitPath=$FIT_PATH
 
 cd "$(dirname $0)/.."
 
@@ -67,5 +68,5 @@ lib/slf4j-api-2.0.7.jar:\
 lib/netty-codec-smtp-4.1.97.Final.jar:\
 lib/netty-transport-classes-kqueue-4.1.97.Final.jar:\
 lib/xmlbeans-3.1.0.jar\
- fit.server.FitServerMain app/server.fit $httpPrefix &
+ fit.server.FitServerMain app/server.fit $httpPrefix $fitPath&
 
