@@ -9,7 +9,7 @@ curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 
-java -classpath lib/fitlang-0.5.12.jar:\
+java -classpath lib/fitlang-0.5.13.jar:\
 lib/hutool-all-5.8.21.jar:\
 lib/SparseBitSet-1.2.jar:\
 lib/netty-codec-socks-4.1.97.Final.jar:\
@@ -68,5 +68,5 @@ lib/slf4j-api-2.0.7.jar:\
 lib/netty-codec-smtp-4.1.97.Final.jar:\
 lib/netty-transport-classes-kqueue-4.1.97.Final.jar:\
 lib/xmlbeans-3.1.0.jar\
- fit.server.FitServerMain app/server.fit $httpPrefix $fitPath&
+ fit.server.FitServerMain server.fit $httpPrefix $fitPath&
 

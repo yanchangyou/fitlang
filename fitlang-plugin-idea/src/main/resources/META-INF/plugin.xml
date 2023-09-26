@@ -230,7 +230,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.5.12 support deploy fitlang to aliyun serverless</li>
+            <li>0.5.13 support deploy fitlang to aliyun serverless</li>
             <li>0.5.11 Add idle CPU and memory value as serverless</li>
             <li>0.5.10 refine monitor</li>
             <li>0.5.9 monitor clientIp use md5</li>

@@ -14,9 +14,9 @@ public class FitServerMain {
 
     public static void main(String[] args) {
 
-        System.out.println("FitLang-0.5.12");
+        System.out.println("FitLang-0.5.13");
+        String fitPath = "app";
         String serverFilePath = "server.fit";
-        String fitPath;
         String httpPrefix = "http://127.0.0.1";
         int port = 11111;
 
@@ -29,10 +29,9 @@ public class FitServerMain {
             }
             if (args.length > 2) {
                 fitPath = args[2];
-                serverFilePath = fitPath + serverFilePath;
             }
         }
-        File serverFile = new File(serverFilePath);
+        File serverFile = new File(fitPath.concat("/").concat(serverFilePath));
 
         if (!serverFile.exists()) {
             System.out.println("server file not existed: " + serverFile.getAbsoluteFile());
