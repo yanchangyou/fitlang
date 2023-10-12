@@ -60,7 +60,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
     public void testExecute3() {
         String flow = "{" +//
                 "   'uni': 'readExcel'," +
-                "   'titleIndex': 0," +
+                "   'titleIndex': 1," +
                 "   'path': '测试用例.xls'" +
                 "}";
         try {
