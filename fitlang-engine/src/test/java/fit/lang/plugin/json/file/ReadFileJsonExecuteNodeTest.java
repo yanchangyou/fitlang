@@ -12,7 +12,7 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'readFile'," +
                 "   'workspaceDir': '/opt/github/fitlang/fitlang-server/demo/fitserver'," +
-                "   'path': '/app/first.fit'" +
+                "   'filePath': '/app/first.fit'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);

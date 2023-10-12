@@ -19,7 +19,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         //限定只能操作指定的路径
         String workspaceDir = parseStringField("workspaceDir", input);
 
-        String path = parseStringField("path", input);
+        String path = parseStringField("filePath", input);
         String charset = parseStringField("charset", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
@@ -27,7 +27,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         }
 
         if (StrUtil.isBlank(path)) {
-            throw new ExecuteNodeException("readFile path param is required!");
+            throw new ExecuteNodeException("readFile filePath param is required!");
         }
 
         //避免遍历父目录
@@ -49,6 +49,6 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
 
         String content = FileUtil.readString(filePath, CharsetUtil.charset(charset));
         output.set("content", content);
-        output.set("path", filePath);
+        output.set("absolutePath", filePath);
     }
 }

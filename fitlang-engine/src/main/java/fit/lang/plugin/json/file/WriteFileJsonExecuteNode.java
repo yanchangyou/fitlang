@@ -19,16 +19,16 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         //限定只能操作指定的路径
         String workspaceDir = parseStringField("workspaceDir", input);
 
-        String path = parseStringField("path", input);
+        String path = parseStringField("filePath", input);
         String charset = parseStringField("charset", input);
         String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
-            throw new ExecuteNodeException("readFile workspaceDir param is required!");
+            throw new ExecuteNodeException("writeFile workspaceDir param is required!");
         }
 
         if (StrUtil.isBlank(path)) {
-            throw new ExecuteNodeException("readFile path param is required!");
+            throw new ExecuteNodeException("writeFile filePath param is required!");
         }
 
         if (StrUtil.isBlank(contentField)) {
@@ -54,9 +54,9 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
 
         Object content = input.get(contentField);
         if (content == null) {
-            content = "";
+            throw new ExecuteNodeException("write content is null");
         }
         FileUtil.writeString(content.toString(), filePath, CharsetUtil.charset(charset));
-        output.set("path", filePath);
+        output.set("absolutePath", filePath);
     }
 }

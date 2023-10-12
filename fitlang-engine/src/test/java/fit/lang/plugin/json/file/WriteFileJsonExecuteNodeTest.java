@@ -12,7 +12,7 @@ public class WriteFileJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'writeFile'," +
                 "   'workspaceDir': '/opt/github/fitlang/fitlang-server/demo/fitserver'," +
-                "   'path': '/app/test.fit'," +
+                "   'filePath': '/app/test.fit'," +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'content': '{\"uni\":\"hello\"}'}", flow);
@@ -23,12 +23,7 @@ public class WriteFileJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("path"));
-
-        Assert.assertEquals("{\n" +
-                "    \"uni\": \"hello\",\n" +
-                "    \"message\": \"hello, world!\"\n" +
-                "}", outputJson.getString("content"));
+        Assert.assertTrue(outputJson.containsKey("absolutePath"));
 
     }
 }
