@@ -11,7 +11,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 /**
  * 执行节点
  */
-public class ReadFileJsonExecuteNode extends JsonExecuteNode {
+public class WriteFileJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -21,6 +21,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
 
         String path = parseStringField("path", input);
         String charset = parseStringField("charset", input);
+        String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
             throw new ExecuteNodeException("readFile workspaceDir param is required!");
@@ -28,6 +29,10 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
 
         if (StrUtil.isBlank(path)) {
             throw new ExecuteNodeException("readFile path param is required!");
+        }
+
+        if (StrUtil.isBlank(contentField)) {
+            contentField = "content";
         }
 
         //避免遍历父目录
@@ -47,8 +52,11 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             filePath = workspaceDir.concat(path);
         }
 
-        String content = FileUtil.readString(filePath, CharsetUtil.charset(charset));
-        output.set("content", content);
+        Object content = input.get(contentField);
+        if (content == null) {
+            content = "";
+        }
+        FileUtil.writeString(content.toString(), filePath, CharsetUtil.charset(charset));
         output.set("path", filePath);
     }
 }
