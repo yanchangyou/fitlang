@@ -40,7 +40,7 @@ sourceSets {
     main {
         java {
             srcDir 'fitlang-plugin-idea/src/main/java'
-            srcDir 'fitlang-core/src/main/java'
+            srcDir 'fitlang-engine/src/main/java'
             srcDir 'fitlang-server/src/main/java'
         }
         resources {
@@ -51,10 +51,10 @@ sourceSets {
 
     test {
         java {
-            srcDir 'fitlang-core/src/test/java'
+            srcDir 'fitlang-engine/src/test/java'
         }
         resources {
-            srcDir 'fitlang-core/src/test/resources'
+            srcDir 'fitlang-engine/src/test/resources'
         }
     }
 }

@@ -11,7 +11,7 @@
     <dependencies>
         <dependency>
             <groupId>com.fitlang</groupId>
-            <artifactId>fitlang-core</artifactId>
+            <artifactId>fitlang-engine</artifactId>
             <version>0.5.13-SNAPSHOT</version>
         </dependency>
     </dependencies>

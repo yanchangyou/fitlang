@@ -14,7 +14,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     <modules>
-        <module>../fitlang-core</module>
+        <module>../fitlang-engine</module>
         <module>../fitlang-server</module>
         <module>../fitlang-springboot</module>
     </modules>
