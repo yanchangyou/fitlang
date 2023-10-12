@@ -230,6 +230,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.5.14 add node: readFile, writeFile, parseJson, stringifyJson</li>
             <li>0.5.13 add node: gitPull, server support config fitPath</li>
             <li>0.5.12 support deploy fitlang to aliyun serverless</li>
             <li>0.5.11 Add idle CPU and memory value as serverless</li>
