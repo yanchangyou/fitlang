@@ -1,0 +1,10 @@
+{
+    "flag": "_needFormatJsonInConsole",
+    "input": {
+        "json": {
+            "hello": "world"
+        }
+    },
+    "uni": "stringifyJson",
+    "jsonField": "json"
+}

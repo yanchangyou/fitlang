@@ -1,0 +1,8 @@
+{
+    "flag": "_needFormatJsonInConsole",
+    "input": {
+        "json": "{'hello':'world'}"
+    },
+    "uni": "parseJson",
+    "jsonField": "json"
+}
