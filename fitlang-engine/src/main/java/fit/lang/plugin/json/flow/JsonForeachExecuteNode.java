@@ -15,6 +15,7 @@ import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 
 import java.util.List;
+import java.util.Map;
 
 import static fit.lang.ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME;
 
@@ -87,8 +88,12 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
         }
         Object item = list.get(currentIndex);
         JSONObject itemJson;
-        if (item instanceof JSONObject) {
-            itemJson = (JSONObject) item;
+        if (item instanceof Map) {
+            if (item instanceof JSONObject) {
+                itemJson = (JSONObject) item;
+            } else {
+                itemJson = JSONObject.from(item);
+            }
         } else {
             itemJson = new JSONObject();
             itemJson.put("data", item);
