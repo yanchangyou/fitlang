@@ -3,6 +3,7 @@ package fit.lang.plugin.json.file;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -11,6 +12,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.io.File;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 /**
  * 执行节点
@@ -52,7 +54,14 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         if (content == null) {
             throw new ExecuteNodeException("write content is null");
         }
-        File file = FileUtil.writeString(content.toString(), filePath, CharsetUtil.charset(charset));
+        String text;
+        Boolean format = nodeJsonDefine.getBoolean("format");
+        if (format != null && format && content instanceof JSONObject) {
+            text = toJsonTextWithFormat((JSONObject) content);
+        } else {
+            text = content.toString();
+        }
+        File file = FileUtil.writeString(text, filePath, CharsetUtil.charset(charset));
         output.set("absolutePath", file.getAbsoluteFile());
     }
 
