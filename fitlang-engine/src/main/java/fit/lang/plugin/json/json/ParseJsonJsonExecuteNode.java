@@ -5,6 +5,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+
 /**
  * 执行节点
  */
@@ -14,12 +16,15 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String jsonField = parseStringField("jsonField", input);
-        String jsonText = input.getString(jsonField);
+        Object jsonObject = input.get(jsonField);
 
         JSONObject outputJson = input.getData().clone();
-
-        outputJson.put(jsonField, JSONObject.parseObject(jsonText));
-
         output.setData(outputJson);
+
+        if (jsonObject instanceof String) {
+            if (isJsonObjectText(jsonObject)) {
+                output.set(jsonField, JSONObject.parseObject((String) jsonObject));
+            }
+        }
     }
 }
