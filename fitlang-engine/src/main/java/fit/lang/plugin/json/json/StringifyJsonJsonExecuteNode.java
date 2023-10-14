@@ -7,6 +7,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+
 /**
  * 执行节点
  */
@@ -33,7 +35,7 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
         String content = null;
         if (jsonObject != null) {
             if (needFormat != null && needFormat) {
-                content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat).replaceAll("\\t", "    ");
+                content = toJsonTextWithFormat(jsonObject);
             } else {
                 content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
             }
