@@ -62,7 +62,7 @@
                                                     "content.uni": "http",
                                                     "content.name": "${name}",
                                                     "content.url": "${request.url.raw}",
-                                                    "content.input": "${request.body.raw}"
+                                                    "content.param": "${request.body.raw}"
                                                 }
                                             },
                                             {
@@ -70,6 +70,10 @@
                                                 "json": {
                                                     "filePath": "${collectionName + '/' + parentName + '/' + name + '.fit'}"
                                                 }
+                                            },
+                                            {
+                                                "uni": "parseJson",
+                                                "jsonField": "content.param"
                                             },
                                             {
                                                 "uni": "writeFile",
@@ -91,15 +95,18 @@
                                             "content.uni": "http",
                                             "content.name": "${name}",
                                             "content.url": "${request.url.raw}",
-                                            "content.input": "${request.body.raw}"
+                                            "content.param": "${request.body.raw}"
                                         }
                                     },
                                     {
                                         "uni": "mix",
                                         "json": {
-                                            "collectionName":"${collectionName}",
                                             "filePath": "${collectionName + '/' + name+'.fit'}"
                                         }
+                                    },
+                                    {
+                                        "uni": "parseJson",
+                                        "jsonField": "content.param"
                                     },
                                     {
                                         "uni": "writeFile",
