@@ -22,7 +22,8 @@
         },
         {
             "uni": "set",
-            "key": "collectionName"
+            "key": "collectionName",
+            "value": "${collectionName}"
         },
         {
             "uni": "foreach",
@@ -96,6 +97,7 @@
                                     {
                                         "uni": "mix",
                                         "json": {
+                                            "collectionName":"${collectionName}",
                                             "filePath": "${collectionName + '/' + name+'.fit'}"
                                         }
                                     },
