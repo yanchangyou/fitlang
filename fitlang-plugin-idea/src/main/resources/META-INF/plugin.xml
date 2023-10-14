@@ -140,16 +140,21 @@ uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一�
 hello: hello world demo<br/>
 echo: 原样返回入参<br/>
 add：支持json相加<br/>
+print：控制台打印<br/>
+sleep：流程休眠节点<br/>
+replace: 替换结果输出<br/>
+execute: 执行入参传递的流程<br/>
+
+JSON节点
+add：支持json相加<br/>
 convert：转换节点，支持json到json的转换，使用转换表达式<br/>
 removeField：移除json字段<br/>
 removeEmptyField：移除空字段<br/>
-print：控制台打印<br/>
-sleep：流程休眠节点<br/>
-mix: 混入json对象<br/>
 replace: 替换结果输出<br/>
 mix: 混入json对象<br/>
 mixNode: 混入节点执行，用于嵌套字段场景<br/>
-execute: 执行入参传递的流程<br/>
+parseJson: 解析json字符串成json对象
+stringifyJson: json对象转换为json字符串
 
 <br/>
 流程节点（有child子节点）<br/>
@@ -230,6 +235,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.5.15 refine node: stringify support format, foreach support basic array, readFile support dir, http support http status code when error</li>
             <li>0.5.14 add node: readFile, writeFile, parseJson, stringifyJson</li>
             <li>0.5.13 add node: gitPull, server support config fitPath</li>
             <li>0.5.12 support deploy fitlang to aliyun serverless</li>
