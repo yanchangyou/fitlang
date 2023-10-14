@@ -3,6 +3,7 @@ package fit.lang.plugin.json.util;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.plugin.json.json.RemoveFieldJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
