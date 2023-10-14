@@ -2,6 +2,7 @@ package fit.lang.plugin.json.util;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -45,6 +46,8 @@ public class ConvertJsonExecuteNodeTest extends TestCase {
                 "{\"A\":{\"A1\":\"甲\"},\"B\":{\"B1\":\"1\"},\"C\":{\"C1\":[1,2]},\"D\":{\"D1\":{\"a\":1,\"b\":\"1\"}},\"E\":[{\"E1\":\"甲\",\"E2\":\"1\"},{\"E1\":\"乙\",\"E2\":\"2\"}]}",
                 "{\"A\":{\"A1\":\"甲\"},\"B\":{\"B1\":\"1\"},\"C\":{\"C1\":[1,2]},\"D\":{\"D1\":{\"a\":1,\"b\":\"1\"}},\"E\":[{\"E1\":\"甲\"},{\"E1\":\"乙\"}]}",
                 "{\"E\":[{\"E3\":[{\"E1\":\"甲\",\"E2\":\"1\"},{\"E1\":11,\"E2\":\"11\"}]},{\"E3\":[{\"E1\":\"乙\",\"E2\":\"2\"},{\"E1\":\"乙乙\",\"E2\":\"22\"}]}]}",
+                "{\"E\":[{\"E3\":[{\"E1\":\"甲\",\"E2\":1},{\"E2\":2}]},{\"E3\":[{\"E2\":2}]}]}",
+                "{\"A1\":\"甲\"}",
         };
         return expects;
     }
@@ -59,6 +62,8 @@ public class ConvertJsonExecuteNodeTest extends TestCase {
                 "{'A.A1':'${a}','B.B1':'${b}','C.C1':'${c}','D.D1':'${d}','E[].E1':'${e[].a}','E[].E2':'${e[].b}'}",
                 "{'A.A1':'${a}','B.B1':'${b}','C.C1':'${c}','D.D1':'${d}','E[].E1':'${e[].a}'}",
                 "{'E[].E3[].E1':'${f[].c[].c1}','E[].E3[].E2':'${f[].c[].c2}'}",
+                "{'E[0].E3[0].E1':'${a}','E[0].E3[].E2':'${e[].a}','E[].E3[0].E2':'${e[].a}'}",
+                "{'A1':'${e[0].a}'}",
         };
         JSONObject[] list = new JSONObject[expresses.length];
         int index = 0;
@@ -86,4 +91,27 @@ public class ConvertJsonExecuteNodeTest extends TestCase {
         return JSON.parseObject("{'A1':{'1':'甲'},'E1':{'1':'甲','22':'乙乙','2':'乙'}}");
     }
 
+    public void testExecute2() throws InterruptedException {
+        String flow = "{" +//
+                "   'uni': 'convert'," +
+                "   'express': {'a[0].a1':'${a}'}," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'a':1}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"a\":[{\"a1\":1}]}", output);
+    }
+
+    public void testExecute3() throws InterruptedException {
+        String flow = "{" +//
+                "   'uni': 'convert'," +
+                "   'express': {'a':'${a[0].a1}'}," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'a':[{'a1':1}]}", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"a\":1}", output);
+    }
 }
