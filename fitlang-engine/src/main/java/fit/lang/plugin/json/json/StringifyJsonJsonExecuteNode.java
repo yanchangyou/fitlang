@@ -26,8 +26,6 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
             jsonObject = input.getJsonObject(jsonField);
         }
 
-        JSONObject outputJson = new JSONObject();
-
         String outputField = jsonField;
         if (StrUtil.isBlank(jsonField)) {
             outputField = "json";
@@ -40,8 +38,6 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
                 content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
             }
         }
-        outputJson.put(outputField, content);
-
-        output.setData(outputJson);
+        output.set(outputField, content);
     }
 }

@@ -2,6 +2,7 @@ package fit.lang.plugin.json.define;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPath;
 import fit.lang.define.base.ExecuteNodeData;
 
 /**
@@ -51,11 +52,11 @@ public class JsonExecuteNodeData implements ExecuteNodeData {
     }
 
     public void set(String fieldName, Object fieldValue) {
-        data.put(fieldName, fieldValue);
+        JSONPath.set(data, fieldName, fieldValue);
     }
 
     public Object get(String fieldName) {
-        return data.get(fieldName);
+        return data.getByPath(fieldName);
     }
 
     public Object getObject(String fieldName) {
@@ -75,7 +76,7 @@ public class JsonExecuteNodeData implements ExecuteNodeData {
     }
 
     public JSONObject getJsonObject(String fieldName) {
-        return data.getJSONObject(fieldName);
+        return (JSONObject) data.getByPath(fieldName);
     }
 
     public JSONArray getJsonArray(String fieldName) {
