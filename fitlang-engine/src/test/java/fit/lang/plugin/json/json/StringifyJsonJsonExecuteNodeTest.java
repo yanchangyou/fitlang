@@ -44,4 +44,27 @@ public class StringifyJsonJsonExecuteNodeTest extends TestCase {
         Assert.assertEquals("{\"json\":{\"uni\":\"hello\"}}", outputJson.get("json"));
 
     }
+
+    public void testExecute3() {
+        String flow = "{" +//
+                "   'uni': 'stringifyJson'," +
+                "   'format': true," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{ 'json': {'uni':'hello','null':null}}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\n" +
+                "    \"json\":{\n" +
+                "        \"uni\":\"hello\",\n" +
+                "        \"null\":null\n" +
+                "    }\n" +
+                "}", outputJson.get("json"));
+
+    }
 }
