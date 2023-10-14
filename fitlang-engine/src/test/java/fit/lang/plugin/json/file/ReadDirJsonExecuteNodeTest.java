@@ -25,10 +25,7 @@ public class ReadDirJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(outputJson.containsKey("files"));
 
-        Assert.assertEquals("{\n" +
-                "    \"uni\": \"hello\",\n" +
-                "    \"message\": \"hello, world!\"\n" +
-                "}", outputJson.getString("content"));
+        Assert.assertTrue(outputJson.getJSONArray("files").contains("server.fit"));
 
     }
 }
