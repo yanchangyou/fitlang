@@ -31,4 +31,25 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
                 "}", outputJson.getString("content"));
 
     }
+
+    public void testExecuteDir() {
+        String flow = "{" +//
+                "   'uni': 'readFile'," +
+                "   'workspaceDir': '/opt/github/fitlang/fitlang-server/demo/fitserver'," +
+                "   'filePath': '/app/'" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("files"));
+
+        Assert.assertTrue(outputJson.getJSONArray("files").contains("server.fit"));
+
+    }
 }
