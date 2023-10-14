@@ -141,8 +141,8 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
                 "                    \"switchField\": \"${boolean(item)+''}\",\n" +
                 "                    \"child\": [\n" +
                 "                        {\n" +
-                "                            \"id\": \"false\",\n" +
-                "                            \"case\": \"false\",\n" +
+                "                            \"id\": \"true\",\n" +
+                "                            \"case\": \"true\",\n" +
                 "                            \"uni\": \"foreach\",\n" +
                 "                            \"foreachField\": \"item\",\n" +
                 "                            \"child\": [\n" +
@@ -156,7 +156,7 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
                 "                        },\n" +
                 "                        {\n" +
                 "                            \"id\": \"false\",\n" +
-                "                            \"case\": \"true\",\n" +
+                "                            \"case\": \"false\",\n" +
                 "                            \"uni\": \"mix\",\n" +
                 "                            \"json\": {\n" +
                 "                                \"message\": \"here\"\n" +

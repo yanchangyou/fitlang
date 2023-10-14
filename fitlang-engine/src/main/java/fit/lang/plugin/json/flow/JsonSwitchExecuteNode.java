@@ -12,7 +12,7 @@ import fit.lang.common.flow.SwitchExecuteNode;
 
 import static fit.lang.ExecuteNodeEngineConst.*;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseString;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringField;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringFieldAndContext;
 import static fit.lang.plugin.json.ExpressUtil.eval;
 
 /**
@@ -37,7 +37,7 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
         if (switchField.startsWith("${")) {
             caseValue = parseString(switchField, (JsonExecuteNodeInput) input);
         } else {
-            caseValue = parseStringField(switchField, (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
+            caseValue = parseStringFieldAndContext(switchField, (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
         }
         if (caseValue == null) {
             return null;

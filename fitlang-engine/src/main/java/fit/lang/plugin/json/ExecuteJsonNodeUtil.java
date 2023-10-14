@@ -397,7 +397,7 @@ public class ExecuteJsonNodeUtil {
      * @param nodeJsonDefine
      * @return
      */
-    public static String parseStringField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
+    public static String parseStringFieldAndContext(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
         String fieldValue = input.getString(fieldName);
         if (StrUtil.isBlank(fieldValue)) {
             fieldValue = nodeJsonDefine.getString(fieldName);
@@ -418,6 +418,17 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String parseString(String fieldValue, JsonExecuteNodeInput input) {
+        return (String) ExpressUtil.eval(fieldValue, input.getData());
+    }
+
+    /**
+     * 解析字段值
+     *
+     * @param fieldValue
+     * @param input
+     * @return
+     */
+    public static String parseStringAndContext(String fieldValue, JsonExecuteNodeInput input) {
         //尝试从上下文获取
         if (StrUtil.isBlank(fieldValue) && input.getNodeContext().getAttribute(fieldValue) != null) {
             //TODO toString
