@@ -48,8 +48,9 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(outputJson.containsKey("files"));
+        Assert.assertFalse(outputJson.getBoolean("isFile"));
 
-        Assert.assertTrue(outputJson.getJSONArray("files").contains("server.fit"));
+        Assert.assertTrue(outputJson.getJSONArray("files").getJSONObject(0).containsKey("name"));
 
     }
 }
