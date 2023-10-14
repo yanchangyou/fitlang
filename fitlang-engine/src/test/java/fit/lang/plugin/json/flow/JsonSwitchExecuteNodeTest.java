@@ -117,24 +117,16 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
                 "    },\n" +
                 "    \"uni\": \"pipe\",\n" +
                 "    \"child\": [\n" +
-                "//        {\n" +
-                "//            \"uni\": \"readFile\",\n" +
-                "//            \"filePath\": \"fit-test.postman_collection.json\"\n" +
-                "//        },\n" +
-                "//        {\n" +
-                "//            \"uni\": \"parseJson\",\n" +
-                "//            \"jsonField\": \"content\"\n" +
-                "//        },\n" +
-                "//        {\n" +
-                "//            \"uni\": \"replace\",\n" +
-                "//            \"json\": {\n" +
-                "//                \"item\": \"${content.item}\"\n" +
-                "//            }\n" +
-                "//        },\n" +
                 "        {\n" +
                 "            \"uni\": \"foreach\",\n" +
                 "            \"foreachField\": \"item\",\n" +
                 "            \"child\": [\n" +
+                "                {\n" +
+                "                    \"uni\": \"mix\",\n" +
+                "                    \"json\": {\n" +
+                "                        \"parentName\": \"${name}\"\n" +
+                "                    }\n" +
+                "                },\n" +
                 "                {\n" +
                 "                    \"id\": \"switch\",\n" +
                 "                    \"uni\": \"switch\",\n" +
@@ -145,47 +137,67 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
                 "                            \"case\": \"true\",\n" +
                 "                            \"uni\": \"foreach\",\n" +
                 "                            \"foreachField\": \"item\",\n" +
+                "                            \"mixToItemField\": \"parentName\",\n" +
                 "                            \"child\": [\n" +
                 "                                {\n" +
-                "                                    \"uni\": \"mix\",\n" +
-                "                                    \"json\": {\n" +
-                "                                        \"hello\": \"world\"\n" +
-                "                                    }\n" +
+                "                                    \"id\": \"false\",\n" +
+                "                                    \"case\": \"false\",\n" +
+                "                                    \"uni\": \"pipe\",\n" +
+                "                                    \"child\": [\n" +
+                "                                        {\n" +
+                "                                            \"uni\": \"convert\",\n" +
+                "                                            \"express\": {\n" +
+                "                                                \"parentName\": \"${parentName}\",\n" +
+                "                                                \"name\": \"${name}\",\n" +
+                "                                                \"content.uni\": \"http\",\n" +
+                "                                                \"content.name\": \"${name}\",\n" +
+                "                                                \"content.url\": \"${request.url.raw}\",\n" +
+                "                                                \"content.input\": \"${request.body.raw}\"\n" +
+                "                                            }\n" +
+                "                                        },\n" +
+                "                                        {\n" +
+                "                                            \"uni\": \"mix\",\n" +
+                "                                            \"json\": {\n" +
+                "                                                \"filePath\": \"${'my/' + parentName + '/' + name + '.fit'}\"\n" +
+                "                                            }\n" +
+                "                                        }\n" +
+                "                                        //                                        {\n" +
+                "                                        //                                            \"uni\": \"writeFile\"\n" +
+                "                                        //                                        }\n" +
+                "                                    ]\n" +
                 "                                }\n" +
                 "                            ]\n" +
                 "                        },\n" +
                 "                        {\n" +
                 "                            \"id\": \"false\",\n" +
                 "                            \"case\": \"false\",\n" +
-                "                            \"uni\": \"mix\",\n" +
-                "                            \"json\": {\n" +
-                "                                \"message\": \"here\"\n" +
-                "                            }\n" +
+                "                            \"uni\": \"pipe\",\n" +
+                "                            \"child\": [\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"convert\",\n" +
+                "                                    \"express\": {\n" +
+                "                                        \"name\": \"${name}\",\n" +
+                "                                        \"content.uni\": \"http\",\n" +
+                "                                        \"content.name\": \"${name}\",\n" +
+                "                                        \"content.url\": \"${request.url.raw}\",\n" +
+                "                                        \"content.input\": \"${request.body.raw}\"\n" +
+                "                                    }\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"mix\",\n" +
+                "                                    \"json\": {\n" +
+                "                                        \"filePath\": \"${'my/' + name+'.fit'}\"\n" +
+                "                                    }\n" +
+                "                                },\n" +
+                "                                {\n" +
+                "                                    \"uni\": \"writeFile\"\n" +
+                "                                }\n" +
+                "                            ]\n" +
                 "                        }\n" +
                 "                    ]\n" +
                 "                }\n" +
                 "            ]\n" +
                 "        }\n" +
-                "        //    ,\n" +
-                "        //        {\n" +
-                "        //            \"uni\": \"convert\",\n" +
-                "        //            \"express\": {\n" +
-                "        //                \"filePath\": \"${name}\",\n" +
-                "        //                \"content.uni\": \"http\",\n" +
-                "        //                \"content.name\": \"${name}\",\n" +
-                "        //                \"content.url\": \"${request.url.raw}\",\n" +
-                "        //                \"content.input\": \"${request.body.raw}\"\n" +
-                "        //            }\n" +
-                "        //        },\n" +
-                "        //        {\n" +
-                "        //            \"uni\": \"mix\",\n" +
-                "        //            \"json\": {\n" +
-                "        //                \"filePath\": \"${'my/' + filePath+'.fit'}\"\n" +
-                "        //            }\n" +
-                "        //        },\n" +
-                "        //        {\n" +
-                "        //            \"uni\": \"writeFile\"\n" +
-                "        //        }\n" +
                 "    ]\n" +
                 "}";
 
