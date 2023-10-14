@@ -38,6 +38,10 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
         ExecuteNodeUtil.buildChildNode(this, nodeDefine);
     }
 
+    private Object getConfig(String fieldName) {
+        return ((JsonExecuteNodeData) getNodeDefine()).get(fieldName);
+    }
+
     String foreachField = "list";
 
     int currentIndex = -1;
@@ -97,6 +101,16 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
         } else {
             itemJson = new JSONObject();
             itemJson.put("data", item);
+        }
+        Object field = getConfig("mixToItemField");
+        JSONArray fields = new JSONArray();
+        if (field instanceof JSONArray) {
+            fields = (JSONArray) field;
+        } else if (field != null) {
+            fields.add(field);
+        }
+        for (Object fieldName : fields) {
+            itemJson.put(fieldName.toString(), ((JsonExecuteNodeInput) input).get(fieldName.toString()));
         }
         return new JsonExecuteNodeInput(new JsonExecuteNodeData(itemJson), ((JsonExecuteNodeInput) input).getNodeContext());
     }
