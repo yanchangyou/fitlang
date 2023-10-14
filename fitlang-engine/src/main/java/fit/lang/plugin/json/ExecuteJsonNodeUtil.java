@@ -362,6 +362,9 @@ public class ExecuteJsonNodeUtil {
         } else {
             result.put("_raw", responseText);
         }
+        if (!response.isOk()) {
+            result.put("httpStatus", response.getStatus());
+        }
         return result;
     }
 
@@ -484,7 +487,7 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String joinFilePath(String workspaceDir, String path) {
-        if(workspaceDir == null || path== null) {
+        if (workspaceDir == null || path == null) {
             return null;
         }
 
