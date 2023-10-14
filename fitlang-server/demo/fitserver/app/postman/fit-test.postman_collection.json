@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "d6e9d27d-569e-4fca-9a1f-62aa8030a953",
+		"name": "fit-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2532575",
+		"_collection_link": "https://gold-star-803610.postman.co/workspace/dev~e159b48c-ff42-45ee-ac1e-014873df4c8a/collection/2532575-d6e9d27d-569e-4fca-9a1f-62aa8030a953?source=collection_link"
+	},
+	"item": [
+		{
+			"name": "folder",
+			"item": [
+				{
+					"name": "hello",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://fit.321zou.com/hello",
+							"protocol": "http",
+							"host": [
+								"fit",
+								"321zou",
+								"com"
+							],
+							"path": [
+								"hello"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "first",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://fit.321zou.com/_ip",
+					"protocol": "http",
+					"host": [
+						"fit",
+						"321zou",
+						"com"
+					],
+					"path": [
+						"_ip"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
