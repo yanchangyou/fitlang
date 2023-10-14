@@ -13,7 +13,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 
 import java.util.List;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringFieldAndContext;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringField;
 
 /**
  * 执行节点
@@ -41,7 +41,7 @@ public class JsonLoopExecuteNode extends LoopExecuteNode implements ExecuteNodeB
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
         //动态解析
-        String loopTimes = parseStringFieldAndContext("loopTimes", (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
+        String loopTimes = parseStringField("loopTimes", (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
         setLoopTimes(Integer.parseInt(loopTimes));
 
         super.execute(input, output);

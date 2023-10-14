@@ -25,7 +25,7 @@ public class HttpPostJsonJsonExecuteNode extends JsonExecuteNode {
 
     public static void request(JsonExecuteNodeInput input, JsonExecuteNodeOutput output, JSONObject nodeJsonDefine, Method method) {
 
-        String url = ExecuteJsonNodeUtil.parseStringFieldAndContext("url", input, nodeJsonDefine);
+        String url = ExecuteJsonNodeUtil.parseStringField("url", input, nodeJsonDefine);
 
         HttpRequest request = HttpUtil.createRequest(method, url);
 
