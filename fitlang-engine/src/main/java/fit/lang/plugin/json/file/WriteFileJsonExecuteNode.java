@@ -8,6 +8,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
+
 /**
  * 执行节点
  */
@@ -42,15 +44,7 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
             charset = "UTF-8";
         }
 
-        String filePath;
-        //兼容收尾斜杠写法
-        if (workspaceDir.endsWith("/") && path.startsWith("/")) {
-            filePath = workspaceDir.concat(path.substring(1));
-        } else if (!workspaceDir.endsWith("/") && !path.startsWith("/")) {
-            filePath = workspaceDir.concat("/").concat(path);
-        } else {
-            filePath = workspaceDir.concat(path);
-        }
+        String filePath = joinFilePath(workspaceDir, path);
 
         Object content = input.get(contentField);
         if (content == null) {
@@ -59,4 +53,5 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         FileUtil.writeString(content.toString(), filePath, CharsetUtil.charset(charset));
         output.set("absolutePath", filePath);
     }
+
 }

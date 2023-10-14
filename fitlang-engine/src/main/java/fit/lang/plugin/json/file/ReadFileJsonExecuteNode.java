@@ -13,6 +13,8 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.io.File;
 import java.util.List;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
+
 /**
  * 执行节点
  */
@@ -42,15 +44,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             charset = "UTF-8";
         }
 
-        String filePath;
-        //兼容收尾斜杠写法
-        if (workspaceDir.endsWith("/") && path.startsWith("/")) {
-            filePath = workspaceDir.concat(path.substring(1));
-        } else if (!workspaceDir.endsWith("/") && !path.startsWith("/")) {
-            filePath = workspaceDir.concat("/").concat(path);
-        } else {
-            filePath = workspaceDir.concat(path);
-        }
+        String filePath = joinFilePath(workspaceDir, path);
 
         File file = new File(filePath);
 

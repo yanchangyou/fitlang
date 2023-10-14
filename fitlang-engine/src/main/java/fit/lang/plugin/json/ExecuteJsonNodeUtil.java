@@ -476,4 +476,23 @@ public class ExecuteJsonNodeUtil {
         return list;
     }
 
+    /**
+     * 路径拼接
+     *
+     * @param workspaceDir
+     * @param path
+     * @return
+     */
+    public static String joinFilePath(String workspaceDir, String path) {
+        String filePath;
+        //兼容收尾斜杠写法
+        if (workspaceDir.endsWith("/") && path.startsWith("/")) {
+            filePath = workspaceDir.concat(path.substring(1));
+        } else if (!workspaceDir.endsWith("/") && !path.startsWith("/")) {
+            filePath = workspaceDir.concat("/").concat(path);
+        } else {
+            filePath = workspaceDir.concat(path);
+        }
+        return filePath;
+    }
 }
