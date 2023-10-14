@@ -12,10 +12,8 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.ExecuteNodeException;
 import fit.lang.define.base.ExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteContext;
-import fit.lang.plugin.json.define.JsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNodeInput;
-import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.plugin.json.define.*;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
@@ -562,4 +560,13 @@ public class ExecuteJsonNodeUtil {
         return fields;
     }
 
+    /**
+     * 获取json node define
+     *
+     * @param nodeDefine
+     * @return
+     */
+    public static JSONObject getJsonData(ExecuteNodeData nodeDefine) {
+        return ((JsonExecuteNodeData) nodeDefine).getData();
+    }
 }

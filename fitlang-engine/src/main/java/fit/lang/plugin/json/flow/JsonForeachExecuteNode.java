@@ -19,6 +19,7 @@ import java.util.Map;
 
 import static fit.lang.ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getConfigFields;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
 /**
  * 执行节点
@@ -32,7 +33,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
     @Override
     public void build(ExecuteNodeData executeNodeData) {
 
-        JSONObject nodeDefine = ((JsonExecuteNodeData) executeNodeData).getData();
+        JSONObject nodeDefine = getJsonData(executeNodeData);
 
         setForeachField(nodeDefine.getString(DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME));
 
@@ -99,7 +100,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
             itemJson = new JSONObject();
             itemJson.put("data", item);
         }
-        JSONArray fields = getConfigFields(((JsonExecuteNodeData) getNodeDefine()).getData(), "mixToItemField");
+        JSONArray fields = getConfigFields(getJsonData(getNodeDefine()), "mixToItemField");
         for (Object fieldName : fields) {
             itemJson.put(fieldName.toString(), ((JsonExecuteNodeInput) input).get(fieldName.toString()));
         }

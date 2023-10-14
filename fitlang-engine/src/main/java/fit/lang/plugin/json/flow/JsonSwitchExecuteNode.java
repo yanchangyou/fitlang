@@ -11,8 +11,7 @@ import fit.lang.ExecuteNodeException;
 import fit.lang.common.flow.SwitchExecuteNode;
 
 import static fit.lang.ExecuteNodeEngineConst.*;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringExcludeContext;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseStringField;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static fit.lang.plugin.json.ExpressUtil.eval;
 
 /**
@@ -49,7 +48,7 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
     @Override
     public void build(ExecuteNodeData nodeDefineData) {
 
-        JSONObject nodeDefine = ((JsonExecuteNodeData) nodeDefineData).getData();
+        JSONObject nodeDefine = getJsonData(nodeDefineData);
         ExecuteNodeUtil.buildChildNode(this, nodeDefine);
 
         switchField = nodeDefine.getString(DEFINE_KEYWORDS_OF_SWITCH_FIELD_NAME);
@@ -73,7 +72,7 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
 
         } else {
             for (ExecuteNode child : childNodes) {
-                JsonExecuteNodeData childDefine = (JsonExecuteNodeData) child.getNodeDefine();
+                JsonExecuteNodeData childDefine =  (JsonExecuteNodeData) child.getNodeDefine();
                 String caseValue = childDefine.getString(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_SWITCH_CASE_VALUE);
                 if (caseValue == null) {
                     throw new ExecuteNodeException("switch node case value is required, node : " + childDefine.getString(DEFINE_KEYWORDS_OF_UNI) + "." + childDefine.getString(DEFINE_KEYWORDS_OF_ID));

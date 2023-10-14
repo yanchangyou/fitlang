@@ -2,7 +2,6 @@ package fit.lang.plugin.json.json;
 
 import com.alibaba.fastjson2.JSONArray;
 import fit.lang.plugin.json.define.JsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.define.base.ExecuteNodeData;
@@ -10,6 +9,8 @@ import fit.lang.define.base.ExecuteNodeBuildable;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
 /**
  * 执行节点
@@ -34,7 +35,7 @@ public class RemoveFieldJsonExecuteNode extends JsonExecuteNode implements Execu
 
     @Override
     public void build(ExecuteNodeData executeNodeData) {
-        JSONArray array = ((JsonExecuteNodeData) executeNodeData).getData().getJSONArray("fieldNames");
+        JSONArray array = getJsonData(executeNodeData).getJSONArray("fieldNames");
         for (Object field : array) {
             fieldNames.add(field.toString());
         }

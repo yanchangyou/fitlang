@@ -4,13 +4,14 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONPath;
 import fit.lang.plugin.json.define.JsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeBuildable;
 
 import java.util.List;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
 /**
  * 执行节点
@@ -170,7 +171,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
 
     @Override
     public void build(ExecuteNodeData executeNodeData) {
-        setExpress(((JsonExecuteNodeData) executeNodeData).getJsonObject("express"));
-        setValueMapping(((JsonExecuteNodeData) executeNodeData).getJsonObject("valueMapping"));
+        setExpress(getJsonData(executeNodeData).getJSONObject("express"));
+        setValueMapping(getJsonData(executeNodeData).getJSONObject("valueMapping"));
     }
 }
