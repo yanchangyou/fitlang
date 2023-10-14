@@ -484,6 +484,13 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String joinFilePath(String workspaceDir, String path) {
+        if(workspaceDir == null || path== null) {
+            return null;
+        }
+
+        //避免遍历父目录
+        path = path.replace("..", "");
+
         String filePath;
         //兼容收尾斜杠写法
         if (workspaceDir.endsWith("/") && path.startsWith("/")) {

@@ -37,9 +37,6 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("readFile filePath param is required!");
         }
 
-        //避免遍历父目录
-        path = path.replace("..", "");
-
         if (StrUtil.isBlank(charset)) {
             charset = "UTF-8";
         }

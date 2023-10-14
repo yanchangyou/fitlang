@@ -8,14 +8,12 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import java.io.File;
-
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
 
 /**
  * 执行节点
  */
-public class WriteFileJsonExecuteNode extends JsonExecuteNode {
+public class DeleteFileJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -24,8 +22,6 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         String workspaceDir = parseStringField("workspaceDir", input);
 
         String path = parseStringField("filePath", input);
-        String charset = parseStringField("charset", input);
-        String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
             throw new ExecuteNodeException("writeFile workspaceDir param is required!");
@@ -35,25 +31,10 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("writeFile filePath param is required!");
         }
 
-        if (StrUtil.isBlank(contentField)) {
-            contentField = "content";
-        }
-
-        //避免遍历父目录
-        path = path.replace("..", "");
-
-        if (StrUtil.isBlank(charset)) {
-            charset = "UTF-8";
-        }
-
         String filePath = joinFilePath(workspaceDir, path);
-
-        Object content = input.get(contentField);
-        if (content == null) {
-            throw new ExecuteNodeException("write content is null");
-        }
-        File file = FileUtil.writeString(content.toString(), filePath, CharsetUtil.charset(charset));
-        output.set("absolutePath", file.getAbsoluteFile());
+        boolean success = FileUtil.del(filePath);
+        output.set("success", success);
+        output.set("absolutePath", filePath);
     }
 
 }

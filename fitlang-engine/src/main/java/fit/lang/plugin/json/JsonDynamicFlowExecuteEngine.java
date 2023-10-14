@@ -22,6 +22,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import fit.lang.plugin.json.excel.ReadExcelJsonExecuteNode;
 import fit.lang.plugin.json.excel.WriteExcelJsonExecuteNode;
+import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
 import fit.lang.plugin.json.file.ReadFileJsonExecuteNode;
 import fit.lang.plugin.json.file.WriteFileJsonExecuteNode;
 import fit.lang.plugin.json.flow.*;
@@ -221,6 +222,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // file
         register("readFile", ReadFileJsonExecuteNode.class);
         register("writeFile", WriteFileJsonExecuteNode.class);
+        register("deleteFile", DeleteFileJsonExecuteNode.class);
 
         //json
         register("parseJson", ParseJsonJsonExecuteNode.class);
