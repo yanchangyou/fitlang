@@ -411,6 +411,22 @@ public class ExecuteJsonNodeUtil {
     }
 
     /**
+     * 解析字段值
+     *
+     * @param fieldValue
+     * @param input
+     * @return
+     */
+    public static String parseString(String fieldValue, JsonExecuteNodeInput input) {
+        //尝试从上下文获取
+        if (StrUtil.isBlank(fieldValue) && input.getNodeContext().getAttribute(fieldValue) != null) {
+            //TODO toString
+            fieldValue = input.getNodeContext().getAttribute(fieldValue).toString();
+        }
+        return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
+    }
+
+    /**
      * 返回数组最大长度，超过长度就采样
      *
      * @param result
