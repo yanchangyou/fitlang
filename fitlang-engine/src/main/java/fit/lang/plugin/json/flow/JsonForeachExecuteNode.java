@@ -85,8 +85,15 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
         if (currentIndex > list.size()) {
             throw new ExecuteNodeException("JsonForeachExecuteNode out of bounder: " + currentIndex);
         }
-        JSONObject item = list.getJSONObject(currentIndex);
-        return new JsonExecuteNodeInput(new JsonExecuteNodeData(item), ((JsonExecuteNodeInput) input).getNodeContext());
+        Object item = list.get(currentIndex);
+        JSONObject itemJson;
+        if (item instanceof JSONObject) {
+            itemJson = (JSONObject) item;
+        } else {
+            itemJson = new JSONObject();
+            itemJson.put("data", item);
+        }
+        return new JsonExecuteNodeInput(new JsonExecuteNodeData(itemJson), ((JsonExecuteNodeInput) input).getNodeContext());
     }
 
     @Override
