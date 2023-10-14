@@ -9,6 +9,7 @@ import cn.hutool.http.server.HttpServerRequest;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.ExecuteNodeException;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
@@ -531,5 +532,15 @@ public class ExecuteJsonNodeUtil {
             filePath = workspaceDir.concat(path);
         }
         return filePath;
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static String toJsonTextWithFormat(JSONObject jsonObject) {
+        return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat).replaceAll("\\t", "    ");
     }
 }
