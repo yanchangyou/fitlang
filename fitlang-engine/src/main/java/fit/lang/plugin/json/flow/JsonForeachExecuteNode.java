@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fit.lang.ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getConfigFields;
 
 /**
  * 执行节点
@@ -36,10 +37,6 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
         setForeachField(nodeDefine.getString(DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME));
 
         ExecuteNodeUtil.buildChildNode(this, nodeDefine);
-    }
-
-    private Object getConfig(String fieldName) {
-        return ((JsonExecuteNodeData) getNodeDefine()).get(fieldName);
     }
 
     String foreachField = "list";
@@ -102,13 +99,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
             itemJson = new JSONObject();
             itemJson.put("data", item);
         }
-        Object field = getConfig("mixToItemField");
-        JSONArray fields = new JSONArray();
-        if (field instanceof JSONArray) {
-            fields = (JSONArray) field;
-        } else if (field != null) {
-            fields.add(field);
-        }
+        JSONArray fields = getConfigFields(((JsonExecuteNodeData) getNodeDefine()).getData(), "mixToItemField");
         for (Object fieldName : fields) {
             itemJson.put(fieldName.toString(), ((JsonExecuteNodeInput) input).get(fieldName.toString()));
         }

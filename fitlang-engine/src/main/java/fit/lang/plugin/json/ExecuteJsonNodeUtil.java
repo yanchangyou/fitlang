@@ -543,4 +543,23 @@ public class ExecuteJsonNodeUtil {
     public static String toJsonTextWithFormat(JSONObject jsonObject) {
         return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat).replaceAll("\\t", "    ");
     }
+
+    /**
+     * 读取配置字段:兼容数组和非数组
+     *
+     * @param jsonNodeDefine
+     * @param fieldName
+     * @return
+     */
+    public static JSONArray getConfigFields(JSONObject jsonNodeDefine, String fieldName) {
+        Object field = jsonNodeDefine.get(fieldName);
+        JSONArray fields = new JSONArray();
+        if (field instanceof JSONArray) {
+            fields = (JSONArray) field;
+        } else if (field != null) {
+            fields.add(field);
+        }
+        return fields;
+    }
+
 }
