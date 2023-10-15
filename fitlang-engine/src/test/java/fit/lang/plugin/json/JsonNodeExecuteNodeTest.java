@@ -12,11 +12,11 @@ public class JsonNodeExecuteNodeTest extends TestCase {
 
     public void testExecute() {
 
-        JsonNodeExecuteNode executeNode = new JsonNodeExecuteNode();
+        JsonExecuteContext nodeContext = new JsonExecuteContext();
+
+        JsonNodeExecuteNode executeNode = new JsonNodeExecuteNode(nodeContext);
         executeNode.setNodePath("hello");
         executeNode.setNodeDefine(new JsonExecuteNodeData(JSON.parseObject("{'uni':'node:hello'}")));
-
-        JsonExecuteContext nodeContext = new JsonExecuteContext();
 
         JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
 

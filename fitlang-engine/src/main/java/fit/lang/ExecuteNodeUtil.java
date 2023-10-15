@@ -75,12 +75,12 @@ public class ExecuteNodeUtil {
         Object child = nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_CHILD_NODE);
         if (child != null) {
             if (child instanceof JSONObject) {
-                ExecuteNode childNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) child);
+                ExecuteNode childNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) child, executeNode.getNodeContext());
                 executeNode.addChildNode(childNode);
             } else if (child instanceof JSONArray) {
                 for (Object nextNode : ((JSONArray) child)) {
                     if (nextNode instanceof JSONObject) {
-                        executeNode.addChildNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode));
+                        executeNode.addChildNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode, executeNode.getNodeContext()));
                     }
                 }
             }
@@ -91,12 +91,12 @@ public class ExecuteNodeUtil {
         Object next = nodeDefine.get(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_NEXT_NODE);
         if (next != null) {
             if (next instanceof JSONObject) {
-                ExecuteNode nextNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) next);
+                ExecuteNode nextNode = JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) next, executeNode.getNodeContext());
                 executeNode.addNextNode(nextNode);
             } else if (next instanceof JSONArray) {
                 for (Object nextNode : ((JSONArray) next)) {
                     if (nextNode instanceof JSONObject) {
-                        executeNode.addNextNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode));
+                        executeNode.addNextNode(JsonDynamicFlowExecuteEngine.createExecuteNode((JSONObject) nextNode, executeNode.getNodeContext()));
                     }
                 }
             }

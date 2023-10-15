@@ -12,6 +12,8 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
 
     Map<String, Object> attributeMap = new TreeMap<>();
 
+    Map<String, Object> nodeMap = new TreeMap<>();
+
     Boolean debugMode;
 
     String instanceId;
@@ -45,6 +47,16 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
 
     public Map<String, Object> getAllAttribute() {
         return attributeMap;
+    }
+
+    @Override
+    public Object getNode(String nodeId) {
+        return nodeMap.get(nodeId);
+    }
+
+    @Override
+    public void addNode(String nodeId, Object nodeDefine) {
+        nodeMap.put(nodeId, nodeDefine);
     }
 
 }

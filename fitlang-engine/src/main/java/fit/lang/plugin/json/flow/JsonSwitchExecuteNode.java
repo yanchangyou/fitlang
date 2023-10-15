@@ -65,7 +65,7 @@ public class JsonSwitchExecuteNode extends SwitchExecuteNode implements ExecuteN
 
             for (String caseValue : caseObject.keySet()) {
                 JSONObject caseNodeDefine = caseObject.getJSONObject(caseValue);
-                ExecuteNode caseNode = JsonDynamicFlowExecuteEngine.createExecuteNode(caseNodeDefine);
+                ExecuteNode caseNode = JsonDynamicFlowExecuteEngine.createExecuteNode(caseNodeDefine, getNodeContext());
                 addCaseNode(caseValue, caseNode);
                 addChildNode(caseNode);
             }

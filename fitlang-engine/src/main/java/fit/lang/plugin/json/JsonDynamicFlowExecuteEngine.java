@@ -9,16 +9,14 @@ import fit.lang.ExecuteNodeUtil;
 import fit.lang.common.flow.ThreadExecuteNode;
 import fit.lang.common.util.EchoExecuteNode;
 import fit.lang.common.util.PrintExecuteNode;
+import fit.lang.define.base.ExecuteContext;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.plugin.json.cloud.CloudClientJsonExecuteNode;
 import fit.lang.plugin.json.cloud.CloudGetClientJsonExecuteNode;
 import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNodeData;
-import fit.lang.plugin.json.define.JsonExecuteNodeInput;
-import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.plugin.json.define.*;
 
 import fit.lang.plugin.json.excel.ReadExcelJsonExecuteNode;
 import fit.lang.plugin.json.excel.WriteExcelJsonExecuteNode;
@@ -69,44 +67,43 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        ExecuteNode executeNode = createExecuteNode(nodeDefine);
+        ExecuteNode executeNode = createExecuteNode(nodeDefine, input.getNodeContext());
 
-        executeNode.setNodeContext(input.getNodeContext());
-       
         executeNode.executeAndNext(input, output);
 
     }
 
-    public static List<ExecuteNode> createExecuteNode(JSONArray childNodes) {
+    public static List<ExecuteNode> createExecuteNode(JSONArray childNodes, ExecuteContext nodeContext) {
         List<ExecuteNode> childExecuteNodes = new ArrayList<>(childNodes.size());
         for (Object childNode : childNodes) {
             JSONObject node = (JSONObject) childNode;
-            ExecuteNode childExecuteNode = JsonDynamicFlowExecuteEngine.createExecuteNode(node);
+            ExecuteNode childExecuteNode = JsonDynamicFlowExecuteEngine.createExecuteNode(node, nodeContext);
             childExecuteNodes.add(childExecuteNode);
         }
         return childExecuteNodes;
     }
 
-    public static ExecuteNode createExecuteNode(JSONObject nodeDefine) {
+    public static ExecuteNode createExecuteNode(JSONObject nodeDefine, ExecuteContext nodeContext) {
 
         String uni = nodeDefine.getString(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_UNI);
         if (uni == null) {
             throw new ExecuteNodeException("node uni is required!");
         }
-        ExecuteNode executeNode = createExecuteNode(uni, nodeDefine);
+        ExecuteNode executeNode = createExecuteNode(uni, nodeDefine, nodeContext);
 
         return executeNode;
     }
 
-    public static ExecuteNode createExecuteNode(String uni, JSONObject nodeDefine) {
+    public static ExecuteNode createExecuteNode(String uni, JSONObject nodeDefine, ExecuteContext nodeContext) {
         Class<? extends ExecuteNode> executeNodeClass = getExecuteNodeClass(uni);
         if (executeNodeClass == null) {
             throw new ExecuteNodeException("not register uni: " + uni);
         }
         try {
             ExecuteNode executeNode = JSON.to(executeNodeClass, nodeDefine);
-
+            executeNode.setNodeContext(nodeContext);
             ExecuteNodeUtil.setExecuteNodeCommonAttribute(executeNode, nodeDefine);
+            nodeContext.addNode(executeNode.getId(), nodeDefine);
 
             executeNode.setNodeDefine(new JsonExecuteNodeData(nodeDefine));
 
@@ -165,6 +162,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("switch", JsonSwitchExecuteNode.class);
         register("return", ReturnJsonExecuteNode.class);
         register("thread", ThreadExecuteNode.class);
+        register("call", CallJsonExecuteNode.class);
 
         register("assert", AssertJsonExecuteNode.class);
 

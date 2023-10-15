@@ -15,4 +15,7 @@ public interface ExecuteContext {
 
     boolean isDebugMode();
 
+    Object getNode(String nodeId);
+
+    void addNode(String nodeId, Object nodeDefine);
 }

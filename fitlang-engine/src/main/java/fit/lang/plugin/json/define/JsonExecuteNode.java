@@ -39,6 +39,8 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 
+//        this.setNodeContext(input.getNodeContext());
+
         execute((JsonExecuteNodeInput) input, (JsonExecuteNodeOutput) output);
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);

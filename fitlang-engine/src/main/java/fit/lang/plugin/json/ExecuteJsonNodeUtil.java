@@ -128,6 +128,9 @@ public class ExecuteJsonNodeUtil {
         if (input == null) {
             input = new JSONObject();
         }
+        if (contextParam == null) {
+            contextParam = new JSONObject();
+        }
 
         contextParam.putAll(input);
         input = eval(input, contextParam);
@@ -140,12 +143,11 @@ public class ExecuteJsonNodeUtil {
         JsonExecuteNodeInput nodeInput = new JsonExecuteNodeInput(nodeContext);
         nodeInput.setData(input);
 
-        if (contextParam != null && !contextParam.isEmpty()) {
+        if (!contextParam.isEmpty()) {
             nodeContext.getAllAttribute().putAll(contextParam);
         }
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
-        executeNode.setNodeContext(nodeInput.getNodeContext());
 
         executeNode.execute(nodeInput, nodeOutput);
 
