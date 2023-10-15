@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.web;
+package fit.lang.plugin.json.http;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -13,15 +13,17 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 /**
  * 执行节点
  */
-public class HttpGetJsonExecuteNode extends JsonExecuteNode {
+public class HttpPostFormJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String url = parseStringField("url", input);
+        String url = parseNodeUrl(input.getInputParamAndContextParam(), nodeJsonDefine);
 
-        HttpRequest request = HttpUtil.createGet(url);
+        HttpRequest request = HttpUtil.createPost(url);
+
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
+
         Object httpParam = nodeJsonDefine.get("param");
 
         parseHttpFormParam(input, request, httpParam);
@@ -34,4 +36,5 @@ public class HttpGetJsonExecuteNode extends JsonExecuteNode {
 
         output.setData(result);
     }
+
 }

@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.web;
+package fit.lang.plugin.json.http;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
