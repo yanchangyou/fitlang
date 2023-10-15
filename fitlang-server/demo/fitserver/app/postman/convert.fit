@@ -32,43 +32,39 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "mix",
-                        "json": {
-                            "parentName": "${name}"
-                        }
-                    },
-                    {
                         "id": "switch",
                         "uni": "switch",
                         "switchField": "${boolean(item)+''}",
                         "child": [
                             {
-                                "id": "true",
-                                "case": "true",
-                                "uni": "foreach",
-                                "foreachField": "item",
-                                "mixToItemField": "parentName",
+                                "case": "false",
+                                "uni": "pipe",
                                 "child": [
                                     {
-                                        "id": "false",
-                                        "case": "false",
+                                        "uni": "mix",
+                                        "json": {
+                                            "isFolder": false
+                                        }
+                                    },
+                                    {
+                                        "id": "convertItem",
                                         "uni": "pipe",
                                         "child": [
                                             {
                                                 "uni": "convert",
                                                 "express": {
-                                                    "parentName": "${parentName}",
                                                     "name": "${name}",
                                                     "content.uni": "http",
                                                     "content.name": "${name}",
                                                     "content.url": "${request.url.raw}",
-                                                    "content.param": "${request.body.raw}"
+                                                    "content.param": "${request.body.raw}",
+                                                    "isFolder": "${isFolder}"
                                                 }
                                             },
                                             {
                                                 "uni": "mix",
                                                 "json": {
-                                                    "filePath": "${collectionName + '/' + parentName + '/' + name + '.fit'}"
+                                                    "filePath": "${collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
                                                 }
                                             },
                                             {
@@ -84,33 +80,27 @@
                                 ]
                             },
                             {
-                                "id": "false",
-                                "case": "false",
+                                "case": "true",
                                 "uni": "pipe",
                                 "child": [
                                     {
-                                        "uni": "convert",
-                                        "express": {
-                                            "name": "${name}",
-                                            "content.uni": "http",
-                                            "content.name": "${name}",
-                                            "content.url": "${request.url.raw}",
-                                            "content.param": "${request.body.raw}"
-                                        }
-                                    },
-                                    {
                                         "uni": "mix",
                                         "json": {
-                                            "filePath": "${collectionName + '/' + name+'.fit'}"
+                                            "parentName": "${'/'+name}",
+                                            "isFolder": true
                                         }
                                     },
                                     {
-                                        "uni": "parseJson",
-                                        "jsonField": "content.param"
-                                    },
-                                    {
-                                        "uni": "writeFile",
-                                        "format": true
+                                        "uni": "foreach",
+                                        "foreachField": "item",
+                                        "mixToItemField": [
+                                            "parentName",
+                                            "isFolder"
+                                        ],
+                                        "child": {
+                                            "uni": "call",
+                                            "nodeId": "convertItem"
+                                        }
                                     }
                                 ]
                             }
