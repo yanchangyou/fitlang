@@ -3,10 +3,16 @@ package fit.lang.plugin.json.file;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
 public class DeleteFileJsonExecuteNodeTest extends TestCase {
+
+    @Override
+    protected void setUp() {
+        JsonDynamicFlowExecuteEngine.enableUnsafeNodes();
+    }
 
     public void testExecute() {
         String flow = "{" +

@@ -135,7 +135,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     public static void register(String uni, Class<? extends ExecuteNode> executeNodeClass) {
         if (executeNodeMap.containsKey(uni)) {
-            throw new ExecuteNodeException("uni is existed:" + uni);
+            return;
         }
         executeNodeMap.put(uni, executeNodeClass);
     }
@@ -152,9 +152,22 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
                 "readExcel",
                 "writeExcel"
         };
-        for (String node : dangerNodes) {
-            unregister(node);
+        for (String nodeUni : dangerNodes) {
+            unregister(nodeUni);
         }
+    }
+
+    public static void enableUnsafeNodes() {
+
+        //excel
+        register("readExcel", ReadExcelJsonExecuteNode.class);
+        register("writeExcel", WriteExcelJsonExecuteNode.class);
+
+        // file
+        register("readFile", ReadFileJsonExecuteNode.class);
+        register("writeFile", WriteFileJsonExecuteNode.class);
+        register("deleteFile", DeleteFileJsonExecuteNode.class);
+
     }
 
     static {
@@ -228,12 +241,12 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("pushClientMonitorData", PushClientMonitorDataJsonExecuteNode.class);
         register("getMonitorClient", GetMonitorClientJsonExecuteNode.class);
 
+        //git
+        register("gitPull", GitPullJsonExecuteNode.class);
+
         //excel
         register("readExcel", ReadExcelJsonExecuteNode.class);
         register("writeExcel", WriteExcelJsonExecuteNode.class);
-
-        //git
-        register("gitPull", GitPullJsonExecuteNode.class);
 
         // file
         register("readFile", ReadFileJsonExecuteNode.class);

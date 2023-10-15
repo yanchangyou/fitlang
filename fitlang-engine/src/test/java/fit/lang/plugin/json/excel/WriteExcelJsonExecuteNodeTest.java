@@ -3,6 +3,7 @@ package fit.lang.plugin.json.excel;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -17,6 +18,8 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 path.replace("/test/classes/fit", "/test/resources/fit")
                         .replace("/classes/java/test-instrumented/fit", "/resources/test/fit"));
         System.out.println(ServerJsonExecuteNode.getServerFileDir());
+
+        JsonDynamicFlowExecuteEngine.enableUnsafeNodes();
     }
 
     public void testExecute() {
