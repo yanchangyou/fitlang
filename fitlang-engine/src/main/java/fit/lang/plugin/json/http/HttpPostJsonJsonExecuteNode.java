@@ -12,6 +12,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
+import static fit.lang.plugin.json.http.HttpJsonExecuteNode.request;
 
 /**
  * 执行节点
@@ -21,38 +22,6 @@ public class HttpPostJsonJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         request(input, output, nodeJsonDefine, Method.POST);
-    }
-
-    public static void request(JsonExecuteNodeInput input, JsonExecuteNodeOutput output, JSONObject nodeJsonDefine, Method method) {
-
-        String url = ExecuteJsonNodeUtil.parseStringField("url", input, nodeJsonDefine);
-
-        HttpRequest request = HttpUtil.createRequest(method, url);
-
-        setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
-
-        String httpBody;
-        Object httpParam = nodeJsonDefine.get("param");
-        if (httpParam != null) {
-            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
-            if (param != null) {
-                httpBody = param.toString();
-            } else {
-                httpBody = "";
-            }
-        } else {
-            httpBody = input.getData().toJSONString();
-        }
-
-        setProxy(nodeJsonDefine.getJSONObject("proxy"), request);
-
-        request.body(httpBody);
-        HttpResponse response = request.execute();
-
-        JSONObject result = parseHttpResult(response);
-
-        output.setData(result);
-
     }
 
 }

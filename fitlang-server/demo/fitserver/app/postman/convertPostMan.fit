@@ -53,6 +53,7 @@
                                             "name": "${name}",
                                             "content.uni": "http",
                                             "content.name": "${name}",
+                                            "content.method": "${request.method}",
                                             "content.url": "${request.url.raw}",
                                             "content.param": "${request.body.raw}",
                                             "isFolder": "${isFolder}"
