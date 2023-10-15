@@ -71,6 +71,8 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         ExecuteNode executeNode = createExecuteNode(nodeDefine);
 
+        executeNode.setNodeContext(input.getNodeContext());
+       
         executeNode.executeAndNext(input, output);
 
     }

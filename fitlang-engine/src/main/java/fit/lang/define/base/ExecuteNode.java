@@ -8,6 +8,15 @@ import java.util.List;
 public interface ExecuteNode {
 
     /**
+     * 上下文
+     *
+     * @return
+     */
+    ExecuteContext getNodeContext();
+
+    void setNodeContext(ExecuteContext nodeContext);
+
+    /**
      * 统一节点标识符
      *
      * @return

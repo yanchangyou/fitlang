@@ -1,9 +1,6 @@
 package fit.lang.common;
 
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.base.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +9,16 @@ import java.util.List;
  * 执行节点
  */
 public abstract class AbstractExecuteNode implements ExecuteNode {
+
+    protected ExecuteContext nodeContext;
+
+    public ExecuteContext getNodeContext() {
+        return nodeContext;
+    }
+
+    public void setNodeContext(ExecuteContext nodeContext) {
+        this.nodeContext = nodeContext;
+    }
 
     /**
      * 统一节点标识符

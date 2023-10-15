@@ -145,6 +145,8 @@ public class ExecuteJsonNodeUtil {
         }
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
+        executeNode.setNodeContext(nodeInput.getNodeContext());
+
         executeNode.execute(nodeInput, nodeOutput);
 
         String rawField = flow.getString("rawField");
