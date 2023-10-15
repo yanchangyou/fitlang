@@ -140,6 +140,23 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         executeNodeMap.put(uni, executeNodeClass);
     }
 
+    public static void unregister(String uni) {
+        executeNodeMap.remove(uni);
+    }
+
+    public static void disableUnsafeNodes() {
+        String[] dangerNodes = new String[]{
+                "readFile",
+                "writeFile",
+                "deleteFile",
+                "readExcel",
+                "writeExcel"
+        };
+        for (String node : dangerNodes) {
+            unregister(node);
+        }
+    }
+
     static {
 
         // util
