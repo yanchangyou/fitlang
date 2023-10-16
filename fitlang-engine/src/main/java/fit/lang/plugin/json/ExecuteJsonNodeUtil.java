@@ -573,4 +573,8 @@ public class ExecuteJsonNodeUtil {
     public static JSONObject getJsonData(ExecuteNodeData nodeDefine) {
         return ((JsonExecuteNodeData) nodeDefine).getData();
     }
+
+    public static boolean isInPluginEnvironment() {
+        return Thread.currentThread().getContextClassLoader().toString().contains("com.intellij.");
+    }
 }

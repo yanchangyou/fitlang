@@ -84,7 +84,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        JsonDynamicFlowExecuteEngine.disableUnsafeNodes();
+        if (!isInPluginEnvironment()) {
+            JsonDynamicFlowExecuteEngine.disableUnsafeNodes();
+        }
 
         Integer port = buildServerPort(input.getData(), nodeJsonDefine, DEFAULT_SERVER_PORT);
         FitServerInstance fitServer = serverMap.get(port);
