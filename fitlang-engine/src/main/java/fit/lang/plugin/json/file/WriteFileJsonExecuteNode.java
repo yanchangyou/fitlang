@@ -41,9 +41,6 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
             contentField = "content";
         }
 
-        //避免遍历父目录
-        path = path.replace("..", "");
-
         if (StrUtil.isBlank(charset)) {
             charset = "UTF-8";
         }
