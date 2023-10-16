@@ -176,7 +176,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
         setExpress(getJsonData(executeNodeData).getJSONObject("express"));
 
         if (express == null) {
-            throw new ExecuteNodeException(" convert express field is required!");
+            throw new ExecuteNodeException("convert express field is required!");
         }
         setValueMapping(getJsonData(executeNodeData).getJSONObject("valueMapping"));
     }

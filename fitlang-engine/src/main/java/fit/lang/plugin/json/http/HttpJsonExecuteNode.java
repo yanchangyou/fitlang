@@ -6,6 +6,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -31,7 +32,9 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     public static void request(JsonExecuteNodeInput input, JsonExecuteNodeOutput output, JSONObject nodeJsonDefine, Method method) {
 
         String url = ExecuteJsonNodeUtil.parseStringField("url", input, nodeJsonDefine);
-
+        if (url == null) {
+            throw new ExecuteNodeException("http node url field is required!");
+        }
         HttpRequest request = HttpUtil.createRequest(method, url);
 
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);

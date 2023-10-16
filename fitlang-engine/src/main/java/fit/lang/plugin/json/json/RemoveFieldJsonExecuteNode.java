@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.json;
 
 import com.alibaba.fastjson2.JSONArray;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -36,6 +37,9 @@ public class RemoveFieldJsonExecuteNode extends JsonExecuteNode implements Execu
     @Override
     public void build(ExecuteNodeData executeNodeData) {
         JSONArray array = getJsonData(executeNodeData).getJSONArray("fieldNames");
+        if (array == null) {
+            throw new ExecuteNodeException("removeField fieldNames is required!");
+        }
         for (Object field : array) {
             fieldNames.add(field.toString());
         }

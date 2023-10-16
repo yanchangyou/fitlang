@@ -3,6 +3,7 @@ package fit.lang.plugin.json.json;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -18,6 +19,9 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String jsonField = parseStringField("jsonField", input);
+        if (jsonField == null) {
+            throw new ExecuteNodeException("stringifyJson jsonField is required!");
+        }
         Boolean needFormat = nodeJsonDefine.getBoolean("format");
 
         JSONObject jsonObject = input.getData();
