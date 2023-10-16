@@ -51,13 +51,21 @@
                                         "uni": "convert",
                                         "express": {
                                             "name": "${name}",
-                                            "content.uni": "http",
+                                            "content.flag": "_needFormatJsonInConsole",
                                             "content.name": "${name}",
+                                            "content.uni": "http",
                                             "content.method": "${request.method}",
                                             "content.url": "${request.url.raw}",
                                             "content.param": "${request.body.raw}",
+                                            "content.param1": "${request.body.urlencoded}",
                                             "isFolder": "${isFolder}"
                                         }
+                                    },
+                                    {
+                                        "uni": "convertKeyValueList",
+                                        "listField": "content.param1",
+                                        "keyField": "key",
+                                        "valueField": "value"
                                     },
                                     {
                                         "uni": "mix",
