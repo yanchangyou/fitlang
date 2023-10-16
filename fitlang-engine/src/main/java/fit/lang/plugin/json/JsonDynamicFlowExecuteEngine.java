@@ -175,14 +175,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // util
         register("hello", HelloJsonExecuteNode.class);
         register("echo", EchoExecuteNode.class);
-
         register("print", PrintExecuteNode.class);
-        register("add", AddJsonExecuteNode.class);
-
-        register("removeField", RemoveFieldJsonExecuteNode.class);
-        register("removeEmptyField", RemoveEmptyFieldJsonExecuteNode.class);
-
-        register("convert", ConvertJsonExecuteNode.class);
+        register("sleep", SleepJsonExecuteNode.class);
+        register("assert", AssertJsonExecuteNode.class);
 
         // flow
         register("pipe", JsonPipeExecuteNode.class);
@@ -194,7 +189,12 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("thread", ThreadExecuteNode.class);
         register("call", CallJsonExecuteNode.class);
 
-        register("assert", AssertJsonExecuteNode.class);
+        register("execute", ExecuteJsonExecuteNode.class);
+
+
+        //json
+        register("parseJson", ParseJsonJsonExecuteNode.class);
+        register("stringifyJson", StringifyJsonJsonExecuteNode.class);
 
         register("mix", MixJsonExecuteNode.class);
         register("replace", ReplaceJsonExecuteNode.class);
@@ -205,11 +205,15 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("node", JsonNodeExecuteNode.class);
 
-        register("execute", ExecuteJsonExecuteNode.class);
+        register("removeField", RemoveFieldJsonExecuteNode.class);
+        register("removeEmptyField", RemoveEmptyFieldJsonExecuteNode.class);
 
-        register("sleep", SleepJsonExecuteNode.class);
+        register("convert", ConvertJsonExecuteNode.class);
+        register("convertKeyValueList", ConvertKeyValueListJsonExecuteNode.class);
 
-        // web
+        register("add", AddJsonExecuteNode.class);
+
+        // http
         register("http", HttpJsonExecuteNode.class);
         register("postJson", HttpPostJsonJsonExecuteNode.class);
         register("postForm", HttpPostFormJsonExecuteNode.class);
@@ -217,6 +221,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("httpPut", HttpPutJsonJsonExecuteNode.class);
         register("httpDelete", HttpDeleteJsonJsonExecuteNode.class);
 
+        // web
         register("server", ServerJsonExecuteNode.class);
         register("proxy", ProxyJsonExecuteNode.class);
         register("register", CloudServerJsonExecuteNode.class);
@@ -252,10 +257,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("readFile", ReadFileJsonExecuteNode.class);
         register("writeFile", WriteFileJsonExecuteNode.class);
         register("deleteFile", DeleteFileJsonExecuteNode.class);
-
-        //json
-        register("parseJson", ParseJsonJsonExecuteNode.class);
-        register("stringifyJson", StringifyJsonJsonExecuteNode.class);
 
     }
 }
