@@ -14,7 +14,7 @@ public class FitServerMain {
 
     public static void main(String[] args) {
 
-        System.out.println("FitLang-0.5.17");
+        System.out.println("FitLang-0.5.18");
         String fitPath = "app";
         String serverFilePath = "server.fit";
         String httpPrefix = "http://127.0.0.1";

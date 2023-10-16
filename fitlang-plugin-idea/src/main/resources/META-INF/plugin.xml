@@ -235,6 +235,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.5.18 refine node</li>
             <li>0.5.17 add node: convertKeyValueList; http node support param1~param9; postman support urlencoded mode</li>
             <li>0.5.16 add node: call; support postman convert to fit; add disable unsafe node such as file</li>
             <li>0.5.15 refine node: stringify support format, foreach support basic array, readFile support dir, http support http status code when error</li>
