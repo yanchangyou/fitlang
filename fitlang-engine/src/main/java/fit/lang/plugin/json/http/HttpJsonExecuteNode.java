@@ -69,9 +69,9 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject httpParam = new JSONObject();
         for (int i = 0; i < 10; i++) {
             String key = "param" + (i > 0 ? i + "" : "");
-            JSONObject param = nodeJsonDefine.getJSONObject(key);
-            if (param != null) {
-                httpParam.putAll(param);
+            Object param = nodeJsonDefine.get(key);
+            if (param instanceof JSONObject) {
+                httpParam.putAll((JSONObject) param);
             }
         }
         return httpParam;

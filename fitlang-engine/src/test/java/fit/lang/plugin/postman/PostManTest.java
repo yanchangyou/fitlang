@@ -30,8 +30,8 @@ public class PostManTest extends TestCase {
                 "            \"jsonField\": \"content\"\n" +
                 "        },\n" +
                 "        {\n" +
-                "            \"uni\": \"replace\",\n" +
-                "            \"json\": {\n" +
+                "            \"uni\": \"convert\",\n" +
+                "            \"express\": {\n" +
                 "                \"item\": \"${content.item}\",\n" +
                 "                \"collectionName\": \"${content.info.name}\"\n" +
                 "            }\n" +

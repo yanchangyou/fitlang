@@ -1,8 +1,8 @@
 package fit.lang.plugin.json.json;
 
-import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONPath;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -47,6 +47,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
+
 
         for (String to : express.keySet()) {
 
@@ -171,7 +172,12 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
 
     @Override
     public void build(ExecuteNodeData executeNodeData) {
+
         setExpress(getJsonData(executeNodeData).getJSONObject("express"));
+
+        if (express == null) {
+            throw new ExecuteNodeException(" convert express field is required!");
+        }
         setValueMapping(getJsonData(executeNodeData).getJSONObject("valueMapping"));
     }
 }
