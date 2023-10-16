@@ -84,7 +84,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        if (!isInPluginEnvironment()) {
+        if (isInServerEnvironment()) {
             JsonDynamicFlowExecuteEngine.disableUnsafeNodes();
         }
 

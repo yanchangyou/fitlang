@@ -574,7 +574,7 @@ public class ExecuteJsonNodeUtil {
         return ((JsonExecuteNodeData) nodeDefine).getData();
     }
 
-    public static boolean isInPluginEnvironment() {
-        return Thread.currentThread().getContextClassLoader().toString().contains("com.intellij.");
+    public static boolean isInServerEnvironment() {
+        return !Thread.currentThread().getContextClassLoader().toString().contains("com.intellij.");
     }
 }
