@@ -37,7 +37,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
         setProxy(nodeJsonDefine.getJSONObject("proxy"), request);
 
-        Object httpParam = nodeJsonDefine.get("param");
+        JSONObject httpParam = parseParam(nodeJsonDefine);
 
         Boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");
         if (method == Method.GET || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
@@ -63,6 +63,18 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
 
         output.setData(result);
 
+    }
+
+    private static JSONObject parseParam(JSONObject nodeJsonDefine) {
+        JSONObject httpParam = new JSONObject();
+        for (int i = 0; i < 10; i++) {
+            String key = "param" + (i > 0 ? i + "" : "");
+            JSONObject param = nodeJsonDefine.getJSONObject(key);
+            if (param != null) {
+                httpParam.putAll(param);
+            }
+        }
+        return httpParam;
     }
 
 }
