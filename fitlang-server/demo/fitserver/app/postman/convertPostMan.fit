@@ -14,8 +14,8 @@
             "jsonField": "content"
         },
         {
-            "uni": "replace",
-            "json": {
+            "uni": "convert",
+            "express": {
                 "item": "${content.item}",
                 "collectionName": "${content.info.name}"
             }
