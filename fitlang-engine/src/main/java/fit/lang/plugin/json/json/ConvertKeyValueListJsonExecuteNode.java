@@ -35,21 +35,19 @@ public class ConvertKeyValueListJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject outputJson = input.getData().clone();
         Object list = outputJson.getByPath(listField);
-        if (!(list instanceof JSONArray)) {
-            throw new ExecuteNodeException(" convertKeyValueList list must be array type!");
-        }
-
-        JSONArray array = (JSONArray) list;
-        JSONObject jsonObject = new JSONObject();
-        for (Object item : array) {
-            if (!(item instanceof JSONObject)) {
-                throw new ExecuteNodeException(" convertKeyValueList item must be object type!");
+        if (list instanceof JSONArray) {
+            JSONArray array = (JSONArray) list;
+            JSONObject jsonObject = new JSONObject();
+            for (Object item : array) {
+                if (!(item instanceof JSONObject)) {
+                    throw new ExecuteNodeException(" convertKeyValueList item must be object type!");
+                }
+                JSONObject itemObject = (JSONObject) item;
+                jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
             }
-            JSONObject itemObject = (JSONObject) item;
-            jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
-        }
-        JSONPath.set(outputJson, listField, jsonObject);
+            JSONPath.set(outputJson, listField, jsonObject);
 
+        }
         output.setData(outputJson);
     }
 }
