@@ -129,15 +129,12 @@ public abstract class RunCodeAction extends AnAction {
 
             for (String path : filePathList) {
                 String code = readNodeDefineFile(path);
+                boolean needFormatJsonInConsole = needFormatJsonInConsole(code);
                 String result;
-                boolean needFormatJsonInConsole = false;
                 try {
 
                     if (finalNeedShowFile) {
                         print("run file: " + path + "\n", project, getProjectConsoleViewMap());
-                    }
-                    if (code.contains("_needFormatJsonInConsole")) {
-                        needFormatJsonInConsole = true;
                     }
 
                     Object resultObject = executeCode(code);
@@ -162,6 +159,10 @@ public abstract class RunCodeAction extends AnAction {
 
             }
         });
+    }
+
+    private static boolean needFormatJsonInConsole(String code) {
+        return code.contains("\"_needFormatJsonInConsole\"");
     }
 
     private String executeCode(String code) {
