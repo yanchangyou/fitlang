@@ -1,5 +1,7 @@
 package fit.lang.define.base;
 
+import fit.lang.info.NodeExecuteInfo;
+
 /**
  * 执行上下文
  */
@@ -12,6 +14,10 @@ public interface ExecuteContext {
     void setAttribute(String name, Object value);
 
     Object getAllAttribute();
+
+    NodeExecuteInfo getNodeExecuteInfo(String nodeId);
+
+    void setNodeExecuteInfo(String nodeId, NodeExecuteInfo nodeExecuteInfo);
 
     boolean isDebugMode();
 

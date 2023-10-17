@@ -1,5 +1,7 @@
 package fit.lang.define.base;
 
+import fit.lang.info.NodeExecuteInfo;
+
 import java.util.List;
 
 /**
@@ -13,6 +15,8 @@ public interface ExecuteNode {
      * @return
      */
     ExecuteContext getNodeContext();
+
+    NodeExecuteInfo getNodeExecuteInfo();
 
     void setNodeContext(ExecuteContext nodeContext);
 

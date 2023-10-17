@@ -52,9 +52,15 @@ public class ExecuteNodeUtil {
         for (String field : fields) {
             setExecuteNodeCommonAttribute(executeNode, nodeDefine, field);
         }
+        buildDefaultNodeId(executeNode);
+    }
+
+    public static void buildDefaultNodeId(ExecuteNode executeNode) {
         if (executeNode.getId() == null) {
             executeNode.setId(uuid());
-            nodeDefine.put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
+            if (executeNode.getNodeDefine() !=null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
+                ((JSONObject) executeNode.getNodeDefine().getData()).put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
+            }
         }
     }
 

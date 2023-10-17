@@ -4,6 +4,9 @@ import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.info.NodeExecuteInfo;
+
+import static fit.lang.ExecuteNodeUtil.buildDefaultNodeId;
 
 /**
  * aop简单实现，支持前后添加代码，处理公共切面逻辑
@@ -11,26 +14,36 @@ import fit.lang.define.base.ExecuteNodeOutput;
 public class ExecuteNodeSimpleAop {
 
     public static void beforeExecute(ExecuteNodeInput input, ExecuteNode executeNode, ExecuteNodeOutput output) {
+
+        buildDefaultNodeId(executeNode);
+
+        String id = executeNode.getId();
         if (!(executeNode instanceof ExecuteNodeAopIgnoreTag)) {
-            String id = executeNode.getId();
-            if (id == null) {
-                id = executeNode.toString();
-            }
             Object data = input.getNodeData().getData();
             if (executeNode.isNeedCloneInputData()) {
                 input.getNodeData().setData(input.getNodeData().cloneData());
             }
             input.getNodeContext().setAttribute(id + "Input", data);
         }
+
+        if (executeNode.getNodeContext() != null) {
+            if (executeNode.getNodeExecuteInfo() == null) {
+                executeNode.getNodeContext().setNodeExecuteInfo(id, new NodeExecuteInfo());
+            }
+            executeNode.getNodeExecuteInfo().setBeginTimeMs(System.currentTimeMillis());
+            executeNode.getNodeExecuteInfo().increaseBeginCount();
+        }
     }
 
     public static void afterExecute(ExecuteNodeInput input, ExecuteNode executeNode, ExecuteNodeOutput output) {
+        String id = executeNode.getId();
+
         if (!(executeNode instanceof ExecuteNodeAopIgnoreTag)) {
-            String id = executeNode.getId();
-            if (id == null) {
-                id = executeNode.toString();
-            }
             input.getNodeContext().setAttribute(id + "Output", output.getNodeData().getData());
+        }
+        if (executeNode.getNodeContext() != null) {
+            executeNode.getNodeContext().getNodeExecuteInfo(id).setEndTimeMs(System.currentTimeMillis());
+            executeNode.getNodeExecuteInfo().increaseEndCount();
         }
     }
 }

@@ -1,6 +1,7 @@
 package fit.lang.common;
 
 import fit.lang.define.base.ExecuteContext;
+import fit.lang.info.NodeExecuteInfo;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -11,6 +12,8 @@ import java.util.TreeMap;
 public abstract class AbstractExecuteContext implements ExecuteContext {
 
     Map<String, Object> attributeMap = new TreeMap<>();
+
+    Map<String, NodeExecuteInfo> nodeExecuteInfoMap = new TreeMap<>();
 
     Map<String, Object> nodeMap = new TreeMap<>();
 
@@ -57,6 +60,14 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
     @Override
     public void addNode(String nodeId, Object nodeDefine) {
         nodeMap.put(nodeId, nodeDefine);
+    }
+
+    public NodeExecuteInfo getNodeExecuteInfo(String nodeId) {
+        return nodeExecuteInfoMap.get(nodeId);
+    }
+
+    public void setNodeExecuteInfo(String nodeId, NodeExecuteInfo nodeExecuteInfo) {
+        nodeExecuteInfoMap.put(nodeId, nodeExecuteInfo);
     }
 
 }

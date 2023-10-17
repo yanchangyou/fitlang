@@ -101,11 +101,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         }
         try {
             ExecuteNode executeNode = JSON.to(executeNodeClass, nodeDefine);
+            executeNode.setNodeDefine(new JsonExecuteNodeData(nodeDefine));
             executeNode.setNodeContext(nodeContext);
             ExecuteNodeUtil.setExecuteNodeCommonAttribute(executeNode, nodeDefine);
             nodeContext.addNode(executeNode.getId(), nodeDefine);
-
-            executeNode.setNodeDefine(new JsonExecuteNodeData(nodeDefine));
 
             buildNextNode(executeNode, nodeDefine);
 
