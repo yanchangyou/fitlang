@@ -48,6 +48,7 @@ public class JsonTimeCountExecuteNodeTest extends TestCase {
                 "   }" +
                 "}";
 
+        System.out.println(flow);
 
         JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject(flow));
 

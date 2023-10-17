@@ -1,0 +1,15 @@
+{
+    "uni": "timeCount",
+    "child": {
+        "uni": "loop",
+        "isPipe": true,
+        "loopTimes": 1000,
+        "child": {
+            "uni": "mix",
+            "json": {
+                "times": "${loopIndex+1}",
+                "times1": "${loopIndex+1}"
+            }
+        }
+    }
+}
