@@ -30,8 +30,8 @@ public class ExecuteNodeSimpleAop {
             if (executeNode.getNodeExecuteInfo() == null) {
                 executeNode.getNodeContext().setNodeExecuteInfo(id, new NodeExecuteInfo());
             }
-            executeNode.getNodeExecuteInfo().setBeginTimeMs(System.currentTimeMillis());
-            executeNode.getNodeExecuteInfo().increaseBeginCount();
+            executeNode.getNodeExecuteInfo().setBeginTime(System.currentTimeMillis());
+//            executeNode.getNodeExecuteInfo().increaseBeginCount();
         }
     }
 
@@ -42,8 +42,8 @@ public class ExecuteNodeSimpleAop {
             input.getNodeContext().setAttribute(id + "Output", output.getNodeData().getData());
         }
         if (executeNode.getNodeContext() != null) {
-            executeNode.getNodeContext().getNodeExecuteInfo(id).setEndTimeMs(System.currentTimeMillis());
-            executeNode.getNodeExecuteInfo().increaseEndCount();
+            executeNode.getNodeContext().getNodeExecuteInfo(id).setEndTime(System.currentTimeMillis());
+//            executeNode.getNodeExecuteInfo().increaseEndCount();
         }
     }
 }

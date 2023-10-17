@@ -8,50 +8,58 @@ public class NodeExecuteInfo {
     /**
      * 开始时间：毫秒
      */
-    long beginTimeMs;
+    long beginTime;
 
     /**
      * 结束
      */
-    long endTimeMs;
+    long endTime;
 
-    int beginCount;
+    long costTime;
 
-    int endCount;
+//    int beginCount;
+//
+//    int endCount;
 
-    public long getBeginTimeMs() {
-        return beginTimeMs;
+    public long getBeginTime() {
+        return beginTime;
     }
 
-    public void setBeginTimeMs(long beginTimeMs) {
-        this.beginTimeMs = beginTimeMs;
+    public void setBeginTime(long beginTime) {
+        this.beginTime = beginTime;
     }
 
-    public long getEndTimeMs() {
-        return endTimeMs;
+    public long getEndTime() {
+        return endTime;
     }
 
-    public void setEndTimeMs(long endTimeMs) {
-        this.endTimeMs = endTimeMs;
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+        costTime = endTime - beginTime;
     }
 
-    public long costTime() {
-        return endTimeMs - beginTimeMs;
+    public long getCostTime() {
+        return costTime;
     }
 
-    public int getBeginCount() {
-        return beginCount;
+    public void setCostTime(long costTime) {
+        this.costTime = costTime;
     }
+//
+//    public int getBeginCount() {
+//        return beginCount;
+//    }
+//
+//    public void increaseBeginCount() {
+//        this.beginCount++;
+//    }
+//
+//    public int getEndCount() {
+//        return endCount;
+//    }
+//
+//    public void increaseEndCount() {
+//        this.endCount++;
+//    }
 
-    public void increaseBeginCount() {
-        this.beginCount++;
-    }
-
-    public int getEndCount() {
-        return endCount;
-    }
-
-    public void increaseEndCount() {
-        this.endCount++;
-    }
 }
