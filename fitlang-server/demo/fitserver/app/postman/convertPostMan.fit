@@ -48,6 +48,12 @@
                                 "uni": "pipe",
                                 "child": [
                                     {
+                                        "uni": "mix",
+                                        "json": {
+                                            "isPostForm": "${boolean(request.body)?(boolean(request.body.urlencoded)?true:false):false}"
+                                        }
+                                    },
+                                    {
                                         "uni": "convert",
                                         "express": {
                                             "name": "${name}",
@@ -55,6 +61,7 @@
                                             "content.name": "${name}",
                                             "content.uni": "http",
                                             "content.method": "${request.method}",
+                                            "content.isPostForm": "${isPostForm}",
                                             "content.url": "${request.url.raw}",
                                             "content.param": "${request.body.raw}",
                                             "content.param1": "${request.body.urlencoded}",
