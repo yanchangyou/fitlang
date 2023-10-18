@@ -11,6 +11,11 @@ public class ExpressUtil {
 
     private static final AviatorEvaluatorInstance engine = AviatorEvaluator.getInstance();
 
+    static {
+        //默认使用缓存
+        engine.setCachedExpressionByDefault(true);
+    }
+
     /**
      * 表达式计算
      *
