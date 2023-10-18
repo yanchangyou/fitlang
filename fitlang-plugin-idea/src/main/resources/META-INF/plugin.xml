@@ -235,6 +235,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.5.20 refine expression performance</li>
             <li>0.5.19 add node: timeCount</li>
             <li>0.5.18 refine node</li>
             <li>0.5.17 add node: convertKeyValueList; http node support param1~param9; postman support urlencoded mode</li>
