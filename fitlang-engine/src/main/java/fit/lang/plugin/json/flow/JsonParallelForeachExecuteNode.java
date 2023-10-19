@@ -3,15 +3,16 @@ package fit.lang.plugin.json.flow;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.define.base.*;
-import org.apache.commons.collections.list.SynchronizedList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 /**
  * 执行节点
  */
-public class JsonParallelLoopExecuteNode extends JsonLoopExecuteNode {
+public class JsonParallelForeachExecuteNode extends JsonForeachExecuteNode {
+
 
     protected int parallelism = Runtime.getRuntime().availableProcessors();
 
@@ -49,49 +50,41 @@ public class JsonParallelLoopExecuteNode extends JsonLoopExecuteNode {
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
         ExecutorService executorService = Executors.newFixedThreadPool(parallelism);
-        LinkedBlockingDeque<Future<Object>> resultObjects = new LinkedBlockingDeque<>();
+        LinkedBlockingDeque<Future<ExecuteNodeData>> resultObjects = new LinkedBlockingDeque<>();
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
-        currentIndex = 0;
-        List bags = getBags(getLoopTimes());
 
-        for (int i = 0; i < getLoopTimes(); i++) {
-            input.getNodeContext().setAttribute("loopIndex", currentIndex);
-            Future<Object> submit = executorService.submit(new Callable<Object>() {
+        List<ExecuteNodeData> resultDataList = new ArrayList<>();
+        for (int i = 0; next(input); i++) {
+            ExecuteNodeOutput subOutput = getCurrentOutput(output);
+            ExecuteNodeInput subInput = getCurrentInput(input);
 
+            Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {
                 @Override
-                public Object call() throws Exception {
+                public ExecuteNodeData call() throws Exception {
+                    ExecuteNodeData result = null;
                     for (ExecuteNode executeNode : childNodes) {
-                        executeNode.executeAndNext(input, output);
-                        if (isPipe) {
-                            input.setNodeData(output.getNodeData());
-                        }
+                        executeNode.executeAndNext(subInput, subOutput);
+                        result = subOutput.getNodeData();
                     }
-
-                    return output.getNodeData().getData();
+                    return result;
                 }
             });
             resultObjects.offer(submit);
-            currentIndex++;
         }
         executorService.shutdown();
 
         resultObjects.forEach(f -> {
             try {
-                Object object = f.get();
-
-                if (isBagsMode) {
-                    bags.add(object);
-                }
+                resultDataList.add(f.get());
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         });
+        setForeachOutputList(resultDataList, output);
 
-        if (isBagsMode) {
-            setBags(bagsName, bags, output);
-        }
+        ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 
-        ExecuteNodeSimpleAop.afterExecute(input, this, output);
     }
+
 }

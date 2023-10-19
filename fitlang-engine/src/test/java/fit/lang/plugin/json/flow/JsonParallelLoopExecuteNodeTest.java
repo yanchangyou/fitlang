@@ -11,7 +11,7 @@ public class JsonParallelLoopExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'parallelLoop'," +
                 "   'isPipe': true," +
-                "   'parallelism': 16," +
+                "   'parallelism': 6," +
                 "   'loopTimes': 100," +
                 "   'child': {" +
                 "       'uni':'mix'," +
