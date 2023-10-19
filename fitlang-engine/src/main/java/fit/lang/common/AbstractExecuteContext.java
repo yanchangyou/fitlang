@@ -4,18 +4,18 @@ import fit.lang.define.base.ExecuteContext;
 import fit.lang.info.NodeExecuteInfo;
 
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 执行上下文
  */
 public abstract class AbstractExecuteContext implements ExecuteContext {
 
-    Map<String, Object> attributeMap = new TreeMap<>();
+    Map<String, Object> attributeMap = new ConcurrentHashMap<>();
 
-    Map<String, NodeExecuteInfo> nodeExecuteInfoMap = new TreeMap<>();
+    Map<String, NodeExecuteInfo> nodeExecuteInfoMap = new ConcurrentHashMap<>();
 
-    Map<String, Object> nodeMap = new TreeMap<>();
+    Map<String, Object> nodeMap = new ConcurrentHashMap<>();
 
     Boolean debugMode;
 
