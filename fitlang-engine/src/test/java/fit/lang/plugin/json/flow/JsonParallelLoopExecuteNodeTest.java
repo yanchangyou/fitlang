@@ -9,7 +9,7 @@ public class JsonParallelLoopExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'parallelLoop'," +
+                "   'uni': 'loop'," +
                 "   'isPipe': true," +
                 "   'parallelism': 6," +
                 "   'loopTimes': 100," +
@@ -30,7 +30,7 @@ public class JsonParallelLoopExecuteNodeTest extends TestCase {
 
     public void testExecute2() {
         String flow = "{" +//
-                "   'uni': 'parallelLoop'," +
+                "   'uni': 'loop'," +
                 "   'isPipe': true," +
                 "   'isBagsMode': true," +
                 "   'loopTimes': 10," +
@@ -53,7 +53,7 @@ public class JsonParallelLoopExecuteNodeTest extends TestCase {
     public void testExecuteHttp() {
         int loopTimes = 10;
         String flow = "{" +//
-                "   'uni': 'parallelLoop'," +
+                "   'uni': 'loop'," +
                 "   'isPipe': true," +
                 "   'isBagsMode': true," +
                 "   'parallelism': 8," +

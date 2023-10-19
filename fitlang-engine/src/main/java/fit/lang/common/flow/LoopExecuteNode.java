@@ -1,5 +1,6 @@
 package fit.lang.common.flow;
 
+import fit.lang.common.AbstractParallelExecuteNode;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
@@ -7,11 +8,12 @@ import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
 
 import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * 执行节点
  */
-public abstract class LoopExecuteNode extends AbstractExecuteNode {
+public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
     protected int loopTimes = 1;
 
@@ -89,26 +91,50 @@ public abstract class LoopExecuteNode extends AbstractExecuteNode {
     @Override
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
 
+        ExecutorService executorService = Executors.newFixedThreadPool(parallelism);
+        LinkedBlockingDeque<Future<Object>> resultObjects = new LinkedBlockingDeque<>();
+
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
         currentIndex = 0;
         List bags = getBags(getLoopTimes());
+
         for (int i = 0; i < getLoopTimes(); i++) {
             input.getNodeContext().setAttribute("loopIndex", currentIndex);
-            for (ExecuteNode executeNode : childNodes) {
-                executeNode.executeAndNext(input, output);
-                if (isPipe) {
-                    input.setNodeData(output.getNodeData());
+            Future<Object> submit = executorService.submit(new Callable<Object>() {
+
+                @Override
+                public Object call() throws Exception {
+                    for (ExecuteNode executeNode : childNodes) {
+                        executeNode.executeAndNext(input, output);
+                        if (isPipe) {
+                            input.setNodeData(output.getNodeData());
+                        }
+                    }
+
+                    return output.getNodeData().getData();
                 }
-            }
-            if (isBagsMode) {
-                bags.add(output.getNodeData().getData());
-            }
+            });
+            resultObjects.offer(submit);
             currentIndex++;
         }
+        executorService.shutdown();
+
+        resultObjects.forEach(f -> {
+            try {
+                Object object = f.get();
+
+                if (isBagsMode) {
+                    bags.add(object);
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         if (isBagsMode) {
             setBags(bagsName, bags, output);
         }
+
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
     }
 

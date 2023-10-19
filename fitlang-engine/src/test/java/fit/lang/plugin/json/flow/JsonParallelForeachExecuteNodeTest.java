@@ -8,8 +8,9 @@ public class JsonParallelForeachExecuteNodeTest extends TestCase {
 
     public void testExecute1() {
         String flow = "{" +//
-                "   'uni': 'parallelForeach'," +
+                "   'uni': 'foreach'," +
                 "   'foreachField': 'list'," +
+                "   'parallelism': 4," +
                 "   'mixToItemField': 'times'," +
                 "   'child': {" +
                 "       'uni':'mix'," +
@@ -28,8 +29,8 @@ public class JsonParallelForeachExecuteNodeTest extends TestCase {
 
     public void testExecute2() {
         String flow = "{" +//
-                "   'uni': 'parallelForeach'," +
-                "   'parallelism': 16," +
+                "   'uni': 'foreach'," +
+                "   'parallelism': 4," +
                 "   'foreachField': 'list'," +
                 "   'mixToItemField': 'times'," +
                 "   'child': {" +
