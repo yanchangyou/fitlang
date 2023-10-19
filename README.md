@@ -70,19 +70,23 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 ### 实用节点
 - hello: hello world demo
 - echo: 原样返回入参
+- assert: 断言
+- set: 设置全局变量
+- sleep: 流程休眠节点
+- print: 控制台打印
+- timeCount: 耗时统计
+
+### json数据节点
 - add: 支持json相加
 - convert: 转换节点，支持json到json的转换，使用转换表达式
 - removeField: 移除json字段
 - removeEmptyField: 移除空字段
-- print: 控制台打印
-- sleep: 流程休眠节点
-- replace: 替换结果输出
 - mix: 混入json对象
 - mixNode: 混入节点执行，用于嵌套字段场景
-- execute: 执行入参传递的流程
-- assert: 断言
 - eval: 表达式计算
-- set: 设置全局变量
+- parseJson: 解析json
+- stringifyJson: json转字符串
+- convertKeyValueList: key value list转换对象
 
 ### 流程节点（有child子节点）
 - sequence: 顺序执行节点
@@ -92,13 +96,21 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - switch: 分支执行节点，switchField指定分支字段
 - return: 返回json
 - thread: 多线程执行
+- execute: 执行入参传递的流程
+- call: 引用节点执行
 
-### Web节点
+### git
+- gitPull: 拉取
+
+### http节点
+- http: http
 - postJson: http post json
 - postForm: http post form
 - httpGet: http get
 - httpPut: http put
 - httpDelete: http delete
+
+### Web节点
 - server: 服务端节点, 类属于tomcat
 - proxy: 代理节点
 - web: 配置web参数，响应头等
@@ -108,6 +120,11 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 ### Excel节点
 - readExcel: 读取Excel
 - writeExcel: 写入Excel
+
+### file节点
+- readFile: 读取文件
+- writeFile: 写入文件
+- deleteFile: 删除文件
 
 ### 系统信息节点
 - systemInfo: 获取系统信息(暂时开放字段：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
