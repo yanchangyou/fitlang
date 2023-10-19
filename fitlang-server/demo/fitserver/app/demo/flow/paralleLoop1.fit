@@ -2,7 +2,7 @@
     "flag": "_needFormatJsonInConsole",
     "uni": "timeCount",
     "child": {
-        "uni": "parallelLoop",
+        "uni": "loop",
         "loopTimes": 1000000,
         "parallelism": 1,
         "child": {

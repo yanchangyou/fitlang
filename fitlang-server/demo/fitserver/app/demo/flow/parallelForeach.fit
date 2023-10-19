@@ -5,7 +5,7 @@
             "b"
         ]
     },
-    "uni": "parallelForeach",
+    "uni": "foreach",
     "foreachField": "list",
     "child": {
         "uni": "mix",

@@ -1,5 +1,5 @@
 {
-    "uni": "parallelLoop",
+    "uni": "loop",
     "loopTimes": 1000000,
     "child": {
         "uni": "mix",
