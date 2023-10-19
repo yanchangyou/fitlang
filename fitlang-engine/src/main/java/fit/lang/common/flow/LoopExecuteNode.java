@@ -13,21 +13,21 @@ import java.util.List;
  */
 public abstract class LoopExecuteNode extends AbstractExecuteNode {
 
-    int loopTimes = 1;
+    protected int loopTimes = 1;
 
-    int currentIndex = 0;
+    protected int currentIndex = 0;
 
     /**
      * loop参数处理逻辑，是否pipe模式（出参转下一次入参），默认是否
      */
-    boolean isPipe;
+    protected boolean isPipe;
 
     /**
      * 是否袋子模式，是：执行结果放入袋子中，否：最后的结果
      */
-    boolean isBagsMode;
+    protected boolean isBagsMode;
 
-    String bagsName = "list";
+    protected String bagsName = "list";
 
     /**
      * 获取循环次数

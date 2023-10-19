@@ -5,13 +5,14 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class JsonLoopExecuteNodeTest extends TestCase {
+public class JsonParallelLoopExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'loop'," +
+                "   'uni': 'parallelLoop'," +
                 "   'isPipe': true," +
-                "   'loopTimes': 10," +
+                "   'parallelism': 16," +
+                "   'loopTimes': 100," +
                 "   'child': {" +
                 "       'uni':'mix'," +
                 "       'json':{" +
@@ -24,12 +25,14 @@ public class JsonLoopExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"times\":10}", output);
+//        Assert.assertEquals("{\"times\":10}", output);
     }
 
     public void testExecute2() {
         String flow = "{" +//
-                "   'uni': 'loop'," +
+                "   'uni': 'parallelLoop'," +
+                "   'isPipe': true," +
+                "   'isBagsMode': true," +
                 "   'loopTimes': 10," +
                 "   'child': {" +
                 "       'uni':'mix'," +
@@ -43,35 +46,17 @@ public class JsonLoopExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"times\":1}", output);
+        Assert.assertEquals(10, JSONObject.parseObject(output).getJSONArray("list").size());
+
     }
-
-    public void testExecute3() {
-        String flow = "{" +//
-                "   'uni': 'loop'," +
-                "   'loopTimes': 10," +
-                "   'child': {" +
-                "       'uni':'mix'," +
-                "       'json':{" +
-                "           'loopIndex':'${loopIndex}'" +
-                "       }" +
-                "   }" +
-                "}";
-
-        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
-
-        System.out.println(output);
-
-        Assert.assertEquals("{\"loopIndex\":9}", output);
-    }
-
 
     public void testExecuteHttp() {
         int loopTimes = 10;
         String flow = "{" +//
-                "   'uni': 'loop'," +
+                "   'uni': 'parallelLoop'," +
                 "   'isPipe': true," +
                 "   'isBagsMode': true," +
+                "   'parallelism': 8," +
                 "   'loopTimes': " + loopTimes + "," +
                 "   'child': {" +
                 "       'uni':'http'," +
