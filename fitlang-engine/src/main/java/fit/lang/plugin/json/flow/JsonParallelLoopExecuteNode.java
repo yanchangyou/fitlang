@@ -3,7 +3,6 @@ package fit.lang.plugin.json.flow;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.define.base.*;
-import org.apache.commons.collections.list.SynchronizedList;
 
 import java.util.List;
 import java.util.concurrent.*;
