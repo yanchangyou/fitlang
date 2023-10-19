@@ -1,0 +1,10 @@
+{
+    "uni": "parallelLoop",
+    "loopTimes": 1000000,
+    "child": {
+        "uni": "mix",
+        "json": {
+            "loopIndex": "${loopIndex}"
+        }
+    }
+}

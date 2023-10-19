@@ -1,0 +1,16 @@
+{
+    "input": {
+        "list": [
+            "a",
+            "b"
+        ]
+    },
+    "uni": "parallelForeach",
+    "foreachField": "list",
+    "child": {
+        "uni": "mix",
+        "json": {
+            "message": "mix"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "flag": "_needFormatJsonInConsole",
+    "uni": "timeCount",
+    "child": {
+        "uni": "parallelLoop",
+        "loopTimes": 1000000,
+        "parallelism": 3,
+        "child": {
+            "uni": "mix",
+            "json": {
+                "loopIndex": "${loopIndex}"
+            }
+        }
+    }
+}
