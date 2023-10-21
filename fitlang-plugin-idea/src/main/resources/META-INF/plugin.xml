@@ -136,6 +136,7 @@ uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一�
 <p>
 目前已经实现的节点如下：<br/>
 <br/>
+
 实用节点<br/>
 hello: hello world demo<br/>
 echo: 原样返回入参<br/>
@@ -144,8 +145,9 @@ print：控制台打印<br/>
 sleep：流程休眠节点<br/>
 replace: 替换结果输出<br/>
 execute: 执行入参传递的流程<br/>
+<br/>
 
-JSON节点
+JSON节点<br/>
 add：支持json相加<br/>
 convert：转换节点，支持json到json的转换，使用转换表达式<br/>
 removeField：移除json字段<br/>
@@ -155,16 +157,16 @@ mix: 混入json对象<br/>
 mixNode: 混入节点执行，用于嵌套字段场景<br/>
 parseJson: 解析json字符串成json对象
 stringifyJson: json对象转换为json字符串
-
 <br/>
+
 流程节点（有child子节点）<br/>
 sequence：顺序执行节点<br/>
 pipe：管道执行节点<br/>
 foreach：遍历json数组字段节点<br/>
 loop：循环执行节点，loopTimes制定执行次数<br/>
 switch：分支执行节点，switchField指定分支字段<br/>
-
 <br/>
+
 Web节点<br/>
 http：支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete<br/>
 server：服务端节点<br/>
@@ -172,10 +174,10 @@ proxy：代理节点<br/>
 web: 配置web参数，响应头等<br/>
 <br/>
 
-<br/>
 云节点<br/>
 cloudServer: 启动web socket<br/>
 cloudClient: 连接web socket<br/>
+<br/>
 
 Excel节点<br/>
 readExcel：读取Excle<br/>
@@ -189,11 +191,12 @@ getClientMonitorData: 获取单个客户端监控数据<br/>
 receiveClientMonitorData: 接收客户端监控数据<br/>
 pushClientMonitorData: 推送监控数据<br/>
 getMonitorClient: 获取监控客户端列表<br/>
-
 <br/>
+
 云节点<br/>
 cloudServer：server端<br/>
 cloudClient：client端<br/>
+
 </p>
     ]]></description>
 
