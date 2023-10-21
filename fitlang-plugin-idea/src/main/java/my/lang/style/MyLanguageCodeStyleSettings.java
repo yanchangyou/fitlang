@@ -9,7 +9,7 @@ import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
 public class MyLanguageCodeStyleSettings extends CustomCodeStyleSettings {
 
     public MyLanguageCodeStyleSettings(CodeStyleSettings settings) {
-        super("MyLanguageCodeStyleSettings", settings);
+        super("FitLanguageCodeStyleSettings", settings);
     }
 
 }

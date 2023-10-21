@@ -24,6 +24,6 @@ public class MyLanguageFile extends PsiFileBase {
 
     @Override
     public String toString() {
-        return "My File";
+        return MyLanguage.LANG_NAME;
     }
 }
