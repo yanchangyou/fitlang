@@ -40,11 +40,14 @@ sourceSets {
     main {
         java {
             srcDir 'fitlang-plugin-idea/src/main/java'
+            srcDir 'fitlang-plugin-idea-json/src'
+            srcDir 'fitlang-plugin-idea-json/gen'
             srcDir 'fitlang-engine/src/main/java'
             srcDir 'fitlang-server/src/main/java'
         }
         resources {
             srcDir 'fitlang-plugin-idea/src/main/resources'
+            srcDir 'fitlang-plugin-idea-json/resources'
             srcDir 'fitlang-server/demo' exclude("**/.idea/**")
         }
     }

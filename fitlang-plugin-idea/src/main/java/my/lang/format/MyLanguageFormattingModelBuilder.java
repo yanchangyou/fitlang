@@ -1,6 +1,6 @@
 package my.lang.format;
 
-import com.intellij.json.formatter.JsonFormattingBuilderModel;
+import fit.intellij.json.formatter.JsonFormattingBuilderModel;
 
 /**
  * @author yanchangyou

@@ -1,6 +1,6 @@
 package my.lang.highlight;
 
-import com.intellij.json.json5.highlighting.Json5SyntaxHighlightingFactory;
+import fit.intellij.json.json5.highlighting.Json5SyntaxHighlightingFactory;
 
 /**
  * @author yanchangyou

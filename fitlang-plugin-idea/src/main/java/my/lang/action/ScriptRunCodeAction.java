@@ -2,7 +2,6 @@ package my.lang.action;
 
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.project.Project;
-import my.lang.MyLanguage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,12 +31,4 @@ public class ScriptRunCodeAction extends RunCodeAction {
         return projectConsoleViewMap;
     }
 
-
-    public static void main(String[] args) {
-        String code = "1+1";
-        System.out.println(code);
-//        Object result = AviatorEvaluator.execute(code);
-//        System.out.println(result);
-
-    }
 }

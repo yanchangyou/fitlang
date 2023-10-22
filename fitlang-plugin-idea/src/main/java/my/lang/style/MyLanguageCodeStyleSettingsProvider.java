@@ -1,6 +1,6 @@
 package my.lang.style;
 
-import com.intellij.json.formatter.JsonLanguageCodeStyleSettingsProvider;
+import fit.intellij.json.formatter.JsonLanguageCodeStyleSettingsProvider;
 
 /**
  * @author yanchangyou

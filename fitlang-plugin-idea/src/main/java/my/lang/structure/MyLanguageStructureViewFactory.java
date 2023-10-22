@@ -1,6 +1,6 @@
 package my.lang.structure;
 
-import com.intellij.json.structureView.JsonStructureViewBuilderFactory;
+import fit.intellij.json.structureView.JsonStructureViewBuilderFactory;
 
 /**
  * @author yanchangyou

@@ -1,26 +1,19 @@
 package my.lang.highlight;
 
-import com.google.common.collect.ImmutableMap;
-import com.intellij.icons.AllIcons;
-import com.intellij.json.JsonLanguage;
-import com.intellij.json.highlighting.JsonColorsPage;
+import fit.intellij.json.highlighting.JsonColorsPage;
 import com.intellij.lang.Language;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
-import com.intellij.openapi.options.colors.ColorDescriptor;
-import com.intellij.psi.codeStyle.DisplayPriority;
 import my.lang.MyLanguage;
 import my.lang.MyLanguageFileType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.Map;
 
-import static com.intellij.json.highlighting.JsonSyntaxHighlighterFactory.*;
-import static com.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_KEYWORD;
+import static fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.*;
+import static fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_KEYWORD;
 
 /**
  * @author yanchangyou
