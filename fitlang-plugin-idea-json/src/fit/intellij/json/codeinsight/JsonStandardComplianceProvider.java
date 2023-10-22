@@ -5,22 +5,25 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiComment;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
+
 /**
  * Allows to configure a compliance level for JSON.
  * For example, some tools ignore comments in JSON silently when parsing, so there is no need to warn users about it.
  */
 public abstract class JsonStandardComplianceProvider {
-  public static final ExtensionPointName<JsonStandardComplianceProvider> EP_NAME =
-    ExtensionPointName.create("fit.intellij.json.jsonStandardComplianceProvider");
+    public static final ExtensionPointName<JsonStandardComplianceProvider> EP_NAME =
+            ExtensionPointName.create("fit.intellij.json.jsonStandardComplianceProvider");
 
-  public abstract boolean isCommentAllowed(@NotNull PsiComment comment);
+    public abstract boolean isCommentAllowed(@NotNull PsiComment comment);
 
-  public static boolean shouldWarnAboutComment(@NotNull PsiComment comment) {
-    for (JsonStandardComplianceProvider provider : EP_NAME.getIterable(null)) {
-      if (provider.isCommentAllowed(comment)) {
-        return false;
-      }
+    public static boolean shouldWarnAboutComment(@NotNull PsiComment comment) {
+        for (Iterator<JsonStandardComplianceProvider> it = EP_NAME.getExtensionList().iterator(); it.hasNext(); ) {
+            JsonStandardComplianceProvider provider = it.next();
+            if (provider.isCommentAllowed(comment)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 }

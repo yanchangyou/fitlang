@@ -42,7 +42,6 @@ public class JsonCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
                 return "reference.settingsdialog.codestyle.json";
             }
         };
-        createSettingsPage(settings, modelSettings);
         return configurable;
     }
 

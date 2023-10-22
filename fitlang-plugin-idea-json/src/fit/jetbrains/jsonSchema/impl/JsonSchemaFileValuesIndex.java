@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, String> {
-  public static final ID<String, String> INDEX_ID = ID.create("json.file.root.values");
+  public static final ID<String, String> INDEX_ID = ID.create("fit.json.file.root.values");
   private static final int VERSION = 5;
   public static final String NULL = "$NULL$";
 

@@ -155,9 +155,9 @@ public class JsonStandardComplianceInspection extends LocalInspectionTool {
     @Override
     public void visitComment(PsiComment comment) {
       if (!allowComments() && myWarnAboutComments) {
-        if (JsonStandardComplianceProvider.shouldWarnAboutComment(comment)) {
-          myHolder.registerProblem(comment, JsonBundle.message("inspection.compliance.msg.comments"));
-        }
+//        if (JsonStandardComplianceProvider.shouldWarnAboutComment(comment)) {
+//          myHolder.registerProblem(comment, JsonBundle.message("inspection.compliance.msg.comments"));
+//        }
       }
     }
 
