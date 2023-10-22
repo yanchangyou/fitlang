@@ -208,16 +208,16 @@ cloudClient：client端<br/>
 <!--        <fileType language="FitLang" name="FitLang" patterns="*.fit"-->
 <!--                  implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE" extensions="fit"/>-->
 
-        <fileType name="FitJSON" extensions="fit" implementationClass="fit.intellij.json.JsonFileType"
+        <fileType language="FitLang" name="FitLang" extensions="fit" patterns="*.fit(.json)?" implementationClass="fit.intellij.json.JsonFileType"
                   fieldName="INSTANCE"/>
-        <fileType name="FitJSON5" extensions="fit5" implementationClass="fit.intellij.json.json5.Json5FileType"
+        <fileType language="FitLang5" name="FitLang5" extensions="fit5" implementationClass="fit.intellij.json.json5.Json5FileType"
                   fieldName="INSTANCE"/>
         <!--        <fileIconProvider implementation="fit.jetbrains.jsonSchema.JsonSchemaIconProvider"/>-->
         <lang.parserDefinition language="FitLang" implementationClass="fit.intellij.json.JsonParserDefinition"/>
-        <lang.parserDefinition language="FitJSON5" implementationClass="fit.intellij.json.json5.Json5ParserDefinition"/>
+        <lang.parserDefinition language="FitLang5" implementationClass="fit.intellij.json.json5.Json5ParserDefinition"/>
         <lang.syntaxHighlighterFactory language="FitLang"
                                        implementationClass="fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory"/>
-        <lang.syntaxHighlighterFactory language="FitJSON5"
+        <lang.syntaxHighlighterFactory language="FitLang5"
                                        implementationClass="fit.intellij.json.json5.highlighting.Json5SyntaxHighlightingFactory"/>
         <statusBarWidgetProvider implementation="fit.jetbrains.jsonSchema.widget.JsonSchemaStatusWidgetProvider"/>
         <fileBasedIndex implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex"/>
@@ -279,7 +279,7 @@ cloudClient：client端<br/>
                          groupKey="json.inspection.group"
                          enabledByDefault="true" level="ERROR"
                          implementationClass="fit.intellij.json.codeinsight.JsonStandardComplianceInspection"/>
-        <localInspection language="FitJSON5" shortName="FitJson5StandardCompliance"
+        <localInspection language="FitLang5" shortName="FitJson5StandardCompliance"
                          bundle="fit.intellij.json.JsonBundle" key="inspection.compliance5.name"
                          groupKey="json.inspection.group"
                          enabledByDefault="true" level="ERROR"

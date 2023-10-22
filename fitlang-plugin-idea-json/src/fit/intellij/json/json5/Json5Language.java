@@ -7,7 +7,7 @@ public class Json5Language extends JsonLanguage {
   public static final Json5Language INSTANCE = new Json5Language();
 
   protected Json5Language() {
-    super("FitJSON5", "application/json5");
+    super("FitLang5", "application/json5");
   }
 
   @Override

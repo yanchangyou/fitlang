@@ -15,13 +15,13 @@ public class Json5FileType extends JsonFileType {
   @NotNull
   @Override
   public String getName() {
-    return "FitJSON5";
+    return "FitLang5";
   }
 
   @NotNull
   @Override
   public String getDescription() {
-    return "FitJSON5";
+    return "FitLang5";
   }
 
   @NotNull
