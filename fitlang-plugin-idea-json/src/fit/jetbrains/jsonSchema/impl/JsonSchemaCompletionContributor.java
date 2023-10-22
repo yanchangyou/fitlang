@@ -696,7 +696,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       };
     }
 
-    private static void invokeEnterHandler(Editor editor) {
+    public static void invokeEnterHandler(Editor editor) {
       EditorActionHandler handler = EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_ENTER);
       Caret caret = editor.getCaretModel().getCurrentCaret();
       handler.execute(editor, caret,

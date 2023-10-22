@@ -22,9 +22,9 @@ import java.util.List;
 public class JsonStructureViewBuilderFactory implements PsiStructureViewFactory {
 
   public JsonStructureViewBuilderFactory() {
-    JsonCustomStructureViewFactory.EP_NAME.addExtensionPointListener(
-      () -> ApplicationManager.getApplication().getMessageBus().syncPublisher(StructureViewWrapperImpl.STRUCTURE_CHANGED).run(),
-      ExtensionPointUtil.createKeyedExtensionDisposable(this, PsiStructureViewFactory.EP_NAME.getPoint(null)));
+//    JsonCustomStructureViewFactory.EP_NAME.addExtensionPointListener(
+//      () -> ApplicationManager.getApplication().getMessageBus().syncPublisher(StructureViewWrapperImpl.STRUCTURE_CHANGED).run(),
+//      ExtensionPointUtil.createKeyedExtensionDisposable(this, PsiStructureViewFactory.EP_NAME.getPoint(null)));
   }
 
   @Nullable

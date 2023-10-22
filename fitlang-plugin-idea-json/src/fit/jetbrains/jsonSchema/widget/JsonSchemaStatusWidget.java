@@ -60,7 +60,7 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
       }
       return null;
     });
-    fit.jetbrains.jsonSchema.extension.JsonWidgetSuppressor.EXTENSION_POINT_NAME.addExtensionPointListener(this::update, project);
+//    fit.jetbrains.jsonSchema.extension.JsonWidgetSuppressor.EXTENSION_POINT_NAME.addExtensionPointListener(this::update, project);
   }
 
   @Nullable
@@ -416,7 +416,7 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
     Alarm alarm = new Alarm(Alarm.ThreadToUse.SWING_THREAD, this);
     alarm.addRequest(() -> {
       final JComponent label =
-        HintUtil.createErrorLabel("<b>" + JsonBundle.message("schema.widget.conflict.popup.title") + "</b><br/><br/>" + ((MyWidgetState)state).getTooltip());
+        HintUtil.createErrorLabel("<b>" + JsonBundle.message("schema.widget.conflict.popup.title") + "</b>");
       BalloonBuilder builder = JBPopupFactory.getInstance().createBalloonBuilder(label);
       JComponent statusBarComponent = getComponent();
       Balloon balloon = builder

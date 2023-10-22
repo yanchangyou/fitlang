@@ -57,9 +57,9 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
         return ContainerUtil.map2SetNotNull(myState.getFiles(), f -> JsonCachedValues.getSchemaId(f, myProject));
       }
     };
-    fit.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory.EP_NAME.addExtensionPointListener(this::reset, this);
-    fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler.EXTENSION_POINT_NAME.addExtensionPointListener(this::reset, this);
-    JsonSchemaCatalogExclusion.EP_NAME.addExtensionPointListener(this::reset, this);
+//    fit.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory.EP_NAME.addExtensionPointListener(this::reset, this);
+//    fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler.EXTENSION_POINT_NAME.addExtensionPointListener(this::reset, this);
+//    JsonSchemaCatalogExclusion.EP_NAME.addExtensionPointListener(this::reset, this);
 
     myCatalogManager = new JsonSchemaCatalogManager(myProject);
 
