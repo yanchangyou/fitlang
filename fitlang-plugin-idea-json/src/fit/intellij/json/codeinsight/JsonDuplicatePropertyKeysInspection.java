@@ -19,7 +19,6 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.icons.AllIcons;
-import fit.intellij.json.JsonBundle;
 import fit.intellij.json.psi.JsonElementVisitor;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
@@ -32,6 +31,7 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -50,13 +50,6 @@ import java.util.stream.Collectors;
 public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
   private static final String COMMENT = "$comment";
 
-  @Nls
-  @NotNull
-  @Override
-  public String getDisplayName() {
-    return JsonBundle.message("inspection.duplicate.keys.name");
-  }
-
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
@@ -73,7 +66,7 @@ public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
           final String entryKey = entry.getKey();
           if (sameNamedKeys.size() > 1 && (!isSchemaFile || !COMMENT.equalsIgnoreCase(entryKey))) {
             for (PsiElement element : sameNamedKeys) {
-              holder.registerProblem(element, JsonBundle.message("inspection.duplicate.keys.msg.duplicate.keys", entryKey),
+              holder.registerProblem(element, fit.intellij.json.JsonBundle.message("inspection.duplicate.keys.msg.duplicate.keys", entryKey),
                                      new NavigateToDuplicatesFix(sameNamedKeys, element, entryKey));
             }
           }
@@ -95,7 +88,7 @@ public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
     @NotNull
     @Override
     public String getText() {
-      return "Navigate to duplicates";
+      return fit.intellij.json.JsonBundle.message("navigate.to.duplicates");
     }
 
     @Nls(capitalization = Nls.Capitalization.Sentence)
@@ -123,7 +116,7 @@ public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
       else {
         final List<PsiElement> allElements =
           mySameNamedKeys.stream().map(k -> k.getElement()).filter(k -> k != startElement).collect(Collectors.toList());
-        JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiElement>("Duplicates of '" + myEntryKey + "'", allElements) {
+        JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiElement>(fit.intellij.json.JsonBundle.message("navigate.to.duplicates.header", myEntryKey), allElements) {
           @NotNull
           @Override
           public Icon getIconFor(PsiElement aValue) {
@@ -133,7 +126,7 @@ public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
           @NotNull
           @Override
           public String getTextFor(PsiElement value) {
-            return "'" + myEntryKey + "' at line #" + editor.getDocument().getLineNumber(value.getTextOffset());
+            return JsonBundle.message("navigate.to.duplicates.desc", myEntryKey, editor.getDocument().getLineNumber(value.getTextOffset()));
           }
 
           @Override

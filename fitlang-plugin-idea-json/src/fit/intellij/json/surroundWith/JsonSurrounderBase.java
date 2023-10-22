@@ -1,8 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.surroundWith;
 
-import fit.intellij.json.psi.JsonElementGenerator;
-import fit.intellij.json.psi.JsonPsiUtil;
 import fit.intellij.json.psi.JsonValue;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.openapi.editor.Editor;
@@ -10,24 +8,26 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
+import fit.intellij.json.psi.JsonElementGenerator;
+import fit.intellij.json.psi.JsonPsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class JsonSurrounderBase implements Surrounder {
   @Override
-  public boolean isApplicable(@NotNull PsiElement[] elements) {
+  public boolean isApplicable(PsiElement @NotNull [] elements) {
     return elements.length >= 1 && elements[0] instanceof JsonValue && !JsonPsiUtil.isPropertyKey(elements[0]);
   }
 
   @Nullable
   @Override
-  public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, @NotNull PsiElement[] elements)
+  public TextRange surroundElements(@NotNull Project project, @NotNull Editor editor, PsiElement @NotNull [] elements)
     throws IncorrectOperationException {
     if (!isApplicable(elements)) {
       return null;
     }
 
-    final JsonElementGenerator generator = new JsonElementGenerator(project);
+    final fit.intellij.json.psi.JsonElementGenerator generator = new JsonElementGenerator(project);
 
     if (elements.length == 1) {
       JsonValue replacement = generator.createValue(createReplacementText(elements[0].getText()));

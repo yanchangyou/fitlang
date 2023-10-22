@@ -2,7 +2,6 @@
 package fit.intellij.json.json5.codeinsight;
 
 import com.intellij.codeInspection.ProblemsHolder;
-import fit.intellij.json.JsonBundle;
 import fit.intellij.json.JsonDialectUtil;
 import fit.intellij.json.codeinsight.JsonStandardComplianceInspection;
 import fit.intellij.json.json5.Json5Language;
@@ -18,16 +17,10 @@ import javax.swing.*;
 
 public class Json5StandardComplianceInspection extends JsonStandardComplianceInspection {
 
-  @Override
-  @NotNull
-  public String getDisplayName() {
-    return JsonBundle.message("inspection.compliance5.name");
-  }
-
   @NotNull
   @Override
   public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
-    if (!(JsonDialectUtil.getLanguage(holder.getFile()) instanceof Json5Language)) return PsiElementVisitor.EMPTY_VISITOR;
+    if (!(JsonDialectUtil.getLanguageOrDefaultJson(holder.getFile()) instanceof Json5Language)) return PsiElementVisitor.EMPTY_VISITOR;
     return new StandardJson5ValidatingElementVisitor(holder);
   }
 

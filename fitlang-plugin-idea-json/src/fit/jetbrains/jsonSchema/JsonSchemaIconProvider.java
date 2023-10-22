@@ -22,7 +22,7 @@ public class JsonSchemaIconProvider implements FileIconProvider {
     if (project != null
         && JsonSchemaEnabler.EXTENSION_POINT_NAME.getExtensionList().stream().anyMatch(e -> e.canBeSchemaFile(file))) {
       fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(project);
-      if (service.isSchemaFile(file) && service.isApplicableToFile(file)) {
+      if (service.isApplicableToFile(file) && service.isSchemaFile(file)) {
         return AllIcons.FileTypes.JsonSchema;
       }
     }

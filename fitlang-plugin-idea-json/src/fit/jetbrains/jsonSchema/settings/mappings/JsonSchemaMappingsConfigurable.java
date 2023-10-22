@@ -17,10 +17,12 @@ import com.intellij.util.Function;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.MultiMap;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
+import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -30,16 +32,13 @@ import javax.swing.tree.DefaultTreeModel;
 import java.io.File;
 import java.util.*;
 
-import static fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath;
-
 /**
  * @author Irina.Chernushina on 2/2/2016.
  */
 public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent implements SearchableConfigurable, Disposable {
   @NonNls public static final String SETTINGS_JSON_SCHEMA = "settings.json.schema";
-  public static final String JSON_SCHEMA_MAPPINGS = "JSON Schema Mappings";
 
-  private final static Comparator<UserDefinedJsonSchemaConfiguration> COMPARATOR = (o1, o2) -> {
+  private final static Comparator<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> COMPARATOR = (o1, o2) -> {
     if (o1.isApplicationDefined() != o2.isApplicationDefined()) {
       return o1.isApplicationDefined() ? 1 : -1;
     }
@@ -65,15 +64,19 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
   @Nullable
   @Override
   protected String getEmptySelectionString() {
-    return myRoot.children().hasMoreElements() ? "Select JSON Schema to view" :
-           "Please add a JSON Schema file and configure its usage";
+    return myRoot.children().hasMoreElements()
+           ? fit.intellij.json.JsonBundle.message("schema.configuration.mapping.empty.area.string")
+           : fit.intellij.json.JsonBundle.message("schema.configuration.mapping.empty.area.alt.string");
   }
 
   @Nullable
   @Override
   protected ArrayList<AnAction> createActions(boolean fromPopup) {
     final ArrayList<AnAction> result = new ArrayList<>();
-    result.add(new DumbAwareAction("Add", "Add", IconUtil.getAddIcon()) {
+    result.add(new DumbAwareAction(
+      fit.intellij.json.JsonBundle.messagePointer("action.DumbAware.JsonSchemaMappingsConfigurable.text.add"),
+      fit.intellij.json.JsonBundle.messagePointer("action.DumbAware.JsonSchemaMappingsConfigurable.description.add"),
+      IconUtil.getAddIcon()) {
       {
         registerCustomShortcutSet(CommonShortcuts.INSERT, myTree);
       }
@@ -86,8 +89,8 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
     return result;
   }
 
-  public UserDefinedJsonSchemaConfiguration addProjectSchema() {
-    UserDefinedJsonSchemaConfiguration configuration = new UserDefinedJsonSchemaConfiguration(createUniqueName(STUB_SCHEMA_NAME),
+  public fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration addProjectSchema() {
+    fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration configuration = new fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration(createUniqueName(STUB_SCHEMA_NAME),
                                                                                      JsonSchemaVersion.SCHEMA_4, "", false, null);
     addCreatedMappings(configuration);
     return configuration;
@@ -110,7 +113,7 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
         }
         int i = tryParseInt(lastPart);
         if (i == -1) continue;
-        max = i > max ? i : max;
+        max = Math.max(i, max);
       }
     }
     return max == -1 ? s : (s + " " + (max + 1));
@@ -125,7 +128,7 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
     }
   }
 
-  private void addCreatedMappings(@NotNull final UserDefinedJsonSchemaConfiguration info) {
+  private void addCreatedMappings(@NotNull final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info) {
     final JsonSchemaConfigurable configurable = new JsonSchemaConfigurable(myProject, "", info, myTreeUpdater, myNameCreator);
     configurable.setError(myError, true);
     final MyNode node = new MyNode(configurable);
@@ -138,11 +141,11 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
 
     if (myProject.isDefault()) return;
 
-    final List<UserDefinedJsonSchemaConfiguration> list = getStoredList();
-    for (UserDefinedJsonSchemaConfiguration info : list) {
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> list = getStoredList();
+    for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info : list) {
       String pathToSchema = info.getRelativePathToSchema();
       final JsonSchemaConfigurable configurable =
-        new JsonSchemaConfigurable(myProject, isHttpPath(pathToSchema) || new File(pathToSchema).isAbsolute() ? pathToSchema : new File(myProject.getBasePath(), pathToSchema).getPath(),
+        new JsonSchemaConfigurable(myProject, JsonFileResolver.isAbsoluteUrl(pathToSchema) || new File(pathToSchema).isAbsolute() ? pathToSchema : new File(myProject.getBasePath(), pathToSchema).getPath(),
                                    info, myTreeUpdater, myNameCreator);
       configurable.setError(myError, true);
       myRoot.add(new MyNode(configurable));
@@ -154,9 +157,9 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
   }
 
   @NotNull
-  private List<UserDefinedJsonSchemaConfiguration> getStoredList() {
-    final List<UserDefinedJsonSchemaConfiguration> list = new ArrayList<>();
-    final Map<String, UserDefinedJsonSchemaConfiguration> projectState = JsonSchemaMappingsProjectConfiguration
+  private List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> getStoredList() {
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> list = new ArrayList<>();
+    final Map<String, fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> projectState = fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration
       .getInstance(myProject).getStateMap();
     if (projectState != null) {
       list.addAll(projectState.values());
@@ -168,28 +171,28 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
 
   @Override
   public void apply() throws ConfigurationException {
-    final List<UserDefinedJsonSchemaConfiguration> uiList = getUiList(true);
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> uiList = getUiList(true);
     validate(uiList);
-    final Map<String, UserDefinedJsonSchemaConfiguration> projectMap = new HashMap<>();
-    for (UserDefinedJsonSchemaConfiguration info : uiList) {
+    final Map<String, fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> projectMap = new HashMap<>();
+    for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info : uiList) {
       projectMap.put(info.getName(), info);
     }
 
     JsonSchemaMappingsProjectConfiguration.getInstance(myProject).setState(projectMap);
     final Project[] projects = ProjectManager.getInstance().getOpenProjects();
     for (Project project : projects) {
-      final JsonSchemaService service = JsonSchemaService.Impl.get(project);
+      final fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(project);
       if (service != null) service.reset();
     }
     DaemonCodeAnalyzer.getInstance(myProject).restart();
     EditorNotifications.getInstance(myProject).updateAllNotifications();
   }
 
-  private static void validate(@NotNull List<UserDefinedJsonSchemaConfiguration> list) throws ConfigurationException {
+  private static void validate(@NotNull List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> list) throws ConfigurationException {
     final Set<String> set = new HashSet<>();
-    for (UserDefinedJsonSchemaConfiguration info : list) {
+    for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info : list) {
       if (set.contains(info.getName())) {
-        throw new ConfigurationException("Duplicate schema name: '" + info.getName() + "'");
+        throw new ConfigurationException(fit.intellij.json.JsonBundle.message("schema.configuration.error.duplicate.name", info.getName()));
       }
       set.add(info.getName());
     }
@@ -197,8 +200,8 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
 
   @Override
   public boolean isModified() {
-    final List<UserDefinedJsonSchemaConfiguration> storedList = getStoredList();
-    final List<UserDefinedJsonSchemaConfiguration> uiList;
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> storedList = getStoredList();
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> uiList;
     try {
       uiList = getUiList(false);
     }
@@ -210,9 +213,9 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
   }
 
   private void updateWarningText(boolean showWarning) {
-    final MultiMap<String, UserDefinedJsonSchemaConfiguration.Item> patternsMap = new MultiMap<>();
+    final MultiMap<String, fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item> patternsMap = new MultiMap<>();
     final StringBuilder sb = new StringBuilder();
-    final List<UserDefinedJsonSchemaConfiguration> list;
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> list;
     try {
       list = getUiList(false);
     }
@@ -220,27 +223,29 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
       // will not happen
       return;
     }
-    for (UserDefinedJsonSchemaConfiguration info : list) {
+    for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info : list) {
       info.refreshPatterns();
-      final fit.jetbrains.jsonSchema.settings.mappings.JsonSchemaPatternComparator comparator = new JsonSchemaPatternComparator(myProject);
-      final List<UserDefinedJsonSchemaConfiguration.Item> patterns = info.getPatterns();
-      for (UserDefinedJsonSchemaConfiguration.Item pattern : patterns) {
-        for (Map.Entry<String, Collection<UserDefinedJsonSchemaConfiguration.Item>> entry : patternsMap.entrySet()) {
-          for (UserDefinedJsonSchemaConfiguration.Item item : entry.getValue()) {
+      final JsonSchemaPatternComparator comparator = new JsonSchemaPatternComparator(myProject);
+      final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item> patterns = info.getPatterns();
+      for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item pattern : patterns) {
+        for (Map.Entry<String, Collection<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item>> entry : patternsMap.entrySet()) {
+          for (fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item item : entry.getValue()) {
             final ThreeState similar = comparator.isSimilar(pattern, item);
             if (ThreeState.NO.equals(similar)) continue;
 
             if (sb.length() > 0) sb.append('\n');
-            sb.append("'").append(pattern.getPresentation()).append("' for schema '")
-              .append(info.getName()).append("' and '").append(item.getPresentation()).append("' for schema '").append(entry.getKey())
-              .append("'");
+            sb.append(fit.intellij.json.JsonBundle.message("schema.configuration.error.conflicting.mappings.desc",
+                                         pattern.getPresentation(),
+                                         info.getName(),
+                                         item.getPresentation(),
+                                         entry.getKey()));
           }
         }
       }
       patternsMap.put(info.getName(), patterns);
     }
     if (sb.length() > 0) {
-      myError = "Conflicting mappings:\n" + sb.toString();
+      myError = fit.intellij.json.JsonBundle.message("schema.configuration.error.conflicting.mappings.title", sb.toString());
     } else {
       myError = null;
     }
@@ -253,7 +258,7 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
     }
   }
 
-  public void selectInTree(UserDefinedJsonSchemaConfiguration configuration) {
+  public void selectInTree(fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration configuration) {
     final Enumeration children = myRoot.children();
     while (children.hasMoreElements()) {
       final MyNode node = (MyNode)children.nextElement();
@@ -265,8 +270,8 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
   }
 
   @NotNull
-  private List<UserDefinedJsonSchemaConfiguration> getUiList(boolean applyChildren) throws ConfigurationException {
-    final List<UserDefinedJsonSchemaConfiguration> uiList = new ArrayList<>();
+  private List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> getUiList(boolean applyChildren) throws ConfigurationException {
+    final List<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> uiList = new ArrayList<>();
     final Enumeration children = myRoot.children();
     while (children.hasMoreElements()) {
       final MyNode node = (MyNode)children.nextElement();
@@ -305,7 +310,7 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
   @Nls
   @Override
   public String getDisplayName() {
-    return JSON_SCHEMA_MAPPINGS;
+    return JsonBundle.message("configurable.JsonSchemaMappingsConfigurable.display.name");
   }
 
 

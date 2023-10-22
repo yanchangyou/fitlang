@@ -1,6 +1,5 @@
-package fit.intellij.json.json5;
+package com.intellij.json.json5;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
@@ -51,9 +50,6 @@ IDENTIFIER=[[:jletterdigit:]~!()*\-."/"@\^<>=]+
   "true"                      { return TRUE; }
   "false"                     { return FALSE; }
   "null"                      { return NULL; }
-  "uni"                       { return UNI; }
-  "input"                     { return INPUT; }
-  "output"                    { return OUTPUT; }
 
   {LINE_COMMENT}              { return LINE_COMMENT; }
   {BLOCK_COMMENT}             { return BLOCK_COMMENT; }

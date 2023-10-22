@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl;
 
+import fit.intellij.json.JsonBundle;
 import fit.intellij.json.pointer.JsonPointerPosition;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
@@ -52,10 +53,10 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
     if (originalElement != null && hasFileOrPointerReferences(originalElement.getReferences())) return null;
     final PsiFile containingFile = element.getContainingFile();
     if (containingFile == null) return null;
-    final fit.jetbrains.jsonSchema.ide.JsonSchemaService service = fit.jetbrains.jsonSchema.ide.JsonSchemaService.Impl.get(element.getProject());
+    final JsonSchemaService service = JsonSchemaService.Impl.get(element.getProject());
     VirtualFile virtualFile = containingFile.getViewProvider().getVirtualFile();
     if (!service.isApplicableToFile(virtualFile)) return null;
-    final JsonSchemaObject rootSchema = service.getSchemaObject(containingFile);
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema = service.getSchemaObject(containingFile);
     if (rootSchema == null) return null;
 
     return generateDoc(element, rootSchema, preferShort, forcedPropName);
@@ -64,7 +65,7 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
   private static boolean hasFileOrPointerReferences(PsiReference[] references) {
     for (PsiReference reference : references) {
       if (reference instanceof PsiFileReference
-          || reference instanceof JsonPointerReferenceProvider.JsonSchemaIdReference
+          || reference instanceof fit.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider.JsonSchemaIdReference
           || reference instanceof JsonPointerReferenceProvider.JsonPointerReference) return true;
     }
     return false;
@@ -76,10 +77,10 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
 
   @Nullable
   public static String generateDoc(@NotNull final PsiElement element,
-                                   @NotNull final JsonSchemaObject rootSchema,
+                                   @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema,
                                    final boolean preferShort,
                                    @Nullable String forcedPropName) {
-    final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(element, rootSchema);
+    final JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(element, rootSchema);
     if (walker == null) return null;
 
     final PsiElement checkable = walker.findElementToCheck(element);
@@ -98,12 +99,12 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
         position.replaceStep(position.size() - 1, forcedPropName);
       }
     }
-    final Collection<JsonSchemaObject> schemas = new JsonSchemaResolver(element.getProject(), rootSchema, position).resolve();
+    final Collection<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemas = new JsonSchemaResolver(element.getProject(), rootSchema, position).resolve();
 
     String htmlDescription = null;
     boolean deprecated = false;
     List<fit.jetbrains.jsonSchema.impl.JsonSchemaType> possibleTypes = new ArrayList<>();
-    for (JsonSchemaObject schema : schemas) {
+    for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema : schemas) {
       if (htmlDescription == null) {
         htmlDescription = getBestDocumentation(preferShort, schema);
         String message = schema.getDeprecationMessage();
@@ -143,12 +144,12 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
     if (name == null) return htmlDescription;
 
     String type = "";
-    String schemaType = JsonSchemaObject.getTypesDescription(false, possibleTypes);
+    String schemaType = fit.jetbrains.jsonSchema.impl.JsonSchemaObject.getTypesDescription(false, possibleTypes);
     if (schemaType != null) {
       type = ": " + schemaType;
     }
 
-    String deprecationComment = deprecated ? " (deprecated)" : "";
+    String deprecationComment = deprecated ? JsonBundle.message("schema.documentation.deprecated.postfix") : "";
     if (preferShort) {
       htmlDescription = "<b>" + name + "</b>" + type + apiInfo + deprecationComment + (htmlDescription == null ? "" : ("<br/>" + htmlDescription));
     }
@@ -161,8 +162,8 @@ public class JsonSchemaDocumentationProvider implements DocumentationProvider {
 
   @NotNull
   private static String getThirdPartyApiInfo(@NotNull PsiElement element,
-                                             @NotNull JsonSchemaObject rootSchema) {
-    fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(element.getProject());
+                                             @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema) {
+    JsonSchemaService service = JsonSchemaService.Impl.get(element.getProject());
     String apiInfo = "";
     JsonSchemaFileProvider provider = service.getSchemaProvider(rootSchema);
     if (provider != null) {

@@ -49,7 +49,7 @@ public class MatchResult {
     while (!queue.isEmpty()) {
       final JsonSchemaTreeNode node = queue.removeFirst();
       if (node.getChildren().isEmpty()) {
-        if (!node.isNothing() && SchemaResolveState.normal.equals(node.getResolveState()) && !processor.process(node)) {
+        if (!node.isNothing() && fit.jetbrains.jsonSchema.impl.SchemaResolveState.normal.equals(node.getResolveState()) && !processor.process(node)) {
           break;
         }
       } else {

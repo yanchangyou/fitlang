@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.panel.ComponentPanelBuilder;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.FormBuilder;
+import fit.intellij.json.JsonBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,6 @@ import java.awt.*;
 
 public class JsonSchemaCatalogConfigurable implements Configurable {
   @NonNls public static final String SETTINGS_JSON_SCHEMA_CATALOG = "settings.json.schema.catalog";
-  public static final String JSON_SCHEMA_CATALOG = "Remote JSON Schemas";
   @NotNull private final Project myProject;
   private final JBCheckBox myCatalogCheckBox;
   private final JBCheckBox myRemoteCheckBox;
@@ -26,9 +26,9 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
 
   public JsonSchemaCatalogConfigurable(@NotNull final Project project) {
     myProject = project;
-    myCatalogCheckBox = new JBCheckBox("Use schemastore.org JSON Schema catalog");
-    myRemoteCheckBox = new JBCheckBox("Allow downloading JSON Schemas from remote sources");
-    myPreferRemoteCheckBox = new JBCheckBox("Always download the most recent version of schemas");
+    myCatalogCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.use.schemastore.org.json.schema.catalog"));
+    myRemoteCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.allow.downloading.json.schemas.from.remote.sources"));
+    myPreferRemoteCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.always.download.the.most.recent.version.of.schemas"));
   }
 
   @Nullable
@@ -47,10 +47,8 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
         myPreferRemoteCheckBox.setSelected(false);
       }
     });
-    addWithComment(builder, myCatalogCheckBox,
-                   "Schemas will be downloaded and assigned using the <a href=\"http://schemastore.org/json/\">SchemaStore API</a>");
-    addWithComment(builder, myPreferRemoteCheckBox,
-                   "Schemas will always be downloaded from the SchemaStore, even if some of them are bundled with the IDE");
+    addWithComment(builder, myCatalogCheckBox, fit.intellij.json.JsonBundle.message("schema.catalog.hint"));
+    addWithComment(builder, myPreferRemoteCheckBox, fit.intellij.json.JsonBundle.message("schema.catalog.remote.hint"));
     return wrap(builder.getPanel());
   }
 
@@ -71,7 +69,7 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
 
   @Override
   public void reset() {
-    fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration.MyState state = fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration.getInstance(myProject).getState();
+    JsonSchemaCatalogProjectConfiguration.MyState state = JsonSchemaCatalogProjectConfiguration.getInstance(myProject).getState();
     final boolean remoteEnabled = state == null || state.myIsRemoteActivityEnabled;
     myRemoteCheckBox.setSelected(remoteEnabled);
     myCatalogCheckBox.setEnabled(remoteEnabled);
@@ -82,7 +80,7 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
 
   @Override
   public boolean isModified() {
-    fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration.MyState state = fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration.getInstance(myProject).getState();
+    JsonSchemaCatalogProjectConfiguration.MyState state = JsonSchemaCatalogProjectConfiguration.getInstance(myProject).getState();
     return state == null
            || state.myIsCatalogEnabled != myCatalogCheckBox.isSelected()
            || state.myIsPreferRemoteSchemas != myPreferRemoteCheckBox.isSelected()
@@ -99,7 +97,7 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
   @Nls(capitalization = Nls.Capitalization.Title)
   @Override
   public String getDisplayName() {
-    return JSON_SCHEMA_CATALOG;
+    return JsonBundle.message("configurable.JsonSchemaCatalogConfigurable.display.name");
   }
 
   @Nullable

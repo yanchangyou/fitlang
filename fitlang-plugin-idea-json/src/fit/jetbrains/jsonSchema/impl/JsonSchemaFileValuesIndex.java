@@ -4,8 +4,6 @@ package fit.jetbrains.jsonSchema.impl;
 import fit.intellij.json.JsonElementTypes;
 import fit.intellij.json.JsonFileType;
 import fit.intellij.json.JsonLexer;
-import fit.intellij.json.json5.Json5FileType;
-import fit.intellij.json.json5.Json5Lexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.DumbService;
@@ -18,6 +16,8 @@ import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
+import fit.intellij.json.json5.Json5FileType;
+import fit.intellij.json.json5.Json5Lexer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -121,25 +121,25 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
           case "$id":
           case "\"$id\"":
           case "'$id'":
-            idFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY);
+            idFound |= captureValueIfString(lexer, map, JsonCachedValues.ID_CACHE_KEY);
             break;
           case "id":
           case "\"id\"":
           case "'id'":
-            obsoleteIdFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY);
+            obsoleteIdFound |= captureValueIfString(lexer, map, JsonCachedValues.OBSOLETE_ID_CACHE_KEY);
             break;
           case "$schema":
           case "\"$schema\"":
           case "'$schema'":
-            schemaFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.URL_CACHE_KEY);
+            schemaFound |= captureValueIfString(lexer, map, JsonCachedValues.URL_CACHE_KEY);
             break;
         }
       }
       lexer.advance();
     }
-    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY)) map.put(fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY, NULL);
-    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY)) map.put(fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY, NULL);
-    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.URL_CACHE_KEY)) map.put(JsonCachedValues.URL_CACHE_KEY, NULL);
+    if (!map.containsKey(JsonCachedValues.ID_CACHE_KEY)) map.put(JsonCachedValues.ID_CACHE_KEY, NULL);
+    if (!map.containsKey(JsonCachedValues.OBSOLETE_ID_CACHE_KEY)) map.put(JsonCachedValues.OBSOLETE_ID_CACHE_KEY, NULL);
+    if (!map.containsKey(JsonCachedValues.URL_CACHE_KEY)) map.put(JsonCachedValues.URL_CACHE_KEY, NULL);
     return map;
   }
 

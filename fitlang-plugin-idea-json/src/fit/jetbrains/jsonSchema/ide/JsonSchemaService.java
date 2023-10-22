@@ -5,11 +5,11 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider;
 import fit.jetbrains.jsonSchema.extension.JsonSchemaInfo;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -64,7 +64,7 @@ public interface JsonSchemaService {
   VirtualFile findSchemaFileByReference(@NotNull String reference, @Nullable VirtualFile referent);
 
   @Nullable
-  fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider getSchemaProvider(@NotNull final VirtualFile schemaFile);
+  JsonSchemaFileProvider getSchemaProvider(@NotNull final VirtualFile schemaFile);
 
   @Nullable
   JsonSchemaFileProvider getSchemaProvider(@NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject);

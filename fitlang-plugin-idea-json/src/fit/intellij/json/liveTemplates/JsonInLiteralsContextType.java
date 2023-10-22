@@ -2,16 +2,17 @@
 package fit.intellij.json.liveTemplates;
 
 import com.intellij.codeInsight.template.TemplateContextType;
-import fit.intellij.json.psi.JsonFile;
+import fit.intellij.json.JsonBundle;
 import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.psi.PsiFile;
+import fit.intellij.json.psi.JsonFile;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 public class JsonInLiteralsContextType extends TemplateContextType {
   protected JsonInLiteralsContextType() {
-    super("JSON_STRING_VALUES", "JSON String Values", JsonContextType.class);
+    super("JSON_STRING_VALUES", JsonBundle.message("json.string.values"), JsonContextType.class);
   }
 
   @Override

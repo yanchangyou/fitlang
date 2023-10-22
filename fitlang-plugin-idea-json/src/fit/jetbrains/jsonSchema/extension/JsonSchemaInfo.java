@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class JsonSchemaInfo {
-  @Nullable private final JsonSchemaFileProvider myProvider;
+  @Nullable private final fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider myProvider;
   @Nullable private final String myUrl;
   @Nullable private String myName = null;
   @Nullable private String myDocumentation = null;
@@ -40,7 +40,7 @@ public class JsonSchemaInfo {
     "https://schemastore.azurewebsites.net/schemas/json/2.0.0-csd.2.beta.2018-10-10.json", "sarif-2.0.0-csd.2.beta.2018-10-10"
   );
 
-  public JsonSchemaInfo(@NotNull JsonSchemaFileProvider provider) {
+  public JsonSchemaInfo(@NotNull fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider provider) {
     myProvider = provider;
     myUrl = null;
   }
@@ -129,7 +129,7 @@ public class JsonSchemaInfo {
   }
 
   @NotNull
-  public JsonSchemaVersion getSchemaVersion() {
+  public fit.jetbrains.jsonSchema.impl.JsonSchemaVersion getSchemaVersion() {
     return myProvider != null ? myProvider.getSchemaVersion() : JsonSchemaVersion.SCHEMA_4;
   }
 

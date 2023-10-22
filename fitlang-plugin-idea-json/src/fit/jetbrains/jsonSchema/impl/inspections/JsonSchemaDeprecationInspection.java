@@ -3,6 +3,7 @@ package fit.jetbrains.jsonSchema.impl.inspections;
 
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
+import fit.intellij.json.JsonBundle;
 import fit.intellij.json.pointer.JsonPointerPosition;
 import fit.intellij.json.psi.JsonElementVisitor;
 import fit.intellij.json.psi.JsonProperty;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 public class JsonSchemaDeprecationInspection extends JsonSchemaBasedInspectionBase {
   @Override
   protected PsiElementVisitor doBuildVisitor(@NotNull JsonValue root,
-                                             @Nullable JsonSchemaObject schema,
+                                             @Nullable fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                              @NotNull JsonSchemaService service,
                                              @NotNull ProblemsHolder holder,
                                              @NotNull LocalInspectionToolSession session) {
@@ -42,7 +43,7 @@ public class JsonSchemaDeprecationInspection extends JsonSchemaBasedInspectionBa
         for (JsonSchemaObject object : result.mySchemas) {
           String message = object.getDeprecationMessage();
           if (message != null) {
-            holder.registerProblem(o.getNameElement(), "Property '" + o.getName() + "' is deprecated: " + message);
+            holder.registerProblem(o.getNameElement(), JsonBundle.message("property.0.is.deprecated.1", o.getName(), message));
             return;
           }
         }

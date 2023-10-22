@@ -18,7 +18,7 @@ public interface JsonSchemaFileProvider {
   @NotNull
   SchemaType getSchemaType();
 
-  default JsonSchemaVersion getSchemaVersion() {
+  default fit.jetbrains.jsonSchema.impl.JsonSchemaVersion getSchemaVersion() {
     return JsonSchemaVersion.SCHEMA_4;
   }
 

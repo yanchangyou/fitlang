@@ -6,6 +6,7 @@ import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
+import fit.intellij.json.JsonBundle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +35,7 @@ public class JsonFindUsagesProvider implements FindUsagesProvider {
   @Override
   public String getType(@NotNull PsiElement element) {
     if (element instanceof JsonProperty) {
-      return "property";
+      return fit.intellij.json.JsonBundle.message("json.property");
     }
     return "";
   }
@@ -43,7 +44,7 @@ public class JsonFindUsagesProvider implements FindUsagesProvider {
   @Override
   public String getDescriptiveName(@NotNull PsiElement element) {
     final String name = element instanceof PsiNamedElement ? ((PsiNamedElement)element).getName() : null;
-    return name != null ? name : "<unnamed>";
+    return name != null ? name : JsonBundle.message("unnamed.desc");
   }
 
   @NotNull

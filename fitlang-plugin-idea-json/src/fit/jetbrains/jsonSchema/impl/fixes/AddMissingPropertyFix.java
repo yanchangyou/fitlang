@@ -9,6 +9,7 @@ import com.intellij.codeInsight.template.impl.EmptyNode;
 import com.intellij.codeInsight.template.impl.MacroCallNode;
 import com.intellij.codeInsight.template.macro.CompleteMacro;
 import com.intellij.codeInspection.*;
+import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
@@ -20,6 +21,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
@@ -37,10 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<CommonProblemDescriptor> {
-  private final JsonValidationError.MissingMultiplePropsIssueData myData;
+  private final fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData myData;
   private final JsonLikeSyntaxAdapter myQuickFixAdapter;
 
-  public AddMissingPropertyFix(JsonValidationError.MissingMultiplePropsIssueData data,
+  public AddMissingPropertyFix(fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData data,
                                JsonLikeSyntaxAdapter quickFixAdapter) {
     myData = data;
     myQuickFixAdapter = quickFixAdapter;
@@ -50,14 +52,14 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
   @NotNull
   @Override
   public String getFamilyName() {
-    return "Add missing properties";
+    return JsonBundle.message("add.missing.properties");
   }
 
   @Nls(capitalization = Nls.Capitalization.Sentence)
   @NotNull
   @Override
   public String getName() {
-    return "Add missing " + myData.getMessage(true);
+    return JsonBundle.message("add.missing.0", myData.getMessage(true));
   }
 
   @Override
@@ -77,6 +79,7 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
       WriteAction.run(() -> editor.getCaretModel().moveToOffset(newElement.getTextRange().getEndOffset()));
       return;
     }
+    PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     TemplateManager templateManager = TemplateManager.getInstance(project);
     TemplateBuilderImpl builder = new TemplateBuilderImpl(newElement);
     String text = value.getText();
@@ -110,7 +113,7 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
     WriteAction.run(() -> {
       boolean isSingle = myData.myMissingPropertyIssues.size() == 1;
       PsiElement processedElement = element;
-      List<JsonValidationError.MissingPropertyIssueData> reverseOrder
+      List<fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingPropertyIssueData> reverseOrder
         = ContainerUtil.reverse(new ArrayList<>(myData.myMissingPropertyIssues));
       for (JsonValidationError.MissingPropertyIssueData issue: reverseOrder) {
         Object defaultValueObject = issue.defaultValue;
@@ -132,9 +135,9 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
           }
         }
         PsiElement adjusted = myQuickFixAdapter.adjustNewProperty(newElement);
-        hadComma.set(myQuickFixAdapter.ensureComma(adjusted, PsiTreeUtil.skipWhitespacesForward(newElement)));
+        hadComma.set(myQuickFixAdapter.ensureComma(adjusted, PsiTreeUtil.skipWhitespacesAndCommentsForward(newElement)));
         if (!hadComma.get()) {
-          hadComma.set(processedElement == element && myQuickFixAdapter.ensureComma(PsiTreeUtil.skipWhitespacesBackward(newElement), adjusted));
+          hadComma.set(processedElement == element && myQuickFixAdapter.ensureComma(PsiTreeUtil.skipWhitespacesAndCommentsBackward(newElement), adjusted));
         }
         processedElement = adjusted;
         if (isSingle) {
@@ -171,7 +174,7 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
 
   @Override
   public void applyFix(@NotNull Project project,
-                       @NotNull CommonProblemDescriptor[] descriptors,
+                       CommonProblemDescriptor @NotNull [] descriptors,
                        @NotNull List<PsiElement> psiElementsToIgnore,
                        @Nullable Runnable refreshViews) {
     List<Pair<AddMissingPropertyFix, PsiElement>> propFixes = new ArrayList<>();
@@ -189,7 +192,7 @@ public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<Commo
   }
 
   @Nullable
-  private static AddMissingPropertyFix getWorkingQuickFix(@NotNull QuickFix[] fixes) {
+  private static AddMissingPropertyFix getWorkingQuickFix(QuickFix @NotNull [] fixes) {
     for (QuickFix fix : fixes) {
       if (fix instanceof AddMissingPropertyFix) {
         return (AddMissingPropertyFix)fix;

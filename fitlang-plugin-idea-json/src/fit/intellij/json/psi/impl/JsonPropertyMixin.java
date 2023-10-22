@@ -1,6 +1,5 @@
 package fit.intellij.json.psi.impl;
 
-import fit.intellij.json.psi.JsonElementGenerator;
 import fit.intellij.json.psi.JsonProperty;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
@@ -9,6 +8,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
+import fit.intellij.json.psi.JsonElementGenerator;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ abstract class JsonPropertyMixin extends JsonElementImpl implements JsonProperty
 
   @Override
   public PsiElement setName(@NonNls @NotNull String name) throws IncorrectOperationException {
-    final JsonElementGenerator generator = new JsonElementGenerator(getProject());
+    final fit.intellij.json.psi.JsonElementGenerator generator = new JsonElementGenerator(getProject());
     // Strip only both quotes in case user wants some exotic name like key'
     getNameElement().replace(generator.createStringLiteral(StringUtil.unquoteString(name)));
     return this;
@@ -33,9 +33,8 @@ abstract class JsonPropertyMixin extends JsonElementImpl implements JsonProperty
     return new fit.intellij.json.psi.impl.JsonPropertyNameReference(this);
   }
 
-  @NotNull
   @Override
-  public PsiReference[] getReferences() {
+  public PsiReference @NotNull [] getReferences() {
     final PsiReference[] fromProviders = ReferenceProvidersRegistry.getReferencesFromProviders(this);
     return ArrayUtil.prepend(new JsonPropertyNameReference(this), fromProviders);
   }

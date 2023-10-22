@@ -2,6 +2,7 @@
 package fit.jetbrains.jsonSchema.widget;
 
 import com.intellij.icons.AllIcons;
+import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.options.ShowSettingsUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.popup.ListPopupStepEx;
@@ -11,8 +12,8 @@ import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.scale.JBUIScale;
 import com.intellij.util.ui.EmptyIcon;
-import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.StatusText;
 import fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
@@ -31,7 +32,7 @@ public class JsonSchemaInfoPopupStep extends BaseListPopupStep<JsonSchemaInfo> i
   private final Project myProject;
   @Nullable private final VirtualFile myVirtualFile;
   @NotNull private final JsonSchemaService myService;
-  private static final Icon EMPTY_ICON = JBUI.scale(EmptyIcon.create(AllIcons.General.Add.getIconWidth()));
+  private static final Icon EMPTY_ICON = JBUIScale.scaleIcon(EmptyIcon.create(AllIcons.General.Add.getIconWidth()));
 
   public JsonSchemaInfoPopupStep(@NotNull List<JsonSchemaInfo> allSchemas, @NotNull Project project, @Nullable VirtualFile virtualFile,
                                  @NotNull JsonSchemaService service, @Nullable String title) {
@@ -72,10 +73,10 @@ public class JsonSchemaInfoPopupStep extends BaseListPopupStep<JsonSchemaInfo> i
     if (index - 1 >= 0) {
       JsonSchemaInfo info = values.get(index - 1);
       if (info == JsonSchemaStatusPopup.EDIT_MAPPINGS || info == JsonSchemaStatusPopup.ADD_MAPPING) {
-        return new ListSeparator("Registered schemas");
+        return new ListSeparator(JsonBundle.message("schema.widget.registered.schemas"));
       }
       if (value.getProvider() == null && info.getProvider() != null) {
-        return new ListSeparator("SchemaStore.org schemas");
+        return new ListSeparator(JsonBundle.message("schema.widget.store.schemas"));
       }
     }
     return null;
@@ -100,7 +101,7 @@ public class JsonSchemaInfoPopupStep extends BaseListPopupStep<JsonSchemaInfo> i
 
   protected void runSchemaEditorForCurrentFile() {
     assert myVirtualFile != null: "override this method to do without a virtual file!";
-    fit.jetbrains.jsonSchema.settings.mappings.JsonSchemaMappingsConfigurable configurable = new JsonSchemaMappingsConfigurable(myProject);
+    JsonSchemaMappingsConfigurable configurable = new JsonSchemaMappingsConfigurable(myProject);
     JsonSchemaMappingsProjectConfiguration mappingsConf = JsonSchemaMappingsProjectConfiguration.getInstance(myProject);
 
     ShowSettingsUtil.getInstance().editConfigurable(myProject, configurable, () -> {
@@ -155,7 +156,7 @@ public class JsonSchemaInfoPopupStep extends BaseListPopupStep<JsonSchemaInfo> i
     if (mappingForFile != null) {
       for (UserDefinedJsonSchemaConfiguration.Item pattern : mappingForFile.patterns) {
         if (Objects.equals(VfsUtil.findRelativeFile(projectBaseDir, pattern.getPathParts()), virtualFile)
-              || virtualFile.getUrl().equals(pattern.getPath())) {
+              || virtualFile.getUrl().equals(UserDefinedJsonSchemaConfiguration.Item.neutralizePath(pattern.getPath()))) {
           mappingForFile.patterns.remove(pattern);
           if (mappingForFile.patterns.size() == 0 && mappingForFile.isApplicationDefined()) {
             configuration.removeConfiguration(mappingForFile);

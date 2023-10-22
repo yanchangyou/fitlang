@@ -5,7 +5,6 @@ import com.intellij.formatting.*;
 import fit.intellij.json.psi.JsonArray;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonPsiUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -13,6 +12,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
+import fit.intellij.json.JsonParserDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,9 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fit.intellij.json.JsonElementTypes.*;
-import static fit.intellij.json.JsonParserDefinition.JSON_CONTAINERS;
-import static fit.intellij.json.formatter.JsonCodeStyleSettings.ALIGN_PROPERTY_ON_COLON;
-import static fit.intellij.json.formatter.JsonCodeStyleSettings.ALIGN_PROPERTY_ON_VALUE;
 import static fit.intellij.json.psi.JsonPsiUtil.hasElementType;
 
 /**
@@ -40,7 +37,7 @@ public class JsonBlock implements ASTBlock {
   private final Alignment myAlignment;
   private final Indent myIndent;
   private final Wrap myWrap;
-  private final fit.intellij.json.formatter.JsonCodeStyleSettings myCustomSettings;
+  private final JsonCodeStyleSettings myCustomSettings;
   private final SpacingBuilder mySpacingBuilder;
   // lazy initialized on first call to #getSubBlocks()
   private List<Block> mySubBlocks = null;
@@ -60,7 +57,7 @@ public class JsonBlock implements ASTBlock {
                    @Nullable Alignment alignment,
                    @NotNull Indent indent,
                    @Nullable Wrap wrap) {
-    this(parent, node, settings.getCustomSettings(fit.intellij.json.formatter.JsonCodeStyleSettings.class), alignment, indent, wrap,
+    this(parent, node, settings.getCustomSettings(JsonCodeStyleSettings.class), alignment, indent, wrap,
          JsonFormattingBuilderModel.createSpacingBuilder(settings));
   }
 
@@ -124,17 +121,17 @@ public class JsonBlock implements ASTBlock {
     Alignment alignment = null;
     Wrap wrap = null;
 
-    if (hasElementType(myNode, JSON_CONTAINERS)) {
-      if (hasElementType(childNode, COMMA)) {
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonParserDefinition.JSON_CONTAINERS)) {
+      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, COMMA)) {
         wrap = Wrap.createWrap(WrapType.NONE, true);
       }
-      else if (!hasElementType(childNode, JSON_ALL_BRACES)) {
+      else if (!fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JSON_ALL_BRACES)) {
         assert myChildWrap != null;
         wrap = myChildWrap;
         indent = Indent.getNormalIndent();
       }
-      else if (hasElementType(childNode, JSON_OPEN_BRACES)) {
-        if (JsonPsiUtil.isPropertyValue(myPsiElement) && propertyAlignment == ALIGN_PROPERTY_ON_VALUE) {
+      else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JSON_OPEN_BRACES)) {
+        if (fit.intellij.json.psi.JsonPsiUtil.isPropertyValue(myPsiElement) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_VALUE) {
           // WEB-13587 Align compound values on opening brace/bracket, not the whole block
           assert myParent != null && myParent.myParent != null && myParent.myParent.myPropertyValueAlignment != null;
           alignment = myParent.myParent.myPropertyValueAlignment;
@@ -142,13 +139,13 @@ public class JsonBlock implements ASTBlock {
       }
     }
     // Handle properties alignment
-    else if (hasElementType(myNode, PROPERTY) ) {
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, PROPERTY) ) {
       assert myParent != null && myParent.myPropertyValueAlignment != null;
-      if (hasElementType(childNode, COLON) && propertyAlignment == ALIGN_PROPERTY_ON_COLON) {
+      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, COLON) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_COLON) {
         alignment = myParent.myPropertyValueAlignment;
       }
-      else if (JsonPsiUtil.isPropertyValue(childNode.getPsi()) && propertyAlignment == ALIGN_PROPERTY_ON_VALUE) {
-        if (!hasElementType(childNode, JSON_CONTAINERS)) {
+      else if (fit.intellij.json.psi.JsonPsiUtil.isPropertyValue(childNode.getPsi()) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_VALUE) {
+        if (!fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JsonParserDefinition.JSON_CONTAINERS)) {
           alignment = myParent.myPropertyValueAlignment;
         }
       }
@@ -183,7 +180,7 @@ public class JsonBlock implements ASTBlock {
   @NotNull
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
-    if (hasElementType(myNode, JSON_CONTAINERS)) {
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonParserDefinition.JSON_CONTAINERS)) {
       // WEB-13675: For some reason including alignment in child attributes causes
       // indents to consist solely of spaces when both USE_TABS and SMART_TAB
       // options are enabled.
@@ -199,13 +196,13 @@ public class JsonBlock implements ASTBlock {
   @Override
   public boolean isIncomplete() {
     final ASTNode lastChildNode = myNode.getLastChildNode();
-    if (hasElementType(myNode, OBJECT)) {
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, OBJECT)) {
       return lastChildNode != null && lastChildNode.getElementType() != R_CURLY;
     }
-    else if (hasElementType(myNode, ARRAY)) {
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, ARRAY)) {
       return lastChildNode != null && lastChildNode.getElementType() != R_BRACKET;
     }
-    else if (hasElementType(myNode, PROPERTY)) {
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, PROPERTY)) {
       return ((JsonProperty)myPsiElement).getValue() == null;
     }
     return false;

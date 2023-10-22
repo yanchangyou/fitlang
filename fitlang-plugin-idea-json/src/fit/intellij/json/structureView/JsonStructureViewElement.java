@@ -6,8 +6,7 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonFile;
+import fit.intellij.json.psi.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -51,12 +50,11 @@ public class JsonStructureViewElement implements StructureViewTreeElement {
     return presentation;
   }
 
-  @NotNull
   @Override
-  public TreeElement[] getChildren() {
+  public TreeElement @NotNull [] getChildren() {
     fit.intellij.json.psi.JsonElement value = null;
     if (myElement instanceof fit.intellij.json.psi.JsonFile) {
-      value = ((JsonFile)myElement).getTopLevelValue();
+      value = ((fit.intellij.json.psi.JsonFile)myElement).getTopLevelValue();
     }
     else if (myElement instanceof fit.intellij.json.psi.JsonProperty) {
       value = ((fit.intellij.json.psi.JsonProperty)myElement).getValue();
@@ -71,10 +69,10 @@ public class JsonStructureViewElement implements StructureViewTreeElement {
     else if (value instanceof fit.intellij.json.psi.JsonArray) {
       final fit.intellij.json.psi.JsonArray array = (fit.intellij.json.psi.JsonArray)value;
       final List<TreeElement> childObjects = ContainerUtil.mapNotNull(array.getValueList(), value1 -> {
-        if (value1 instanceof fit.intellij.json.psi.JsonObject && !((fit.intellij.json.psi.JsonObject)value1).getPropertyList().isEmpty()) {
+        if (value1 instanceof fit.intellij.json.psi.JsonObject && !((JsonObject)value1).getPropertyList().isEmpty()) {
           return new JsonStructureViewElement(value1);
         }
-        else if (value1 instanceof JsonArray && PsiTreeUtil.findChildOfType(value1, fit.intellij.json.psi.JsonProperty.class) != null) {
+        else if (value1 instanceof fit.intellij.json.psi.JsonArray && PsiTreeUtil.findChildOfType(value1, fit.intellij.json.psi.JsonProperty.class) != null) {
           return new JsonStructureViewElement(value1);
         }
         return null;

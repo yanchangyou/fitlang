@@ -11,7 +11,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
-import fit.intellij.json.psi.JsonFile;
 import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +67,7 @@ public class JsonLineMover extends LineMover {
 
       if (destFirst == destSecond && !(destFirst instanceof fit.intellij.json.psi.JsonProperty) && !(destFirst instanceof fit.intellij.json.psi.JsonValue)) {
         PsiElement parent = destFirst.getParent();
-        if (((JsonFile)parent.getContainingFile()).getTopLevelValue() == parent) {
+        if (((fit.intellij.json.psi.JsonFile)parent.getContainingFile()).getTopLevelValue() == parent) {
           info.prohibitMove();
           return true;
         }

@@ -2,16 +2,16 @@
 package fit.intellij.json.json5;
 
 import fit.intellij.json.JsonParserDefinition;
+import fit.intellij.json.psi.impl.JsonFileImpl;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
-import fit.intellij.json.psi.impl.JsonFileImpl;
 import org.jetbrains.annotations.NotNull;
 
 public class Json5ParserDefinition extends JsonParserDefinition {
-  public static final IFileElementType FILE = new IFileElementType(fit.intellij.json.json5.Json5Language.INSTANCE);
+  public static final IFileElementType FILE = new IFileElementType(Json5Language.INSTANCE);
 
   @NotNull
   @Override

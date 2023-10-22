@@ -2,6 +2,7 @@
 package fit.jetbrains.jsonSchema.impl;
 
 
+import fit.intellij.json.JsonBundle;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -31,12 +33,12 @@ import java.util.stream.Collectors;
  * @author Irina.Chernushina on 1/13/2017.
  */
 public class JsonSchemaReader {
-  private static final int MAX_SCHEMA_LENGTH = FileUtilRt.MEGABYTE;
+  private static final int MAX_SCHEMA_LENGTH = FileUtilRt.LARGE_FOR_CONTENT_LOADING;
   public static final Logger LOG = Logger.getInstance(JsonSchemaReader.class);
   public static final NotificationGroup ERRORS_NOTIFICATION = NotificationGroup.logOnlyGroup("JSON Schema");
 
   private final Map<String, JsonSchemaObject> myIds = new HashMap<>();
-  private final ArrayDeque<Pair<JsonSchemaObject, fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter>> myQueue;
+  private final ArrayDeque<Pair<JsonSchemaObject, JsonValueAdapter>> myQueue;
 
   private static final Map<String, MyReader> READERS_MAP = new HashMap<>();
   static {
@@ -53,13 +55,13 @@ public class JsonSchemaReader {
   @NotNull
   public static JsonSchemaObject readFromFile(@NotNull Project project, @NotNull VirtualFile file) throws Exception {
     if (!file.isValid()) {
-      throw new Exception(String.format("Can not load JSON Schema file '%s'", file.getName()));
+      throw new Exception(JsonBundle.message("schema.reader.cant.load.file", file.getName()));
     }
 
     final PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
     JsonSchemaObject object = psiFile == null ? null : new JsonSchemaReader(file).read(psiFile);
     if (object == null) {
-      throw new Exception(String.format("Can not load code model for JSON Schema file '%s'", file.getName()));
+      throw new Exception(JsonBundle.message("schema.reader.cant.load.model", file.getName()));
     }
     return object;
   }
@@ -69,31 +71,31 @@ public class JsonSchemaReader {
     final long length = file.getLength();
     final String fileName = file.getName();
     if (length > MAX_SCHEMA_LENGTH) {
-      return String.format("JSON schema was not loaded from '%s' because it's too large (file size is %d bytes).", fileName, length);
+      return JsonBundle.message("schema.reader.file.too.large", fileName, length);
     }
     if (length == 0) {
-      return String.format("JSON schema was not loaded from '%s'. File is empty.", fileName);
+      return JsonBundle.message("schema.reader.file.empty", fileName);
     }
     try {
       readFromFile(project, file);
     } catch (Exception e) {
-      final String message = String.format("JSON Schema not found or contain error in '%s': %s", fileName, e.getMessage());
+      final String message = JsonBundle.message("schema.reader.file.not.found.or.error", fileName, e.getMessage());
       LOG.info(message);
       return message;
     }
     return null;
   }
 
-  private static JsonSchemaObject enqueue(@NotNull Collection<Pair<JsonSchemaObject, fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter>> queue,
+  private static JsonSchemaObject enqueue(@NotNull Collection<Pair<JsonSchemaObject, JsonValueAdapter>> queue,
                                           @NotNull JsonSchemaObject schemaObject,
-                                          @NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter container) {
+                                          @NotNull JsonValueAdapter container) {
     queue.add(Pair.create(schemaObject, container));
     return schemaObject;
   }
 
   @Nullable
   public JsonSchemaObject read(@NotNull PsiFile file) {
-    fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker = fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker.getWalker(file, JsonSchemaObject.NULL_OBJ);
+    JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(file, JsonSchemaObject.NULL_OBJ);
     if (walker == null) return null;
     PsiElement root = AstLoadingFilter.forceAllowTreeLoading(file, () -> ContainerUtil.getFirstItem(walker.getRoots(file)));
     return root == null ? null : read(root, walker);
@@ -102,25 +104,25 @@ public class JsonSchemaReader {
   @Nullable
   private JsonSchemaObject read(@NotNull final PsiElement object, @NotNull JsonLikePsiWalker walker) {
     final JsonSchemaObject root = new JsonSchemaObject(myFile, "/");
-    fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter rootAdapter = walker.createValueAdapter(object);
+    JsonValueAdapter rootAdapter = walker.createValueAdapter(object);
     if (rootAdapter == null) return null;
     enqueue(myQueue, root, rootAdapter);
     while (!myQueue.isEmpty()) {
-      final Pair<JsonSchemaObject, fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> currentItem = myQueue.removeFirst();
+      final Pair<JsonSchemaObject, JsonValueAdapter> currentItem = myQueue.removeFirst();
 
       JsonSchemaObject currentSchema = currentItem.first;
       String pointer = currentSchema.getPointer();
-      fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter adapter = currentItem.second;
+      JsonValueAdapter adapter = currentItem.second;
 
-      if (adapter instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter) {
-        final List<fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter> list = ((fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter)adapter).getPropertyList();
-        for (fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter property : list) {
-          Collection<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> values = property.getValues();
+      if (adapter instanceof JsonObjectValueAdapter) {
+        final List<JsonPropertyAdapter> list = ((JsonObjectValueAdapter)adapter).getPropertyList();
+        for (JsonPropertyAdapter property : list) {
+          Collection<JsonValueAdapter> values = property.getValues();
           if (values.size() != 1) continue;
           String name = property.getName();
           if (name == null) continue;
           final MyReader reader = READERS_MAP.get(name);
-          fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value = values.iterator().next();
+          JsonValueAdapter value = values.iterator().next();
           if (reader != null) {
             reader.read(value, currentSchema, myQueue, myFile);
           }
@@ -129,8 +131,8 @@ public class JsonSchemaReader {
           }
         }
       }
-      else if (adapter instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-        List<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> values = ((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)adapter).getElements();
+      else if (adapter instanceof JsonArrayValueAdapter) {
+        List<JsonValueAdapter> values = ((JsonArrayValueAdapter)adapter).getElements();
         for (int i = 0; i < values.size(); i++) {
           readSingleDefinition(String.valueOf(i), values.get(i), currentSchema, pointer);
         }
@@ -147,7 +149,7 @@ public class JsonSchemaReader {
   }
 
   private void readSingleDefinition(@NotNull String name,
-                                    @NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value,
+                                    @NotNull JsonValueAdapter value,
                                     @NotNull JsonSchemaObject schema,
                                     String pointer) {
     String nextPointer = getNewPointer(name, pointer);
@@ -163,6 +165,7 @@ public class JsonSchemaReader {
   }
 
   private static void fillMap() {
+    READERS_MAP.put("$anchor", createFromStringValue((object, s) -> object.setId(s)));
     READERS_MAP.put("$id", createFromStringValue((object, s) -> object.setId(s)));
     READERS_MAP.put("id", createFromStringValue((object, s) -> object.setId(s)));
     READERS_MAP.put("$schema", createFromStringValue((object, s) -> object.setSchema(s)));
@@ -170,15 +173,24 @@ public class JsonSchemaReader {
     // non-standard deprecation property used by VSCode
     READERS_MAP.put("deprecationMessage", createFromStringValue((object, s) -> object.setDeprecationMessage(s)));
     READERS_MAP.put(JsonSchemaObject.X_INTELLIJ_HTML_DESCRIPTION, createFromStringValue((object, s) -> object.setHtmlDescription(s)));
-    READERS_MAP.put(JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION, createFromStringValue((object, s) -> object.setLanguageInjection(s)));
+    READERS_MAP.put(JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION, (element, object, queue, virtualFile) -> readInjectionMetadata(element, object));
+    READERS_MAP.put(JsonSchemaObject.X_INTELLIJ_ENUM_METADATA, (element, object, queue, virtualFile) -> readEnumMetadata(element, object));
     READERS_MAP.put(JsonSchemaObject.X_INTELLIJ_CASE_INSENSITIVE, (element, object, queue, virtualFile) -> {
       if (element.isBooleanLiteral()) object.setForceCaseInsensitive(getBoolean(element));
     });
     READERS_MAP.put("title", createFromStringValue((object, s) -> object.setTitle(s)));
     READERS_MAP.put("$ref", createFromStringValue((object, s) -> object.setRef(s)));
+    READERS_MAP.put("$recursiveRef", createFromStringValue((object, s) -> {
+      object.setRef(s);
+      object.setRefRecursive(true);
+    }));
+    READERS_MAP.put("$recursiveAnchor", (element, object, queue, virtualFile) -> {
+      if (element.isBooleanLiteral()) object.setRecursiveAnchor(true);
+    });
     READERS_MAP.put("default", createDefault());
     READERS_MAP.put("format", createFromStringValue((object, s) -> object.setFormat(s)));
     READERS_MAP.put(JsonSchemaObject.DEFINITIONS, createDefinitionsConsumer());
+    READERS_MAP.put(JsonSchemaObject.DEFINITIONS_v9, createDefinitionsConsumer());
     READERS_MAP.put(JsonSchemaObject.PROPERTIES, createPropertiesConsumer());
     READERS_MAP.put("multipleOf", createFromNumber((object, i) -> object.setMultipleOf(i)));
     READERS_MAP.put("maximum", createFromNumber((object, i) -> object.setMaximum(i)));
@@ -223,10 +235,67 @@ public class JsonSchemaReader {
     READERS_MAP.put("typeof", ((element, object, queue, virtualFile) -> object.setShouldValidateAgainstJSType()));
   }
 
+  private static void readEnumMetadata(JsonValueAdapter element, JsonSchemaObject object) {
+    if (!(element instanceof JsonObjectValueAdapter)) return;
+    Map<String, Map<String, String>> metadataMap = new HashMap<>();
+    for (JsonPropertyAdapter adapter : ((JsonObjectValueAdapter)element).getPropertyList()) {
+      String name = adapter.getName();
+      if (name == null) continue;
+      Collection<JsonValueAdapter> values = adapter.getValues();
+      if (values.size() != 1) continue;
+      JsonValueAdapter valueAdapter = values.iterator().next();
+      if (valueAdapter.isStringLiteral()) {
+        metadataMap.put(name, Collections.singletonMap("description", getString(valueAdapter)));
+      }
+      else if (valueAdapter instanceof JsonObjectValueAdapter) {
+        Map<String, String> valueMap = new HashMap<>();
+        for (JsonPropertyAdapter propertyAdapter : ((JsonObjectValueAdapter)valueAdapter).getPropertyList()) {
+          String adapterName = propertyAdapter.getName();
+          if (adapterName == null) continue;
+          Collection<JsonValueAdapter> adapterValues = propertyAdapter.getValues();
+          if (adapterValues.size() != 1) continue;
+          JsonValueAdapter next = adapterValues.iterator().next();
+          if (next.isStringLiteral()) {
+            valueMap.put(adapterName, getString(next));
+          }
+        }
+        metadataMap.put(name, valueMap);
+      }
+    }
+    object.setEnumMetadata(metadataMap);
+  }
+
+  private static void readInjectionMetadata(JsonValueAdapter element, JsonSchemaObject object) {
+    if (element.isStringLiteral()) {
+      object.setLanguageInjection(getString(element));
+    }
+    else if (element instanceof JsonObjectValueAdapter) {
+      for (JsonPropertyAdapter adapter : ((JsonObjectValueAdapter)element).getPropertyList()) {
+        String lang = readSingleProp(adapter, "language", JsonSchemaReader::getString);
+        if (lang != null) object.setLanguageInjection(lang);
+        String prefix = readSingleProp(adapter, "prefix", JsonSchemaReader::getString);
+        if (prefix != null) object.setLanguageInjectionPrefix(prefix);
+        String postfix = readSingleProp(adapter, "suffix", JsonSchemaReader::getString);
+        if (postfix != null) object.setLanguageInjectionPostfix(postfix);
+      }
+    }
+  }
+
+  @Nullable
+  private static <T> T readSingleProp(JsonPropertyAdapter adapter, String propName, Function<JsonValueAdapter, T> getterFunc) {
+    if (propName.equals(adapter.getName())) {
+      Collection<JsonValueAdapter> values = adapter.getValues();
+      if (values.size() == 1) {
+        return getterFunc.apply(values.iterator().next());
+      }
+    }
+    return null;
+  }
+
   private static MyReader createFromStringValue(PairConsumer<JsonSchemaObject, String> propertySetter) {
     return (element, object, queue, virtualFile) -> {
       if (element.isStringLiteral()) {
-        propertySetter.consume(object, StringUtil.unquoteString(element.getDelegate().getText()));
+        propertySetter.consume(object, getString(element));
       }
     };
   }
@@ -257,11 +326,11 @@ public class JsonSchemaReader {
 
   private static MyReader createContainer(@NotNull final PairConsumer<JsonSchemaObject, List<JsonSchemaObject>> delegate) {
     return (element, object, queue, virtualFile) -> {
-      if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-        final List<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> list = ((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)element).getElements();
+      if (element instanceof JsonArrayValueAdapter) {
+        final List<JsonValueAdapter> list = ((JsonArrayValueAdapter)element).getElements();
         final List<JsonSchemaObject> members = new ArrayList<>(list.size());
         for (int i = 0; i < list.size(); i++) {
-          fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value = list.get(i);
+          JsonValueAdapter value = list.get(i);
           if (!(value.isObject())) continue;
           members.add(enqueue(queue, new JsonSchemaObject(virtualFile, getNewPointer(String.valueOf(i), object.getPointer())), value));
         }
@@ -275,8 +344,8 @@ public class JsonSchemaReader {
       if (element.isStringLiteral()) {
         final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = parseType(StringUtil.unquoteString(element.getDelegate().getText()));
         if (type != null) object.setType(type);
-      } else if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-        final Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> typeList = ((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)element).getElements().stream()
+      } else if (element instanceof JsonArrayValueAdapter) {
+        final Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> typeList = ((JsonArrayValueAdapter)element).getElements().stream()
           .filter(notEmptyString()).map(el -> parseType(StringUtil.unquoteString(el.getDelegate().getText())))
           .filter(el -> el != null).collect(Collectors.toSet());
         if (!typeList.isEmpty()) object.setTypeVariants(typeList);
@@ -294,7 +363,7 @@ public class JsonSchemaReader {
   }
 
   @Nullable
-  private static Object readEnumValue(fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value) {
+  private static Object readEnumValue(JsonValueAdapter value) {
     if (value.isStringLiteral()) {
       return "\"" + StringUtil.unquoteString(value.getDelegate().getText()) + "\"";
     } else if (value.isNumberLiteral()) {
@@ -303,10 +372,10 @@ public class JsonSchemaReader {
       return getBoolean(value);
     } else if (value.isNull()) {
       return "null";
-    } else if (value instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-      return new EnumArrayValueWrapper(((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)value).getElements().stream().map(v -> readEnumValue(v)).filter(v -> v != null).toArray());
-    } else if (value instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter) {
-      return new EnumObjectValueWrapper(((fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter)value).getPropertyList().stream()
+    } else if (value instanceof JsonArrayValueAdapter) {
+      return new EnumArrayValueWrapper(((JsonArrayValueAdapter)value).getElements().stream().map(v -> readEnumValue(v)).filter(v -> v != null).toArray());
+    } else if (value instanceof JsonObjectValueAdapter) {
+      return new EnumObjectValueWrapper(((JsonObjectValueAdapter)value).getPropertyList().stream()
         .filter(p -> p.getValues().size() == 1)
         .map(p -> Pair.create(p.getName(), readEnumValue(p.getValues().iterator().next())))
         .filter(p -> p.second != null)
@@ -317,10 +386,10 @@ public class JsonSchemaReader {
 
   private static MyReader createEnum() {
     return (element, object, queue, virtualFile) -> {
-      if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
+      if (element instanceof JsonArrayValueAdapter) {
         final List<Object> objects = new ArrayList<>();
-        final List<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> list = ((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)element).getElements();
-        for (fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value : list) {
+        final List<JsonValueAdapter> list = ((JsonArrayValueAdapter)element).getElements();
+        for (JsonValueAdapter value : list) {
           Object enumValue = readEnumValue(value);
           if (enumValue == null) return; // don't validate if we have unsupported entity kinds
           objects.add(enumValue);
@@ -330,12 +399,16 @@ public class JsonSchemaReader {
     };
   }
 
-  private static boolean getBoolean(@NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value) {
+  private static String getString(@NotNull JsonValueAdapter value) {
+    return StringUtil.unquoteString(value.getDelegate().getText());
+  }
+
+  private static boolean getBoolean(@NotNull JsonValueAdapter value) {
     return Boolean.parseBoolean(value.getDelegate().getText());
   }
 
   @NotNull
-  private static Number getNumber(@NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value) {
+  private static Number getNumber(@NotNull JsonValueAdapter value) {
     Number numberValue;
     try {
       numberValue = Integer.parseInt(value.getDelegate().getText());
@@ -352,18 +425,18 @@ public class JsonSchemaReader {
 
   private static MyReader createDependencies() {
     return (element, object, queue, virtualFile) -> {
-      if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter) {
+      if (element instanceof JsonObjectValueAdapter) {
         final HashMap<String, List<String>> propertyDependencies = new HashMap<>();
         final HashMap<String, JsonSchemaObject> schemaDependencies = new HashMap<>();
 
-        final List<fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter> list = ((fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter)element).getPropertyList();
-        for (fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter property : list) {
-          Collection<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> values = property.getValues();
+        final List<JsonPropertyAdapter> list = ((JsonObjectValueAdapter)element).getPropertyList();
+        for (JsonPropertyAdapter property : list) {
+          Collection<JsonValueAdapter> values = property.getValues();
           if (values.size() != 1) continue;
-          fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value = values.iterator().next();
+          JsonValueAdapter value = values.iterator().next();
           if (value == null) continue;
-          if (value instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-            final List<String> dependencies = ((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)value).getElements().stream()
+          if (value instanceof JsonArrayValueAdapter) {
+            final List<String> dependencies = ((JsonArrayValueAdapter)value).getElements().stream()
               .filter(notEmptyString())
               .map(el -> StringUtil.unquoteString(el.getDelegate().getText())).collect(Collectors.toList());
             if (!dependencies.isEmpty()) propertyDependencies.put(property.getName(), dependencies);
@@ -380,7 +453,7 @@ public class JsonSchemaReader {
   }
 
   @NotNull
-  private static Predicate<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> notEmptyString() {
+  private static Predicate<JsonValueAdapter> notEmptyString() {
     return el -> el.isStringLiteral() && !StringUtil.isEmptyOrSpaces(el.getDelegate().getText());
   }
 
@@ -406,8 +479,8 @@ public class JsonSchemaReader {
 
   private static MyReader createRequired() {
     return (element, object, queue, virtualFile) -> {
-      if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
-        object.setRequired(new LinkedHashSet<>(((fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter)element).getElements().stream()
+      if (element instanceof JsonArrayValueAdapter) {
+        object.setRequired(new LinkedHashSet<>(((JsonArrayValueAdapter)element).getElements().stream()
                                                  .filter(notEmptyString())
                                                  .map(el -> StringUtil.unquoteString(el.getDelegate().getText()))
                                                  .collect(Collectors.toList())));
@@ -419,11 +492,11 @@ public class JsonSchemaReader {
     return (element, object, queue, virtualFile) -> {
       if (element.isObject()) {
         object.setItemsSchema(enqueue(queue, new JsonSchemaObject(virtualFile, getNewPointer("items", object.getPointer())), element));
-      } else if (element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
+      } else if (element instanceof JsonArrayValueAdapter) {
         final List<JsonSchemaObject> list = new ArrayList<>();
-        final List<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> values = ((JsonArrayValueAdapter)element).getElements();
+        final List<JsonValueAdapter> values = ((JsonArrayValueAdapter)element).getElements();
         for (int i = 0; i < values.size(); i++) {
-          fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value = values.get(i);
+          JsonValueAdapter value = values.get(i);
           if (value.isObject()) {
             list.add(enqueue(queue, new JsonSchemaObject(virtualFile, getNewPointer("items/"+i, object.getPointer())), value));
           }
@@ -469,16 +542,16 @@ public class JsonSchemaReader {
   }
 
   @NotNull
-  private static Map<String, JsonSchemaObject> readInnerObject(String parentPointer, @NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter element,
-                                                               @NotNull Collection<Pair<JsonSchemaObject, fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter>> queue,
+  private static Map<String, JsonSchemaObject> readInnerObject(String parentPointer, @NotNull JsonValueAdapter element,
+                                                               @NotNull Collection<Pair<JsonSchemaObject, JsonValueAdapter>> queue,
                                                                VirtualFile virtualFile) {
     final Map<String, JsonSchemaObject> map = new HashMap<>();
-    if (!(element instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter)) return map;
-    final List<fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter> properties = ((JsonObjectValueAdapter)element).getPropertyList();
+    if (!(element instanceof JsonObjectValueAdapter)) return map;
+    final List<JsonPropertyAdapter> properties = ((JsonObjectValueAdapter)element).getPropertyList();
     for (JsonPropertyAdapter property : properties) {
-      Collection<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> values = property.getValues();
+      Collection<JsonValueAdapter> values = property.getValues();
       if (values.size() != 1) continue;
-      fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value = values.iterator().next();
+      JsonValueAdapter value = values.iterator().next();
       String propertyName = property.getName();
       if (propertyName == null) continue;
       if (value.isBooleanLiteral()) {
@@ -507,7 +580,7 @@ public class JsonSchemaReader {
   }
 
   private interface MyReader {
-    void read(@NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter source,
+    void read(@NotNull JsonValueAdapter source,
               @NotNull JsonSchemaObject target,
               @NotNull Collection<Pair<JsonSchemaObject, JsonValueAdapter>> processingQueue,
               @Nullable VirtualFile file);

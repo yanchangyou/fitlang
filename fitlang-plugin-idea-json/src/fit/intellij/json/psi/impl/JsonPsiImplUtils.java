@@ -1,3 +1,4 @@
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.psi.impl;
 
 import com.intellij.icons.AllIcons;
@@ -16,8 +17,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
-import fit.intellij.json.psi.JsonPsiChangeUtils;
-import fit.intellij.json.psi.JsonReferenceExpression;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,7 +44,7 @@ public class JsonPsiImplUtils {
   @NotNull
   public static fit.intellij.json.psi.JsonValue getNameElement(@NotNull fit.intellij.json.psi.JsonProperty property) {
     final PsiElement firstChild = property.getFirstChild();
-    assert firstChild instanceof fit.intellij.json.psi.JsonLiteral || firstChild instanceof JsonReferenceExpression;
+    assert firstChild instanceof fit.intellij.json.psi.JsonLiteral || firstChild instanceof fit.intellij.json.psi.JsonReferenceExpression;
     return (fit.intellij.json.psi.JsonValue)firstChild;
   }
 
@@ -69,19 +69,19 @@ public class JsonPsiImplUtils {
       @Nullable
       @Override
       public String getLocationString() {
-        final fit.intellij.json.psi.JsonValue value = property.getValue();
+        final JsonValue value = property.getValue();
         return value instanceof fit.intellij.json.psi.JsonLiteral ? value.getText() : null;
       }
 
       @Nullable
       @Override
       public Icon getIcon(boolean unused) {
-//        if (property.getValue() instanceof fit.intellij.json.psi.JsonArray) {
-//          return AllIcons.Json.Property_brackets;
-//        }
-//        if (property.getValue() instanceof fit.intellij.json.psi.JsonObject) {
-//          return AllIcons.Json.Property_braces;
-//        }
+        if (property.getValue() instanceof fit.intellij.json.psi.JsonArray) {
+          return AllIcons.Json.Array;
+        }
+        if (property.getValue() instanceof fit.intellij.json.psi.JsonObject) {
+          return AllIcons.Json.Object;
+        }
         return PlatformIcons.PROPERTY_ICON;
       }
     };
@@ -177,7 +177,7 @@ public class JsonPsiImplUtils {
               pos = i;
               break;
             case 'x':
-              Language language = JsonDialectUtil.getLanguage(literal);
+              Language language = JsonDialectUtil.getLanguageOrDefaultJson(literal);
               if (language instanceof JsonLanguage && ((JsonLanguage)language).hasPermissiveStrings()) {
                 int i2 = pos + 2;
                 for (; i2 < pos + 4; i2++) {
@@ -211,7 +211,7 @@ public class JsonPsiImplUtils {
 
   public static void delete(@NotNull fit.intellij.json.psi.JsonProperty property) {
     final ASTNode myNode = property.getNode();
-    JsonPsiChangeUtils.removeCommaSeparatedFromList(myNode, myNode.getTreeParent());
+    fit.intellij.json.psi.JsonPsiChangeUtils.removeCommaSeparatedFromList(myNode, myNode.getTreeParent());
   }
 
   @NotNull

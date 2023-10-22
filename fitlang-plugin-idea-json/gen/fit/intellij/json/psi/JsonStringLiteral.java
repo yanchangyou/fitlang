@@ -18,4 +18,8 @@ public interface JsonStringLiteral extends JsonLiteral {
 
   boolean isPropertyName();
 
+  //WARNING: isKeyword(...) is skipped
+  //matching isKeyword(JsonStringLiteral, ...)
+  //methods are not found in JsonPsiImplUtils
+
 }

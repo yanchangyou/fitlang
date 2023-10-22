@@ -14,13 +14,12 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonReferenceExpression;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.impl.adapters.JsonJsonPropertyAdapter;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,7 +55,7 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
 
   @Override
   public boolean isPropertyWithValue(@NotNull PsiElement element) {
-    if (element instanceof fit.intellij.json.psi.JsonStringLiteral || element instanceof JsonReferenceExpression) {
+    if (element instanceof fit.intellij.json.psi.JsonStringLiteral || element instanceof fit.intellij.json.psi.JsonReferenceExpression) {
       final PsiElement parent = element.getParent();
       if (!(parent instanceof fit.intellij.json.psi.JsonProperty) || ((fit.intellij.json.psi.JsonProperty)parent).getNameElement() != element) return false;
       element = parent;
@@ -164,7 +163,7 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   public JsonPropertyAdapter getParentPropertyAdapter(@NotNull PsiElement element) {
     final fit.intellij.json.psi.JsonProperty property = PsiTreeUtil.getParentOfType(element, fit.intellij.json.psi.JsonProperty.class, false);
     if (property == null) return null;
-    return new fit.jetbrains.jsonSchema.impl.adapters.JsonJsonPropertyAdapter(property);
+    return new JsonJsonPropertyAdapter(property);
   }
 
   @Override
@@ -175,11 +174,11 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   @Nullable
   @Override
   public JsonValueAdapter createValueAdapter(@NotNull PsiElement element) {
-    return element instanceof fit.intellij.json.psi.JsonValue ? JsonJsonPropertyAdapter.createAdapterByType((fit.intellij.json.psi.JsonValue)element) : null;
+    return element instanceof fit.intellij.json.psi.JsonValue ? JsonJsonPropertyAdapter.createAdapterByType((JsonValue)element) : null;
   }
 
   @Override
-  public fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter getSyntaxAdapter(Project project) {
+  public JsonLikeSyntaxAdapter getSyntaxAdapter(Project project) {
     return new JsonLikeSyntaxAdapter() {
       private final fit.intellij.json.psi.JsonElementGenerator myGenerator = new fit.intellij.json.psi.JsonElementGenerator(project);
       @Nullable
@@ -251,7 +250,7 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   @NotNull
   @Override
   public Collection<PsiElement> getRoots(@NotNull PsiFile file) {
-    return file instanceof fit.intellij.json.psi.JsonFile ? ContainerUtil.createMaybeSingletonList(((JsonFile)file).getTopLevelValue()) : ContainerUtil.emptyList();
+    return file instanceof fit.intellij.json.psi.JsonFile ? ContainerUtil.createMaybeSingletonList(((fit.intellij.json.psi.JsonFile)file).getTopLevelValue()) : ContainerUtil.emptyList();
   }
 
   @Nullable

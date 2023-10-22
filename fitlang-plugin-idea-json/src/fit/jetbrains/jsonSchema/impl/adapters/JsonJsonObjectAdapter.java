@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * @author Irina.Chernushina on 2/20/2017.
  */
-public class JsonJsonObjectAdapter implements fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter {
+public class JsonJsonObjectAdapter implements JsonObjectValueAdapter {
   @NotNull private final JsonObject myValue;
 
   public JsonJsonObjectAdapter(@NotNull JsonObject value) {myValue = value;}

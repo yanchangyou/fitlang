@@ -21,18 +21,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class JsonSchemaComplianceChecker {
-  private static final Key<Set<PsiElement>> ANNOTATED_PROPERTIES = Key.create("FitJsonSchema.Properties.Annotated");
+  private static final Key<Set<PsiElement>> ANNOTATED_PROPERTIES = Key.create("JsonSchema.Properties.Annotated");
 
   @NotNull private final JsonSchemaObject myRootSchema;
   @NotNull private final ProblemsHolder myHolder;
-  @NotNull private final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker myWalker;
+  @NotNull private final JsonLikePsiWalker myWalker;
   private final LocalInspectionToolSession mySession;
   @NotNull private final fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions myOptions;
   @Nullable private final String myMessagePrefix;
 
   public JsonSchemaComplianceChecker(@NotNull JsonSchemaObject rootSchema,
                                      @NotNull ProblemsHolder holder,
-                                     @NotNull fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker,
+                                     @NotNull JsonLikePsiWalker walker,
                                      @NotNull LocalInspectionToolSession session,
                                      @NotNull fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
     this(rootSchema, holder, walker, session, options, null);
@@ -40,7 +40,7 @@ public class JsonSchemaComplianceChecker {
 
   public JsonSchemaComplianceChecker(@NotNull JsonSchemaObject rootSchema,
                                      @NotNull ProblemsHolder holder,
-                                     @NotNull fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker,
+                                     @NotNull JsonLikePsiWalker walker,
                                      @NotNull LocalInspectionToolSession session,
                                      @NotNull JsonComplianceCheckerOptions options,
                                      @Nullable String messagePrefix) {
@@ -54,12 +54,12 @@ public class JsonSchemaComplianceChecker {
 
   public void annotate(@NotNull final PsiElement element) {
     Project project = element.getProject();
-    final fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter firstProp = myWalker.getParentPropertyAdapter(element);
+    final JsonPropertyAdapter firstProp = myWalker.getParentPropertyAdapter(element);
     if (firstProp != null) {
       final JsonPointerPosition position = myWalker.findPosition(firstProp.getDelegate(), true);
       if (position == null || position.isEmpty()) return;
       final MatchResult result = new JsonSchemaResolver(project, myRootSchema, position).detailedResolve();
-      for (fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value : firstProp.getValues()) {
+      for (JsonValueAdapter value : firstProp.getValues()) {
         createWarnings(JsonSchemaAnnotatorChecker.checkByMatchResult(project, value, result, myOptions));
       }
     }
@@ -67,7 +67,7 @@ public class JsonSchemaComplianceChecker {
   }
 
   private void checkRoot(@NotNull PsiElement element, @Nullable JsonPropertyAdapter firstProp) {
-    fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter rootToCheck;
+    JsonValueAdapter rootToCheck;
     if (firstProp == null) {
       rootToCheck = findTopLevelElement(myWalker, element);
     } else {

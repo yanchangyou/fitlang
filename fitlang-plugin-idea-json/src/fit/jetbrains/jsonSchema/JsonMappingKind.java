@@ -3,6 +3,7 @@ package fit.jetbrains.jsonSchema;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.text.StringUtil;
+import fit.intellij.json.JsonBundle;
 
 import javax.swing.*;
 
@@ -14,11 +15,11 @@ public enum JsonMappingKind {
   public String getDescription() {
     switch (this) {
       case File:
-        return "file";
+        return fit.intellij.json.JsonBundle.message("schema.mapping.file");
       case Pattern:
-        return "file path pattern";
+        return fit.intellij.json.JsonBundle.message("schema.mapping.pattern");
       case Directory:
-        return "directory";
+        return JsonBundle.message("schema.mapping.directory");
     }
     return "";
   }

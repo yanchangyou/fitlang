@@ -1,12 +1,15 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json;
 
+import com.intellij.ide.scratch.RootType;
+import com.intellij.ide.scratch.ScratchFileService;
+import com.intellij.ide.scratch.ScratchUtil;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ObjectUtils;
-import fit.intellij.json.psi.JsonFile;
 import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -72,12 +75,15 @@ public class JsonUtil {
 
   @Contract(value = "null -> null")
   @Nullable
-  public static fit.intellij.json.psi.JsonObject getTopLevelObject(@Nullable JsonFile jsonFile) {
+  public static fit.intellij.json.psi.JsonObject getTopLevelObject(@Nullable fit.intellij.json.psi.JsonFile jsonFile) {
     return jsonFile != null ? ObjectUtils.tryCast(jsonFile.getTopLevelValue(), fit.intellij.json.psi.JsonObject.class) : null;
   }
 
-  public static boolean isJsonFile(@NotNull VirtualFile file) {
+  public static boolean isJsonFile(@NotNull VirtualFile file, @Nullable Project project) {
     FileType type = file.getFileType();
-    return type instanceof LanguageFileType && ((LanguageFileType)type).getLanguage() instanceof JsonLanguage;
+    if (type instanceof LanguageFileType && ((LanguageFileType)type).getLanguage() instanceof fit.intellij.json.JsonLanguage) return true;
+    if (project == null || !ScratchUtil.isScratch(file)) return false;
+    RootType rootType = ScratchFileService.findRootType(file);
+    return rootType != null && rootType.substituteLanguage(project, file) instanceof JsonLanguage;
   }
 }

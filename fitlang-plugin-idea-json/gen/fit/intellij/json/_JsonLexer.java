@@ -7,7 +7,6 @@ import com.intellij.psi.tree.IElementType;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static fit.intellij.json.JsonElementTypes.*;
 
 
 /**
@@ -420,7 +419,7 @@ public class _JsonLexer implements FlexLexer {
   /**
    * Refills the input buffer.
    *
-   * @return      <code>false</code>, iff there was new input.
+   * @return      {@code false}, iff there was new input.
    *
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
@@ -456,7 +455,7 @@ public class _JsonLexer implements FlexLexer {
 
 
   /**
-   * Returns the character at position <tt>pos</tt> from the
+   * Returns the character at position {@code pos} from the
    * matched text.
    *
    * It is equivalent to yytext().charAt(pos), but faster
@@ -480,7 +479,7 @@ public class _JsonLexer implements FlexLexer {
 
 
   /**
-   * Reports an error that occured while scanning.
+   * Reports an error that occurred while scanning.
    *
    * In a wellformed scanner (no or only correct usage of
    * yypushback(int) and a match-all fallback rule) this method
@@ -623,77 +622,77 @@ public class _JsonLexer implements FlexLexer {
             // fall through
           case 19: break;
           case 3: 
-            { return IDENTIFIER;
+            { return JsonElementTypes.IDENTIFIER;
             } 
             // fall through
           case 20: break;
           case 4: 
-            { return DOUBLE_QUOTED_STRING;
+            { return JsonElementTypes.DOUBLE_QUOTED_STRING;
             } 
             // fall through
           case 21: break;
           case 5: 
-            { return SINGLE_QUOTED_STRING;
+            { return JsonElementTypes.SINGLE_QUOTED_STRING;
             } 
             // fall through
           case 22: break;
           case 6: 
-            { return NUMBER;
+            { return JsonElementTypes.NUMBER;
             } 
             // fall through
           case 23: break;
           case 7: 
-            { return L_CURLY;
+            { return JsonElementTypes.L_CURLY;
             } 
             // fall through
           case 24: break;
           case 8: 
-            { return R_CURLY;
+            { return JsonElementTypes.R_CURLY;
             } 
             // fall through
           case 25: break;
           case 9: 
-            { return L_BRACKET;
+            { return JsonElementTypes.L_BRACKET;
             } 
             // fall through
           case 26: break;
           case 10: 
-            { return R_BRACKET;
+            { return JsonElementTypes.R_BRACKET;
             } 
             // fall through
           case 27: break;
           case 11: 
-            { return COMMA;
+            { return JsonElementTypes.COMMA;
             } 
             // fall through
           case 28: break;
           case 12: 
-            { return COLON;
+            { return JsonElementTypes.COLON;
             } 
             // fall through
           case 29: break;
           case 13: 
-            { return LINE_COMMENT;
+            { return JsonElementTypes.LINE_COMMENT;
             } 
             // fall through
           case 30: break;
           case 14: 
-            { return BLOCK_COMMENT;
+            { return JsonElementTypes.BLOCK_COMMENT;
             } 
             // fall through
           case 31: break;
           case 15: 
-            { return NULL;
+            { return JsonElementTypes.NULL;
             } 
             // fall through
           case 32: break;
           case 16: 
-            { return TRUE;
+            { return JsonElementTypes.TRUE;
             } 
             // fall through
           case 33: break;
           case 17: 
-            { return FALSE;
+            { return JsonElementTypes.FALSE;
             } 
             // fall through
           case 34: break;

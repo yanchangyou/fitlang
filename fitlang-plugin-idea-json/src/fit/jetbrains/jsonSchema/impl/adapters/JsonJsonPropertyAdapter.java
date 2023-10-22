@@ -48,13 +48,13 @@ public class JsonJsonPropertyAdapter implements JsonPropertyAdapter {
 
   @NotNull
   @Override
-  public Collection<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> getValues() {
+  public Collection<JsonValueAdapter> getValues() {
     return myProperty.getValue() == null ? ContainerUtil.emptyList() : Collections.singletonList(createAdapterByType(myProperty.getValue()));
   }
 
   @Nullable
   @Override
-  public fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter getNameValueAdapter() {
+  public JsonValueAdapter getNameValueAdapter() {
     return createAdapterByType(myProperty.getNameElement());
   }
 

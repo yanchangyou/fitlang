@@ -17,7 +17,6 @@ package fit.intellij.json.formatter;
 
 import com.intellij.application.options.CodeStyle;
 import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.JsonLanguage;
 import fit.intellij.json.psi.JsonArray;
 import fit.intellij.json.psi.JsonObject;
 import com.intellij.lang.ASTNode;
@@ -28,6 +27,7 @@ import com.intellij.psi.impl.source.codeStyle.PreFormatProcessor;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.JsonLanguage;
 import fit.intellij.json.psi.impl.JsonRecursiveElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

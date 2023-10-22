@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.List;
 
 public interface JsonSchemaProviderFactory {
-  ExtensionPointName<JsonSchemaProviderFactory> EP_NAME = ExtensionPointName.create("FitJavaScript.JsonSchema.ProviderFactory");
+  ExtensionPointName<JsonSchemaProviderFactory> EP_NAME = ExtensionPointName.create("JavaScript.JsonSchema.ProviderFactory");
   Logger LOG = Logger.getInstance(JsonSchemaProviderFactory.class);
 
   @NotNull

@@ -3,8 +3,8 @@ package fit.intellij.json.liveTemplates;
 import com.intellij.codeInsight.template.FileTypeBasedContextType;
 import fit.intellij.json.JsonBundle;
 import fit.intellij.json.JsonFileType;
-import fit.intellij.json.psi.JsonFile;
 import com.intellij.psi.PsiFile;
+import fit.intellij.json.psi.JsonFile;
 import org.jetbrains.annotations.NotNull;
 
 /**

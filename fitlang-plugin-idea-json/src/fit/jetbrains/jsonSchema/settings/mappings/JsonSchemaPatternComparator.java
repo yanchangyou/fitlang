@@ -7,7 +7,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.BeforeAfter;
 import com.intellij.util.ThreeState;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,18 +25,18 @@ public class JsonSchemaPatternComparator {
   }
 
   @NotNull
-  public ThreeState isSimilar(@NotNull UserDefinedJsonSchemaConfiguration.Item itemLeft,
-                              @NotNull UserDefinedJsonSchemaConfiguration.Item itemRight) {
+  public ThreeState isSimilar(@NotNull fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item itemLeft,
+                              @NotNull fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item itemRight) {
     if (itemLeft.isPattern() != itemRight.isPattern()) return ThreeState.NO;
     if (itemLeft.isPattern()) return comparePatterns(itemLeft, itemRight);
     return comparePaths(itemLeft, itemRight);
   }
 
-  private ThreeState comparePaths(UserDefinedJsonSchemaConfiguration.Item left, UserDefinedJsonSchemaConfiguration.Item right) {
+  private ThreeState comparePaths(fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item left, fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item right) {
     String leftPath = left.getPath();
     String rightPath = right.getPath();
 
-    if (leftPath.startsWith(JsonSchemaObject.MOCK_URL) || rightPath.startsWith(JsonSchemaObject.MOCK_URL)) {
+    if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isTempOrMockUrl(leftPath) || JsonFileResolver.isTempOrMockUrl(rightPath)) {
       return leftPath.equals(rightPath) ? ThreeState.YES : ThreeState.NO;
     }
     final File leftFile = new File(myProject.getBasePath(), leftPath);
@@ -51,8 +51,8 @@ public class JsonSchemaPatternComparator {
     return FileUtil.filesEqual(leftFile, rightFile) && left.isDirectory() == right.isDirectory() ? ThreeState.YES : ThreeState.NO;
   }
 
-  private static ThreeState comparePatterns(@NotNull final UserDefinedJsonSchemaConfiguration.Item leftItem,
-                                            @NotNull final UserDefinedJsonSchemaConfiguration.Item rightItem) {
+  private static ThreeState comparePatterns(@NotNull final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item leftItem,
+                                            @NotNull final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item rightItem) {
     if (leftItem.getPath().equals(rightItem.getPath())) return ThreeState.YES;
     if (leftItem.getPath().indexOf(File.separatorChar) >= 0 || rightItem.getPath().indexOf(File.separatorChar) >= 0) {
       // todo: better heuristic

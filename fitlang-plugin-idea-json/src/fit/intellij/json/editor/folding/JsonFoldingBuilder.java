@@ -10,7 +10,6 @@ import com.intellij.openapi.util.Couple;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import fit.intellij.json.psi.JsonPsiUtil;
 import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,9 +21,8 @@ import java.util.List;
  * @author Mikhail Golubev
  */
 public class JsonFoldingBuilder implements FoldingBuilder, DumbAware {
-  @NotNull
   @Override
-  public FoldingDescriptor[] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
+  public FoldingDescriptor @NotNull [] buildFoldRegions(@NotNull ASTNode node, @NotNull Document document) {
     final List<FoldingDescriptor> descriptors = new ArrayList<>();
     collectDescriptorsRecursively(node, document, descriptors);
     return descriptors.toArray(FoldingDescriptor.EMPTY);
@@ -99,7 +97,7 @@ public class JsonFoldingBuilder implements FoldingBuilder, DumbAware {
 
   @NotNull
   public static Couple<PsiElement> expandLineCommentsRange(@NotNull PsiElement anchor) {
-    return Couple.of(fit.intellij.json.psi.JsonPsiUtil.findFurthestSiblingOfSameType(anchor, false), JsonPsiUtil.findFurthestSiblingOfSameType(anchor, true));
+    return Couple.of(fit.intellij.json.psi.JsonPsiUtil.findFurthestSiblingOfSameType(anchor, false), fit.intellij.json.psi.JsonPsiUtil.findFurthestSiblingOfSameType(anchor, true));
   }
 
   private static boolean spanMultipleLines(@NotNull ASTNode node, @NotNull Document document) {

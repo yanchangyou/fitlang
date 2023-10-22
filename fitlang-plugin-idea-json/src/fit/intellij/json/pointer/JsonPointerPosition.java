@@ -2,14 +2,13 @@
 package fit.intellij.json.pointer;
 
 import com.intellij.util.containers.ContainerUtil;
+import fit.jetbrains.jsonSchema.JsonPointerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static fit.jetbrains.jsonSchema.JsonPointerUtil.*;
 
 public class JsonPointerPosition {
 
@@ -26,14 +25,14 @@ public class JsonPointerPosition {
   }
 
   public static JsonPointerPosition parsePointer(@NotNull String pointer) {
-    final List<String> chain = split(normalizeSlashes(normalizeId(pointer)));
-    List<JsonPointerPosition.Step> steps = new ArrayList<>(chain.size());
+    final List<String> chain = JsonPointerUtil.split(JsonPointerUtil.normalizeSlashes(JsonPointerUtil.normalizeId(pointer)));
+    List<Step> steps = new ArrayList<>(chain.size());
     for (String s: chain) {
       try {
-        steps.add(JsonPointerPosition.Step.createArrayElementStep(Integer.parseInt(s)));
+        steps.add(Step.createArrayElementStep(Integer.parseInt(s)));
       }
       catch (NumberFormatException e) {
-        steps.add(JsonPointerPosition.Step.createPropertyStep(unescapeJsonPointerPart(s)));
+        steps.add(Step.createPropertyStep(JsonPointerUtil.unescapeJsonPointerPart(s)));
       }
     }
     return new JsonPointerPosition(steps);
@@ -118,7 +117,7 @@ public class JsonPointerPosition {
   }
 
   public String toJsonPointer() {
-    return "/" + steps.stream().map(step -> escapeForJsonPointer(step.myName == null ? String.valueOf(step.myIdx) : step.myName)).collect(Collectors.joining("/"));
+    return "/" + steps.stream().map(step -> JsonPointerUtil.escapeForJsonPointer(step.myName == null ? String.valueOf(step.myIdx) : step.myName)).collect(Collectors.joining("/"));
   }
 
   @Override

@@ -10,7 +10,7 @@ import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import org.jetbrains.annotations.NotNull;
 
 public class Json5PsiWalkerFactory implements JsonLikePsiWalkerFactory {
-  public static final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker WALKER_INSTANCE = new JsonOriginalPsiWalker() {
+  public static final JsonLikePsiWalker WALKER_INSTANCE = new JsonOriginalPsiWalker() {
     @Override
     public boolean requiresNameQuotes() {
       return false;
@@ -25,7 +25,7 @@ public class Json5PsiWalkerFactory implements JsonLikePsiWalkerFactory {
   @Override
   public boolean handles(@NotNull PsiElement element) {
     PsiElement parent = element.getParent();
-    return parent != null && JsonDialectUtil.getLanguage(parent) == Json5Language.INSTANCE;
+    return parent != null && JsonDialectUtil.getLanguageOrDefaultJson(parent) == Json5Language.INSTANCE;
   }
 
   @NotNull

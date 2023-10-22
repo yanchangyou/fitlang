@@ -1,5 +1,7 @@
 package fit.intellij.json;
 
+import fit.intellij.json.pointer.JsonPointerPosition;
+import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
 import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.project.Project;
@@ -15,7 +17,6 @@ import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
-import fit.intellij.json.pointer.JsonPointerPosition;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonOriginalPsiWalker;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
@@ -55,14 +56,25 @@ public class JsonSpellcheckerStrategy extends SpellcheckingStrategy {
     if (file == null) return false;
 
     Project project = element.getProject();
-    final fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(project);
+    final JsonSchemaService service = JsonSchemaService.Impl.get(project);
     if (!service.isApplicableToFile(file)) return false;
     final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema = service.getSchemaObject(element.getContainingFile());
     if (rootSchema == null) return false;
     if (service.isSchemaFile(rootSchema)) {
       JsonProperty property = ObjectUtils.tryCast(element.getParent(), JsonProperty.class);
-      if (property != null && fit.jetbrains.jsonSchema.impl.JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION.equals(property.getName())) {
-        return true;
+      if (property != null) {
+        if (fit.jetbrains.jsonSchema.impl.JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION.equals(property.getName())) {
+          return true;
+        }
+        if ("language".equals(property.getName())) {
+          PsiElement parent = property.getParent();
+          if (parent instanceof JsonObject) {
+            PsiElement grandParent = parent.getParent();
+            if (grandParent instanceof JsonProperty && fit.jetbrains.jsonSchema.impl.JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION.equals(((JsonProperty)grandParent).getName())) {
+              return true;
+            }
+          }
+        }
       }
     }
 

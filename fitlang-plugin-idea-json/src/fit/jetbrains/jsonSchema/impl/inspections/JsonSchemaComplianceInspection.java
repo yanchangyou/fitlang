@@ -23,21 +23,15 @@ public class JsonSchemaComplianceInspection extends JsonSchemaBasedInspectionBas
   public boolean myCaseInsensitiveEnum = false;
 
   @Override
-  @NotNull
-  public String getDisplayName() {
-    return JsonBundle.message("json.schema.inspection.compliance.name");
-  }
-
-  @Override
-  protected PsiElementVisitor doBuildVisitor(@NotNull JsonValue root, @Nullable JsonSchemaObject schema, @NotNull JsonSchemaService service,
+  protected PsiElementVisitor doBuildVisitor(@NotNull JsonValue root, @Nullable fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, @NotNull JsonSchemaService service,
                                              @NotNull ProblemsHolder holder,
                                              @NotNull LocalInspectionToolSession session) {
     if (schema == null) return PsiElementVisitor.EMPTY_VISITOR;
-    JsonComplianceCheckerOptions options = new JsonComplianceCheckerOptions(myCaseInsensitiveEnum);
+    fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options = new fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions(myCaseInsensitiveEnum);
 
     return new JsonElementVisitor() {
       @Override
-      public void visitElement(PsiElement element) {
+      public void visitElement(@NotNull PsiElement element) {
         if (element == root) {
           // perform this only for the root element, because the checker traverses the hierarchy itself
           annotate(element, schema, holder, session, options);

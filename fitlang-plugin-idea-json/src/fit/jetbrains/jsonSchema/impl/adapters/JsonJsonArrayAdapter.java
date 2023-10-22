@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 /**
  * @author Irina.Chernushina on 2/20/2017.
  */
-public class JsonJsonArrayAdapter implements fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter {
+public class JsonJsonArrayAdapter implements JsonArrayValueAdapter {
   @NotNull private final JsonArray myArray;
 
   public JsonJsonArrayAdapter(@NotNull JsonArray array) {myArray = array;}

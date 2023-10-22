@@ -4,6 +4,7 @@ package fit.jetbrains.jsonSchema.extension;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NullableLazyValue;
 import com.intellij.openapi.vfs.VirtualFile;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
 import kotlin.NotImplementedError;
@@ -55,9 +56,9 @@ public class JsonSchemaProjectSelfProviderFactory implements JsonSchemaProviderF
     @Override
     public boolean isAvailable(@NotNull VirtualFile file) {
       if (myProject.isDisposed()) return false;
-      JsonSchemaService service = JsonSchemaService.Impl.get(myProject);
+      fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(myProject);
       if (!service.isApplicableToFile(file)) return false;
-      JsonSchemaVersion schemaVersion = service.getSchemaVersion(file);
+      fit.jetbrains.jsonSchema.impl.JsonSchemaVersion schemaVersion = service.getSchemaVersion(file);
       if (schemaVersion == null) return false;
       switch (schemaVersion) {
         case SCHEMA_4:
@@ -72,8 +73,8 @@ public class JsonSchemaProjectSelfProviderFactory implements JsonSchemaProviderF
     }
 
     @Override
-    public JsonSchemaVersion getSchemaVersion() {
-      return isSchemaV4() ? JsonSchemaVersion.SCHEMA_4 : isSchemaV7() ? JsonSchemaVersion.SCHEMA_7 : JsonSchemaVersion.SCHEMA_6;
+    public fit.jetbrains.jsonSchema.impl.JsonSchemaVersion getSchemaVersion() {
+      return isSchemaV4() ? fit.jetbrains.jsonSchema.impl.JsonSchemaVersion.SCHEMA_4 : isSchemaV7() ? fit.jetbrains.jsonSchema.impl.JsonSchemaVersion.SCHEMA_7 : JsonSchemaVersion.SCHEMA_6;
     }
 
     @NotNull
@@ -113,11 +114,11 @@ public class JsonSchemaProjectSelfProviderFactory implements JsonSchemaProviderF
     public String getPresentableName() {
       switch (myFileName) {
         case SCHEMA_JSON_FILE_NAME:
-          return "JSON schema v4";
+          return fit.intellij.json.JsonBundle.message("schema.of.version", 4);
         case SCHEMA06_JSON_FILE_NAME:
-          return "JSON schema v6";
+          return fit.intellij.json.JsonBundle.message("schema.of.version", 6);
         case SCHEMA07_JSON_FILE_NAME:
-          return "JSON schema v7";
+          return JsonBundle.message("schema.of.version", 7);
       }
       return getName();
     }

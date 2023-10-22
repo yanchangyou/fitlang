@@ -5,11 +5,11 @@ import com.intellij.ide.structureView.StructureViewModelBase;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.Sorter;
 import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonFile;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
+import fit.intellij.json.psi.JsonFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public class JsonStructureViewModel extends StructureViewModelBase implements StructureViewModel.ElementInfoProvider {
 
   public JsonStructureViewModel(@NotNull PsiFile psiFile, @Nullable Editor editor) {
-    super(psiFile, editor, new JsonStructureViewElement((JsonFile)psiFile));
+    super(psiFile, editor, new JsonStructureViewElement((fit.intellij.json.psi.JsonFile)psiFile));
     withSuitableClasses(JsonFile.class, JsonProperty.class, JsonObject.class, JsonArray.class);
     withSorters(Sorter.ALPHA_SORTER);
   }

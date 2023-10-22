@@ -6,7 +6,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import fit.intellij.json.psi.JsonElement;
 import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +41,7 @@ public class JsonWithObjectLiteralSurrounder extends JsonSurrounderBase {
   }
 
   @Override
-  public boolean isApplicable(@NotNull PsiElement[] elements) {
+  public boolean isApplicable(PsiElement @NotNull [] elements) {
     return !fit.intellij.json.psi.JsonPsiUtil.isPropertyKey(elements[0]) && (elements[0] instanceof fit.intellij.json.psi.JsonProperty || elements.length == 1);
   }
 
@@ -50,7 +49,7 @@ public class JsonWithObjectLiteralSurrounder extends JsonSurrounderBase {
   @Override
   public TextRange surroundElements(@NotNull Project project,
                                     @NotNull Editor editor,
-                                    @NotNull PsiElement[] elements) throws IncorrectOperationException {
+                                    PsiElement @NotNull [] elements) throws IncorrectOperationException {
 
     if (!isApplicable(elements)) {
       return null;
@@ -59,7 +58,7 @@ public class JsonWithObjectLiteralSurrounder extends JsonSurrounderBase {
     final fit.intellij.json.psi.JsonElementGenerator generator = new fit.intellij.json.psi.JsonElementGenerator(project);
 
     final PsiElement firstElement = elements[0];
-    final JsonElement newNameElement;
+    final fit.intellij.json.psi.JsonElement newNameElement;
     if (firstElement instanceof JsonValue) {
       assert elements.length == 1 : "Only single JSON value can be wrapped in object literal";
       fit.intellij.json.psi.JsonObject replacement = generator.createValue(createReplacementText(firstElement.getText()));

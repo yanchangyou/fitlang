@@ -2,6 +2,8 @@
 package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInspection.LocalQuickFix;
+import fit.intellij.json.JsonBundle;
+import fit.jetbrains.jsonSchema.extension.JsonErrorPriority;
 import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import fit.jetbrains.jsonSchema.impl.fixes.AddMissingPropertyFix;
 import fit.jetbrains.jsonSchema.impl.fixes.RemoveProhibitedPropertyFix;
@@ -65,7 +67,7 @@ public class JsonValidationError {
     public String getMessage(boolean trimIfNeeded) {
       if (myMissingPropertyIssues.size() == 1) {
         MissingPropertyIssueData prop = myMissingPropertyIssues.iterator().next();
-        return "property " + getPropertyNameWithComment(prop);
+        return JsonBundle.message("schema.validation.property", getPropertyNameWithComment(prop));
       }
 
       Collection<MissingPropertyIssueData> namesToDisplay = myMissingPropertyIssues;
@@ -88,17 +90,17 @@ public class JsonValidationError {
         return firstHasEq ? -1 : 1;
       }).collect(Collectors.joining(", "));
       if (trimmed) allNames += ", ...";
-      return "properties " + allNames;
+      return JsonBundle.message("schema.validation.properties", allNames);
     }
   }
 
   public static class MissingPropertyIssueData implements IssueData {
     public final String propertyName;
-    public final fit.jetbrains.jsonSchema.impl.JsonSchemaType propertyType;
+    public final JsonSchemaType propertyType;
     public final Object defaultValue;
     public final int enumItemsCount;
 
-    public MissingPropertyIssueData(String propertyName, fit.jetbrains.jsonSchema.impl.JsonSchemaType propertyType, Object defaultValue, int enumItemsCount) {
+    public MissingPropertyIssueData(String propertyName, JsonSchemaType propertyType, Object defaultValue, int enumItemsCount) {
       this.propertyName = propertyName;
       this.propertyType = propertyType;
       this.defaultValue = defaultValue;
@@ -115,7 +117,7 @@ public class JsonValidationError {
   }
 
   public static class TypeMismatchIssueData implements IssueData {
-    public final fit.jetbrains.jsonSchema.impl.JsonSchemaType[] expectedTypes;
+    public final JsonSchemaType[] expectedTypes;
 
     public TypeMismatchIssueData(JsonSchemaType[] expectedTypes) {
       this.expectedTypes = expectedTypes;
@@ -143,19 +145,18 @@ public class JsonValidationError {
     return myFixableIssueKind;
   }
 
-  @NotNull
-  public LocalQuickFix[] createFixes(@Nullable JsonLikeSyntaxAdapter quickFixAdapter) {
+  public LocalQuickFix @NotNull [] createFixes(@Nullable JsonLikeSyntaxAdapter quickFixAdapter) {
     if (quickFixAdapter == null) return LocalQuickFix.EMPTY_ARRAY;
     switch (myFixableIssueKind) {
       case MissingProperty:
-        return new fit.jetbrains.jsonSchema.impl.fixes.AddMissingPropertyFix[]{new fit.jetbrains.jsonSchema.impl.fixes.AddMissingPropertyFix((MissingMultiplePropsIssueData)myIssueData, quickFixAdapter)};
+        return new AddMissingPropertyFix[]{new AddMissingPropertyFix((MissingMultiplePropsIssueData)myIssueData, quickFixAdapter)};
       case MissingOneOfProperty:
       case MissingAnyOfProperty:
         return ((MissingOneOfPropsIssueData)myIssueData).myExclusiveOptions.stream().map(d -> new AddMissingPropertyFix(d, quickFixAdapter)).toArray(LocalQuickFix[]::new);
       case ProhibitedProperty:
-        return new fit.jetbrains.jsonSchema.impl.fixes.RemoveProhibitedPropertyFix[]{new RemoveProhibitedPropertyFix((ProhibitedPropertyIssueData)myIssueData, quickFixAdapter)};
+        return new RemoveProhibitedPropertyFix[]{new RemoveProhibitedPropertyFix((ProhibitedPropertyIssueData)myIssueData, quickFixAdapter)};
       case NonEnumValue:
-        return new fit.jetbrains.jsonSchema.impl.fixes.SuggestEnumValuesFix[]{new SuggestEnumValuesFix(quickFixAdapter)};
+        return new SuggestEnumValuesFix[]{new SuggestEnumValuesFix(quickFixAdapter)};
       default:
         return LocalQuickFix.EMPTY_ARRAY;
     }

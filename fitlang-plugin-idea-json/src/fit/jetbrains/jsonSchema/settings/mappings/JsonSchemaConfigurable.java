@@ -15,9 +15,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.impl.http.HttpVirtualFile;
 import com.intellij.util.Function;
 import com.intellij.util.Urls;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaReader;
-import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,23 +25,21 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 
-import static fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath;
-
 /**
  * @author Irina.Chernushina on 2/2/2016.
  */
-public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSchemaConfiguration> {
+public class JsonSchemaConfigurable extends NamedConfigurable<fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration> {
   private final Project myProject;
   @NotNull private final String mySchemaFilePath;
-  @NotNull private final UserDefinedJsonSchemaConfiguration mySchema;
-  @Nullable private final fit.jetbrains.jsonSchema.settings.mappings.TreeUpdater myTreeUpdater;
+  @NotNull private final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration mySchema;
+  @Nullable private final TreeUpdater myTreeUpdater;
   @NotNull private final Function<? super String, String> myNameCreator;
   private fit.jetbrains.jsonSchema.settings.mappings.JsonSchemaMappingsView myView;
   private String myDisplayName;
   private String myError;
 
   public JsonSchemaConfigurable(Project project,
-                                @NotNull String schemaFilePath, @NotNull UserDefinedJsonSchemaConfiguration schema,
+                                @NotNull String schemaFilePath, @NotNull fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration schema,
                                 @Nullable TreeUpdater updateTree,
                                 @NotNull Function<? super String, String> nameCreator) {
     super(true, () -> {
@@ -58,7 +56,7 @@ public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSch
   }
 
   @NotNull
-  public UserDefinedJsonSchemaConfiguration getSchema() {
+  public fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration getSchema() {
     return mySchema;
   }
 
@@ -68,7 +66,7 @@ public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSch
   }
 
   @Override
-  public UserDefinedJsonSchemaConfiguration getEditableObject() {
+  public fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration getEditableObject() {
     return mySchema;
   }
 
@@ -130,31 +128,31 @@ public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSch
   }
 
   public static boolean isValidURL(@NotNull final String url) {
-    return isHttpPath(url) && Urls.parse(url, false) != null;
+    return fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(url) && Urls.parse(url, false) != null;
   }
 
   private void doValidation() throws ConfigurationException {
     String schemaSubPath = myView.getSchemaSubPath();
 
     if (StringUtil.isEmptyOrSpaces(schemaSubPath)) {
-      throw new ConfigurationException((!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + "Schema path is empty");
+      throw new ConfigurationException((!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + fit.intellij.json.JsonBundle.message("schema.configuration.error.empty.path"));
     }
 
     VirtualFile vFile;
     String filename;
 
-    if (isHttpPath(schemaSubPath)) {
+    if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(schemaSubPath)) {
       filename = schemaSubPath;
 
       if (!isValidURL(schemaSubPath)) {
         throw new ConfigurationException(
-          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + "Invalid schema URL");
+          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + fit.intellij.json.JsonBundle.message("schema.configuration.error.invalid.url"));
       }
 
-      vFile = JsonFileResolver.urlToFile(schemaSubPath);
+      vFile = fit.jetbrains.jsonSchema.remote.JsonFileResolver.urlToFile(schemaSubPath);
       if (vFile == null) {
         throw new ConfigurationException(
-          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + "Invalid URL resource");
+          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + fit.intellij.json.JsonBundle.message("schema.configuration.error.invalid.url.resource"));
       }
     }
     else {
@@ -162,17 +160,17 @@ public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSch
       final File file = subPath.isAbsolute() ? subPath : new File(myProject.getBasePath(), schemaSubPath);
       if (!file.exists() || (vFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)) == null) {
         throw new ConfigurationException(
-          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + "Schema file does not exist");
+          (!StringUtil.isEmptyOrSpaces(myDisplayName) ? (myDisplayName + ": ") : "") + fit.intellij.json.JsonBundle.message("schema.configuration.error.file.does.not.exist"));
       }
       filename = file.getName();
     }
 
-    if (StringUtil.isEmptyOrSpaces(myDisplayName)) throw new ConfigurationException(filename + ": Schema name is empty");
+    if (StringUtil.isEmptyOrSpaces(myDisplayName)) throw new ConfigurationException(filename + ": " + JsonBundle.message("schema.configuration.error.empty.name"));
 
     // we don't validate remote schemas while in options dialog
     if (vFile instanceof HttpVirtualFile) return;
 
-    final String error = JsonSchemaReader.checkIfValidJsonSchema(myProject, vFile);
+    final String error = fit.jetbrains.jsonSchema.impl.JsonSchemaReader.checkIfValidJsonSchema(myProject, vFile);
     if (error != null) {
       logErrorForUser(error);
       throw new RuntimeConfigurationWarning(error);
@@ -190,8 +188,8 @@ public class JsonSchemaConfigurable extends NamedConfigurable<UserDefinedJsonSch
     setDisplayName(mySchema.getName());
   }
 
-  public UserDefinedJsonSchemaConfiguration getUiSchema() {
-    final UserDefinedJsonSchemaConfiguration info = new UserDefinedJsonSchemaConfiguration();
+  public fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration getUiSchema() {
+    final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration info = new UserDefinedJsonSchemaConfiguration();
     info.setApplicationDefined(mySchema.isApplicationDefined());
     if (myView != null && myView.isInitialized()) {
       info.setName(getDisplayName());

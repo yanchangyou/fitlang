@@ -31,11 +31,11 @@ class JsonMappingsTableCellEditor extends AbstractTableCellEditor {
 
   final TextFieldWithBrowseButton myComponent;
   final JPanel myWrapper;
-  private final UserDefinedJsonSchemaConfiguration.Item myItem;
+  private final fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item myItem;
   private final Project myProject;
-  private final fit.jetbrains.jsonSchema.settings.mappings.TreeUpdater myTreeUpdater;
+  private final TreeUpdater myTreeUpdater;
 
-  JsonMappingsTableCellEditor(UserDefinedJsonSchemaConfiguration.Item item, Project project, TreeUpdater treeUpdater) {
+  JsonMappingsTableCellEditor(fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration.Item item, Project project, TreeUpdater treeUpdater) {
     myItem = item;
     myProject = project;
     myTreeUpdater = treeUpdater;

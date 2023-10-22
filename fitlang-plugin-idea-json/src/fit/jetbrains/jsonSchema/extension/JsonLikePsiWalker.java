@@ -7,10 +7,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.ThreeState;
-import fit.jetbrains.jsonSchema.impl.JsonOriginalPsiWalker;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
+import fit.jetbrains.jsonSchema.impl.JsonOriginalPsiWalker;
+import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +61,7 @@ public interface JsonLikePsiWalker {
 
   @Nullable
   static JsonLikePsiWalker getWalker(@NotNull final PsiElement element, JsonSchemaObject schemaObject) {
-    if (JsonOriginalPsiWalker.INSTANCE.handles(element)) return JsonOriginalPsiWalker.INSTANCE;
+    if (fit.jetbrains.jsonSchema.impl.JsonOriginalPsiWalker.INSTANCE.handles(element)) return JsonOriginalPsiWalker.INSTANCE;
 
     return JsonLikePsiWalkerFactory.EXTENSION_POINT_NAME.getExtensionList().stream()
       .filter(extension -> extension.handles(element))

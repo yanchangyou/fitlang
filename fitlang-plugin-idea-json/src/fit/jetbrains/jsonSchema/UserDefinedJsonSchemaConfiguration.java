@@ -15,9 +15,11 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.xmlb.annotations.Tag;
 import com.intellij.util.xmlb.annotations.Transient;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
+import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,7 +128,7 @@ public class UserDefinedJsonSchemaConfiguration {
     for (final Item patternText : patterns) {
       switch (patternText.mappingKind) {
         case File:
-          result.add((project, vfile) -> vfile.equals(getRelativeFile(project, patternText)) || vfile.getUrl().equals(patternText.getPath()));
+          result.add((project, vfile) -> vfile.equals(getRelativeFile(project, patternText)) || vfile.getUrl().equals(Item.neutralizePath(patternText.getPath())));
           break;
         case Pattern:
           String pathText = patternText.getPath().replace(File.separatorChar, '/').replace('\\', '/');
@@ -173,8 +175,7 @@ public class UserDefinedJsonSchemaConfiguration {
     return ContainerUtil.filter(StringUtil.split(path, "/"), s -> !".".equals(s));
   }
 
-  @NotNull
-  private static String[] pathToParts(@NotNull String path) {
+  private static String @NotNull [] pathToParts(@NotNull String path) {
     return ArrayUtilRt.toStringArray(pathToPartsList(path));
   }
 
@@ -231,11 +232,11 @@ public class UserDefinedJsonSchemaConfiguration {
       // mock URLs of fragments editor
       return StringUtil.startsWith(path, "http:")
              || StringUtil.startsWith(path, "https:")
-             || StringUtil.startsWith(path, "mock:");
+             || JsonFileResolver.isTempOrMockUrl(path);
     }
 
     @NotNull
-    private static String neutralizePath(@NotNull String path) {
+    public static String neutralizePath(@NotNull String path) {
       if (preserveSlashes(path)) return path;
       return StringUtil.trimEnd(FileUtilRt.toSystemIndependentName(path), '/');
     }
@@ -251,14 +252,14 @@ public class UserDefinedJsonSchemaConfiguration {
     public String getError() {
       switch (mappingKind) {
         case File:
-          return !StringUtil.isEmpty(path) ? null : "Empty file path doesn't match anything";
+          return !StringUtil.isEmpty(path) ? null : fit.intellij.json.JsonBundle.message("schema.configuration.error.empty.file.path");
         case Pattern:
-          return !StringUtil.isEmpty(path) ? null : "Empty pattern matches nothing";
+          return !StringUtil.isEmpty(path) ? null : fit.intellij.json.JsonBundle.message("schema.configuration.error.empty.pattern");
         case Directory:
           return null;
       }
 
-      return "Unknown mapping kind";
+      return fit.intellij.json.JsonBundle.message("schema.configuration.error.unknown.mapping");
     }
 
     public boolean isPattern() {
@@ -279,7 +280,7 @@ public class UserDefinedJsonSchemaConfiguration {
 
     public String getPresentation() {
       if (mappingKind == JsonMappingKind.Directory && StringUtil.isEmpty(path)) {
-        return mappingKind.getPrefix() + "[Project Directory]";
+        return JsonBundle.message("schema.configuration.project.directory", mappingKind.getPrefix());
       }
       return mappingKind.getPrefix() + getPath();
     }

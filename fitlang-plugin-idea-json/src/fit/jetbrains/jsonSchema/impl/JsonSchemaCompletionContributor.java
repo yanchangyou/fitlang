@@ -7,6 +7,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.DataManager;
+import fit.intellij.json.JsonBundle;
 import fit.intellij.json.pointer.JsonPointerPosition;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageUtil;
@@ -36,14 +37,13 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonReferenceExpression;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider;
 import fit.jetbrains.jsonSchema.extension.SchemaType;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
@@ -67,16 +67,16 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     final VirtualFile file = PsiUtilCore.getVirtualFile(position);
     if (file == null) return;
 
-    final fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(position.getProject());
+    final JsonSchemaService service = JsonSchemaService.Impl.get(position.getProject());
     if (!service.isApplicableToFile(file)) return;
-    final JsonSchemaObject rootSchema = service.getSchemaObject(position.getContainingFile());
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema = service.getSchemaObject(position.getContainingFile());
     if (rootSchema == null) return;
     PsiElement positionParent = position.getParent();
     if (positionParent != null) {
       PsiElement parent = positionParent.getParent();
       if (parent instanceof fit.intellij.json.psi.JsonProperty) {
         final String propName = ((fit.intellij.json.psi.JsonProperty)parent).getName();
-        if ("$schema".equals(propName) && parent.getParent() instanceof fit.intellij.json.psi.JsonObject && parent.getParent().getParent() instanceof JsonFile
+        if ("$schema".equals(propName) && parent.getParent() instanceof fit.intellij.json.psi.JsonObject && parent.getParent().getParent() instanceof fit.intellij.json.psi.JsonFile
             || "$ref".equals(propName) && service.isSchemaFile(file)) {
           return;
         }
@@ -89,13 +89,13 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
 
   public static void doCompletion(@NotNull final CompletionParameters parameters,
                                   @NotNull final CompletionResultSet result,
-                                  @NotNull final JsonSchemaObject rootSchema) {
+                                  @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema) {
     doCompletion(parameters, result, rootSchema, true);
   }
 
   public static void doCompletion(@NotNull final CompletionParameters parameters,
                                   @NotNull final CompletionResultSet result,
-                                  @NotNull final JsonSchemaObject rootSchema,
+                                  @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema,
                                   boolean stop) {
     final PsiElement completionPosition = parameters.getOriginalPosition() != null ? parameters.getOriginalPosition() :
                                           parameters.getPosition();
@@ -107,7 +107,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
 
   @TestOnly
   @NotNull
-  public static List<LookupElement> getCompletionVariants(@NotNull final JsonSchemaObject schema,
+  public static List<LookupElement> getCompletionVariants(@NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                                           @NotNull final PsiElement position, @NotNull final PsiElement originalPosition) {
     final List<LookupElement> result = new ArrayList<>();
     new Worker(schema, position, originalPosition, element -> result.add(element)).work();
@@ -118,20 +118,20 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     if (provider == null) {
       if (schemaFile instanceof HttpVirtualFile) {
         // auto-detected and auto-downloaded JSON schemas
-        JsonSchemaUsageTriggerCollector.trigger(REMOTE_USAGE_KEY);
+        fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector.trigger(REMOTE_USAGE_KEY);
       }
       return;
     }
     final SchemaType schemaType = provider.getSchemaType();
     switch (schemaType) {
       case schema:
-        JsonSchemaUsageTriggerCollector.trigger(SCHEMA_USAGE_KEY);
+        fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector.trigger(SCHEMA_USAGE_KEY);
         break;
       case userSchema:
-        JsonSchemaUsageTriggerCollector.trigger(USER_USAGE_KEY);
+        fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector.trigger(USER_USAGE_KEY);
         break;
       case embeddedSchema:
-        JsonSchemaUsageTriggerCollector.trigger(BUILTIN_USAGE_KEY);
+        fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector.trigger(BUILTIN_USAGE_KEY);
         break;
       case remoteSchema:
         // this works only for user-specified remote schemas in our settings, but not for auto-detected remote schemas
@@ -141,7 +141,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
   }
 
   private static class Worker {
-    @NotNull private final JsonSchemaObject myRootSchema;
+    @NotNull private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject myRootSchema;
     @NotNull private final PsiElement myPosition;
     @NotNull private final PsiElement myOriginalPosition;
     @NotNull private final Consumer<LookupElement> myResultConsumer;
@@ -149,10 +149,10 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     private final boolean myInsideStringLiteral;
     // we need this set to filter same-named suggestions (they can be suggested by several matching schemes)
     private final Set<LookupElement> myVariants;
-    private final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker myWalker;
+    private final JsonLikePsiWalker myWalker;
     private final Project myProject;
 
-    Worker(@NotNull JsonSchemaObject rootSchema, @NotNull PsiElement position,
+    Worker(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema, @NotNull PsiElement position,
            @NotNull PsiElement originalPosition, @NotNull final Consumer<LookupElement> resultConsumer) {
       myRootSchema = rootSchema;
       myPosition = position;
@@ -160,7 +160,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       myProject = originalPosition.getProject();
       myResultConsumer = resultConsumer;
       myVariants = new HashSet<>();
-      myWalker = fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker.getWalker(myPosition, myRootSchema);
+      myWalker = JsonLikePsiWalker.getWalker(myPosition, myRootSchema);
       myWrapInQuotes = !(position.getParent() instanceof fit.intellij.json.psi.JsonStringLiteral);
       myInsideStringLiteral = position.getParent() instanceof fit.intellij.json.psi.JsonStringLiteral;
     }
@@ -173,7 +173,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       final JsonPointerPosition position = myWalker.findPosition(checkable, isName == ThreeState.NO);
       if (position == null || position.isEmpty() && isName == ThreeState.NO) return;
 
-      final Collection<JsonSchemaObject> schemas = new JsonSchemaResolver(myProject, myRootSchema, position).resolve();
+      final Collection<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemas = new fit.jetbrains.jsonSchema.impl.JsonSchemaResolver(myProject, myRootSchema, position).resolve();
       final Set<String> knownNames = new HashSet<>();
       // too long here, refactor further
       schemas.forEach(schema -> {
@@ -182,9 +182,9 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
           final boolean hasValue = myWalker.isPropertyWithValue(checkable);
 
           final Collection<String> properties = myWalker.getPropertyNamesOfParentObject(myOriginalPosition, myPosition);
-          final fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter adapter = myWalker.getParentPropertyAdapter(myOriginalPosition);
+          final JsonPropertyAdapter adapter = myWalker.getParentPropertyAdapter(myOriginalPosition);
 
-          final Map<String, JsonSchemaObject> schemaProperties = schema.getProperties();
+          final Map<String, fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemaProperties = schema.getProperties();
           addAllPropertyVariants(insertComma, hasValue, properties, adapter, schemaProperties, knownNames);
           addIfThenElsePropertyNameVariants(schema, insertComma, hasValue, properties, adapter, knownNames);
           addPropertyNameSchemaVariants(schema);
@@ -200,8 +200,8 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       }
     }
 
-    private void addPropertyNameSchemaVariants(@NotNull JsonSchemaObject schema) {
-      JsonSchemaObject propertyNamesSchema = schema.getPropertyNamesSchema();
+    private void addPropertyNameSchemaVariants(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
+      fit.jetbrains.jsonSchema.impl.JsonSchemaObject propertyNamesSchema = schema.getPropertyNamesSchema();
       if (propertyNamesSchema == null) return;
       List<Object> anEnum = propertyNamesSchema.getEnum();
       if (anEnum == null) return;
@@ -213,33 +213,33 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       }
     }
 
-    private void addIfThenElsePropertyNameVariants(@NotNull JsonSchemaObject schema,
+    private void addIfThenElsePropertyNameVariants(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                                    boolean insertComma,
                                                    boolean hasValue,
                                                    @NotNull Collection<String> properties,
-                                                   @Nullable fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter adapter,
+                                                   @Nullable JsonPropertyAdapter adapter,
                                                    Set<String> knownNames) {
-      List<IfThenElse> ifThenElseList = schema.getIfThenElse();
+      List<fit.jetbrains.jsonSchema.impl.IfThenElse> ifThenElseList = schema.getIfThenElse();
       if (ifThenElseList == null) return;
 
-      fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker = fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker.getWalker(myPosition, schema);
-      fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter propertyAdapter = walker == null ? null : walker.getParentPropertyAdapter(myPosition);
+      JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(myPosition, schema);
+      JsonPropertyAdapter propertyAdapter = walker == null ? null : walker.getParentPropertyAdapter(myPosition);
       if (propertyAdapter == null) return;
 
       JsonObjectValueAdapter object = propertyAdapter.getParentObject();
       if (object == null) return;
 
       for (IfThenElse ifThenElse : ifThenElseList) {
-        JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(myProject, JsonComplianceCheckerOptions.RELAX_ENUM_CHECK);
+        fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(myProject, JsonComplianceCheckerOptions.RELAX_ENUM_CHECK);
         checker.checkByScheme(object, ifThenElse.getIf());
         if (checker.isCorrect()) {
-          JsonSchemaObject then = ifThenElse.getThen();
+          fit.jetbrains.jsonSchema.impl.JsonSchemaObject then = ifThenElse.getThen();
           if (then != null) {
             addAllPropertyVariants(insertComma, hasValue, properties, adapter, then.getProperties(), knownNames);
           }
         }
         else {
-          JsonSchemaObject schemaElse = ifThenElse.getElse();
+          fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaElse = ifThenElse.getElse();
           if (schemaElse != null) {
             addAllPropertyVariants(insertComma, hasValue, properties, adapter, schemaElse.getProperties(), knownNames);
           }
@@ -250,8 +250,8 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     private void addAllPropertyVariants(boolean insertComma,
                                         boolean hasValue,
                                         Collection<String> properties,
-                                        fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter adapter,
-                                        Map<String, JsonSchemaObject> schemaProperties, Set<String> knownNames) {
+                                        JsonPropertyAdapter adapter,
+                                        Map<String, fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemaProperties, Set<String> knownNames) {
       schemaProperties.keySet().stream()
         .filter(name -> !properties.contains(name) && !knownNames.contains(name) || adapter != null && name.equals(adapter.getName()))
         .forEach(name -> {
@@ -263,17 +263,21 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     // some schemas provide empty array / empty object in enum values...
     private static final Set<String> filtered = ContainerUtil.set("[]", "{}", "[ ]", "{ }");
 
-    private void suggestValues(JsonSchemaObject schema, boolean isSurelyValue) {
+    private void suggestValues(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, boolean isSurelyValue) {
       suggestValuesForSchemaVariants(schema.getAnyOf(), isSurelyValue);
       suggestValuesForSchemaVariants(schema.getOneOf(), isSurelyValue);
       suggestValuesForSchemaVariants(schema.getAllOf(), isSurelyValue);
 
       if (schema.getEnum() != null) {
+        Map<String, Map<String, String>> metadata = schema.getEnumMetadata();
         for (Object o : schema.getEnum()) {
           if (myInsideStringLiteral && !(o instanceof String)) continue;
           String variant = o.toString();
           if (!filtered.contains(variant)) {
-            addValueVariant(variant, null);
+            Map<String, String> valueMetadata = metadata == null ? null : metadata.get(StringUtil.unquoteString(variant));
+            String description = valueMetadata == null ? null : valueMetadata.get("description");
+            String deprecated = valueMetadata == null ? null : valueMetadata.get("deprecationMessage");
+            addValueVariant(variant, description, deprecated != null ? (variant + " (" + deprecated + ")") : null, null);
           }
         }
       }
@@ -304,8 +308,17 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
         if (name.equals("required")) {
           addRequiredPropVariants();
         }
-        else if (name.equals(JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION)) {
+        else if (name.equals(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION)) {
           addInjectedLanguageVariants();
+        }
+        else if (name.equals("language")) {
+          JsonObjectValueAdapter parent = propertyAdapter.getParentObject();
+          if (parent != null) {
+            JsonPropertyAdapter adapter = myWalker.getParentPropertyAdapter(parent.getDelegate());
+            if (adapter != null && fit.jetbrains.jsonSchema.impl.JsonSchemaObject.X_INTELLIJ_LANGUAGE_INJECTION.equals(adapter.getName())) {
+              addInjectedLanguageVariants();
+            }
+          }
         }
       }
     }
@@ -324,7 +337,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
 
     private void addRequiredPropVariants() {
       PsiElement checkable = myWalker.findElementToCheck(myPosition);
-      if (!(checkable instanceof fit.intellij.json.psi.JsonStringLiteral) && !(checkable instanceof JsonReferenceExpression)) return;
+      if (!(checkable instanceof fit.intellij.json.psi.JsonStringLiteral) && !(checkable instanceof fit.intellij.json.psi.JsonReferenceExpression)) return;
       fit.intellij.json.psi.JsonObject propertiesObject = JsonRequiredPropsReferenceProvider.findPropertiesObject(checkable);
       if (propertiesObject == null) return;
       PsiElement parent = checkable.getParent();
@@ -337,7 +350,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
         .forEach(n -> addStringVariant(n));
     }
 
-    private void suggestByType(JsonSchemaObject schema, fit.jetbrains.jsonSchema.impl.JsonSchemaType type) {
+    private void suggestByType(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, fit.jetbrains.jsonSchema.impl.JsonSchemaType type) {
       if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._string.equals(type)) {
         addPossibleStringValue(schema);
       }
@@ -362,7 +375,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       }
     }
 
-    private void addPossibleStringValue(JsonSchemaObject schema) {
+    private void addPossibleStringValue(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
       Object defaultValue = schema.getDefault();
       String defaultValueString = defaultValue == null ? null : defaultValue.toString();
       addStringVariant(defaultValueString);
@@ -383,9 +396,9 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       }
     }
 
-    private void suggestValuesForSchemaVariants(List<JsonSchemaObject> list, boolean isSurelyValue) {
+    private void suggestValuesForSchemaVariants(List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> list, boolean isSurelyValue) {
       if (list != null && list.size() > 0) {
-        for (JsonSchemaObject schemaObject : list) {
+        for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject : list) {
           suggestValues(schemaObject, isSurelyValue);
         }
       }
@@ -429,10 +442,10 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     }
 
     private void addPropertyVariant(@NotNull String key,
-                                    @NotNull JsonSchemaObject jsonSchemaObject,
+                                    @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject jsonSchemaObject,
                                     boolean hasValue,
                                     boolean insertComma) {
-      final Collection<JsonSchemaObject> variants = new JsonSchemaResolver(myProject, jsonSchemaObject).resolve();
+      final Collection<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> variants = new JsonSchemaResolver(myProject, jsonSchemaObject).resolve();
       jsonSchemaObject = ObjectUtils.coalesce(ContainerUtil.getFirstItem(variants), jsonSchemaObject);
       key = !shouldWrapInQuotes(key, false) ? key : StringUtil.wrapWithDoubleQuote(key);
       LookupElementBuilder builder = LookupElementBuilder.create(key);
@@ -474,7 +487,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
 
       String deprecationMessage = jsonSchemaObject.getDeprecationMessage();
       if (deprecationMessage != null) {
-        builder = builder.withTailText(" (deprecated)", true).withStrikeoutness(true);
+        builder = builder.withTailText(JsonBundle.message("schema.documentation.deprecated.postfix"), true).withStrikeoutness(true);
       }
 
       myVariants.add(builder);
@@ -493,8 +506,8 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       }
     }
 
-    private static boolean hasSameType(@NotNull Collection<JsonSchemaObject> variants) {
-      return variants.stream().map(JsonSchemaObject::guessType).filter(Objects::nonNull).distinct().count() <= 1;
+    private static boolean hasSameType(@NotNull Collection<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> variants) {
+      return variants.stream().map(fit.jetbrains.jsonSchema.impl.JsonSchemaObject::guessType).filter(Objects::nonNull).distinct().count() <= 1;
     }
 
     private static InsertHandler<LookupElement> createArrayOrObjectLiteralInsertHandler(boolean newline, int insertedTextSize) {
@@ -570,7 +583,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     }
 
     @NotNull
-    private InsertHandler<LookupElement> createPropertyInsertHandler(@NotNull JsonSchemaObject jsonSchemaObject,
+    private InsertHandler<LookupElement> createPropertyInsertHandler(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject jsonSchemaObject,
                                                                      final boolean hasValue,
                                                                      boolean insertComma) {
       fit.jetbrains.jsonSchema.impl.JsonSchemaType type = jsonSchemaObject.guessType();
@@ -670,6 +683,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
                 break;
               case _string:
               case _integer:
+              case _number:
                 insertPropertyWithEnum(context, editor, defaultValueAsString, values, finalType, comma, myWalker, insertColon);
                 break;
               default:
@@ -717,7 +731,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
       if (((LeafPsiElement)element).getElementType() == TokenType.WHITE_SPACE) {
         PsiElement prevSibling = element.getPrevSibling();
         if (prevSibling instanceof fit.intellij.json.psi.JsonProperty) {
-          fit.intellij.json.psi.JsonValue nameElement = ((fit.intellij.json.psi.JsonProperty)prevSibling).getNameElement();
+          JsonValue nameElement = ((fit.intellij.json.psi.JsonProperty)prevSibling).getNameElement();
           if (!nameElement.getText().endsWith("\"")) {
             editor.getCaretModel().moveToOffset(nameElement.getTextRange().getEndOffset());
             EditorModificationUtil.insertStringAtCaret(editor, "\"", false, true, 1);

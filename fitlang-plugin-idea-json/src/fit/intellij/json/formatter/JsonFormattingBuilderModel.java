@@ -1,10 +1,10 @@
 package fit.intellij.json.formatter;
 
 import com.intellij.formatting.*;
-import fit.intellij.json.JsonLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import fit.intellij.json.JsonLanguage;
 import org.jetbrains.annotations.NotNull;
 
 import static fit.intellij.json.JsonElementTypes.*;
@@ -16,7 +16,7 @@ public class JsonFormattingBuilderModel implements FormattingModelBuilder {
   @NotNull
   @Override
   public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
-    fit.intellij.json.formatter.JsonCodeStyleSettings customSettings = settings.getCustomSettings(fit.intellij.json.formatter.JsonCodeStyleSettings.class);
+    JsonCodeStyleSettings customSettings = settings.getCustomSettings(JsonCodeStyleSettings.class);
     SpacingBuilder spacingBuilder = createSpacingBuilder(settings);
     final fit.intellij.json.formatter.JsonBlock block = new JsonBlock(null, element.getNode(), customSettings, null, Indent.getSmartIndent(Indent.Type.CONTINUATION), null, spacingBuilder);
     return FormattingModelProvider.createFormattingModelForPsiFile(element.getContainingFile(), block, settings);
@@ -24,8 +24,8 @@ public class JsonFormattingBuilderModel implements FormattingModelBuilder {
 
   @NotNull
   static SpacingBuilder createSpacingBuilder(CodeStyleSettings settings) {
-    final fit.intellij.json.formatter.JsonCodeStyleSettings jsonSettings = settings.getCustomSettings(JsonCodeStyleSettings.class);
-    final CommonCodeStyleSettings commonSettings = settings.getCommonSettings(JsonLanguage.INSTANCE);
+    final JsonCodeStyleSettings jsonSettings = settings.getCustomSettings(JsonCodeStyleSettings.class);
+    final CommonCodeStyleSettings commonSettings = settings.getCommonSettings(fit.intellij.json.JsonLanguage.INSTANCE);
 
     final int spacesBeforeComma = commonSettings.SPACE_BEFORE_COMMA ? 1 : 0;
     final int spacesBeforeColon = jsonSettings.SPACE_BEFORE_COLON ? 1 : 0;

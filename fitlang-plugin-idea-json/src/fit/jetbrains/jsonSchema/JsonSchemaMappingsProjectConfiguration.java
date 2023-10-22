@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.*;
 
-@State(name = "FitJsonSchemaMappingsProjectConfiguration", storages = @Storage("jsonSchemas.xml"))
+@State(name = "JsonSchemaMappingsProjectConfiguration", storages = @Storage("jsonSchemas.xml"))
 public class JsonSchemaMappingsProjectConfiguration implements PersistentStateComponent<JsonSchemaMappingsProjectConfiguration.MyState> {
   @NotNull private final Project myProject;
   public volatile MyState myState = new MyState();
@@ -57,7 +57,7 @@ public class JsonSchemaMappingsProjectConfiguration implements PersistentStateCo
       for (UserDefinedJsonSchemaConfiguration.Item pattern : configuration.patterns) {
         if (pattern.mappingKind != JsonMappingKind.File) continue;
         VirtualFile relativeFile = VfsUtil.findRelativeFile(projectBaseDir, pattern.getPathParts());
-        if (Objects.equals(relativeFile, file) || file.getUrl().equals(pattern.getPath())) {
+        if (Objects.equals(relativeFile, file) || file.getUrl().equals(UserDefinedJsonSchemaConfiguration.Item.neutralizePath(pattern.getPath()))) {
           return configuration;
         }
       }

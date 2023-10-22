@@ -4,6 +4,7 @@ package fit.jetbrains.jsonSchema.settings.mappings;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.StatusText;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.JsonMappingKind;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +21,10 @@ class JsonMappingsTableView extends TableView<UserDefinedJsonSchemaConfiguration
         return isEmpty();
       }
     };
-    myEmptyText.setText("No schema mappings defined")
-               .appendSecondaryText("Add mapping for a ", SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+    myEmptyText.setText(fit.intellij.json.JsonBundle.message("no.schema.mappings.defined"))
+               .appendSecondaryText(JsonBundle.message("add.mapping.for.a"), SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
 
-    JsonMappingKind[] values = JsonMappingKind.values();
+    fit.jetbrains.jsonSchema.JsonMappingKind[] values = fit.jetbrains.jsonSchema.JsonMappingKind.values();
     for (int i = 0; i < values.length; i++) {
       JsonMappingKind kind = values[i];
       myEmptyText.appendSecondaryText(kind.getDescription(), SimpleTextAttributes.LINK_ATTRIBUTES,
@@ -40,7 +41,7 @@ class JsonMappingsTableView extends TableView<UserDefinedJsonSchemaConfiguration
   public void setCellEditor(TableCellEditor anEditor) {
     super.setCellEditor(anEditor);
     if (anEditor != null) {
-      ((JsonMappingsTableCellEditor)anEditor).myComponent.getTextField().requestFocus();
+      ((fit.jetbrains.jsonSchema.settings.mappings.JsonMappingsTableCellEditor)anEditor).myComponent.getTextField().requestFocus();
     }
   }
 

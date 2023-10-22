@@ -2,7 +2,6 @@ package fit.intellij.json.highlighting;
 
 import com.google.common.collect.ImmutableMap;
 import com.intellij.icons.AllIcons;
-import fit.intellij.json.JsonLanguage;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
@@ -12,37 +11,38 @@ import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.RainbowColorSettingsPage;
 import com.intellij.psi.codeStyle.DisplayPriority;
 import com.intellij.psi.codeStyle.DisplayPrioritySortable;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Map;
 
+import static fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.*;
+
 /**
  * @author Mikhail Golubev
  */
 public class JsonColorsPage implements RainbowColorSettingsPage, DisplayPrioritySortable {
-    private static final Map<String, TextAttributesKey> ourAdditionalHighlighting = ImmutableMap.of(
-            "propertyKey", JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY,
-            "myKeyword", JsonSyntaxHighlighterFactory.MY_KEYWORD
-    );
+    private static final Map<String, TextAttributesKey> ourAdditionalHighlighting = ImmutableMap.of("propertyKey", JSON_PROPERTY_KEY);
 
     private static final AttributesDescriptor[] ourAttributeDescriptors = new AttributesDescriptor[]{
-            new AttributesDescriptor("Property key", JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.property.key"), JSON_PROPERTY_KEY),
 
-            new AttributesDescriptor("Braces", JsonSyntaxHighlighterFactory.JSON_BRACES),
-            new AttributesDescriptor("Brackets", JsonSyntaxHighlighterFactory.JSON_BRACKETS),
-            new AttributesDescriptor("Comma", JsonSyntaxHighlighterFactory.JSON_COMMA),
-            new AttributesDescriptor("Colon", JsonSyntaxHighlighterFactory.JSON_COLON),
-            new AttributesDescriptor("Number", JsonSyntaxHighlighterFactory.JSON_NUMBER),
-            new AttributesDescriptor("String", JsonSyntaxHighlighterFactory.JSON_STRING),
-            new AttributesDescriptor("Keyword", JsonSyntaxHighlighterFactory.JSON_KEYWORD),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.braces"), JSON_BRACES),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.brackets"), JSON_BRACKETS),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.comma"), JSON_COMMA),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.colon"), JSON_COLON),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.number"), JSON_NUMBER),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.string"), JSON_STRING),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.keyword"), JSON_KEYWORD),
             new AttributesDescriptor("MyKeyword", JsonSyntaxHighlighterFactory.MY_KEYWORD),
-            new AttributesDescriptor("Line comment", JsonSyntaxHighlighterFactory.JSON_LINE_COMMENT),
-            new AttributesDescriptor("Block comment", JsonSyntaxHighlighterFactory.JSON_BLOCK_COMMENT),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.line.comment"), JSON_LINE_COMMENT),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.block.comment"), JSON_BLOCK_COMMENT),
             //new AttributesDescriptor("", JSON_IDENTIFIER),
-            new AttributesDescriptor("Valid escape sequence", JsonSyntaxHighlighterFactory.JSON_VALID_ESCAPE),
-            new AttributesDescriptor("Invalid escape sequence", JsonSyntaxHighlighterFactory.JSON_INVALID_ESCAPE),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.valid.escape.sequence"), JSON_VALID_ESCAPE),
+            new AttributesDescriptor(fit.intellij.json.JsonBundle.message("color.page.attribute.invalid.escape.sequence"), JSON_INVALID_ESCAPE),
     };
 
     @Nullable
@@ -54,7 +54,7 @@ public class JsonColorsPage implements RainbowColorSettingsPage, DisplayPriority
     @NotNull
     @Override
     public SyntaxHighlighter getHighlighter() {
-        return SyntaxHighlighterFactory.getSyntaxHighlighter(JsonLanguage.INSTANCE, null, null);
+        return SyntaxHighlighterFactory.getSyntaxHighlighter(fit.intellij.json.JsonLanguage.INSTANCE, null, null);
     }
 
     @NotNull
@@ -89,22 +89,20 @@ public class JsonColorsPage implements RainbowColorSettingsPage, DisplayPriority
         return ourAdditionalHighlighting;
     }
 
-    @NotNull
     @Override
-    public AttributesDescriptor[] getAttributeDescriptors() {
+    public AttributesDescriptor @NotNull [] getAttributeDescriptors() {
         return ourAttributeDescriptors;
     }
 
-    @NotNull
     @Override
-    public ColorDescriptor[] getColorDescriptors() {
+    public ColorDescriptor @NotNull [] getColorDescriptors() {
         return ColorDescriptor.EMPTY_ARRAY;
     }
 
     @NotNull
     @Override
     public String getDisplayName() {
-        return "FitLang";
+        return JsonBundle.message("settings.display.name.json");
     }
 
     @Override
@@ -115,12 +113,12 @@ public class JsonColorsPage implements RainbowColorSettingsPage, DisplayPriority
     @Override
     public boolean isRainbowType(TextAttributesKey type) {
         return JsonSyntaxHighlighterFactory.MY_KEYWORD.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_BRACES.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_BRACKETS.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_STRING.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_NUMBER.equals(type)
-                || JsonSyntaxHighlighterFactory.JSON_KEYWORD.equals(type);
+                || JSON_PROPERTY_KEY.equals(type)
+                || JSON_BRACES.equals(type)
+                || JSON_BRACKETS.equals(type)
+                || JSON_STRING.equals(type)
+                || JSON_NUMBER.equals(type)
+                || JSON_KEYWORD.equals(type);
     }
 
     @Nullable

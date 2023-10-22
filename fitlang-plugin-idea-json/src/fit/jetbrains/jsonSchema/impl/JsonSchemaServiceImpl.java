@@ -3,6 +3,7 @@ package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.diagnostic.PluginException;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -16,7 +17,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.openapi.vfs.impl.http.HttpVirtualFile;
 import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ConcurrentList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.messages.MessageBusConnection;
@@ -24,9 +24,10 @@ import fit.jetbrains.jsonSchema.JsonPointerUtil;
 import fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry;
 import fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration;
 import fit.jetbrains.jsonSchema.JsonSchemaVfsListener;
-import fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler;
+import fit.jetbrains.jsonSchema.extension.SchemaType;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
+import fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogExclusion;
 import fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTracker {
+public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTracker, Disposable {
   private static final Logger LOG = Logger.getInstance(JsonSchemaServiceImpl.class);
 
   @NotNull private final Project myProject;
@@ -44,7 +45,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
   @NotNull private final Set<String> myRefs = ContainerUtil.newConcurrentSet();
   private final AtomicLong myAnyChangeCount = new AtomicLong(0);
 
-  @NotNull private final JsonSchemaCatalogManager myCatalogManager;
+  @NotNull private final fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogManager myCatalogManager;
 
   public JsonSchemaServiceImpl(@NotNull Project project) {
     myProject = project;
@@ -53,12 +54,16 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
       @NotNull
       @Override
       protected Set<String> compute() {
-      return ContainerUtil.map2Set(myState.getFiles(), f -> fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaId(f, myProject));
+        return ContainerUtil.map2SetNotNull(myState.getFiles(), f -> JsonCachedValues.getSchemaId(f, myProject));
       }
     };
+    fit.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory.EP_NAME.addExtensionPointListener(this::reset, this);
+    fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler.EXTENSION_POINT_NAME.addExtensionPointListener(this::reset, this);
+    JsonSchemaCatalogExclusion.EP_NAME.addExtensionPointListener(this::reset, this);
+
     myCatalogManager = new JsonSchemaCatalogManager(myProject);
 
-    MessageBusConnection connection = project.getMessageBus().connect();
+    MessageBusConnection connection = project.getMessageBus().connect(this);
     connection.subscribe(JsonSchemaVfsListener.JSON_SCHEMA_CHANGED, myAnyChangeCount::incrementAndGet);
     connection.subscribe(JsonSchemaVfsListener.JSON_DEPS_CHANGED, () -> {
       myRefs.clear();
@@ -73,6 +78,10 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     return myAnyChangeCount.get();
   }
 
+  @Override
+  public void dispose() {
+  }
+
   @NotNull
   private List<fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> getProvidersFromFactories() {
     List<fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> providers = new ArrayList<>();
@@ -84,7 +93,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
         throw e;
       }
       catch (Exception e) {
-        PluginException.logPluginError(Logger.getInstance(JsonSchemaService.class), e.getMessage(), e, factory.getClass());
+        PluginException.logPluginError(Logger.getInstance(JsonSchemaService.class), e.toString(), e, factory.getClass());
       }
     }
     return providers;
@@ -103,7 +112,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
 
   @Nullable
   @Override
-  public fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider getSchemaProvider(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject) {
+  public fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider getSchemaProvider(@NotNull JsonSchemaObject schemaObject) {
     VirtualFile file = resolveSchemaFile(schemaObject);
     return file == null ? null : getSchemaProvider(file);
   }
@@ -131,7 +140,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     final VirtualFile file = findBuiltInSchemaByReference(reference);
     if (file != null) return file;
     if (reference.startsWith("#")) return referent;
-    return JsonFileResolver.resolveSchemaByReference(referent, JsonPointerUtil.normalizeId(reference));
+    return fit.jetbrains.jsonSchema.remote.JsonFileResolver.resolveSchemaByReference(referent, JsonPointerUtil.normalizeId(reference));
   }
 
   @Nullable
@@ -139,7 +148,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     String id = JsonPointerUtil.normalizeId(reference);
     if (!myBuiltInSchemaIds.getValue().contains(id)) return null;
     for (VirtualFile file : myState.getFiles()) {
-      if (id.equals(fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaId(file, myProject))) {
+      if (id.equals(JsonCachedValues.getSchemaId(file, myProject))) {
         return file;
       }
     }
@@ -157,8 +166,8 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     String schemaUrl = null;
     if (!onlyUserSchemas) {
       // prefer schema-schema if it is specified in "$schema" property
-      schemaUrl = fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
-      if (JsonFileResolver.isSchemaUrl(schemaUrl)) {
+      schemaUrl = JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
+      if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isSchemaUrl(schemaUrl)) {
         final VirtualFile virtualFile = resolveFromSchemaProperty(schemaUrl, file);
         if (virtualFile != null) return Collections.singletonList(virtualFile);
       }
@@ -175,7 +184,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
 
     boolean checkSchemaProperty = true;
     if (!onlyUserSchemas && providers.stream().noneMatch(p -> p.getSchemaType() == fit.jetbrains.jsonSchema.extension.SchemaType.userSchema)) {
-      if (schemaUrl == null) schemaUrl = fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
+      if (schemaUrl == null) schemaUrl = JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
       VirtualFile virtualFile = resolveFromSchemaProperty(schemaUrl, file);
       if (virtualFile != null) return Collections.singletonList(virtualFile);
       checkSchemaProperty = false;
@@ -211,7 +220,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     }
 
     if (checkSchemaProperty) {
-      if (schemaUrl == null) schemaUrl = fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
+      if (schemaUrl == null) schemaUrl = JsonCachedValues.getSchemaUrlFromSchemaProperty(file, myProject);
       VirtualFile virtualFile = resolveFromSchemaProperty(schemaUrl, file);
       if (virtualFile != null) return Collections.singletonList(virtualFile);
     }
@@ -284,19 +293,19 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
 
   @Nullable
   @Override
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaObject getSchemaObject(@NotNull final VirtualFile file) {
+  public JsonSchemaObject getSchemaObject(@NotNull final VirtualFile file) {
     Collection<VirtualFile> schemas = getSchemasForFile(file, true, false);
     if (schemas.size() == 0) return null;
     assert schemas.size() == 1;
     VirtualFile schemaFile = schemas.iterator().next();
-    return fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaObject(replaceHttpFileWithBuiltinIfNeeded(schemaFile), myProject);
+    return JsonCachedValues.getSchemaObject(replaceHttpFileWithBuiltinIfNeeded(schemaFile), myProject);
   }
 
 
   @Nullable
   @Override
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaObject getSchemaObject(@NotNull PsiFile file) {
-    return fit.jetbrains.jsonSchema.impl.JsonCachedValues.computeSchemaForFile(file, this);
+  public JsonSchemaObject getSchemaObject(@NotNull PsiFile file) {
+    return JsonCachedValues.computeSchemaForFile(file, this);
   }
 
   public VirtualFile replaceHttpFileWithBuiltinIfNeeded(VirtualFile schemaFile) {
@@ -304,7 +313,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     // we cannot perform that inside corresponding provider, because it leads to recursive component dependency
     // this way we're preventing http files when a built-in schema exists
     if (schemaFile instanceof HttpVirtualFile && (!JsonSchemaCatalogProjectConfiguration.getInstance(myProject).isPreferRemoteSchemas()
-                                                  || JsonFileResolver.isSchemaUrl(schemaFile.getUrl()))) {
+                                                  || fit.jetbrains.jsonSchema.remote.JsonFileResolver.isSchemaUrl(schemaFile.getUrl()))) {
       String url = schemaFile.getUrl();
       VirtualFile first1 = getLocalSchemaByUrl(url);
       return first1 != null ? first1 : schemaFile;
@@ -318,15 +327,15 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
                   .filter(f -> {
                      fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider prov = getSchemaProvider(f);
                      return prov != null && !(prov.getSchemaFile() instanceof HttpVirtualFile)
-                            && (url.equals(prov.getRemoteSource()) || JsonFileResolver.replaceUnsafeSchemaStoreUrls(url).equals(prov.getRemoteSource())
-                             || url.equals(JsonFileResolver.replaceUnsafeSchemaStoreUrls(prov.getRemoteSource())));
+                            && (url.equals(prov.getRemoteSource()) || fit.jetbrains.jsonSchema.remote.JsonFileResolver.replaceUnsafeSchemaStoreUrls(url).equals(prov.getRemoteSource())
+                             || url.equals(fit.jetbrains.jsonSchema.remote.JsonFileResolver.replaceUnsafeSchemaStoreUrls(prov.getRemoteSource())));
                   }).findFirst().orElse(null);
   }
 
   @Nullable
   @Override
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaObject getSchemaObjectForSchemaFile(@NotNull VirtualFile schemaFile) {
-    return fit.jetbrains.jsonSchema.impl.JsonCachedValues.getSchemaObject(schemaFile, myProject);
+  public JsonSchemaObject getSchemaObjectForSchemaFile(@NotNull VirtualFile schemaFile) {
+    return JsonCachedValues.getSchemaObject(schemaFile, myProject);
   }
 
   @Override
@@ -337,7 +346,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
   }
 
   @Override
-  public boolean isSchemaFile(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject) {
+  public boolean isSchemaFile(@NotNull JsonSchemaObject schemaObject) {
     VirtualFile file = resolveSchemaFile(schemaObject);
     return file != null && isSchemaFile(file);
   }
@@ -363,11 +372,11 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
   }
 
   private static boolean isSchemaProvider(fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider provider) {
-    return JsonFileResolver.isSchemaUrl(provider.getRemoteSource());
+    return fit.jetbrains.jsonSchema.remote.JsonFileResolver.isSchemaUrl(provider.getRemoteSource());
   }
 
   @Override
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaVersion getSchemaVersion(@NotNull VirtualFile file) {
+  public JsonSchemaVersion getSchemaVersion(@NotNull VirtualFile file) {
     if (isMappedSchema(file)) {
       fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider provider = myState.getProvider(file);
       if (provider != null) {
@@ -379,7 +388,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
   }
 
   @Nullable
-  private fit.jetbrains.jsonSchema.impl.JsonSchemaVersion getSchemaVersionFromSchemaUrl(@NotNull VirtualFile file) {
+  private JsonSchemaVersion getSchemaVersionFromSchemaUrl(@NotNull VirtualFile file) {
     Ref<String> res = Ref.create(null);
     //noinspection CodeBlock2Expr
     ApplicationManager.getApplication().runReadAction(() -> {
@@ -412,7 +421,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     myCatalogManager.unregisterCatalogUpdateCallback(callback);
   }
 
-  private final ConcurrentList<Runnable> myResetActions = ContainerUtil.createConcurrentList();
+  private final List<Runnable> myResetActions = ContainerUtil.createConcurrentList();
 
   @Override
   public void registerResetAction(Runnable action) {
@@ -446,8 +455,8 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
   @Override
   public boolean isApplicableToFile(@Nullable VirtualFile file) {
     if (file == null) return false;
-    for (fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler e : JsonSchemaEnabler.EXTENSION_POINT_NAME.getExtensionList()) {
-      if (e.isEnabledForFile(file)) {
+    for (fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler e : fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler.EXTENSION_POINT_NAME.getExtensionList()) {
+      if (e.isEnabledForFile(file, myProject)) {
         return true;
       }
     }
@@ -504,7 +513,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     public fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider getProvider(@NotNull final VirtualFile file) {
       final Collection<fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> providers = myData.getValue().get(file);
       for (fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider p : providers) {
-        if (p.getSchemaType() == fit.jetbrains.jsonSchema.extension.SchemaType.userSchema) {
+        if (p.getSchemaType() == SchemaType.userSchema) {
           return p;
         }
       }

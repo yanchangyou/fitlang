@@ -10,19 +10,14 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
-import fit.intellij.json.psi.JsonElementVisitor;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class JsonSchemaRefReferenceInspection extends JsonSchemaBasedInspectionBase {
-  @Override
-  @NotNull
-  public String getDisplayName() {
-    return JsonBundle.message("json.schema.ref.refs.inspection.name");
-  }
 
   @Override
   protected PsiElementVisitor doBuildVisitor(@NotNull fit.intellij.json.psi.JsonValue root,
@@ -31,9 +26,9 @@ public class JsonSchemaRefReferenceInspection extends JsonSchemaBasedInspectionB
                                              @NotNull ProblemsHolder holder,
                                              @NotNull LocalInspectionToolSession session) {
     boolean checkRefs = schema != null && service.isSchemaFile(schema);
-    return new JsonElementVisitor() {
+    return new fit.intellij.json.psi.JsonElementVisitor() {
       @Override
-      public void visitElement(PsiElement element) {
+      public void visitElement(@NotNull PsiElement element) {
         if (element == root) {
           if (element instanceof fit.intellij.json.psi.JsonObject) {
             final fit.intellij.json.psi.JsonProperty schemaProp = ((fit.intellij.json.psi.JsonObject)element).findProperty("$schema");
@@ -54,7 +49,7 @@ public class JsonSchemaRefReferenceInspection extends JsonSchemaBasedInspectionB
         super.visitProperty(o);
       }
 
-      private void doCheck(fit.intellij.json.psi.JsonValue value) {
+      private void doCheck(JsonValue value) {
         if (!(value instanceof fit.intellij.json.psi.JsonStringLiteral)) return;
         for (PsiReference reference : value.getReferences()) {
           if (reference instanceof WebReference) continue;

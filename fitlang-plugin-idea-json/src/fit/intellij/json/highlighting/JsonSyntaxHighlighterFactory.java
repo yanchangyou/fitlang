@@ -2,9 +2,6 @@
 package fit.intellij.json.highlighting;
 
 import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.JsonFileType;
-import fit.intellij.json.JsonLanguage;
-import fit.intellij.json.JsonLexer;
 import com.intellij.lang.Language;
 import com.intellij.lexer.LayeredLexer;
 import com.intellij.lexer.Lexer;
@@ -20,6 +17,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.StringEscapesTokenTypes;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
+import fit.intellij.json.JsonFileType;
+import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.JsonLexer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,10 +57,7 @@ public class JsonSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
 
     // Added by annotators
     public static final TextAttributesKey JSON_PROPERTY_KEY = TextAttributesKey.createTextAttributesKey("JSON.PROPERTY_KEY", INSTANCE_FIELD);
-
     public static final TextAttributesKey MY_KEYWORD = TextAttributesKey.createTextAttributesKey("MY.KEYWORD", KEYWORD);
-    public static final TextAttributesKey MY_KEYWORD_UNI = TextAttributesKey.createTextAttributesKey("MY.KEYWORD.UNI", KEYWORD);
-    public static final TextAttributesKey MY_KEYWORD_INPUT = TextAttributesKey.createTextAttributesKey("MY.KEYWORD.INPUT", KEYWORD);
 
     // String escapes
     public static final TextAttributesKey JSON_VALID_ESCAPE =
@@ -91,8 +88,6 @@ public class JsonSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
             fillMap(ourAttributes, JSON_NUMBER, JsonElementTypes.NUMBER);
             fillMap(ourAttributes, JSON_KEYWORD, JsonElementTypes.TRUE, JsonElementTypes.FALSE, JsonElementTypes.NULL);
             fillMap(ourAttributes, MY_KEYWORD, JsonElementTypes.MY_KEYWORD);
-            fillMap(ourAttributes, MY_KEYWORD_UNI, JsonElementTypes.UNI);
-            fillMap(ourAttributes, MY_KEYWORD_INPUT, JsonElementTypes.INPUT);
             fillMap(ourAttributes, JSON_LINE_COMMENT, JsonElementTypes.LINE_COMMENT);
             fillMap(ourAttributes, JSON_BLOCK_COMMENT, JsonElementTypes.BLOCK_COMMENT);
             // TODO may be it's worth to add more sensible highlighting for identifiers
@@ -147,16 +142,15 @@ public class JsonSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
         private boolean isPermissiveDialect() {
             FileType fileType = myFile == null ? null : myFile.getFileType();
             boolean isPermissiveDialect = false;
-            if (fileType instanceof JsonFileType) {
+            if (fileType instanceof fit.intellij.json.JsonFileType) {
                 Language language = ((JsonFileType) fileType).getLanguage();
-                isPermissiveDialect = language instanceof JsonLanguage && ((JsonLanguage) language).hasPermissiveStrings();
+                isPermissiveDialect = language instanceof fit.intellij.json.JsonLanguage && ((JsonLanguage) language).hasPermissiveStrings();
             }
             return isPermissiveDialect;
         }
 
-        @NotNull
         @Override
-        public TextAttributesKey[] getTokenHighlights(IElementType type) {
+        public TextAttributesKey @NotNull [] getTokenHighlights(IElementType type) {
             return pack(ourAttributes.get(type));
         }
     }

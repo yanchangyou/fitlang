@@ -5,23 +5,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class IfThenElse {
-  private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject condition;
-  private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject trueBranch;
-  private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject falseBranch;
+  private final JsonSchemaObject condition;
+  private final JsonSchemaObject trueBranch;
+  private final JsonSchemaObject falseBranch;
 
-  public IfThenElse(fit.jetbrains.jsonSchema.impl.JsonSchemaObject condition, fit.jetbrains.jsonSchema.impl.JsonSchemaObject trueBranch, fit.jetbrains.jsonSchema.impl.JsonSchemaObject falseBranch) {
+  public IfThenElse(JsonSchemaObject condition, JsonSchemaObject trueBranch, JsonSchemaObject falseBranch) {
     this.condition = condition;
     this.trueBranch = trueBranch;
     this.falseBranch = falseBranch;
   }
 
   @NotNull
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaObject getIf() {
+  public JsonSchemaObject getIf() {
     return condition;
   }
 
   @Nullable
-  public fit.jetbrains.jsonSchema.impl.JsonSchemaObject getThen() {
+  public JsonSchemaObject getThen() {
     return trueBranch;
   }
 

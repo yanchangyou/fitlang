@@ -25,9 +25,8 @@ import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.filters.position.FilterPattern;
 import com.intellij.util.ObjectUtils;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonValue;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,15 +34,18 @@ import org.jetbrains.annotations.Nullable;
  * @author Irina.Chernushina on 3/31/2016.
  */
 public class JsonSchemaReferenceContributor extends PsiReferenceContributor {
-  public static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> REF_PATTERN = createPropertyValuePattern("$ref", true, false);
-  public static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> SCHEMA_PATTERN = createPropertyValuePattern("$schema", false, true);
-  public static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonStringLiteral> REQUIRED_PROP_PATTERN = createRequiredPropPattern();
-
+  private static class Holder {
+    private static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> REF_PATTERN = createPropertyValuePattern("$ref", true, false);
+    private static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> REC_REF_PATTERN = createPropertyValuePattern("$recursiveRef", true, false);
+    private static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> SCHEMA_PATTERN = createPropertyValuePattern("$schema", false, true);
+    private static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonStringLiteral> REQUIRED_PROP_PATTERN = createRequiredPropPattern();
+  }
   @Override
   public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(REF_PATTERN, new JsonPointerReferenceProvider(false));
-    registrar.registerReferenceProvider(SCHEMA_PATTERN, new JsonPointerReferenceProvider(true));
-    registrar.registerReferenceProvider(REQUIRED_PROP_PATTERN, new JsonRequiredPropsReferenceProvider());
+    registrar.registerReferenceProvider(Holder.REF_PATTERN, new fit.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider(false));
+    registrar.registerReferenceProvider(Holder.REC_REF_PATTERN, new fit.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider(false));
+    registrar.registerReferenceProvider(Holder.SCHEMA_PATTERN, new JsonPointerReferenceProvider(true));
+    registrar.registerReferenceProvider(Holder.REQUIRED_PROP_PATTERN, new JsonRequiredPropsReferenceProvider());
   }
 
   private static PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> createPropertyValuePattern(
@@ -54,12 +56,12 @@ public class JsonSchemaReferenceContributor extends PsiReferenceContributor {
       public boolean isAcceptable(Object element, @Nullable PsiElement context) {
         if (element instanceof fit.intellij.json.psi.JsonValue) {
           final fit.intellij.json.psi.JsonValue value = (JsonValue) element;
-          if (schemaOnly && !fit.jetbrains.jsonSchema.ide.JsonSchemaService.isSchemaFile(CompletionUtil.getOriginalOrSelf(value.getContainingFile()))) return false;
+          if (schemaOnly && !JsonSchemaService.isSchemaFile(CompletionUtil.getOriginalOrSelf(value.getContainingFile()))) return false;
 
           final fit.intellij.json.psi.JsonProperty property = ObjectUtils.tryCast(value.getParent(), fit.intellij.json.psi.JsonProperty.class);
           if (property != null && property.getValue() == element) {
             final PsiFile file = property.getContainingFile();
-            if (rootOnly && (!(file instanceof fit.intellij.json.psi.JsonFile) || ((JsonFile)file).getTopLevelValue() != property.getParent())) return false;
+            if (rootOnly && (!(file instanceof fit.intellij.json.psi.JsonFile) || ((fit.intellij.json.psi.JsonFile)file).getTopLevelValue() != property.getParent())) return false;
             return propertyName.equals(property.getName());
           }
         }

@@ -26,7 +26,7 @@ import java.util.Collection;
  */
 public interface JsonPropertyAdapter {
   @Nullable String getName();
-  @Nullable fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter getNameValueAdapter();
+  @Nullable JsonValueAdapter getNameValueAdapter();
   @NotNull Collection<JsonValueAdapter> getValues();
   @NotNull PsiElement getDelegate();
   @Nullable JsonObjectValueAdapter getParentObject();

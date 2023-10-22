@@ -9,6 +9,7 @@ import com.intellij.util.PairProcessor;
 import com.intellij.util.containers.ContainerUtil;
 import fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
+import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,11 +24,11 @@ import java.util.Map;
 public class JsonSchemaUserDefinedProviderFactory implements JsonSchemaProviderFactory {
   @NotNull
   @Override
-  public List<fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> getProviders(@NotNull Project project) {
+  public List<JsonSchemaFileProvider> getProviders(@NotNull Project project) {
     final JsonSchemaMappingsProjectConfiguration configuration = JsonSchemaMappingsProjectConfiguration.getInstance(project);
 
     final Map<String, UserDefinedJsonSchemaConfiguration> map = configuration.getStateMap();
-    final List<fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> providers = ContainerUtil.map(map.values(), schema -> createProvider(project, schema));
+    final List<JsonSchemaFileProvider> providers = ContainerUtil.map(map.values(), schema -> createProvider(project, schema));
 
     return providers;
   }
@@ -37,7 +38,7 @@ public class JsonSchemaUserDefinedProviderFactory implements JsonSchemaProviderF
                                    UserDefinedJsonSchemaConfiguration schema) {
     String relPath = schema.getRelativePathToSchema();
     return new MyProvider(project, schema.getSchemaVersion(), schema.getName(),
-                          fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(relPath) || new File(relPath).isAbsolute()
+                          fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(relPath) || relPath.startsWith(JsonSchemaObject.TEMP_URL) || new File(relPath).isAbsolute()
                             ? relPath
                             : new File(project.getBasePath(),
                           relPath).getAbsolutePath(),
@@ -46,14 +47,14 @@ public class JsonSchemaUserDefinedProviderFactory implements JsonSchemaProviderF
 
   static class MyProvider implements JsonSchemaFileProvider, JsonSchemaImportedProviderMarker {
     @NotNull private final Project myProject;
-    @NotNull private final JsonSchemaVersion myVersion;
+    @NotNull private final fit.jetbrains.jsonSchema.impl.JsonSchemaVersion myVersion;
     @NotNull private final String myName;
     @NotNull private final String myFile;
     private VirtualFile myVirtualFile;
     @NotNull private final List<? extends PairProcessor<Project, VirtualFile>> myPatterns;
 
     MyProvider(@NotNull final Project project,
-                      @NotNull final JsonSchemaVersion version,
+                      @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaVersion version,
                       @NotNull final String name,
                       @NotNull final String file,
                       @NotNull final List<? extends PairProcessor<Project, VirtualFile>> patterns) {
@@ -74,7 +75,8 @@ public class JsonSchemaUserDefinedProviderFactory implements JsonSchemaProviderF
     public VirtualFile getSchemaFile() {
       if (myVirtualFile != null && myVirtualFile.isValid()) return myVirtualFile;
       String path = myFile;
-      if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(path)) {
+
+      if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isAbsoluteUrl(path)) {
         myVirtualFile = fit.jetbrains.jsonSchema.remote.JsonFileResolver.urlToFile(path);
       }
       else {
@@ -89,7 +91,7 @@ public class JsonSchemaUserDefinedProviderFactory implements JsonSchemaProviderF
 
     @NotNull
     @Override
-    public fit.jetbrains.jsonSchema.extension.SchemaType getSchemaType() {
+    public SchemaType getSchemaType() {
       return SchemaType.userSchema;
     }
 

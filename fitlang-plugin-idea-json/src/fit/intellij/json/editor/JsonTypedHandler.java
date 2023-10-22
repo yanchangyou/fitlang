@@ -14,8 +14,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonReferenceExpression;
+import com.intellij.psi.util.PsiUtilCore;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
 public class JsonTypedHandler extends TypedHandlerDelegate {
@@ -29,12 +29,65 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
       processPairedBracesComma(c, editor, file);
       addWhiteSpaceAfterColonIfNeeded(c, editor, file);
       removeRedundantWhitespaceIfAfterColon(c, editor, file);
+      handleMoveOutsideQuotes(c, editor, file);
     }
     return Result.CONTINUE;
   }
 
+  private static void handleMoveOutsideQuotes(char c, Editor editor, PsiFile file) {
+    fit.intellij.json.editor.JsonEditorOptions options = fit.intellij.json.editor.JsonEditorOptions.getInstance();
+    if (c == ':' && options.COLON_MOVE_OUTSIDE_QUOTES || c == ',' && options.COMMA_MOVE_OUTSIDE_QUOTES) {
+      int offset = editor.getCaretModel().getOffset();
+      CharSequence sequence = editor.getDocument().getCharsSequence();
+      int length = sequence.length();
+      if (offset >= length || offset < 0) return;
+      char charAtOffset = sequence.charAt(offset);
+      if (charAtOffset != '"') return;
+      if (offset + 1 < length && sequence.charAt(offset + 1) == c) return;
+      final PsiElement element = file.findElementAt(offset);
+      if (element == null) return;
+      if (!validatePositionToMoveOutOfQuotes(c, element)) return;
+      PsiDocumentManager.getInstance(file.getProject()).commitDocument(editor.getDocument());
+      editor.getDocument().deleteString(offset - 1, offset);
+      editor.getDocument().insertString(offset, String.valueOf(c));
+      CharSequence newSequence = editor.getDocument().getCharsSequence();
+      int nextOffset = offset + 1;
+      if (c == ':' && options.AUTO_WHITESPACE_AFTER_COLON) {
+        char nextChar = nextOffset >= newSequence.length() ? 'a' : newSequence.charAt(nextOffset);
+        if (!Character.isWhitespace(nextChar) || nextChar == '\n') {
+          editor.getDocument().insertString(nextOffset, " ");
+          nextOffset++;
+        }
+      }
+      editor.getCaretModel().moveToOffset(nextOffset);
+    }
+  }
+
+  private static boolean validatePositionToMoveOutOfQuotes(char c, PsiElement element) {
+    // comma can be after the element, but only the comma
+    if (PsiUtilCore.getElementType(element) == JsonElementTypes.R_CURLY) {
+      return c == ',' && element.getPrevSibling() instanceof fit.intellij.json.psi.JsonProperty;
+    }
+    if (PsiUtilCore.getElementType(element) == JsonElementTypes.R_BRACKET) {
+      return c == ',' && element.getPrevSibling() instanceof fit.intellij.json.psi.JsonStringLiteral;
+    }
+
+    // we can have a whitespace in the position, but again - only for the comma
+    PsiElement parent = element.getParent();
+    if (element instanceof PsiWhiteSpace && c == ',') {
+      PsiElement sibling = element.getPrevSibling();
+      return sibling instanceof fit.intellij.json.psi.JsonProperty || sibling instanceof fit.intellij.json.psi.JsonStringLiteral;
+    }
+
+    // the most ordinary case - literal property key or value
+    PsiElement grandParent = parent instanceof fit.intellij.json.psi.JsonStringLiteral ? parent.getParent() : null;
+    return grandParent instanceof fit.intellij.json.psi.JsonProperty
+           && (c != ':' || ((fit.intellij.json.psi.JsonProperty)grandParent).getNameElement() == parent)
+           && (c != ',' || ((fit.intellij.json.psi.JsonProperty)grandParent).getValue() == parent);
+  }
+
   private void removeRedundantWhitespaceIfAfterColon(char c, Editor editor, PsiFile file) {
-    if (!myWhitespaceAdded || c != ' ' || !JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
+    if (!myWhitespaceAdded || c != ' ' || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
       if (c != ':') {
         myWhitespaceAdded = false;
       }
@@ -56,7 +109,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
                                 @NotNull Editor editor,
                                 @NotNull PsiFile file,
                                 @NotNull FileType fileType) {
-    if (file instanceof JsonFile) {
+    if (file instanceof fit.intellij.json.psi.JsonFile) {
       addPropertyNameQuotesIfNeeded(c, editor, file);
     }
     return Result.CONTINUE;
@@ -65,7 +118,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   private void addWhiteSpaceAfterColonIfNeeded(char c,
                                                @NotNull Editor editor,
                                                @NotNull PsiFile file) {
-    if (c != ':' || !JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
+    if (c != ':' || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
       if (c != ' ') {
         myWhitespaceAdded = false;
       }
@@ -100,12 +153,12 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   private static void addPropertyNameQuotesIfNeeded(char c,
                                                     @NotNull Editor editor,
                                                     @NotNull PsiFile file) {
-    if (c != ':' || !JsonDialectUtil.isStandardJson(file) || !JsonEditorOptions.getInstance().AUTO_QUOTE_PROP_NAME) return;
+    if (c != ':' || !JsonDialectUtil.isStandardJson(file) || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_QUOTE_PROP_NAME) return;
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = PsiTreeUtil.skipWhitespacesBackward(file.findElementAt(offset));
     if (!(element instanceof fit.intellij.json.psi.JsonProperty)) return;
     final fit.intellij.json.psi.JsonValue nameElement = ((fit.intellij.json.psi.JsonProperty)element).getNameElement();
-    if (nameElement instanceof JsonReferenceExpression) {
+    if (nameElement instanceof fit.intellij.json.psi.JsonReferenceExpression) {
       ((fit.intellij.json.psi.JsonProperty)element).setName(nameElement.getText());
       PsiDocumentManager.getInstance(file.getProject()).doPostponedOperationsAndUnblockDocument(editor.getDocument());
     }
@@ -137,7 +190,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
       PsiElement nextElement = PsiTreeUtil.skipWhitespacesForward(parent instanceof fit.intellij.json.psi.JsonProperty ? parent : item);
       if (nextElement instanceof PsiErrorElement) {
         PsiElement forward = PsiTreeUtil.skipWhitespacesForward(nextElement);
-        return parent instanceof fit.intellij.json.psi.JsonProperty ? forward instanceof fit.intellij.json.psi.JsonProperty : forward instanceof fit.intellij.json.psi.JsonValue;
+        return parent instanceof fit.intellij.json.psi.JsonProperty ? forward instanceof fit.intellij.json.psi.JsonProperty : forward instanceof JsonValue;
       }
     }
     return false;
