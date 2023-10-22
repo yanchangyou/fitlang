@@ -52,7 +52,7 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
     private static final AtomicBoolean myIsNotified = new AtomicBoolean(false);
 
     public JsonSchemaStatusWidget(Project project) {
-        super(project);
+        super(project, true);
         myServiceLazy = new SynchronizedClearableLazy<>(() -> {
             if (!project.isDisposed()) {
                 JsonSchemaService myService = JsonSchemaService.Impl.get(project);
@@ -409,7 +409,7 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
         Alarm alarm = new Alarm(Alarm.ThreadToUse.SWING_THREAD, this);
         alarm.addRequest(() -> {
             final JComponent label =
-                    HintUtil.createErrorLabel("<b>JSON Schema conflicting mappings</b><br/><br/>" + ((MyWidgetState) state).getTooltip());
+                    HintUtil.createErrorLabel("<b>JSON Schema conflicting mappings</b><br/><br/>" );
             BalloonBuilder builder = JBPopupFactory.getInstance().createBalloonBuilder(label);
             JComponent statusBarComponent = getComponent();
             Balloon balloon = builder

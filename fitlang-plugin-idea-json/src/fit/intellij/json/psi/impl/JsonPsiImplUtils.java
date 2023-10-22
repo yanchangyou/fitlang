@@ -76,12 +76,12 @@ public class JsonPsiImplUtils {
       @Nullable
       @Override
       public Icon getIcon(boolean unused) {
-        if (property.getValue() instanceof fit.intellij.json.psi.JsonArray) {
-          return AllIcons.Json.Property_brackets;
-        }
-        if (property.getValue() instanceof fit.intellij.json.psi.JsonObject) {
-          return AllIcons.Json.Property_braces;
-        }
+//        if (property.getValue() instanceof fit.intellij.json.psi.JsonArray) {
+//          return AllIcons.Json.Property_brackets;
+//        }
+//        if (property.getValue() instanceof fit.intellij.json.psi.JsonObject) {
+//          return AllIcons.Json.Property_braces;
+//        }
         return PlatformIcons.PROPERTY_ICON;
       }
     };
