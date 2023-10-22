@@ -699,8 +699,9 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     public static void invokeEnterHandler(Editor editor) {
       EditorActionHandler handler = EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_ENTER);
       Caret caret = editor.getCaretModel().getCurrentCaret();
-      handler.execute(editor, caret,
-                      new CaretSpecificDataContext(DataManager.getInstance().getDataContext(editor.getContentComponent()), caret));
+      //TODO
+//      handler.execute(editor, caret,
+//                      new CaretSpecificDataContext(DataManager.getInstance().getDataContext(editor.getContentComponent()), caret));
     }
 
     private boolean handleInsideQuotesInsertion(@NotNull InsertionContext context, @NotNull Editor editor, boolean hasValue) {

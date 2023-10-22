@@ -73,7 +73,7 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
     myIsNotified.set(false);
   };
 
-  private static class MyWidgetState extends WidgetState {
+  public static class MyWidgetState extends WidgetState {
     boolean warning = false;
     boolean conflict = false;
     MyWidgetState(String toolTip, String text, boolean actionEnabled) {
@@ -89,11 +89,11 @@ class JsonSchemaStatusWidget extends EditorBasedStatusBarPopup {
       this.setIcon(warning ? AllIcons.General.Warning : null);
     }
 
-    private void setConflict() {
+    public void setConflict() {
       this.conflict = true;
     }
 
-    private String getTooltip() {
+    public String getTooltip() {
       return this.toolTip;
     }
   }
