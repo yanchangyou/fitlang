@@ -205,8 +205,8 @@ cloudClient：client端<br/>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!--        <fileType language="FitLang" name="FitLang" patterns="*.fit"-->
-        <!--                  implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE" extensions="fit"/>-->
+<!--        <fileType language="FitLang" name="FitLang" patterns="*.fit"-->
+<!--                  implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE" extensions="fit"/>-->
 
         <fileType name="FitJSON" extensions="fit" implementationClass="fit.intellij.json.JsonFileType"
                   fieldName="INSTANCE"/>

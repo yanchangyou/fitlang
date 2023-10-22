@@ -145,6 +145,21 @@ public class JsonParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // UNI | INPUT | OUTPUT | ID | NAME
+  public static boolean my_keyword(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "my_keyword")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, MY_KEYWORD, "<my keyword>");
+    r = consumeToken(b, UNI);
+    if (!r) r = consumeToken(b, INPUT);
+    if (!r) r = consumeToken(b, OUTPUT);
+    if (!r) r = consumeToken(b, ID);
+    if (!r) r = consumeToken(b, NAME);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // !('}'|value)
   static boolean not_brace_or_next_value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "not_brace_or_next_value")) return false;
@@ -316,13 +331,13 @@ public class JsonParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
+  // my_keyword | SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
   public static boolean string_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "string_literal")) return false;
-    if (!nextTokenIs(b, "<string literal>", DOUBLE_QUOTED_STRING, SINGLE_QUOTED_STRING)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, STRING_LITERAL, "<string literal>");
-    r = consumeToken(b, SINGLE_QUOTED_STRING);
+    r = my_keyword(b, l + 1);
+    if (!r) r = consumeToken(b, SINGLE_QUOTED_STRING);
     if (!r) r = consumeToken(b, DOUBLE_QUOTED_STRING);
     exit_section_(b, l, m, r, false, null);
     return r;

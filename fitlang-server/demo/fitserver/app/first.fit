@@ -1,5 +1,6 @@
 {
     "uni": "hello",
     "message": "hello, world!",
-    "hello":2343
+    "hello":2343,
+    "a":[123,3,3]
 }

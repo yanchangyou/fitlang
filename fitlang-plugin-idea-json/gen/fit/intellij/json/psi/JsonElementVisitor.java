@@ -4,7 +4,7 @@ package fit.intellij.json.psi;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
-import fit.intellij.psi.PsiNamedElement;
+import com.intellij.psi.PsiNamedElement;
 
 public class JsonElementVisitor extends PsiElementVisitor {
 
@@ -22,6 +22,10 @@ public class JsonElementVisitor extends PsiElementVisitor {
 
   public void visitLiteral(@NotNull JsonLiteral o) {
     visitValue(o);
+  }
+
+  public void visitMyKeyword(@NotNull JsonMyKeyword o) {
+    visitPsiElement(o);
   }
 
   public void visitNullLiteral(@NotNull JsonNullLiteral o) {

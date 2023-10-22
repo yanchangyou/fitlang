@@ -11,6 +11,7 @@ public interface JsonElementTypes {
   IElementType ARRAY = new JsonElementType("ARRAY");
   IElementType BOOLEAN_LITERAL = new JsonElementType("BOOLEAN_LITERAL");
   IElementType LITERAL = new JsonElementType("LITERAL");
+  IElementType MY_KEYWORD = new JsonElementType("MY_KEYWORD");
   IElementType NULL_LITERAL = new JsonElementType("NULL_LITERAL");
   IElementType NUMBER_LITERAL = new JsonElementType("NUMBER_LITERAL");
   IElementType OBJECT = new JsonElementType("OBJECT");
@@ -24,16 +25,21 @@ public interface JsonElementTypes {
   IElementType COMMA = new JsonTokenType(",");
   IElementType DOUBLE_QUOTED_STRING = new JsonTokenType("DOUBLE_QUOTED_STRING");
   IElementType FALSE = new JsonTokenType("false");
+  IElementType ID = new JsonTokenType("\"id\"");
   IElementType IDENTIFIER = new JsonTokenType("IDENTIFIER");
+  IElementType INPUT = new JsonTokenType("\"input\"");
   IElementType LINE_COMMENT = new JsonTokenType("LINE_COMMENT");
   IElementType L_BRACKET = new JsonTokenType("[");
   IElementType L_CURLY = new JsonTokenType("{");
+  IElementType NAME = new JsonTokenType("\"name\"");
   IElementType NULL = new JsonTokenType("null");
   IElementType NUMBER = new JsonTokenType("NUMBER");
+  IElementType OUTPUT = new JsonTokenType("\"output\"");
   IElementType R_BRACKET = new JsonTokenType("]");
   IElementType R_CURLY = new JsonTokenType("}");
   IElementType SINGLE_QUOTED_STRING = new JsonTokenType("SINGLE_QUOTED_STRING");
   IElementType TRUE = new JsonTokenType("true");
+  IElementType UNI = new JsonTokenType("\"uni\"");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -43,6 +49,9 @@ public interface JsonElementTypes {
       }
       else if (type == BOOLEAN_LITERAL) {
         return new JsonBooleanLiteralImpl(node);
+      }
+      else if (type == MY_KEYWORD) {
+        return new JsonMyKeywordImpl(node);
       }
       else if (type == NULL_LITERAL) {
         return new JsonNullLiteralImpl(node);

@@ -30,6 +30,12 @@ public class JsonStringLiteralImpl extends JsonStringLiteralMixin implements Jso
   }
 
   @Override
+  @Nullable
+  public JsonMyKeyword getMyKeyword() {
+    return findChildByClass(JsonMyKeyword.class);
+  }
+
+  @Override
   public @NotNull List<Pair<TextRange, String>> getTextFragments() {
     return JsonPsiImplUtils.getTextFragments(this);
   }

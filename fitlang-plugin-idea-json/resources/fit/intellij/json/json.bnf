@@ -15,7 +15,7 @@
   implements("value") = "fit.intellij.json.psi.JsonElement"
   extends("value") = "fit.intellij.json.psi.impl.JsonElementImpl"
 
-    tokens = [
+  tokens = [
         L_CURLY='{'
         R_CURLY='}'
         L_BRACKET='['
@@ -28,6 +28,13 @@
         BLOCK_COMMENT='regexp:/\*([^*]|\*+[^*/])*(\*+/)?'
         // else /\*(?:[^*]|\*[^/])*\*+/
 
+        // my keyword
+        UNI='"uni"'
+        INPUT='"input"'
+        OUTPUT='"output"'
+        ID='"id"'
+        NAME='"name"'
+
         // unclosed string literal matches till the line's end
         // any escape sequences included, illegal escapes are indicated by SyntaxHighlighter
         // and JsonStringLiteralAnnotator
@@ -39,6 +46,7 @@
         TRUE='true'
         FALSE='false'
         NULL='null'
+
         // Actually not defined in RFC 4627, but may be used for JSON5 and helps with
         // auto completion of keywords. Semantically, it represents "bad word" type
         // of tokens
@@ -54,7 +62,7 @@
     extends("string_literal|number_literal|boolean_literal|null_literal")=literal
     implements("property")=[
       "fit.intellij.json.psi.JsonElement"
-      "fit.intellij.psi.PsiNamedElement"
+      "com.intellij.psi.PsiNamedElement"
     ]
 }
 
@@ -104,11 +112,14 @@ private array_element ::= value (','|&']') {
   pin=1
 }
 
-string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
+my_keyword ::= UNI | INPUT | OUTPUT | ID | NAME
+
+string_literal ::= my_keyword | SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
   methods=[
     getTextFragments
     getValue
     isPropertyName
+    isKeyword
     SINGLE_QUOTED_STRING=""
     DOUBLE_QUOTED_STRING=""
   ]
@@ -126,6 +137,18 @@ boolean_literal ::= TRUE | FALSE {
   ]
 }
 null_literal ::= NULL
+
+
+//my_keyword ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
+//  methods=[
+//    getTextFragments
+//    getValue
+//    isPropertyName
+//    SINGLE_QUOTED_STRING=""
+//    DOUBLE_QUOTED_STRING=""
+//  ]
+//  mixin="fit.intellij.json.psi.impl.JsonMyKeywordImpl"
+//}
 
 literal ::= string_literal | number_literal | boolean_literal | null_literal {
   methods=[

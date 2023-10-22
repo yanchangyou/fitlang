@@ -42,6 +42,11 @@ IDENTIFIER=[[:jletterdigit:]~!()*\-."/"@\^<>=]+
   "]"                         { return R_BRACKET; }
   ","                         { return COMMA; }
   ":"                         { return COLON; }
+  "\"uni\""                   { return UNI; }
+  "\"input\""                 { return INPUT; }
+  "\"output\""                { return OUTPUT; }
+  "\"id\""                    { return ID; }
+  "\"name\""                  { return NAME; }
   "true"                      { return TRUE; }
   "false"                     { return FALSE; }
   "null"                      { return NULL; }

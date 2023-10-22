@@ -68,13 +68,6 @@ public class JsonParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public PsiElement createElement(ASTNode astNode) {
-        String text = astNode.getText();
-//        if (text.startsWith("\"uni\"") && astNode.getElementType() == PROPERTY) {
-//            return new fit.intellij.json.psi.impl.JsonNumberLiteralImpl(astNode);
-//        }
-        if ("\"uni\"".equals(text) && astNode.getTreeParent().getElementType() == PROPERTY) {
-            return new fit.intellij.json.psi.impl.JsonStringLiteralImpl(astNode);
-        }
         return Factory.createElement(astNode);
     }
 
