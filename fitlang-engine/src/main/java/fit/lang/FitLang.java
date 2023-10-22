@@ -8,6 +8,6 @@ public class FitLang {
     /**
      * 版本号
      */
-    public static final String VERSION = "0.5.21";
+    public static final String VERSION = "0.6.0";
 
 }

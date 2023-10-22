@@ -386,6 +386,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.6.0 support keyword highlight(include and modify idea json code)</li>
             <li>0.5.21 refine loop and foreach node, use parallel mode</li>
             <li>0.5.20 refine expression performance</li>
             <li>0.5.19 add node: timeCount</li>
