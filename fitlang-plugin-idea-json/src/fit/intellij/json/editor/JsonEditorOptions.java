@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @State(
-  name = "JsonEditorOptions",
-  storages = @Storage("editor.xml"),
+  name = "FitJsonEditorOptions",
+  storages = @Storage("FitEditor.xml"),
   reportStatistic = true
 )
 public class JsonEditorOptions implements PersistentStateComponent<JsonEditorOptions> {

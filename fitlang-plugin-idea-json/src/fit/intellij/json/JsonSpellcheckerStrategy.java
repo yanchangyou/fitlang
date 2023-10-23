@@ -57,6 +57,7 @@ public class JsonSpellcheckerStrategy extends SpellcheckingStrategy {
 
     Project project = element.getProject();
     final JsonSchemaService service = JsonSchemaService.Impl.get(project);
+    if(true)return false;//TODO FIX
     if (!service.isApplicableToFile(file)) return false;
     final fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema = service.getSchemaObject(element.getContainingFile());
     if (rootSchema == null) return false;

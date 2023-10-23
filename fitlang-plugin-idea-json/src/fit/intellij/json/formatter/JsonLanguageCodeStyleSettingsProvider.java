@@ -108,7 +108,7 @@ public class JsonLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   @Override
   protected void customizeDefaults(@NotNull CommonCodeStyleSettings commonSettings,
                                    @NotNull CommonCodeStyleSettings.IndentOptions indentOptions) {
-    indentOptions.INDENT_SIZE = 2;
+    indentOptions.INDENT_SIZE = 4;
     // strip all blank lines by default
     commonSettings.KEEP_BLANK_LINES_IN_CODE = 0;
   }

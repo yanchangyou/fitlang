@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.*;
 
-@State(name = "JsonSchemaMappingsProjectConfiguration", storages = @Storage("jsonSchemas.xml"))
+@State(name = "FitJsonSchemaMappingsProjectConfiguration", storages = @Storage("FitJsonSchemas.xml"))
 public class JsonSchemaMappingsProjectConfiguration implements PersistentStateComponent<JsonSchemaMappingsProjectConfiguration.MyState> {
   @NotNull private final Project myProject;
   public volatile MyState myState = new MyState();

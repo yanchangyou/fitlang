@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@State(name = "JsonSchemaCatalogProjectConfiguration", storages = @Storage("jsonCatalog.xml"))
+@State(name = "FitJsonSchemaCatalogProjectConfiguration", storages = @Storage("FitJsonCatalog.xml"))
 public class JsonSchemaCatalogProjectConfiguration implements PersistentStateComponent<JsonSchemaCatalogProjectConfiguration.MyState> {
   public volatile MyState myState = new MyState();
   private final List<Runnable> myChangeHandlers = ContainerUtil.createConcurrentList();

@@ -24,10 +24,12 @@ public interface JsonSchemaService {
   }
 
   static boolean isSchemaFile(@NotNull PsiFile psiFile) {
-    if (JsonLikePsiWalker.getWalker(psiFile, fit.jetbrains.jsonSchema.impl.JsonSchemaObject.NULL_OBJ) == null) return false;
-    final VirtualFile file = psiFile.getViewProvider().getVirtualFile();
-    JsonSchemaService service = Impl.get(psiFile.getProject());
-    return service.isSchemaFile(file) && service.isApplicableToFile(file);
+//    if (JsonLikePsiWalker.getWalker(psiFile, fit.jetbrains.jsonSchema.impl.JsonSchemaObject.NULL_OBJ) == null) return false;
+//    final VirtualFile file = psiFile.getViewProvider().getVirtualFile();
+//    JsonSchemaService service = Impl.get(psiFile.getProject());
+//    return service.isSchemaFile(file) && service.isApplicableToFile(file);
+      //TODO
+    return false;
   }
 
   boolean isSchemaFile(@NotNull VirtualFile file);
