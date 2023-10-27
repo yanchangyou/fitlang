@@ -44,7 +44,9 @@ public class JsonLoopExecuteNode extends LoopExecuteNode implements ExecuteNodeB
 
         //动态解析
         String loopTimes = parseStringField("loopTimes", (JsonExecuteNodeInput) input, (JSONObject) nodeDefine.getData());
-        setLoopTimes(Integer.parseInt(loopTimes));
+        if (loopTimes != null) {
+            setLoopTimes(Integer.parseInt(loopTimes));
+        }
 
         super.execute(input, output);
     }
