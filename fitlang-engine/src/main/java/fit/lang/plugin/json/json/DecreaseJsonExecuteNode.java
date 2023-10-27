@@ -20,9 +20,8 @@ public class DecreaseJsonExecuteNode extends JsonExecuteNode {
         Integer number = input.getInteger(fieldName);
         if (number == null) {
             number = 0;
-        } else {
-            number -= 1;
         }
+        number -= 1;
 
         JSONObject result = input.getData().clone();
         result.put(fieldName, number);
