@@ -388,7 +388,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.6.2 IDE error fix</li>
+            <li>0.6.3 IDE error fix</li>
             <li>0.6.1 support idea version 201+</li>
             <li>0.6.0 support keyword highlight(include and modify idea json code)</li>
             <li>0.5.21 refine loop and foreach node, use parallel mode</li>

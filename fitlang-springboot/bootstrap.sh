@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-java -Dserver.port=9000 -jar ./target/fitlang-springboot-0.6.2-SNAPSHOT.jar
+java -Dserver.port=9000 -jar ./target/fitlang-springboot-0.6.3-SNAPSHOT.jar
