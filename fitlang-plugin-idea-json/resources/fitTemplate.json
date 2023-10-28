@@ -181,42 +181,42 @@
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "postJson",
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "postForm",
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "httpGet",
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "httpPut",
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "httpDelete",
             "param": {
                 "foo": "bar"
             },
-            "url": "http://host/path"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "server",
@@ -232,7 +232,7 @@
         },
         {
             "uni": "proxy",
-            "url": "http://127.0.0.1:10111/"
+            "url": "http://fit.321zou.com/hello"
         },
         {
             "uni": "web",
