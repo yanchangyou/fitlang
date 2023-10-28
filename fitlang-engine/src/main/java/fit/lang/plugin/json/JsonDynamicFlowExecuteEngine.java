@@ -217,7 +217,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // http
         register("http", HttpJsonExecuteNode.class);
         register("postJson", HttpPostJsonJsonExecuteNode.class);
+        register("httpPostJson", HttpPostJsonJsonExecuteNode.class);
         register("postForm", HttpPostFormJsonExecuteNode.class);
+        register("httpPostForm", HttpPostFormJsonExecuteNode.class);
         register("httpGet", HttpGetJsonExecuteNode.class);
         register("httpPut", HttpPutJsonJsonExecuteNode.class);
         register("httpDelete", HttpDeleteJsonJsonExecuteNode.class);
