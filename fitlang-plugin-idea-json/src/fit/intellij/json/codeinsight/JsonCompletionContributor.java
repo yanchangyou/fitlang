@@ -15,6 +15,9 @@
  */
 package fit.intellij.json.codeinsight;
 
+import cn.hutool.core.io.IoUtil;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import fit.intellij.json.psi.JsonArray;
@@ -24,6 +27,9 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -50,8 +56,7 @@ public class JsonCompletionContributor extends CompletionContributor {
     public JsonCompletionContributor() {
         extend(CompletionType.BASIC, AFTER_COLON_IN_PROPERTY, MyKeywordsCompletionProvider.INSTANCE);
         extend(CompletionType.BASIC, AFTER_COMMA_OR_BRACKET_IN_ARRAY, MyKeywordsCompletionProvider.INSTANCE);
-        extend(CompletionType.BASIC, UNI_KEY_WORD_NO_QUOTE, UniKeywordsCompletionProviderNoQuote.INSTANCE);
-        extend(CompletionType.BASIC, UNI_KEY_WORD_WITH_QUOTE, UniKeywordsCompletionProviderWithQuote.INSTANCE);
+        extend(CompletionType.BASIC, UNI_KEY_WORD_NO_QUOTE, LoadUniCompletionProviderNoQuote.INSTANCE);
     }
 
     private static class MyKeywordsCompletionProvider extends CompletionProvider<CompletionParameters> {
@@ -66,27 +71,30 @@ public class JsonCompletionContributor extends CompletionContributor {
         }
     }
 
-    final static String keywords[] = {"hello", "increase", "decrease", "echo", "assert", "set", "sleep", "print", "timeCount", "add", "convert", "removeField", "removeEmptyField", "mix", "mixNode", "eval", "parseJson", "stringifyJson", "convertKeyValueList", "sequence", "pipe", "foreach", "loop", "switch", "return", "thread", "execute", "call", "gitPull", "http", "postJson", "postForm", "httpGet", "httpPut", "httpDelete", "server", "proxy", "web", "wsServer", "wsClient", "readExcel", "writeExcel", "readFile", "writeFile", "deleteFile", "systemInfo", "startMonitor", "getMonitorData", "getClientMonitorData", "receiveClientMonitorData", "pushClientMonitorData", "getMonitorClient", "cloudServer", "cloudClient"};
-
-    private static class UniKeywordsCompletionProviderNoQuote extends CompletionProvider<CompletionParameters> {
-        private static final UniKeywordsCompletionProviderNoQuote INSTANCE = new UniKeywordsCompletionProviderNoQuote();
+    private static class LoadUniCompletionProviderNoQuote extends CompletionProvider<CompletionParameters> {
+        private static final LoadUniCompletionProviderNoQuote INSTANCE = new LoadUniCompletionProviderNoQuote();
 
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
-            for (String keyword : keywords) {
-                result.addElement(LookupElementBuilder.create("\"uni\":\"".concat(keyword).concat("\"")).bold());
+            List<String> templates = loadTemplate();
+            for (String template : templates) {
+                result.addElement(LookupElementBuilder.create(template).bold());
             }
         }
     }
 
-    private static class UniKeywordsCompletionProviderWithQuote extends CompletionProvider<CompletionParameters> {
-        private static final UniKeywordsCompletionProviderWithQuote INSTANCE = new UniKeywordsCompletionProviderWithQuote();
-
-        @Override
-        protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
-            for (String keyword : keywords) {
-                result.addElement(LookupElementBuilder.create("uni\":\"".concat(keyword)).bold());
+    private static List<String> loadTemplate() {
+        String templateJsonText = IoUtil.readUtf8(JsonCompletionContributor.class.getClassLoader().getResourceAsStream("fitTemplate.json"));
+        JSONObject template = JSONObject.parseObject(templateJsonText);
+        JSONArray templateList = template.getJSONArray("template");
+        List<String> templates = new ArrayList<>(templateList.size());
+        for (Object item : templateList) {
+            if (item instanceof JSONObject) {
+                JSONObject itemObject = (JSONObject) item;
+                String text = itemObject.toJSONString();
+                templates.add(text.substring(1, text.length() - 1));
             }
         }
+        return templates;
     }
 }

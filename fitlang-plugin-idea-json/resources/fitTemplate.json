@@ -1,0 +1,267 @@
+{
+    "template": [
+        {
+            "uni": "hello"
+        },
+        {
+            "uni": "hello",
+            "who": "world"
+        },
+        {
+            "uni": "hello",
+            "message": "hello, fit!"
+        },
+        {
+            "uni": "increase",
+            "field": "num"
+        },
+        {
+            "uni": "decrease",
+            "field": "num"
+        },
+        {
+            "uni": "echo"
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "containJson": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "expected": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "containField": [
+                "hello"
+            ]
+        },
+        {
+            "uni": "set",
+            "key": "keyName",
+            "value": "value"
+        },
+        {
+            "uni": "sleep",
+            "second": 0.5
+        },
+        {
+            "uni": "timeCount",
+            "child": {}
+        },
+        {
+            "uni": "convert",
+            "express": {
+                "newField1": "${oldField1}",
+                "parent.newField2": "${parent.oldField2}",
+                "list[].newField2": "${list[].oldField2}"
+            }
+        },
+        {
+            "uni": "removeField",
+            "fieldNames": [
+                "field1"
+            ]
+        },
+        {
+            "uni": "removeEmptyField"
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "mixNode",
+            "json": {
+                "key": {
+                    "uni": "hello"
+                }
+            }
+        },
+        {
+            "uni": "eval"
+        },
+        {
+            "uni": "parseJson",
+            "jsonField": "fieldName"
+        },
+        {
+            "uni": "stringifyJson",
+            "jsonField": "fieldName",
+            "format": true
+        },
+        {
+            "uni": "convertKeyValueList",
+            "listField": "list",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "sequence",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "pipe",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "foreach",
+            "foreachField": "list",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "loop",
+            "loopTimes": 10,
+            "child": {
+                "uni": "increase"
+            }
+        },
+        {
+            "uni": "switch",
+            "switchField": "type",
+            "child": [
+                {
+                    "id": "case2",
+                    "case": "2",
+                    "uni": "echo"
+                },
+                {
+                    "case": "1",
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "return",
+            "json": {
+                "message": "mock data!"
+            }
+        },
+        {
+            "uni": "thread",
+            "child": {
+                "uni": "hello"
+            }
+        },
+        {
+            "uni": "execute"
+        },
+        {
+            "uni": "call",
+            "nodeId": "nodeId"
+        },
+        {
+            "uni": "gitPull",
+            "gitPath": "/opt/github/fitlang/"
+        },
+        {
+            "uni": "http",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "postJson",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "postForm",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "httpGet",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "httpPut",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "httpDelete",
+            "param": {
+                "foo": "bar"
+            },
+            "url": "http://host/path"
+        },
+        {
+            "uni": "server",
+            "port": 11111,
+            "service": {
+                "/hello": {
+                    "uni": "hello"
+                },
+                "/echo": {
+                    "uni": "echo"
+                }
+            }
+        },
+        {
+            "uni": "proxy",
+            "url": "http://127.0.0.1:10111/"
+        },
+        {
+            "uni": "web",
+            "rawField": "html",
+            "child": {
+                "uni": "return",
+                "json": {
+                    "html": "<h1>hello, world!</h1>"
+                }
+            }
+        },
+        {
+            "uni": "readFile",
+            "workspaceDir": "dir",
+            "filePath": "/app/first.fit"
+        },
+        {
+            "uni": "writeFile",
+            "workspaceDir": "dir",
+            "filePath": "/app/first.fit"
+        },
+        {
+            "uni": "deleteFile",
+            "workspaceDir": "dir",
+            "filePath": "/app/first.fit"
+        },
+        {
+            "uni": "systemInfo",
+            "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver",
+            "filePath": "/app/first.fit"
+        }
+    ]
+}
