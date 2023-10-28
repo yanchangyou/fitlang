@@ -59,6 +59,7 @@
         {
             "uni": "convert",
             "express": {
+                "newField": "const",
                 "newField1": "${oldField1}",
                 "parent.newField2": "${parent.oldField2}",
                 "list[].newField2": "${list[].oldField2}"
