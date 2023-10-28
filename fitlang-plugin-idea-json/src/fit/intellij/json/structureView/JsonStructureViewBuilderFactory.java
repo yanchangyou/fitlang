@@ -21,39 +21,43 @@ import java.util.List;
  */
 public class JsonStructureViewBuilderFactory implements PsiStructureViewFactory {
 
-  public JsonStructureViewBuilderFactory() {
+    public JsonStructureViewBuilderFactory() {
 //    JsonCustomStructureViewFactory.EP_NAME.addExtensionPointListener(
 //      () -> ApplicationManager.getApplication().getMessageBus().syncPublisher(StructureViewWrapperImpl.STRUCTURE_CHANGED).run(),
 //      ExtensionPointUtil.createKeyedExtensionDisposable(this, PsiStructureViewFactory.EP_NAME.getPoint(null)));
-  }
-
-  @Nullable
-  @Override
-  public StructureViewBuilder getStructureViewBuilder(@NotNull final PsiFile psiFile) {
-    if (!(psiFile instanceof fit.intellij.json.psi.JsonFile)) {
-      return null;
     }
 
-    List<JsonCustomStructureViewFactory> extensionList = JsonCustomStructureViewFactory.EP_NAME.getExtensionList();
-    if (extensionList.size() > 1) {
-      Logger.getInstance(JsonStructureViewBuilderFactory.class)
-        .warn("Several extensions are registered for JsonCustomStructureViewFactory extension point. " +
-              "Conflicts can arise if there are several builders corresponding to the same file.");
-    }
+    @Nullable
+    @Override
+    public StructureViewBuilder getStructureViewBuilder(@NotNull final PsiFile psiFile) {
+        if (!(psiFile instanceof fit.intellij.json.psi.JsonFile)) {
+            return null;
+        }
+        //TODO
+        if (true) {
+            return null;
+        }
 
-    for (JsonCustomStructureViewFactory extension : extensionList) {
-      final StructureViewBuilder builder = extension.getStructureViewBuilder((JsonFile)psiFile);
-      if (builder != null) {
-        return builder;
-      }
-    }
+        List<JsonCustomStructureViewFactory> extensionList = JsonCustomStructureViewFactory.EP_NAME.getExtensionList();
+        if (extensionList.size() > 1) {
+            Logger.getInstance(JsonStructureViewBuilderFactory.class)
+                    .warn("Several extensions are registered for JsonCustomStructureViewFactory extension point. " +
+                            "Conflicts can arise if there are several builders corresponding to the same file.");
+        }
 
-    return new TreeBasedStructureViewBuilder() {
-      @NotNull
-      @Override
-      public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
-        return new JsonStructureViewModel(psiFile, editor);
-      }
-    };
-  }
+        for (JsonCustomStructureViewFactory extension : extensionList) {
+            final StructureViewBuilder builder = extension.getStructureViewBuilder((JsonFile) psiFile);
+            if (builder != null) {
+                return builder;
+            }
+        }
+
+        return new TreeBasedStructureViewBuilder() {
+            @NotNull
+            @Override
+            public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
+                return new JsonStructureViewModel(psiFile, editor);
+            }
+        };
+    }
 }
