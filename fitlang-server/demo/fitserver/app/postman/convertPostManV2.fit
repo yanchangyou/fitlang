@@ -1,0 +1,135 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "input": {
+        "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver/app/postman/",
+        "filePath": "fit-test.postman_collection.json"
+    },
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "readFile"
+        },
+        {
+            "uni": "parseJson",
+            "jsonField": "content"
+        },
+        {
+            "uni": "convert",
+            "express": {
+                "item": "${content.item}",
+                "collectionName": "${content.info.name}"
+            }
+        },
+        {
+            "uni": "set",
+            "key": "collectionName",
+            "value": "${collectionName}"
+        },
+        {
+            "uni": "foreach",
+            "foreachField": "item",
+            "child": {
+                "id": "switch",
+                "uni": "switch",
+                "switchField": "${boolean(item)+''}",
+                "child": [
+                    {
+                        "case": "false",
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "mix",
+                                "json": {
+                                    "isFolder": false
+                                }
+                            },
+                            {
+                                "id": "convertItem",
+                                "uni": "pipe",
+                                "child": [
+                                    {
+                                        "uni": "mix",
+                                        "json": {
+                                            "contentType": "${boolean(request.body)?(boolean(request.body.urlencoded)?'application/x-www-form-urlencoded':''):''}"
+                                        }
+                                    },
+                                    {
+                                        "uni": "convert",
+                                        "express": {
+                                            "name": "${name}",
+                                            "content.flag": "needFormatJsonInConsoleFlag",
+                                            "content.name": "${name}",
+                                            "content.uni": "postman",
+                                            "content.method": "${request.method}",
+                                            "content.header": "${request.header}",
+                                            "content.header.contentType": "${contentType}",
+                                            "content.url": "${request.url.raw}",
+                                            "content.query": "${request.body.urlencoded}",
+                                            "content.body": "${request.body.raw}",
+                                            "isFolder": "${isFolder}"
+                                        }
+                                    },
+                                    {
+                                        "uni": "convertKeyValueList",
+                                        "listField": "content.query",
+                                        "keyField": "key",
+                                        "valueField": "value"
+                                    },
+                                    {
+                                        "uni": "convertKeyValueList",
+                                        "listField": "content.header",
+                                        "keyField": "key",
+                                        "valueField": "value"
+                                    },
+                                    {
+                                        "uni": "mix",
+                                        "json": {
+                                            "filePath": "${collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
+                                        }
+                                    },
+                                    {
+                                        "uni": "parseJson",
+                                        "jsonField": "content.query"
+                                    },
+                                    {
+                                        "uni": "parseJson",
+                                        "jsonField": "content.body"
+                                    },
+                                    {
+                                        "uni": "writeFile",
+                                        "format": true
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "case": "true",
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "mix",
+                                "json": {
+                                    "parentName": "${'/'+name}",
+                                    "isFolder": true
+                                }
+                            },
+                            {
+                                "uni": "foreach",
+                                "foreachField": "item",
+                                "mixToItemField": [
+                                    "parentName",
+                                    "isFolder"
+                                ],
+                                "child": {
+                                    "uni": "call",
+                                    "nodeId": "convertItem"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
