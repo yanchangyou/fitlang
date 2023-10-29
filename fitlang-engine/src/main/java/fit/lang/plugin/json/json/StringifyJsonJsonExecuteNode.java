@@ -32,7 +32,7 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
         }
         String content = null;
         if (jsonObject != null) {
-            if (needFormat != null && needFormat) {
+            if (Boolean.TRUE.equals(needFormat)) {
                 content = toJsonTextWithFormat(jsonObject);
             } else {
                 content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);

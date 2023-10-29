@@ -97,8 +97,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     }
 
     private static Boolean isPostForm(JSONObject nodeJsonDefine) {
-        boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");
-        if (isPostForm) {
+        Boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");
+        if (Boolean.TRUE.equals(isPostForm)) {
             return true;
         }
         //再根据header的contentType判断

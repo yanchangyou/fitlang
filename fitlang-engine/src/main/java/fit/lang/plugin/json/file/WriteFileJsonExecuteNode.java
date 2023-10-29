@@ -53,7 +53,7 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         }
         String text;
         Boolean format = nodeJsonDefine.getBoolean("format");
-        if (format != null && format && content instanceof JSONObject) {
+        if (Boolean.TRUE.equals(format) && content instanceof JSONObject) {
             text = toJsonTextWithFormat((JSONObject) content);
         } else {
             text = content.toString();
