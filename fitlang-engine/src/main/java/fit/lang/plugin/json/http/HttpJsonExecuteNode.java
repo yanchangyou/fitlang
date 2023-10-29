@@ -6,6 +6,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
@@ -15,6 +16,8 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.nio.charset.Charset;
+import java.util.List;
+import java.util.Map;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 
@@ -67,12 +70,40 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             request.body(httpBody);
         }
 
+        long timeBegin = System.currentTimeMillis();
         HttpResponse response = request.execute();
+        long timeEnd = System.currentTimeMillis();
 
         JSONObject result = parseHttpResult(response);
 
-        output.setData(result);
+        JSONObject out = result;
 
+        if (Boolean.FALSE.equals(nodeJsonDefine.get("onlyBody")) || "postman".equals(nodeJsonDefine.getString("uni"))) {
+            out = new JSONObject();
+            out.put("cookie", parseCookie(response));
+            out.put("header", parseHeader(response));
+            out.put("status", response.getStatus());
+            out.put("size", response.body().length());
+            out.put("time", (timeEnd - timeBegin) + "ms");
+            out.put("body", result);
+        }
+        output.setData(out);
+    }
+
+    static JSONArray parseCookie(HttpResponse response) {
+        return JSONArray.copyOf(response.getCookies());
+    }
+
+    static JSONObject parseHeader(HttpResponse response) {
+        Map<String, List<String>> headers = response.headers();
+        JSONObject headerJson = new JSONObject();
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            if (entry.getKey() == null) {
+                continue;
+            }
+            headerJson.put(entry.getKey(), entry.getValue().get(0));
+        }
+        return headerJson;
     }
 
     private static String buildUrlByQueryParams(JSONObject nodeJsonDefine, String url) {
