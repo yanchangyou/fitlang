@@ -160,19 +160,27 @@ public class ExecuteJsonNodeUtil {
         return nodeOutput.getData().toJSONString();
     }
 
+    public static Map<String, String> toStringMap(JSONObject jsonObject) {
+        return toStringMap(jsonObject, false);
+    }
+
     /**
      * json to string map
      *
      * @param jsonObject
      * @return
      */
-    public static Map<String, String> toStringMap(JSONObject jsonObject) {
+    public static Map<String, String> toStringMap(JSONObject jsonObject, boolean needRemoveEmpty) {
         if (jsonObject == null) {
             return null;
         }
         Map<String, String> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            map.put(entry.getKey(), entry.getValue() == null ? null : entry.getValue().toString());
+            String value = entry.getValue() == null ? null : entry.getValue().toString();
+            if (needRemoveEmpty && StrUtil.isBlank(value)) {
+                continue;
+            }
+            map.put(entry.getKey(), value);
         }
         return map;
     }
@@ -315,7 +323,7 @@ public class ExecuteJsonNodeUtil {
      */
     public static void setHttpHeader(JSONObject header, HttpRequest request) {
         if (header != null && !header.isEmpty()) {
-            request.addHeaders(toStringMap(header));
+            request.addHeaders(toStringMap(header, true));
         }
     }
 
