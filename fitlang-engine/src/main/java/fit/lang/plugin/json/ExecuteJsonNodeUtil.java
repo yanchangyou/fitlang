@@ -543,7 +543,13 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String toJsonTextWithFormat(JSONObject jsonObject) {
-        return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat).replaceAll("\\t", "    ").replace("\":\"", "\": \"");
+        return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
+                .replaceAll("\\t", "    ")
+                .replace("\":\"", "\": \"")
+                .replace("\":true", "\": true")
+                .replace("\":false", "\": false")
+                .replace("\":null", "\": null")
+                ;
     }
 
     /**
