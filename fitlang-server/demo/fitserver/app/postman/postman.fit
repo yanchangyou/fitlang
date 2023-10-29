@@ -1,0 +1,18 @@
+{
+    "uni": "postman",
+    "method": "POST",
+    "url": "http://fit.321zou.com/echo",
+    "header": {
+        "contentType": "application/json"
+    },
+    "query": {
+        "foo": "bar"
+    },
+    "body": {
+        "hello": "world"
+    },
+    "proxy": {
+        "host": "",
+        "port": 0
+    }
+}
