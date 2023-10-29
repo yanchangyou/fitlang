@@ -57,10 +57,10 @@ public class JsonPsiUtil {
     final PsiElement parent = element.getParent();
     return parent instanceof JsonProperty && element == ((JsonProperty) parent).getNameElement()
             && ("\"uni\"".equals(element.getText())
-            || "\"input\"".equals(element.getText())
-            || "\"output\"".equals(element.getText())
-            || "\"id\"".equals(element.getText())
-            || "\"name\"".equals(element.getText())
+//            || "\"input\"".equals(element.getText())
+//            || "\"output\"".equals(element.getText())
+//            || "\"id\"".equals(element.getText())
+//            || "\"name\"".equals(element.getText())
     );
   }
 
