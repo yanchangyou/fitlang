@@ -388,6 +388,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.6.5 add node: postman(jui)</li>
             <li>0.6.4 refine code complete</li>
             <li>0.6.3 support code complete</li>
             <li>0.6.2 IDE error fix</li>
