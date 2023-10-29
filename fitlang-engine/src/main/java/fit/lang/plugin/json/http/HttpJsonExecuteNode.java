@@ -81,9 +81,15 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (Boolean.FALSE.equals(nodeJsonDefine.get("onlyBody")) || "postman".equals(nodeJsonDefine.getString("uni"))) {
             out = new JSONObject();
             out.put("cookie", parseCookie(response));
-            out.put("header", parseHeader(response));
+            JSONObject headerInfo = parseHeader(response);
+            out.put("header", headerInfo.getJSONObject("header"));
             out.put("status", response.getStatus());
-            out.put("size", response.body().length());
+            JSONObject sizeInfo = new JSONObject();
+            int bodySize = response.body().length();
+            sizeInfo.put("body", bodySize);
+            sizeInfo.put("header", headerInfo.getIntValue("size"));
+            out.put("size", bodySize + headerInfo.getIntValue("size"));
+            out.put("sizeInfo", sizeInfo);
             out.put("time", (timeEnd - timeBegin) + "ms");
             out.put("body", result);
         }
@@ -97,6 +103,25 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     static JSONObject parseHeader(HttpResponse response) {
         Map<String, List<String>> headers = response.headers();
         JSONObject headerJson = new JSONObject();
+        int size = 0;
+        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
+            size += entry.getValue().get(0).length();
+            if (entry.getKey() == null) {
+                continue;
+            }
+            size += entry.getKey().length();
+            headerJson.put(entry.getKey(), entry.getValue().get(0));
+        }
+        JSONObject result = new JSONObject();
+        result.put("header", headerJson);
+        result.put("size", size + headers.size() * 4);
+        return result;
+    }
+
+    static JSONObject parseHeaderSize(HttpResponse response) {
+        Map<String, List<String>> headers = response.headers();
+        JSONObject headerJson = new JSONObject();
+
         for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
             if (entry.getKey() == null) {
                 continue;
