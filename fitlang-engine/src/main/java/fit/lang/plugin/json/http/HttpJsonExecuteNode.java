@@ -52,7 +52,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject httpParam = parseParam(nodeJsonDefine);
 
-        Boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");
+        Boolean isPostForm = isPostForm(nodeJsonDefine);
         if (method == Method.GET || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
             parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
@@ -94,6 +94,24 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("body", result);
         }
         output.setData(out);
+    }
+
+    private static Boolean isPostForm(JSONObject nodeJsonDefine) {
+        boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");
+        if (isPostForm) {
+            return true;
+        }
+        //再根据header的contentType判断
+        JSONObject header = nodeJsonDefine.getJSONObject("header");
+        if (header == null) {
+            return false;
+        }
+        String contentType = header.getString("contentType");
+        if (contentType == null) {
+            return false;
+        }
+
+        return contentType.equalsIgnoreCase("application/x-www-form-urlencoded");
     }
 
     static JSONArray parseCookie(HttpResponse response) {
