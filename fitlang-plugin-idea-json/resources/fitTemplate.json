@@ -281,7 +281,7 @@
             "body": {
                 "hello": "world"
             },
-            "flag": "_needFormatJsonInConsole"
+            "flag": "needFormatJsonInConsoleFlag"
         }
     ]
 }

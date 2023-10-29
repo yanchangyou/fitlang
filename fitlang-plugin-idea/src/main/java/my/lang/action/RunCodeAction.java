@@ -162,7 +162,7 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     private static boolean needFormatJsonInConsole(String code) {
-        return code.contains("\"_needFormatJsonInConsole\"");
+        return code.contains("\"_needFormatJsonInConsole\"") || code.contains("needFormatJsonInConsoleFlag");
     }
 
     private String executeCode(String code) {
