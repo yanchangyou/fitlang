@@ -261,5 +261,8 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("writeFile", WriteFileJsonExecuteNode.class);
         register("deleteFile", DeleteFileJsonExecuteNode.class);
 
+        //jui
+        register("postman", HttpJsonExecuteNode.class);
+
     }
 }

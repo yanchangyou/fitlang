@@ -327,7 +327,7 @@ public class ExecuteJsonNodeUtil {
      */
     public static void setProxy(JSONObject proxyConfig, HttpRequest request) {
 
-        if (proxyConfig != null && proxyConfig.containsKey("host") && proxyConfig.containsKey("port")) {
+        if (proxyConfig != null && StrUtil.isNotBlank(proxyConfig.getString("host")) && proxyConfig.containsKey("port")) {
 
             String type = proxyConfig.getString("type");
             SocketAddress socketAddress = new InetSocketAddress(proxyConfig.getString("host"), proxyConfig.getInteger("port"));

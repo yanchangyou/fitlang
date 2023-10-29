@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.http;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
@@ -12,6 +13,8 @@ import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+
+import java.nio.charset.Charset;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 
@@ -35,6 +38,10 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (url == null) {
             throw new ExecuteNodeException("http node url field is required!");
         }
+
+        //add query params
+        url = buildUrlByQueryParams(nodeJsonDefine, url);
+
         HttpRequest request = HttpUtil.createRequest(method, url);
 
         setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
@@ -68,16 +75,31 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
 
     }
 
+    private static String buildUrlByQueryParams(JSONObject nodeJsonDefine, String url) {
+        JSONObject query = nodeJsonDefine.getJSONObject("query");
+        if (query != null && !query.isEmpty()) {
+            String queryParams = URLUtil.buildQuery(query, Charset.defaultCharset());
+            if (url.contains("?")) {
+                url = url.concat("&").concat(queryParams);
+            } else {
+                url = url.concat("?").concat(queryParams);
+            }
+        }
+        return url;
+    }
+
     private static JSONObject parseParam(JSONObject nodeJsonDefine) {
         JSONObject httpParam = new JSONObject();
-        for (int i = 0; i < 10; i++) {
-            String key = "param" + (i > 0 ? i + "" : "");
-            Object param = nodeJsonDefine.get(key);
-            if (param instanceof JSONObject) {
-                httpParam.putAll((JSONObject) param);
+        String[] fields = {"param", "body"};
+        for (String field : fields) {
+            for (int i = 0; i < 10; i++) {
+                String key = field + (i > 0 ? i + "" : "");
+                Object param = nodeJsonDefine.get(key);
+                if (param instanceof JSONObject) {
+                    httpParam.putAll((JSONObject) param);
+                }
             }
         }
         return httpParam;
     }
-
 }
