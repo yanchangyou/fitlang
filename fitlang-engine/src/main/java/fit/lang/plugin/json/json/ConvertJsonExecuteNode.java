@@ -48,6 +48,10 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
+        Boolean isMixMode = nodeJsonDefine.getBoolean("isMixMode");
+        if (Boolean.TRUE.equals(isMixMode)) {
+            output.setData(input.getData().clone());
+        }
 
         for (String to : express.keySet()) {
 
