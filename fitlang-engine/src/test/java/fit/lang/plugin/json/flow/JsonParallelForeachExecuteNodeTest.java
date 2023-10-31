@@ -24,7 +24,7 @@ public class JsonParallelForeachExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"list\":[{\"data\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
+        Assert.assertEquals("{\"list\":[{\"value\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
     }
 
     public void testExecute2() {
@@ -45,7 +45,7 @@ public class JsonParallelForeachExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"list\":[{\"data\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
+        Assert.assertEquals("{\"list\":[{\"value\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
     }
 
 }

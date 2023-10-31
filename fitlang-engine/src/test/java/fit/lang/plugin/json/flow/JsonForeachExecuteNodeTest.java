@@ -29,7 +29,7 @@ public class JsonForeachExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"list\":[{\"data\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
+        Assert.assertEquals("{\"list\":[{\"value\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
     }
 
     public void testExecute2() {
@@ -91,7 +91,7 @@ public class JsonForeachExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"list\":[{\"data\":1,\"index\":2},{\"data\":2,\"index\":2}]}", output);
+        Assert.assertEquals("{\"list\":[{\"value\":1,\"index\":2},{\"value\":2,\"index\":2}]}", output);
     }
 
     public void testExecuteIsNotPipe() {
@@ -114,6 +114,6 @@ public class JsonForeachExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertEquals("{\"list\":[{\"data\":1,\"index\":1},{\"data\":2,\"index\":1}]}", output);
+        Assert.assertEquals("{\"list\":[{\"value\":1,\"index\":1},{\"value\":2,\"index\":1}]}", output);
     }
 }

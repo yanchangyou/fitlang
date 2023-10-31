@@ -32,6 +32,7 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
         Assert.assertTrue(outputJson.containsKey("content"));
 
         Assert.assertEquals("{\n" +
+                "    \"flag\": \"needFormatJsonInConsoleFlag\",\n" +
                 "    \"uni\": \"hello\",\n" +
                 "    \"message\": \"hello, world!\"\n" +
                 "}", outputJson.getString("content"));

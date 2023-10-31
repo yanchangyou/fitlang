@@ -138,7 +138,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
             }
         } else {
             itemJson = new JSONObject();
-            itemJson.put("data", item);
+            itemJson.put("value", item);
         }
         JSONArray fields = getConfigFields(getJsonData(getNodeDefine()), "mixToItemField");
         for (Object fieldName : fields) {
