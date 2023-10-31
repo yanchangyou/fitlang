@@ -261,8 +261,20 @@
         },
         {
             "uni": "systemInfo",
-            "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver",
-            "filePath": "/app/first.fit"
+            "shareFields": [
+                "computerManufacturer",
+                "computerModel",
+                "processorName",
+                "processorPhysicalCount",
+                "processorLogicalCount",
+                "processorMaxFreq",
+                "memoryTotal",
+                "memoryAvailable",
+                "osManufacturer",
+                "osFamily",
+                "osVersion",
+                "osBit"
+            ]
         },
         {
             "uni": "postman",
