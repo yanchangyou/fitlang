@@ -39,6 +39,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
 
         setForeachField(nodeDefine.getString(DEFINE_KEYWORDS_OF_FOREACH_FIELD_NAME));
         setParallelism(nodeDefine.getInteger("parallelism"));
+        setPipe(nodeDefine.getBoolean("isPipe"));
 
         ExecuteNodeUtil.buildChildNode(this, nodeDefine);
     }

@@ -71,4 +71,48 @@ public class JsonForeachExecuteNodeTest extends TestCase {
 
         Assert.assertEquals("{\"list\":[{\"key\":\"object\",\"value\":{\"foo\":\"bar\"},\"times\":0,\"message\":\"mix\"}]}", output);
     }
+
+    public void testExecuteIsPipe() {
+        String flow = "{" +//
+                "   'uni': 'foreach'," +
+                "   'foreachField': 'list'," +
+                "   'isPipe': true," +
+                "   'child': [" +
+                "   {" +
+                "       'uni':'increase'," +
+                "   }," +
+                "   {" +
+                "       'uni':'increase'," +
+                "   }" +
+                "]" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'list':[1,2],'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"list\":[{\"data\":1,\"index\":2},{\"data\":2,\"index\":2}]}", output);
+    }
+
+    public void testExecuteIsNotPipe() {
+        String flow = "{" +//
+                "   'uni': 'foreach'," +
+                "   'foreachField': 'list'," +
+                "   'isPipe': false," +
+                "   'child': [" +
+                "   {" +
+                "       'uni':'increase'," +
+                "   }," +
+                "   {" +
+                "       'uni':'increase'," +
+                "   }" +
+                "]" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'list':[1,2],'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"list\":[{\"data\":1,\"index\":1},{\"data\":2,\"index\":1}]}", output);
+    }
 }

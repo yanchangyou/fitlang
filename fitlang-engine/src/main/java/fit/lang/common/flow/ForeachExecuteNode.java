@@ -37,6 +37,9 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
                     for (ExecuteNode executeNode : childNodes) {
                         executeNode.executeAndNext(subInput, subOutput);
                         result = subOutput.getNodeData();
+                        if (isPipe) {
+                            subInput.setNodeData(result);
+                        }
                     }
                     return result;
                 }
@@ -78,4 +81,20 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
     public abstract ExecuteNodeOutput getCurrentOutput(ExecuteNodeOutput input);
 
+    /**
+     * loop参数处理逻辑，是否pipe模式（出参转下一次入参），默认是否
+     */
+    protected boolean isPipe;
+
+    public boolean isPipe() {
+        return isPipe;
+    }
+
+    public void setPipe(boolean pipe) {
+        isPipe = pipe;
+    }
+
+    public void setPipe(Boolean pipe) {
+        isPipe = pipe != null ? pipe : false;
+    }
 }
