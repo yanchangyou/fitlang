@@ -32,4 +32,43 @@ public class JsonForeachExecuteNodeTest extends TestCase {
         Assert.assertEquals("{\"list\":[{\"data\":\"a\",\"times\":0,\"message\":\"mix\"}]}", output);
     }
 
+    public void testExecute2() {
+        String flow = "{" +//
+                "   'uni': 'foreach'," +
+                "   'foreachField': 'list'," +
+                "   'mixToItemField': 'times'," +
+                "   'child': {" +
+                "       'uni':'mix'," +
+                "       'json':{" +
+                "           'message':'mix'" +
+                "       }" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'list':{'code':'001'},'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"list\":[{\"key\":\"code\",\"value\":\"001\",\"times\":0,\"message\":\"mix\"}]}", output);
+    }
+
+    public void testExecute3() {
+        String flow = "{" +//
+                "   'uni': 'foreach'," +
+                "   'foreachField': 'list'," +
+                "   'mixToItemField': 'times'," +
+                "   'child': {" +
+                "       'uni':'mix'," +
+                "       'json':{" +
+                "           'message':'mix'" +
+                "       }" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'list':{'object':{'foo':'bar'}},'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"list\":[{\"key\":\"object\",\"value\":{\"foo\":\"bar\"},\"times\":0,\"message\":\"mix\"}]}", output);
+    }
 }

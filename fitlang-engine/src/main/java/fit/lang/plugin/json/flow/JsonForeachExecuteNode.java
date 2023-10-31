@@ -14,6 +14,8 @@ import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,15 +79,51 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
     @Override
     public boolean next(ExecuteNodeInput input) {
         JsonExecuteNodeInput jsonInput = (JsonExecuteNodeInput) input;
-        JSONArray list = jsonInput.getJsonArray(foreachField);
-        currentIndex++;
-        return list != null && !list.isEmpty() && currentIndex < list.size();
+        Object target = jsonInput.get(foreachField);
+        if (target instanceof JSONArray) {
+            JSONArray list = (JSONArray) jsonInput.get(foreachField);
+            currentIndex++;
+            return list != null && !list.isEmpty() && currentIndex < list.size();
+        } else if (target instanceof JSONObject) {
+            JSONObject jsonObject = (JSONObject) jsonInput.get(foreachField);
+            currentIndex++;
+            return jsonObject != null && !jsonObject.isEmpty() && currentIndex < jsonObject.size();
+        }
+        return false;
+    }
+
+    Map<JSONObject, JSONArray> cache = new HashMap<>();
+
+    JSONArray buildKeyValueList(JSONObject jsonObject) {
+        if (cache.keySet().contains(jsonObject)) {
+            return cache.get(jsonObject);
+        }
+        JSONArray list = new JSONArray();
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            JSONObject item = new JSONObject();
+            item.put("key", entry.getKey());
+            item.put("value", entry.getValue());
+            list.add(item);
+        }
+        cache.put(jsonObject, list);
+        return list;
     }
 
     @Override
     public ExecuteNodeInput getCurrentInput(ExecuteNodeInput input) {
         JsonExecuteNodeInput jsonInput = (JsonExecuteNodeInput) input;
-        JSONArray list = jsonInput.getJsonArray(foreachField);
+        Object target = jsonInput.get(foreachField);
+
+        if (target == null) {
+            throw new ExecuteNodeException("foreach ".concat(foreachField).concat(" value is null!"));
+        }
+        JSONArray list;
+        if (target instanceof JSONObject) {
+            list = buildKeyValueList((JSONObject) target);
+        } else {
+            list = jsonInput.getJsonArray(foreachField);
+        }
+
         if (currentIndex > list.size()) {
             throw new ExecuteNodeException("JsonForeachExecuteNode out of bounder: " + currentIndex);
         }

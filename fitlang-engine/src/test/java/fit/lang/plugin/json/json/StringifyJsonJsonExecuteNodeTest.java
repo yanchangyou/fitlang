@@ -61,8 +61,8 @@ public class StringifyJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertEquals("{\n" +
                 "    \"json\":{\n" +
-                "        \"uni\":\"hello\",\n" +
-                "        \"null\":null\n" +
+                "        \"uni\": \"hello\",\n" +
+                "        \"null\": null\n" +
                 "    }\n" +
                 "}", outputJson.get("json"));
 
