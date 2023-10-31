@@ -108,6 +108,7 @@ public class JsonForeachExecuteNodeTest extends TestCase {
                 "   }" +
                 "]" +
                 "}";
+        System.out.println(flow);
 
         String output = ExecuteJsonNodeUtil.executeCode("{'list':[1,2],'times':0}", flow);
 

@@ -125,15 +125,17 @@
         {
             "uni": "foreach",
             "foreachField": "list",
+            "isPipe": true,
             "child": [
                 {
-                    "uni": "hello"
+                    "uni": "increase"
                 }
             ]
         },
         {
             "uni": "loop",
             "loopTimes": 10,
+            "isPipe": true,
             "child": {
                 "uni": "increase"
             }
