@@ -1,5 +1,5 @@
 {
-    "_flag": "needFormatJsonInConsoleFlag",
+    "flag": "needFormatJsonInConsoleFlag",
     "uni": "pipe",
     "child": [
         {

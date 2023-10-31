@@ -1,5 +1,5 @@
 {
-    "_flag": "needFormatJsonInConsoleFlag",
+    "flag": "needFormatJsonInConsoleFlag",
     "description": "system info node",
     "uni": "systemInfo",
     "shareFields": [
