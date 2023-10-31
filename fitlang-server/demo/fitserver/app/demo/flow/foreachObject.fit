@@ -1,0 +1,21 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "input": {
+        "object": {
+            "/path1": {
+                "foo": "bar1"
+            },
+            "/path2": {
+                "foo": "bar2"
+            }
+        }
+    },
+    "uni": "foreach",
+    "foreachField": "object",
+    "child": {
+        "uni": "mix",
+        "json": {
+            "message": "mix"
+        }
+    }
+}
