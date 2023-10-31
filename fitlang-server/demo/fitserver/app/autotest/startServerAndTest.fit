@@ -1,5 +1,5 @@
 {
-    "flag": "_needFormatJsonInConsole",
+    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "path": "测试用例.xls",
         "sheetName": "接口列表",

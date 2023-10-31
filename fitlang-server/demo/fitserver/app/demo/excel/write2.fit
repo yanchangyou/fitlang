@@ -14,7 +14,7 @@
             }
         },
         {
-            "flag": "_needFormatJsonInConsole",
+            "flag": "needFormatJsonInConsoleFlag",
             "uni": "pipe",
             "child": [
                 {

@@ -61,7 +61,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "            }" +
                 "        }," +
                 "        {" +
-                "            'flag': '_needFormatJsonInConsole'," +
+                "            'flag': 'needFormatJsonInConsoleFlag'," +
                 "            'uni': 'pipe'," +
                 "            'child': [" +
                 "                {" +

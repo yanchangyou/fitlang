@@ -119,7 +119,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
                 "        \"sheetName\": \"接口列表\",\n" +
                 "        \"testRepostExcelName\": \"${'测试报告-'+System.currentTimeMillis()+'.xls'}\"\n" +
                 "    },\n" +
-                "    \"flag\": \"_needFormatJsonInConsole\",\n" +
+                "    \"flag\": \"needFormatJsonInConsoleFlag\",\n" +
                 "    \"uni\": \"sequence\",\n" +
                 "    \"child\": [\n" +
                 "        {\n" +

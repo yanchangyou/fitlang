@@ -2,7 +2,7 @@
     "uni": "pipe",
     "child": [
         {
-            "flag": "_needFormatJsonInConsole",
+            "flag": "needFormatJsonInConsoleFlag",
             "uni": "readFile",
             "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver",
             "filePath": "/app/first.fit"

@@ -1,5 +1,5 @@
 {
-    "flag": "_needFormatJsonInConsole",
+    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver/app/postman/",
         "filePath": "fit-test.postman_collection.json"
@@ -57,7 +57,7 @@
                                         "uni": "convert",
                                         "express": {
                                             "name": "${name}",
-                                            "content.flag": "_needFormatJsonInConsole",
+                                            "content.flag": "needFormatJsonInConsoleFlag",
                                             "content.name": "${name}",
                                             "content.uni": "http",
                                             "content.method": "${request.method}",

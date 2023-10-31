@@ -1,5 +1,5 @@
 {
-    "flag": "_needFormatJsonInConsole",
+    "flag": "needFormatJsonInConsoleFlag",
     "uni": "postman",
     "method": "POST",
     "url": "http://fit.321zou.com/echo",
