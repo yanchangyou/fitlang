@@ -178,45 +178,45 @@
         },
         {
             "uni": "http",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "postJson",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "postForm",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "httpGet",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "httpPut",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "httpDelete",
+            "url": "http://fit.321zou.com/hello",
             "param": {
                 "foo": "bar"
-            },
-            "url": "http://fit.321zou.com/hello"
+            }
         },
         {
             "uni": "server",
