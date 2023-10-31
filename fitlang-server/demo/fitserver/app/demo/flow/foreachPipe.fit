@@ -8,6 +8,7 @@
     },
     "uni": "foreach",
     "foreachField": "list",
+    "isPipe": true,
     "child": {
         "uni": "increase"
     }

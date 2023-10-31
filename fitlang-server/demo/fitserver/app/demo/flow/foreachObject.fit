@@ -13,9 +13,6 @@
     "uni": "foreach",
     "foreachField": "object",
     "child": {
-        "uni": "mix",
-        "json": {
-            "message": "mix"
-        }
+        "uni": "increase"
     }
 }
