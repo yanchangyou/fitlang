@@ -24,6 +24,8 @@ import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
 import fit.lang.plugin.json.file.ReadFileJsonExecuteNode;
 import fit.lang.plugin.json.file.WriteFileJsonExecuteNode;
 import fit.lang.plugin.json.flow.*;
+import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
+import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.git.GitPullJsonExecuteNode;
 import fit.lang.plugin.json.http.*;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
@@ -263,6 +265,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //jui
         register("postman", HttpJsonExecuteNode.class);
+
+        //function and package
+        register("package", JsonPackageExecuteNode.class);
+        register("function", JsonFunctionExecuteNode.class);
 
     }
 }
