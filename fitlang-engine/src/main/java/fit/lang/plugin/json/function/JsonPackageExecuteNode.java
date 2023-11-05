@@ -60,16 +60,19 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
                 mainExecuteNode = (JsonExecuteNode) child;
             }
             String functionName = child.getName();
-            if (functionMap.containsKey(functionName)) {
-                throw new ExecuteNodeException("function name existed: ".concat(functionName));
-            }
+//            if (functionMap.containsKey(functionName)) {
+//                throw new ExecuteNodeException("function name existed: ".concat(functionName));
+//            }
             functionMap.put(functionName, (JsonExecuteNode) child);
 
-            String functionId = packageName.concat(".").concat(functionName);
-            if (packageFunctionMap.containsKey(functionId)) {
-                throw new ExecuteNodeException("function existed: ".concat(functionId));
+            //排除main方法
+            if (!"main".equals(functionName)) {
+                String functionId = packageName.concat(".").concat(functionName);
+//                if (packageFunctionMap.containsKey(functionId)) {
+//                    throw new ExecuteNodeException("function existed: ".concat(functionId));
+//                }
+                packageFunctionMap.put(functionId, (JsonExecuteNode) child);
             }
-            packageFunctionMap.put(functionId, (JsonExecuteNode) child);
         }
     }
 

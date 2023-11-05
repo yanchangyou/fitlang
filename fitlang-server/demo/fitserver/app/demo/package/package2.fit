@@ -1,0 +1,14 @@
+{
+    "uni": "package",
+    "name": "package2",
+    "child": [
+        {
+            "uni": "function",
+            "name": "main",
+            "child": {
+                "uni": "call",
+                "function": "package1.hello"
+            }
+        }
+    ]
+}
