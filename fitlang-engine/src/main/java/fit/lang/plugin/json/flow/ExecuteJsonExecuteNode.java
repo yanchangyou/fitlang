@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.util;
+package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
