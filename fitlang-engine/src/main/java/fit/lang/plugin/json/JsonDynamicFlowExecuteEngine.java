@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fit.lang.ExecuteNodeUtil.buildNextNode;
+import static fit.lang.ExecuteNodeUtil.getAllException;
 
 /**
  * 执行引擎
@@ -116,7 +117,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
             return executeNode;
         } catch (Exception e) {
-            throw new ExecuteNodeException("buildExecuteNode exception:", e);
+            throw new ExecuteNodeException("buildExecuteNode exception:".concat(getAllException(e)), e);
         }
     }
 

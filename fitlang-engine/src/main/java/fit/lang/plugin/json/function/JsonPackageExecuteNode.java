@@ -15,7 +15,6 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * 执行节点
  */
@@ -23,11 +22,21 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
 
     String packageName;
 
+    /**
+     * 按照惯例，默认从main函数开始执行
+     */
     String mainFunctionName = "main";
 
     JsonExecuteNode mainExecuteNode;
 
     Map<String, JsonExecuteNode> functionMap = new HashMap<>();
+
+    static Map<String, JsonExecuteNode> localFunctionMap;
+
+    /**
+     * 全局函数定义
+     */
+    static Map<String, JsonExecuteNode> packageFunctionMap = new HashMap<>();
 
     /**
      * 静态解析
@@ -50,7 +59,17 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
             if (child.getName().equals(mainFunctionName)) {
                 mainExecuteNode = (JsonExecuteNode) child;
             }
-            functionMap.put(child.getName(), (JsonExecuteNode) child);
+            String functionName = child.getName();
+            if (functionMap.containsKey(functionName)) {
+                throw new ExecuteNodeException("function name existed: ".concat(functionName));
+            }
+            functionMap.put(functionName, (JsonExecuteNode) child);
+
+            String functionId = packageName.concat(".").concat(functionName);
+            if (packageFunctionMap.containsKey(functionId)) {
+                throw new ExecuteNodeException("function existed: ".concat(functionId));
+            }
+            packageFunctionMap.put(functionId, (JsonExecuteNode) child);
         }
     }
 
@@ -58,8 +77,11 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         if (mainExecuteNode == null) {
-            throw new ExecuteNodeException("package main function is null, can not execute!");
+            throw new ExecuteNodeException("package main function node is null, can not execute! main function name is: ".concat(mainFunctionName).concat("."));
         }
+
+        //局部函数赋值
+        localFunctionMap = functionMap;
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 
@@ -67,5 +89,17 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
 
+    }
+
+    public static JsonExecuteNode getFunction(String functionName) {
+
+        //先找包内找
+        JsonExecuteNode node = localFunctionMap.get(functionName);
+
+        //全局找
+        if (node == null) {
+            node = packageFunctionMap.get(functionName);
+        }
+        return node;
     }
 }
