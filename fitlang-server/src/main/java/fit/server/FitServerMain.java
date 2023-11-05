@@ -3,6 +3,7 @@ package fit.server;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
@@ -44,6 +45,7 @@ public class FitServerMain {
 
         ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
         ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
+        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
 
         String result = ExecuteJsonNodeUtil.executeCode(code);
         System.out.println(result);

@@ -17,6 +17,7 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
@@ -120,6 +121,7 @@ public abstract class RunCodeAction extends AnAction {
 
         if (!filePathList.isEmpty()) {
             ServerJsonExecuteNode.setCurrentServerFilePath(filePathList.get(0));
+            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
         } else {
             return;
         }

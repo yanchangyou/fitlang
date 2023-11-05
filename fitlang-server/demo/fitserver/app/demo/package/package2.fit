@@ -1,13 +1,17 @@
 {
     "uni": "package",
     "name": "package2",
+    "import": [
+        "package0",
+        "demo/package/package0"
+    ],
     "child": [
         {
             "uni": "function",
             "name": "main",
             "child": {
                 "uni": "call",
-                "function": "package1.hello"
+                "function": "package0.hello"
             }
         }
     ]

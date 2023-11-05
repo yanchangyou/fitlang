@@ -1,24 +1,38 @@
 package fit.lang.plugin.json.function;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.aop.ExecuteNodeSimpleAop;
+import fit.lang.define.base.ExecuteContext;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
 
 /**
  * 执行节点
  */
 public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNodeBuildable {
+
+    /**
+     * 函数加载目录
+     */
+    static List<String> functionImportPaths = new ArrayList<>();
 
     String packageName;
 
@@ -54,6 +68,14 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
         if (nodeDefineJson.getString("mainFunction") != null) {
             mainFunctionName = nodeDefineJson.getString("mainFunction");
         }
+
+        //import 路径支持
+        if (nodeDefineJson.getJSONArray("import") != null) {
+            JSONArray paths = nodeDefineJson.getJSONArray("import");
+            for (Object item : paths) {
+                addImportPath(item.toString());
+            }
+        }
         ExecuteNodeUtil.buildChildNode(this, nodeDefineJson);
         for (ExecuteNode child : childNodes) {
             if (child.getName().equals(mainFunctionName)) {
@@ -74,6 +96,7 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
                 packageFunctionMap.put(functionId, (JsonExecuteNode) child);
             }
         }
+        importFunction(functionImportPaths, nodeJsonDefine, nodeContext);
     }
 
     @Override
@@ -103,6 +126,41 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
         if (node == null) {
             node = packageFunctionMap.get(functionName);
         }
+
         return node;
+    }
+
+    /**
+     * 导入函数
+     *
+     * @param importRoots
+     * @param nodeDefine
+     * @param nodeContext
+     */
+    private static void importFunction(List<String> importRoots, JSONObject nodeDefine, ExecuteContext nodeContext) {
+        JSONArray imports = nodeDefine.getJSONArray("import");
+        if (imports != null) {
+            for (Object importPath : imports) {
+                for (String importRoot : importRoots) {
+                    String path = importPath.toString();
+                    if (!path.endsWith(".fit") && !path.endsWith(".fit.json")) {
+                        path += ".fit";
+                    }
+                    File file = new File(joinFilePath(importRoot, path));
+                    if (!file.exists()) {
+                        continue;
+                    }
+
+                    String content = FileUtil.readUtf8String(file);
+                    JSONObject define = JSONObject.parse(content);
+                    JsonDynamicFlowExecuteEngine.createExecuteNode(define, nodeContext);
+                    importFunction(importRoots, define, nodeContext);
+                }
+            }
+        }
+    }
+
+    public static void addImportPath(String path) {
+        functionImportPaths.add(path);
     }
 }
