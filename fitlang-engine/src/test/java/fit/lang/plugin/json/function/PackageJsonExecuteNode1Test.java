@@ -12,10 +12,10 @@ public class PackageJsonExecuteNode1Test extends TestCase {
 
         String flow = "{" +
                 "    'uni': 'package'," +
-                "    'name': 'package2'," +
+                "    'name': 'package3'," +
                 "    'import': [" +
-                "        'package0'," +
-                "        'demo/package/package0'" +
+                "        'package2'," +
+                "        'demo/package/package2'" +
                 "    ]," +
                 "    'child': [" +
                 "        {" +

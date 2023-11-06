@@ -69,30 +69,17 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
             mainFunctionName = nodeDefineJson.getString("mainFunction");
         }
 
-        //import 路径支持
-        if (nodeDefineJson.getJSONArray("import") != null) {
-            JSONArray paths = nodeDefineJson.getJSONArray("import");
-            for (Object item : paths) {
-                addImportPath(item.toString());
-            }
-        }
         ExecuteNodeUtil.buildChildNode(this, nodeDefineJson);
         for (ExecuteNode child : childNodes) {
             if (child.getName().equals(mainFunctionName)) {
                 mainExecuteNode = (JsonExecuteNode) child;
             }
             String functionName = child.getName();
-//            if (functionMap.containsKey(functionName)) {
-//                throw new ExecuteNodeException("function name existed: ".concat(functionName));
-//            }
             functionMap.put(functionName, (JsonExecuteNode) child);
 
             //排除main方法
             if (!"main".equals(functionName)) {
                 String functionId = packageName.concat(".").concat(functionName);
-//                if (packageFunctionMap.containsKey(functionId)) {
-//                    throw new ExecuteNodeException("function existed: ".concat(functionId));
-//                }
                 packageFunctionMap.put(functionId, (JsonExecuteNode) child);
             }
         }
@@ -154,7 +141,6 @@ public class JsonPackageExecuteNode extends JsonExecuteNode implements ExecuteNo
                     String content = FileUtil.readUtf8String(file);
                     JSONObject define = JSONObject.parse(content);
                     JsonDynamicFlowExecuteEngine.createExecuteNode(define, nodeContext);
-                    importFunction(importRoots, define, nodeContext);
                 }
             }
         }
