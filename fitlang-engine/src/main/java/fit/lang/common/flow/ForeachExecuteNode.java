@@ -32,7 +32,7 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
             Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {
                 @Override
-                public ExecuteNodeData call() throws Exception {
+                public ExecuteNodeData call() {
                     ExecuteNodeData result = null;
                     for (ExecuteNode executeNode : childNodes) {
                         executeNode.executeAndNext(subInput, subOutput);
