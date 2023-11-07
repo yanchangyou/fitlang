@@ -114,8 +114,6 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - server: 服务端节点, 类属于tomcat
 - proxy: 代理节点
 - web: 配置web参数，响应头等
-- wsServer: web socket server
-- wsClient: web socket client
 
 ### file节点
 - readFile: 读取文件
