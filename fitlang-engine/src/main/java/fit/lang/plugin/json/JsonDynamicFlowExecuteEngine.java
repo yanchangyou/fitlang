@@ -221,8 +221,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("proxy", ProxyJsonExecuteNode.class);
 
         register("web", WebJsonExecuteNode.class);
-        register("wsServer", WebSocketServerJsonExecuteNode.class);
-        register("wsClient", WebSocketClientJsonExecuteNode.class);
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
