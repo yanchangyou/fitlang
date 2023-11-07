@@ -388,6 +388,7 @@ cloudClient：client端<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.6.9 fix package nest import; fix loop bug</li>
             <li>0.6.8 add node: package and function</li>
             <li>0.6.7 refine fit template; foreach support object</li>
             <li>0.6.6 refine postman(jui)</li>
