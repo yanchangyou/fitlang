@@ -5,7 +5,6 @@ import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
-import fit.lang.common.AbstractExecuteNode;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -99,23 +98,23 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
         List bags = getBags(getLoopTimes());
 
         for (int i = 0; i < getLoopTimes(); i++) {
-            input.getNodeContext().setAttribute("loopIndex", currentIndex);
+
             Future<Object> submit = executorService.submit(new Callable<Object>() {
 
                 @Override
                 public Object call() throws Exception {
+                    input.getNodeContext().setAttribute("loopIndex", currentIndex);
                     for (ExecuteNode executeNode : childNodes) {
                         executeNode.executeAndNext(input, output);
                         if (isPipe) {
                             input.setNodeData(output.getNodeData());
                         }
                     }
-
-                    return output.getNodeData().getData();
+                    currentIndex++;
+                    return output.getNodeData().cloneThis().getData();
                 }
             });
             resultObjects.offer(submit);
-            currentIndex++;
         }
         executorService.shutdown();
 

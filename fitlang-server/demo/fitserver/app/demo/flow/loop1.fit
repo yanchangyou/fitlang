@@ -1,0 +1,12 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "loop",
+    "loopTimes": 10,
+    "isBagsMode": true,
+    "child": {
+        "uni": "mix",
+        "json": {
+            "loopIndex": "${loopIndex+1}"
+        }
+    }
+}
