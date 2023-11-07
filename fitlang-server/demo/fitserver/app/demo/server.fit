@@ -5,12 +5,12 @@
     "enableInnerService": [
         "_shutdown",
         "_stop",
-        "_reload",
-        "_cloud"
+        "_reload"
     ],
     "init": {
-        "uni": "cloudServer",
-        "port": 20000
+        "uni": "mix",
+        "json": {
+        }
     },
     "service": {
         "/helloSpeed": {

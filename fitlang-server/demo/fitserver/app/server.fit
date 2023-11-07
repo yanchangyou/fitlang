@@ -7,7 +7,6 @@
     //        "_stop",
     //        "_reload",
     //        "_api",
-    //        "_cloud"
     //    ],
     "init": {
         "uni": "sequence",
@@ -23,10 +22,6 @@
                     //                    "host":"xxx.com",
                     //                    "port":13000
                 }
-            },
-            {
-                "uni": "cloudServer",
-                "port": 20000
             }
         ]
     },

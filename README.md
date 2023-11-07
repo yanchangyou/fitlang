@@ -117,10 +117,6 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - wsServer: web socket server
 - wsClient: web socket client
 
-### Excel节点
-- readExcel: 读取Excel
-- writeExcel: 写入Excel
-
 ### file节点
 - readFile: 读取文件
 - writeFile: 写入文件
@@ -136,7 +132,3 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - receiveClientMonitorData: 接收客户端监控数据
 - pushClientMonitorData: 推送监控数据
 - getMonitorClient: 获取监控客户端列表
-
-### 云节点
-- cloudServer: server端
-- cloudClient: client端

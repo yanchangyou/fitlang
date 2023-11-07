@@ -13,13 +13,8 @@ import fit.lang.define.base.ExecuteContext;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
-import fit.lang.plugin.json.cloud.CloudClientJsonExecuteNode;
-import fit.lang.plugin.json.cloud.CloudGetClientJsonExecuteNode;
-import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import fit.lang.plugin.json.define.*;
 
-import fit.lang.plugin.json.excel.ReadExcelJsonExecuteNode;
-import fit.lang.plugin.json.excel.WriteExcelJsonExecuteNode;
 import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
 import fit.lang.plugin.json.file.ReadFileJsonExecuteNode;
 import fit.lang.plugin.json.file.WriteFileJsonExecuteNode;
@@ -151,8 +146,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
                 "readFile",
                 "writeFile",
                 "deleteFile",
-                "readExcel",
-                "writeExcel"
         };
         for (String nodeUni : dangerNodes) {
             unregister(nodeUni);
@@ -160,10 +153,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
     }
 
     public static void enableUnsafeNodes() {
-
-        //excel
-        register("readExcel", ReadExcelJsonExecuteNode.class);
-        register("writeExcel", WriteExcelJsonExecuteNode.class);
 
         // file
         register("readFile", ReadFileJsonExecuteNode.class);
@@ -230,16 +219,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // web
         register("server", ServerJsonExecuteNode.class);
         register("proxy", ProxyJsonExecuteNode.class);
-        register("register", CloudServerJsonExecuteNode.class);
 
         register("web", WebJsonExecuteNode.class);
         register("wsServer", WebSocketServerJsonExecuteNode.class);
         register("wsClient", WebSocketClientJsonExecuteNode.class);
-
-        // cloud
-        register("cloudServer", CloudServerJsonExecuteNode.class);
-        register("cloudClient", CloudClientJsonExecuteNode.class);
-        register("cloudGetClient", CloudGetClientJsonExecuteNode.class);
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
@@ -254,10 +237,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //git
         register("gitPull", GitPullJsonExecuteNode.class);
-
-        //excel
-        register("readExcel", ReadExcelJsonExecuteNode.class);
-        register("writeExcel", WriteExcelJsonExecuteNode.class);
 
         // file
         register("readFile", ReadFileJsonExecuteNode.class);

@@ -13,7 +13,7 @@ import static fit.lang.ExecuteNodeUtil.getNow;
 import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.*;
 
 /**
- * 获取cloud场景下，获取client推送的监控信息
+ * 获取client推送的监控信息
  */
 public class GetClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
 

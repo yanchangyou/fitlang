@@ -1,7 +1,0 @@
-{
-    "description": "read excel, config param, path: excel file path; sheetName: sheet name, default is first; titleIndex: header row index >=1;",
-    "uni": "readExcel",
-    "path": "测试用例.xls",
-    "sheetName": "接口列表",
-    "titleIndex": 1
-}

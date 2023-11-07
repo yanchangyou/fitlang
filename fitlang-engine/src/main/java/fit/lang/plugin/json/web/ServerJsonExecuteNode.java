@@ -16,7 +16,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
-import fit.lang.plugin.json.cloud.CloudServerJsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -156,16 +155,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         } else {
             JSONObject stopDefine = addStopService(fitServer);
             serviceList.add(stopDefine);
-
-            stopDefine = addStopWsService(fitServer);
-            serviceList.add(stopDefine);
-        }
-
-        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_cloud")) {
-            // nothing
-        } else {
-            JSONObject cloudDefine = addCloudService(fitServer);
-            serviceList.add(cloudDefine);
         }
 
         JSONObject ipDefine = addIpService(fitServer);
@@ -343,27 +332,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return getHttpPrefix() + ":" + serverPort + servicePath;
     }
 
-    static JSONObject addStopWsService(FitServerInstance fitServer) {
-        String path = "/_stopWs";
-        clearContext(fitServer.getSimpleServer(), path);
-        fitServer.getSimpleServer().addAction(path, new Action() {
-            @Override
-            public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                String clientIp = getHttpClientIp(request);
-                if (!isLocalIp(clientIp)) {
-                    responseWriteText(request, response, "{\"message\":\"only allow stop server at host 127.0.0.1, but found: ".concat(clientIp).concat("\"}"), getDefaultContextType());
-                    return;
-                }
-                CloudServerJsonExecuteNode.stopAll();
-                responseWriteText(request, response, "{\"message\":\"stop all websocket OK!\"}", getDefaultContextType());
-            }
-        });
-        JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", path);
-        stopDefine.put("description", "stop this websocket server");
-        return stopDefine;
-    }
-
     private static String getDefaultContextType() {
         return ContentType.JSON.getValue();
     }
@@ -380,9 +348,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     return;
                 }
                 responseWriteText(request, response, "{\"message\":\"server shutdown!\"}", getDefaultContextType());
-
-                //关闭websocket
-                CloudServerJsonExecuteNode.stopAll();
 
                 //关闭simple server
                 int stopPort = fitServer.getSimpleServer().getAddress().getPort();
@@ -456,37 +421,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         String output = ExecuteJsonNodeUtil.executeCode(define);
         System.out.println("default init node result: " + output);
         return JSONObject.parse(output);
-    }
-
-    static JSONObject addCloudService(FitServerInstance fitServer) {
-        String path = "/_cloud";
-        clearContext(fitServer.getSimpleServer(), path);
-        fitServer.getSimpleServer().addAction(path, new Action() {
-            @Override
-            public void doAction(HttpServerRequest request, HttpServerResponse response) {
-
-                String clientId = request.getParam("clientId");
-
-                JSONObject info = new JSONObject();
-                if (StrUtil.isNotBlank(clientId)) {
-                    JSONObject session = CloudServerJsonExecuteNode.getSession(clientId);
-                    info.put("session", session);
-                    info.put("clientId", clientId);
-                    if (session == null) {
-                        info.put("message", "clientId not existed!");
-                    }
-                } else {
-                    Collection sessionList = CloudServerJsonExecuteNode.getSessions();
-                    info.put("onlineCount", sessionList.size());
-                    info.put("sessions", sessionList);
-                }
-                responseWriteText(request, response, info.toJSONString(), getDefaultContextType());
-            }
-        });
-        JSONObject stopDefine = new JSONObject();
-        stopDefine.put("path", path);
-        stopDefine.put("description", "connect this server by websocket");
-        return stopDefine;
     }
 
     static JSONObject addIpService(FitServerInstance fitServer) {
