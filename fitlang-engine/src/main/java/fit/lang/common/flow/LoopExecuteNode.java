@@ -96,7 +96,6 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
         currentIndex.set(0);
-        List bags = getBags(getLoopTimes());
 
         for (int i = 0; i < getLoopTimes(); i++) {
 
@@ -117,6 +116,8 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
             resultObjects.offer(submit);
         }
         executorService.shutdown();
+
+        List<Object> bags = getBags(isBagsMode ? getLoopTimes() : 0);
 
         resultObjects.forEach(f -> {
             try {
