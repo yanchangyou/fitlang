@@ -179,6 +179,30 @@
             "nodeId": "nodeId"
         },
         {
+            "uni": "package",
+            "name": "packageName",
+            "mainFunction": "main",
+            "import": [
+            ],
+            "child": [
+                {
+                    "uni": "function",
+                    "name": "hello",
+                    "child": {
+                        "uni": "hello"
+                    }
+                },
+                {
+                    "uni": "function",
+                    "name": "main",
+                    "child": {
+                        "uni": "call",
+                        "function": "packageName.hello"
+                    }
+                }
+            ]
+        },
+        {
             "uni": "gitPull",
             "gitPath": "/opt/github/fitlang/"
         },
