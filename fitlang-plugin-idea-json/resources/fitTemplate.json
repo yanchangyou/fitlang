@@ -139,9 +139,12 @@
             "isPipe": true,
             "isBagsMode": true,
             "bagsName": "list",
-            "parallelism": 1,
+            "parallelism": 2,
             "child": {
-                "uni": "increase"
+                "uni": "mix",
+                "json": {
+                    "index": "${loopIndex}"
+                }
             }
         },
         {

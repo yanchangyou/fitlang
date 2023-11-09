@@ -8,6 +8,7 @@ import fit.lang.aop.ExecuteNodeSimpleAop;
 
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 执行节点
@@ -16,7 +17,7 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
     protected int loopTimes = 1;
 
-    protected int currentIndex = 0;
+    transient AtomicInteger currentIndex = new AtomicInteger(0);
 
     /**
      * loop参数处理逻辑，是否pipe模式（出参转下一次入参），默认是否
@@ -50,11 +51,11 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
     }
 
     public int getCurrentIndex() {
-        return currentIndex;
+        return currentIndex.get();
     }
 
     public void setCurrentIndex(int currentIndex) {
-        this.currentIndex = currentIndex;
+        this.currentIndex.set(currentIndex);
     }
 
     public boolean isPipe() {
@@ -94,7 +95,7 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
         LinkedBlockingDeque<Future<Object>> resultObjects = new LinkedBlockingDeque<>();
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
-        currentIndex = 0;
+        currentIndex.set(0);
         List bags = getBags(getLoopTimes());
 
         for (int i = 0; i < getLoopTimes(); i++) {
@@ -103,14 +104,13 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
                 @Override
                 public Object call() throws Exception {
-                    input.getNodeContext().setAttribute("loopIndex", currentIndex);
+                    input.getNodeContext().setAttribute("loopIndex", currentIndex.getAndIncrement());
                     for (ExecuteNode executeNode : childNodes) {
                         executeNode.executeAndNext(input, output);
                         if (isPipe) {
                             input.setNodeData(output.getNodeData());
                         }
                     }
-                    currentIndex++;
                     return output.getNodeData().cloneThis().getData();
                 }
             });
