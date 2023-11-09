@@ -6,11 +6,11 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class JsonTimeCountExecuteNodeTest extends TestCase {
+public class PerformanceJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'timeCount'," +
+                "   'uni': 'perf'," +
                 "   'child': {" +
                 "       'uni':'mix'," +
                 "       'json':{" +
@@ -33,7 +33,7 @@ public class JsonTimeCountExecuteNodeTest extends TestCase {
     public void testExecute2() {
 
         String flow = "{" +//
-                "   'uni': 'timeCount'," +
+                "   'uni': 'perf'," +
                 "   'child': {" +
                 "       'uni': 'loop'," +
                 "       'isPipe': true," +

@@ -53,7 +53,7 @@
             "second": 0.5
         },
         {
-            "uni": "timeCount",
+            "uni": "perf",
             "child": {}
         },
         {

@@ -14,7 +14,7 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 /**
  * 执行节点
  */
-public class JsonTimeCountExecuteNode extends WrapExecuteNode implements ExecuteNodeBuildable {
+public class PerformanceJsonExecuteNode extends WrapExecuteNode implements ExecuteNodeBuildable {
 
     @Override
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {

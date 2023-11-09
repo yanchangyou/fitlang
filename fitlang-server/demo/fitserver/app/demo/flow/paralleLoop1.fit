@@ -1,6 +1,6 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "timeCount",
+    "uni": "perf",
     "child": {
         "uni": "loop",
         "loopTimes": 1000000,

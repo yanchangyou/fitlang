@@ -74,7 +74,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - set: 设置全局变量
 - sleep: 流程休眠节点
 - print: 控制台打印
-- timeCount: 耗时统计
+- perf: 耗时统计
 
 ### json数据节点
 - add: 支持json相加
