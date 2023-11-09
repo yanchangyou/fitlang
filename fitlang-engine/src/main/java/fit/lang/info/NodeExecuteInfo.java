@@ -68,6 +68,7 @@ public class NodeExecuteInfo {
 
     public void evalTps(long total) {
         if (costTime != 0) {
+            this.total = total;
             tps = total * 1000 / costTime;
         }
     }
