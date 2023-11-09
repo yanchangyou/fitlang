@@ -6,7 +6,7 @@ import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
-import fit.lang.common.AbstractExecuteNode;
+import fit.lang.info.NodeExecuteInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +56,9 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
             }
         });
         setForeachOutputList(resultDataList, output);
+
+        //total
+        NodeExecuteInfo.globalNodeExecuteInfo.setTotal(resultDataList.size());
 
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 

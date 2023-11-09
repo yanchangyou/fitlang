@@ -5,6 +5,7 @@ import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
+import fit.lang.info.NodeExecuteInfo;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -134,6 +135,9 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
         if (isBagsMode) {
             setBags(bagsName, bags, output);
         }
+
+        //total
+        NodeExecuteInfo.globalNodeExecuteInfo.setTotal(getLoopTimes());
 
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
     }

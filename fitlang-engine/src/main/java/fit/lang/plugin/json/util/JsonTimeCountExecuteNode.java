@@ -7,6 +7,7 @@ import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.define.base.ExecuteNodeData;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.info.NodeExecuteInfo;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
@@ -21,6 +22,9 @@ public class JsonTimeCountExecuteNode extends WrapExecuteNode implements Execute
         Object result = output.getNodeData().getData();
         JSONObject realResult = new JSONObject();
         realResult.put("output", result);
+        getNodeExecuteInfo().evalTps(NodeExecuteInfo.globalNodeExecuteInfo.getTotal());
+        NodeExecuteInfo.globalNodeExecuteInfo.setTotal(0);
+
         realResult.put("executeInfo", JSONObject.from(getNodeExecuteInfo()));
         output.getNodeData().setData(realResult);
     }

@@ -5,6 +5,8 @@ package fit.lang.info;
  */
 public class NodeExecuteInfo {
 
+    public static NodeExecuteInfo globalNodeExecuteInfo = new NodeExecuteInfo();
+
     /**
      * 开始时间：毫秒
      */
@@ -17,9 +19,15 @@ public class NodeExecuteInfo {
 
     long costTime;
 
-//    int beginCount;
-//
-//    int endCount;
+    /**
+     * 总数
+     */
+    long total;
+
+    /**
+     * 性能tps
+     */
+    long tps;
 
     public long getBeginTime() {
         return beginTime;
@@ -45,21 +53,22 @@ public class NodeExecuteInfo {
     public void setCostTime(long costTime) {
         this.costTime = costTime;
     }
-//
-//    public int getBeginCount() {
-//        return beginCount;
-//    }
-//
-//    public void increaseBeginCount() {
-//        this.beginCount++;
-//    }
-//
-//    public int getEndCount() {
-//        return endCount;
-//    }
-//
-//    public void increaseEndCount() {
-//        this.endCount++;
-//    }
 
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public long getTps() {
+        return tps;
+    }
+
+    public void evalTps(long total) {
+        if (costTime != 0) {
+            tps = total * 1000 / costTime;
+        }
+    }
 }
