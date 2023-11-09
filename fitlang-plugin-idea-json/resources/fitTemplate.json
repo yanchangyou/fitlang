@@ -126,6 +126,7 @@
             "uni": "foreach",
             "foreachField": "list",
             "isPipe": true,
+            "parallelism": 1,
             "child": [
                 {
                     "uni": "increase"
@@ -137,6 +138,8 @@
             "loopTimes": 10,
             "isPipe": true,
             "isBagsMode": true,
+            "bagsName": "list",
+            "parallelism": 1,
             "child": {
                 "uni": "increase"
             }
