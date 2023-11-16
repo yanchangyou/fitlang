@@ -92,7 +92,12 @@ public class JsonCompletionContributor extends CompletionContributor {
             if (item instanceof JSONObject) {
                 JSONObject itemObject = (JSONObject) item;
                 String text = itemObject.toJSONString();
-                templates.add(text.substring(1, text.length() - 1));
+                text = text.substring(1, text.length() - 1);
+                text = text.replace("\":\"", "\": \"");
+                if (text.equals("\"flag\": \"needFormatJsonInConsoleFlag\"")) {
+                    text += ",";
+                }
+                templates.add(text);
             }
         }
         return templates;

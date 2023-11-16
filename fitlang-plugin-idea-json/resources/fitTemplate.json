@@ -1,6 +1,9 @@
 {
     "template": [
         {
+            "flag": "needFormatJsonInConsoleFlag"
+        },
+        {
             "uni": "hello"
         },
         {
