@@ -33,6 +33,7 @@ public class JsonLoopExecuteNode extends LoopExecuteNode implements ExecuteNodeB
         setPipe(Boolean.TRUE.equals(nodeDefineJson.getBoolean("isPipe")));
         setBagsMode(Boolean.TRUE.equals(nodeDefineJson.getBoolean("isBagsMode")));
         setBagsName(nodeDefineJson.getString("bagsName"));
+        setBagsStep(nodeDefineJson.getInteger("bagsStep"));
 
         setParallelism(nodeDefineJson.getInteger("parallelism"));
 

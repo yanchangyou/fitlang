@@ -33,6 +33,11 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
     protected String bagsName = "list";
 
     /**
+     * 袋子步长：间隔多长放入袋子
+     */
+    protected int bagsStep = 1;
+
+    /**
      * 获取循环次数
      *
      * @return
@@ -120,12 +125,15 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
         List<Object> bags = getBags(isBagsMode ? getLoopTimes() : 0);
 
+        AtomicInteger index = new AtomicInteger();
         resultObjects.forEach(f -> {
             try {
                 Object object = f.get();
 
                 if (isBagsMode) {
-                    bags.add(object);
+                    if (index.getAndIncrement() % bagsStep == 0) {
+                        bags.add(object);
+                    }
                 }
             } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
@@ -146,4 +154,11 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
     public abstract void setBags(String bagsFieldName, List list, ExecuteNodeOutput output);
 
+    public int getBagsStep() {
+        return bagsStep;
+    }
+
+    public void setBagsStep(int bagsStep) {
+        this.bagsStep = bagsStep;
+    }
 }

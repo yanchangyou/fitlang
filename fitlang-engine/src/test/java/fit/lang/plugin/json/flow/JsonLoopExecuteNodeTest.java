@@ -86,4 +86,27 @@ public class JsonLoopExecuteNodeTest extends TestCase {
         Assert.assertEquals(loopTimes, JSONObject.parseObject(output).getJSONArray("list").size());
 
     }
+
+    public void testExecute4() {
+        String flow = "{" +//
+                "   'uni': 'loop'," +
+                "   'isPipe': true," +
+                "   'loopTimes': 10," +
+                "   'isBagsMode': true," +
+                "   'bagsStep': 2," +
+                "   'child': {" +
+                "       'uni':'mix'," +
+                "       'json':{" +
+                "           'times':'${times+1}'" +
+                "       }" +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'times':0}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"list\":[{\"times\":1},{\"times\":3},{\"times\":5},{\"times\":7},{\"times\":9}]}", output);
+    }
+
 }
