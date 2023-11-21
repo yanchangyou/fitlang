@@ -370,7 +370,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.7.2 template add flag</li>
+            <li>0.7.2 template add flag; loop node supports bagsStep;</li>
             <li>0.7.1 refine template; timeCount rename to perf and support tps</li>
             <li>0.7.0 remove web socket and excel node</li>
             <li>0.6.9 fix package nest import; fix loop bug</li>
