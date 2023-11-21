@@ -161,4 +161,11 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
     public void setBagsStep(int bagsStep) {
         this.bagsStep = bagsStep;
     }
+
+    public void setBagsStep(Integer bagsStep) {
+        if (bagsStep == null) {
+            return;
+        }
+        this.bagsStep = bagsStep;
+    }
 }
