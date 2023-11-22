@@ -111,7 +111,18 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             System.out.println("server start warning: rootPath is not existed: " + rootPath);
             return;
         }
-        fitServer.getSimpleServer().setRoot(rootPath);
+        try {
+            fitServer.getSimpleServer().getRawServer().removeContext("/");
+        } catch (Exception e) {
+            //ignore
+            System.out.println("server removeContext error: " + e.getMessage() + ", at path: " + rootPath);
+        }
+        try {
+            fitServer.getSimpleServer().setRoot(rootPath);
+        } catch (Exception e) {
+            //ignore
+            System.out.println("server setRoot error: " + e.getMessage() + ", at path: " + rootPath);
+        }
     }
 
     public JSONObject load(FitServerInstance fitServer) {
@@ -458,9 +469,13 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServer.getSimpleServer().addAction(path, new Action() {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
-                reload(fitServer);
-                JSONObject welcome = getWelcomeJson(fitServer);
-                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                try {
+                    reload(fitServer);
+                    JSONObject welcome = getWelcomeJson(fitServer);
+                    response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                } catch (Exception e) {
+                    response.write("reload exception: " + e.getMessage());
+                }
             }
         });
         JSONObject reloadDefine = new JSONObject();
