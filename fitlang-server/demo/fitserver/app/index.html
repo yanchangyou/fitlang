@@ -22,7 +22,7 @@
         <h4>输入代码</h4>
         <textarea type="text" id="input" name="message" style="width:80%; height: 200px;">{"uni":"hello","message":"hello world!"}</textarea>
         <br/><br/>
-        <div style="text-align:left;margin-left:60%;">
+        <div style="text-align:left;margin-left:80%;">
             <input type="button" value="执行" onclick="execute();">&nbsp;&nbsp;
             <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;
         </div>
@@ -66,6 +66,7 @@
         var url = "/execute"
         request("POST", url, inputText, function(body){
             document.getElementById('output').value = body;
+            format();
         });
     }
 </script>
