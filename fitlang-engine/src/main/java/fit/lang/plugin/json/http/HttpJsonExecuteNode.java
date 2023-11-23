@@ -47,8 +47,10 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         url = buildUrlByQueryParams(nodeJsonDefine, url);
 
         HttpRequest request = HttpUtil.createRequest(method, url);
+        JSONObject header = nodeJsonDefine.getJSONObject("header");
+        header = ExpressUtil.eval(header, input.getInputParamAndContextParam());
 
-        setHttpHeader(nodeJsonDefine.getJSONObject("header"), request);
+        setHttpHeader(header, request);
         setProxy(nodeJsonDefine.getJSONObject("proxy"), request);
 
         JSONObject httpParam = parseParam(nodeJsonDefine);
