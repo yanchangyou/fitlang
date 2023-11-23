@@ -6,6 +6,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.http.Method;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
@@ -115,7 +116,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONArray parseCookie(HttpResponse response) {
-        return JSONArray.copyOf(response.getCookies());
+        return (JSONArray) JSON.toJSON(response.getCookies());
     }
 
     static JSONObject parseHeader(HttpResponse response) {
