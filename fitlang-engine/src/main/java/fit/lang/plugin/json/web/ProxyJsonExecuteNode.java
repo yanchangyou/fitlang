@@ -9,7 +9,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toStringMap;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toStringMapForCookie;
 
 /**
  * 执行节点
@@ -43,7 +43,7 @@ public class ProxyJsonExecuteNode extends JsonExecuteNode {
         HttpRequest request = HttpUtil.createPost(realUrl);
         JSONObject header = nodeJsonDefine.getJSONObject("header");
         if (header != null && !header.isEmpty()) {
-            request.addHeaders(toStringMap(header));
+            request.addHeaders(toStringMapForCookie(header));
         }
         request.body(input.getData().toJSONString());
         HttpResponse response = request.execute();

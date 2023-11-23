@@ -171,12 +171,43 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static Map<String, String> toStringMap(JSONObject jsonObject, boolean needRemoveEmpty) {
+        return toStringMap(jsonObject, false, false);
+    }
+
+    /**
+     * json to string map
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static Map<String, String> toStringMapForCookie(JSONObject jsonObject) {
+        return toStringMap(jsonObject, false, true);
+    }
+
+    /**
+     * json to string map
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static Map<String, String> toStringMap(JSONObject jsonObject, boolean needRemoveEmpty, boolean isCookieJoin) {
         if (jsonObject == null) {
             return null;
         }
         Map<String, String> map = new HashMap<>();
         for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
-            String value = entry.getValue() == null ? null : entry.getValue().toString();
+            String value;
+            Object valueObject = entry.getValue();
+            StringBuilder builder = new StringBuilder();
+            if (isCookieJoin && valueObject instanceof JSONObject) {
+                Map<String, String> itemMap = toStringMap((JSONObject) valueObject);
+                for (Map.Entry<String, String> itemEntry : itemMap.entrySet()) {
+                    builder.append(itemEntry.getKey()).append("=").append(itemEntry.getValue()).append(";");
+                }
+                value = builder.toString();
+            } else {
+                value = entry.getValue() == null ? null : entry.getValue().toString();
+            }
             if (needRemoveEmpty && StrUtil.isBlank(value)) {
                 continue;
             }
