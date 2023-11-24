@@ -354,7 +354,7 @@ public class ExecuteJsonNodeUtil {
      */
     public static void setHttpHeader(JSONObject header, HttpRequest request) {
         if (header != null && !header.isEmpty()) {
-            request.addHeaders(toStringMap(header, true));
+            request.addHeaders(toStringMapForCookie(header));
         }
     }
 
