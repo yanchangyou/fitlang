@@ -13,7 +13,7 @@
         "memoryAvailable",
         "osManufacturer",
         "osFamily",
-        //                        "osVersion",
+        "osVersion",
         "osBit"
     ]
 }
