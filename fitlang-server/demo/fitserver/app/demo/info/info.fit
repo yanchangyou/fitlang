@@ -1,0 +1,16 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "description": "system info node",
+    "uni": "info",
+    "shareFields": [
+        "os",
+        "memory",
+        "jvm",
+        "host",
+        "runtime",
+        "javaSpec",
+        "jvm",
+        "user",
+        "properties"
+    ]
+}

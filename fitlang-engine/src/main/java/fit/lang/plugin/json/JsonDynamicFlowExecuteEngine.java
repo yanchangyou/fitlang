@@ -23,6 +23,7 @@ import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.git.GitPullJsonExecuteNode;
 import fit.lang.plugin.json.http.*;
+import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
 import fit.lang.plugin.json.monitor.*;
@@ -224,6 +225,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //info
         register("systemInfo", SystemBaseInfoJsonExecuteNode.class);
+        register("info", InfoJsonExecuteNode.class);
 
         //monitor
         register("startMonitor", StartMonitorJsonExecuteNode.class);
