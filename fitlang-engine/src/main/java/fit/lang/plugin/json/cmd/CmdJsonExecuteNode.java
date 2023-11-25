@@ -2,6 +2,7 @@ package fit.lang.plugin.json.cmd;
 
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -61,8 +62,10 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
      * @return
      */
     private static String wrapCmd(String cmd) {
-        if (cmd.contains("ping") && !cmd.contains("-c")) {
-            cmd += " -c 4";
+        if (!SystemUtil.getOsInfo().isWindows()) {
+            if (cmd.contains("ping") && !cmd.contains("-c")) {
+                cmd += " -c 4";
+            }
         }
         return cmd;
     }
