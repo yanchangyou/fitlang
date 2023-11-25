@@ -61,7 +61,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
      * @return
      */
     private static String wrapCmd(String cmd) {
-        if (cmd.contains("ping")) {
+        if (cmd.contains("ping") && !cmd.contains("-c")) {
             cmd += " -c 4";
         }
         return cmd;
