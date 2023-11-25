@@ -54,6 +54,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     static Map<Integer, FitServerInstance> serverMap = new HashMap<>();
 
+    static Set<FitServerInstance> initRootMap = new HashSet<>();
+
     public static void setCurrentServerFilePath(String currentServerFilePath) {
         ServerJsonExecuteNode.currentServerFilePath = currentServerFilePath;
     }
@@ -111,14 +113,17 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             System.out.println("server start warning: rootPath is not existed: " + rootPath);
             return;
         }
-        try {
-            fitServer.getSimpleServer().getRawServer().removeContext("/");
-        } catch (Exception e) {
-            //ignore
-            System.out.println("server removeContext error: " + e.getMessage() + ", at path: " + rootPath);
+        if (initRootMap.contains(fitServer)) {
+            try {
+                fitServer.getSimpleServer().getRawServer().removeContext("/");
+            } catch (Exception e) {
+                //ignore
+                System.out.println("server removeContext error: " + e.getMessage() + ", at path: " + rootPath);
+            }
         }
         try {
             fitServer.getSimpleServer().setRoot(rootPath);
+            initRootMap.add(fitServer);
         } catch (Exception e) {
             //ignore
             System.out.println("server setRoot error: " + e.getMessage() + ", at path: " + rootPath);
