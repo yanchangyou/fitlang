@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.util;
+package fit.lang.plugin.json.json;
 
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
