@@ -40,6 +40,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 if (cmd.startsWith("#")) {
                     resultLines = Collections.singletonList("");
                 } else {
+                    cmd = wrapCmd(cmd);
                     resultLines = RuntimeUtil.execForLines(cmd);
                 }
             }
@@ -54,6 +55,19 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
     }
 
     /**
+     * 命令保障
+     *
+     * @param cmd
+     * @return
+     */
+    private static String wrapCmd(String cmd) {
+        if (cmd.contains("ping")) {
+            cmd += " -c 4";
+        }
+        return cmd;
+    }
+
+    /**
      * 检查高风险命令
      *
      * @param cmd
@@ -63,7 +77,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
         if (StrUtil.isBlank(cmd)) {
             return "cmd is empty!";
         }
-        if (cmd.matches("\\s*\\b(rm|mv|wget|dd|chmod|sh|shell|bash|zsh|cp|ulimit|delete|remove)\\s+.+")) {
+        if (cmd.matches("\\s*\\b(rm|mv|wget|dd|chmod|sh|shell|bash|zsh|cp|ulimit|delete|remove|sleep|kill|ssh|su)\\s+.+")) {
             return "cmd is disable";
         }
         if (cmd.contains(">") || cmd.contains("^") || cmd.contains("&") || cmd.contains("!") || cmd.contains(";")) {
