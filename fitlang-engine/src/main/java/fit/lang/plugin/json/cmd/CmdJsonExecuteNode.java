@@ -1,12 +1,15 @@
 package fit.lang.plugin.json.cmd;
 
 import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -24,9 +27,23 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("cmd is required!");
         }
 
-        List<List<String>> results = new ArrayList<>(cmdList.size());
+        List<JSONObject> results = new ArrayList<>(cmdList.size());
         for (String cmd : cmdList) {
-            List<String> result = RuntimeUtil.execForLines(cmd);
+            JSONObject result = new JSONObject(2);
+            result.put("cmd", cmd);
+            String checkResult = checkCmd(cmd);
+            List resultLines;
+            if (checkResult != null) {
+                resultLines = Collections.singletonList(checkResult);
+            } else {
+                cmd = cmd.trim();
+                if (cmd.startsWith("#")) {
+                    resultLines = Collections.singletonList("");
+                } else {
+                    resultLines = RuntimeUtil.execForLines(cmd);
+                }
+            }
+            result.put("out", resultLines);
             results.add(result);
         }
 
@@ -34,5 +51,27 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         output.set("result", isArray ? results : results.get(0));
 
+    }
+
+    /**
+     * 检查高风险命令
+     *
+     * @param cmd
+     * @return
+     */
+    String checkCmd(String cmd) {
+        if (StrUtil.isBlank(cmd)) {
+            return "cmd is empty!";
+        }
+        if (cmd.matches("\\s*\\b(rm|mv|wget|dd|chmod|sh|shell|bash|zsh|cp|ulimit|delete|remove)\\s+.+")) {
+            return "cmd is disable";
+        }
+        if (cmd.contains(">") || cmd.contains("^") || cmd.contains("&") || cmd.contains("!") || cmd.contains(";")) {
+            return "cmd is disable";
+        }
+        if (cmd.contains(":(){:|:&};:")) {
+            return "cmd is disable";
+        }
+        return null;
     }
 }

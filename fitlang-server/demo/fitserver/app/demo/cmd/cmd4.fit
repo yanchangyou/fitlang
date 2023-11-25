@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "cmd": [
+        "ls",
+        "rm abc",
+        "#abc"
+    ]
+}
