@@ -92,9 +92,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 || cmd.contains("|")
                 || cmd.contains("@")
                 || cmd.contains("$")
-                || cmd.contains("%")
                 || cmd.contains("~")
-                || cmd.contains("=")
                 || cmd.contains("`")
         ) {
             return "cmd is disabled";
