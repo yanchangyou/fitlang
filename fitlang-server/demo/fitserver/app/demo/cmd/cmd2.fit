@@ -1,0 +1,7 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "input": {
+        "cmd": "ls"
+    }
+}
