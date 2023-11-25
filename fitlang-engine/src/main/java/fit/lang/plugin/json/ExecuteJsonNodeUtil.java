@@ -453,6 +453,60 @@ public class ExecuteJsonNodeUtil {
     }
 
     /**
+     * 判断是否数组字段
+     *
+     * @param fieldName
+     * @param input
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static boolean isArrayField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
+
+        Object value = input.get(fieldName);
+        if (value == null) {
+            value = nodeJsonDefine.get(fieldName);
+        }
+        return value != null && value instanceof JSONArray;
+    }
+
+    /**
+     * 解析字符串数组
+     *
+     * @param fieldName
+     * @param input
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static List<String> parseStringArray(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
+
+        Object value = input.get(fieldName);
+        if (value == null) {
+            value = nodeJsonDefine.get(fieldName);
+        }
+        if (value == null) {
+            return null;
+        }
+        JSONArray array = null;
+        if (value instanceof JSONArray) {
+            array = (JSONArray) value;
+        } else {
+            array = new JSONArray(1);
+            array.add(value);
+        }
+
+        List<String> result = new ArrayList<>(array.size());
+        for (Object item : array) {
+            if (item == null) {
+                continue;
+            }
+            String line = item.toString();
+            String parseValue = (String) ExpressUtil.eval(line, input.getInputParamAndContextParam());
+            result.add(parseValue);
+        }
+        return result;
+    }
+
+    /**
      * 解析字段值
      *
      * @param fieldValue

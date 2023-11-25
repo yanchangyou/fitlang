@@ -9,6 +9,8 @@ import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 
+import java.util.List;
+
 /**
  * 执行节点
  */
@@ -58,6 +60,28 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
      */
     protected String parseStringField(String fieldName, JsonExecuteNodeInput input) {
         return ExecuteJsonNodeUtil.parseStringField(fieldName, input, nodeJsonDefine);
+    }
+
+    /**
+     * 判断是否数组字段
+     *
+     * @param fieldName
+     * @param input
+     * @return
+     */
+    protected boolean isArrayField(String fieldName, JsonExecuteNodeInput input) {
+        return ExecuteJsonNodeUtil.isArrayField(fieldName, input, nodeJsonDefine);
+    }
+
+    /**
+     * 解析字段值: 先从入参获取，然后从配置中获取
+     *
+     * @param fieldName
+     * @param input
+     * @return
+     */
+    protected List<String> parseStringArray(String fieldName, JsonExecuteNodeInput input) {
+        return ExecuteJsonNodeUtil.parseStringArray(fieldName, input, nodeJsonDefine);
     }
 
     protected int parseIntField(String fieldName, JsonExecuteNodeInput input, int defaultValue) {

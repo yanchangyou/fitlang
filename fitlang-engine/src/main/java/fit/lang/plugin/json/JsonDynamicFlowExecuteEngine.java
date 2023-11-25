@@ -13,6 +13,7 @@ import fit.lang.define.base.ExecuteContext;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
+import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
 import fit.lang.plugin.json.define.*;
 
 import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
@@ -249,6 +250,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         //function and package
         register("package", JsonPackageExecuteNode.class);
         register("function", JsonFunctionExecuteNode.class);
+
+        //cmd
+        register("cmd", CmdJsonExecuteNode.class);
 
     }
 }
