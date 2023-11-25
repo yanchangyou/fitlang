@@ -121,7 +121,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - deleteFile: 删除文件
 
 ### 系统信息节点
-- systemInfo: 获取系统信息(暂时开放字段：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
+- systemInfo: 获取系统信息，基于oshi实现(信息字段(支持屏蔽)：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
+- info: 获取系统信息，基于hutool SystemUtil实现(信息字段(支持屏蔽)：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties)
 
 ### 监控节点
 - startMonitor: 启动监控
@@ -130,3 +131,6 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - receiveClientMonitorData: 接收客户端监控数据
 - pushClientMonitorData: 推送监控数据
 - getMonitorClient: 获取监控客户端列表
+
+### 命令行
+- cmd: 执行命令行

@@ -4,6 +4,7 @@
     "cmd": [
         "ls",
         "rm abc",
-        "#abc"
+        "#abc",
+        "ping www.baidu.com -c 1"
     ]
 }
