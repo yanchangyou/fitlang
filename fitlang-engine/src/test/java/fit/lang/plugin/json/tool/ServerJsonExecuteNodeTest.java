@@ -9,18 +9,21 @@ public class ServerJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'server'," +
                 "   'port': 11110," +
-                "   'root': '/opt/log'," +
-                "   'action':{" +
+                "   'fitPath': '/opt/github/fitlang/fitlang-server/demo/fitserver/app/'," +
+                "   'service':{" +
                 "       '/hello':{" +
                 "           'uni':'hello'" +
-                "       }" +
+                "       }," +
+                "       '/execute': {" +
+                "            'uni': 'execute'" +
+                "        }" +
                 "   }" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
-//        Thread.sleep(1000 * 1000);
+        Thread.sleep(1000 * 1000);
     }
 
 

@@ -104,7 +104,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     private void setFileServer(FitServerInstance fitServer) {
-        String rootPath = nodeJsonDefine.getString("fitPath");
+        String rootPath = getFitPath();
 
         if (rootPath == null) {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
@@ -128,6 +128,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             //ignore
             System.out.println("server setRoot error: " + e.getMessage() + ", at path: " + rootPath);
         }
+    }
+
+    private String getFitPath() {
+        return nodeJsonDefine.getString("fitPath");
     }
 
     public JSONObject load(FitServerInstance fitServer) {
@@ -279,6 +283,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     }
 
     boolean existedIndexHtml() {
+        String rootPath = getFitPath();
+        if (new File(rootPath + "/index.html").exists()) {
+            return true;
+        }
+
         return new File(getServerFileDir() + "/index.html").exists();
     }
 
@@ -584,7 +593,8 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         ListValueMap<String, String> listValueMap = request.getParams();
         for (Map.Entry<String, List<String>> entry : listValueMap.entrySet()) {
-            if (entry.getKey().startsWith("{")) {
+            String key = entry.getKey();
+            if (key.contains("{") || key.contains("}")) {
                 continue;
             }
             if (entry.getValue().isEmpty()) {
