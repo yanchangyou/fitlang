@@ -5,6 +5,6 @@
         "ls",
         "rm abc",
         "#abc",
-        "ping www.baidu.com -c 1"
+        "ping www.baidu.com -c 2"
     ]
 }
