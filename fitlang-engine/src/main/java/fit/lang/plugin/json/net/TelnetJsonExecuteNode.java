@@ -2,6 +2,7 @@ package fit.lang.plugin.json.net;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.LineHandler;
+import com.alibaba.fastjson2.JSON;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -40,7 +41,8 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
                 }
             });
             socket.close();
-            output.set("output", outputLines);
+            output.set("input", JSON.toJSON(inputLines));
+            output.set("output", JSON.toJSON(outputLines));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
