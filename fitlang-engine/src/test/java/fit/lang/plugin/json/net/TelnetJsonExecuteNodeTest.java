@@ -19,7 +19,7 @@ public class TelnetJsonExecuteNodeTest extends TestCase {
                 "       ''," +
                 "   ]," +
                 "}";
-
+        System.out.println(flow);
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
