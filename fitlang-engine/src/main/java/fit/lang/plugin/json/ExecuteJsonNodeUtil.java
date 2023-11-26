@@ -144,7 +144,7 @@ public class ExecuteJsonNodeUtil {
         nodeInput.setData(input);
 
         if (!contextParam.isEmpty()) {
-            nodeContext.getAllAttribute().putAll(contextParam);
+            nodeContext.putAllAttribute(contextParam);
         }
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);

@@ -1,5 +1,6 @@
 package fit.lang.common;
 
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteContext;
 import fit.lang.info.NodeExecuteInfo;
 
@@ -50,6 +51,14 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
 
     public Map<String, Object> getAllAttribute() {
         return attributeMap;
+    }
+
+    public void putAllAttribute(JSONObject jsonObject) {
+        for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+            if (entry.getKey() != null && entry.getValue() != null) {
+                attributeMap.put(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     @Override
