@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.web;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.multi.ListValueMap;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
@@ -163,6 +164,12 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             serviceList.add(addApiMenuService(fitServer));
         }
 
+        if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_raw")) {
+            // nothing
+        } else {
+            serviceList.add(addRawContentService(fitServer));
+        }
+
         if (disableInnerServiceConfig != null && disableInnerServiceConfig.contains("_shutdown")) {
             // nothing
         } else {
@@ -256,6 +263,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return addApiMenuService(fitServerInstance, "/_api");
     }
 
+    private JSONObject addRawContentService(FitServerInstance fitServerInstance) {
+        return addRawContentService(fitServerInstance, "/_raw");
+    }
+
     private JSONObject addDefaultService(FitServerInstance fitServerInstance) {
         //不存在index.html，默认使用_api
         if (!existedIndexHtml()) {
@@ -263,7 +274,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         }
         return null;
     }
-
 
     private JSONObject addApiMenuService(FitServerInstance fitServerInstance, String routePath) {
 
@@ -279,6 +289,29 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         JSONObject define = new JSONObject();
         define.put("path", routePath);
         define.put("description", "show api menu");
+        return define;
+    }
+
+    private JSONObject addRawContentService(FitServerInstance fitServerInstance, String routePath) {
+
+        clearContext(fitServerInstance.getSimpleServer(), routePath);
+        fitServerInstance.getSimpleServer().addAction(routePath, new Action() {
+            @Override
+            public void doAction(HttpServerRequest request, HttpServerResponse response) {
+                String path = request.getPath();
+                String fitPath = path.substring(routePath.length());
+                try {
+                    String rawContent = FileUtil.readUtf8String(joinFilePath(getServerFileDir(), fitPath));
+                    response.write(rawContent, ContentType.TEXT_PLAIN.getValue());
+                } catch (Exception e) {
+                    response.send404(e.getMessage());
+                }
+            }
+        });
+
+        JSONObject define = new JSONObject();
+        define.put("path", routePath);
+        define.put("description", "show raw content");
         return define;
     }
 
