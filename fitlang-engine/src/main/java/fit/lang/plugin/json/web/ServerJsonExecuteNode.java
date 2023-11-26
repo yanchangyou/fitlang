@@ -111,7 +111,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             rootPath = ServerJsonExecuteNode.getServerFileDir();
         }
         if (StrUtil.isBlank(rootPath) || !new File(rootPath).exists()) {
-            System.out.println("server start warning: rootPath is not existed: " + rootPath);
+            System.out.println("server start warning: fitPath is not existed: " + rootPath);
             return;
         }
         if (initRootMap.contains(fitServer)) {
