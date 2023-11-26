@@ -28,6 +28,7 @@ import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
 import fit.lang.plugin.json.monitor.*;
+import fit.lang.plugin.json.net.TelnetJsonExecuteNode;
 import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
@@ -253,6 +254,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //cmd
         register("cmd", CmdJsonExecuteNode.class);
+
+        //net
+        register("telnet", TelnetJsonExecuteNode.class);
 
     }
 }
