@@ -300,6 +300,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 String path = request.getPath();
                 String fitPath = path.substring(routePath.length());
+                //防止非法访问
+                if (fitPath.contains("..")) {
+                    response.sendError(401, "not allow ..!");
+                    return;
+                }
                 try {
                     String rawContent = FileUtil.readUtf8String(joinFilePath(getServerFileDir(), fitPath));
                     response.write(rawContent, ContentType.TEXT_PLAIN.getValue());
