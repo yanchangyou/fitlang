@@ -122,7 +122,26 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
         ) {
             return "cmd is disabled";
         }
-        if (cmd.matches("\\s*\\b(rm|mv|wget|dd|chmod|sh|shell|bash|zsh|cp|ulimit|delete|remove|sleep|kill|ssh|su)\\s+.+")) {
+        if (cmd.matches("\\s*\\b(" +
+                "|rm" +
+                "|mv" +
+                "|wget" +
+                "|dd" +
+                "|chmod" +
+                "|sh" +
+                "|shell" +
+                "|bash" +
+                "|zsh" +
+                "|cp" +
+                "|ulimit" +
+                "|delete" +
+                "|remove" +
+                "|sleep" +
+                "|kill" +
+                "|ssh" +
+                "|nohup" +
+                "|su" +
+                ")\\s+.+")) {
             return "cmd is disabled";
         }
         return null;
