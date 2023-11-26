@@ -25,8 +25,9 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
         String host = parseStringField("host", input);
         int port = parseIntField("port", input, -1);
         List<String> inputLines = parseStringArray("input", input);
+
         try {
-            Socket socket = new Socket();
+            Socket socket = getSocket();
             socket.connect(new InetSocketAddress(host, port));
             OutputStream outputStream = socket.getOutputStream();
             for (String line : inputLines) {
@@ -43,8 +44,12 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
             socket.close();
             output.set("input", JSON.toJSON(inputLines));
             output.set("output", JSON.toJSON(outputLines));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected Socket getSocket() throws IOException {
+        return new Socket();
     }
 }

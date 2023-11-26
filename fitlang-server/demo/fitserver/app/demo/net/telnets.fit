@@ -1,0 +1,11 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "telnets",
+    "host": "dev.321zou.com",
+    "port": 443,
+    "input": [
+        "GET / HTTP/1.0",
+        "Host: dev.321zou.com",
+        ""
+    ]
+}
