@@ -50,19 +50,21 @@ The nodes that have been implemented so far are as follows:<br/>
 util nodes<br/>
 hello: hello world demo<br/>
 echo: Return input parameters as is<br/>
+print: Console printing<br/>
+sleep: Process sleep node<br/>
+<br/>
+
+json nodes<br/>
 add: supports JSON addition<br/>
 convert: Transform node, supports JSON to JSON conversion, using conversion expressions<br/>
 removeField: Remove the JSON field<br/>
 removeEmptyField: Remove an empty field<br/>
-print: Console printing<br/>
-sleep: Process sleep node<br/>
 mix: mix a json object<br/>
 replace: replace output<br/>
 mix: mix a json object<br/>
 mixNode: execute node, and mix<br/>
-execute: execute input node define<br/>
-
 <br/>
+
 flow nodes (with child nodes)<br/>
 sequence: Sequential execution node<br/>
 pipe: pipeline execution node<br/>
@@ -70,14 +72,14 @@ foreach: traverse JSON array field nodes<br/>
 loop: loop execution node, loopTimes specifies the number of execution times<br/>
 switch: branch execution node, switchField specifies the branch field<br/>
 return: return json value<br/>
-
+execute: execute input node define<br/>
 <br/>
+
 web nodes<br/>
 hTTP: supports HTTP client request<br/>
 server: server node<br/>
 proxy: proxy node<br/>
 web: config web param, such as response header<br/>
-
 <br/>
 
 Monitoring nodes<br/>
@@ -87,6 +89,10 @@ getClientMonitorData: get client monitor data<br/>
 receiveClientMonitorData: receive client monitor data<br/>
 pushClientMonitorData: push client monitor data<br/>
 getMonitorClient: get monitor client list<br/>
+
+info nodes<br/>
+systemInfo: os、memory info<br/>
+info: jvm jdk info<br/>
 <br/>
 <br/>
 
@@ -134,8 +140,6 @@ echo: 原样返回入参<br/>
 add：支持json相加<br/>
 print：控制台打印<br/>
 sleep：流程休眠节点<br/>
-replace: 替换结果输出<br/>
-execute: 执行入参传递的流程<br/>
 <br/>
 
 JSON节点<br/>
@@ -148,6 +152,7 @@ mix: 混入json对象<br/>
 mixNode: 混入节点执行，用于嵌套字段场景<br/>
 parseJson: 解析json字符串成json对象
 stringifyJson: json对象转换为json字符串
+replace: 替换结果输出<br/>
 <br/>
 
 流程节点（有child子节点）<br/>
@@ -156,6 +161,7 @@ pipe：管道执行节点<br/>
 foreach：遍历json数组字段节点<br/>
 loop：循环执行节点，loopTimes制定执行次数<br/>
 switch：分支执行节点，switchField指定分支字段<br/>
+execute: 执行节点<br/>
 <br/>
 
 Web节点<br/>
@@ -165,9 +171,13 @@ proxy：代理节点<br/>
 web: 配置web参数，响应头等<br/>
 <br/>
 
-云节点<br/>
-cloudServer: 启动web socket<br/>
-cloudClient: 连接web socket<br/>
+信息节点<br/>
+systemInfo: CPU、内存信息<br/>
+info: JVM, JDK, 运行时信息<br/>
+<br/>
+
+命令行<br/>
+cmd: 命令行<br/>
 <br/>
 
 监控节点<br/>
