@@ -1,10 +1,15 @@
 package fit.lang.plugin.json.flow;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.common.flow.SequenceExecuteNode;
 import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.plugin.json.define.JsonExecuteNodeData;
+
+import java.util.List;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
@@ -15,7 +20,17 @@ public class JsonSequenceExecuteNode extends SequenceExecuteNode implements Exec
 
     @Override
     public void build(ExecuteNodeData executeNodeData) {
-        JSONObject nodeDefine = getJsonData(executeNodeData);
-        ExecuteNodeUtil.buildChildNode(this, nodeDefine);
+        JSONObject nodeDefineJson = getJsonData(executeNodeData);
+
+        setBagsMode(Boolean.TRUE.equals(nodeDefineJson.getBoolean("isBagsMode")));
+        setBagsName(nodeDefineJson.getString("bagsName"));
+
+        ExecuteNodeUtil.buildChildNode(this, nodeDefineJson);
+    }
+
+    @Override
+    public void setBags(String bagsFieldName, List list, ExecuteNodeOutput output) {
+        JsonExecuteNodeData jsonExecuteNodeData = (JsonExecuteNodeData) output.getNodeData();
+        jsonExecuteNodeData.getData().put(bagsFieldName, list);
     }
 }
