@@ -15,7 +15,12 @@ public class ExecuteJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         JSONObject nodeDefine = input.getData();
 
-        String result = ExecuteJsonNodeUtil.executeCode(nodeDefine, new JSONObject(), input.getNodeContext());
+        JSONObject inputJson = nodeDefine.getJSONObject("input");
+        if (inputJson == null) {
+            inputJson = new JSONObject();
+        }
+
+        String result = ExecuteJsonNodeUtil.executeCode(nodeDefine, inputJson, input.getNodeContext());
 
         output.setData(JSONObject.parseObject(result));
 

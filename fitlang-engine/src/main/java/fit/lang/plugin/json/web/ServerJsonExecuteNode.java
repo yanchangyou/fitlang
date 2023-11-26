@@ -559,13 +559,13 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 contextParam.put(SERVICE_PATH, servicePath);
                 try {
                     JSONObject input = buildInput(request, serviceDefineCopy);
-                    serviceDefineCopy.put("input", input);
+//                    serviceDefineCopy.put("input", input);
                     JsonExecuteContext jsonExecuteContext = new JsonExecuteContext();
                     jsonExecuteContext.setAttribute("clientIp", clientIp);
 
-                    String output = ExecuteJsonNodeUtil.executeCode(serviceDefineCopy, contextParam, jsonExecuteContext);
-                    if (isWebNode(serviceDefineCopy)) {
-                        JSONObject header = serviceDefineCopy.getJSONObject("header");
+                    String output = ExecuteJsonNodeUtil.executeCode(input, contextParam, jsonExecuteContext);
+                    if (isWebNode(input)) {
+                        JSONObject header = input.getJSONObject("header");
                         String contextType = null;
                         if (header != null) {
                             contextType = header.getString("contextType");

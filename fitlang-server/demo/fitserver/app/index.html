@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/fitlang.svg"/>
+    <style>
+        #file-list li {
+           list-style:none;
+        }
+        #file-list {
+            padding-inline-start: 10px;
+            height: 700px;
+            overflow: scroll;
+        }
+    </style>
 </head>
 <body>
 <center>
@@ -18,18 +28,32 @@
     </div>
     <h2>FitServer 0.7.3</h2>
 
-    <form onsubmit="return false;">
-        <h4>输入代码</h4>
-        <textarea type="text" id="input" name="message" style="width:80%; height: 200px;">{"uni":"hello","who":"world"}</textarea>
-        <br/><br/>
-        <div style="text-align:left;margin-left:80%;">
-            <input type="button" value="执行" onclick="execute();">&nbsp;&nbsp;
-            <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;
-        </div>
-        <h4>输出结果</h4>
-        <textarea id="output" style="width:80%; height: 300px;">{}</textarea>
-    </form>
-
+    <table width="100%">
+        <tr>
+            <td width="15%" style="vertical-align: top;">
+                <div>demo list:
+                    <ul id="file-list">
+                        <li onclick="showFile('/first.fit');">/first.fit</li>
+                    </ul>
+                </div>
+            </td>
+            <td width="80%">
+                <div>
+                    <form onsubmit="return false;">
+                        <h4>输入代码</h4>
+                        <textarea type="text" id="input" name="message" style="width:80%; height: 200px;">{"uni":"hello","who":"world"}</textarea>
+                        <br/><br/>
+                        <div style="text-align:left;margin-left:70%;">
+                            <input type="button" value="执行" onclick="execute();">&nbsp;&nbsp;
+                            <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;
+                        </div>
+                        <h4>输出结果</h4>
+                        <textarea id="output" style="width:80%; height: 300px;">{}</textarea>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
 </center>
 <script type="text/javascript">
 
@@ -70,6 +94,32 @@
         });
     }
 
+    function loadDir() {
+        var url = "/_api";
+        request("POST", url, null, function(body) {
+            var serviceList = JSON.parse(body).service;
+            for (var i=0; i<serviceList.length; i++) {
+                var service = serviceList[i];
+                if(service.path.indexOf(".fit") < 0){
+                    continue;
+                }
+                var li =document.createElement("li");
+                li.innerText = service.path;
+                li.onclick = Function("showFile('" + service.path + "')");
+                document.getElementById('file-list').appendChild(li);
+            }
+        });
+    }
+
+    function showFile(filePath) {
+        var url = "/_raw" + filePath;
+        request("POST", url, null, function(body) {
+            document.getElementById('input').value = body.replace('"flag": "needFormatJsonInConsoleFlag",','');
+            format();
+        });
+    }
+
+    loadDir();
     format();
 
 </script>
