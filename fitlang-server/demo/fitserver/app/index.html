@@ -82,6 +82,7 @@
 
     function formatText(domId) {
         var inputText = document.getElementById(domId).value;
+        inputText = inputText.replace(/\s+\/\/.*/g,'');
         document.getElementById(domId).value = JSON.stringify(JSON.parse(inputText), 2,'  ');
     }
 
