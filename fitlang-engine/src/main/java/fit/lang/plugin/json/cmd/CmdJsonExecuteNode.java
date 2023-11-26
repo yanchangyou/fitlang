@@ -31,8 +31,8 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
         List<JSONObject> results = new ArrayList<>(cmdList.size());
         for (String cmd : cmdList) {
             JSONObject result = new JSONObject(2);
-            result.put("cmd", cmd);
             cmd = parseCmd(cmd, input.getInputParamAndContextParam());
+            result.put("cmd", cmd);
             String checkResult = checkCmd(cmd);
             List resultLines;
             if (checkResult != null) {

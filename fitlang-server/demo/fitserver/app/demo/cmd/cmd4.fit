@@ -5,6 +5,9 @@
         "ls",
         "rm abc",
         "#abc",
-        "ping www.baidu.com -c 2"
-    ]
+        "ping www.baidu.com -c ${n}"
+    ],
+    "input": {
+        "n": 2
+    }
 }

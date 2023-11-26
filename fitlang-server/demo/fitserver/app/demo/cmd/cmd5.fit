@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "cmd": "ping www.baidu.com -c ${n} -i ${m}",
+    "input": {
+        "n": 2,
+        "m": 1
+    }
+}
