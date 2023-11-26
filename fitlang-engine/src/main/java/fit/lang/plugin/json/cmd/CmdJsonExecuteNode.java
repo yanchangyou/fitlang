@@ -9,9 +9,9 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -32,6 +32,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
         for (String cmd : cmdList) {
             JSONObject result = new JSONObject(2);
             result.put("cmd", cmd);
+            cmd = parseCmd(cmd, input.getInputParamAndContextParam());
             String checkResult = checkCmd(cmd);
             List resultLines;
             if (checkResult != null) {
@@ -53,6 +54,30 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         output.set("result", isArray ? results : results.get(0));
 
+    }
+
+    /**
+     * 解析命令行，支持参数
+     *
+     * @param cmd
+     * @param inputParamAndContextParam
+     * @return
+     */
+    String parseCmd(String cmd, JSONObject inputParamAndContextParam) {
+        if (StrUtil.isBlank(cmd) || !cmd.contains("${")) {
+            return cmd;
+        }
+        Matcher matcher = Pattern.compile("\\$\\{(\\w+)}").matcher(cmd);
+        Set<String> param = new HashSet<>();
+        while (matcher.find()) {
+            param.add(matcher.group(1));
+        }
+        for (String key : param) {
+            String value = inputParamAndContextParam.getString(key);
+            value = value == null ? "" : value;
+            cmd = cmd.replace("${".concat(key).concat("}"), value);
+        }
+        return cmd;
     }
 
     /**
