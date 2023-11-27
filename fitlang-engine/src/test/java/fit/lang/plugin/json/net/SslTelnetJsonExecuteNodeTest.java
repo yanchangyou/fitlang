@@ -11,11 +11,11 @@ public class SslTelnetJsonExecuteNodeTest extends TestCase {
     public void testGetSocket() {
         String flow = "{" +//
                 "   'uni': 'telnets'," +
-                "   'host': 'dev.321zou.com'," +
+                "   'host': 'www.baidu.com'," +
                 "   'port': 443," +
                 "   'input': [" +
                 "       'GET / HTTP/1.0'," +
-                "       'Host: dev.321zou.com'," +
+                "       'Host: www.baidu.com'," +
                 "       ''," +
                 "   ]," +
                 "}";

@@ -1,6 +1,6 @@
 package fit.lang.plugin.json.net;
 
-import sun.security.ssl.SSLSocketFactoryImpl;
+import cn.hutool.http.ssl.DefaultSSLFactory;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -11,6 +11,6 @@ import java.net.Socket;
 public class SslTelnetJsonExecuteNode extends TelnetJsonExecuteNode {
 
     protected Socket getSocket() throws IOException {
-        return SSLSocketFactoryImpl.getDefault().createSocket();
+        return DefaultSSLFactory.getDefault().createSocket();
     }
 }

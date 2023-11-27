@@ -1,8 +1,9 @@
-package fit.lang.plugin.json.node.engine;
+package fit.lang.plugin.json.json;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteNode;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -10,13 +11,24 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class RemoveFieldJsonExecuteNodeTest extends TestCase {
+public class HelloJsonExecuteNodeTest extends TestCase {
 
-    public void testExecute() {
+    public void testExecute() throws InterruptedException {
 
-        JSONObject nodeDefine = JSON.parseObject("{'uni':'node:removeField','fieldNames':['field1']}");
+        String flow = "{'uni':'node:hello'}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
+
+        System.out.println(output);
+
+        Assert.assertEquals("{\"message\":\"hello, world!\"}", output);
+
+    }
+
+    public void testExecute1() {
+
+        JSONObject nodeDefine = JSON.parseObject("{'uni':'node:hello'}");
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(nodeDefine);
-//        executeNode.addRemoveField("field1");
 
         JsonExecuteContext nodeContext = new JsonExecuteContext();
 
@@ -25,19 +37,17 @@ public class RemoveFieldJsonExecuteNodeTest extends TestCase {
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
 
         input.set("who", "world");
-        input.set("field1", "world");
 
         Assert.assertTrue(output.isEmpty());
-        Assert.assertTrue(input.containsKey("field1"));
 
         executeNode.execute(input, output);
 
-        Assert.assertTrue(input.containsKey("field1"));
-        Assert.assertFalse(output.containsKey("field1"));
-
         System.out.println(output.getData());
 
-        Assert.assertEquals("world", output.getString("who"));
+        Assert.assertTrue(output.containsKey("message"));
+
+        Assert.assertEquals("hello, world!", output.getString("message"));
+
 
     }
 }
