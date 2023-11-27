@@ -17,6 +17,6 @@ lib/jna-platform-5.13.0.jar:\
 lib/oshi-core-6.4.7.jar:\
 lib/fastjson2-2.0.42.jar:\
 lib/slf4j-api-2.0.7.jar:\
-jcl-over-slf4j-2.0.9.jar:\
+lib/jcl-over-slf4j-2.0.9.jar:\
  fit.server.FitServerMain server.fit $httpPrefix $fitPath&
 
