@@ -1,0 +1,29 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "sequence",
+    "isBagsMode": true,
+    "child": [
+        {
+            "uni": "telnet",
+            "description": "test cdn http",
+            "host": "180.101.50.242",
+            "port": 80,
+            "input": [
+                "GET /sugrec HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
+            ]
+        },
+        {
+            "uni": "telnets",
+            "description": "test cdn https",
+            "host": "180.101.50.242",
+            "port": 443,
+            "input": [
+                "GET /sugrec HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
+            ]
+        }
+    ]
+}
