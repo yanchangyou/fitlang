@@ -380,7 +380,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.7.3 add node: info, cmd; update lib</li>
+            <li>0.7.3 add node: info, cmd, telnet, telnets; update lib</li>
             <li>0.7.2 template add flag; loop node supports bagsStep; server support jdk embed; refine http</li>
             <li>0.7.1 refine template; timeCount rename to perf and support tps</li>
             <li>0.7.0 remove web socket and excel node</li>
