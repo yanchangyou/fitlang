@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.tool;
+package fit.lang.plugin.json.web;
 
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
@@ -7,12 +7,12 @@ import junit.framework.TestCase;
 public class ServerJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
-//        ServerJsonExecuteNode.setCurrentServerFilePath("/opt/github/fitlang/fitlang-server/demo/fitserver/app/");
+        ServerJsonExecuteNode.setCurrentServerFilePath("/opt/github/fitlang/fitlang-server/demo/fitserver/app/");
         String flow = "{" +//
                 "   'uni': 'server'," +
                 "   'port': 11110," +
-                "   'fitPath': '/opt'," +
-//                "   'fitPath': '/opt/github/fitlang/fitlang-server/demo/fitserver/app/'," +
+//                "   'fitPath': '/opt'," +
+                "   'fitPath': '/opt/github/fitlang/fitlang-server/demo/fitserver/app/'," +
                 "   'service':{" +
                 "       '/hello':{" +
                 "           'uni':'hello'" +
