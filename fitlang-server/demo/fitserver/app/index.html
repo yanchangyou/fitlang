@@ -89,6 +89,7 @@
     }
 
     function execute() {
+        document.getElementById('output').value = '{\n  "message": "waiting..."\n}';
         var inputText = document.getElementById('input').value;
         var url = "/execute"
         request("POST", url, inputText, function(body){
