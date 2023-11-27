@@ -1,5 +1,6 @@
 package fit.lang.common.flow;
 
+import cn.hutool.core.util.StrUtil;
 import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeInput;
 import fit.lang.define.base.ExecuteNodeOutput;
@@ -34,7 +35,9 @@ public class SequenceExecuteNode extends AbstractExecuteNode {
     }
 
     public void setBagsName(String bagsName) {
-        this.bagsName = bagsName;
+        if (StrUtil.isNotBlank(bagsName)) {
+            this.bagsName = bagsName;
+        }
     }
 
     public void setBags(String bagsFieldName, List list, ExecuteNodeOutput output) {
