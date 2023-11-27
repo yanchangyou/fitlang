@@ -42,6 +42,7 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
                 }
             });
             socket.close();
+            output.set("telnet", host + ":" + port);
             output.set("input", JSON.toJSON(inputLines));
             output.set("output", JSON.toJSON(outputLines));
         } catch (Exception e) {

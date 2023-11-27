@@ -46,7 +46,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                     resultLines = RuntimeUtil.execForLines(cmd);
                 }
             }
-            result.put("out", resultLines);
+            result.put("output", resultLines);
             results.add(result);
         }
 
