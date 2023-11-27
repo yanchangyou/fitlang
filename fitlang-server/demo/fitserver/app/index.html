@@ -12,11 +12,14 @@
             height: 650px;
             overflow: scroll;
         }
+        #file-list li.selected {
+            background-color: #bbb;
+        }
     </style>
 </head>
 <body>
 <center>
-    <div style="text-align:right;margin-right:50px;">
+    <div style="text-align:right;margin-right:50px;display:none1;">
         &nbsp;<a target="" href="/">root</a>
         &nbsp;<a target="" href="/online.html">online</a>
         &nbsp;<a target="" href="/demo/monitor/index.html">monitor</a>
@@ -33,7 +36,6 @@
             <td width="15%" style="vertical-align: top;">
                 <div>demo list:
                     <ul id="file-list">
-                        <li onclick="showFile('/first.fit');">/first.fit</li>
                     </ul>
                 </div>
             </td>
@@ -106,17 +108,24 @@
                 }
                 var li =document.createElement("li");
                 li.innerText = service.path;
-                li.onclick = Function("showFile('" + service.path + "')");
+                li.onclick = Function("showFile('" + service.path + "', this)");
                 document.getElementById('file-list').appendChild(li);
             }
         });
     }
 
-    function showFile(filePath) {
+    var preDom = null;
+    function showFile(filePath, dom) {
         var url = "/_raw" + filePath;
         request("POST", url, null, function(body) {
             document.getElementById('input').value = body.replace('"flag": "needFormatJsonInConsoleFlag",','');
             format();
+            if(preDom) {
+               preDom.className = "";
+            }
+            dom.className = "selected";
+            preDom = dom;
+            execute();
         });
     }
 
