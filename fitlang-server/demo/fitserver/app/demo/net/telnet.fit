@@ -1,11 +1,11 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnet",
-    "host": "fit.321zou.com",
+    "host": "www.baidu.com",
     "port": 80,
     "input": [
         "GET / HTTP/1.0",
-        "Host: fit.321zou.com",
+        "Host: www.baidu.com",
         ""
     ]
 }
