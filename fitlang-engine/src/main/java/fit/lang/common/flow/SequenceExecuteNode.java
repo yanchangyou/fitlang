@@ -49,7 +49,7 @@ public class SequenceExecuteNode extends AbstractExecuteNode {
     public void execute(ExecuteNodeInput input, ExecuteNodeOutput output) {
         ExecuteNodeSimpleAop.beforeExecute(input, this, output);
 
-        List<Object> bags = new ArrayList<>(childNodes.size());
+        List<Object> bags = isBagsMode ? new ArrayList<>(childNodes.size()) : null;
 
         for (ExecuteNode childNode : childNodes) {
             if (this.isNeedCloneInputData()) {

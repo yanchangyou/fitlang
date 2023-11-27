@@ -31,6 +31,7 @@ public class JsonSequenceExecuteNode extends SequenceExecuteNode implements Exec
     @Override
     public void setBags(String bagsFieldName, List list, ExecuteNodeOutput output) {
         JsonExecuteNodeData jsonExecuteNodeData = (JsonExecuteNodeData) output.getNodeData();
+        jsonExecuteNodeData.getData().clear();
         jsonExecuteNodeData.getData().put(bagsFieldName, list);
     }
 }
