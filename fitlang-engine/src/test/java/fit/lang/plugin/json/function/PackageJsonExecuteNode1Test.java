@@ -8,7 +8,7 @@ import org.junit.Assert;
 public class PackageJsonExecuteNode1Test extends TestCase {
 
     public void testExecute3() {
-        JsonPackageExecuteNode.addImportPath("/opt/github/fitlang/fitlang-server/demo/fitserver/app/demo/package/");
+        JsonPackageExecuteNode.addImportPath("/opt/github/fitlang/fitlang-server/demo/fitserver/app/package/");
 
         String flow = "{" +
                 "    'uni': 'package'," +
