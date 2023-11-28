@@ -14,6 +14,7 @@
         "osManufacturer",
         "osFamily",
         "osVersion",
-        "osBit"
+        "osBit",
+        "net"
     ]
 }

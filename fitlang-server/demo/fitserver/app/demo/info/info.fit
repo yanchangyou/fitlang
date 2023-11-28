@@ -11,6 +11,7 @@
         "javaSpec",
         "jvm",
         "user",
-        "properties"
+        "properties",
+        "net"
     ]
 }

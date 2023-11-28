@@ -111,6 +111,8 @@
         },
         {
             "uni": "sequence",
+            "isBagsMode": false,
+            "bagsName": "list",
             "child": [
                 {
                     "uni": "hello"
@@ -310,7 +312,46 @@
                 "osManufacturer",
                 "osFamily",
                 "osVersion",
-                "osBit"
+                "osBit",
+                "net"
+            ]
+        },
+        {
+            "uni": "info",
+            "shareFields": [
+                "os",
+                "memory",
+                "jvm",
+                "host",
+                "runtime",
+                "javaSpec",
+                "jvm",
+                "user",
+                "properties"
+            ]
+        },
+        {
+            "uni": "cmd",
+            "cmd": "echo hello fit!"
+        },
+        {
+            "uni": "telnet",
+            "host": "www.baidu.com",
+            "port": 80,
+            "input": [
+                "GET / HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
+            ]
+        },
+        {
+            "uni": "telnets",
+            "host": "www.baidu.com",
+            "port": 443,
+            "input": [
+                "GET / HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
             ]
         },
         {
