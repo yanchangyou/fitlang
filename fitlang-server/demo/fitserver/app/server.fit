@@ -15,8 +15,8 @@
                 "uni": "startMonitor",
                 "second": 5,
                 "pushUrl": [
-                    // "http://127.0.0.1:11111/monitor/receiveClientMonitorData.fit?clientId=this",
-                    // "http://fit.321zou.com/monitor/receiveClientMonitorData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e72"
+                    // "http://127.0.0.1:11111/monitor/receiveData.fit?clientId=this",
+                    // "http://fit.321zou.com/monitor/receiveData.fit?clientId=cc5046d7f3ccbc78f26ad22dc33e6e72"
                 ],
                 "pushProxy": {
                     // "host":"xxx.com",
