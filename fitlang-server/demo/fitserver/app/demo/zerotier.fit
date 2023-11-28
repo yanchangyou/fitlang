@@ -1,7 +1,0 @@
-{
-    "description": "a simple hello world demo",
-    "uni": "echo",
-    "input": {
-        "networkId": "9bee8941b5422261"
-    }
-}
