@@ -10,9 +10,12 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildProxy;
 
 /**
  * 执行节点
@@ -26,8 +29,9 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
         int port = parseIntField("port", input, -1);
         List<String> inputLines = parseStringArray("input", input);
 
+        Proxy proxy = buildProxy(nodeJsonDefine.getJSONObject("proxy"));
         try {
-            Socket socket = getSocket();
+            Socket socket = buildSocket(proxy);
             socket.connect(new InetSocketAddress(host, port));
             OutputStream outputStream = socket.getOutputStream();
             for (String line : inputLines) {
@@ -50,7 +54,7 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
         }
     }
 
-    protected Socket getSocket() throws IOException {
-        return new Socket();
+    protected Socket buildSocket(Proxy proxy) throws IOException {
+        return proxy == null ? new Socket() : new Socket(proxy);
     }
 }

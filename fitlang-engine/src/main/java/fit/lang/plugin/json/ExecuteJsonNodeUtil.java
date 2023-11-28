@@ -366,22 +366,36 @@ public class ExecuteJsonNodeUtil {
      */
     public static void setProxy(JSONObject proxyConfig, HttpRequest request) {
 
-        if (proxyConfig != null && StrUtil.isNotBlank(proxyConfig.getString("host")) && proxyConfig.containsKey("port")) {
-
-            String type = proxyConfig.getString("type");
-            SocketAddress socketAddress = new InetSocketAddress(proxyConfig.getString("host"), proxyConfig.getInteger("port"));
-            Proxy.Type typeEnum;
-            if ("http".equals(type) || "HTTP".equals(type)) {
-                typeEnum = Proxy.Type.HTTP;
-            } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
-                typeEnum = Proxy.Type.SOCKS;
-            } else if ("direct".equals(type) || "DIRECT".equals(type)) {
-                typeEnum = Proxy.Type.DIRECT;
-            } else {
-                typeEnum = Proxy.Type.HTTP;
-            }
-            request.setProxy(new Proxy(typeEnum, socketAddress));
+        Proxy proxy = buildProxy(proxyConfig);
+        if (proxy != null) {
+            request.setProxy(proxy);
         }
+    }
+
+    /**
+     * 构建proxy
+     *
+     * @param proxyConfig
+     * @return
+     */
+    public static Proxy buildProxy(JSONObject proxyConfig) {
+
+        if (proxyConfig == null || StrUtil.isBlank(proxyConfig.getString("host")) || !proxyConfig.containsKey("port")) {
+            return null;
+        }
+        String type = proxyConfig.getString("type");
+        SocketAddress socketAddress = new InetSocketAddress(proxyConfig.getString("host"), proxyConfig.getInteger("port"));
+        Proxy.Type typeEnum;
+        if ("http".equals(type) || "HTTP".equals(type)) {
+            typeEnum = Proxy.Type.HTTP;
+        } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
+            typeEnum = Proxy.Type.SOCKS;
+        } else if ("direct".equals(type) || "DIRECT".equals(type)) {
+            typeEnum = Proxy.Type.DIRECT;
+        } else {
+            typeEnum = Proxy.Type.HTTP;
+        }
+        return new Proxy(typeEnum, socketAddress);
     }
 
     /**
