@@ -15,6 +15,9 @@
         #file-list li.selected {
             background-color: #bbb;
         }
+        h4 {
+           margin:10px 5px;
+        }
     </style>
 </head>
 <body>
@@ -42,15 +45,14 @@
             <td width="80%">
                 <div>
                     <form onsubmit="return false;">
-                        <h4>输入代码</h4>
-                        <textarea type="text" id="input" name="message" style="width:80%; height: 200px;">{"uni":"hello","who":"world"}</textarea>
-                        <br/><br/>
-                        <div style="text-align:left;margin-left:70%;">
-                            <input type="button" value="执行" onclick="execute();">&nbsp;&nbsp;
-                            <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;
+                        <h4>输入代码：</h4>
+                        <textarea type="text" id="input" name="message" style="width:95%; height: 250px;">{"uni":"hello","who":"world"}</textarea>
+                        <div style="text-align:left;margin-top:20px;margin-bottom:-20px;margin-left:90%;">
+                            <input type="button" value="执行" onclick="execute();" style="font-size:1rem;">&nbsp;&nbsp;
+<!--                            <input type="button" value="格式化" onclick="format()">&nbsp;&nbsp;-->
                         </div>
-                        <h4>输出结果</h4>
-                        <textarea id="output" style="width:80%; height: 300px;">{}</textarea>
+                        <h4>输出结果：</h4>
+                        <textarea id="output" style="width:95%; height: 350px;">{}</textarea>
                     </form>
                 </div>
             </td>
