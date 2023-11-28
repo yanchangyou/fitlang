@@ -1,4 +1,4 @@
 {
     "uni": "pushClientMonitorData",
-    "pushUrl": "http://127.0.0.1:11111/demo/monitor/receiveClientMonitorData.fit?clientId=localhost"
+    "pushUrl": "http://127.0.0.1:11111/monitor/receiveClientMonitorData.fit?clientId=localhost"
 }

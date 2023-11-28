@@ -9,7 +9,7 @@
     <div style="text-align:right;margin-right:50px;">
         &nbsp;<a target="" href="/">root</a>
         &nbsp;<a target="" href="/online.html">online</a>
-        &nbsp;<a target="" href="/demo/monitor/index.html">monitor</a>
+        &nbsp;<a target="" href="/monitor/index.html">monitor</a>
         &nbsp;<a target="_blank" href="/_api">api</a>
         &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/fitlang">doc</a>
         &nbsp;<a target="_blank" href="https://plugins.jetbrains.com/plugin/22593-fitlang/plugin">plugin</a>
@@ -52,12 +52,12 @@
         }
         httpRequest.send(body);
     }
-    var url = "/demo/monitor/getMonitorClient.fit";
+    var url = "/monitor/getMonitorClient.fit";
     request("POST", url, {}, function(body) {
         var result = JSON.parse(body);
         for(var i=0; i<result.clients.length; i++) {
             var aDom = document.createElement('a');
-            aDom.href = "/demo/monitor/index.html?innerClientId="+result.clients[i].innerClientId;
+            aDom.href = "/monitor/index.html?innerClientId="+result.clients[i].innerClientId;
             aDom.text = ""+ result.clients[i].clientIp+"" + "　　("+ result.clients[i].startTime+")";
             document.getElementById('onlineUsers').appendChild(aDom);
             document.getElementById('onlineUsers').appendChild(document.createElement('br'));
