@@ -15,7 +15,7 @@ public class PackageJsonExecuteNode1Test extends TestCase {
                 "    'name': 'package3'," +
                 "    'import': [" +
                 "        'package2'," +
-                "        'demo/package/package2'" +
+                "        'package/package2'" +
                 "    ]," +
                 "    'child': [" +
                 "        {" +

@@ -3,7 +3,7 @@
     "name": "package4",
     "import": [
         "package3",
-        "demo/package/package3"
+        "package/package3"
     ],
     "child": [
         {
