@@ -9,6 +9,9 @@ import oshi.SystemInfo;
 import oshi.hardware.*;
 import oshi.software.os.OperatingSystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.covertToG;
 
 /**
@@ -73,6 +76,7 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
             systemInfoJson.put("memoryAvailable", covertToG(memoryAvailable) + "G");
         }
 
+        //OS
         OperatingSystem os = systemInfo.getOperatingSystem();
         if (shardFields.contains("osManufacturer")) {
             String osManufacturer = os.getManufacturer();
@@ -86,7 +90,7 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
 
         if (shardFields.contains("osVersion")) {
             OperatingSystem.OSVersionInfo osVersion = os.getVersionInfo();
-            systemInfoJson.put("osVersion", osVersion.getVersion());
+            systemInfoJson.put("osVersion", osVersion);
         }
 
         if (shardFields.contains("osBit")) {
@@ -94,8 +98,31 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
             systemInfoJson.put("osBit", osBit);
         }
 
+        if (shardFields.contains("net")) {
+            List<NetworkIF> networkIFS = hardware.getNetworkIFs();
+            List<JSONObject> netInfos = new ArrayList<>();
+            for (NetworkIF netIf : networkIFS) {
+                JSONObject netInfo = new JSONObject();
+                netInfo.put("IPv4", getFirstItem(netIf.getIPv4addr()));
+                netInfo.put("IPv6", getFirstItem(netIf.getIPv6addr()));
+                netInfo.put("macAddress", netIf.getMacaddr().toUpperCase());
+                netInfo.put("name", netIf.getName());
+                netInfo.put("displayName", netIf.getDisplayName());
+                netInfos.add(netInfo);
+            }
+            systemInfoJson.put("net", netInfos);
+            systemInfoJson.put("netParams", os.getNetworkParams());
+        }
+
         output.setData(systemInfoJson);
 
+    }
+
+    String getFirstItem(String[] array) {
+        if (array == null || array.length == 0) {
+            return null;
+        }
+        return array[0];
     }
 
 }
