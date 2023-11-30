@@ -16,6 +16,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -48,8 +49,6 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         url = buildUrlByQueryParams(nodeJsonDefine, url);
 
         HttpRequest request = HttpUtil.createRequest(method, url);
-
-        URL httpUrl = request.getConnection().getUrl();
 
         JSONObject header = nodeJsonDefine.getJSONObject("header");
         header = ExpressUtil.eval(header, input.getInputParamAndContextParam());
@@ -90,8 +89,15 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (Boolean.FALSE.equals(nodeJsonDefine.get("onlyBody")) || "postman".equals(nodeJsonDefine.getString("uni"))) {
             out = new JSONObject();
             out.put("url", url);
-            out.put("host", httpUrl.getHost());
-            out.put("port", httpUrl.getPort());
+
+            try {
+                URL httpUrl = new URL(url);
+                out.put("host", httpUrl.getHost());
+                out.put("port", httpUrl.getPort() == -1 ? httpUrl.getDefaultPort() : httpUrl.getPort());
+            } catch (MalformedURLException e) {
+                //ignore todo
+            }
+
             out.put("cookie", parseCookie(response));
             JSONObject headerInfo = parseHeader(response);
             out.put("header", headerInfo.getJSONObject("header"));
