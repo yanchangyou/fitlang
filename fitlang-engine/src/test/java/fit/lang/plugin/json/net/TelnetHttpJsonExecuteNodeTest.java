@@ -6,18 +6,16 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class TelnetJsonExecuteNodeTest extends TestCase {
+public class TelnetHttpJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'telnet'," +
-                "   'host': 'fit.321zou.com'," +
-                "   'port': 80," +
-                "   'input': [" +
-                "       'GET /hello HTTP/1.0'," +
-                "       'Host: fit.321zou.com'," +
-                "       ''," +
-                "   ]," +
+                "   'uni': 'telnet.http'," +
+                "   'method': 'GET'," +
+                "   'url': 'http://116.62.65.251/hello'," +
+                "    'header': {" +
+                "        'Host': 'fit.321zou.com'" +
+                "    }," +
                 "}";
         System.out.println(flow);
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);

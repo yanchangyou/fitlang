@@ -93,7 +93,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             try {
                 URL httpUrl = new URL(url);
                 out.put("host", httpUrl.getHost());
-                out.put("port", httpUrl.getPort() == -1 ? httpUrl.getDefaultPort() : httpUrl.getPort());
+                out.put("port", getUrlPort(httpUrl));
             } catch (MalformedURLException e) {
                 //ignore todo
             }
@@ -113,6 +113,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         }
         output.setData(out);
     }
+
 
     private static Boolean isPostForm(JSONObject nodeJsonDefine) {
         Boolean isPostForm = nodeJsonDefine.getBoolean("isPostForm");

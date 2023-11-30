@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -689,5 +690,9 @@ public class ExecuteJsonNodeUtil {
 
     public static boolean isInServerEnvironment() {
         return !Thread.currentThread().getContextClassLoader().toString().contains("com.intellij.");
+    }
+
+    public static int getUrlPort(URL httpUrl) {
+        return httpUrl.getPort() == -1 ? httpUrl.getDefaultPort() : httpUrl.getPort();
     }
 }
