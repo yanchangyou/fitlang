@@ -119,10 +119,10 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
     }
 
     String getFirstItem(String[] array) {
-        if (array == null || array.length == 0) {
+        if (array == null || array.length == 0 || array[0] == null) {
             return null;
         }
-        return array[0];
+        return array[0].toUpperCase();
     }
 
 }
