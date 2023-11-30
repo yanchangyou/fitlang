@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "telnet.http",
+    "method": "GET",
+    "url": "http://116.62.65.251/hello",
+    "header": {
+        "Host": "fit.321zou.com"
+    }
+}

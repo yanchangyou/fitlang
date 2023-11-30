@@ -86,7 +86,7 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             output.set("urlHost", urlHost);
             output.set("host", header.get("Host"));
             output.set("port", port);
-            output.set("input", JSON.toJSON(inputLines));
+//            output.set("input", JSON.toJSON(inputLines));
             if (outputLines.size() > 0) {
                 String statusLine = outputLines.get(0);
                 String[] parts = statusLine.split(" ");

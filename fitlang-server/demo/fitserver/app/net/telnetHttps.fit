@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "telnet.https",
+    "method": "GET",
+    "url": "https://180.101.50.242",
+    "header": {
+        "Host": "www.baidu.com"
+    }
+}
