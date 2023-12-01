@@ -1,8 +1,21 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "javac",
-    "option": {
-        "-version": "",
-        "-XX:": "+PrintGCDetails"
-    }
+    "uni": "sequence",
+    "isBagsMode": true,
+    "bagsName": "list",
+    "child": [
+        {
+            "uni": "javac",
+            "option": {
+            },
+            "target": "${currentDir+'/Hello.java'}"
+        },
+        {
+            "uni": "java",
+            "option": {
+                "-cp": "${currentDir}"
+            },
+            "target": "Hello"
+        }
+    ]
 }
