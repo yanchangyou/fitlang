@@ -17,7 +17,7 @@ public class TelnetHttpJsonExecuteNodeTest extends TestCase {
                 "        'Host': 'fit.321zou.com'" +
                 "    }," +
                 "}";
-        System.out.println(flow);
+        System.out.println(flow.replace("'", "\""));
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
@@ -39,7 +39,7 @@ public class TelnetHttpJsonExecuteNodeTest extends TestCase {
                 "        'Host': 'fit.321zou.com'" +
                 "    }," +
                 "}";
-        System.out.println(flow);
+        System.out.println(flow.replace("'", "\""));
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);

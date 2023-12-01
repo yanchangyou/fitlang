@@ -18,6 +18,7 @@ public class CatchJsonExecuteNodeTest extends TestCase {
                 "       }" +
                 "   }" +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         JSONObject output = ExecuteJsonNodeUtil.execute(JSON.parseObject(flow));
 

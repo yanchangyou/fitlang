@@ -11,13 +11,13 @@ public class SslTelnetHttpJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'telnet.https'," +
-                "   'method': 'GET'," +
+                "   'method': 'HEAD'," +
                 "   'url': 'https://180.101.50.242'," +
                 "    'header': {" +
                 "        'Host': 'www.baidu.com'" +
                 "    }," +
                 "}";
-        System.out.println(flow);
+        System.out.println(flow.replace("'", "\""));
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);

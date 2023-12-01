@@ -188,6 +188,15 @@
             "nodeId": "nodeId"
         },
         {
+            "uni": "catch",
+            "child": {
+                "uni": "mix",
+                "json": {
+                    "message": "${1/0}"
+                }
+            }
+        },
+        {
             "uni": "package",
             "name": "packageName",
             "mainFunction": "main",
@@ -353,6 +362,22 @@
                 "Host: www.baidu.com",
                 ""
             ]
+        },
+        {
+            "uni": "telnet.http",
+            "method": "GET",
+            "url": "http://116.62.65.251/hello",
+            "header": {
+                "Host": "fit.321zou.com"
+            }
+        },
+        {
+            "uni": "telnet.https",
+            "method": "HEAD",
+            "url": "https://180.101.50.242",
+            "header": {
+                "Host": "www.baidu.com"
+            }
         },
         {
             "uni": "postman",
