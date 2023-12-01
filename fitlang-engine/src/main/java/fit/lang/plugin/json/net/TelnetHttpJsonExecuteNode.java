@@ -90,9 +90,11 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             if (outputLines.size() > 0) {
                 String statusLine = outputLines.get(0);
                 String[] parts = statusLine.split(" ");
-                if (parts.length == 3) {
+                if (parts.length >= 3) {
                     output.set("http", parts[0]);
                     output.set("status", Integer.parseInt(parts[1]));
+                    String message = statusLine.substring(statusLine.indexOf(" ", parts[0].length() + 2) + 1);
+                    output.set("message", message);
                 }
             }
             output.set("output", JSON.toJSON(outputLines));
