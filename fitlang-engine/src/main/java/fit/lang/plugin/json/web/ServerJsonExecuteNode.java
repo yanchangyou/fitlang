@@ -59,6 +59,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
     public static void setCurrentServerFilePath(String currentServerFilePath) {
         ServerJsonExecuteNode.currentServerFilePath = currentServerFilePath;
+        JsonDynamicFlowExecuteEngine.setCurrentDir(getServerFileDir());
     }
 
     public static String getCurrentServerFilePath() {

@@ -52,9 +52,19 @@ import static fit.lang.ExecuteNodeUtil.getAllException;
  */
 public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements ExecuteNodeAopIgnoreTag {
 
+    public static String currentDir;
+
     static Map<String, Class<? extends ExecuteNode>> executeNodeMap = new HashMap<>();
 
     JSONObject nodeDefine;
+
+    public static String getCurrentDir() {
+        return currentDir;
+    }
+
+    public static void setCurrentDir(String currentDir) {
+        JsonDynamicFlowExecuteEngine.currentDir = currentDir;
+    }
 
     public JsonDynamicFlowExecuteEngine(JSONObject nodeDefine) {
         setNodeDefine(nodeDefine);
@@ -73,6 +83,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
+        input.getNodeContext().setAttribute("currentDir", currentDir);
         ExecuteNode executeNode = createExecuteNode(nodeDefine, input.getNodeContext());
 
         executeNode.executeAndNext(input, output);
