@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
+import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -28,11 +29,15 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("cmd is required!");
         }
 
+        JSONObject param = nodeJsonDefine.getJSONObject("param");
+        if (param != null) {
+            param = ExpressUtil.eval(param, input.getInputParamAndContextParam());
+        }
+
         List<JSONObject> results = new ArrayList<>(cmdList.size());
         for (String cmd : cmdList) {
             JSONObject result = new JSONObject(2);
             cmd = parseCmd(cmd, input.getInputParamAndContextParam());
-            result.put("cmd", cmd);
             String checkResult = checkCmd(cmd);
             List resultLines;
             if (checkResult != null) {
@@ -42,10 +47,11 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 if (cmd.startsWith("#")) {
                     resultLines = Collections.singletonList("");
                 } else {
-                    cmd = wrapCmd(cmd);
+                    cmd = wrapCmd(cmd, param);
                     resultLines = RuntimeUtil.execForLines(cmd);
                 }
             }
+            result.put("cmd", cmd);
             result.put("out", resultLines);
             results.add(result);
         }
@@ -84,9 +90,23 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
      * 命令保障
      *
      * @param cmd
+     * @param param
      * @return
      */
-    private static String wrapCmd(String cmd) {
+    private static String wrapCmd(String cmd, JSONObject param) {
+        StringBuilder builder = new StringBuilder();
+        if (param != null) {
+            for (Map.Entry<String, Object> entry : param.entrySet()) {
+                if (builder.length() > 0) {
+                    builder.append(" ");
+                }
+                builder.append(entry.getKey());
+                if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                    builder.append(" ").append(entry.getValue());
+                }
+            }
+        }
+        cmd = cmd.concat(" ").concat(builder.toString());
         if (!SystemUtil.getOsInfo().isWindows()) {
             if (cmd.contains("ping") && !cmd.contains("-c")) {
                 cmd += " -c 4";

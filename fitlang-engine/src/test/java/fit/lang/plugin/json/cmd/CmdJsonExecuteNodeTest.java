@@ -57,4 +57,25 @@ public class CmdJsonExecuteNodeTest extends TestCase {
             System.out.println(result);
         }
     }
+
+    public void testExecuteWithParam1() {
+        String flow = "{" +//
+                "   'uni': 'cmd'," +
+                "   'cmd': 'ping www.baidu.com'," +
+                "   'param': {" +
+                "       '-c': '2'," +
+                "   }" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("result"));
+
+    }
 }
