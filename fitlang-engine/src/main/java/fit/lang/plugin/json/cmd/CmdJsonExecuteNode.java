@@ -144,23 +144,24 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
     }
 
     private static String parseOption(String cmd, JSONObject param) {
+        if (param == null) {
+            return cmd;
+        }
         StringBuilder builder = new StringBuilder();
-        if (param != null) {
-            for (Map.Entry<String, Object> entry : param.entrySet()) {
-                if (builder.length() > 0) {
+        for (Map.Entry<String, Object> entry : param.entrySet()) {
+            if (builder.length() > 0) {
+                builder.append(" ");
+            }
+            String key = entry.getKey();
+            if (StrUtil.isBlank(key)) {
+                continue;
+            }
+            builder.append(key);
+            if (entry.getValue() != null && !"".equals(entry.getValue())) {
+                if (!key.endsWith(":")) {
                     builder.append(" ");
                 }
-                String key = entry.getKey();
-                if (StrUtil.isBlank(key)) {
-                    continue;
-                }
-                builder.append(key);
-                if (entry.getValue() != null && !"".equals(entry.getValue())) {
-                    if (!key.endsWith(":")) {
-                        builder.append(" ");
-                    }
-                    builder.append(entry.getValue());
-                }
+                builder.append(entry.getValue());
             }
         }
         return StrUtil.isBlank(cmd) ? builder.toString() : cmd.concat(" ").concat(builder.toString());
