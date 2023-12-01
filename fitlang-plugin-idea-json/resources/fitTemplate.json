@@ -49,7 +49,10 @@
         {
             "uni": "set",
             "key": "keyName",
-            "value": "value"
+            "value": "value",
+            "copyField": [
+                "fieldName"
+            ]
         },
         {
             "uni": "sleep",
