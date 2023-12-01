@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
  * 执行节点
  */
@@ -34,6 +33,16 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             option = ExpressUtil.eval(option, input.getInputParamAndContextParam());
         }
 
+        Object target = nodeJsonDefine.get("target");
+        if (target != null) {
+            target = ExpressUtil.eval(target, input.getInputParamAndContextParam());
+        }
+
+        Object param = nodeJsonDefine.get("param");
+        if (param != null) {
+            param = ExpressUtil.eval(param, input.getInputParamAndContextParam());
+        }
+
         List<JSONObject> results = new ArrayList<>(cmdList.size());
         for (String cmd : cmdList) {
             JSONObject result = new JSONObject(2);
@@ -47,7 +56,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 if (cmd.startsWith("#")) {
                     resultLines = Collections.singletonList("");
                 } else {
-                    cmd = wrapCmd(cmd, option);
+                    cmd = wrapCmd(cmd, option, target, param);
                     resultLines = RuntimeUtil.execForLines(cmd);
                 }
             }
@@ -90,10 +99,51 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
      * 命令保障
      *
      * @param cmd
+     * @param option
+     * @param target
      * @param param
      * @return
      */
-    private static String wrapCmd(String cmd, JSONObject param) {
+    private static String wrapCmd(String cmd, JSONObject option, Object target, Object param) {
+
+        cmd = parseOption(cmd, option);
+        cmd = parseTarget(cmd, target);
+        cmd = parseTarget(cmd, param);
+
+        if (!SystemUtil.getOsInfo().isWindows()) {
+            if (cmd.contains("ping") && !cmd.contains("-c")) {
+                cmd += " -c 4";
+            }
+        }
+        return cmd;
+    }
+
+    private static String parseTarget(String cmd, Object target) {
+        if (target == null) {
+            return cmd;
+        }
+        String targetString;
+        if (target instanceof String) {
+            targetString = (String) target;
+        } else if (target instanceof List) {
+            List list = (List) target;
+            StringBuilder builder = new StringBuilder();
+            for (Object item : list) {
+                if (builder.length() > 0) {
+                    builder.append(" ");
+                }
+                builder.append(item);
+            }
+            targetString = builder.toString();
+        } else if (target instanceof JSONObject) {
+            targetString = parseOption("", (JSONObject) target);
+        } else {
+            throw new ExecuteNodeException("only support string, array, object type");
+        }
+        return cmd.concat(" ").concat(targetString);
+    }
+
+    private static String parseOption(String cmd, JSONObject param) {
         StringBuilder builder = new StringBuilder();
         if (param != null) {
             for (Map.Entry<String, Object> entry : param.entrySet()) {
@@ -113,13 +163,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 }
             }
         }
-        cmd = cmd.concat(" ").concat(builder.toString());
-        if (!SystemUtil.getOsInfo().isWindows()) {
-            if (cmd.contains("ping") && !cmd.contains("-c")) {
-                cmd += " -c 4";
-            }
-        }
-        return cmd;
+        return StrUtil.isBlank(cmd) ? builder.toString() : cmd.concat(" ").concat(builder.toString());
     }
 
     /**
