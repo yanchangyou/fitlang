@@ -100,9 +100,16 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 if (builder.length() > 0) {
                     builder.append(" ");
                 }
-                builder.append(entry.getKey());
+                String key = entry.getKey();
+                if (StrUtil.isBlank(key)) {
+                    continue;
+                }
+                builder.append(key);
                 if (entry.getValue() != null && !"".equals(entry.getValue())) {
-                    builder.append(" ").append(entry.getValue());
+                    if (!key.endsWith(":")) {
+                        builder.append(" ");
+                    }
+                    builder.append(entry.getValue());
                 }
             }
         }
