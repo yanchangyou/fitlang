@@ -1,0 +1,8 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "java",
+    "param": {
+        "-version": "",
+        "-XX:": "+PrintGCDetails"
+    }
+}
