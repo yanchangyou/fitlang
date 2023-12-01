@@ -115,11 +115,11 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 cmd += " -c 4";
             }
         }
-        return cmd;
+        return cmd.replaceAll(" +", " ").trim();
     }
 
     private static String parseTarget(String cmd, Object target) {
-        if (target == null) {
+        if (target == null || "".equals(target)) {
             return cmd;
         }
         String targetString;
@@ -144,7 +144,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
     }
 
     private static String parseOption(String cmd, JSONObject param) {
-        if (param == null) {
+        if (param == null || param.isEmpty()) {
             return cmd;
         }
         StringBuilder builder = new StringBuilder();
@@ -164,7 +164,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 builder.append(entry.getValue());
             }
         }
-        return StrUtil.isBlank(cmd) ? builder.toString() : cmd.concat(" ").concat(builder.toString());
+        return cmd.concat(" ").concat(builder.toString());
     }
 
     /**
