@@ -2,7 +2,7 @@
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "cmd",
     "cmd": "ping www.baidu.com",
-    "param": {
+    "option": {
         "-c": 2,
         "-i": 1
     }

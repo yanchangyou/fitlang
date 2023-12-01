@@ -26,13 +26,13 @@ public class CmdJsonExecuteNodeTest extends TestCase {
 
     }
 
-    public void testExecuteWithParam() {
+    public void testExecuteWithoption() {
         String flow = "{" +//
                 "   'uni': 'cmd'," +
-                "   'cmd': 'ls ${param}'" +
+                "   'cmd': 'ls ${option}'" +
                 "}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("{'param':' -l'}", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{'option':' -l'}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
 
@@ -49,20 +49,20 @@ public class CmdJsonExecuteNodeTest extends TestCase {
                 "ls -n ${n1}",
                 "ls -n ${n} -c ${n}",
         };
-        JSONObject param = new JSONObject();
+        JSONObject option = new JSONObject();
         CmdJsonExecuteNode cmdJsonExecuteNode = new CmdJsonExecuteNode();
-        param.put("n", 1);
+        option.put("n", 1);
         for (String cmd : cmdArray) {
-            String result = cmdJsonExecuteNode.parseCmd(cmd, param);
+            String result = cmdJsonExecuteNode.parseCmd(cmd, option);
             System.out.println(result);
         }
     }
 
-    public void testExecuteWithParam1() {
+    public void testExecuteWithOption1() {
         String flow = "{" +//
                 "   'uni': 'cmd'," +
                 "   'cmd': 'ping www.baidu.com'," +
-                "   'param': {" +
+                "   'option': {" +
                 "       '-c': '2'," +
                 "   }" +
                 "}";
@@ -79,11 +79,11 @@ public class CmdJsonExecuteNodeTest extends TestCase {
 
     }
 
-    public void testExecuteWithParam2() {
+    public void testExecuteWithOption2() {
         String flow = "{" +//
                 "   'uni': 'cmd'," +
                 "   'cmd': 'java'," +
-                "   'param': {" +
+                "   'option': {" +
                 "       '-version': ''," +
                 "       '-XX:': '+PrintGCDetails'," +
                 "   }" +

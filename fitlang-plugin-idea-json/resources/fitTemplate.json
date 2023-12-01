@@ -344,7 +344,9 @@
         },
         {
             "uni": "cmd",
-            "cmd": "echo hello fit!"
+            "cmd": "echo hello fit!",
+            "option": {
+            }
         },
         {
             "uni": "telnet",

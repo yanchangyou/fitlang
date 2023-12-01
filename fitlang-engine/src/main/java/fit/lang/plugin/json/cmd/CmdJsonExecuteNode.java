@@ -29,9 +29,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("cmd is required!");
         }
 
-        JSONObject param = nodeJsonDefine.getJSONObject("param");
-        if (param != null) {
-            param = ExpressUtil.eval(param, input.getInputParamAndContextParam());
+        JSONObject option = nodeJsonDefine.getJSONObject("option");
+        if (option != null) {
+            option = ExpressUtil.eval(option, input.getInputParamAndContextParam());
         }
 
         List<JSONObject> results = new ArrayList<>(cmdList.size());
@@ -47,7 +47,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 if (cmd.startsWith("#")) {
                     resultLines = Collections.singletonList("");
                 } else {
-                    cmd = wrapCmd(cmd, param);
+                    cmd = wrapCmd(cmd, option);
                     resultLines = RuntimeUtil.execForLines(cmd);
                 }
             }

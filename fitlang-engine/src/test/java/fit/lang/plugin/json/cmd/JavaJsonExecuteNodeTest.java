@@ -11,7 +11,7 @@ public class JavaJsonExecuteNodeTest extends TestCase {
     public void testExecuteWithParam2() {
         String flow = "{" +//
                 "   'uni': 'java'," +
-                "   'param': {" +
+                "   'option': {" +
                 "       '-version': ''," +
                 "       '-XX:': '+PrintGCDetails'," +
                 "   }" +
