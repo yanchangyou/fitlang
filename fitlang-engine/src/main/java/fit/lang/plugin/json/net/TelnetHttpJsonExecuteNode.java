@@ -32,14 +32,15 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String url = ExecuteJsonNodeUtil.parseStringField("url", input, nodeJsonDefine);
+        if (url == null) {
+            throw new ExecuteNodeException("telnetHttp node url field is required!");
+        }
+
         String method = ExecuteJsonNodeUtil.parseStringField("method", input, nodeJsonDefine);
 
         JSONObject header = nodeJsonDefine.getJSONObject("header");
         header = ExpressUtil.eval(header, input.getInputParamAndContextParam());
 
-        if (url == null) {
-            throw new ExecuteNodeException("telnetHttp node url field is required!");
-        }
         try {
 
             URL httpUrl = new URL(url);
