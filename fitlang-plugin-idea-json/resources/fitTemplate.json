@@ -344,9 +344,27 @@
         },
         {
             "uni": "cmd",
-            "cmd": "echo hello fit!",
+            "cmd": "echo hello fit",
             "option": {
-            }
+            },
+            "target": "",
+            "param": [
+                ""
+            ]
+        },
+        {
+            "uni": "javac",
+            "target": "${currentDir+'/Hello.java'}"
+        },
+        {
+            "uni": "java",
+            "option": {
+                "-cp": "${currentDir}"
+            },
+            "target": "Hello",
+            "param": [
+                ""
+            ]
         },
         {
             "uni": "telnet",
