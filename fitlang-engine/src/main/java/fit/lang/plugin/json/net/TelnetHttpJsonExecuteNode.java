@@ -86,6 +86,7 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             output.set("urlHost", urlHost);
             output.set("host", header.get("Host"));
             output.set("port", port);
+            output.set("inputHeader", header);
 //            output.set("input", JSON.toJSON(inputLines));
             if (outputLines.size() > 0) {
                 String statusLine = outputLines.get(0);
@@ -96,6 +97,29 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
                     String message = statusLine.substring(statusLine.indexOf(" ", parts[0].length() + 2) + 1);
                     output.set("message", message);
                 }
+                JSONObject outputHeader = new JSONObject();
+                int headerAndBodySeparatorIndex = 1;
+                //header 解
+                for (int i = 1; i < outputLines.size(); i++) {
+                    String line = outputLines.get(i);
+                    if (StrUtil.isBlank(line)) {
+                        headerAndBodySeparatorIndex = i;
+                        break;
+                    }
+                    String[] headerKeyValue = line.split(": ");
+                    outputHeader.put(headerKeyValue[0], line.substring(headerKeyValue[0].length() + 2));
+                }
+                output.set("outputHeader", outputHeader);
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = headerAndBodySeparatorIndex + 1; i < outputLines.size(); i++) {
+                    if (i != headerAndBodySeparatorIndex + 1) {
+                        builder.append("\n");
+                    }
+                    builder.append(outputLines.get(i));
+                }
+                String body = builder.toString();
+                output.set("body", body);
             }
             output.set("output", JSON.toJSON(outputLines));
         } catch (Exception e) {
