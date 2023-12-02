@@ -4,13 +4,10 @@
     "child": [
         {
             "uni": "cmd:javac",
-            "target": "${currentDir+'/Hello.java'}"
+            "target": "Hello.java"
         },
         {
             "uni": "cmd:java",
-            "option": {
-                "-cp": "${currentDir}"
-            },
             "target": "Hello"
         }
     ]
