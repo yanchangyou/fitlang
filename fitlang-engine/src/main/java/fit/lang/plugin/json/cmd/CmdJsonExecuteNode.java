@@ -158,7 +158,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             }
             builder.append(key);
             if (entry.getValue() != null && !"".equals(entry.getValue())) {
-                if (!key.endsWith(":")) {
+                if (!key.endsWith(":") && !key.endsWith("=")) {
                     builder.append(" ");
                 }
                 builder.append(entry.getValue());
