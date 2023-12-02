@@ -43,6 +43,7 @@ public class CmdJsonExecuteNodeTest extends TestCase {
         Assert.assertTrue(outputJson.containsKey("result"));
 
     }
+
     public void testParseCmd() {
         String[] cmdArray = new String[]{
                 "ls -n ${n}",
@@ -97,6 +98,25 @@ public class CmdJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(outputJson.containsKey("result"));
+
+    }
+
+    public void testExecuteExceptionCMD() {
+        String flow = "{" +//
+                "   'uni': 'cmd'," +
+                "   'cmd': 'abc'" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{'option':' -l'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("result"));
+        Assert.assertTrue(outputJson.toJSONString().contains("IOException"));
 
     }
 }

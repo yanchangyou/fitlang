@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.cmd;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
@@ -26,6 +27,20 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         if (cmdList == null || cmdList.isEmpty()) {
             throw new ExecuteNodeException("cmd is required!");
+        }
+
+        String[] envArray = new String[0];
+        JSONObject env = nodeJsonDefine.getJSONObject("env");
+        if (env != null) {
+            env = ExpressUtil.eval(env, input.getInputParamAndContextParam());
+            envArray = new String[env.size()];
+            int index = 0;
+            for (Map.Entry<String, Object> entry : env.entrySet()) {
+                if (entry.getValue() == null) {
+                    continue;
+                }
+                envArray[index++] = entry.getKey().concat("=").concat(entry.getValue().toString());
+            }
         }
 
         JSONObject option = nodeJsonDefine.getJSONObject("option");
@@ -57,7 +72,16 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                     resultLines = Collections.singletonList("");
                 } else {
                     cmd = wrapCmd(cmd, option, target, param);
-                    resultLines = RuntimeUtil.execForLines(cmd);
+                    try {
+                        Process process = RuntimeUtil.exec(envArray, cmd);
+
+                        resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
+                        if (resultLines == null) {
+                            resultLines = IoUtil.readUtf8Lines(process.getInputStream(), new ArrayList<>());
+                        }
+                    } catch (Exception e) {
+                        resultLines = Collections.singletonList(e.getMessage());
+                    }
                 }
             }
             result.put("cmd", cmd);
@@ -181,7 +205,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 || cmd.contains("^")
                 || cmd.contains("&")
                 || cmd.contains("!")
-                || cmd.contains(";")
+//                || cmd.contains(";")
                 || cmd.contains(")")
                 || cmd.contains("]")
                 || cmd.contains("}")
