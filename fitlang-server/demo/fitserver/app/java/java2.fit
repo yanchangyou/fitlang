@@ -6,8 +6,6 @@
     "child": [
         {
             "uni": "cmd:javac",
-            "option": {
-            },
             "target": "${currentDir+'/Hello.java'}"
         },
         {
