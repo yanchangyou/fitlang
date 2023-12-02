@@ -1,0 +1,5 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "cmd": "whereis java"
+}

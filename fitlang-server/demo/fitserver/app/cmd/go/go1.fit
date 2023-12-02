@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "option": {
+    },
+    "cmd": [
+        "${'/opt/local/bin/go run ' + currentDir + '/hello.go'}"
+    ]
+}
