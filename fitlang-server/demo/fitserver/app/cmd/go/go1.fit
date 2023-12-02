@@ -1,9 +1,12 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "cmd",
-    "option": {
+    "uni": "cmd:/opt/local/bin/go",
+    "target": "run",
+    "env": {
+        "GOPATH": "${currentDir}",
+        "GOCACHE": "/opt/go/cache"
     },
-    "cmd": [
-        "${'/opt/local/bin/go run ' + currentDir + '/hello.go'}"
+    "param": [
+        "hello.go"
     ]
 }

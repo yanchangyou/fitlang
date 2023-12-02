@@ -1,0 +1,11 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd",
+    "env": {
+        "name": "value"
+    },
+    "cmd": [
+        "echo ${name}",
+        "echo 2"
+    ]
+}
