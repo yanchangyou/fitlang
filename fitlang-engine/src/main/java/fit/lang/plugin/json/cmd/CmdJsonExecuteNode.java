@@ -200,10 +200,10 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 "|wget" +
                 "|dd" +
                 "|chmod" +
-                "|sh" +
-                "|shell" +
-                "|bash" +
-                "|zsh" +
+//                "|sh" +
+//                "|shell" +
+//                "|bash" +
+//                "|zsh" +
                 "|cp" +
                 "|ulimit" +
                 "|delete" +
@@ -213,6 +213,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 "|ssh" +
                 "|nohup" +
                 "|su" +
+                "|vim" +
+                "|vi" +
+                "|nona" +
                 ")\\s+.+")) {
             return "cmd is disabled";
         }
