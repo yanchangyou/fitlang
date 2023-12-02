@@ -113,9 +113,15 @@
             "valueField": "value"
         },
         {
+            "uni": "batch",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
             "uni": "sequence",
-            "isBagsMode": false,
-            "bagsName": "list",
             "child": [
                 {
                     "uni": "hello"

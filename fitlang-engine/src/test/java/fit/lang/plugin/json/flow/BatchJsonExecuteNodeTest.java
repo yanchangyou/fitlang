@@ -25,6 +25,7 @@ public class BatchJsonExecuteNodeTest extends TestCase {
                 "        }" +//
                 "     ]" +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 

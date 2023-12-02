@@ -1,0 +1,18 @@
+{
+    "uni": "batch",
+    "child": [
+        {
+            "uni": "set",
+            "key": "data",
+            "value": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "hello": "${data.hello}"
+            }
+        }
+    ]
+}
