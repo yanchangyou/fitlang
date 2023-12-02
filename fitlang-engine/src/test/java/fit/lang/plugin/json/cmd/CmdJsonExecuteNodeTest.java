@@ -26,7 +26,7 @@ public class CmdJsonExecuteNodeTest extends TestCase {
 
     }
 
-    public void testExecuteWithoption() {
+    public void testExecuteWithOption() {
         String flow = "{" +//
                 "   'uni': 'cmd'," +
                 "   'cmd': 'ls ${option}'" +
