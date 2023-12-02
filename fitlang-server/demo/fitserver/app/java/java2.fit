@@ -5,13 +5,13 @@
     "bagsName": "list",
     "child": [
         {
-            "uni": "javac",
+            "uni": "cmd:javac",
             "option": {
             },
             "target": "${currentDir+'/Hello.java'}"
         },
         {
-            "uni": "java",
+            "uni": "cmd:java",
             "option": {
                 "-cp": "${currentDir}"
             },

@@ -1,5 +1,6 @@
 package fit.lang.plugin.json;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -14,9 +15,6 @@ import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
-import fit.lang.plugin.json.cmd.JarJsonExecuteNode;
-import fit.lang.plugin.json.cmd.JavaJsonExecuteNode;
-import fit.lang.plugin.json.cmd.JavacJsonExecuteNode;
 import fit.lang.plugin.json.define.*;
 
 import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
@@ -84,7 +82,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        input.getNodeContext().setAttribute("currentDir", currentDir);
+        if (StrUtil.isNotBlank(currentDir)) {
+            input.getNodeContext().setAttribute("currentDir", currentDir);
+        }
         ExecuteNode executeNode = createExecuteNode(nodeDefine, input.getNodeContext());
 
         executeNode.executeAndNext(input, output);
@@ -128,6 +128,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
             if (executeNode instanceof ExecuteNodeBuildable) {
                 ((ExecuteNodeBuildable) executeNode).build(new JsonExecuteNodeData(nodeDefine));
+            }
+
+            if (uni.contains(":")) {
+                nodeDefine.put(uni.substring(0, uni.indexOf(':')), uni.substring(uni.indexOf(':') + 1));
             }
 
             return executeNode;
@@ -272,9 +276,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         //cmd
         register("cmd", CmdJsonExecuteNode.class);
-        register("java", JavaJsonExecuteNode.class);
-        register("javac", JavacJsonExecuteNode.class);
-        register("jar", JarJsonExecuteNode.class);
 
         //net
         register("telnet", TelnetJsonExecuteNode.class);
