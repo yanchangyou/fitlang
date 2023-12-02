@@ -76,7 +76,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                         Process process = RuntimeUtil.exec(envArray, cmd);
 
                         resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
-                        if (resultLines == null) {
+                        if (resultLines == null || resultLines.isEmpty()) {
                             resultLines = IoUtil.readUtf8Lines(process.getInputStream(), new ArrayList<>());
                         }
                     } catch (Exception e) {
@@ -85,6 +85,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 }
             }
             result.put("cmd", cmd);
+            if (env != null && !env.isEmpty()) {
+                result.put("env", env);
+            }
             result.put("out", resultLines);
             results.add(result);
         }
@@ -208,11 +211,11 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 //                || cmd.contains(";")
                 || cmd.contains(")")
                 || cmd.contains("]")
-                || cmd.contains("}")
+//                || cmd.contains("}")
                 || cmd.contains("*")
                 || cmd.contains("|")
                 || cmd.contains("@")
-                || cmd.contains("$")
+//                || cmd.contains("$")
                 || cmd.contains("~")
                 || cmd.contains("`")
         ) {
