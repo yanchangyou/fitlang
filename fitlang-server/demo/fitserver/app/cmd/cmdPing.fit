@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd:ping",
+    "target": "www.baidu.com",
+    "param": {
+        "-c": 2,
+        "-i": 1
+    }
+}
