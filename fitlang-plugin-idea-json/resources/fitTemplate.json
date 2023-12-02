@@ -351,11 +351,24 @@
         {
             "uni": "cmd",
             "cmd": "echo hello fit",
+            "env": {
+            },
             "option": {
             },
             "target": "",
             "param": [
                 ""
+            ]
+        },
+        {
+            "uni": "cmd:ping",
+            "env": {
+            },
+            "option": {
+            },
+            "target": "www.baidu.com",
+            "param": [
+                "-c 2"
             ]
         },
         {
