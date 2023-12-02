@@ -7,10 +7,12 @@ import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.ExpressUtil;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,7 +75,13 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 } else {
                     cmd = wrapCmd(cmd, option, target, param);
                     try {
-                        Process process = RuntimeUtil.exec(envArray, cmd);
+                        Process process;
+
+                        if (JsonDynamicFlowExecuteEngine.getCurrentDir() != null) {
+                            process = RuntimeUtil.exec(envArray, new File(JsonDynamicFlowExecuteEngine.getCurrentDir()), cmd);
+                        } else {
+                            process = RuntimeUtil.exec(envArray, cmd);
+                        }
 
                         resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
                         if (resultLines == null || resultLines.isEmpty()) {
