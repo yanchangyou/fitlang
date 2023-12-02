@@ -82,7 +82,7 @@ public class CmdJsonExecuteNodeTest extends TestCase {
     public void testExecuteWithOption2() {
         String flow = "{" +//
                 "   'uni': 'cmd'," +
-                "   'cmd': 'java'," +
+                "   'cmd': 'cmd:java'," +
                 "   'option': {" +
                 "       '-version': ''," +
                 "       '-XX:': '+PrintGCDetails'," +

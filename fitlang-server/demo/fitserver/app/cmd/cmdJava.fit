@@ -1,7 +1,6 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "cmd",
-    "cmd": "java",
+    "uni": "cmd:java",
     "option": {
         "-version": "",
         "-XX:": "+PrintGCDetails"
