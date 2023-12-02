@@ -1,8 +1,6 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "sequence",
-    "isBagsMode": true,
-    "bagsName": "list",
+    "uni": "batch",
     "child": [
         {
             "uni": "cmd:javac",
