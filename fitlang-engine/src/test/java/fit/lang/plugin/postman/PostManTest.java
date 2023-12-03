@@ -47,7 +47,7 @@ public class PostManTest extends TestCase {
                 "            \"child\": {\n" +
                 "                \"id\": \"switch\",\n" +
                 "                \"uni\": \"switch\",\n" +
-                "                \"switchField\": \"${boolean(item)+''}\",\n" +
+                "                \"switchField\": \"${this.?item!=null}\",\n" +
                 "                \"child\": [\n" +
                 "                    {\n" +
                 "                        \"case\": \"false\",\n" +

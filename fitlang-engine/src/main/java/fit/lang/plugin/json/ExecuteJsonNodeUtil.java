@@ -529,7 +529,8 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String parseStringExcludeContext(String fieldValue, JsonExecuteNodeInput input) {
-        return (String) ExpressUtil.eval(fieldValue, input.getData());
+        Object value = ExpressUtil.eval(fieldValue, input.getData());
+        return value == null ? "" : value.toString();
     }
 
     /**

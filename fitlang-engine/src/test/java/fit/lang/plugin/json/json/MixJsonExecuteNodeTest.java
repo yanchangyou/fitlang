@@ -66,4 +66,28 @@ public class MixJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
         Assert.assertEquals("{\"who\":\"world\",\"hello\":\"world\"}", output);
     }
+
+    public void testExecute4() {
+
+        String flow = "{\n" +
+                "    \"uni\": \"loop\",\n" +
+                "    \"loopTimes\": 10,\n" +
+                "    \"isPipe\": true,\n" +
+                "    \"child\": {\n" +
+                "        \"uni\": \"mix\",\n" +
+                "        \"json\": {\n" +
+                "            \"array\": \"${array+=[loopIndex]}\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode(" {\n" +
+                "        \"array\": [\n" +
+                "            1\n" +
+                "        ]\n" +
+                "    }", flow);
+
+        System.out.println(output);
+        Assert.assertEquals("{\"array\":[1,0,1,2,3,4,5,6,7,8,9]}", output);
+    }
 }

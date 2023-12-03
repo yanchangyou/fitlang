@@ -2,6 +2,6 @@
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "mix",
     "json": {
-        "result": "${math.round(0.6)}"
+        "result": "${java.lang.Math.round(0.6)}"
     }
 }

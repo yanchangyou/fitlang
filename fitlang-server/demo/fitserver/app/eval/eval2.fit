@@ -10,7 +10,7 @@
     "child": {
         "uni": "mix",
         "json": {
-            "array": "${concat(array,seq.list(2))}"
+            "array": "${array+=[loopIndex]}"
         }
     }
 }

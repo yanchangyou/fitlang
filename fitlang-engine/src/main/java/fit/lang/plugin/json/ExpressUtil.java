@@ -27,7 +27,7 @@ public class ExpressUtil {
 
         String realExpress = express.substring(2, express.length() - 1);
 
-        return MVEL.eval(realExpress, param);
+        return MVEL.eval(realExpress, param, param);
     }
 
     /**
