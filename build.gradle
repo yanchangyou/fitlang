@@ -59,9 +59,11 @@ sourceSets {
     test {
         java {
             srcDir 'fitlang-engine/src/test/java'
+            srcDir 'fitlang-plugin-idea/src/test/java'
         }
         resources {
             srcDir 'fitlang-engine/src/test/resources'
+            srcDir 'fitlang-plugin-idea/src/test/resources'
         }
     }
 }

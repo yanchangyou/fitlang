@@ -104,12 +104,15 @@ public abstract class RunCodeAction extends AnAction {
 
                 List<File> files = FileUtil.loopFiles(virtualFile1.getPath());
                 for (File file : files) {
-                    if (isMyLanguageFile(file.getName())) {
-                        filePathList.add(file.getPath());
-                    } else {
-                        //检查文件后缀名是否满足
-                        print("This file can't execute, ignore: ".concat(file.getAbsolutePath()).concat("\n\n"), project, getProjectConsoleViewMap());
+                    if (file.isDirectory()) {
+                        continue;
                     }
+//                    if (isMyLanguageFile(file.getName())) {
+                    filePathList.add(file.getPath());
+//                    } else {
+                    //检查文件后缀名是否满足
+//                        print("This file can't execute, ignore: ".concat(file.getAbsolutePath()).concat("\n\n"), project, getProjectConsoleViewMap());
+//                    }
                 }
             }
             if (filePathList.size() > 1) {
@@ -151,10 +154,6 @@ public abstract class RunCodeAction extends AnAction {
                 System.out.println("execute " + getLanguageName() + " code result:");
                 System.out.println(result);
 
-                if (needFormatJsonInConsole && isJsonObjectText(result)) {
-                    result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat);
-                }
-
                 print(result.concat("\n\n"), project, getProjectConsoleViewMap());
 
             }
@@ -165,7 +164,7 @@ public abstract class RunCodeAction extends AnAction {
         return code.contains("\"_needFormatJsonInConsole\"") || code.contains("needFormatJsonInConsoleFlag");
     }
 
-    private String executeCode(String code, String codePath) {
+    String executeCode(String code, String codePath) {
 
         ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
         JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
@@ -180,11 +179,46 @@ public abstract class RunCodeAction extends AnAction {
         contextParam.put("fileName", file.getName());
         contextParam.put("fileDir", file.getParent());
         contextParam.put("filePrefix", fileName.split("\\.")[0]);
+        String fileSuffix = null;
         if (fileName.contains(".")) {
-            contextParam.put("fileSuffix", fileName.split("\\.")[1]);
+            fileSuffix = fileName.split("\\.")[1];
+            contextParam.put("fileSuffix", fileSuffix);
         }
 
-        return ExecuteJsonNodeUtil.executeCode(code);
+        boolean needFormatJsonInConsole = false;
+        String result;
+        if (isMyLanguageFile(file.getName())) {
+            result = ExecuteJsonNodeUtil.executeCode(code, contextParam);
+            needFormatJsonInConsole = needFormatJsonInConsole(code);
+        } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {
+            result = runLanguageFile(fileSuffix, contextParam);
+            needFormatJsonInConsole = true;
+        } else {
+            result = "can not execute: ".concat(codePath);
+        }
+
+        if (needFormatJsonInConsole && isJsonObjectText(result)) {
+            result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+        }
+
+        return result;
+    }
+
+    static JSONObject supportLanguageMap = new JSONObject();
+
+    static String supportLanguageFileDir = "";
+
+    static {
+        supportLanguageMap.put("java", "");
+        supportLanguageMap.put("go", "");
+        supportLanguageMap.put("js", "");
+        supportLanguageMap.put("rs", "");
+        supportLanguageMap.put("py", "");
+    }
+
+    String runLanguageFile(String fileType, JSONObject contextParam) {
+        String fitCode = FileUtil.readUtf8String("fit/plugin/code/".concat(fileType).concat(".fit"));
+        return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {
