@@ -83,11 +83,15 @@ public class ExecuteJsonNodeUtil {
     }
 
     public static String executeCode(String input) {
+        return executeCode(input, new JSONObject());
+    }
+
+    public static String executeCode(String input, JSONObject contextParam) {
         if (!isJsonObjectText(input)) {
             throw new RuntimeException("input must be json, but found: ".concat(input));
         }
         input = ExecuteJsonNodeUtil.removeJsonComment(input);
-        return executeCode(JSONObject.parseObject(input));
+        return executeCode(new JSONObject(), JSONObject.parseObject(input), contextParam);
     }
 
     public static String executeCode(JSONObject input) {

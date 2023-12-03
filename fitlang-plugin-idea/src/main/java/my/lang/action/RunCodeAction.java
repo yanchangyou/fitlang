@@ -129,9 +129,6 @@ public abstract class RunCodeAction extends AnAction {
             for (String path : filePathList) {
                 String code = readNodeDefineFile(path);
 
-                ServerJsonExecuteNode.setCurrentServerFilePath(path);
-                JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
-
                 boolean needFormatJsonInConsole = needFormatJsonInConsole(code);
                 String result;
                 try {
@@ -140,7 +137,7 @@ public abstract class RunCodeAction extends AnAction {
                         print("run file: " + path + "\n", project, getProjectConsoleViewMap());
                     }
 
-                    Object resultObject = executeCode(code);
+                    Object resultObject = executeCode(code, path);
 
                     result = resultObject.toString();
 
@@ -168,7 +165,25 @@ public abstract class RunCodeAction extends AnAction {
         return code.contains("\"_needFormatJsonInConsole\"") || code.contains("needFormatJsonInConsoleFlag");
     }
 
-    private String executeCode(String code) {
+    private String executeCode(String code, String codePath) {
+
+        ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
+        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
+
+        File file = new File(codePath);
+        if (!file.exists()) {
+            return "file not existed: ".concat(codePath);
+        }
+        String fileName = file.getName();
+        JSONObject contextParam = new JSONObject();
+        contextParam.put("filePath", file.getAbsolutePath());
+        contextParam.put("fileName", file.getName());
+        contextParam.put("fileDir", file.getParent());
+        contextParam.put("filePrefix", fileName.split("\\.")[0]);
+        if (fileName.contains(".")) {
+            contextParam.put("fileSuffix", fileName.split("\\.")[1]);
+        }
+
         return ExecuteJsonNodeUtil.executeCode(code);
     }
 
