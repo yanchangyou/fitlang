@@ -119,10 +119,7 @@ public abstract class RunCodeAction extends AnAction {
             return;
         }
 
-        if (!filePathList.isEmpty()) {
-            ServerJsonExecuteNode.setCurrentServerFilePath(filePathList.get(0));
-            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
-        } else {
+        if (filePathList.isEmpty()) {
             return;
         }
 
@@ -131,6 +128,10 @@ public abstract class RunCodeAction extends AnAction {
 
             for (String path : filePathList) {
                 String code = readNodeDefineFile(path);
+
+                ServerJsonExecuteNode.setCurrentServerFilePath(path);
+                JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
+
                 boolean needFormatJsonInConsole = needFormatJsonInConsole(code);
                 String result;
                 try {
