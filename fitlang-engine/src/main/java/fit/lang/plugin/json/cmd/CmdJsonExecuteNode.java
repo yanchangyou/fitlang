@@ -87,7 +87,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                         if (resultLines == null || resultLines.isEmpty()) {
                             resultLines = IoUtil.readUtf8Lines(process.getInputStream(), new ArrayList<>());
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         resultLines = Collections.singletonList(e.getMessage());
                     }
                 }

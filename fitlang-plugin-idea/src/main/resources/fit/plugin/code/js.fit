@@ -1,0 +1,4 @@
+{
+    "uni": "cmd:node",
+    "target": "${fileName}"
+}

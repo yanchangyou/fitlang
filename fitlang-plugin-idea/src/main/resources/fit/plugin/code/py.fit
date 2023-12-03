@@ -1,0 +1,4 @@
+{
+    "uni": "cmd:python3",
+    "target": "${fileName}"
+}
