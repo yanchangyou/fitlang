@@ -1,6 +1,7 @@
 package my.lang.action;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
@@ -21,6 +22,7 @@ import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +93,7 @@ public abstract class RunCodeAction extends AnAction {
         if (editor != null) {
             VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
             //检查文件后缀名是否满足
-            if (!isScriptCode(virtualFile)) {
+            if (!isCodeFile(virtualFile)) {
                 print("This file can't execute!\n\n", project, getProjectConsoleViewMap());
                 return;
             }
@@ -107,12 +109,12 @@ public abstract class RunCodeAction extends AnAction {
                     if (file.isDirectory()) {
                         continue;
                     }
-//                    if (isMyLanguageFile(file.getName())) {
-                    filePathList.add(file.getPath());
-//                    } else {
-                    //检查文件后缀名是否满足
-//                        print("This file can't execute, ignore: ".concat(file.getAbsolutePath()).concat("\n\n"), project, getProjectConsoleViewMap());
-//                    }
+                    if (isCodeFile(file.getName())) {
+                        filePathList.add(file.getPath());
+                    } else {
+                        //检查文件后缀名是否满足
+                        print("This file can't execute, ignore: ".concat(file.getAbsolutePath()).concat("\n\n"), project, getProjectConsoleViewMap());
+                    }
                 }
             }
             if (filePathList.size() > 1) {
@@ -217,7 +219,12 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     String runLanguageFile(String fileType, JSONObject contextParam) {
-        String fitCode = FileUtil.readUtf8String("fit/plugin/code/".concat(fileType).concat(".fit"));
+        String path = "fit/plugin/code/".concat(fileType).concat(".fit");
+        InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(path);
+        if (in == null) {
+            return "can not found: ".concat(path);
+        }
+        String fitCode = IoUtil.readUtf8(in);
         return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
     }
 
@@ -261,11 +268,17 @@ public abstract class RunCodeAction extends AnAction {
         }
     }
 
-    boolean isScriptCode(VirtualFile virtualFile) {
+    boolean isCodeFile(VirtualFile virtualFile) {
         if (virtualFile == null) {
             return false;
         }
-        return isMyLanguageFile(virtualFile.getName());
+        return isCodeFile(virtualFile.getName());
     }
 
+    boolean isCodeFile(String fileName) {
+        if (fileName == null) {
+            return false;
+        }
+        return fileName.contains(".");
+    }
 }

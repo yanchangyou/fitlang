@@ -1,0 +1,10 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd:/opt/local/bin/go",
+    "env": {
+        "GOPATH": "${fileDir}",
+        "GOCACHE": "/opt/go/cache"
+    },
+    "target": "run",
+    "param": "${fileName}"
+}
