@@ -14,7 +14,7 @@ public class CatchJsonExecuteNodeTest extends TestCase {
                 "   'child': {" +
                 "       'uni':'mix'," +
                 "       'json':{" +
-                "           'message':'${1/0}'" +
+                "           'message':'${a}'" +
                 "       }" +
                 "   }" +
                 "}";

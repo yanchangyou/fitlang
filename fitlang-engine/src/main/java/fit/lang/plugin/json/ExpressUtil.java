@@ -2,19 +2,11 @@ package fit.lang.plugin.json;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.googlecode.aviator.AviatorEvaluator;
-import com.googlecode.aviator.AviatorEvaluatorInstance;
+import org.mvel2.MVEL;
 
 import java.util.Map;
 
 public class ExpressUtil {
-
-    private static final AviatorEvaluatorInstance engine = AviatorEvaluator.getInstance();
-
-    static {
-        //默认使用缓存
-        engine.setCachedExpressionByDefault(true);
-    }
 
     /**
      * 表达式计算
@@ -35,7 +27,7 @@ public class ExpressUtil {
 
         String realExpress = express.substring(2, express.length() - 1);
 
-        return engine.execute(realExpress, param);
+        return MVEL.eval(realExpress, param);
     }
 
     /**
