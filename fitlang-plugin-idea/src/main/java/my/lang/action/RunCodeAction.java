@@ -3,6 +3,7 @@ package my.lang.action;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
@@ -180,6 +181,8 @@ public abstract class RunCodeAction extends AnAction {
         contextParam.put("fileName", file.getName());
         contextParam.put("fileDir", file.getParent());
         contextParam.put("filePrefix", fileName.split("\\.")[0]);
+        contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
+
         String fileSuffix = null;
         if (fileName.contains(".")) {
             fileSuffix = fileName.split("\\.")[1];

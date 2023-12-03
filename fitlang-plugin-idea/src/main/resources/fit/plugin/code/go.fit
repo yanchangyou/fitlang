@@ -1,8 +1,8 @@
 {
-    "uni": "cmd:/opt/local/bin/go",
+    "uni": "cmd:go",
     "env": {
         "GOPATH": "${fileDir}",
-        "GOCACHE": "/opt/go/cache"
+        "GOCACHE": "${userHome+'/go/cache'}"
     },
     "target": "run",
     "param": "${fileName}"
