@@ -1,0 +1,13 @@
+{
+    "uni": "batch",
+    "child": [
+        {
+            "uni": "cmd:javac",
+            "target": "${fileName}"
+        },
+        {
+            "uni": "cmd:java",
+            "target": "${filePrefix}"
+        }
+    ]
+}

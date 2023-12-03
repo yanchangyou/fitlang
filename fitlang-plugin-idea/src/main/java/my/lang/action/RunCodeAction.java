@@ -226,7 +226,14 @@ public abstract class RunCodeAction extends AnAction {
         String fitCode = IoUtil.readUtf8(in);
         String result = ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
         if (isJsonObjectText(result)) {
-            JSONArray lines = JSONObject.parseObject(result).getJSONObject("result").getJSONArray("out");
+            JSONObject resultJson = JSONObject.parseObject(result);
+            JSONArray lines;
+            if (resultJson.containsKey("result")) {
+                lines = resultJson.getJSONObject("result").getJSONArray("out");
+            } else {
+                JSONArray list = resultJson.getJSONArray("list");
+                lines = list.getJSONObject(list.size() - 1).getJSONObject("result").getJSONArray("out");
+            }
             return lines == null ? "" : StrUtil.join("\n", lines);
         }
         return "error: ".concat(result);
