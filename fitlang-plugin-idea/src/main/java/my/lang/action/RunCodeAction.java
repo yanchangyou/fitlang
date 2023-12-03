@@ -2,6 +2,8 @@ package my.lang.action;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
@@ -24,10 +26,7 @@ import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -225,7 +224,12 @@ public abstract class RunCodeAction extends AnAction {
             return "can not found: ".concat(path);
         }
         String fitCode = IoUtil.readUtf8(in);
-        return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
+        String result = ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
+        if (isJsonObjectText(result)) {
+            JSONArray lines = JSONObject.parseObject(result).getJSONObject("result").getJSONArray("out");
+            return lines == null ? "" : StrUtil.join("\n", lines);
+        }
+        return "error: ".concat(result);
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {
