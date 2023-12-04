@@ -380,7 +380,8 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.7.7 support language java, go(?), js(?), python, rust(?) code run, like Code Runner</li>
+            <li>0.7.7 </li>
+            <li>0.7.6 support language java, go(?), js(?), python, rust(?) code run, like Code Runner</li>
             <li>0.7.5 cmd support extend command: java, javac, jar; replace aviator to mvel expression; refine telnet.http;</li>
             <li>0.7.4 add node: catch, telnet.http, telnet.https; fix log lib; systemInfo add net; refine app dir; telnet support proxy;</li>
             <li>0.7.3 add node: info, cmd, telnet, telnets; update lib</li>
