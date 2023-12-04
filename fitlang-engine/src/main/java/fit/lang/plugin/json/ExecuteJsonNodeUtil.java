@@ -6,6 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.server.HttpServerRequest;
+import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -21,6 +22,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -699,5 +701,14 @@ public class ExecuteJsonNodeUtil {
 
     public static int getUrlPort(URL httpUrl) {
         return httpUrl.getPort() == -1 ? httpUrl.getDefaultPort() : httpUrl.getPort();
+    }
+
+    /**
+     * 操作系统字符集
+     *
+     * @return
+     */
+    public static Charset getSystemCharset() {
+        return Charset.forName(SystemUtil.getProps().getProperty("sun.jnu.encoding", "UTF-8"));
     }
 }
