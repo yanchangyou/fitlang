@@ -386,7 +386,8 @@
             ]
         },
         {
-            "uni": "zip"
+            "uni": "zip",
+            "path": ""
         },
         {
             "uni": "telnet",

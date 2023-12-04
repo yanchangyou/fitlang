@@ -28,10 +28,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getAllException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
@@ -44,6 +41,8 @@ import static my.lang.MyLanguage.isMyLanguageFile;
  * @date 2020-09-11 22:48:45
  */
 public abstract class RunCodeAction extends AnAction {
+
+    static final Map<Project, ConsoleView> projectConsoleViewMap = new ConcurrentHashMap<>();
 
     /**
      * 获取id
@@ -175,13 +174,14 @@ public abstract class RunCodeAction extends AnAction {
         if (!file.exists()) {
             return "file not existed: ".concat(codePath);
         }
-        String fileName = file.getName();
         JSONObject contextParam = new JSONObject();
         contextParam.put("filePath", file.getAbsolutePath());
         contextParam.put("fileName", file.getName());
         contextParam.put("fileDir", file.getParent());
-        contextParam.put("filePrefix", fileName.split("\\.")[0]);
         contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
+
+        String fileName = file.getName();
+        contextParam.put("filePrefix", fileName.split("\\.")[0]);
 
         String fileSuffix = null;
         if (fileName.contains(".")) {
@@ -191,7 +191,7 @@ public abstract class RunCodeAction extends AnAction {
 
         boolean needFormatJsonInConsole = false;
         String result;
-        if (isMyLanguageFile(file.getName())) {
+        if (isMyLanguageFile(fileName)) {
             result = ExecuteJsonNodeUtil.executeCode(code, contextParam);
             needFormatJsonInConsole = needFormatJsonInConsole(code);
         } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {

@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.cmd;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -15,14 +16,14 @@ public class ZipJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String filePath = parseStringField("filePath", input);
+        String path = parseStringField("path", input);
 
-        if (filePath != null) {
-            String zipFile = filePath.substring(0, filePath.lastIndexOf(".")).concat(".zip");
-            File file = ZipUtil.zip(filePath, zipFile, true);
-            output.set("zipPath", file.getAbsoluteFile());
+        if (StrUtil.isBlank(path)) {
+            output.set("message", "path is empty!");
         } else {
-            output.set("message", "filePath is null!");
+            String zipFile = path.concat(".zip");
+            File file = ZipUtil.zip(path, zipFile, true);
+            output.set("zipPath", file.getAbsoluteFile());
         }
     }
 }

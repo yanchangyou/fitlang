@@ -12,8 +12,7 @@ public class ZipJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'zip'," +
-                "   'filePath': '/opt/github/fitlang/fitlang-engine/src/test/java/fit/lang/plugin/json/cmd/ZipJsonExecuteNodeTest.java'," +
-                "   'filePrefix': 'ZipJsonExecuteNodeTest'" +
+                "   'path': '/opt/github/fitlang/fitlang-engine/src/test/java/fit/lang/plugin/json/cmd/ZipJsonExecuteNodeTest.java'" +
                 "}";
 
         System.out.println(flow.replace("'", "\""));

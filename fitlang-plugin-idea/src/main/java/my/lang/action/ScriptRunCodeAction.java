@@ -14,8 +14,6 @@ import static my.lang.MyLanguage.LANG_STRING_LOGO;
  */
 public class ScriptRunCodeAction extends RunCodeAction {
 
-    static final Map<Project, ConsoleView> projectConsoleViewMap = new ConcurrentHashMap<>();
-
     @Override
     public String getLanguageName() {
         return LANG_NAME;
