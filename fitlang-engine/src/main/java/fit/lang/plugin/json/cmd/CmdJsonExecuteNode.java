@@ -215,9 +215,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             return "cmd is empty!";
         }
         if (cmd.contains(">")
-                || cmd.contains("^")
+//                || cmd.contains("^")
                 || cmd.contains("&")
-                || cmd.contains("!")
+//                || cmd.contains("!")
 //                || cmd.contains(";")
                 || cmd.contains(")")
                 || cmd.contains("]")
