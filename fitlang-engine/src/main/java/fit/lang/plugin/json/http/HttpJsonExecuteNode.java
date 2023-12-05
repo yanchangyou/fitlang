@@ -109,10 +109,10 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
                 //ignore todo
             }
 
-            out.put("cookie", parseCookie(response));
+            out.put("status", response.getStatus());
             JSONObject headerInfo = parseHeader(response);
             out.put("header", headerInfo.getJSONObject("header"));
-            out.put("status", response.getStatus());
+            out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
             int bodySize = response.body().length();
             sizeInfo.put("body", bodySize);
