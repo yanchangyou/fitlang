@@ -100,4 +100,16 @@ public class HttpJsonExecuteNodeTest extends TestCase {
         Assert.assertEquals("{\"hello\":\"world\",\"foo\":\"bar\"}", output);
     }
 
+    public void testUniUrl() {
+        String flow = "{" +
+                "    'uni': 'post http://fit.321zou.com/hello'," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+
+        Assert.assertTrue(output.contains("{\"message\":\"hello, world!\"}"));
+    }
+
 }
