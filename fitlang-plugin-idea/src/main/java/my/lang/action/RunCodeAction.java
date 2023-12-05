@@ -133,7 +133,6 @@ public abstract class RunCodeAction extends AnAction {
             for (String path : filePathList) {
                 String code = readNodeDefineFile(path);
 
-                boolean needFormatJsonInConsole = needFormatJsonInConsole(code);
                 String result;
                 try {
 
@@ -162,7 +161,14 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     private static boolean needFormatJsonInConsole(String code) {
-        return code.contains("\"_needFormatJsonInConsole\"") || code.contains("needFormatJsonInConsoleFlag");
+        return code.contains("\"_needFormatJsonInConsole\"")
+                || code.contains("needFormatJsonInConsoleFlag")
+                || code.contains("GET http")
+                || code.contains("POST http")
+                || code.contains("PUT http")
+                || code.contains("HEAD http")
+                || code.contains("DELETE http")
+                ;
     }
 
     String executeCode(String code, String codePath) {
