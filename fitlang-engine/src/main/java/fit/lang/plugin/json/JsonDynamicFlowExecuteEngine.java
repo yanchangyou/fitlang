@@ -238,27 +238,23 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("postJson", HttpPostJsonJsonExecuteNode.class);
         register("httpPostJson", HttpPostJsonJsonExecuteNode.class);
-        register("postJson http", HttpPostJsonJsonExecuteNode.class);
-        register("post http", HttpPostJsonJsonExecuteNode.class);
-        register("postJson https", HttpPostJsonJsonExecuteNode.class);
-        register("post https", HttpPostJsonJsonExecuteNode.class);
+        register("POST http", HttpPostJsonJsonExecuteNode.class);
+        register("POST https", HttpPostJsonJsonExecuteNode.class);
 
         register("postForm", HttpPostFormJsonExecuteNode.class);
         register("httpPostForm", HttpPostFormJsonExecuteNode.class);
-        register("postForm http", HttpPostFormJsonExecuteNode.class);
-        register("postForm https", HttpPostFormJsonExecuteNode.class);
 
         register("httpGet", HttpGetJsonExecuteNode.class);
-        register("get http", HttpGetJsonExecuteNode.class);
-        register("get https", HttpGetJsonExecuteNode.class);
+        register("GET http", HttpGetJsonExecuteNode.class);
+        register("GET https", HttpGetJsonExecuteNode.class);
 
         register("httpPut", HttpPutJsonJsonExecuteNode.class);
-        register("put http", HttpPutJsonJsonExecuteNode.class);
-        register("put https", HttpPutJsonJsonExecuteNode.class);
+        register("PUT http", HttpPutJsonJsonExecuteNode.class);
+        register("PUT https", HttpPutJsonJsonExecuteNode.class);
 
         register("httpDelete", HttpDeleteJsonJsonExecuteNode.class);
-        register("delete http", HttpDeleteJsonJsonExecuteNode.class);
-        register("delete https", HttpDeleteJsonJsonExecuteNode.class);
+        register("DELETE http", HttpDeleteJsonJsonExecuteNode.class);
+        register("DELETE https", HttpDeleteJsonJsonExecuteNode.class);
 
         // web
         register("server", ServerJsonExecuteNode.class);

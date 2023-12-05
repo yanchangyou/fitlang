@@ -102,7 +102,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
 
     public void testUniUrl() {
         String flow = "{" +
-                "    'uni': 'post http://fit.321zou.com/hello'," +
+                "    'uni': 'POST http://fit.321zou.com/hello'" +
                 "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);

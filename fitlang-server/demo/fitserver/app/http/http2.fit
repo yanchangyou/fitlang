@@ -1,3 +1,4 @@
 {
-    "uni": "get https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "GET https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
 }

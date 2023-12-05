@@ -43,12 +43,14 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         String url = ExecuteJsonNodeUtil.parseStringField("url", input, nodeJsonDefine);
         if (url == null) {
             String uni = nodeJsonDefine.getString("uni");
-            if (uni.startsWith("get http")
-                    || uni.startsWith("post http")
-                    || uni.startsWith("put http")
-                    || uni.startsWith("head http")
+            if (uni.startsWith("GET http")
+                    || uni.startsWith("POST http")
+                    || uni.startsWith("PUT http")
+                    || uni.startsWith("HEAD http")
+                    || uni.startsWith("DELETE http")
             ) {
                 url = uni.substring(uni.indexOf(" ") + 1);
+                nodeJsonDefine.put("onlyBody", false);
             } else {
                 throw new ExecuteNodeException("http node url field is required!");
             }
