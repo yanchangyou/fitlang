@@ -390,6 +390,10 @@
             "path": ""
         },
         {
+            "uni": "unzip",
+            "path": ""
+        },
+        {
             "uni": "telnet",
             "host": "www.baidu.com",
             "port": 80,
