@@ -72,7 +72,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject httpParam = parseParam(nodeJsonDefine);
 
         Boolean isPostForm = isPostForm(nodeJsonDefine);
-        if (method == Method.GET || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
+        if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
             parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
             String httpBody;

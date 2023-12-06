@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.http;
 
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -110,6 +112,24 @@ public class HttpJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(output.contains("{\"message\":\"hello, world!\"}"));
+    }
+
+    public void testExecuteHead() {
+        String flow = "{" +//
+                "   'uni': 'httpHead'," +
+                "   'url': 'http://116.62.65.251/hello'," +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("output"));
+
     }
 
 }
