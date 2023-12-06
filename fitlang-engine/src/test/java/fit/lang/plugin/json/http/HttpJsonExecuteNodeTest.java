@@ -117,7 +117,7 @@ public class HttpJsonExecuteNodeTest extends TestCase {
     public void testExecuteHead() {
         String flow = "{" +//
                 "   'uni': 'httpHead'," +
-                "   'url': 'http://116.62.65.251/hello'," +
+                "   'url': 'http://fit.321zou.com/hello'," +
                 "}";
         System.out.println(flow.replace("'", "\""));
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
@@ -128,7 +128,25 @@ public class HttpJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("output"));
+        Assert.assertEquals("", outputJson.get("_raw"));
+
+    }
+
+    public void testExecuteHead2() {
+        String flow = "{" +//
+                "   'uni': 'httpHead'," +
+                "   'url': 'https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic'," +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertEquals("", outputJson.get("_raw"));
 
     }
 

@@ -114,13 +114,16 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("header", headerInfo.getJSONObject("header"));
             out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
-            int bodySize = response.body().length();
-            sizeInfo.put("body", bodySize);
             sizeInfo.put("header", headerInfo.getIntValue("size"));
-            out.put("size", bodySize + headerInfo.getIntValue("size"));
+            String body = response.body();
+            if (body != null) {
+                int bodySize = response.body().length();
+                sizeInfo.put("body", bodySize);
+                out.put("size", bodySize + headerInfo.getIntValue("size"));
+                out.put("time", (timeEnd - timeBegin) + "ms");
+                out.put("body", result);
+            }
             out.put("sizeInfo", sizeInfo);
-            out.put("time", (timeEnd - timeBegin) + "ms");
-            out.put("body", result);
         }
         output.setData(out);
     }
