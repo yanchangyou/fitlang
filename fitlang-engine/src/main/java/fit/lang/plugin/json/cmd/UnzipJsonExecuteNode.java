@@ -27,11 +27,11 @@ public class UnzipJsonExecuteNode extends JsonExecuteNode {
         } else if (!path.endsWith(".zip")) {
             output.set("message", "path must be end with zip!");
         } else {
-            String targetPath = path.replace(".zip", "");
-            if (new File(targetPath).exists()) {
-                targetPath = targetPath.concat(DateUtil.format(new Date(), PURE_DATETIME_PATTERN));
+            String targetDir = path.substring(0, path.lastIndexOf(File.separator));
+            if (new File(targetDir).exists()) {
+                targetDir = targetDir.concat(DateUtil.format(new Date(), PURE_DATETIME_PATTERN));
             }
-            File file = ZipUtil.unzip(path, targetPath);
+            File file = ZipUtil.unzip(path, targetDir);
             output.set("path", path);
             output.set("unzipPath", file.getAbsoluteFile());
         }
