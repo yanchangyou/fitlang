@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.cmd;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.ZipUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -7,11 +8,14 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.io.File;
+import java.util.Date;
+
+import static cn.hutool.core.date.DatePattern.PURE_DATETIME_PATTERN;
 
 /**
  * 执行节点
  */
-public class ZipJsonExecuteNode extends JsonExecuteNode {
+public class UnzipJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -20,13 +24,16 @@ public class ZipJsonExecuteNode extends JsonExecuteNode {
 
         if (StrUtil.isBlank(path)) {
             output.set("message", "path is empty!");
-        } else if ("/".equals(path) || path.endsWith(":/")) {
-            output.set("message", "path is not valid!");
+        } else if (!path.endsWith(".zip")) {
+            output.set("message", "path must be end with zip!");
         } else {
-            String zipFile = path.concat(".zip");
-            File file = ZipUtil.zip(path, zipFile, true);
+            String targetPath = path.replace(".zip", "");
+            if (new File(targetPath).exists()) {
+                targetPath = targetPath.concat(DateUtil.format(new Date(), PURE_DATETIME_PATTERN));
+            }
+            File file = ZipUtil.unzip(path, targetPath);
             output.set("path", path);
-            output.set("zipPath", file.getAbsoluteFile());
+            output.set("unzipPath", file.getAbsoluteFile());
         }
     }
 }

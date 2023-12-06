@@ -15,6 +15,7 @@ import fit.lang.define.base.ExecuteNode;
 import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
+import fit.lang.plugin.json.cmd.UnzipJsonExecuteNode;
 import fit.lang.plugin.json.cmd.ZipJsonExecuteNode;
 import fit.lang.plugin.json.define.*;
 
@@ -296,6 +297,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         //cmd
         register("cmd", CmdJsonExecuteNode.class);
         register("zip", ZipJsonExecuteNode.class);
+        register("unzip", UnzipJsonExecuteNode.class);
 
         //net
         register("telnet", TelnetJsonExecuteNode.class);

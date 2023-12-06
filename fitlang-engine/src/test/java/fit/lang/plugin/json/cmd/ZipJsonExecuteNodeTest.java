@@ -12,7 +12,7 @@ public class ZipJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni': 'zip'," +
-                "   'path': '/opt/github/fitlang/fitlang-engine/src/test/java/fit/lang/plugin/json/cmd/ZipJsonExecuteNodeTest.java'" +
+                "   'path': '/opt/github/fitlang/fitlang-engine/src/test/java/fit/lang/plugin/json/cmd/JavaJsonExecuteNodeTest.java'" +
                 "}";
 
         System.out.println(flow.replace("'", "\""));
@@ -27,6 +27,26 @@ public class ZipJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(outputJson.containsKey("zipPath"));
 
+    }
+
+    public void testExecuteUnzip() {
+
+        String flow = "{" +//
+                "   'uni': 'unzip'," +
+                "   'path': '/opt/github/fitlang/fitlang-engine/src/test/java/fit/lang/plugin/json/cmd/JavaJsonExecuteNodeTest.java.zip'" +
+                "}";
+
+        System.out.println(flow.replace("'", "\""));
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("unzipPath"));
 
     }
 }
