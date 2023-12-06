@@ -54,11 +54,6 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
     }
 
     protected Socket buildSocket(String host, int port, Proxy proxy) throws IOException {
-        if(proxy == null) {
-            return new Socket(host, port);
-        }
-        Socket socket = new Socket(proxy);
-        socket.connect(new InetSocketAddress(host, port));
-        return socket;
+        return TelnetNodeUtil.buildSocket(host, port, proxy);
     }
 }
