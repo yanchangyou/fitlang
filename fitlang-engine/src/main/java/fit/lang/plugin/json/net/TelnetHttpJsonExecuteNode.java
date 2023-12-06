@@ -68,8 +68,7 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             inputLines.add("");
 
             Proxy proxy = buildProxy(nodeJsonDefine.getJSONObject("proxy"));
-            Socket socket = buildSocket(proxy);
-            socket.connect(new InetSocketAddress(urlHost, port));
+            Socket socket = buildSocket(urlHost, port, proxy);
             OutputStream outputStream = socket.getOutputStream();
             for (String line : inputLines) {
                 outputStream.write((line + "\n").getBytes());
@@ -128,7 +127,12 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
         }
     }
 
-    protected Socket buildSocket(Proxy proxy) throws IOException {
-        return proxy == null ? new Socket() : new Socket(proxy);
+    protected Socket buildSocket(String host, int port, Proxy proxy) throws IOException {
+        if (proxy == null) {
+            return new Socket(host, port);
+        }
+        Socket socket = new Socket(proxy);
+        socket.connect(new InetSocketAddress(host, port));
+        return socket;
     }
 }
