@@ -20,6 +20,8 @@ public class ZipJsonExecuteNode extends JsonExecuteNode {
 
         if (StrUtil.isBlank(path)) {
             output.set("message", "path is empty!");
+        } else if ("/".equals(path) || path.endsWith(":/")) {
+            output.set("message", "path is not valid!");
         } else {
             String zipFile = path.concat(".zip");
             File file = ZipUtil.zip(path, zipFile, true);
