@@ -122,7 +122,11 @@ public class SystemBaseInfoJsonExecuteNode extends JsonExecuteNode {
         if (array == null || array.length == 0 || array[0] == null) {
             return null;
         }
-        return array[0].toUpperCase();
+        return array[0];
+    }
+
+    String getFirstItemWithUppercase(String[] array) {
+        return getFirstItem(array).toUpperCase();
     }
 
 }
