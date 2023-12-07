@@ -147,7 +147,6 @@ public abstract class RunCodeAction extends AnAction {
                 } catch (Throwable exception) {
                     exception.printStackTrace();
                     result = "exception:" + getAllException(exception);
-                    print(result + "\n\n", project, getProjectConsoleViewMap());
                     // throw exception; //TODO
                 }
 
