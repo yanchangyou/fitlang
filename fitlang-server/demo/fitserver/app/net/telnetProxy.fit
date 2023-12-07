@@ -7,5 +7,9 @@
         "GET /hello HTTP/1.0",
         "Host: fit.321zou.com",
         ""
-    ]
+    ],
+    "proxy": {
+        "host": "62.234.182.56",
+        "port": 443
+    }
 }

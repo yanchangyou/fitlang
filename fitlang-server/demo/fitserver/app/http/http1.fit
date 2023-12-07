@@ -1,6 +1,4 @@
 {
-    "uni": "http",
-    "input": {
-    },
-    "url": "https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+    "uni": "httpGet",
+    "url": "http://fit.321zou.com/hello"
 }
