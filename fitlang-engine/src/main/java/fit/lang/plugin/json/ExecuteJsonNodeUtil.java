@@ -395,7 +395,7 @@ public class ExecuteJsonNodeUtil {
         Proxy.Type typeEnum;
         if ("http".equals(type) || "HTTP".equals(type)) {
             typeEnum = Proxy.Type.HTTP;
-        } else if ("socket".equals(type) || "socks".equals(type) || "SOCKS".equals(type)) {
+        } else if ("socket".equalsIgnoreCase(type) || "socks".equalsIgnoreCase(type)) {
             typeEnum = Proxy.Type.SOCKS;
         } else if ("direct".equals(type) || "DIRECT".equals(type)) {
             typeEnum = Proxy.Type.DIRECT;
