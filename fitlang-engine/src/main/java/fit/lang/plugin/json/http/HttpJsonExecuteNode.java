@@ -115,6 +115,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
             sizeInfo.put("header", headerInfo.getIntValue("size"));
+            out.put("sizeInfo", sizeInfo);
+
             String body = response.body();
             if (body != null) {
                 int bodySize = response.body().length();
@@ -123,7 +125,6 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
                 out.put("time", (timeEnd - timeBegin) + "ms");
                 out.put("body", result);
             }
-            out.put("sizeInfo", sizeInfo);
         }
         output.setData(out);
     }
