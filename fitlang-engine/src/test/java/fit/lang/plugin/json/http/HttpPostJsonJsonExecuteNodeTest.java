@@ -21,10 +21,32 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
+        Assert.assertEquals("{'error_code':100,'error_msg':'Invalid parameter'}", output);
 
     }
 
+    public void testExecuteWithProxy() {
+
+        String flow = "{" +//
+                "   'uni':'http'," +
+                "   'url':'https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic'," +
+                "   'header':{" +
+                "       'test':'123'" +
+                "   }," +
+                "    'proxy': {" +
+                "        'host': '62.234.182.56'," +
+                "        'port': 443" +
+                "    }" +
+                "}";
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        System.out.println(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
+
+    }
 
     public void testExecute2() {
 
@@ -56,7 +78,7 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{\"hello\":\"world\"}", output);
+        Assert.assertEquals("{'hello':'world'}", output);
 
     }
 
