@@ -68,7 +68,7 @@ public abstract class RunCodeAction extends AnAction {
     public static Map<Project, ToolWindow> windowMap = new HashMap<Project, ToolWindow>();
 
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
-    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(4, 10, 10, TimeUnit.MINUTES, workQueue);
+    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
 
     @Override
     public void actionPerformed(AnActionEvent e) {
