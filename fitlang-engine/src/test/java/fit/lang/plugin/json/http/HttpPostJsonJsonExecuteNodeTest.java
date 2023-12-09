@@ -29,9 +29,9 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         String flow = "{" +//
                 "   'uni':'httpGet'," +
-                "   'url':'https://www.iteye.com'," +
+                "   'url':'https://www.baidu.com'," +
                 "   'header':{" +
-                "       'Host':'www.iteye.com'" +
+//                "       'Host':'www.baidu.com'" +
                 "   }," +
                 "    'proxy': {" +
                 "        'host': '62.234.182.56'," +
@@ -43,8 +43,8 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(!output.isEmpty());
+        Assert.assertTrue(output.toString().contains("百度"));
 
-        Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
 
     }
 
