@@ -17,22 +17,7 @@ import static my.lang.MyLanguage.LANG_STRING_LOGO;
 /**
  * @author yanchangyou
  */
-public class ScriptRunCodeForZipAction extends RunCodeAction {
-
-    @Override
-    public String getLanguageName() {
-        return LANG_NAME;
-    }
-
-    @Override
-    public String getLogoString() {
-        return LANG_STRING_LOGO;
-    }
-
-    @Override
-    public Map<Project, ConsoleView> getProjectConsoleViewMap() {
-        return projectConsoleViewMap;
-    }
+public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
