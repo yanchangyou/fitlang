@@ -78,7 +78,7 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{'hello':'world'}", output);
+        Assert.assertEquals("{\"hello\":\"world\"}", output);
 
     }
 
