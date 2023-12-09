@@ -93,6 +93,7 @@ public class SslTelnetJsonExecuteNodeTest extends TestCase {
                 "   'uni': 'telnets'," +
                 "   'host': '116.196.89.107 www.iteye.com'," +
                 "   'port': 443," +
+//                "   'validateCert': true," +
                 "   'input': [" +
                 "       'HEAD / HTTP/1.0'," +
                 "       'Host: www.iteye.com'," +

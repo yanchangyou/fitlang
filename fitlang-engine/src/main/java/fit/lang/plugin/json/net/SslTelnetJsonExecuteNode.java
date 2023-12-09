@@ -10,6 +10,7 @@ import java.net.Socket;
 public class SslTelnetJsonExecuteNode extends TelnetJsonExecuteNode {
 
     protected Socket buildSocket(String host, int port, Proxy proxy) throws IOException {
-        return TelnetNodeUtil.buildSslSocket(host, port, proxy, false);
+        boolean validateCert = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("validateCert"));
+        return TelnetNodeUtil.buildSslSocket(host, port, proxy, validateCert);
     }
 }
