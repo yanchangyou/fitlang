@@ -29,20 +29,20 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             });
         }
 
-        String filePath;
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
         VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
 
         if (editor != null && virtualFile != null) {
-            filePath = virtualFile.getPath();
         } else if (virtualFiles != null && virtualFiles.length > 0) {
-            filePath = virtualFiles[0].getPath();
+            virtualFile = virtualFiles[0];
         } else {
             return;
         }
+        String filePath = virtualFile.getPath();
 
+        VirtualFile finalVirtualFile = virtualFile;
         threadPoolExecutor.submit(() -> {
 
             JSONObject contextParam = new JSONObject();
@@ -57,6 +57,7 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
 
             print(result + "\n\n", project, getProjectConsoleViewMap());
 
+            finalVirtualFile.getParent().refresh(true, false);
         });
     }
 
