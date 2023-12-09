@@ -377,12 +377,12 @@ getMonitorClient: 获取监控客户端列表<br/>
     </extensions>
 
     <actions>
-<!--        <action id="RunFitLangForZip" class="my.lang.action.ScriptRunCodeForZipAction" text="Zip"-->
-<!--                description="Zip file" icon="/my/lang/icon/fit.svg">-->
-<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
-<!--            <keyboard-shortcut first-keystroke="control shift Z" keymap="$default"/>-->
-<!--        </action>-->
+        <action id="RunFitLangForZip" class="my.lang.action.ScriptRunCodeForZipAction" text="Zip"
+                description="Zip file" icon="/my/lang/icon/fit.svg">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <keyboard-shortcut first-keystroke="control shift Z" keymap="$default"/>
+        </action>
         <!-- Add your actions here -->
         <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Run FitLang"
                 description="Run fit lang" icon="/my/lang/icon/fit.svg">
