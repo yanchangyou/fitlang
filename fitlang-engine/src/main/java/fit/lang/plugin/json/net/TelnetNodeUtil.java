@@ -28,8 +28,13 @@ public class TelnetNodeUtil {
         return socket;
     }
 
-    static Socket buildSslSocket(String host, int port, Proxy proxy) throws IOException {
-        SSLSocketFactory factory = getUnsafeSslSocketFactory();
+    static Socket buildSslSocket(String host, int port, Proxy proxy, boolean validateCert) throws IOException {
+        SSLSocketFactory factory;
+        if (validateCert) {
+            factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        } else {
+            factory = getUnsafeSslSocketFactory();
+        }
         SSLSocket socket;
         if (proxy != null) {
             Socket proxySocket = new Socket();
