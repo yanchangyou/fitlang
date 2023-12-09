@@ -57,7 +57,7 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
 
             print(result + "\n\n", project, getProjectConsoleViewMap());
 
-            finalVirtualFile.getParent().refresh(true, false);
+            finalVirtualFile.getParent().refresh(false, false);
         });
     }
 
