@@ -76,10 +76,23 @@ execute: execute input node define<br/>
 <br/>
 
 web nodes<br/>
-hTTP: supports HTTP client request<br/>
+http: supports HTTP client request<br/>
 server: server node<br/>
 proxy: proxy node<br/>
 web: config web param, such as response header<br/>
+<br/>
+
+info nodes<br/>
+systemInfo: os、memory info<br/>
+info: jvm jdk info<br/>
+<br/>
+
+command nodes<br/>
+cmd: cmd<br/>
+telnet: telnet<br/>
+telnets: telnets<br/>
+telnet.http: telnet.http<br/>
+telnet.https: telnet.https<br/>
 <br/>
 
 Monitoring nodes<br/>
@@ -89,12 +102,6 @@ getClientMonitorData: get client monitor data<br/>
 receiveClientMonitorData: receive client monitor data<br/>
 pushClientMonitorData: push client monitor data<br/>
 getMonitorClient: get monitor client list<br/>
-
-info nodes<br/>
-systemInfo: os、memory info<br/>
-info: jvm jdk info<br/>
-<br/>
-<br/>
 
 中文：<br/>
 <br/>
@@ -164,7 +171,7 @@ switch：分支执行节点，switchField指定分支字段<br/>
 execute: 执行节点<br/>
 <br/>
 
-Web节点<br/>
+web节点<br/>
 http：支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete<br/>
 server：服务端节点<br/>
 proxy：代理节点<br/>
@@ -176,8 +183,12 @@ systemInfo: CPU、内存信息<br/>
 info: JVM, JDK, 运行时信息<br/>
 <br/>
 
-命令行<br/>
+命令行节点<br/>
 cmd: 命令行<br/>
+telnet: telnet<br/>
+telnets: telnets<br/>
+telnet.http: telnet.http<br/>
+telnet.https: telnet.https<br/>
 <br/>
 
 监控节点<br/>

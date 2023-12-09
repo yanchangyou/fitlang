@@ -35,9 +35,10 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 
 插件审核通过后，遇到.fit结尾文件时会提示下载，预览版需要下载zip包，然后在IDEA中按照，使用方式如下
 
-[预览版插件安装](https://plugins.jetbrains.com/plugin/22593-fitlang/plugin)
-
 ![](https://plugins.jetbrains.com/files/22593/screenshot_cc167984-8557-41da-8211-36eeb5864633)
+![](https://plugins.jetbrains.com/files/22593/screenshot_2ce2a61a-43b9-4569-bcc1-9d98e8b5f306)
+![](https://plugins.jetbrains.com/files/22593/screenshot_573fe927-a2e3-4abf-b012-8c4a25029419)
+![](https://plugins.jetbrains.com/files/22593/screenshot_610c35af-8ae6-45cd-a102-bf3b90a74745)
 
 ## demo
 - [demo-hello](https://plugins.jetbrains.com/plugin/22593-fitlang/demo-hello)
@@ -124,6 +125,13 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - systemInfo: 获取系统信息，基于oshi实现(信息字段(支持屏蔽)：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
 - info: 获取系统信息，基于hutool SystemUtil实现(信息字段(支持屏蔽)：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties)
 
+### 命令行
+- cmd: 命令行
+- telnet: telnet
+- telnets: telnets
+- telnet.http: telnet.http
+- telnet.https: telnet.https
+
 ### 监控节点
 - startMonitor: 启动监控
 - getMonitorData: 获取监控数据: CPU和Memory
@@ -131,6 +139,3 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - receiveClientMonitorData: 接收客户端监控数据
 - pushClientMonitorData: 推送监控数据
 - getMonitorClient: 获取监控客户端列表
-
-### 命令行
-- cmd: 执行命令行
