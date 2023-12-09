@@ -31,7 +31,7 @@
             "child": {
                 "id": "switch",
                 "uni": "switch",
-                "switchField": "${boolean(item)+''}",
+                "switchField": "${this.?item!=null}",
                 "child": [
                     {
                         "case": "false",
@@ -50,7 +50,7 @@
                                     {
                                         "uni": "mix",
                                         "json": {
-                                            "isPostForm": "${boolean(request.body)?(boolean(request.body.urlencoded)?true:false):false}"
+                                            "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
                                         }
                                     },
                                     {

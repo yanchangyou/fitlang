@@ -31,7 +31,7 @@
             "child": {
                 "id": "switch",
                 "uni": "switch",
-                "switchField": "${boolean(item)+''}",
+                "switchField": "${this.?item!=null}",
                 "child": [
                     {
                         "case": "false",
@@ -50,7 +50,7 @@
                                     {
                                         "uni": "set",
                                         "key": "contentType",
-                                        "value": "${boolean(request.body)?(boolean(request.body.urlencoded)?'application/x-www-form-urlencoded':''):''}"
+                                        "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
                                     },
                                     {
                                         "uni": "convert",
