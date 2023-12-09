@@ -48,7 +48,7 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             JSONObject contextParam = new JSONObject();
             contextParam.put("path", filePath);
 
-            String fitPath = "fit/plugin/tool/zip.fit";
+            String fitPath = getFitPath();
 
             String result = runFitFile(fitPath, contextParam);
             if (isJsonObjectText(result)) {
@@ -58,5 +58,9 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             print(result + "\n\n", project, getProjectConsoleViewMap());
 
         });
+    }
+
+    String getFitPath() {
+        return "fit/plugin/tool/zip.fit";
     }
 }
