@@ -55,7 +55,7 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
                 result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
             }
 
-            print(result, project, getProjectConsoleViewMap());
+            print(result + "\n\n", project, getProjectConsoleViewMap());
 
         });
     }
