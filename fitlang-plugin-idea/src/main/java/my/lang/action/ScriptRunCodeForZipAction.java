@@ -66,7 +66,7 @@ public class ScriptRunCodeForZipAction extends RunCodeAction {
         threadPoolExecutor.submit(() -> {
 
             JSONObject contextParam = new JSONObject();
-            contextParam.put("filePath", filePath);
+            contextParam.put("path", filePath);
 
             String result = runLanguageFile("zip", contextParam);
 
