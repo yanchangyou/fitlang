@@ -21,17 +21,17 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(!output.isEmpty());
 
-        Assert.assertEquals("{'error_code':100,'error_msg':'Invalid parameter'}", output);
+        Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
 
     }
 
     public void testExecuteWithProxy() {
 
         String flow = "{" +//
-                "   'uni':'http'," +
-                "   'url':'https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic'," +
+                "   'uni':'httpGet'," +
+                "   'url':'https://www.iteye.com'," +
                 "   'header':{" +
-                "       'test':'123'" +
+                "       'Host':'www.iteye.com'" +
                 "   }," +
                 "    'proxy': {" +
                 "        'host': '62.234.182.56'," +

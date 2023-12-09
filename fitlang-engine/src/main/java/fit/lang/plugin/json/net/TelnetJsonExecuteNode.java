@@ -35,8 +35,8 @@ public class TelnetJsonExecuteNode extends JsonExecuteNode {
             OutputStream outputStream = socket.getOutputStream();
             for (String line : inputLines) {
                 outputStream.write((line + "\n").getBytes());
-                outputStream.flush();
             }
+            outputStream.flush();
             List<String> outputLines = new ArrayList<>();
             IoUtil.readUtf8Lines(socket.getInputStream(), new LineHandler() {
                 @Override

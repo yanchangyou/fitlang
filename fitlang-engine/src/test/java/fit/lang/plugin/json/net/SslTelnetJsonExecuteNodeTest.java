@@ -14,8 +14,8 @@ public class SslTelnetJsonExecuteNodeTest extends TestCase {
                 "   'host': 'www.baidu.com'," +
                 "   'port': 443," +
                 "   'input': [" +
-                "       'HEAD / HTTP/1.0'," +
-                "       'Host: www.baidu.com'," +
+                "       'GET / HTTP/1.0'," +
+//                "       'Host: www.baidu.com'," +
                 "       ''," +
                 "   ]," +
                 "}";
@@ -35,19 +35,75 @@ public class SslTelnetJsonExecuteNodeTest extends TestCase {
     public void testGetSocketByProxy() {
         String flow = "{" +//
                 "   'uni': 'telnets'," +
-                "   'host': 'www.iteye.com'," +
+                "   'host': 'www.baidu.com'," +
                 "   'port': 443," +
                 "   'input': [" +
                 "       'GET / HTTP/1.0'," +
+                "       'Host: www.baidu.com'," +
+                "       ''," +
+                "   ]," +
+                "   'proxy': {" +
+                "        'host': '62.234.182.56'," +
+                "        'port': 443" +
+                "    }" +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("output"));
+
+    }
+
+    public void testGetSocketByProxyWithIP() {
+        String flow = "{" +//
+                "   'uni': 'telnets'," +
+                "   'host': '180.101.50.242'," +
+                "   'port': 443," +
+                "   'input': [" +
+                "       'HEAD / HTTP/1.0'," +
+                "       'Host: www.baidu.com'," +
+                "       ''," +
+                "   ]," +
+                "   'proxy': {" +
+                "        'host': '62.234.182.56'," +
+                "        'port': 443" +
+                "    }" +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("output"));
+
+    }
+
+    public void testGetSocketByProxyWithIpAndHost() {
+        String flow = "{" +//
+                "   'uni': 'telnets'," +
+                "   'host': '116.196.89.107 www.iteye.com'," +
+                "   'port': 443," +
+                "   'input': [" +
+                "       'HEAD / HTTP/1.0'," +
                 "       'Host: www.iteye.com'," +
                 "       ''," +
                 "   ]," +
-                " \"proxy\": {\n" +
-                "        \"host\": \"62.234.182.56\",\n" +
-                "        \"port\": 443\n" +
+                "   'proxy': {" +
+                "        'host': '62.234.182.56'," +
+                "        'port': 443" +
                 "    }" +
                 "}";
-        System.out.println(flow);
+        System.out.println(flow.replace("'", "\""));
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
