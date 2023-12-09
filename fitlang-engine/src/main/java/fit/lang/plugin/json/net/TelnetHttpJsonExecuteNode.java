@@ -59,14 +59,8 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             if (header == null) {
                 header = new JSONObject();
             }
-//            String headerHost = null;
             if (!header.containsKey("host") && !header.containsKey("Host") && !header.containsKey("HOST")) {
                 header.put("Host", urlHost);
-//            } else {
-//                headerHost = header.getString("Host");
-//                if (headerHost == null) {
-//                    headerHost = header.getString("host");
-//                }
             }
             for (Map.Entry<String, Object> entry : header.entrySet()) {
                 inputLines.add(entry.getKey().concat(": ").concat(StrUtil.toString(entry.getValue())));
@@ -75,9 +69,6 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
 
             Proxy proxy = buildProxy(nodeJsonDefine.getJSONObject("proxy"));
             String host = urlHost;
-//            if (headerHost != null && proxy != null) {
-//                host = urlHost.concat(" ").concat(headerHost);
-//            }
             Socket socket = buildSocket(urlHost, port, proxy);
             OutputStream outputStream = socket.getOutputStream();
             for (String line : inputLines) {
@@ -97,7 +88,7 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             output.set("host", header.get("Host"));
             output.set("port", port);
             output.set("inputHeader", header);
-//            output.set("input", JSON.toJSON(inputLines));
+            output.set("input", JSON.toJSON(inputLines));
             if (outputLines.size() > 0) {
                 String statusLine = outputLines.get(0);
                 String[] parts = statusLine.split(" ");
