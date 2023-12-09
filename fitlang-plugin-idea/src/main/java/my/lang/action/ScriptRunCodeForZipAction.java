@@ -1,18 +1,12 @@
 package my.lang.action;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.util.Map;
-
-import static my.lang.MyLanguage.LANG_NAME;
-import static my.lang.MyLanguage.LANG_STRING_LOGO;
 
 /**
  * @author yanchangyou
@@ -35,16 +29,13 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
-        if (editor != null) {
-            VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+        VirtualFile virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE);
+
+        if (editor != null && virtualFile != null) {
             filePath = virtualFile.getPath();
-        } else if (virtualFiles != null) {
+        } else if (virtualFiles != null && virtualFiles.length > 0) {
             filePath = virtualFiles[0].getPath();
         } else {
-            return;
-        }
-
-        if (filePath == null) {
             return;
         }
 
