@@ -384,10 +384,10 @@ getMonitorClient: 获取监控客户端列表<br/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
 
             <action id="RunFitLangForZip" class="my.lang.action.ScriptRunCodeForZipAction" text="Zip"
-                    description="Zip file" icon="/my/lang/icon/fit.svg">
+                    description="Zip file">
             </action>
             <action id="RunFitLangForUnzip" class="my.lang.action.ScriptRunCodeForUnzipAction" text="Unzip"
-                    description="Unzip file" icon="/my/lang/icon/fit.svg">
+                    description="Unzip file">
             </action>
 
         </group>
