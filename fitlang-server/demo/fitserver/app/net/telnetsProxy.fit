@@ -7,5 +7,9 @@
         "GET / HTTP/1.0",
         "Host: www.baidu.com",
         ""
-    ]
+    ],
+    "proxy": {
+        "host": "62.234.182.56",
+        "port": 443
+    }
 }

@@ -1,0 +1,9 @@
+{
+    "uni": "telnet.https",
+    "method": "HEAD",
+    "url": "https://116.196.89.107",
+//    "validateCert": true,
+    "header": {
+        "Host": "www.iteye.com"
+    }
+}

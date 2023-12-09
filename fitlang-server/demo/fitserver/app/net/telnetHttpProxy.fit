@@ -1,0 +1,13 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "telnet.http",
+    "method": "GET",
+    "url": "http://fit.321zou.com/hello",
+    "header": {
+        "Host": "fit.321zou.com"
+    },
+    "proxy": {
+        "host": "62.234.182.56",
+        "port": 443
+    }
+}

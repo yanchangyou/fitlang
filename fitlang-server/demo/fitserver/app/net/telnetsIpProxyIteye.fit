@@ -1,0 +1,15 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "telnets",
+    "host": "116.196.89.107",
+    "port": 443,
+    "input": [
+        "GET / HTTP/1.0",
+        "Host: www.iteye.com",
+        ""
+    ],
+    "proxy": {
+        "host": "62.234.182.56",
+        "port": 443
+    }
+}
