@@ -1,12 +1,16 @@
 package my.lang.action;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
  * @author yanchangyou
@@ -44,7 +48,12 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             JSONObject contextParam = new JSONObject();
             contextParam.put("path", filePath);
 
-            String result = runLanguageFile("zip", contextParam);
+            String fitPath = "fit/plugin/tool/zip.fit";
+
+            String result = runFitFile(fitPath, contextParam);
+            if (isJsonObjectText(result)) {
+                result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+            }
 
             print(result, project, getProjectConsoleViewMap());
 

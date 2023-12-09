@@ -147,7 +147,6 @@ public abstract class RunCodeAction extends AnAction {
                 } catch (Throwable exception) {
                     exception.printStackTrace();
                     result = "exception:" + getAllException(exception);
-                    // throw exception; //TODO
                 }
 
                 System.out.println("execute " + getLanguageName() + " code result:");
@@ -226,13 +225,8 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     String runLanguageFile(String fileType, JSONObject contextParam) {
-        String path = "fit/plugin/code/".concat(fileType).concat(".fit");
-        InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(path);
-        if (in == null) {
-            return "can not found: ".concat(path);
-        }
-        String fitCode = IoUtil.readUtf8(in);
-        String result = ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
+        String fitPath = "fit/plugin/code/".concat(fileType).concat(".fit");
+        String result = runFitFile(fitPath, contextParam);
         if (isJsonObjectText(result)) {
             JSONObject resultJson = JSONObject.parseObject(result);
             JSONArray lines;
@@ -245,6 +239,15 @@ public abstract class RunCodeAction extends AnAction {
             return lines == null ? "" : StrUtil.join("\n", lines);
         }
         return "error: ".concat(result);
+    }
+
+    String runFitFile(String fitPath, JSONObject contextParam) {
+        InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(fitPath);
+        if (in == null) {
+            return "can not found: ".concat(fitPath);
+        }
+        String fitCode = IoUtil.readUtf8(in);
+        return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {
