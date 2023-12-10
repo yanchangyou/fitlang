@@ -148,7 +148,10 @@ public abstract class RunCodeAction extends AnAction {
                         print("run file: " + path + "\n", project, getProjectConsoleViewMap());
                     }
 
-                    Object resultObject = executeCode(code, path);
+                    String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
+                    String projectFilePath = e.getProject() == null ? "" : e.getProject().getProjectFilePath();
+
+                    Object resultObject = executeCode(code, path, projectPath);
 
                     result = resultObject.toString();
 
@@ -177,7 +180,7 @@ public abstract class RunCodeAction extends AnAction {
                 ;
     }
 
-    String executeCode(String code, String codePath) {
+    String executeCode(String code, String codePath, String projectPath) {
 
         ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
         JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
@@ -186,11 +189,7 @@ public abstract class RunCodeAction extends AnAction {
         if (!file.exists()) {
             return "file not existed: ".concat(codePath);
         }
-        JSONObject contextParam = new JSONObject();
-        contextParam.put("filePath", file.getAbsolutePath());
-        contextParam.put("fileName", file.getName());
-        contextParam.put("fileDir", file.getParent());
-        contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
+        JSONObject contextParam = buildContextParam(projectPath, file);
 
         String fileName = file.getName();
         contextParam.put("filePrefix", fileName.split("\\.")[0]);
@@ -218,6 +217,16 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         return result;
+    }
+
+    static JSONObject buildContextParam(String projectPath, File file) {
+        JSONObject contextParam = new JSONObject();
+        contextParam.put("filePath", file.getAbsolutePath());
+        contextParam.put("fileName", file.getName());
+        contextParam.put("fileDir", file.getParent());
+        contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
+        contextParam.put("projectPath", projectPath);
+        return contextParam;
     }
 
     static JSONObject supportLanguageMap = new JSONObject();

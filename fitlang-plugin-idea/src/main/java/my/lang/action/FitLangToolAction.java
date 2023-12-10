@@ -10,6 +10,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
+import java.io.File;
+
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
@@ -52,8 +54,7 @@ public class FitLangToolAction extends ScriptRunCodeAction {
         VirtualFile finalVirtualFile = virtualFile;
         threadPoolExecutor.submit(() -> {
 
-            JSONObject contextParam = new JSONObject();
-            contextParam.put("path", filePath);
+            JSONObject contextParam = buildContextParam(e.getProject().getBasePath(), new File(filePath));
 
             String fitPath = getFitPath();
             String result = runFitFile(fitPath, contextParam);
