@@ -8,6 +8,7 @@
         "fileDirInProject": "${fileDirInProject}",
         "fileDirInProject1": "${fileDirInProject1}",
         "fileDirInProject2": "${fileDirInProject2}",
+        "fileDirInProject3": "${fileDirInProject3}",
         "filePath": "${filePath}",
         "fileName": "${fileName}",
         "filePrefix": "${filePrefix}",

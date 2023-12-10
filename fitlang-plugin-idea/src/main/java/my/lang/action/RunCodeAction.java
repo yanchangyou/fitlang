@@ -227,11 +227,16 @@ public abstract class RunCodeAction extends AnAction {
         contextParam.put("fileDirInProject", fileDirInProject);
         contextParam.put("fileDirInProject1", "");
         contextParam.put("fileDirInProject2", "");
+        contextParam.put("fileDirInProject3", "");
         if (fileDirInProject.indexOf(File.separatorChar, 1) > 0) {
-            String fileDirInProject1 = fileDirInProject.substring(fileDirInProject.indexOf(1, File.separatorChar));
+            String fileDirInProject1 = fileDirInProject.substring(fileDirInProject.indexOf(File.separatorChar, 1));
             contextParam.put("fileDirInProject1", fileDirInProject1);
             if (fileDirInProject1.indexOf(File.separatorChar, 1) > 0) {
-                contextParam.put("fileDirInProject2", fileDirInProject1.substring(fileDirInProject.indexOf(1, File.separatorChar)));
+                String fileDirInProject2 = fileDirInProject1.substring(fileDirInProject1.indexOf(File.separatorChar, 1));
+                contextParam.put("fileDirInProject2", fileDirInProject2);
+                if (fileDirInProject2.indexOf(File.separatorChar, 1) > 0) {
+                    contextParam.put("fileDirInProject3", fileDirInProject2.substring(fileDirInProject2.indexOf(File.separatorChar, 1)));
+                }
             }
         }
 
