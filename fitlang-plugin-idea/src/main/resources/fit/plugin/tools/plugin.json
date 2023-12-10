@@ -1,12 +1,15 @@
 {
+    "isDebug": false,
     "plugins": [
         {
             "name": "zip",
-            "title": "Fit Zip"
+            "title": "Fit Zip",
+            "fitPath": "fit/plugin/tools/zip.fit"
         },
         {
             "name": "unzip",
-            "title": "Fit Unzip"
+            "title": "Fit Unzip",
+            "fitPath": "fit/plugin/tools/unzip.fit"
         }
     ]
 }

@@ -21,9 +21,12 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
     String name;
 
-    protected FitLangToolAction(String name, String title) {
+    String fitPath;
+
+    protected FitLangToolAction(String name, String title, String fitPath) {
         super(title);
         this.name = name;
+        this.fitPath = fitPath;
     }
 
     @Override
@@ -58,7 +61,6 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
             JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
-            String fitPath = getFitPath();
             String result = runFitFile(fitPath, contextParam);
             if (isJsonObjectText(result)) {
                 result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
@@ -69,9 +71,5 @@ public class FitLangToolAction extends ScriptRunCodeAction {
             finalVirtualFile.getParent().refresh(false, false);
 
         });
-    }
-
-    String getFitPath() {
-        return "fit/plugin/tools/" + name + ".fit";
     }
 }
