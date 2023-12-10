@@ -242,12 +242,16 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     String runFitFile(String fitPath, JSONObject contextParam) {
-        InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(fitPath);
-        if (in == null) {
-            return "can not found: ".concat(fitPath);
-        }
-        String fitCode = IoUtil.readUtf8(in);
+        String fitCode = getPluginFile(fitPath);
         return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
+    }
+
+    String getPluginFile(String path) {
+        InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(path);
+        if (in == null) {
+            throw new RuntimeException("getPluginFile can not found: ".concat(path));
+        }
+        return IoUtil.readUtf8(in);
     }
 
     public static synchronized void initConsoleViewIfNeed(Project project, String languageName, String logoString, Map<Project, ConsoleView> projectConsoleViewMap) {

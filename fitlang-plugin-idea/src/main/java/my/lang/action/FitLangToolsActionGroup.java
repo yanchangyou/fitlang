@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.editor.Editor;
 
-public class CustomDefaultActionGroup extends DefaultActionGroup {
+public class FitLangToolsActionGroup extends DefaultActionGroup {
     @Override
     public void update(AnActionEvent event) {
         // Enable/disable depending on whether a user is editing
