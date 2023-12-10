@@ -10,6 +10,7 @@
         "fileDirInProject2": "${fileDirInProject2}",
         "fileDirInProject3": "${fileDirInProject3}",
         "filePath": "${filePath}",
+        "path": "${path}",
         "fileName": "${fileName}",
         "filePrefix": "${filePrefix}",
         "fileSuffix": "${fileSuffix}"
