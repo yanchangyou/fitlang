@@ -2,9 +2,11 @@
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "mix",
     "json": {
+        "userHome": "${userHome}",
         "projectPath": "${projectPath}",
-        "filePath": "${filePath}",
+        "projectFilePath": "${projectFilePath}",
         "fileDir": "${fileDir}",
+        "filePath": "${filePath}",
         "fileName": "${fileName}",
         "filePrefix": "${filePrefix}",
         "fileSuffix": "${fileSuffix}"

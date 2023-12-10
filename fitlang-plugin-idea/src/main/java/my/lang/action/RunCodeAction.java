@@ -151,7 +151,7 @@ public abstract class RunCodeAction extends AnAction {
                     String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
                     String projectFilePath = e.getProject() == null ? "" : e.getProject().getProjectFilePath();
 
-                    Object resultObject = executeCode(code, path, projectPath);
+                    Object resultObject = executeCode(code, path, projectPath, projectFilePath);
 
                     result = resultObject.toString();
 
@@ -180,7 +180,7 @@ public abstract class RunCodeAction extends AnAction {
                 ;
     }
 
-    String executeCode(String code, String codePath, String projectPath) {
+    String executeCode(String code, String codePath, String projectPath, String projectFilePath) {
 
         ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
         JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
@@ -189,10 +189,9 @@ public abstract class RunCodeAction extends AnAction {
         if (!file.exists()) {
             return "file not existed: ".concat(codePath);
         }
-        JSONObject contextParam = buildContextParam(projectPath, file);
+        JSONObject contextParam = buildContextParam(projectPath, file, projectFilePath);
 
         String fileName = file.getName();
-        contextParam.put("filePrefix", fileName.split("\\.")[0]);
 
         String fileSuffix = null;
         if (fileName.contains(".")) {
@@ -219,13 +218,20 @@ public abstract class RunCodeAction extends AnAction {
         return result;
     }
 
-    static JSONObject buildContextParam(String projectPath, File file) {
+    static JSONObject buildContextParam(String projectPath, File file, String projectFilePath) {
         JSONObject contextParam = new JSONObject();
+
+        contextParam.put("projectPath", projectPath);
+        contextParam.put("projectFilePath", projectFilePath);
+
+        contextParam.put("fileDir", file.getParent());
         contextParam.put("filePath", file.getAbsolutePath());
         contextParam.put("fileName", file.getName());
-        contextParam.put("fileDir", file.getParent());
+        contextParam.put("filePrefix", file.getName().split("\\.")[0]);
+        if (file.getName().contains(".")) {
+            contextParam.put("fileSuffix", file.getName().split("\\.")[1]);
+        }
         contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
-        contextParam.put("projectPath", projectPath);
         return contextParam;
     }
 

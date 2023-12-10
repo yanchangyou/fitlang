@@ -54,7 +54,10 @@ public class FitLangToolAction extends ScriptRunCodeAction {
         VirtualFile finalVirtualFile = virtualFile;
         threadPoolExecutor.submit(() -> {
 
-            JSONObject contextParam = buildContextParam(e.getProject().getBasePath(), new File(filePath));
+            String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
+            String projectFilePath = e.getProject() == null ? "" : e.getProject().getProjectFilePath();
+
+            JSONObject contextParam = buildContextParam(projectPath, new File(filePath), projectFilePath);
 
             String fitPath = getFitPath();
             String result = runFitFile(fitPath, contextParam);
