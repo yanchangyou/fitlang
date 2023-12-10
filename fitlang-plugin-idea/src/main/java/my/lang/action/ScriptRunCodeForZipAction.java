@@ -62,6 +62,6 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
     }
 
     String getFitPath() {
-        return "fit/plugin/tool/zip.fit";
+        return "fit/plugin/tools/zip.fit";
     }
 }

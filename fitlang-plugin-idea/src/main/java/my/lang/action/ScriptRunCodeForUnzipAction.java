@@ -6,6 +6,6 @@ package my.lang.action;
 public class ScriptRunCodeForUnzipAction extends ScriptRunCodeForZipAction {
 
     String getFitPath() {
-        return "fit/plugin/tool/unzip.fit";
+        return "fit/plugin/tools/unzip.fit";
     }
 }
