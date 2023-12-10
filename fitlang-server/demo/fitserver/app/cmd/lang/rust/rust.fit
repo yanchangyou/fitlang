@@ -1,0 +1,5 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd:/usr/local/bin/rustc",
+    "target": "hello.rs"
+}
