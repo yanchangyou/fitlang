@@ -1,1 +1,5 @@
-{"uni":"hello"}
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "hello",
+    "who": "fit"
+}
