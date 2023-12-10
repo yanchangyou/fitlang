@@ -4,7 +4,6 @@ import com.intellij.execution.ui.ConsoleView;
 import com.intellij.openapi.project.Project;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static my.lang.MyLanguage.LANG_NAME;
 import static my.lang.MyLanguage.LANG_STRING_LOGO;
@@ -29,4 +28,11 @@ public class ScriptRunCodeAction extends RunCodeAction {
         return projectConsoleViewMap;
     }
 
+    protected ScriptRunCodeAction() {
+
+    }
+
+    protected ScriptRunCodeAction(String title) {
+        super(title);
+    }
 }

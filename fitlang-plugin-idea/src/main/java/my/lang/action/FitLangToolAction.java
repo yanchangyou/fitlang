@@ -15,7 +15,14 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 /**
  * @author yanchangyou
  */
-public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
+public class FitLangToolAction extends ScriptRunCodeAction {
+
+    String name;
+
+    protected FitLangToolAction(String name, String title) {
+        super(title);
+        this.name = name;
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -49,7 +56,6 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             contextParam.put("path", filePath);
 
             String fitPath = getFitPath();
-
             String result = runFitFile(fitPath, contextParam);
             if (isJsonObjectText(result)) {
                 result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
@@ -58,10 +64,11 @@ public class ScriptRunCodeForZipAction extends ScriptRunCodeAction {
             print(result + "\n\n", project, getProjectConsoleViewMap());
 
             finalVirtualFile.getParent().refresh(false, false);
+
         });
     }
 
     String getFitPath() {
-        return "fit/plugin/tools/zip.fit";
+        return "fit/plugin/tools/" + name + ".fit";
     }
 }

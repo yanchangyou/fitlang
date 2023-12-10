@@ -378,18 +378,9 @@ getMonitorClient: 获取监控客户端列表<br/>
 
     <actions>
         <group id="FitTools" text="Fit Tools" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.FitLangToolsActionGroup">
-
+               class="my.lang.action.FitLangToolActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
-
-            <action id="RunFitLangForZip" class="my.lang.action.ScriptRunCodeForZipAction"
-                    text="Fit Zip" description="Zip file">
-            </action>
-            <action id="RunFitLangForUnzip" class="my.lang.action.ScriptRunCodeForUnzipAction"
-                    text="Fit Unzip" description="Unzip file">
-            </action>
-
         </group>
 
         <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Fit Run"

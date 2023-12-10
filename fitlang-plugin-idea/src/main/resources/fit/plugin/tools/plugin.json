@@ -1,0 +1,12 @@
+{
+    "plugins": [
+        {
+            "name": "zip",
+            "title": "Fit Zip"
+        },
+        {
+            "name": "unzip",
+            "title": "Fit Unzip"
+        }
+    ]
+}

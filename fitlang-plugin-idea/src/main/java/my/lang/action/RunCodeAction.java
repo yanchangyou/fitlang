@@ -58,6 +58,14 @@ public abstract class RunCodeAction extends AnAction {
      */
     public abstract String getLogoString();
 
+    protected RunCodeAction() {
+
+    }
+
+    protected RunCodeAction(String title) {
+        super(title);
+    }
+
     /**
      * 获取 project到consoleView的映射
      *
@@ -246,7 +254,7 @@ public abstract class RunCodeAction extends AnAction {
         return ExecuteJsonNodeUtil.executeCode(fitCode, contextParam);
     }
 
-    String getPluginFile(String path) {
+    static String getPluginFile(String path) {
         InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(path);
         if (in == null) {
             throw new RuntimeException("getPluginFile can not found: ".concat(path));
