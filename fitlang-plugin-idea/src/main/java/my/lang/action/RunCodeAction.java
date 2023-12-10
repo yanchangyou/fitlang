@@ -149,9 +149,8 @@ public abstract class RunCodeAction extends AnAction {
                     }
 
                     String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
-                    String projectFilePath = e.getProject() == null ? "" : e.getProject().getProjectFilePath();
 
-                    Object resultObject = executeCode(code, path, projectPath, projectFilePath);
+                    Object resultObject = executeCode(code, path, projectPath);
 
                     result = resultObject.toString();
 
@@ -180,7 +179,7 @@ public abstract class RunCodeAction extends AnAction {
                 ;
     }
 
-    String executeCode(String code, String codePath, String projectPath, String projectFilePath) {
+    String executeCode(String code, String codePath, String projectPath) {
 
         ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
         JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
@@ -189,7 +188,7 @@ public abstract class RunCodeAction extends AnAction {
         if (!file.exists()) {
             return "file not existed: ".concat(codePath);
         }
-        JSONObject contextParam = buildContextParam(projectPath, file, projectFilePath);
+        JSONObject contextParam = buildContextParam(projectPath, file);
 
         String fileName = file.getName();
 
@@ -218,11 +217,10 @@ public abstract class RunCodeAction extends AnAction {
         return result;
     }
 
-    static JSONObject buildContextParam(String projectPath, File file, String projectFilePath) {
+    static JSONObject buildContextParam(String projectPath, File file) {
         JSONObject contextParam = new JSONObject();
 
         contextParam.put("projectPath", projectPath);
-        contextParam.put("projectFilePath", projectFilePath);
 
         contextParam.put("fileDir", file.getParent());
         contextParam.put("filePath", file.getAbsolutePath());

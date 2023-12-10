@@ -55,9 +55,8 @@ public class FitLangToolAction extends ScriptRunCodeAction {
         threadPoolExecutor.submit(() -> {
 
             String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
-            String projectFilePath = e.getProject() == null ? "" : e.getProject().getProjectFilePath();
 
-            JSONObject contextParam = buildContextParam(projectPath, new File(filePath), projectFilePath);
+            JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
             String fitPath = getFitPath();
             String result = runFitFile(fitPath, contextParam);

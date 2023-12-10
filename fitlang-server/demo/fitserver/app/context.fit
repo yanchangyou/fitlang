@@ -4,7 +4,6 @@
     "json": {
         "userHome": "${userHome}",
         "projectPath": "${projectPath}",
-        "projectFilePath": "${projectFilePath}",
         "fileDir": "${fileDir}",
         "filePath": "${filePath}",
         "fileName": "${fileName}",
