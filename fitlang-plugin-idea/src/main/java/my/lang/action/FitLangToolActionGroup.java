@@ -42,7 +42,8 @@ public class FitLangToolActionGroup extends DefaultActionGroup {
                 pluginNameSet.add(name);
                 String title = plugin.getString("title");
                 String fitPath = plugin.getString("fitPath");
-                actionList.add(new FitLangToolAction(name, title, fitPath));
+                boolean isInClass = Boolean.TRUE.equals(plugin.getBoolean("isInClass"));
+                actionList.add(new FitLangToolAction(name, title, fitPath, isInClass));
             }
             children = actionList.toArray(new AnAction[0]);
         }
@@ -76,10 +77,16 @@ public class FitLangToolActionGroup extends DefaultActionGroup {
 
             if (pluginConfigJson != null) {
                 if (pluginConfigJson.getJSONArray("plugins") != null) {
-                    plugins.addAll(pluginConfigJson.getJSONArray("plugins"));
+                    boolean isInClass = !pluginPath.startsWith("~");
+                    JSONArray subPlugins = pluginConfigJson.getJSONArray("plugins");
+                    for (Object item : subPlugins) {
+                        JSONObject plugin = (JSONObject) item;
+                        plugin.put("isInClass", isInClass);
+                    }
+                    plugins.addAll(subPlugins);
                 }
                 if (!isDebug) {
-                    isDebug =Boolean.TRUE.equals(pluginConfigJson.getBoolean("isDebug"));
+                    isDebug = Boolean.TRUE.equals(pluginConfigJson.getBoolean("isDebug"));
                 }
             }
         }

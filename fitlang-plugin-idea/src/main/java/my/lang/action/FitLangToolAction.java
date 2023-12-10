@@ -23,10 +23,13 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
     String fitPath;
 
-    protected FitLangToolAction(String name, String title, String fitPath) {
+    boolean isInClass;
+
+    protected FitLangToolAction(String name, String title, String fitPath, boolean isInClass) {
         super(title);
         this.name = name;
         this.fitPath = fitPath;
+        this.isInClass = isInClass;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
             JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
-            String result = runFitFile(fitPath, contextParam);
+            String result = runFitFile((isInClass ? "" : "file:") + fitPath, contextParam);
             if (isJsonObjectText(result)) {
                 result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
             }

@@ -286,6 +286,12 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     static String getPluginFile(String path) {
+        if (path.startsWith("~")) {
+            return FileUtil.readUtf8String(path);
+        }
+        if (path.startsWith("file:")) {
+            return FileUtil.readUtf8String(path.substring("file:".length()));
+        }
         InputStream in = RunCodeAction.class.getClassLoader().getResourceAsStream(path);
         if (in == null) {
             throw new RuntimeException("getPluginFile can not found: ".concat(path));
