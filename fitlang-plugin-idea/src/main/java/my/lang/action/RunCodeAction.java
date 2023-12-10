@@ -241,6 +241,7 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         contextParam.put("filePath", file.getAbsolutePath());
+        contextParam.put("path", file.getAbsolutePath());
         contextParam.put("fileName", file.getName());
         contextParam.put("filePrefix", file.getName().split("\\.")[0]);
         if (file.getName().contains(".")) {
