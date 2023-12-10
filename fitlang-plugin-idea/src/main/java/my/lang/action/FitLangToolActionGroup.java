@@ -53,7 +53,7 @@ public class FitLangToolActionGroup extends DefaultActionGroup {
     JSONObject loadPluginRegisterConfig() {
         String[] pluginPaths = new String[]{
                 "~/plugin.fit.json",
-                "fit/plugin/tools/plugin.json",
+                "fit/plugin/tools/plugin.fit.json",
         };
         JSONArray plugins = new JSONArray();
         for (String pluginPath : pluginPaths) {
