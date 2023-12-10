@@ -58,6 +58,8 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
             JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
+            contextParam.put("path", contextParam.get("filePath"));
+
             String fitPath = getFitPath();
             String result = runFitFile(fitPath, contextParam);
             if (isJsonObjectText(result)) {
