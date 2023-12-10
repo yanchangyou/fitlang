@@ -1,8 +1,9 @@
 {
+    "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnet.https",
     "method": "HEAD",
     "url": "https://116.196.89.107",
-//    "validateCert": true,
+    //    "validateCert": true,
     "header": {
         "Host": "www.iteye.com"
     }
