@@ -35,16 +35,18 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         String[] envArray = new String[0];
         JSONObject env = nodeJsonDefine.getJSONObject("env");
-        if (env != null) {
-            env = ExpressUtil.eval(env, input.getInputParamAndContextParam());
-            envArray = new String[env.size()];
-            int index = 0;
-            for (Map.Entry<String, Object> entry : env.entrySet()) {
-                if (entry.getValue() == null) {
-                    continue;
-                }
-                envArray[index++] = entry.getKey().concat("=").concat(entry.getValue().toString());
+        if (env == null) {
+            env = new JSONObject();
+        }
+        env.putAll(System.getenv());
+        env = ExpressUtil.eval(env, input.getInputParamAndContextParam());
+        envArray = new String[env.size()];
+        int index = 0;
+        for (Map.Entry<String, Object> entry : env.entrySet()) {
+            if (entry.getValue() == null) {
+                continue;
             }
+            envArray[index++] = entry.getKey().concat("=").concat(entry.getValue().toString());
         }
 
         JSONObject option = nodeJsonDefine.getJSONObject("option");
@@ -95,9 +97,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 }
             }
             result.put("cmd", cmd);
-            if (env != null && !env.isEmpty()) {
-                result.put("env", env);
-            }
+//            result.put("env", env);
             result.put("out", resultLines);
             results.add(result);
         }
