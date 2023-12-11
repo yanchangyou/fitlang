@@ -711,4 +711,13 @@ public class ExecuteJsonNodeUtil {
     public static Charset getSystemCharset() {
         return Charset.forName(SystemUtil.getProps().getProperty("sun.jnu.encoding", "UTF-8"));
     }
+
+    /**
+     * 获取文件字符集
+     *
+     * @return
+     */
+    public static Charset getFileCharset() {
+        return Charset.forName(SystemUtil.getProps().getProperty("file.encoding", "UTF-8"));
+    }
 }

@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getSystemCharset;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getFileCharset;
 
 /**
  * 执行节点
@@ -87,7 +87,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
                         resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
                         if (resultLines == null || resultLines.isEmpty()) {
-                            resultLines = IoUtil.readLines(process.getInputStream(), getSystemCharset(), new ArrayList<>());
+                            resultLines = IoUtil.readLines(process.getInputStream(), getFileCharset(), new ArrayList<>());
                         }
                     } catch (Throwable e) {
                         resultLines = Collections.singletonList(e.getMessage());
