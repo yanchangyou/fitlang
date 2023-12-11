@@ -1,7 +1,7 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
-    "uni": "cmd:/usr/local/go/bin/go",
-    //    "uni": "cmd:go",
+    //    "uni": "cmd:/usr/local/go/bin/go",
+    "uni": "cmd:go",
     "env": {
         "GOPATH": "${currentDir}",
         "GOCACHE": "/opt/go/cache"

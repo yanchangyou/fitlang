@@ -1,0 +1,9 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "cmd:go-doudou svc run",
+    //    "ignoreCurrentDir": true,
+    "env": {
+        "GOROOT": "${fileDir}",
+        "GOCACHE": "${userHome+'/go/cache'}"
+    }
+}

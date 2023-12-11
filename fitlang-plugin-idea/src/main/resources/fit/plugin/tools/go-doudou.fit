@@ -1,0 +1,9 @@
+{
+    "uni": "cmd:go-doudou",
+    "target": "name",
+    "param": {
+        "--file": "${fileName}",
+        "--form": "",
+        "--case": "lowerCamel"
+    }
+}
