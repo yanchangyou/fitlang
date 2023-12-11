@@ -58,6 +58,10 @@ public class InfoJsonExecuteNode extends JsonExecuteNode {
             systemInfoJson.put("properties", SystemUtil.getProps());
         }
 
+        if (shardFields.contains("env")) {
+            systemInfoJson.put("env", System.getenv());
+        }
+
         output.setData(systemInfoJson);
 
     }
