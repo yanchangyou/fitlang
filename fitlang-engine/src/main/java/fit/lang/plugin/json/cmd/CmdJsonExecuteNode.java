@@ -29,16 +29,22 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         List<String> cmdList = parseStringArray("cmd", input);
 
+        boolean debug = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("debug"));
+        boolean ignoreCurrentDir = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("ignoreCurrentDir"));
+
         if (cmdList == null || cmdList.isEmpty()) {
             throw new ExecuteNodeException("cmd is required!");
         }
 
-        String[] envArray = new String[0];
-        JSONObject env = nodeJsonDefine.getJSONObject("env");
-        if (env == null) {
-            env = new JSONObject();
-        }
+        String[] envArray;
+        JSONObject env = new JSONObject();
         env.putAll(System.getenv());
+
+        JSONObject configEnv = nodeJsonDefine.getJSONObject("env");
+
+        if (configEnv != null) {
+            env.putAll(configEnv);
+        }
         env = ExpressUtil.eval(env, input.getInputParamAndContextParam());
         envArray = new String[env.size()];
         int index = 0;
@@ -81,7 +87,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                     try {
                         Process process;
 
-                        if (JsonDynamicFlowExecuteEngine.getCurrentDir() != null) {
+                        if (JsonDynamicFlowExecuteEngine.getCurrentDir() != null && !ignoreCurrentDir) {
                             process = RuntimeUtil.exec(envArray, new File(JsonDynamicFlowExecuteEngine.getCurrentDir()), cmd);
                         } else {
                             process = RuntimeUtil.exec(envArray, cmd);
@@ -97,7 +103,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 }
             }
             result.put("cmd", cmd);
-//            result.put("env", env);
+            if (debug) {
+                result.put("env", env);//数量太多
+            }
             result.put("out", resultLines);
             results.add(result);
         }
@@ -226,7 +234,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                 || cmd.contains("|")
                 || cmd.contains("@")
 //                || cmd.contains("$")
-                || cmd.contains("~")
+//                || cmd.contains("~")
                 || cmd.contains("`")
         ) {
             return "cmd is disabled";
