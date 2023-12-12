@@ -1,6 +1,7 @@
 package my.lang.action;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
-import static my.lang.action.RunCodeAction.getPluginFile;
 
 public class FitLangPluginActionGroup extends DefaultActionGroup {
 
@@ -25,21 +25,27 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
 
     AnAction[] children = new AnAction[0];
 
-    boolean isDebug = false;
+    boolean debug = false;
 
     @Override
     public AnAction[] getChildren(AnActionEvent event) {
-        if (children == null || children.length == 0 || isDebug) {
+        if (children == null || children.length == 0 || debug) {
             String projectPath = event.getProject() == null ? "" : event.getProject().getBasePath();
+            if (StrUtil.isBlank(projectPath)) {
+                return children;
+            }
             JSONObject pluginConfig = loadPluginRegisterConfig(projectPath);
             if (pluginConfig == null || pluginConfig.isEmpty()) {
+                return children;
+            }
+            if (!(pluginConfig.get("action") instanceof JSONArray)) {
                 return children;
             }
             JSONArray actions = pluginConfig.getJSONArray("action");
             if (actions == null) {
                 return children;
             }
-            isDebug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
+            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
             List<AnAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
             for (Object item : actions) {
@@ -53,16 +59,21 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
                 String script = plugin.getString("script");
                 actionList.add(new FitLangPluginAction(name, title, script));
             }
+
+            System.out.println("loaded plugin: ".concat(pluginNameSet.toString()));
+
             children = actionList.toArray(new AnAction[0]);
         }
         return children;
     }
 
     JSONObject loadPluginRegisterConfig(String projectPath) {
-
         try {
 
-            String pluginConfigJson = FileUtil.readUtf8String(projectPath + File.separator + "plugin.fit");
+            String pluginPath = projectPath + File.separator + "plugin.fit";
+            System.out.println("load plugin at ".concat(pluginPath));
+
+            String pluginConfigJson = FileUtil.readUtf8String(pluginPath);
 
             if (isJsonObjectText(pluginConfigJson)) {
                 return JSONObject.parse(pluginConfigJson);
