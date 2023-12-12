@@ -7,10 +7,10 @@
             "param": {
                 "-o": "${filePrefix}"
             }
+        },
+        {
+            "uni": "cmd",
+            "cmd": "${'./'+filePrefix}"
         }
-//        {
-//            "uni": "cmd",
-//            "cmd": "${'./'+filePrefix}"
-//        }
     ]
 }
