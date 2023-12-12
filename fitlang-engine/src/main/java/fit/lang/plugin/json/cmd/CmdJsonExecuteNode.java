@@ -13,6 +13,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,8 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         List<String> cmdList = parseStringArray("cmd", input);
+
+        String charset = parseStringField("charset", input);
 
         boolean debug = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("debug"));
         boolean ignoreCurrentDir = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("ignoreCurrentDir"));
@@ -95,7 +98,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
                         resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
                         if (resultLines == null || resultLines.isEmpty()) {
-                            resultLines = IoUtil.readLines(process.getInputStream(), getFileCharset(), new ArrayList<>());
+                            resultLines = IoUtil.readLines(process.getInputStream(), getCharset(charset), new ArrayList<>());
                         }
                     } catch (Throwable e) {
                         resultLines = Collections.singletonList(e.getMessage());
@@ -114,6 +117,13 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         output.set("result", isArray ? results : results.get(0));
 
+    }
+
+    Charset getCharset(String configCharset) {
+        if (StrUtil.isNotBlank(configCharset)) {
+            return Charset.forName(configCharset);
+        }
+        return getFileCharset();
     }
 
     /**
