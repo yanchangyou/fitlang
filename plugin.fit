@@ -1,4 +1,5 @@
 {
+    "debug": true,
     "action": [
         {
             "name": "zip",
@@ -12,6 +13,13 @@
             "title": "Unzip",
             "script": {
                 "uni": "unzip"
+            }
+        },
+        {
+            "name": "hello",
+            "title": "Hello",
+            "script": {
+                "uni": "hello"
             }
         }
     ]
