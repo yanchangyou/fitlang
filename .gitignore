@@ -31,3 +31,4 @@ hs_err_pid*
 replay_pid*
 /out
 target
+/fitlang-server/demo/fitserver/app/cmd/lang/rust/hello
