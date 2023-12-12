@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 
 import java.io.File;
 
@@ -17,19 +18,16 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 /**
  * @author yanchangyou
  */
-public class FitLangToolAction extends ScriptRunCodeAction {
+public class FitLangPluginAction extends ScriptRunCodeAction {
 
     String name;
 
-    String fitPath;
+    String script;
 
-    boolean isInClass;
-
-    protected FitLangToolAction(String name, String title, String fitPath, boolean isInClass) {
+    protected FitLangPluginAction(String name, String title, String script) {
         super(title);
         this.name = name;
-        this.fitPath = fitPath;
-        this.isInClass = isInClass;
+        this.script = script;
     }
 
     @Override
@@ -64,7 +62,8 @@ public class FitLangToolAction extends ScriptRunCodeAction {
 
             JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
-            String result = runFitFile((isInClass ? "" : "file:") + fitPath, contextParam);
+            String result = ExecuteJsonNodeUtil.executeCode(script, contextParam);
+
             if (isJsonObjectText(result)) {
                 result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
             }

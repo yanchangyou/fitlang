@@ -1,0 +1,18 @@
+{
+    "action": [
+        {
+            "name": "zip",
+            "title": "Zip",
+            "script": {
+                "uni": "zip"
+            }
+        },
+        {
+            "name": "unzip",
+            "title": "Unzip",
+            "script": {
+                "uni": "unzip"
+            }
+        }
+    ]
+}
