@@ -60,7 +60,7 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
                 actionList.add(new FitLangPluginAction(name, title, script));
             }
 
-            System.out.println("loaded plugin: ".concat(pluginNameSet.toString()));
+            System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
 
             children = actionList.toArray(new AnAction[0]);
         }
@@ -71,7 +71,7 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
         try {
 
             String pluginPath = projectPath + File.separator + "plugin.fit";
-            System.out.println("load plugin at ".concat(pluginPath));
+            System.out.println("FitLang: load plugin at ".concat(pluginPath));
 
             String pluginConfigJson = FileUtil.readUtf8String(pluginPath);
 
