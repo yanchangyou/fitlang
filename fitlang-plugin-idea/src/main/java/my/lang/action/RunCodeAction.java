@@ -1,5 +1,6 @@
 package my.lang.action;
 
+import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
@@ -27,6 +28,8 @@ import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -204,6 +207,8 @@ public abstract class RunCodeAction extends AnAction {
             result = ExecuteJsonNodeUtil.executeCode(code, contextParam);
             needFormatJsonInConsole = needFormatJsonInConsole(code);
         } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {
+            Charset charset = CharsetDetector.detect(file, characters);
+            contextParam.put("charset", charset.name());
             result = runLanguageFile(fileSuffix, contextParam);
             needFormatJsonInConsole = true;
         } else {
@@ -215,6 +220,20 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         return result;
+    }
+
+    static Charset[] characters = new Charset[]{
+            StandardCharsets.UTF_8,
+            Charset.forName("ISO8859-1"),
+            StandardCharsets.UTF_8,
+    };
+
+    static {
+        try {
+            characters[2] = Charset.forName("GBK");
+        } catch (Exception e) {
+            //ignore
+        }
     }
 
     static JSONObject buildContextParam(String projectPath, File file) {
