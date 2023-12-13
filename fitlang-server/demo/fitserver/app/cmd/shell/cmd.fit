@@ -1,5 +1,5 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "cmd",
-    "cmd": "echo hello fit"
+    "cmd": "echo hello fit!"
 }

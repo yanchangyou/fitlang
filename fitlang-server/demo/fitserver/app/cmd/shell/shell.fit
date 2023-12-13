@@ -1,5 +1,5 @@
 {
     "flag": "needFormatJsonInConsoleFlag",
     "uni": "cmd",
-    "cmd": "/usr/bin/env /bin/bash -c \"echo version\""
+    "cmd": "echo version"
 }
