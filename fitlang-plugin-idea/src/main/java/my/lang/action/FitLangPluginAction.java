@@ -10,6 +10,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 
@@ -61,6 +62,8 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
             String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
             JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
+
+            ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
 
             String result = ExecuteJsonNodeUtil.executeCode(script, contextParam);
 
