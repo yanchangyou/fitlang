@@ -377,7 +377,7 @@ getMonitorClient: 获取监控客户端列表<br/>
     </extensions>
 
     <actions>
-        <group id="FitTools" text="Fit Tools" icon="/my/lang/icon/fit.svg" popup="true"
+        <group id="FitActions" text="Fit Actions" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.FitLangPluginActionGroup">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
