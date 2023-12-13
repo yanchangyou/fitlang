@@ -21,6 +21,63 @@
             "script": {
                 "uni": "hello"
             }
+        },
+        {
+            "name": "info",
+            "title": "Info",
+            "script": {
+                "uni": "info",
+                "shareFields": [
+                    "os",
+                    "memory",
+                    "jvm",
+                    "host",
+                    "runtime",
+                    "javaSpec",
+                    "jvm",
+                    "user",
+                    "properties",
+                    "env"
+                ]
+            }
+        },
+        {
+            "name": "systemInfo",
+            "title": "System Info",
+            "script": {
+                "uni": "systemInfo",
+                "shareFields": [
+                    "computerManufacturer",
+                    "computerModel",
+                    "processorName",
+                    "processorPhysicalCount",
+                    "processorLogicalCount",
+                    "processorMaxFreq",
+                    "memoryTotal",
+                    "memoryAvailable",
+                    "osManufacturer",
+                    "osFamily",
+                    "osVersion",
+                    "osBit",
+                    "net"
+                ]
+            }
+        },
+        {
+            "name": "server",
+            "title": "Server",
+            "script": {
+                "uni": "server",
+                "port": 11111,
+                "service": {
+                    "/hello": {
+                        "uni": "hello"
+                    },
+                    "/echo": {
+                        "uni": "echo"
+                    }
+                }
+            }
         }
     ]
 }

@@ -331,7 +331,8 @@
                 "osFamily",
                 "osVersion",
                 "osBit",
-                "net"
+                "net",
+                "env"
             ]
         },
         {
