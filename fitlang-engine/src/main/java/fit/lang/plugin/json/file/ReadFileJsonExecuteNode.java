@@ -30,7 +30,8 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         String charset = parseStringField("charset", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
-            throw new ExecuteNodeException("readFile workspaceDir param is required!");
+//            throw new ExecuteNodeException("writeFile workspaceDir param is required!");
+            workspaceDir = "";
         }
 
         if (StrUtil.isBlank(path)) {
@@ -44,6 +45,9 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         String filePath = joinFilePath(workspaceDir, path);
 
         File file = new File(filePath);
+        if (!file.exists()) {
+            throw new ExecuteNodeException("file not found: " + filePath);
+        }
 
         if (file.isFile()) {
             output.set("isFile", true);

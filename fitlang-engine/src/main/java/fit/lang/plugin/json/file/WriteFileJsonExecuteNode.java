@@ -30,7 +30,8 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
-            throw new ExecuteNodeException("writeFile workspaceDir param is required!");
+//            throw new ExecuteNodeException("writeFile workspaceDir param is required!");
+            workspaceDir = "";
         }
 
         if (StrUtil.isBlank(path)) {
@@ -46,6 +47,10 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         }
 
         String filePath = joinFilePath(workspaceDir, path);
+
+        if (!new File(filePath).exists()) {
+            throw new ExecuteNodeException("file not found: " + filePath);
+        }
 
         Object content = input.get(contentField);
         if (content == null) {
