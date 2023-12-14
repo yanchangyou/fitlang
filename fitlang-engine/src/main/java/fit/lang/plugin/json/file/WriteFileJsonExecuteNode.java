@@ -48,10 +48,6 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
 
         String filePath = joinFilePath(workspaceDir, path);
 
-        if (!new File(filePath).exists()) {
-            throw new ExecuteNodeException("file not found: " + filePath);
-        }
-
         Object content = input.get(contentField);
         if (content == null) {
             throw new ExecuteNodeException("write content is null");

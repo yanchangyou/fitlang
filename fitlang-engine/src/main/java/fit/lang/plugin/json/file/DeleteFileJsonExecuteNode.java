@@ -36,10 +36,6 @@ public class DeleteFileJsonExecuteNode extends JsonExecuteNode {
 
         String filePath = joinFilePath(workspaceDir, path);
 
-        if (!new File(filePath).exists()) {
-            throw new ExecuteNodeException("file not found: " + filePath);
-        }
-
         boolean success = FileUtil.del(filePath);
         output.set("success", success);
         output.set("absolutePath", filePath);
