@@ -14,6 +14,7 @@ import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 
+import static fit.lang.ExecuteNodeUtil.getAllException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
@@ -58,23 +59,29 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
         VirtualFile finalVirtualFile = virtualFile;
         threadPoolExecutor.submit(() -> {
+            String result;
+            try {
 
-            String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
+                String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
-            JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
+                JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
-            ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
+                ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
 
-            String result = ExecuteJsonNodeUtil.executeCode(script, contextParam);
+                result = ExecuteJsonNodeUtil.executeCode(script, contextParam);
 
-            if (isJsonObjectText(result)) {
-                result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+                if (isJsonObjectText(result)) {
+                    result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+                }
+
+                print(result + "\n\n", project, getProjectConsoleViewMap());
+
+                finalVirtualFile.getParent().refresh(false, false);
+
+            } catch (Exception exception) {
+                result = "exception:" + getAllException(exception);
+                print(result + "\n\n", project, getProjectConsoleViewMap());
             }
-
-            print(result + "\n\n", project, getProjectConsoleViewMap());
-
-            finalVirtualFile.getParent().refresh(false, false);
-
         });
     }
 }
