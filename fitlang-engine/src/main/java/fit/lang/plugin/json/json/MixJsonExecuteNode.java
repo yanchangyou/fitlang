@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.ExpressUtil;
@@ -23,8 +24,13 @@ public class MixJsonExecuteNode extends JsonExecuteNode {
         if (mixJson == null) {
             throw new ExecuteNodeException("mix json field is required!");
         }
+
         JSONObject mixJsonResult = ExpressUtil.eval(mixJson, input.getInputParamAndContextParam());
         JSONObject outputJson = input.getData().clone();
+        //上下文特殊处理
+        if (mixJson.containsKey("_context")) {
+            outputJson.put(mixJson.getString("_context"), JSON.toJSON(input.getNodeContext().getAllAttribute()));
+        }
         if (StrUtil.isBlank(pickJsonField)) {
             outputJson.putAll(mixJsonResult);
         } else if (mixJsonResult != null) {
