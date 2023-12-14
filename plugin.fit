@@ -1,242 +1,260 @@
 {
     "debug": true,
-    "actions": [
+    "groups": [
         {
-            "name": "zip",
-            "title": "Zip",
-            "script": {
-                "uni": "zip"
-            },
-            "addToMenu": {
-            }
-        },
-        {
-            "name": "unzip",
-            "title": "Unzip",
-            "script": {
-                "uni": "unzip"
-            }
-        },
-        {
-            "name": "hello",
-            "title": "Hello",
-            "script": {
-                "uni": "hello"
-            }
-        },
-        {
-            "name": "info",
-            "title": "Info",
-            "script": {
-                "uni": "info",
-                "shareFields": [
-                    "os",
-                    "memory",
-                    "jvm",
-                    "host",
-                    "runtime",
-                    "javaSpec",
-                    "jvm",
-                    "user",
-                    "properties",
-                    "env"
-                ]
-            }
-        },
-        {
-            "name": "systemInfo",
-            "title": "System Info",
-            "script": {
-                "uni": "systemInfo",
-                "shareFields": [
-                    "computerManufacturer",
-                    "computerModel",
-                    "processorName",
-                    "processorPhysicalCount",
-                    "processorLogicalCount",
-                    "processorMaxFreq",
-                    "memoryTotal",
-                    "memoryAvailable",
-                    "osManufacturer",
-                    "osFamily",
-                    "osVersion",
-                    "osBit",
-                    "net"
-                ]
-            }
-        },
-        {
-            "name": "server",
-            "title": "Server",
-            "script": {
-                "uni": "server",
-                "port": 11111,
-                "service": {
-                    "/hello": {
-                        "uni": "hello"
+            "name": "FitActionGroup1",
+            "title": "Fit Tools",
+            "actions": [
+                {
+                    "name": "zip",
+                    "title": "Zip",
+                    "script": {
+                        "uni": "zip"
                     },
-                    "/echo": {
-                        "uni": "echo"
+                    "addToMenu": {
                     }
-                }
-            }
-        },
-        {
-            "name": "showContext",
-            "title": "Show Context",
-            "script": {
-                "uni": "mix",
-                "json": {
-                    "_context": "context"
-                }
-            }
-        },
-        {
-            "name": "convertPostman",
-            "title": "Convert Postman",
-            "script": {
-                "uni": "pipe",
-                "child": [
-                    {
-                        "uni": "mix",
-                        "json": {
-                            "filePath": "${filePath}"
-                        }
-                    },
-                    {
-                        "uni": "readFile"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
-                    },
-                    {
-                        "uni": "convert",
-                        "express": {
-                            "item": "${content.item}",
-                            "collectionName": "${content.info.name}"
-                        }
-                    },
-                    {
-                        "uni": "set",
-                        "key": "collectionName",
-                        "value": "${collectionName}"
-                    },
-                    {
-                        "uni": "foreach",
-                        "foreachField": "item",
-                        "child": {
-                            "id": "switch",
-                            "uni": "switch",
-                            "switchField": "${this.?item!=null}",
-                            "child": [
-                                {
-                                    "case": "false",
-                                    "uni": "pipe",
+                },
+                {
+                    "name": "unzip",
+                    "title": "Unzip",
+                    "script": {
+                        "uni": "unzip"
+                    }
+                },
+                {
+                    "name": "convertPostman",
+                    "title": "Convert Postman",
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "mix",
+                                "json": {
+                                    "filePath": "${filePath}"
+                                }
+                            },
+                            {
+                                "uni": "readFile"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "content"
+                            },
+                            {
+                                "uni": "convert",
+                                "express": {
+                                    "item": "${content.item}",
+                                    "collectionName": "${content.info.name}"
+                                }
+                            },
+                            {
+                                "uni": "set",
+                                "key": "collectionName",
+                                "value": "${collectionName}"
+                            },
+                            {
+                                "uni": "foreach",
+                                "foreachField": "item",
+                                "child": {
+                                    "id": "switch",
+                                    "uni": "switch",
+                                    "switchField": "${this.?item!=null}",
                                     "child": [
                                         {
-                                            "uni": "mix",
-                                            "json": {
-                                                "isFolder": false
-                                            }
-                                        },
-                                        {
-                                            "id": "convertItem",
+                                            "case": "false",
                                             "uni": "pipe",
                                             "child": [
                                                 {
-                                                    "uni": "set",
-                                                    "key": "contentType",
-                                                    "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
-                                                },
-                                                {
-                                                    "uni": "convert",
-                                                    "express": {
-                                                        "name": "${name}",
-                                                        "content.flag": "needFormatJsonInConsoleFlag",
-                                                        "content.name": "${name}",
-                                                        "content.uni": "postman",
-                                                        "content.method": "${request.method}",
-                                                        "content.header": "${request.header}",
-                                                        "content.header.contentType": "${contentType}",
-                                                        "content.url": "${request.url.raw}",
-                                                        "content.query": "${request.body.urlencoded}",
-                                                        "content.body": "${request.body.raw}",
-                                                        "isFolder": "${isFolder}",
-                                                        "contentType": "${contentType}"
+                                                    "uni": "mix",
+                                                    "json": {
+                                                        "isFolder": false
                                                     }
                                                 },
                                                 {
-                                                    "uni": "convertKeyValueList",
-                                                    "listField": "content.query",
-                                                    "keyField": "key",
-                                                    "valueField": "value"
-                                                },
-                                                {
-                                                    "uni": "convertKeyValueList",
-                                                    "listField": "content.header",
-                                                    "keyField": "key",
-                                                    "valueField": "value"
-                                                },
-                                                {
-                                                    "uni": "convert",
-                                                    "isMixMode": true,
-                                                    "express": {
-                                                        "content.header.contentType": "${contentType}"
-                                                    }
-                                                },
+                                                    "id": "convertItem",
+                                                    "uni": "pipe",
+                                                    "child": [
+                                                        {
+                                                            "uni": "set",
+                                                            "key": "contentType",
+                                                            "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
+                                                        },
+                                                        {
+                                                            "uni": "convert",
+                                                            "express": {
+                                                                "name": "${name}",
+                                                                "content.flag": "needFormatJsonInConsoleFlag",
+                                                                "content.name": "${name}",
+                                                                "content.uni": "postman",
+                                                                "content.method": "${request.method}",
+                                                                "content.header": "${request.header}",
+                                                                "content.header.contentType": "${contentType}",
+                                                                "content.url": "${request.url.raw}",
+                                                                "content.query": "${request.body.urlencoded}",
+                                                                "content.body": "${request.body.raw}",
+                                                                "isFolder": "${isFolder}",
+                                                                "contentType": "${contentType}"
+                                                            }
+                                                        },
+                                                        {
+                                                            "uni": "convertKeyValueList",
+                                                            "listField": "content.query",
+                                                            "keyField": "key",
+                                                            "valueField": "value"
+                                                        },
+                                                        {
+                                                            "uni": "convertKeyValueList",
+                                                            "listField": "content.header",
+                                                            "keyField": "key",
+                                                            "valueField": "value"
+                                                        },
+                                                        {
+                                                            "uni": "convert",
+                                                            "isMixMode": true,
+                                                            "express": {
+                                                                "content.header.contentType": "${contentType}"
+                                                            }
+                                                        },
+                                                        {
+                                                            "uni": "mix",
+                                                            "json": {
+                                                                "filePath": "${fileDir + '/' +collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
+                                                            }
+                                                        },
+                                                        {
+                                                            "uni": "parseJson",
+                                                            "jsonField": "content.query"
+                                                        },
+                                                        {
+                                                            "uni": "parseJson",
+                                                            "jsonField": "content.body"
+                                                        },
+                                                        {
+                                                            "uni": "writeFile",
+                                                            "format": true
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "case": "true",
+                                            "uni": "pipe",
+                                            "child": [
                                                 {
                                                     "uni": "mix",
                                                     "json": {
-                                                        "filePath": "${fileDir + '/' +collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
+                                                        "parentName": "${'/'+name}",
+                                                        "isFolder": true
                                                     }
                                                 },
                                                 {
-                                                    "uni": "parseJson",
-                                                    "jsonField": "content.query"
-                                                },
-                                                {
-                                                    "uni": "parseJson",
-                                                    "jsonField": "content.body"
-                                                },
-                                                {
-                                                    "uni": "writeFile",
-                                                    "format": true
+                                                    "uni": "foreach",
+                                                    "foreachField": "item",
+                                                    "mixToItemField": [
+                                                        "parentName",
+                                                        "isFolder"
+                                                    ],
+                                                    "child": {
+                                                        "uni": "call",
+                                                        "nodeId": "convertItem"
+                                                    }
                                                 }
                                             ]
                                         }
                                     ]
-                                },
-                                {
-                                    "case": "true",
-                                    "uni": "pipe",
-                                    "child": [
-                                        {
-                                            "uni": "mix",
-                                            "json": {
-                                                "parentName": "${'/'+name}",
-                                                "isFolder": true
-                                            }
-                                        },
-                                        {
-                                            "uni": "foreach",
-                                            "foreachField": "item",
-                                            "mixToItemField": [
-                                                "parentName",
-                                                "isFolder"
-                                            ],
-                                            "child": {
-                                                "uni": "call",
-                                                "nodeId": "convertItem"
-                                            }
-                                        }
-                                    ]
                                 }
-                            ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FitActionGroup2",
+            "title": "Fit Info",
+            "actions": [
+                {
+                    "name": "showContext",
+                    "title": "Show Context",
+                    "script": {
+                        "uni": "mix",
+                        "json": {
+                            "_context": "context"
                         }
                     }
-                ]
-            }
+                },
+                {
+                    "name": "hello",
+                    "title": "Hello",
+                    "script": {
+                        "uni": "hello"
+                    }
+                },
+                {
+                    "name": "info",
+                    "title": "Info",
+                    "script": {
+                        "uni": "info",
+                        "shareFields": [
+                            "os",
+                            "memory",
+                            "jvm",
+                            "host",
+                            "runtime",
+                            "javaSpec",
+                            "jvm",
+                            "user",
+                            "properties",
+                            "env"
+                        ]
+                    }
+                },
+                {
+                    "name": "systemInfo",
+                    "title": "System Info",
+                    "script": {
+                        "uni": "systemInfo",
+                        "shareFields": [
+                            "computerManufacturer",
+                            "computerModel",
+                            "processorName",
+                            "processorPhysicalCount",
+                            "processorLogicalCount",
+                            "processorMaxFreq",
+                            "memoryTotal",
+                            "memoryAvailable",
+                            "osManufacturer",
+                            "osFamily",
+                            "osVersion",
+                            "osBit",
+                            "net"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FitActionGroup3",
+            "title": "Fit Server",
+            "actions": [
+                {
+                    "name": "server",
+                    "title": "Server",
+                    "script": {
+                        "uni": "server",
+                        "port": 11111,
+                        "service": {
+                            "/hello": {
+                                "uni": "hello"
+                            },
+                            "/echo": {
+                                "uni": "echo"
+                            }
+                        }
+                    }
+                }
+            ]
         }
     ]
 }

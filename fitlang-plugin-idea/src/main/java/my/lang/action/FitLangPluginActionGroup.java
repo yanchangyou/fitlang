@@ -16,7 +16,7 @@ import java.util.Set;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
-public class FitLangPluginActionGroup extends DefaultActionGroup {
+public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public void update(AnActionEvent event) {
@@ -26,6 +26,28 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
     AnAction[] children = new AnAction[0];
 
     boolean debug = false;
+
+    protected abstract String getGroupName();
+
+    JSONObject getGroupConfig(JSONObject pluginConfig) {
+        JSONArray groups = pluginConfig.getJSONArray("groups");
+        if (groups == null) {
+            return null;
+        }
+        for (Object group : groups) {
+            JSONObject groupObject = (JSONObject) group;
+            if (getGroupName().equalsIgnoreCase(groupObject.getString("name"))) {
+                if (!(groupObject.get("actions") instanceof JSONArray)) {
+                    return null;
+                }
+                JSONObject groupConfig = new JSONObject();
+                groupConfig.put("title", groupObject.getOrDefault("title", getGroupName()));
+                groupConfig.put("actions", groupObject.get("actions"));
+                return groupConfig;
+            }
+        }
+        return null;
+    }
 
     @Override
     public AnAction[] getChildren(AnActionEvent event) {
@@ -38,13 +60,14 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
             if (pluginConfig == null || pluginConfig.isEmpty()) {
                 return children;
             }
-            if (!(pluginConfig.get("actions") instanceof JSONArray)) {
-                return children;
-            }
-            JSONArray actions = pluginConfig.getJSONArray("actions");
+            JSONObject groupConfig = getGroupConfig(pluginConfig);
+            JSONArray actions = groupConfig.getJSONArray("actions");
             if (actions == null) {
+                event.getPresentation().setVisible(false);
                 return children;
             }
+            event.getPresentation().setText(groupConfig.getString("title"));
+            event.getPresentation().setVisible(true);
             debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
             List<AnAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
