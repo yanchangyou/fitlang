@@ -38,10 +38,10 @@ public class FitLangPluginActionGroup extends DefaultActionGroup {
             if (pluginConfig == null || pluginConfig.isEmpty()) {
                 return children;
             }
-            if (!(pluginConfig.get("action") instanceof JSONArray)) {
+            if (!(pluginConfig.get("actions") instanceof JSONArray)) {
                 return children;
             }
-            JSONArray actions = pluginConfig.getJSONArray("action");
+            JSONArray actions = pluginConfig.getJSONArray("actions");
             if (actions == null) {
                 return children;
             }

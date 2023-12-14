@@ -1,6 +1,6 @@
 {
     "debug": true,
-    "action": [
+    "actions": [
         {
             "name": "zip",
             "title": "Zip",
