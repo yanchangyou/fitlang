@@ -61,8 +61,11 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return children;
             }
             JSONObject groupConfig = getGroupConfig(pluginConfig);
+            if (groupConfig == null) {
+                return children;
+            }
             JSONArray actions = groupConfig.getJSONArray("actions");
-            if (actions == null) {
+            if (actions == null || actions.isEmpty()) {
                 event.getPresentation().setVisible(false);
                 return children;
             }
