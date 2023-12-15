@@ -61,7 +61,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return children;
             }
             JSONObject groupConfig = getGroupConfig(pluginConfig);
-            if (groupConfig == null) {
+            if (groupConfig == null || groupConfig.isEmpty()) {
                 return children;
             }
             JSONArray actions = groupConfig.getJSONArray("actions");
