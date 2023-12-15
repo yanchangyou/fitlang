@@ -100,9 +100,6 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - execute: 执行入参传递的流程
 - call: 引用节点执行
 
-### git
-- gitPull: 拉取
-
 ### http节点
 - http: http
 - postJson: http post json

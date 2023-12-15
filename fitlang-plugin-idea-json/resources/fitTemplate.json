@@ -230,10 +230,6 @@
             ]
         },
         {
-            "uni": "gitPull",
-            "gitPath": "/opt/github/fitlang/"
-        },
-        {
             "uni": "http",
             "url": "http://fit.321zou.com/hello",
             "param": {
