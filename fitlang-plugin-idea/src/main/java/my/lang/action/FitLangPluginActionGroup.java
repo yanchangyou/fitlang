@@ -31,11 +31,12 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     JSONObject getGroupConfig(JSONObject pluginConfig) {
         JSONArray groups = pluginConfig.getJSONArray("groups");
-        if (groups == null) {
+        if (groups == null || groups.isEmpty()) {
             return null;
         }
-        for (Object group : groups) {
-            JSONObject groupObject = (JSONObject) group;
+        //倒序加载，每次都放到最前
+        for (int i = groups.size() - 1; i > -1; i--) {
+            JSONObject groupObject = groups.getJSONObject(i);
             if (getGroupName().equalsIgnoreCase(groupObject.getString("name"))) {
                 if (!(groupObject.get("actions") instanceof JSONArray)) {
                     return null;
