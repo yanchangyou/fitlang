@@ -18,12 +18,52 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
+    AnAction[] children = new AnAction[0];
+
     @Override
     public void update(AnActionEvent event) {
-        event.getPresentation().setEnabled(true);
-    }
+        if (children == null || children.length == 0 || debug) {
 
-    AnAction[] children = new AnAction[0];
+            event.getPresentation().setEnabledAndVisible(false);
+
+            String projectPath = event.getProject() == null ? "" : event.getProject().getBasePath();
+            if (StrUtil.isBlank(projectPath)) {
+                return;
+            }
+            JSONObject pluginConfig = loadPluginRegisterConfig(projectPath);
+            if (pluginConfig == null || pluginConfig.isEmpty()) {
+                return;
+            }
+            JSONObject groupConfig = getGroupConfig(pluginConfig);
+            if (groupConfig == null || groupConfig.isEmpty()) {
+                return;
+            }
+            JSONArray actions = groupConfig.getJSONArray("actions");
+            if (actions == null || actions.isEmpty()) {
+                return;
+            }
+            event.getPresentation().setText(groupConfig.getString("title"));
+            event.getPresentation().setEnabledAndVisible(true);
+            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
+            List<AnAction> actionList = new ArrayList<>();
+            Set<String> pluginNameSet = new HashSet<>();
+            for (Object item : actions) {
+                JSONObject plugin = (JSONObject) item;
+                String name = plugin.getString("name");
+                if (pluginNameSet.contains(name)) {
+                    continue;
+                }
+                pluginNameSet.add(name);
+                String title = plugin.getString("title");
+                String script = plugin.getString("script");
+                actionList.add(new FitLangPluginAction(name, title, script));
+            }
+
+            System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
+
+            children = actionList.toArray(new AnAction[0]);
+        }
+    }
 
     boolean debug = false;
 
@@ -52,45 +92,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public AnAction[] getChildren(AnActionEvent event) {
-        if (children == null || children.length == 0 || debug) {
-            String projectPath = event.getProject() == null ? "" : event.getProject().getBasePath();
-            if (StrUtil.isBlank(projectPath)) {
-                return children;
-            }
-            JSONObject pluginConfig = loadPluginRegisterConfig(projectPath);
-            if (pluginConfig == null || pluginConfig.isEmpty()) {
-                return children;
-            }
-            JSONObject groupConfig = getGroupConfig(pluginConfig);
-            if (groupConfig == null || groupConfig.isEmpty()) {
-                return children;
-            }
-            JSONArray actions = groupConfig.getJSONArray("actions");
-            if (actions == null || actions.isEmpty()) {
-                event.getPresentation().setVisible(false);
-                return children;
-            }
-            event.getPresentation().setText(groupConfig.getString("title"));
-            event.getPresentation().setVisible(true);
-            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
-            List<AnAction> actionList = new ArrayList<>();
-            Set<String> pluginNameSet = new HashSet<>();
-            for (Object item : actions) {
-                JSONObject plugin = (JSONObject) item;
-                String name = plugin.getString("name");
-                if (pluginNameSet.contains(name)) {
-                    continue;
-                }
-                pluginNameSet.add(name);
-                String title = plugin.getString("title");
-                String script = plugin.getString("script");
-                actionList.add(new FitLangPluginAction(name, title, script));
-            }
 
-            System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
-
-            children = actionList.toArray(new AnAction[0]);
-        }
         return children;
     }
 
