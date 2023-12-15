@@ -377,6 +377,16 @@ getMonitorClient: 获取监控客户端列表<br/>
     </extensions>
 
     <actions>
+        <group id="FitActionGroup5" text="Fit Actions5" icon="/my/lang/icon/fit.svg" popup="true"
+               class="my.lang.action.group.FitLangPluginActionGroup5">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+        </group>
+        <group id="FitActionGroup4" text="Fit Actions4" icon="/my/lang/icon/fit.svg" popup="true"
+               class="my.lang.action.group.FitLangPluginActionGroup4">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+        </group>
         <group id="FitActionGroup3" text="Fit Actions3" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup3">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
@@ -392,16 +402,6 @@ getMonitorClient: 获取监控客户端列表<br/>
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </group>
-<!--        <group id="FitActionGroup4" text="Fit Actions" icon="/my/lang/icon/fit.svg" popup="true"-->
-<!--               class="my.lang.action.group.FitLangPluginActionGroup4">-->
-<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
-<!--        </group>-->
-<!--        <group id="FitActionGroup5" text="Fit Actions" icon="/my/lang/icon/fit.svg" popup="true"-->
-<!--               class="my.lang.action.group.FitLangPluginActionGroup5">-->
-<!--            <add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
-<!--        </group>-->
 
         <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Fit Run"
                 description="Run fit lang" icon="/my/lang/icon/fit.svg">
