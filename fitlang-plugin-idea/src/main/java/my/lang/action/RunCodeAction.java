@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 
-import static fit.lang.ExecuteNodeUtil.getAllException;
+import static fit.lang.ExecuteNodeUtil.getRootException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
@@ -159,7 +159,7 @@ public abstract class RunCodeAction extends AnAction {
 
                 } catch (Throwable exception) {
                     exception.printStackTrace();
-                    result = "exception:" + getAllException(exception);
+                    result = "exception:" + getRootException(exception);
                 }
 
                 System.out.println("execute " + getLanguageName() + " code result:");

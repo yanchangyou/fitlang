@@ -58,7 +58,7 @@ public class ExecuteNodeUtil {
     public static void buildDefaultNodeId(ExecuteNode executeNode) {
         if (executeNode.getId() == null) {
             executeNode.setId(uuid());
-            if (executeNode.getNodeDefine() !=null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
+            if (executeNode.getNodeDefine() != null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
                 ((JSONObject) executeNode.getNodeDefine().getData()).put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
             }
         }
@@ -127,5 +127,18 @@ public class ExecuteNodeUtil {
         builder.append(e.getMessage()).append("(");
         builder.append(getAllException(e.getCause())).append(")");
         return builder.toString();
+    }
+
+    /**
+     * 获取root异常：深度遍历原因
+     *
+     * @param e
+     * @return
+     */
+    public static String getRootException(Throwable e) {
+        if (e.getCause() != null) {
+            return getRootException(e.getCause());
+        }
+        return e.getMessage();
     }
 }

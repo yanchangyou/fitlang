@@ -14,7 +14,7 @@ import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 
-import static fit.lang.ExecuteNodeUtil.getAllException;
+import static fit.lang.ExecuteNodeUtil.getRootException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 
 /**
@@ -79,7 +79,8 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
                 finalVirtualFile.getParent().refresh(false, false);
 
             } catch (Exception exception) {
-                result = "exception:" + getAllException(exception);
+                exception.printStackTrace();
+                result = "exception:" + getRootException(exception);
                 print(result + "\n\n", project, getProjectConsoleViewMap());
             }
         });
