@@ -244,12 +244,27 @@
                     "script": {
                         "uni": "server",
                         "port": 11111,
+                        "init": {
+                            "uni": "sequence",
+                            "child": [
+                                {
+                                    "uni": "startMonitor",
+                                    "second": 5
+                                }
+                            ]
+                        },
                         "service": {
                             "/hello": {
                                 "uni": "hello"
                             },
                             "/echo": {
                                 "uni": "echo"
+                            },
+                            "/execute": {
+                                "uni": "execute"
+                            },
+                            "/monitor/get": {
+                                "uni": "getMonitorData"
                             }
                         }
                     }
