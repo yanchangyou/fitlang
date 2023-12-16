@@ -63,6 +63,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (actionScript != null) {
                 event.getPresentation().setEnabledAndVisible(true);
                 String title = groupConfig.getString("title");
+                if (StrUtil.isBlank(title)) {
+                    title = groupConfig.getString("name");
+                }
                 event.getPresentation().setText(title);
                 return;
             }

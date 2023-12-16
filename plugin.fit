@@ -2,6 +2,14 @@
     "debug": true,
     "groups": [
         {
+            "name": "FitActionGroup0",
+            "title": "Hello Fit",
+            "script": {
+                "uni": "hello",
+                "who": "fit"
+            }
+        },
+        {
             "name": "FitActionGroup1",
             "title": "Fit Tools",
             "actions": [
@@ -185,13 +193,6 @@
                     }
                 },
                 {
-                    "name": "hello",
-                    "title": "Hello",
-                    "script": {
-                        "uni": "hello"
-                    }
-                },
-                {
                     "name": "info",
                     "title": "Info",
                     "script": {
@@ -236,40 +237,34 @@
         },
         {
             "name": "FitActionGroup3",
-            "title": "Fit Server",
-            "actions": [
-                {
-                    "name": "server",
-                    "title": "Server",
-                    "script": {
-                        "uni": "server",
-                        "port": 11111,
-                        "init": {
-                            "uni": "sequence",
-                            "child": [
-                                {
-                                    "uni": "startMonitor",
-                                    "second": 5
-                                }
-                            ]
-                        },
-                        "service": {
-                            "/hello": {
-                                "uni": "hello"
-                            },
-                            "/echo": {
-                                "uni": "echo"
-                            },
-                            "/execute": {
-                                "uni": "execute"
-                            },
-                            "/monitor/get": {
-                                "uni": "getMonitorData"
-                            }
+            "title": "Server",
+            "script": {
+                "uni": "server",
+                "port": 11111,
+                "init": {
+                    "uni": "sequence",
+                    "child": [
+                        {
+                            "uni": "startMonitor",
+                            "second": 5
                         }
+                    ]
+                },
+                "service": {
+                    "/hello": {
+                        "uni": "hello"
+                    },
+                    "/echo": {
+                        "uni": "echo"
+                    },
+                    "/execute": {
+                        "uni": "execute"
+                    },
+                    "/monitor/get": {
+                        "uni": "getMonitorData"
                     }
                 }
-            ]
+            }
         }
     ]
 }
