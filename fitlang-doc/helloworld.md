@@ -1,4 +1,4 @@
-### hello world
+### HelloWorld
 从HelloWorld开始
 
 新建文件：hello.fit，使用JSON的语法，编辑如下内容：
