@@ -336,7 +336,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             welcomeMessage = nodeJsonDefine.getString("welcome");
         }
         JSONObject welcome = new JSONObject();
-        welcome.put("message", welcomeMessage);
+        welcome.put("welcome", welcomeMessage);
         welcome.put("server", getServerDisplay(serverMap));
         welcome.put("service", getServicesDisplay(fitServerInstance));
         return welcome;
