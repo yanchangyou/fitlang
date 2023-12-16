@@ -75,6 +75,7 @@ public class FitServerInstance {
         JSONObject info = new JSONObject();
         info.put("file", serverFile);
         info.put("url", url);
+        info.put("port", getPort());
         return info;
     }
 
