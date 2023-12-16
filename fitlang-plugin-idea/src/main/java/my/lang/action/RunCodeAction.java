@@ -184,13 +184,14 @@ public abstract class RunCodeAction extends AnAction {
 
     String executeCode(String code, String codePath, String projectPath) {
 
-        ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
-        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
-
         File file = new File(codePath);
         if (!file.exists()) {
             return "file not existed: ".concat(codePath);
         }
+
+        ServerJsonExecuteNode.setCurrentServerFilePath(codePath);
+        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
+
         JSONObject contextParam = buildContextParam(projectPath, file);
 
         String fileName = file.getName();
@@ -210,6 +211,12 @@ public abstract class RunCodeAction extends AnAction {
             Charset charset = CharsetDetector.detect(file, characters);
             contextParam.put("charset", charset.name());
             result = runLanguageFile(fileSuffix, contextParam);
+
+            if (isJsonObjectText(result)) {
+                //文件字符集转换为操作系统默认字符集
+                result = new String(result.getBytes(charset));
+            }
+
             needFormatJsonInConsole = true;
         } else {
             result = "can not execute: ".concat(codePath);
@@ -224,13 +231,13 @@ public abstract class RunCodeAction extends AnAction {
 
     static Charset[] characters = new Charset[]{
             StandardCharsets.UTF_8,
-            Charset.forName("ISO8859-1"),
             StandardCharsets.UTF_8,
+            Charset.forName("ISO8859-1"),
     };
 
     static {
         try {
-            characters[2] = Charset.forName("GBK");
+            characters[1] = Charset.forName("GBK");
         } catch (Exception e) {
             //ignore
         }
