@@ -442,7 +442,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.8.1 </li>
+            <li>0.8.1 support 10 menu and sub menu; add go-doudou ide plugin</li>
             <li>0.8.0 support project IDE plugin by plugin.fit, support 5 menu groups</li>
             <li>0.7.9 support dynamic plugin; start IDEA by shell will with path env!</li>
             <li>0.7.8 add zip/unzip IDEA plugin; support config plugin;</li>
