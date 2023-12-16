@@ -71,3 +71,47 @@
 案例：/fitlang-project-plugin/plugins/godoudou/plugin.fit
 
 放到GoLand的IDE项目根路径下，就会显示动态菜单
+
+### 动态插件原理
+通过IDEA的AnAction实现，见插件文档：
+https://plugins.jetbrains.com/docs/intellij/basic-action-system.html
+
+实现源码：
+- 一级菜单实现：fitlang-plugin-idea/src/main/java/my/lang/action/FitLangPluginActionGroup.java
+- 二级菜单实现：fitlang-plugin-idea/src/main/java/my/lang/action/FitLangPluginAction.java
+
+一级菜单默认内置了10个实现类，编号0~9,如果插件定义文件中，有对应编号，并且有script或actions，就会显示，否则就隐藏，通过这种方式一级菜单
+
+二级菜单：通过菜单组实现，定义多少，就加入多少，无数量限制
+
+一级菜单：如果有script属性，只有一级菜单，无二级菜单；如果有actions属性，就有二级菜单；
+通过代码配置
+```
+    //一级菜单判断是否有点击行为
+    public boolean canBePerformed(@NotNull DataContext context) {
+        return actionScript != null;
+    }
+    //update方法中，配置是否显示和生效，以及内容
+    public void update(AnActionEvent event) {
+        //...
+        event.getPresentation().setEnabledAndVisible(true);
+        event.getPresentation().setText(title);
+        //...
+    }
+    //actionPerformed中行为定义
+    public void actionPerformed(@NotNull AnActionEvent e) {
+        //...
+    }
+
+    //二级菜单获取
+    @Override
+    public AnAction[] getChildren(AnActionEvent event) {
+        return children;
+    }
+
+```
+
+二级菜单扩展AnAction实现，添加到菜单组中的children中：
+```
+    actionList.add(new FitLangPluginAction(name, title, script));
+```
