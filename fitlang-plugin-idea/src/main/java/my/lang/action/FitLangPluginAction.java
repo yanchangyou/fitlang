@@ -13,9 +13,12 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static my.lang.MyLanguage.LANG_NAME;
+import static my.lang.MyLanguage.LANG_STRING_LOGO;
 
 /**
  * @author yanchangyou
@@ -24,9 +27,9 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
     String name;
 
-    String script;
+    JSONObject script;
 
-    protected FitLangPluginAction(String name, String title, String script) {
+    protected FitLangPluginAction(String name, String title, JSONObject script) {
         super(title);
         this.name = name;
         this.script = script;
@@ -34,10 +37,14 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        actionPerformedInner(e, threadPoolExecutor, script);
+    }
+
+    static void actionPerformedInner(AnActionEvent e, ThreadPoolExecutor threadPoolExecutor, JSONObject actionScript) {
 
         final Project project = e.getProject();
 
-        initConsoleViewIfNeed(project, getLanguageName(), getLogoString(), getProjectConsoleViewMap());
+        initConsoleViewIfNeed(project, LANG_NAME, LANG_STRING_LOGO, projectConsoleViewMap);
 
         if (windowMap.get(project) != null) {
             windowMap.get(project).show(() -> {
@@ -68,20 +75,20 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
                 ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
 
-                result = ExecuteJsonNodeUtil.executeCode(script, contextParam);
+                result = ExecuteJsonNodeUtil.executeCode(null, actionScript, contextParam);
 
                 if (isJsonObjectText(result)) {
                     result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
                 }
 
-                print(result + "\n\n", project, getProjectConsoleViewMap());
+                print(result + "\n\n", project, projectConsoleViewMap);
 
                 finalVirtualFile.getParent().refresh(false, false);
 
             } catch (Exception exception) {
                 exception.printStackTrace();
                 result = "exception:" + getRootException(exception);
-                print(result + "\n\n", project, getProjectConsoleViewMap());
+                print(result + "\n\n", project, projectConsoleViewMap);
             }
         });
     }

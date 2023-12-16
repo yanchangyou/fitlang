@@ -351,14 +351,14 @@ public abstract class RunCodeAction extends AnAction {
         return projectConsoleViewMap.get(project) != null;
     }
 
-    void print(String result, Project project, Map<Project, ConsoleView> projectConsoleViewMap) {
+    static void print(String result, Project project, Map<Project, ConsoleView> projectConsoleViewMap) {
         projectConsoleViewMap.get(project).print(result, ConsoleViewContentType.NORMAL_OUTPUT);
 
         //低版本idea不支持此方法，兼容处理
         scrollToEnd(projectConsoleViewMap.get(project));
     }
 
-    private void scrollToEnd(ConsoleView consoleView) {
+    static void scrollToEnd(ConsoleView consoleView) {
         try {
             Method method = ConsoleView.class.getMethod("requestScrollingToEnd", new Class[0]);
             method.invoke(consoleView, new Object[0]);

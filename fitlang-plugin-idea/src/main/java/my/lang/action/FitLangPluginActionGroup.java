@@ -4,21 +4,42 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static my.lang.action.FitLangPluginAction.actionPerformedInner;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     AnAction[] children = new AnAction[0];
+
+    JSONObject actionScript;
+
+    private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
+
+    ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
+
+    public boolean canBePerformed(@NotNull DataContext context) {
+        return actionScript != null;
+    }
+
+    @Override
+    public void actionPerformed(@NotNull AnActionEvent e) {
+        if (actionScript != null) {
+            actionPerformedInner(e, threadPoolExecutor, actionScript);
+        }
+    }
 
     @Override
     public void update(AnActionEvent event) {
@@ -38,6 +59,13 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (groupConfig == null || groupConfig.isEmpty()) {
                 return;
             }
+            actionScript = groupConfig.getJSONObject("script");
+            if (actionScript != null) {
+                event.getPresentation().setEnabledAndVisible(true);
+                String title = groupConfig.getString("title");
+                event.getPresentation().setText(title);
+                return;
+            }
             JSONArray actions = groupConfig.getJSONArray("actions");
             if (actions == null || actions.isEmpty()) {
                 return;
@@ -55,7 +83,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 }
                 pluginNameSet.add(name);
                 String title = plugin.getString("title");
-                String script = plugin.getString("script");
+                JSONObject script = plugin.getJSONObject("script");
                 actionList.add(new FitLangPluginAction(name, title, script));
             }
 
@@ -78,12 +106,14 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
         for (int i = groups.size() - 1; i > -1; i--) {
             JSONObject groupObject = groups.getJSONObject(i);
             if (getGroupName().equalsIgnoreCase(groupObject.getString("name"))) {
-                if (!(groupObject.get("actions") instanceof JSONArray)) {
+                if (!(groupObject.get("actions") instanceof JSONArray)
+                        && !(groupObject.get("script") instanceof JSONObject)) {
                     return null;
                 }
                 JSONObject groupConfig = new JSONObject();
                 groupConfig.put("title", groupObject.getOrDefault("title", getGroupName()));
                 groupConfig.put("actions", groupObject.get("actions"));
+                groupConfig.put("script", groupObject.get("script"));
                 return groupConfig;
             }
         }
