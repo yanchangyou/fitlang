@@ -210,12 +210,11 @@ public abstract class RunCodeAction extends AnAction {
         } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {
             Charset charset = CharsetDetector.detect(file, characters);
             contextParam.put("charset", charset.name());
+
             result = runLanguageFile(fileSuffix, contextParam);
 
-            if (isJsonObjectText(result)) {
-                //文件字符集转换为操作系统默认字符集
-                result = new String(result.getBytes(charset));
-            }
+            //文件字符集转换为操作系统默认字符集
+            result = new String(result.getBytes(charset));
 
             needFormatJsonInConsole = true;
         } else {
