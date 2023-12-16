@@ -3,7 +3,7 @@
     "groups": [
         {
             "name": "FitActionGroup0",
-            "title": "Hello Fit",
+            "title": "Fit Hello",
             "script": {
                 "uni": "hello",
                 "who": "fit"
@@ -90,7 +90,7 @@
         },
         {
             "name": "FitActionGroup3",
-            "title": "Server",
+            "title": "Fit Server",
             "script": {
                 "uni": "server",
                 "port": 11111,
