@@ -1,4 +1,6 @@
 {
+    "uni": "hello",
+    "message": "This is a plugin define file for go-doudou framework!",
     "debug": true,
     "groups": [
         {
