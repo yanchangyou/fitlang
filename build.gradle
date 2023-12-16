@@ -53,7 +53,7 @@ sourceSets {
         resources {
             srcDir 'fitlang-plugin-idea/src/main/resources'
             srcDir 'fitlang-plugin-idea-json/resources'
-            srcDir 'ide-plugins'
+            srcDir 'fitlang-project-plugin'
             srcDir 'fitlang-server/demo' exclude("**/.idea/**")
         }
     }
