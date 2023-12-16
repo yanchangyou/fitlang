@@ -327,8 +327,7 @@
                 "osFamily",
                 "osVersion",
                 "osBit",
-                "net",
-                "env"
+                "net"
             ]
         },
         {
@@ -342,7 +341,8 @@
                 "javaSpec",
                 "jvm",
                 "user",
-                "properties"
+                "properties",
+                "env"
             ]
         },
         {
