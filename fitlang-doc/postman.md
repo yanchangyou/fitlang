@@ -76,7 +76,7 @@ fitlang-project-plugin/plugins/default/plugin.fit
 - 转换字段，成fit格式
 - 生成fit文件或目录
 
-实现源码
+实现源码（一个较复杂的fit应用案例）
 ```
 {
     "uni": "pipe",
