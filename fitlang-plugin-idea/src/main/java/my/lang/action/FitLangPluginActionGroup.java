@@ -125,7 +125,6 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public AnAction[] getChildren(AnActionEvent event) {
-
         return children;
     }
 
