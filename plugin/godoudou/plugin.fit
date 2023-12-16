@@ -1,0 +1,95 @@
+{
+    "debug": true,
+    "groups": [
+        {
+            "name": "FitActionGroup0",
+            "title": "Go Dou Dou",
+            "actions": [
+                {
+                    "name": "version",
+                    "title": "version",
+                    "script": {
+                        "uni": "cmd:go-doudou -v"
+                    }
+                },
+                {
+                    "name": "help",
+                    "title": "help",
+                    "script": {
+                        "uni": "cmd:go-doudou help"
+                    }
+                },
+                {
+                    "name": "init",
+                    "title": "init",
+                    "script": {
+                        "uni": "cmd:go-doudou svc init helloworld"
+                    }
+                },
+                {
+                    "name": "generate-ddl",
+                    "title": "generate-ddl",
+                    "script": {
+                        "uni": "cmd:go-doudou ddl"
+                    }
+                },
+                {
+                    "name": "generate-http-client",
+                    "title": "generate-http",
+                    "script": {
+                        "uni": "cmd:go-doudou svc http -c"
+                    }
+                },
+                {
+                    "name": "generate-http-client",
+                    "title": "generate-http-client",
+                    "script": {
+                        "uni": "cmd:go-doudou svc http -c"
+                    }
+                },
+                {
+                    "name": "generate-grpc",
+                    "title": "generate-grpc",
+                    "script": {
+                        "uni": "cmd:go-doudou svc grpc"
+                    }
+                },
+                {
+                    "name": "run",
+                    "title": "run",
+                    "script": {
+                        "uni": "cmd:go-doudou svc run"
+                    }
+                },
+                {
+                    "name": "push",
+                    "title": "push",
+                    "script": {
+                        "uni": "cmd:go-doudou svc push"
+                    }
+                },
+                {
+                    "name": "deploy",
+                    "title": "deploy",
+                    "script": {
+                        "uni": "cmd:go-doudou svc deploy"
+                    }
+                },
+                {
+                    "name": "shutdown",
+                    "title": "shutdown",
+                    "script": {
+                        "uni": "cmd:go-doudou svc shutdown"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FitActionGroup4",
+            "title": "go-doudou",
+            "script": {
+                "uni": "cmd:go mod tidy"
+            }
+        }
+    ]
+}
