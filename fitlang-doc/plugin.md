@@ -14,6 +14,7 @@
 安装插件后（一般不需要重启），在文本编辑器或文件目录右键，会出现Fit的菜单选项，点击菜单，就会执行当前内容或文件
 
 #### 智能提示
+
 当在花括号后面输入内置实现节点名称前缀时，会以模板下拉列表方式，实现智能补全，提升开发效率
 
 ### 动态插件
@@ -76,10 +77,12 @@
 放到GoLand的IDE项目根路径下，就会显示动态菜单
 
 ### 动态插件原理
+
 通过IDEA的AnAction实现，见插件文档：
 https://plugins.jetbrains.com/docs/intellij/basic-action-system.html
 
 实现源码：
+
 - 一级菜单实现：fitlang-plugin-idea/src/main/java/my/lang/action/FitLangPluginActionGroup.java
 - 二级菜单实现：fitlang-plugin-idea/src/main/java/my/lang/action/FitLangPluginAction.java
 
@@ -89,6 +92,7 @@ https://plugins.jetbrains.com/docs/intellij/basic-action-system.html
 
 一级菜单：如果有script属性，只有一级菜单，无二级菜单；如果有actions属性，就有二级菜单；
 通过代码配置
+
 ```
     //一级菜单判断是否有点击行为
     public boolean canBePerformed(@NotNull DataContext context) {
@@ -115,6 +119,7 @@ https://plugins.jetbrains.com/docs/intellij/basic-action-system.html
 ```
 
 二级菜单扩展AnAction实现，添加到菜单组中的children中：
+
 ```
     actionList.add(new FitLangPluginAction(name, title, script));
 ```

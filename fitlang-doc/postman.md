@@ -1,6 +1,7 @@
-
 ### postman
+
 基本实现了postman类似功能，调用方式如下：
+
 ```
 {
     "flag": "needFormatJsonInConsoleFlag",
@@ -24,6 +25,7 @@
 ```
 
 属性说明，基本参考postman图形界面属性元素
+
 - uni: postman节点
 - method: 请求方法，支持：GET,POST,PUT,HEAD,DELETE
 - url: 请求URL地址
@@ -33,6 +35,7 @@
 - proxy: 代理配置
 
 执行结果
+
 ```
 {
 	"url":"http://fit.321zou.com/echo?foo=bar",
@@ -60,14 +63,17 @@
 	}
 }
 ```
+
 出参也是参考postman出参元素，常规信息都有
 
 ### postman转换
+
 内部通过fit代码实现了，把postman导出文件转换为fit文件功能，在默认的项目插件定义有已经集成，参考路径
 
 fitlang-project-plugin/plugins/default/plugin.fit
 
 实现主要步骤：
+
 - 设置postman导出文件路径，默认使用当前选择文件
 - 读取文件内容
 - 解析成json对象
@@ -77,6 +83,7 @@ fitlang-project-plugin/plugins/default/plugin.fit
 - 生成fit文件或目录
 
 实现源码（一个较复杂的fit应用案例）
+
 ```
 {
     "uni": "pipe",
