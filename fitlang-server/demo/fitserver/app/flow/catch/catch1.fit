@@ -1,0 +1,18 @@
+{
+    "uni": "loop",
+    "loopTimes": 2,
+    "isBagsMode": true,
+    "child": {
+        "uni": "catch",
+        "child": [
+            {
+                "name": "try node",
+                "uni": "mix"
+            },
+            {
+                "name": "catch node",
+                "uni": "echo"
+            }
+        ]
+    }
+}

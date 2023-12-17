@@ -1,9 +1,0 @@
-{
-    "uni": "catch",
-    "child": {
-        "uni": "mix",
-        "json": {
-            "message": "${1/0}"
-        }
-    }
-}

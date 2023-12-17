@@ -5,5 +5,45 @@
 子节点是独立执行，并且需要查看每个节点的执行结果，就选用batch
 
 #### 属性
-- uni: sequence
+
+- uni: batch
 - child: 子节点，按照顺序执行的子节点数组
+
+#### demo
+
+输入：
+
+```
+{
+    "uni": "batch",
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "value": 1
+            }
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "value": 2
+            }
+        }
+    ]
+}
+```
+
+输出:
+
+```
+{
+	"list":[
+		{
+			"value":1
+		},
+		{
+			"value":2
+		}
+	]
+}
+```

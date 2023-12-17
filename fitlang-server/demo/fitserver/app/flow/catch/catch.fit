@@ -1,0 +1,13 @@
+{
+    "uni": "catch",
+    "child": [
+        {
+            "name": "try node",
+            "uni": "mix"
+        },
+        {
+            "name": "catch node",
+            "uni": "echo"
+        }
+    ]
+}
