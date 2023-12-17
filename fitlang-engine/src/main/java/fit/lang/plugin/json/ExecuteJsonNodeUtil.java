@@ -760,9 +760,11 @@ public class ExecuteJsonNodeUtil {
         contextParam.put("fileSeparator", File.separator);
         contextParam.put("pathSeparator", File.pathSeparator);
 
+        String fileSuffix = "";
         if (file.getName().contains(".")) {
-            contextParam.put("fileSuffix", file.getName().split("\\.")[1]);
+            fileSuffix = file.getName().split("\\.")[1];
         }
+        contextParam.put("fileSuffix", fileSuffix);
 
         contextParam.put("userHome", getUserHome());
         return contextParam;
