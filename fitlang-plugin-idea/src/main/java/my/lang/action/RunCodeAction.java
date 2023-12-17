@@ -172,14 +172,15 @@ public abstract class RunCodeAction extends AnAction {
     }
 
     private static boolean needFormatJsonInConsole(String code) {
-        return code.contains("\"_needFormatJsonInConsole\"")
-                || code.contains("needFormatJsonInConsoleFlag")
-                || code.contains("GET http")
-                || code.contains("POST http")
-                || code.contains("PUT http")
-                || code.contains("HEAD http")
-                || code.contains("DELETE http")
-                ;
+        return true; //默认IDE执行的全部格式化
+//        return code.contains("\"_needFormatJsonInConsole\"")
+//                || code.contains("needFormatJsonInConsoleFlag")
+//                || code.contains("GET http")
+//                || code.contains("POST http")
+//                || code.contains("PUT http")
+//                || code.contains("HEAD http")
+//                || code.contains("DELETE http")
+//                ;
     }
 
     String executeCode(String code, String codePath, String projectPath) {
