@@ -1,5 +1,7 @@
 package fit.lang;
 
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
@@ -141,4 +143,23 @@ public class ExecuteNodeUtil {
         }
         return e.getMessage();
     }
+
+    /**
+     * 获取user home 路径
+     *
+     * @return
+     */
+    public static String getUserHome() {
+        String userHome = "";
+
+        if (StrUtil.isBlank(userHome)) {
+            userHome = SystemUtil.get("user.home");
+        }
+
+        if (StrUtil.isBlank(userHome)) {
+            userHome = SystemUtil.get("HOME");
+        }
+        return userHome;
+    }
+
 }

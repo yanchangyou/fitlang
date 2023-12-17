@@ -34,6 +34,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
+import static fit.lang.ExecuteNodeUtil.getUserHome;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
@@ -268,7 +269,8 @@ public abstract class RunCodeAction extends AnAction {
         if (file.getName().contains(".")) {
             contextParam.put("fileSuffix", file.getName().split("\\.")[1]);
         }
-        contextParam.put("userHome", SystemUtil.getProps().get("user.home"));
+
+        contextParam.put("userHome", getUserHome());
         return contextParam;
     }
 
