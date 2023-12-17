@@ -6,7 +6,7 @@
 - uni: foreach
 - foreachField: 遍历数组
 - isPipe: 是否管道执行，默认是sequence方式执行
-- indexName: 索引字段名称，放到上下文中，可以通过mix等方式获取
+- indexName: 索引字段名称，放到上下文中，可以通过mix等方式获取，默认值：foreachIndex
 - child: 字节点，支持数组
 
 下面demo展示使用
