@@ -16,7 +16,7 @@ public class MixNodeJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
         JSONObject mixJson = nodeJsonDefine.getJSONObject("json");
         if (mixJson == null) {
-            throw new ExecuteNodeException("mix json field is required!");
+            throw new ExecuteNodeException("mix node of json field is required!");
         }
         JSONObject mixJsonResult = NodeExpressUtil.eval(mixJson, input.getData());
         JSONObject outputJson = input.getData().clone();
