@@ -40,6 +40,7 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
                 "       }" +
                 "   ]" +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{'type':'" + type + "'}", flow);
 

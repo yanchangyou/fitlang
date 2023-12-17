@@ -1,0 +1,23 @@
+{
+    "input": {
+        "type": "2"
+    },
+    "uni": "switch",
+    "switchField": "type",
+    "child": [
+        {
+            "case": "1",
+            "uni": "mix",
+            "json": {
+                "value": "A"
+            }
+        },
+        {
+            "case": "2",
+            "uni": "mix",
+            "json": {
+                "value": "B"
+            }
+        }
+    ]
+}
