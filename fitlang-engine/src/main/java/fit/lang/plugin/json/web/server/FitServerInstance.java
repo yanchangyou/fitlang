@@ -3,6 +3,7 @@ package fit.lang.plugin.json.web.server;
 import cn.hutool.http.server.SimpleServer;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 public class FitServerInstance {
 
@@ -76,6 +77,7 @@ public class FitServerInstance {
         info.put("file", serverFile);
         info.put("url", url);
         info.put("port", getPort());
+        info.put("serverRoot", ServerJsonExecuteNode.getServerFileDir());
         return info;
     }
 
