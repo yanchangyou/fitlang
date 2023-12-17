@@ -1,3 +1,5 @@
+## server节点
+
 一个最简单的服务器demo，添加文件server.fit,输入一下内容：
 
 ```
@@ -108,3 +110,12 @@
 ### 动态资源
 
 如果访问以.fit结尾的资源，会动态执行后，返回结果，和tomcat的JSP类似
+
+## FitServer中间件
+
+静态资源和动态资源结合，就相当于一个中间件，类似于Tomcat中JSP；
+
+官方网站运行在FitServer上
+
+- 网址: http://fit.321zou.com/
+- 源码: fitlang-server/demo/fitserver/app/server.fit
