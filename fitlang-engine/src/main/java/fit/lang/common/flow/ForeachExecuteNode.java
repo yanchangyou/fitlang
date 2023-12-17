@@ -91,7 +91,7 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
      */
     protected boolean isPipe;
 
-    protected String indexName = "index";
+    protected String indexName = "foreachIndex";
 
     public boolean isPipe() {
         return isPipe;

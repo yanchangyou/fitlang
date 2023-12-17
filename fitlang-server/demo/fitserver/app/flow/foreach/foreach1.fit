@@ -7,11 +7,11 @@
     },
     "uni": "foreach",
     "foreachField": "list",
-    "indexName": "loopIndex",
+    "indexName": "foreachIndex",
     "child": {
         "uni": "mix",
         "json": {
-            "loopIndex": "${loopIndex}"
+            "loopIndex": "${foreachIndex}"
         }
     }
 }
