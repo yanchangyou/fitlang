@@ -7,6 +7,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeEngineConst;
 import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
+import fit.lang.ExecuteReturnNodeException;
 import fit.lang.common.flow.ThreadExecuteNode;
 import fit.lang.common.util.EchoExecuteNode;
 import fit.lang.common.util.PrintExecuteNode;
@@ -86,9 +87,12 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         if (StrUtil.isNotBlank(currentDir)) {
             input.getNodeContext().setAttribute("currentDir", currentDir);
         }
-        ExecuteNode executeNode = createExecuteNode(nodeDefine, input.getNodeContext());
-
-        executeNode.executeAndNext(input, output);
+        try {
+            ExecuteNode executeNode = createExecuteNode(nodeDefine, input.getNodeContext());
+            executeNode.executeAndNext(input, output);
+        } catch (ExecuteReturnNodeException returnNodeException) {
+            output.setData(returnNodeException.getResult());
+        }
 
     }
 

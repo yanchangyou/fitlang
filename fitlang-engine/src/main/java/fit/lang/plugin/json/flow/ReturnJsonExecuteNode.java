@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteReturnNodeException;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -20,5 +21,8 @@ public class ReturnJsonExecuteNode extends JsonExecuteNode {
         }
         JSONObject returnJsonResult = ExpressUtil.eval(returnJson, input.getInputParamAndContextParam());
         output.setData(returnJsonResult);
+
+        //返回结果
+        throw new ExecuteReturnNodeException(returnJsonResult);
     }
 }
