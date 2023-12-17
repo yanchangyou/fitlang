@@ -31,7 +31,7 @@ public class HelloJsonExecuteNodeTest extends TestCase {
                 "   'message': \"${'hello, ' + who + '!'}\"" +
                 "}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
 
