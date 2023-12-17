@@ -3,7 +3,7 @@
 - sequence: 顺序执行节点
 - batch: 批量执行节点
 - pipe: 管道执行节点
-- foreach: 遍历json数组字段节点
+- foreach: 遍历数组或对象执行
 - loop: 循环执行节点，loopTimes制定执行次数
 - switch: 分支执行节点，switchField指定分支字段
 - return: 返回json
