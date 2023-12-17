@@ -1,0 +1,6 @@
+{
+    "uni": "thread",
+    "child": {
+        "uni": "hello"
+    }
+}
