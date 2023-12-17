@@ -54,3 +54,6 @@ input字段是入参，对谁hello，执行完之后输出:
 
 ### 格式化
 历史版本需要配置格式参数，最新版本已经去掉此配置，IDE控制台输出的默认格式化.
+
+### demo
+更多demo参考：fitlang-server/demo/fitserver/app/hello
