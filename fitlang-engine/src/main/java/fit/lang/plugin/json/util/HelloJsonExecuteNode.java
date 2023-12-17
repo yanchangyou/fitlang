@@ -19,7 +19,6 @@ public class HelloJsonExecuteNode extends JsonExecuteNode {
         if (who == null) {
             who = "world";
         }
-        input.set("who", who);
 
         String message = parseStringField("message", input);
 
