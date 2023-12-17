@@ -1,0 +1,14 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "return",
+            "json": {
+                "who": "fit"
+            }
+        },
+        {
+            "uni": "hello"
+        }
+    ]
+}
