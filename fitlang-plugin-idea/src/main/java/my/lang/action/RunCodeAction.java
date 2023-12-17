@@ -236,44 +236,6 @@ public abstract class RunCodeAction extends AnAction {
         }
     }
 
-    static JSONObject buildContextParam(String projectPath, File file) {
-        JSONObject contextParam = new JSONObject();
-
-        contextParam.put("projectPath", projectPath);
-
-        contextParam.put("fileDir", file.getParent());
-        String fileDirInProject = file.getParent().substring(projectPath.length());
-        contextParam.put("fileDirInProject", fileDirInProject);
-        contextParam.put("fileDirInProject1", "");
-        contextParam.put("fileDirInProject2", "");
-        contextParam.put("fileDirInProject3", "");
-        if (fileDirInProject.indexOf(File.separatorChar, 1) > 0) {
-            String fileDirInProject1 = fileDirInProject.substring(fileDirInProject.indexOf(File.separatorChar, 1));
-            contextParam.put("fileDirInProject1", fileDirInProject1);
-            if (fileDirInProject1.indexOf(File.separatorChar, 1) > 0) {
-                String fileDirInProject2 = fileDirInProject1.substring(fileDirInProject1.indexOf(File.separatorChar, 1));
-                contextParam.put("fileDirInProject2", fileDirInProject2);
-                if (fileDirInProject2.indexOf(File.separatorChar, 1) > 0) {
-                    contextParam.put("fileDirInProject3", fileDirInProject2.substring(fileDirInProject2.indexOf(File.separatorChar, 1)));
-                }
-            }
-        }
-
-        contextParam.put("filePath", file.getAbsolutePath());
-        contextParam.put("path", file.getAbsolutePath());
-        contextParam.put("fileName", file.getName());
-        contextParam.put("filePrefix", file.getName().split("\\.")[0]);
-        contextParam.put("fileSeparator", File.separator);
-        contextParam.put("pathSeparator", File.pathSeparator);
-
-        if (file.getName().contains(".")) {
-            contextParam.put("fileSuffix", file.getName().split("\\.")[1]);
-        }
-
-        contextParam.put("userHome", getUserHome());
-        return contextParam;
-    }
-
     static JSONObject supportLanguageMap = new JSONObject();
 
     static String supportLanguageFileDir = "";

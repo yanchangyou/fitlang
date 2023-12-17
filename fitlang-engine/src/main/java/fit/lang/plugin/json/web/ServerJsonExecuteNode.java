@@ -212,7 +212,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             File serverDir = new File(serviceDir);
             if (serverDir.exists()) {
                 try {
-                    List<JSONObject> serviceListInServerNode = loadServiceDir(serviceDir, serverDir, fitServer.getSimpleServer());
+                    List<JSONObject> serviceListInServerNode = loadServiceDir(serviceDir, serverDir, fitServer);
                     serviceList.addAll(serviceListInServerNode);
                 } catch (Exception e) {
                     System.out.println("loadServiceDir error: " + e);
@@ -380,7 +380,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 }
                 serviceDefine.put("path", servicePath);
                 serviceDefine.put("loadType", "serverNode");
-                registerService(fitServer.getSimpleServer(), servicePath, serviceDefine);
+                registerService(fitServer, servicePath, serviceDefine);
                 fitServer.getServiceList().add(serviceDefine);
             }
         }
@@ -538,14 +538,15 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     /**
      * 注册service
      *
-     * @param simpleServer
+     * @param serverInstance
      * @param servicePath
      * @param serviceDefine
      */
-    private void registerService(SimpleServer simpleServer, String servicePath, JSONObject serviceDefine) {
+    private void registerService(FitServerInstance serverInstance, String servicePath, JSONObject serviceDefine) {
         if (StrUtil.isBlank(servicePath) || serviceDefine == null || serviceDefine.isEmpty()) {
             return;
         }
+        SimpleServer simpleServer = serverInstance.getSimpleServer();
         clearContext(simpleServer, servicePath);
         simpleServer.addAction(servicePath, new Action() {
             @Override
@@ -553,9 +554,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 String clientIp = getHttpClientIp(request);
 
                 JSONObject serviceDefineCopy = serviceDefine.clone();
-                JSONObject contextParam = new JSONObject();
+                String serverDir = serverInstance.getServerDir();
+                JSONObject contextParam = buildContextParam(serverDir, new File(joinFilePath(serverDir, servicePath)));
                 contextParam.put(REQUEST_PATH, request.getPath());
                 contextParam.put(SERVICE_PATH, servicePath);
+
                 try {
                     JSONObject input = buildInput(request, serviceDefineCopy);
                     serviceDefineCopy.put("input", input);
@@ -645,13 +648,13 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         return inputJson;
     }
 
-    List<JSONObject> loadServiceDir(String serviceRootDir, File serviceFile, SimpleServer simpleServer) {
+    List<JSONObject> loadServiceDir(String serviceRootDir, File serviceFile, FitServerInstance serverInstance) {
 
         List<JSONObject> serviceDefineList = new ArrayList<>();
         if (serviceFile.isDirectory()) {
             File[] subFiles = serviceFile.listFiles();
             for (File subFile : subFiles) {
-                List<JSONObject> subDefineList = loadServiceDir(serviceRootDir, subFile, simpleServer);
+                List<JSONObject> subDefineList = loadServiceDir(serviceRootDir, subFile, serverInstance);
                 serviceDefineList.addAll(subDefineList);
             }
         } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
@@ -660,7 +663,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
             serviceDefine.put("path", servicePath);
             serviceDefine.put("loadType", "fileSystem");
-            registerService(simpleServer, servicePath, serviceDefine);
+            registerService(serverInstance, servicePath, serviceDefine);
             serviceDefineList.add(serviceDefine);
         }
         return serviceDefineList;
