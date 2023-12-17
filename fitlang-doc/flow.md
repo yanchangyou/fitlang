@@ -1,6 +1,7 @@
 ## 流程节点
 
 - sequence: 顺序执行节点
+- batch: 批量执行节点
 - pipe: 管道执行节点
 - foreach: 遍历json数组字段节点
 - loop: 循环执行节点，loopTimes制定执行次数
@@ -66,6 +67,5 @@ sequence是
 }
 ```
 
-对比发现：一个是hello, world， 另外一个hello, fit; sequence影响hello的入参，pipe是影响的，
-
-pipe：就是管道的意思，如果管道里面水，上一个节点把变成了红色，下一个节点，接收到的就是红色
+对比发现：一个是hello, world， 另外一个hello, fit; sequence不影响hello的入参，而pipe是影响的；
+pipe就是管道的意思，如果管道里面是水，上一个节点变成了红色，下一个节点，接收到的也是红色.
