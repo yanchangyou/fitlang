@@ -92,7 +92,6 @@
 输入：
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "object": {
             "code": "1001",

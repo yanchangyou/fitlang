@@ -183,7 +183,6 @@
                                                     "uni": "convert",
                                                     "express": {
                                                         "name": "${name}",
-                                                        "content.flag": "needFormatJsonInConsoleFlag",
                                                         "content.name": "${name}",
                                                         "content.uni": "postman",
                                                         "content.method": "${request.method}",

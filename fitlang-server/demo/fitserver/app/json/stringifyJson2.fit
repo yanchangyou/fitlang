@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "json": {
             "hello": "world"

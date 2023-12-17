@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "server",
     "port": 11111,
     //    "disableInnerService": [

@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnets",
     "host": "www.baidu.com",
     "port": 443,

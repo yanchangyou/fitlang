@@ -129,7 +129,7 @@
     function showFile(filePath, dom) {
         var url = "/_raw" + filePath;
         request("POST", url, null, function (body) {
-            document.getElementById('input').value = body.replace('"flag": "needFormatJsonInConsoleFlag",', '');
+            document.getElementById('input').value = body;
             format();
             if (preDom) {
                 preDom.className = "";

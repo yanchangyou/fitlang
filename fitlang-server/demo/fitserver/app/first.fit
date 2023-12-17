@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "hello",
     "message": "hello, world!"
 }

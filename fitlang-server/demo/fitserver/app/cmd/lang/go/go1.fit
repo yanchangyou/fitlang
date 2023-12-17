@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     //    "uni": "cmd:/usr/local/go/bin/go",
     "uni": "cmd:go",
     "env": {

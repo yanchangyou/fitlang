@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "cmd",
     "cmd": "ping www.baidu.com",
     "option": {

@@ -1,9 +1,6 @@
 {
     "template": [
         {
-            "flag": "needFormatJsonInConsoleFlag"
-        },
-        {
             "uni": "hello"
         },
         {
@@ -442,8 +439,7 @@
             },
             "body": {
                 "hello": "world"
-            },
-            "flag": "needFormatJsonInConsoleFlag"
+            }
         }
     ]
 }

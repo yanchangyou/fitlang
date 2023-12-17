@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnet",
     "host": "fit.321zou.com",
     "port": 80,

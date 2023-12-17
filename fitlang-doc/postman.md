@@ -4,7 +4,6 @@
 
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "postman",
     "method": "POST",
     "url": "http://fit.321zou.com/echo",
@@ -144,7 +143,6 @@ fitlang-project-plugin/plugins/default/plugin.fit
                                         "uni": "convert",
                                         "express": {
                                             "name": "${name}",
-                                            "content.flag": "needFormatJsonInConsoleFlag",
                                             "content.name": "${name}",
                                             "content.uni": "postman",
                                             "content.method": "${request.method}",

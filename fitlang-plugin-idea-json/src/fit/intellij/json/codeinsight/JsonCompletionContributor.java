@@ -94,9 +94,6 @@ public class JsonCompletionContributor extends CompletionContributor {
                 String text = itemObject.toJSONString();
                 text = text.substring(1, text.length() - 1);
                 text = text.replace("\":\"", "\": \"");
-                if (text.equals("\"flag\": \"needFormatJsonInConsoleFlag\"")) {
-                    text += ",";
-                }
                 templates.add(text);
             }
         }

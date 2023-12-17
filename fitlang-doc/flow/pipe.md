@@ -11,7 +11,6 @@
 
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "pipe",
     "child": [
         {

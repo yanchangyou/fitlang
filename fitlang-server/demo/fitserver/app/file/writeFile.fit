@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver"
     },

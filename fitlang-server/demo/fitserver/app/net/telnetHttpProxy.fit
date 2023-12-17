@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnet.http",
     "method": "GET",
     "url": "http://fit.321zou.com/hello",

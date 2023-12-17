@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "telnets",
     "host": "www.iteye.com",
     "port": 443,

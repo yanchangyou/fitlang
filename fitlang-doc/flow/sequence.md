@@ -12,7 +12,6 @@
 
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "sequence",
     "child": [
         {
@@ -37,7 +36,6 @@
 
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "sequence",
     "isBagsMode": true,
     "child": [

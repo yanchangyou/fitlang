@@ -15,7 +15,6 @@ public class PostManTest extends TestCase {
 
     public void testExecute() {
         String flow = "{\n" +
-                "    \"flag\": \"needFormatJsonInConsoleFlag\",\n" +
                 "    \"input\": {\n" +
                 "        \"workspaceDir\": \"/opt/github/fitlang/fitlang-server/demo/fitserver/app/postman/\",\n" +
                 "        \"filePath\": \"fit-test.postman_collection.json\"\n" +

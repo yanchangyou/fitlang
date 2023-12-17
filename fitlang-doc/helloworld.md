@@ -56,7 +56,6 @@ input字段是入参，对谁hello，执行完之后输出:
 
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "hello"
 }
 ```

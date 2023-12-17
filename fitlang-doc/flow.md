@@ -19,7 +19,6 @@ sequence和pipe的区别在于：
 #### sequence
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "sequence",
     "child": [
         {
@@ -45,7 +44,6 @@ sequence是
 #### pipe
 ```
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "pipe",
     "child": [
         {

@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "uni": "mix",
     "json": {
         "userHome": "${userHome}",

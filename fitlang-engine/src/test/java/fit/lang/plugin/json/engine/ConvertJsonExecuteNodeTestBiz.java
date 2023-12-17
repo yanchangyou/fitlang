@@ -47,7 +47,6 @@ public class ConvertJsonExecuteNodeTestBiz extends TestCase {
                 "\t]\n" +
                 "}";
         String flow = "{\n" +
-                "    \"flag\": \"needFormatJsonInConsoleFlag\",\n" +
                 "    \"uni\": \"pipe\",\n" +
                 "    \"child\": [\n" +
                 "        {\n" +
