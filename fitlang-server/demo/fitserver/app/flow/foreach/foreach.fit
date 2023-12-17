@@ -1,5 +1,4 @@
 {
-    "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "list": [
             "a",
@@ -9,6 +8,8 @@
     "uni": "foreach",
     "foreachField": "list",
     "child": {
-        "uni": "increase"
+        "uni": "mix",
+        "json": {
+        }
     }
 }

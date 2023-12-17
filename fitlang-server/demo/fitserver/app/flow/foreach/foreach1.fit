@@ -1,0 +1,18 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "input": {
+        "list": [
+            "a",
+            "b"
+        ]
+    },
+    "uni": "foreach",
+    "foreachField": "list",
+    "indexName": "loopIndex",
+    "child": {
+        "uni": "mix",
+        "json": {
+            "loopIndex": "${loopIndex}"
+        }
+    }
+}

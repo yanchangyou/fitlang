@@ -2,17 +2,13 @@
     "flag": "needFormatJsonInConsoleFlag",
     "input": {
         "object": {
-            "/path1": {
-                "foo": "bar1"
-            },
-            "/path2": {
-                "foo": "bar2"
-            }
+            "code": "1001",
+            "foo": "bar"
         }
     },
     "uni": "foreach",
     "foreachField": "object",
     "child": {
-        "uni": "increase"
+        "uni": "echo"
     }
 }
