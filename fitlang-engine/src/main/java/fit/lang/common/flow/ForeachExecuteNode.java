@@ -27,6 +27,7 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
         List<ExecuteNodeData> resultDataList = new ArrayList<>();
         for (int i = 0; next(input); i++) {
+            input.getNodeContext().setAttribute("foreachIndex", i);
             ExecuteNodeOutput subOutput = getCurrentOutput(output);
             ExecuteNodeInput subInput = getCurrentInput(input);
 
