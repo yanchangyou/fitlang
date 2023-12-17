@@ -471,7 +471,13 @@ public class ExecuteJsonNodeUtil {
             //TODO toString
             fieldValue = input.getNodeContext().getAttribute(fieldName).toString();
         }
-        return (String) ExpressUtil.eval(fieldValue, input.getInputParamAndContextParam());
+        JSONObject inputAndContextParam = input.getInputParamAndContextParam();
+
+        //把节点定义也放入解析
+        for (Map.Entry<String, Object> define : nodeJsonDefine.entrySet()) {
+            inputAndContextParam.putIfAbsent(define.getKey(), define.getValue());
+        }
+        return (String) ExpressUtil.eval(fieldValue, inputAndContextParam);
     }
 
     /**
