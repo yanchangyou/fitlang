@@ -11,12 +11,14 @@ public class CatchJsonExecuteNodeTest extends TestCase {
     public void testExecute() {
         String flow = "{" +//
                 "   'uni': 'catch'," +
-                "   'child': {" +
-                "       'uni':'mix'," +
-                "       'json':{" +
-                "           'message':'${a}'" +
+                "   'child': [" +
+                "       {" +
+                "           'uni':'mix'," +
+                "       }," +
+                "       {" +
+                "           'uni':'echo'" +
                 "       }" +
-                "   }" +
+                "   ]" +
                 "}";
         System.out.println(flow.replace("'", "\""));
 
@@ -25,5 +27,6 @@ public class CatchJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(output.containsKey("exception"));
+        Assert.assertEquals("{\"exception\":\"mix node of json field is required!\",\"input\":{}}", output.toJSONString());
     }
 }
