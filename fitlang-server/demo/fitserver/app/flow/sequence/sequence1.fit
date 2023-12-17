@@ -1,0 +1,15 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "who": "Fit"
+            }
+        },
+        {
+            "uni": "hello"
+        }
+    ]
+}

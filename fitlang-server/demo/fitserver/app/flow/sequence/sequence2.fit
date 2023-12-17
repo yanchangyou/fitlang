@@ -1,0 +1,17 @@
+{
+    "flag": "needFormatJsonInConsoleFlag",
+    "uni": "sequence",
+    "isBagsMode": true,
+    "bagsName": "array",
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "who": "Fit"
+            }
+        },
+        {
+            "uni": "hello"
+        }
+    ]
+}
