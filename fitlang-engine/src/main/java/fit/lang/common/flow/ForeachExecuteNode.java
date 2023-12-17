@@ -27,13 +27,14 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
         List<ExecuteNodeData> resultDataList = new ArrayList<>();
         for (int i = 0; next(input); i++) {
-            input.getNodeContext().setAttribute("foreachIndex", i);
             ExecuteNodeOutput subOutput = getCurrentOutput(output);
             ExecuteNodeInput subInput = getCurrentInput(input);
 
+            int index = i;
             Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {
                 @Override
                 public ExecuteNodeData call() {
+                    input.getNodeContext().setAttribute(getIndexName(), index);
                     ExecuteNodeData result = null;
                     for (ExecuteNode executeNode : childNodes) {
                         executeNode.executeAndNext(subInput, subOutput);
@@ -90,6 +91,8 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
      */
     protected boolean isPipe;
 
+    protected String indexName = "index";
+
     public boolean isPipe() {
         return isPipe;
     }
@@ -100,5 +103,13 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
     public void setPipe(Boolean pipe) {
         isPipe = pipe != null ? pipe : false;
+    }
+
+    public String getIndexName() {
+        return indexName;
+    }
+
+    public void setIndexName(String indexName) {
+        this.indexName = indexName;
     }
 }
