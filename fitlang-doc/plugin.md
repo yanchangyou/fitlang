@@ -7,7 +7,7 @@
 - 路径：菜单：Settings -> Plugins -> Marketplace
 - 快捷键：Cmd + ,
 
-输入fitlang，绿色背景，大写白色F，小写it，就是此插件
+输入fitlang，绿色背景，白色大写F，小写it，就是此插件
 
 或者新建hello.fit文件，IDEA的智能感知，会提示下载插件，按照提示操作即可，此特性非常人性化
 

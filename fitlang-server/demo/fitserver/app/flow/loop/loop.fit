@@ -1,0 +1,9 @@
+{
+    "uni": "loop",
+    "child": {
+        "uni": "mix",
+        "json": {
+            "index": "${loopIndex}"
+        }
+    }
+}

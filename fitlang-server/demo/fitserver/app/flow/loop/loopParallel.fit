@@ -1,0 +1,13 @@
+{
+    "uni": "loop",
+    "loopTimes": 10,
+    "isBagsMode": true,
+    "bagsName": "list",
+    "parallelism": 5,
+    "child": {
+        "uni": "mix",
+        "json": {
+            "index": "${loopIndex}"
+        }
+    }
+}

@@ -1,10 +1,12 @@
 {
     "uni": "loop",
     "loopTimes": 10,
+    "isBagsMode": true,
+    "bagsStep": 2,
     "child": {
         "uni": "mix",
         "json": {
-            "loopIndex": "${loopIndex}"
+            "index": "${loopIndex}"
         }
     }
 }
