@@ -1,0 +1,23 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "id": "node1",
+            "uni": "mix",
+            "json": {
+                "value": 1
+            }
+        },
+        {
+            "id": "node2",
+            "uni": "mix",
+            "json": {
+                "value": 2
+            }
+        },
+        {
+            "uni": "call",
+            "nodeId": "node1"
+        }
+    ]
+}
