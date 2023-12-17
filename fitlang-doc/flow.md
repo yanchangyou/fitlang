@@ -10,6 +10,7 @@
 - thread: 多线程执行
 - execute: 执行入参传递的流程
 - call: 引用节点执行
+- catch: 异常捕获，包含try节点和catch节点两个子节点
 
 sequence和pipe的区别在于：
 - sequence：所有子节点的入参一样
