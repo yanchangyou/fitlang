@@ -144,12 +144,10 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
 
         JSONArray serviceList = fitServer.getServiceList();
         String serverFile = fitServer.getServerFile();
-        String serviceDir = fitServer.getServiceDir();
+        String serviceDir = fitServer.getServerDir();
 
-        if (serverFile == null) {
-            serverFile = getCurrentServerFilePath();
-        }
-        fitServer.setServerFile(serverFile);
+        fitServer.setServerFile(getCurrentServerFilePath());
+        fitServer.setServerDir(getServerFileDir());
 
         serviceList.clear();
 
@@ -307,7 +305,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                     return;
                 }
                 try {
-                    String rawContent = FileUtil.readUtf8String(joinFilePath(getServerFileDir(), fitPath));
+                    String rawContent = FileUtil.readUtf8String(joinFilePath(fitServerInstance.getServerDir(), fitPath));
                     response.write(rawContent, ContentType.TEXT_PLAIN.getValue());
                 } catch (Exception e) {
                     response.send404(e.getMessage());
