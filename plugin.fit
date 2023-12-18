@@ -14,6 +14,7 @@
         {
             "name": "FitActionGroup1",
             "title": "Run Code",
+            "visible": true,
             "actions": [
                 {
                     "name": "java",

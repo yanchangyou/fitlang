@@ -75,7 +75,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return;
             }
             event.getPresentation().setText(groupConfig.getString("title"));
-            event.getPresentation().setEnabledAndVisible(true);
+            if (!Boolean.FALSE.equals(groupConfig.getBoolean("visible"))) {
+                event.getPresentation().setEnabledAndVisible(true);
+            }
             debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
             List<AnAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
@@ -121,6 +123,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 groupConfig.put("title", groupObject.getOrDefault("title", getGroupName()));
                 groupConfig.put("actions", groupObject.get("actions"));
                 groupConfig.put("script", groupObject.get("script"));
+                groupConfig.put("visible", groupObject.get("visible"));
                 return groupConfig;
             }
         }
