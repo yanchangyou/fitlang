@@ -56,7 +56,7 @@
                     }
                 },
                 {
-                    "name": "javascript",
+                    "name": "js",
                     "title": "JavaScript",
                     "script": {
                         "uni": "cmd:node",
@@ -64,7 +64,7 @@
                     }
                 },
                 {
-                    "name": "python3",
+                    "name": "py",
                     "title": "Python3",
                     "script": {
                         "uni": "cmd:python3",
@@ -80,7 +80,7 @@
                     }
                 },
                 {
-                    "name": "rust",
+                    "name": "rs",
                     "title": "Rust",
                     "script": {
                         "uni": "batch",

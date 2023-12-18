@@ -217,21 +217,13 @@ public abstract class RunCodeAction extends AnAction {
         return result;
     }
 
-    static JSONObject supportLanguageMap = new JSONObject();
-
-    static String supportLanguageFileDir = "";
-
-    static {
-        supportLanguageMap.put("java", "");
-        supportLanguageMap.put("go", "");
-        supportLanguageMap.put("js", "");
-        supportLanguageMap.put("rs", "");
-        supportLanguageMap.put("py", "");
-    }
+    static Map<String, JSONObject> supportLanguageMap = new HashMap<>();
 
     String runLanguageFile(String fileType, JSONObject contextParam) {
-        String fitPath = "fit/plugin/code/".concat(fileType).concat(".fit");
-        String result = runFitFile(fitPath, contextParam);
+
+        JSONObject script = supportLanguageMap.get(fileType);
+
+        String result = ExecuteJsonNodeUtil.executeCode(new JSONObject(), script, contextParam);
         if (isJsonObjectText(result)) {
             JSONObject resultJson = JSONObject.parseObject(result);
             JSONArray lines;

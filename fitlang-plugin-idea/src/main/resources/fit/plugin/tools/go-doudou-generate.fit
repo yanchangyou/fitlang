@@ -1,7 +1,0 @@
-{
-    "uni": "cmd:go-doudou svc http -c",
-    "env": {
-        "GOROOT": "${fileDir}",
-        "GOCACHE": "${userHome+'/go/cache'}"
-    }
-}

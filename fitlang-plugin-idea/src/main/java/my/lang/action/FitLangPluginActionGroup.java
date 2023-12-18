@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static my.lang.action.FitLangPluginAction.actionPerformedInner;
+import static my.lang.action.RunCodeAction.supportLanguageMap;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
@@ -88,6 +89,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 String title = plugin.getString("title");
                 JSONObject script = plugin.getJSONObject("script");
                 actionList.add(new FitLangPluginAction(name, title, script));
+
+                //第一个fit插件菜单执行
+                supportLanguageMap.put(name, script);
             }
 
             System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
