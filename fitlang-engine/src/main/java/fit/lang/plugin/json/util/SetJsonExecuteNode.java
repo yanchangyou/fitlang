@@ -15,7 +15,7 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        output.setData(input.getData());
+        output.setData(input.getData().clone());
 
         String key = nodeJsonDefine.getString("key");
         Object value = nodeJsonDefine.get("value");
