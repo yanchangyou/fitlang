@@ -87,10 +87,10 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 
 - hello: hello world demo
 - echo: 原样返回入参
-- assert: 断言
 - set: 设置全局变量
 - sleep: 流程休眠节点
 - print: 控制台打印
+- assert: 断言
 - perf: 耗时统计
 
 ### json数据节点

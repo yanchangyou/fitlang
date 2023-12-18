@@ -1,0 +1,16 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "set",
+            "key": "foo",
+            "value": "bar"
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "value": "${foo}"
+            }
+        }
+    ]
+}
