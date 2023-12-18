@@ -23,12 +23,5 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
         Object newValue = ExpressUtil.eval(value, input.getInputParamAndContextParam());
         input.getNodeContext().setAttribute(key, newValue);
         output.getData().putIfAbsent(key, newValue);
-
-        JSONArray fields = getConfigFields(nodeJsonDefine, "copyField");
-
-        for (Object field : fields) {
-            input.getNodeContext().setAttribute(field.toString(), input.get(field.toString()));
-            output.getData().putIfAbsent(field.toString(), input.get(field.toString()));
-        }
     }
 }
