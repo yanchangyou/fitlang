@@ -40,6 +40,64 @@
                             }
                         ]
                     }
+                },
+                {
+                    "name": "go",
+                    "title": "Go",
+                    "script": {
+                        "uni": "cmd:go",
+                        "env": {
+                            "GOPATH": "${fileDir}",
+                            "GOCACHE": "${userHome+'/go/cache'}"
+                        },
+                        "target": "run",
+                        "param": "${fileName}",
+                        "comment": "count install https://github.com/golang/go/issues/27921"
+                    }
+                },
+                {
+                    "name": "javascript",
+                    "title": "JavaScript",
+                    "script": {
+                        "uni": "cmd:node",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "python3",
+                    "title": "Python3",
+                    "script": {
+                        "uni": "cmd:python3",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "python2",
+                    "title": "Python2",
+                    "script": {
+                        "uni": "cmd:python",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "rust",
+                    "title": "Rust",
+                    "script": {
+                        "uni": "batch",
+                        "child": [
+                            {
+                                "uni": "cmd:rustc",
+                                "target": "${fileName}",
+                                "param": {
+                                    "-o": "${filePrefix}"
+                                }
+                            },
+                            {
+                                "uni": "cmd",
+                                "cmd": "${'./'+filePrefix}"
+                            }
+                        ]
+                    }
                 }
             ]
         },

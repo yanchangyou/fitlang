@@ -3,8 +3,8 @@
     "child": [
         {
             "uni": "cmd:javac",
-            "param": {
-                "-encoding": "${charset}"
+            "option": {
+                "-encoding": "UTF-8"
             },
             "target": "${fileName}"
         },
