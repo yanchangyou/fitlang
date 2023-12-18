@@ -6,7 +6,7 @@ import fit.lang.ExecuteNodeUtil;
 /**
  *
  */
-@JSONType(orders = {"beginTime","beginTimeShow",  "endTime", "endTimeShow", "costTime", "total", "tps"})
+@JSONType(orders = {"beginTime", "endTime", "beginTimeShow", "endTimeShow", "costTime", "total", "tps"})
 public class NodeExecuteInfo {
 
     public static NodeExecuteInfo globalNodeExecuteInfo = new NodeExecuteInfo();
