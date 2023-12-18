@@ -18,6 +18,10 @@ import java.util.UUID;
  */
 public class ExecuteNodeUtil {
 
+    static String DATE_FORMAT_TIMESTAMP = "yyyy-MM-dd HH:mm:ss.SSS";
+
+    static String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
+
     /**
      * uuid
      *
@@ -33,7 +37,7 @@ public class ExecuteNodeUtil {
      * @return
      */
     public static String getTimestamp() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+        return getNow(DATE_FORMAT_TIMESTAMP);
     }
 
     /**
@@ -42,11 +46,49 @@ public class ExecuteNodeUtil {
      * @return
      */
     public static String getNow() {
-        return getNow("yyyy-MM-dd HH:mm:ss");
+        return getNow(DATE_FORMAT_DATETIME);
     }
 
+    /**
+     * 获取当前时间，并且格式化
+     *
+     * @param format
+     * @return
+     */
     public static String getNow(String format) {
-        return new SimpleDateFormat(format).format(new Date());
+        return format(System.currentTimeMillis(), format);
+    }
+
+    /**
+     * 日期对象格式化
+     *
+     * @param date
+     * @param format
+     * @return
+     */
+    public static String format(Date date, String format) {
+        return new SimpleDateFormat(format).format(date);
+    }
+
+    /**
+     * 对毫秒数格式化
+     *
+     * @param time
+     * @param format
+     * @return
+     */
+    public static String format(long time, String format) {
+        return format(new Date(time), format);
+    }
+
+    /**
+     * 对毫秒数格式化
+     *
+     * @param time
+     * @return
+     */
+    public static String formatTimestamp(long time) {
+        return format(new Date(time), DATE_FORMAT_TIMESTAMP);
     }
 
     public static void setExecuteNodeCommonAttribute(ExecuteNode executeNode, JSONObject nodeDefine) {

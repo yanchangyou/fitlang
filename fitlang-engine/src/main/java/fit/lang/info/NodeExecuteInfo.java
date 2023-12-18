@@ -1,8 +1,12 @@
 package fit.lang.info;
 
+import com.alibaba.fastjson2.annotation.JSONType;
+import fit.lang.ExecuteNodeUtil;
+
 /**
  *
  */
+@JSONType(orders = {"beginTime","beginTimeShow",  "endTime", "endTimeShow", "costTime", "total", "tps"})
 public class NodeExecuteInfo {
 
     public static NodeExecuteInfo globalNodeExecuteInfo = new NodeExecuteInfo();
@@ -33,12 +37,20 @@ public class NodeExecuteInfo {
         return beginTime;
     }
 
+    public String getBeginTimeShow() {
+        return ExecuteNodeUtil.formatTimestamp(beginTime);
+    }
+
     public void setBeginTime(long beginTime) {
         this.beginTime = beginTime;
     }
 
     public long getEndTime() {
         return endTime;
+    }
+
+    public String getEndTimeShow() {
+        return ExecuteNodeUtil.formatTimestamp(endTime);
     }
 
     public void setEndTime(long endTime) {
