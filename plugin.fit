@@ -1,7 +1,8 @@
 {
+    "enable": true,
+    "debug": true,
     "uni": "hello",
     "message": "This is a plugin define file!",
-    "debug": true,
     "groups": [
         {
             "name": "FitActionGroup0",

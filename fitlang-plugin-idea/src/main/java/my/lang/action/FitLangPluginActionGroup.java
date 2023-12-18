@@ -56,6 +56,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (pluginConfig == null || pluginConfig.isEmpty()) {
                 return;
             }
+            if (Boolean.FALSE.equals(pluginConfig.getBoolean("enable"))) {
+                return;
+            }
             JSONObject groupConfig = getGroupConfig(pluginConfig);
             if (groupConfig == null || groupConfig.isEmpty()) {
                 return;
