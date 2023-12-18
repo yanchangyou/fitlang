@@ -202,13 +202,8 @@ public abstract class RunCodeAction extends AnAction {
             result = ExecuteJsonNodeUtil.executeCode(code, contextParam);
             needFormatJsonInConsole = needFormatJsonInConsole(code);
         } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {
-            Charset charset = CharsetDetector.detect(file, characters);
-            contextParam.put("charset", charset.name());
 
             result = runLanguageFile(fileSuffix, contextParam);
-
-            //文件字符集转换为操作系统默认字符集
-            result = new String(result.getBytes(charset));
 
             needFormatJsonInConsole = true;
         } else {
@@ -220,20 +215,6 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         return result;
-    }
-
-    static Charset[] characters = new Charset[]{
-            StandardCharsets.UTF_8,
-            StandardCharsets.UTF_8,
-            Charset.forName("ISO8859-1"),
-    };
-
-    static {
-        try {
-            characters[1] = Charset.forName("GBK");
-        } catch (Exception e) {
-            //ignore
-        }
     }
 
     static JSONObject supportLanguageMap = new JSONObject();

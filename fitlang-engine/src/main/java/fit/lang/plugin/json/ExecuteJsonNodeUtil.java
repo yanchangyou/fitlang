@@ -766,6 +766,8 @@ public class ExecuteJsonNodeUtil {
         contextParam.put("fileSeparator", File.separator);
         contextParam.put("pathSeparator", File.pathSeparator);
 
+        contextParam.put("charset", SystemUtil.get("file.encoding"));
+
         String fileSuffix = "";
         if (file.getName().contains(".")) {
             fileSuffix = file.getName().split("\\.")[1];

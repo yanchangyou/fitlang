@@ -13,6 +13,38 @@
         },
         {
             "name": "FitActionGroup1",
+            "title": "Run Code",
+            "actions": [
+                {
+                    "name": "java",
+                    "title": "Java",
+                    "script": {
+                        "uni": "batch",
+                        "child": [
+                            {
+                                "uni": "cmd:javac",
+                                "option": {
+                                    "-encoding": "UTF-8"
+                                },
+                                "target": "${fileName}",
+                                "param": {
+                                }
+                            },
+                            {
+                                "uni": "cmd:java",
+                                "option": {
+                                },
+                                "target": "${filePrefix}",
+                                "param": {
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FitActionGroup2",
             "title": "Fit Tools",
             "actions": [
                 {
@@ -20,8 +52,6 @@
                     "title": "Zip",
                     "script": {
                         "uni": "zip"
-                    },
-                    "addToMenu": {
                     }
                 },
                 {
@@ -34,7 +64,7 @@
             ]
         },
         {
-            "name": "FitActionGroup2",
+            "name": "FitActionGroup3",
             "title": "Fit Info",
             "actions": [
                 {
@@ -91,7 +121,7 @@
             ]
         },
         {
-            "name": "FitActionGroup3",
+            "name": "FitActionGroup4",
             "title": "Fit Server",
             "script": {
                 "uni": "server",
