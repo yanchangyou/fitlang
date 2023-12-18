@@ -1,0 +1,6 @@
+{
+    "uni": "echo",
+    "input": {
+        "foo": "bar"
+    }
+}
