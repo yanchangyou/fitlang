@@ -1,7 +1,8 @@
 {
+    "enable": true,
+    "debug": true,
     "uni": "hello",
     "message": "This is a plugin define file!",
-    "debug": true,
     "groups": [
         {
             "name": "FitActionGroup0",
@@ -13,6 +14,97 @@
         },
         {
             "name": "FitActionGroup1",
+            "title": "Run Code",
+            "visible": true,
+            "actions": [
+                {
+                    "name": "java",
+                    "title": "Java",
+                    "script": {
+                        "uni": "batch",
+                        "child": [
+                            {
+                                "uni": "cmd:javac",
+                                "option": {
+                                    "-encoding": "UTF-8"
+                                },
+                                "target": "${fileName}",
+                                "param": {
+                                }
+                            },
+                            {
+                                "uni": "cmd:java",
+                                "option": {
+                                },
+                                "target": "${filePrefix}",
+                                "param": {
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "go",
+                    "title": "Go",
+                    "script": {
+                        "uni": "cmd:go",
+                        "env": {
+                            "GOPATH": "${fileDir}",
+                            "GOCACHE": "${userHome+'/go/cache'}"
+                        },
+                        "target": "run",
+                        "param": "${fileName}",
+                        "comment": "count install https://github.com/golang/go/issues/27921"
+                    }
+                },
+                {
+                    "name": "js",
+                    "title": "JavaScript",
+                    "script": {
+                        "uni": "cmd:node",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "py",
+                    "title": "Python3",
+                    "script": {
+                        "uni": "cmd:python3",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "python2",
+                    "title": "Python2",
+                    "script": {
+                        "uni": "cmd:python",
+                        "target": "${fileName}"
+                    }
+                },
+                {
+                    "name": "rs",
+                    "title": "Rust",
+                    "script": {
+                        "uni": "batch",
+                        "child": [
+                            {
+                                "uni": "cmd:rustc",
+                                "target": "${fileName}",
+                                "param": {
+                                    "-o": "${filePrefix}"
+                                }
+                            },
+                            {
+                                "uni": "cmd",
+                                "cmd": "${'./'+filePrefix}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "FitActionGroup2",
             "title": "Fit Tools",
             "actions": [
                 {
@@ -20,8 +112,6 @@
                     "title": "Zip",
                     "script": {
                         "uni": "zip"
-                    },
-                    "addToMenu": {
                     }
                 },
                 {
@@ -34,7 +124,7 @@
             ]
         },
         {
-            "name": "FitActionGroup2",
+            "name": "FitActionGroup3",
             "title": "Fit Info",
             "actions": [
                 {
@@ -91,7 +181,7 @@
             ]
         },
         {
-            "name": "FitActionGroup3",
+            "name": "FitActionGroup4",
             "title": "Fit Server",
             "script": {
                 "uni": "server",
