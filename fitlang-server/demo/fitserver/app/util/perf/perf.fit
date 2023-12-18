@@ -1,0 +1,13 @@
+{
+    "uni": "perf",
+    "child": {
+        "uni": "loop",
+        "loopTimes": 10000,
+        "child": {
+            "uni": "mix",
+            "json": {
+                "times": "${loopIndex+1}"
+            }
+        }
+    }
+}
