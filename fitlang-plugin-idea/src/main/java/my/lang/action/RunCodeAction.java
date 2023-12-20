@@ -1,10 +1,9 @@
 package my.lang.action;
 
-import cn.hutool.core.io.CharsetDetector;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.system.SystemUtil;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
@@ -23,18 +22,17 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
+import fit.lang.plugin.json.util.PrintJsonExecuteNode;
+import fit.lang.plugin.json.util.ExecuteNodePrintable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
-import static fit.lang.ExecuteNodeUtil.getUserHome;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
@@ -154,6 +152,22 @@ public abstract class RunCodeAction extends AnAction {
 
                     String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
+                    //支持中间输出
+                    PrintJsonExecuteNode.setPrintable(new ExecuteNodePrintable() {
+                        @Override
+                        public void print(Object info) {
+                            if (info == null) {
+                                info = "";
+                            }
+                            String infoText;
+                            if (info instanceof Map || info instanceof List) {
+                                infoText = JSON.toJSONString(info, JSONWriter.Feature.PrettyFormat);
+                            } else {
+                                infoText = info.toString();
+                            }
+                            RunCodeAction.print(infoText + "\n", project, getProjectConsoleViewMap());
+                        }
+                    });
                     Object resultObject = executeCode(code, path, projectPath);
 
                     result = resultObject.toString();
