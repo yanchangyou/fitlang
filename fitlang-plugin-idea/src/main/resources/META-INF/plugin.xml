@@ -442,7 +442,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.8.4 support print node info to IDE console</li>
+            <li>0.8.4 add node: log</li>
             <li>0.8.3 add fitlang-doc: flow and util nodes; refine nodes: server, set, perf; fix get userHome bug</li>
             <li>0.8.2 add fitlang-doc; refine node: server, hello, foreach, return, mix, catch; remove needFormatJsonInConsoleFlag attribute</li>
             <li>0.8.1 project IDE plugin support 10 menus and sub menu; add go-doudou ide plugin</li>
