@@ -9,7 +9,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import junit.framework.TestCase;
 
-public class PrintJsonExecuteNodeTest extends TestCase {
+public class LogJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         JsonExecuteContext nodeContext = new JsonExecuteContext();

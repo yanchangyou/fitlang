@@ -22,8 +22,8 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
-import fit.lang.plugin.json.util.PrintJsonExecuteNode;
-import fit.lang.plugin.json.util.ExecuteNodePrintable;
+import fit.lang.plugin.json.util.LogJsonExecuteNode;
+import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
@@ -153,7 +153,7 @@ public abstract class RunCodeAction extends AnAction {
                     String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
                     //支持中间输出
-                    PrintJsonExecuteNode.setPrintable(new ExecuteNodePrintable() {
+                    LogJsonExecuteNode.setPrintable(new ExecuteNodeLogActionable() {
                         @Override
                         public void print(Object info) {
                             if (info == null) {
