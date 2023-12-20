@@ -46,10 +46,7 @@
         {
             "uni": "set",
             "key": "keyName",
-            "value": "value",
-            "copyField": [
-                "fieldName"
-            ]
+            "value": "value"
         },
         {
             "uni": "sleep",
@@ -62,7 +59,13 @@
         {
             "uni": "print",
             "info": {
-                "hello": "world"
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "log",
+            "info": {
+                "foo": "bar"
             }
         },
         {
