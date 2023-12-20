@@ -1,0 +1,20 @@
+{
+    "uni": "loop",
+    "loopTimes": 10,
+    "isBagsMode": true,
+    "isPipe": true,
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "loopIndex": "${loopIndex+1}"
+            }
+        },
+        {
+            "uni": "print",
+            "info": {
+                "hello": "world"
+            }
+        }
+    ]
+}
