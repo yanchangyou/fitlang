@@ -2,10 +2,18 @@
     "uni": "loop",
     "loopTimes": 10,
     "isBagsMode": true,
-    "child": {
-        "uni": "mix",
-        "json": {
-            "loopIndex": "${loopIndex+1}"
+    "child": [
+        {
+            "uni": "mix",
+            "json": {
+                "loopIndex": "${loopIndex+1}"
+            }
+        },
+        {
+            "uni": "print",
+            "info": {
+                "hello": "world"
+            }
         }
-    }
+    ]
 }

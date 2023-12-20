@@ -60,6 +60,12 @@
             "child": {}
         },
         {
+            "uni": "print",
+            "info": {
+                "hello": "world"
+            }
+        },
+        {
             "uni": "convert",
             "express": {
                 "newField": "const",
