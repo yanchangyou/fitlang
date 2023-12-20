@@ -302,17 +302,16 @@
         },
         {
             "uni": "readFile",
-            "workspaceDir": "dir",
-            "filePath": "/app/first.fit"
+            "filePath": "/app/first.fit",
+            "contentField": "content"
         },
         {
             "uni": "writeFile",
-            "workspaceDir": "dir",
-            "filePath": "/app/first.fit"
+            "filePath": "/app/first.fit",
+            "contentField": "content"
         },
         {
             "uni": "deleteFile",
-            "workspaceDir": "dir",
             "filePath": "/app/first.fit"
         },
         {

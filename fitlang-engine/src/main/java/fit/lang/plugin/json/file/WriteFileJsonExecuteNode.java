@@ -50,7 +50,7 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
 
         Object content = input.get(contentField);
         if (content == null) {
-            throw new ExecuteNodeException("write content is null");
+            throw new ExecuteNodeException("write content is null, check contentField value!");
         }
         String text;
         Boolean format = nodeJsonDefine.getBoolean("format");

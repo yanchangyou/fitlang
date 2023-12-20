@@ -28,6 +28,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
 
         String path = parseStringField("filePath", input);
         String charset = parseStringField("charset", input);
+        String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
 //            throw new ExecuteNodeException("writeFile workspaceDir param is required!");
@@ -42,6 +43,10 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             charset = "UTF-8";
         }
 
+        if (StrUtil.isBlank(contentField)) {
+            contentField = "content";
+        }
+
         String filePath = joinFilePath(workspaceDir, path);
 
         File file = new File(filePath);
@@ -52,7 +57,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         if (file.isFile()) {
             output.set("isFile", true);
             String content = FileUtil.readString(filePath, CharsetUtil.charset(charset));
-            output.set("content", content);
+            output.set(contentField, content);
         } else {
             output.set("isFile", false);
             List<String> fileNames = FileUtil.listFileNames(filePath);
