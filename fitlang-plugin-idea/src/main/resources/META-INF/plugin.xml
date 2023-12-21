@@ -51,7 +51,9 @@ util nodes<br/>
 hello: hello world demo<br/>
 echo: Return input parameters as is<br/>
 print: Console printing<br/>
+log: log info node<br/>
 sleep: Process sleep node<br/>
+perf: performance  node<br/>
 <br/>
 
 json nodes<br/>
@@ -67,10 +69,15 @@ mixNode: execute node, and mix<br/>
 
 flow nodes (with child nodes)<br/>
 sequence: Sequential execution node<br/>
+batch: batch execution node<br/>
 pipe: pipeline execution node<br/>
 foreach: traverse JSON array field nodes<br/>
 loop: loop execution node, loopTimes specifies the number of execution times<br/>
 switch: branch execution node, switchField specifies the branch field<br/>
+thread: thead node<br/>
+call: call node<br/>
+catch: try-catch node<br/>
+assert: assert node<br/>
 return: return json value<br/>
 execute: execute input node define<br/>
 <br/>
@@ -103,7 +110,7 @@ receiveClientMonitorData: receive client monitor data<br/>
 pushClientMonitorData: push client monitor data<br/>
 getMonitorClient: get monitor client list<br/>
 
-中文：<br/>
+中文: <br/>
 <br/>
 <p>
 fit语言是一门轻量级编程语言，开发人员友好和工具处理友好。<br/>
@@ -111,7 +118,7 @@ fit语言是一门轻量级编程语言，开发人员友好和工具处理友�
 </p>
 <br/>
 <p>
-第一个demo：hello.fit<br/>
+第一个demo: hello.fit<br/>
 内容<br/>
 <pre>
 {
@@ -124,7 +131,7 @@ fit语言是一门轻量级编程语言，开发人员友好和工具处理友�
 <br/>
 <p>
 hello.fit 后缀以fit结尾，语言插件继承IDEA自带的JSON语言，使用JSON的语法校验、高亮、格式等<br/>
-input：入参JSON<br/>
+input: 入参JSON<br/>
 uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一个实现类<br/>
 编辑器里面，点击右键，选择【Run FitLang】执行，代码执行完将输出<br/>
 
@@ -138,22 +145,24 @@ uni 统一节点描述符(借鉴URI)，区分不同的处理，内部对应一�
 <br/>
 <br/>
 <p>
-目前已经实现的节点如下：<br/>
+目前已经实现的节点如下: <br/>
 <br/>
 
 实用节点<br/>
 hello: hello world demo<br/>
 echo: 原样返回入参<br/>
-add：支持json相加<br/>
-print：控制台打印<br/>
-sleep：流程休眠节点<br/>
+add: 支持json相加<br/>
+print: 控制台打印<br/>
+log: IDE控制台打印<br/>
+sleep: 流程休眠节点<br/>
+perf: 性能测试节点<br/>
 <br/>
 
 JSON节点<br/>
-add：支持json相加<br/>
-convert：转换节点，支持json到json的转换，使用转换表达式<br/>
-removeField：移除json字段<br/>
-removeEmptyField：移除空字段<br/>
+add: 支持json相加<br/>
+convert: 转换节点，支持json到json的转换，使用转换表达式<br/>
+removeField: 移除json字段<br/>
+removeEmptyField: 移除空字段<br/>
 replace: 替换结果输出<br/>
 mix: 混入json对象<br/>
 mixNode: 混入节点执行，用于嵌套字段场景<br/>
@@ -163,18 +172,24 @@ replace: 替换结果输出<br/>
 <br/>
 
 流程节点（有child子节点）<br/>
-sequence：顺序执行节点<br/>
-pipe：管道执行节点<br/>
-foreach：遍历json数组字段节点<br/>
-loop：循环执行节点，loopTimes制定执行次数<br/>
-switch：分支执行节点，switchField指定分支字段<br/>
+sequence: 顺序执行节点<br/>
+batch: 批处理节点<br/>
+pipe: 管道执行节点<br/>
+foreach: 遍历json数组字段节点<br/>
+loop: 循环执行节点，loopTimes制定执行次数<br/>
+switch: 分支执行节点，switchField指定分支字段<br/>
+thread: 线程节点<br/>
+call: 调用节点<br/>
 execute: 执行节点<br/>
+catch: 异常捕获节点<br/>
+assert: 断言节点<br/>
+return: 返回节点<br/>
 <br/>
 
 web节点<br/>
-http：支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete<br/>
-server：服务端节点<br/>
-proxy：代理节点<br/>
+http: 支持http-client请求, postJson, postForm, httpGet, httpPut, httpDelete<br/>
+server: 服务端节点<br/>
+proxy: 代理节点<br/>
 web: 配置web参数，响应头等<br/>
 <br/>
 
@@ -192,8 +207,8 @@ telnet.https: telnet.https<br/>
 <br/>
 
 监控节点<br/>
-startMonitor：启动监控<br/>
-getMonitorData：获取监控数据：CPU和Memory<br/>
+startMonitor: 启动监控<br/>
+getMonitorData: 获取监控数据: CPU和Memory<br/>
 getClientMonitorData: 获取单个客户端监控数据<br/>
 receiveClientMonitorData: 接收客户端监控数据<br/>
 pushClientMonitorData: 推送监控数据<br/>
