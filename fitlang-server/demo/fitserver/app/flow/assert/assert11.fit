@@ -1,0 +1,10 @@
+{
+    "input": {
+        "hello": "world"
+    },
+    "uni": "assert",
+    "needToString": true,
+    "expected": {
+        "hello": "world"
+    }
+}
