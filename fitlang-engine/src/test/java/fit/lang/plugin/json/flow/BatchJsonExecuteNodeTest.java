@@ -30,7 +30,7 @@ public class BatchJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
         System.out.println(output);
-        Assert.assertEquals("{\"list\":[{\"data\":{\"hello\":\"world\"}},{\"hello\":\"world\"}]}", output);
+        Assert.assertEquals("{\"list\":[{},{\"hello\":\"world\"}]}", output);
 
     }
 }

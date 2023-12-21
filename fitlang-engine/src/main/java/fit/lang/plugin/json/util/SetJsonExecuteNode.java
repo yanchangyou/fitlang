@@ -15,13 +15,14 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        output.setData(input.getData().clone());
 
         String key = nodeJsonDefine.getString("key");
         Object value = nodeJsonDefine.get("value");
 
         Object newValue = ExpressUtil.eval(value, input.getInputParamAndContextParam());
         input.getNodeContext().setAttribute(key, newValue);
-        output.getData().putIfAbsent(key, newValue);
+
+        output.setData(input.getData().clone());
+
     }
 }
