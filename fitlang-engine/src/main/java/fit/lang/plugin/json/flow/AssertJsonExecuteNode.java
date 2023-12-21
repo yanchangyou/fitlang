@@ -21,7 +21,9 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
         boolean success = true;
         Object assertResultObject = null;
 
+        String type = "";
         if (nodeJsonDefine.get("expected") != null) {
+            type = "expected";
             Object expectedExpress = nodeJsonDefine.get("expected");
             assertResultObject = ExpressUtil.eval(expectedExpress, input.getInputParamAndContextParam());
 
@@ -32,6 +34,7 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
             }
         }
         if (success && nodeJsonDefine.get("containField") != null) {
+            type = "containField";
             JSONArray containField = nodeJsonDefine.getJSONArray("containField");
             assertResultObject = "contain fields: ".concat(ExpressUtil.eval(containField, input.getInputParamAndContextParam()).toString());
 
@@ -44,6 +47,7 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
             }
         }
         if (success && nodeJsonDefine.get("containJson") != null) {
+            type = "containJson";
             JSONObject containJson = nodeJsonDefine.getJSONObject("containJson");
             assertResultObject = ExpressUtil.eval(containJson, input.getInputParamAndContextParam()).toJSONString();
             success = true;
@@ -58,6 +62,7 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = new JSONObject();
         result.put("success", success);
         if (!success) {
+            result.put("type", type);
             if (Boolean.TRUE.equals(needToString)) {
                 result.put("actual", input.getData().toString());
             } else {
