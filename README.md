@@ -164,3 +164,9 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - receiveClientMonitorData: 接收客户端监控数据
 - pushClientMonitorData: 推送监控数据
 - getMonitorClient: 获取监控客户端列表
+
+## 🔋 JetBrains开源授权
+
+FitLang在JetBrains公司的免费开源授权下，通过IDEA IDE开发，在此表达我的感谢。
+
+<a href="https://jb.gg/OpenSourceSupport" target="_blank"><img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." width="300"></a>
