@@ -1,8 +1,8 @@
-package fit.lang.plugin.json.util;
+package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.ExecuteNodeException;
+import fit.lang.ExecuteReturnNodeException;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -65,7 +65,12 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
             }
             result.put("expected", assertResultObject);
             result.put("input", input.getData());
+
+            //断言失败返回
+            throw new ExecuteReturnNodeException(result);
         }
-        output.setData(result);
+        //断言成功透传
+        output.setData(input.getData());
+
     }
 }

@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.util;
+package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -22,7 +22,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("success"));
+        Assert.assertEquals("hello, world!", outputJson.getString("message"));
 
     }
 
@@ -41,7 +41,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("success"));
+        Assert.assertEquals("hello, world!", outputJson.getString("message"));
 
     }
 
@@ -60,7 +60,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("success"));
+        Assert.assertEquals("hello, world!", outputJson.getString("message"));
 
     }
 
@@ -116,7 +116,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("success"));
+        Assert.assertEquals("hello, world!", outputJson.getString("message"));
 
     }
 
@@ -154,7 +154,7 @@ public class AssertJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.getBoolean("success"));
+        Assert.assertEquals("bar", outputJson.getString("foo"));
 
     }
 

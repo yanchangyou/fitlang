@@ -197,21 +197,21 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("echo", EchoExecuteNode.class);
         register("print", PrintExecuteNode.class);
         register("sleep", SleepJsonExecuteNode.class);
-        register("assert", AssertJsonExecuteNode.class);
         register("perf", PerformanceJsonExecuteNode.class);
         register("log", LogJsonExecuteNode.class);
 
         // flow
         register("pipe", JsonPipeExecuteNode.class);
         register("sequence", JsonSequenceExecuteNode.class);
+        register("batch", JsonBatchExecuteNode.class);
         register("foreach", JsonForeachExecuteNode.class);
         register("loop", JsonLoopExecuteNode.class);
         register("switch", JsonSwitchExecuteNode.class);
-        register("return", ReturnJsonExecuteNode.class);
         register("thread", ThreadExecuteNode.class);
         register("call", CallJsonExecuteNode.class);
         register("catch", CatchJsonExecuteNode.class);
-        register("batch", JsonBatchExecuteNode.class);
+        register("assert", AssertJsonExecuteNode.class);
+        register("return", ReturnJsonExecuteNode.class);
 
         register("execute", ExecuteJsonExecuteNode.class);
 
