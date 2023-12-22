@@ -1,1 +1,7 @@
-{"uni":"hello"}
+{
+    "input": {
+        "b": 2,
+        "a": 1
+    },
+    "uni": "pipe"
+}

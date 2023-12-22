@@ -23,10 +23,7 @@ import java.net.Proxy;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static fit.lang.ExecuteNodeUtil.getUserHome;
 import static fit.lang.plugin.json.ExpressUtil.eval;
@@ -776,5 +773,57 @@ public class ExecuteJsonNodeUtil {
 
         contextParam.put("userHome", getUserHome());
         return contextParam;
+    }
+
+    /**
+     * json的key按照字母顺序排列
+     *
+     * @param json
+     * @return
+     */
+    public static JSONObject sortJson(JSONObject json) {
+
+        if (json == null || json.isEmpty()) {
+            return json;
+        }
+
+        TreeMap<String, Object> map = new TreeMap<>();
+        for (Map.Entry<String, Object> entry : json.entrySet()) {
+            Object value = entry.getValue();
+            Object newVale = value;
+            if (value instanceof JSONObject) {
+                newVale = sortJson((JSONObject) value);
+            } else if (value instanceof JSONArray) {
+                newVale = sortJson((JSONArray) value);
+            }
+            map.put(entry.getKey(), newVale);
+        }
+        return (JSONObject) JSON.toJSON(map);
+    }
+
+    /**
+     * 遍历json数组
+     *
+     * @param array
+     * @return
+     */
+    public static JSONArray sortJson(JSONArray array) {
+
+        if (array == null || array.isEmpty()) {
+            return array;
+        }
+
+        JSONArray newArray = new JSONArray(array.size());
+        for (Object item : array) {
+            Object newItem = item;
+            if (item instanceof JSONObject) {
+                newItem = sortJson((JSONObject) item);
+            } else if (item instanceof JSONArray) {
+                newItem = sortJson((JSONArray) item);
+            }
+            newArray.add(newItem);
+        }
+
+        return newArray;
     }
 }
