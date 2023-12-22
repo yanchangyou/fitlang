@@ -132,7 +132,45 @@
                                 "filePath": "${filePath}"
                             },
                             {
+                                "uni": "parseJson",
+                                "jsonField": "content"
+                            },
+                            {
                                 "uni": "sortField"
+                            },
+                            {
+                                "uni": "stringifyJson",
+                                "jsonField": "content",
+                                "format": true
+                            },
+                            {
+                                "uni": "writeFile",
+                                "filePath": "${filePath}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "getJsonStructure",
+                    "title": "Get Json Structure",
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readFile",
+                                "filePath": "${filePath}"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "content"
+                            },
+                            {
+                                "uni": "getJsonStructure"
+                            },
+                            {
+                                "uni": "stringifyJson",
+                                "jsonField": "content",
+                                "format": true
                             },
                             {
                                 "uni": "writeFile",
