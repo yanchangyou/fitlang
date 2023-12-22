@@ -231,6 +231,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("removeEmptyField", RemoveEmptyFieldJsonExecuteNode.class);
 
         register("sortField", SortFieldJsonExecuteNode.class);
+        register("getJsonStructure", getJsonStructureExecuteNode.class);
 
         register("convert", ConvertJsonExecuteNode.class);
         register("convertKeyValueList", ConvertKeyValueListJsonExecuteNode.class);

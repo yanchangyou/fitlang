@@ -782,6 +782,17 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static JSONObject sortJson(JSONObject json) {
+        return sortJson(json, false);
+    }
+
+    /**
+     * json的key按照字母顺序排列
+     *
+     * @param json
+     * @param keepOnlyOneItemInArray 是否只保留数组的第一个元素
+     * @return
+     */
+    public static JSONObject sortJson(JSONObject json, boolean keepOnlyOneItemInArray) {
 
         if (json == null || json.isEmpty()) {
             return json;
@@ -792,9 +803,9 @@ public class ExecuteJsonNodeUtil {
             Object value = entry.getValue();
             Object newVale = value;
             if (value instanceof JSONObject) {
-                newVale = sortJson((JSONObject) value);
+                newVale = sortJson((JSONObject) value, keepOnlyOneItemInArray);
             } else if (value instanceof JSONArray) {
-                newVale = sortJson((JSONArray) value);
+                newVale = sortJson((JSONArray) value, keepOnlyOneItemInArray);
             }
             map.put(entry.getKey(), newVale);
         }
@@ -808,6 +819,17 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static JSONArray sortJson(JSONArray array) {
+        return sortJson(array, false);
+    }
+
+    /**
+     * 遍历json数组
+     *
+     * @param array
+     * @param keepOnlyOneItemInArray 是否只保留数组的第一个元素
+     * @return
+     */
+    public static JSONArray sortJson(JSONArray array, boolean keepOnlyOneItemInArray) {
 
         if (array == null || array.isEmpty()) {
             return array;
@@ -817,13 +839,26 @@ public class ExecuteJsonNodeUtil {
         for (Object item : array) {
             Object newItem = item;
             if (item instanceof JSONObject) {
-                newItem = sortJson((JSONObject) item);
+                newItem = sortJson((JSONObject) item, keepOnlyOneItemInArray);
             } else if (item instanceof JSONArray) {
-                newItem = sortJson((JSONArray) item);
+                newItem = sortJson((JSONArray) item, keepOnlyOneItemInArray);
             }
             newArray.add(newItem);
+            if (keepOnlyOneItemInArray) {
+                break;
+            }
         }
 
         return newArray;
+    }
+
+    /**
+     * 获取json结构：排序，并且对于数组，只保留一个元素
+     *
+     * @param json
+     * @return
+     */
+    public static JSONObject getJsonStructure(JSONObject json) {
+        return sortJson(json, true);
     }
 }
