@@ -2,6 +2,7 @@ package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.ExecuteReturnNodeException;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -49,7 +50,7 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
         if (success && nodeJsonDefine.get("containJson") != null) {
             type = "containJson";
             JSONObject containJson = nodeJsonDefine.getJSONObject("containJson");
-            assertResultObject = ExpressUtil.eval(containJson, input.getInputParamAndContextParam()).toJSONString();
+            assertResultObject = ExpressUtil.eval(containJson, input.getInputParamAndContextParam()).toJSONString(JSONWriter.Feature.WriteMapNullValue);
             success = true;
             for (String field : containJson.keySet()) {
                 if (!containJson.get(field).equals(input.get(field))) {

@@ -798,7 +798,7 @@ public class ExecuteJsonNodeUtil {
             }
             map.put(entry.getKey(), newVale);
         }
-        return (JSONObject) JSON.toJSON(map);
+        return (JSONObject) JSON.toJSON(map, JSONWriter.Feature.WriteMapNullValue);
     }
 
     /**
