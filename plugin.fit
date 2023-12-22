@@ -122,8 +122,8 @@
                     }
                 },
                 {
-                    "name": "sortJson",
-                    "title": "Sort Json",
+                    "name": "sortJsonFile",
+                    "title": "Sort Json File",
                     "script": {
                         "uni": "pipe",
                         "child": [
@@ -151,6 +151,30 @@
                     }
                 },
                 {
+                    "name": "sortJson",
+                    "title": "Sort Json",
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readFile",
+                                "filePath": "${filePath}"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "content"
+                            },
+                            {
+                                "uni": "sortField"
+                            },
+                            {
+                                "uni": "getField",
+                                "field": "content"
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "getJsonStructure",
                     "title": "Get Json Structure",
                     "script": {
@@ -168,13 +192,8 @@
                                 "uni": "getJsonStructure"
                             },
                             {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeFile",
-                                "filePath": "${filePath}"
+                                "uni": "getField",
+                                "field": "content"
                             }
                         ]
                     }

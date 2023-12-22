@@ -182,6 +182,7 @@ public abstract class RunCodeAction extends AnAction {
 
                 print(result.concat("\n\n"), project, getProjectConsoleViewMap());
 
+
             }
         });
     }
@@ -225,7 +226,7 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         if (needFormatJsonInConsole && isJsonObjectText(result)) {
-            result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+            result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
         }
 
         return result;

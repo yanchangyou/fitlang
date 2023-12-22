@@ -45,6 +45,8 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
         final Project project = e.getProject();
 
+        String menuTitle = e.getPresentation().getText();
+
         initConsoleViewIfNeed(project, LANG_NAME, LANG_STRING_LOGO, projectConsoleViewMap);
 
         if (windowMap.get(project) != null) {
@@ -84,7 +86,11 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
                 print(result + "\n\n", project, projectConsoleViewMap);
 
-                finalVirtualFile.getParent().refresh(false, false);
+                if (menuTitle.equalsIgnoreCase("Zip") || menuTitle.equalsIgnoreCase("Unzip")) {
+                    finalVirtualFile.getParent().refresh(false, false);
+                } else if (menuTitle.equalsIgnoreCase("Sort Json File")) {
+                    finalVirtualFile.refresh(false, false);
+                }
 
             } catch (Exception exception) {
                 exception.printStackTrace();
