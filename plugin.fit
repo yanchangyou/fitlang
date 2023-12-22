@@ -120,6 +120,26 @@
                     "script": {
                         "uni": "unzip"
                     }
+                },
+                {
+                    "name": "sortJson",
+                    "title": "Sort Json",
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readFile",
+                                "filePath": "${filePath}"
+                            },
+                            {
+                                "uni": "sortField"
+                            },
+                            {
+                                "uni": "writeFile",
+                                "filePath": "${filePath}"
+                            }
+                        ]
+                    }
                 }
             ]
         },
