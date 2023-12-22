@@ -162,7 +162,7 @@ public class ExecuteJsonNodeUtil {
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return nodeOutput.getData().toJSONString();
+        return nodeOutput.getData().toJSONString(JSONWriter.Feature.WriteMapNullValue);
     }
 
     public static Map<String, String> toStringMap(JSONObject jsonObject) {
