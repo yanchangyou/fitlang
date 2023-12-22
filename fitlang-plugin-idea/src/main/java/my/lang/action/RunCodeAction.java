@@ -161,7 +161,7 @@ public abstract class RunCodeAction extends AnAction {
                             }
                             String infoText;
                             if (info instanceof Map || info instanceof List) {
-                                infoText = JSON.toJSONString(info, JSONWriter.Feature.PrettyFormat);
+                                infoText = JSON.toJSONString(info, JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
                             } else {
                                 infoText = info.toString();
                             }

@@ -79,7 +79,7 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
                 result = ExecuteJsonNodeUtil.executeCode(null, actionScript, contextParam);
 
                 if (isJsonObjectText(result)) {
-                    result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat);
+                    result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
                 }
 
                 print(result + "\n\n", project, projectConsoleViewMap);
