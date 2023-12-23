@@ -782,8 +782,8 @@ public class ExecuteJsonNodeUtil {
      * @param json
      * @return
      */
-    public static JSONObject sortJson(JSONObject json) {
-        return sortJson(json, false);
+    public static JSONObject sortJsonField(JSONObject json) {
+        return sortJsonField(json, false);
     }
 
     /**
@@ -793,7 +793,7 @@ public class ExecuteJsonNodeUtil {
      * @param isStruct 是否只保留数组的第一个元素
      * @return
      */
-    public static JSONObject sortJson(JSONObject json, boolean isStruct) {
+    public static JSONObject sortJsonField(JSONObject json, boolean isStruct) {
 
         if (json == null || json.isEmpty()) {
             return json;
@@ -804,9 +804,9 @@ public class ExecuteJsonNodeUtil {
             Object value = entry.getValue();
             Object newVale = value;
             if (value instanceof JSONObject) {
-                newVale = sortJson((JSONObject) value, isStruct);
+                newVale = sortJsonField((JSONObject) value, isStruct);
             } else if (value instanceof JSONArray) {
-                newVale = sortJson((JSONArray) value, isStruct);
+                newVale = sortJsonField((JSONArray) value, isStruct);
             } else {
                 if (isStruct) {
                     if (value instanceof String) {
@@ -831,8 +831,8 @@ public class ExecuteJsonNodeUtil {
      * @param array
      * @return
      */
-    public static JSONArray sortJson(JSONArray array) {
-        return sortJson(array, false);
+    public static JSONArray sortJsonField(JSONArray array) {
+        return sortJsonField(array, false);
     }
 
     /**
@@ -842,7 +842,7 @@ public class ExecuteJsonNodeUtil {
      * @param keepOnlyOneItemInArray 是否只保留数组的第一个元素
      * @return
      */
-    public static JSONArray sortJson(JSONArray array, boolean keepOnlyOneItemInArray) {
+    public static JSONArray sortJsonField(JSONArray array, boolean keepOnlyOneItemInArray) {
 
         if (array == null || array.isEmpty()) {
             return array;
@@ -852,9 +852,9 @@ public class ExecuteJsonNodeUtil {
         for (Object item : array) {
             Object newItem = item;
             if (item instanceof JSONObject) {
-                newItem = sortJson((JSONObject) item, keepOnlyOneItemInArray);
+                newItem = sortJsonField((JSONObject) item, keepOnlyOneItemInArray);
             } else if (item instanceof JSONArray) {
-                newItem = sortJson((JSONArray) item, keepOnlyOneItemInArray);
+                newItem = sortJsonField((JSONArray) item, keepOnlyOneItemInArray);
             }
             newArray.add(newItem);
             if (keepOnlyOneItemInArray) {
@@ -871,7 +871,7 @@ public class ExecuteJsonNodeUtil {
      * @param json
      * @return
      */
-    public static JSONObject getStruct(JSONObject json) {
-        return sortJson(json, true);
+    public static JSONObject getJsonStruct(JSONObject json) {
+        return sortJsonField(json, true);
     }
 }

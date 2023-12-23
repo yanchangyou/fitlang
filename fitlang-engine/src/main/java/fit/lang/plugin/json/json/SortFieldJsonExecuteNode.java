@@ -12,7 +12,7 @@ public class SortFieldJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        output.setData(ExecuteJsonNodeUtil.sortJson(input.getData()));
+        output.setData(ExecuteJsonNodeUtil.sortJsonField(input.getData()));
     }
 
 }

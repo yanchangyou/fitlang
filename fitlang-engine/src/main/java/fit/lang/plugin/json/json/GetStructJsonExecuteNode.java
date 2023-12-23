@@ -12,7 +12,7 @@ public class GetStructJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        output.setData(ExecuteJsonNodeUtil.getStruct(input.getData()));
+        output.setData(ExecuteJsonNodeUtil.getJsonStruct(input.getData()));
     }
 
 }
