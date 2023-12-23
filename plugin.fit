@@ -110,6 +110,7 @@
                 {
                     "name": "zip",
                     "title": "Zip",
+                    "refreshParent": true,
                     "script": {
                         "uni": "zip"
                     }
@@ -117,6 +118,7 @@
                 {
                     "name": "unzip",
                     "title": "Unzip",
+                    "refreshParent": true,
                     "script": {
                         "uni": "unzip"
                     }
@@ -124,12 +126,14 @@
                 {
                     "name": "sortJsonFile",
                     "title": "Sort Json File",
+                    "refresh": true,
                     "script": {
                         "uni": "pipe",
                         "child": [
                             {
                                 "uni": "readFile",
-                                "filePath": "${filePath}"
+                                "filePath": "${filePath}",
+                                "charset": "UTF-8"
                             },
                             {
                                 "uni": "parseJson",
@@ -145,7 +149,8 @@
                             },
                             {
                                 "uni": "writeFile",
-                                "filePath": "${filePath}"
+                                "filePath": "${filePath}",
+                                "charset": "UTF-8"
                             }
                         ]
                     }
@@ -158,7 +163,8 @@
                         "child": [
                             {
                                 "uni": "readFile",
-                                "filePath": "${filePath}"
+                                "filePath": "${filePath}",
+                                "charset": "UTF-8"
                             },
                             {
                                 "uni": "parseJson",
@@ -182,7 +188,8 @@
                         "child": [
                             {
                                 "uni": "readFile",
-                                "filePath": "${filePath}"
+                                "filePath": "${filePath}",
+                                "charset": "UTF-8"
                             },
                             {
                                 "uni": "parseJson",
@@ -291,6 +298,7 @@
         {
             "name": "FitActionGroup5",
             "title": "Convert Postman",
+            "refreshParent": true,
             "script": {
                 "uni": "pipe",
                 "child": [

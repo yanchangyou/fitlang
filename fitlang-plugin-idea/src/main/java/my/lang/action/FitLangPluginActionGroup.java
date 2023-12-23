@@ -25,20 +25,20 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     AnAction[] children = new AnAction[0];
 
-    JSONObject actionScript;
+    PluginActionConfig actionConfig;
 
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
 
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
 
     public boolean canBePerformed(@NotNull DataContext context) {
-        return actionScript != null;
+        return actionConfig != null;
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        if (actionScript != null) {
-            actionPerformedInner(e, threadPoolExecutor, actionScript);
+        if (actionConfig != null) {
+            actionPerformedInner(e, threadPoolExecutor, actionConfig);
         }
     }
 
@@ -63,8 +63,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (groupConfig == null || groupConfig.isEmpty()) {
                 return;
             }
-            actionScript = groupConfig.getJSONObject("script");
+            JSONObject actionScript = groupConfig.getJSONObject("script");
             if (actionScript != null) {
+                actionConfig = new PluginActionConfig(groupConfig);
                 event.getPresentation().setEnabledAndVisible(true);
                 String title = groupConfig.getString("title");
                 if (StrUtil.isBlank(title)) {
@@ -91,10 +92,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                     continue;
                 }
                 pluginNameSet.add(name);
-                String title = plugin.getString("title");
-                JSONObject script = plugin.getJSONObject("script");
-                actionList.add(new FitLangPluginAction(name, title, script));
+                actionList.add(new FitLangPluginAction(plugin));
 
+                JSONObject script = plugin.getJSONObject("script");
                 //第一个fit插件菜单执行
                 supportLanguageMap.put(name, script);
             }
@@ -122,12 +122,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                         && !(groupObject.get("script") instanceof JSONObject)) {
                     return null;
                 }
-                JSONObject groupConfig = new JSONObject();
-                groupConfig.put("title", groupObject.getOrDefault("title", getGroupName()));
-                groupConfig.put("actions", groupObject.get("actions"));
-                groupConfig.put("script", groupObject.get("script"));
-                groupConfig.put("visible", groupObject.get("visible"));
-                return groupConfig;
+                return groupObject;
             }
         }
         return null;

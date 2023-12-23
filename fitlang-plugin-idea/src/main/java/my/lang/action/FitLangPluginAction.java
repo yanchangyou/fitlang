@@ -26,26 +26,21 @@ import static my.lang.MyLanguage.LANG_STRING_LOGO;
  */
 public class FitLangPluginAction extends ScriptRunCodeAction {
 
-    String name;
+    PluginActionConfig actionConfig;
 
-    JSONObject script;
-
-    protected FitLangPluginAction(String name, String title, JSONObject script) {
-        super(title);
-        this.name = name;
-        this.script = script;
+    protected FitLangPluginAction(JSONObject config) {
+        super(config.getOrDefault("title", config.getString("name")).toString());
+        actionConfig = new PluginActionConfig(config);
     }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        actionPerformedInner(e, threadPoolExecutor, script);
+        actionPerformedInner(e, threadPoolExecutor, actionConfig);
     }
 
-    static void actionPerformedInner(AnActionEvent e, ThreadPoolExecutor threadPoolExecutor, JSONObject actionScript) {
+    static void actionPerformedInner(AnActionEvent e, ThreadPoolExecutor threadPoolExecutor, PluginActionConfig actionConfig) {
 
         final Project project = e.getProject();
-
-        String menuTitle = e.getPresentation().getText();
 
         initConsoleViewIfNeed(project, LANG_NAME, LANG_STRING_LOGO, projectConsoleViewMap);
 
@@ -78,7 +73,7 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
                 ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
 
-                result = ExecuteJsonNodeUtil.executeCode(null, actionScript, contextParam);
+                result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
 
                 if (isJsonObjectText(result)) {
                     result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
@@ -86,9 +81,10 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
                 print(result + "\n\n", project, projectConsoleViewMap);
 
-                if (menuTitle.equalsIgnoreCase("Zip") || menuTitle.equalsIgnoreCase("Unzip")) {
+                if (actionConfig.isRefreshParent()) {
                     finalVirtualFile.getParent().refresh(false, false);
-                } else if (menuTitle.equalsIgnoreCase("Sort Json File")) {
+                }
+                if (actionConfig.isRefresh()) {
                     finalVirtualFile.refresh(false, false);
                 }
 
