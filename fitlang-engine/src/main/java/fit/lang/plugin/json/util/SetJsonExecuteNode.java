@@ -1,12 +1,9 @@
 package fit.lang.plugin.json.util;
 
-import com.alibaba.fastjson2.JSONArray;
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getConfigFields;
 
 /**
  * 执行节点
