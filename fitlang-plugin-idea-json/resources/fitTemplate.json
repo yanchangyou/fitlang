@@ -306,12 +306,14 @@
         {
             "uni": "readFile",
             "filePath": "/app/first.fit",
-            "contentField": "content"
+            "contentField": "content",
+            "charset": "UTF-8"
         },
         {
             "uni": "writeFile",
             "filePath": "/app/first.fit",
-            "contentField": "content"
+            "contentField": "content",
+            "charset": "UTF-8"
         },
         {
             "uni": "deleteFile",
