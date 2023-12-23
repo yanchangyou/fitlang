@@ -1,6 +1,6 @@
 {
     "input": {
-        "foo": "bar"
+        "foo": true
     },
     "uni": "get",
     "path": "foo"

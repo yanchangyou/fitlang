@@ -1,7 +1,10 @@
 {
     "input": {
-        "foo": "bar"
+        "foo": {
+            "theValue": "bar"
+        }
     },
     "uni": "get",
     "path": "foo"
 }
+
