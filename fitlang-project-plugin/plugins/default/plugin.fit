@@ -151,7 +151,7 @@
                     }
                 },
                 {
-                    "name": "getJsonStructure",
+                    "name": "getStruct",
                     "title": "Get Json Structure",
                     "script": {
                         "uni": "pipe",
@@ -165,7 +165,7 @@
                                 "jsonField": "content"
                             },
                             {
-                                "uni": "getJsonStructure"
+                                "uni": "getStruct"
                             },
                             {
                                 "uni": "stringifyJson",

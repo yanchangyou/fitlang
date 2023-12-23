@@ -33,7 +33,7 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         Assert.assertEquals("{\n" +
                 "    \"uni\": \"hello\",\n" +
-                "    \"message\": \"hello, world!\"\n" +
+                "    \"message\": \"hello, world! 你好，世界！\"\n" +
                 "}", outputJson.getString("content"));
 
     }

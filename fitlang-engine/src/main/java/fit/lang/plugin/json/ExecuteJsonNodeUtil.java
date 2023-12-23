@@ -18,6 +18,7 @@ import fit.lang.plugin.json.define.*;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.SocketAddress;
@@ -789,10 +790,10 @@ public class ExecuteJsonNodeUtil {
      * json的key按照字母顺序排列
      *
      * @param json
-     * @param keepOnlyOneItemInArray 是否只保留数组的第一个元素
+     * @param isStruct 是否只保留数组的第一个元素
      * @return
      */
-    public static JSONObject sortJson(JSONObject json, boolean keepOnlyOneItemInArray) {
+    public static JSONObject sortJson(JSONObject json, boolean isStruct) {
 
         if (json == null || json.isEmpty()) {
             return json;
@@ -803,9 +804,21 @@ public class ExecuteJsonNodeUtil {
             Object value = entry.getValue();
             Object newVale = value;
             if (value instanceof JSONObject) {
-                newVale = sortJson((JSONObject) value, keepOnlyOneItemInArray);
+                newVale = sortJson((JSONObject) value, isStruct);
             } else if (value instanceof JSONArray) {
-                newVale = sortJson((JSONArray) value, keepOnlyOneItemInArray);
+                newVale = sortJson((JSONArray) value, isStruct);
+            } else {
+                if (isStruct) {
+                    if (value instanceof String) {
+                        newVale = "";
+                    } else if (value instanceof Integer || value instanceof BigInteger) {
+                        newVale = 0;
+                    } else if (value instanceof Number) {
+                        newVale = 0.0;
+                    } else if (value instanceof Boolean) {
+                        newVale = true;
+                    }
+                }
             }
             map.put(entry.getKey(), newVale);
         }
@@ -858,7 +871,7 @@ public class ExecuteJsonNodeUtil {
      * @param json
      * @return
      */
-    public static JSONObject getJsonStructure(JSONObject json) {
+    public static JSONObject getStruct(JSONObject json) {
         return sortJson(json, true);
     }
 }

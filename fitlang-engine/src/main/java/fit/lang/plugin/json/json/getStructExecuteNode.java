@@ -8,11 +8,11 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 /**
  * 执行节点
  */
-public class getJsonStructureExecuteNode extends JsonExecuteNode {
+public class getStructExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        output.setData(ExecuteJsonNodeUtil.getJsonStructure(input.getData()));
+        output.setData(ExecuteJsonNodeUtil.getStruct(input.getData()));
     }
 
 }

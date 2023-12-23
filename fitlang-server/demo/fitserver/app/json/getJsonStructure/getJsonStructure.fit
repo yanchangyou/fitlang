@@ -28,5 +28,5 @@
         "b": 2,
         "a": 1
     },
-    "uni": "getJsonStructure"
+    "uni": "getStruct"
 }
