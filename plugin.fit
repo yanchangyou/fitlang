@@ -175,7 +175,7 @@
                             },
                             {
                                 "uni": "get",
-                                "field": "content"
+                                "path": "content"
                             }
                         ]
                     }
@@ -200,7 +200,7 @@
                             },
                             {
                                 "uni": "get",
-                                "field": "content"
+                                "path": "content"
                             }
                         ]
                     }
