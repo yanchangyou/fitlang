@@ -1,0 +1,10 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "set",
+            "path": "data.nest[1]",
+            "value": 0
+        }
+    ]
+}

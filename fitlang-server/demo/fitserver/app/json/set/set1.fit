@@ -1,0 +1,12 @@
+{
+    "uni": "sequence",
+    "child": [
+        {
+            "uni": "set",
+            "path": "data",
+            "value": {
+                "hello": "world"
+            }
+        }
+    ]
+}
