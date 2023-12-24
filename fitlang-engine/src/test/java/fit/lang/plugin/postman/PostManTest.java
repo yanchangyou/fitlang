@@ -36,7 +36,7 @@ public class PostManTest extends TestCase {
                 "            }\n" +
                 "        },\n" +
                 "        {\n" +
-                "            \"uni\": \"set\",\n" +
+                "            \"uni\": \"setGlobal\",\n" +
                 "            \"key\": \"collectionName\",\n" +
                 "            \"value\": \"${collectionName}\"\n" +
                 "        },\n" +
