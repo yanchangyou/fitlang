@@ -322,6 +322,14 @@
             "filePath": "/app/first.fit"
         },
         {
+            "uni": "readEditor",
+            "contentField": "content"
+        },
+        {
+            "uni": "writeEditor",
+            "contentField": "content"
+        },
+        {
             "uni": "systemInfo",
             "shareFields": [
                 "computerManufacturer",

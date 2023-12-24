@@ -1,0 +1,13 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "readEditor",
+            "contentField": "content"
+        },
+        {
+            "uni": "writeEditor",
+            "contentField": "content"
+        }
+    ]
+}
