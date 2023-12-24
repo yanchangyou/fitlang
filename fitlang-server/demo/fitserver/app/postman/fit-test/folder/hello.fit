@@ -1,8 +1,0 @@
-{
-    "uni": "http",
-    "name": "hello",
-    "url": "http://fit.321zou.com/hello",
-    "param":{
-        "who": "fit"
-    }
-}
