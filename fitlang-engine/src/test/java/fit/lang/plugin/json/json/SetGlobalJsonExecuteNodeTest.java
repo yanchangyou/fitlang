@@ -11,7 +11,7 @@ public class SetGlobalJsonExecuteNodeTest extends TestCase {
                 "    'uni': 'sequence'," +
                 "    'child': [" +
                 "       {" +
-                "           'uni': 'set'," +
+                "           'uni': 'setGlobal'," +
                 "           'key': 'data'," +
                 "           'value':{" +
                 "               'hello':'world'" +

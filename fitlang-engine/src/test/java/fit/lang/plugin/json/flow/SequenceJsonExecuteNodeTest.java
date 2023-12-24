@@ -13,7 +13,7 @@ public class SequenceJsonExecuteNodeTest extends TestCase {
                 "    'bagsName': 'array'," +
                 "    'child': [" +
                 "       {" +
-                "           'uni': 'set'," +
+                "           'uni': 'setGlobal'," +
                 "           'key': 'data'," +
                 "           'value':{" +
                 "               'hello':'world'" +

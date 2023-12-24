@@ -11,7 +11,7 @@ public class BatchJsonExecuteNodeTest extends TestCase {
                 "    'uni': 'batch'," +
                 "    'child': [" +
                 "       {" +
-                "           'uni': 'set'," +
+                "           'uni': 'setGlobal'," +
                 "           'key': 'data'," +
                 "           'value':{" +
                 "               'hello':'world'" +
