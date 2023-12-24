@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -22,20 +23,35 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject jsonObject = input.getData();
 
-        if (StrUtil.isNotBlank(jsonField)) {
-            jsonObject = input.getJsonObject(jsonField);
-        }
-
         String outputField = jsonField;
         if (StrUtil.isBlank(jsonField)) {
             outputField = "json";
         }
+
         String content = null;
-        if (jsonObject != null) {
-            if (Boolean.TRUE.equals(needFormat)) {
-                content = toJsonTextWithFormat(jsonObject);
+
+        Object value = jsonObject;
+        if (StrUtil.isNotBlank(jsonField)) {
+            value = input.get(jsonField);
+        }
+
+        if (value != null) {
+            if (value instanceof JSONObject) {
+                jsonObject = (JSONObject) value;
+                if (Boolean.TRUE.equals(needFormat)) {
+                    content = toJsonTextWithFormat(jsonObject);
+                } else {
+                    content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+                }
+            } else if (value instanceof JSONArray) {
+                JSONArray array = (JSONArray) value;
+                if (Boolean.TRUE.equals(needFormat)) {
+                    content = toJsonTextWithFormat(array);
+                } else {
+                    content = array.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+                }
             } else {
-                content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+                content = value.toString();
             }
         }
         output.set(outputField, content);

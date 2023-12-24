@@ -29,4 +29,24 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
     }
 
+    public void testExecuteArray() {
+        String flow = "{" +//
+                "   'uni': 'parseJson'," +
+                "   'jsonField': 'json'," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{ 'json': '[{\"uni\":\"hello\"}]'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("json"));
+        Assert.assertTrue(outputJson.getJSONArray("json").size() == 1);
+
+        Assert.assertEquals("hello", outputJson.getJSONArray("json").getJSONObject(0).get("uni"));
+
+    }
 }

@@ -689,6 +689,21 @@ public class ExecuteJsonNodeUtil {
     }
 
     /**
+     * 转换为json 文本
+     *
+     * @param jsonArray
+     * @return
+     */
+    public static String toJsonTextWithFormat(JSONArray jsonArray) {
+        return jsonArray.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
+                .replaceAll("\\t", "    ")
+                .replace("\":\"", "\": \"")
+                .replace("\":true", "\": true")
+                .replace("\":false", "\": false")
+                .replace("\":null", "\": null")
+                ;
+    }
+    /**
      * 读取配置字段:兼容数组和非数组
      *
      * @param jsonNodeDefine
