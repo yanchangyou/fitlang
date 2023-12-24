@@ -16,11 +16,11 @@ public class SetJsonExecuteNode extends JsonExecuteNode {
 
         String path = nodeJsonDefine.getString("path");
 
-        Object object = parseField(path, input);
+        Object value = parseField("value", input);
 
         JSONObject inputData = input.getData();
 
-        JSONPath.set(inputData, path, object);
+        JSONPath.set(inputData, path, value);
 
         output.setData(inputData);
     }
