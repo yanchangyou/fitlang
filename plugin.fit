@@ -387,7 +387,7 @@
         },
         {
             "name": "FitActionGroup7",
-            "title": "Get JSON Structure",
+            "title": "Get JSON Struct",
             "script": {
                 "uni": "pipe",
                 "child": [
