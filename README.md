@@ -93,7 +93,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - sleep: 流程休眠节点
 - perf: 耗时统计
 
-### json数据节点
+### json操作节点
 
 - convert: 转换节点，支持json到json的转换，使用转换表达式
 - removeField: 移除json字段
