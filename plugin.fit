@@ -289,7 +289,7 @@
                         }
                     },
                     {
-                        "uni": "set",
+                        "uni": "setGlobal",
                         "key": "collectionName",
                         "value": "${collectionName}"
                     },
@@ -316,7 +316,7 @@
                                             "uni": "pipe",
                                             "child": [
                                                 {
-                                                    "uni": "set",
+                                                    "uni": "setGlobal",
                                                     "key": "contentType",
                                                     "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
                                                 },

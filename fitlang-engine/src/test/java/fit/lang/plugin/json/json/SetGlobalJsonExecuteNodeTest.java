@@ -4,7 +4,7 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class SetJsonExecuteNodeTest extends TestCase {
+public class SetGlobalJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +

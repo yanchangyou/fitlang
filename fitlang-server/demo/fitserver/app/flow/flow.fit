@@ -2,7 +2,7 @@
     "uni": "sequence",
     "child": [
         {
-            "uni": "set",
+            "uni": "setGlobal",
             "key": "times",
             "value": 1
         },
@@ -10,7 +10,7 @@
             "uni": "loop",
             "loopTimes": 10,
             "child": {
-                "uni": "set",
+                "uni": "setGlobal",
                 "key": "times",
                 "value": "${times+1}"
             }

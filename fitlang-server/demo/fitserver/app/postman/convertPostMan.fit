@@ -20,7 +20,7 @@
             }
         },
         {
-            "uni": "set",
+            "uni": "setGlobal",
             "key": "collectionName",
             "value": "${collectionName}"
         },

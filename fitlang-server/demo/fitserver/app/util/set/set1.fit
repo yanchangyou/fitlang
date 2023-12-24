@@ -1,5 +1,5 @@
 {
-    "uni": "set",
+    "uni": "setGlobal",
     "key": "foo",
     "value": "bar"
 }

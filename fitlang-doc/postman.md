@@ -108,7 +108,7 @@ fitlang-project-plugin/plugins/default/plugin.fit
             }
         },
         {
-            "uni": "set",
+            "uni": "setGlobal",
             "key": "collectionName",
             "value": "${collectionName}"
         },
@@ -135,7 +135,7 @@ fitlang-project-plugin/plugins/default/plugin.fit
                                 "uni": "pipe",
                                 "child": [
                                     {
-                                        "uni": "set",
+                                        "uni": "setGlobal",
                                         "key": "contentType",
                                         "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
                                     },

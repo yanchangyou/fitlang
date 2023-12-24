@@ -14,7 +14,7 @@
 
 ```
 {
-    "uni": "set",
+    "uni": "setGlobal",
     "key": "foo",
     "value": "bar"
 }
@@ -38,7 +38,7 @@
     "uni": "sequence",
     "child": [
         {
-            "uni": "set",
+            "uni": "setGlobal",
             "key": "foo",
             "value": "bar"
         },

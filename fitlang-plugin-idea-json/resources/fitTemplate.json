@@ -46,7 +46,7 @@
             ]
         },
         {
-            "uni": "set",
+            "uni": "setGlobal",
             "key": "keyName",
             "value": "value"
         },
