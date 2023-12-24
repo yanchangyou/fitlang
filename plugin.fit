@@ -124,16 +124,14 @@
                     }
                 },
                 {
-                    "name": "sortJsonFile",
-                    "title": "Sort Json File",
-                    "refresh": true,
+                    "name": "sortJson",
+                    "title": "Sort Json",
                     "script": {
                         "uni": "pipe",
                         "child": [
                             {
-                                "uni": "readFile",
-                                "filePath": "${filePath}",
-                                "charset": "UTF-8"
+                                "uni": "readEditor",
+                                "contentField": "content"
                             },
                             {
                                 "uni": "parseJson",
@@ -148,34 +146,8 @@
                                 "format": true
                             },
                             {
-                                "uni": "writeFile",
-                                "filePath": "${filePath}",
-                                "charset": "UTF-8"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "name": "sortJson",
-                    "title": "Sort Json",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readFile",
-                                "filePath": "${filePath}",
-                                "charset": "UTF-8"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "sortField"
-                            },
-                            {
-                                "uni": "get",
-                                "path": "content"
+                                "uni": "writeEditor",
+                                "contentField": "content"
                             }
                         ]
                     }
@@ -187,9 +159,8 @@
                         "uni": "pipe",
                         "child": [
                             {
-                                "uni": "readFile",
-                                "filePath": "${filePath}",
-                                "charset": "UTF-8"
+                                "uni": "readEditor",
+                                "contentField": "content"
                             },
                             {
                                 "uni": "parseJson",
@@ -303,13 +274,8 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "mix",
-                        "json": {
-                            "filePath": "${filePath}"
-                        }
-                    },
-                    {
-                        "uni": "readFile"
+                        "uni": "readEditor",
+                        "contentField": "content"
                     },
                     {
                         "uni": "parseJson",
