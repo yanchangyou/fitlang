@@ -150,7 +150,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - systemInfo: 获取系统信息，基于oshi实现(信息字段(支持屏蔽)
   ：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
 - info: 获取系统信息，基于hutool SystemUtil实现(信息字段(支持屏蔽)
-  ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties)
+  ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties,env)
 
 ### 命令行
 
