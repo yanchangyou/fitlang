@@ -460,6 +460,22 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static String parseStringField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
+        Object object = parseField(fieldName, input, nodeJsonDefine);
+        if (object == null) {
+            return null;
+        }
+        return object.toString();
+    }
+
+    /**
+     * 解析字段， 解析顺序：入参, 配置
+     *
+     * @param fieldName
+     * @param input
+     * @param nodeJsonDefine
+     * @return
+     */
+    public static Object parseField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
         String fieldValue = input.getString(fieldName);
         if (StrUtil.isBlank(fieldValue)) {
             fieldValue = nodeJsonDefine.getString(fieldName);
@@ -475,7 +491,7 @@ public class ExecuteJsonNodeUtil {
         for (Map.Entry<String, Object> define : nodeJsonDefine.entrySet()) {
             inputAndContextParam.putIfAbsent(define.getKey(), define.getValue());
         }
-        return (String) ExpressUtil.eval(fieldValue, inputAndContextParam);
+        return ExpressUtil.eval(fieldValue, inputAndContextParam);
     }
 
     /**

@@ -94,4 +94,7 @@ public abstract class JsonExecuteNode extends AbstractExecuteNode {
         return result;
     }
 
+    protected Object parseField(String fieldName, JsonExecuteNodeInput input) {
+        return ExecuteJsonNodeUtil.parseField(fieldName, input, nodeJsonDefine);
+    }
 }
