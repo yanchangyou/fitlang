@@ -160,9 +160,6 @@ public class JsonSchemaCatalogManager {
     String beforeStar = mask.substring(0, star);
     String afterStar = mask.substring(star + 1);
 
-    if (fileName.startsWith(beforeStar) && fileName.endsWith(afterStar)) {
-      return true;
-    }
-    return false;
+    return fileName.startsWith(beforeStar) && fileName.endsWith(afterStar);
   }
 }

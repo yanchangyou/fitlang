@@ -19,7 +19,7 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         Assert.assertEquals("{\"error_code\":100,\"error_msg\":\"Invalid parameter\"}", output);
 
@@ -42,8 +42,8 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(!output.isEmpty());
-        Assert.assertTrue(output.toString().contains("百度"));
+        Assert.assertFalse(output.isEmpty());
+        Assert.assertTrue(output.contains("百度"));
 
 
     }
@@ -76,7 +76,7 @@ public class HttpPostJsonJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         Assert.assertEquals("{\"hello\":\"world\"}", output);
 

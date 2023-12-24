@@ -239,7 +239,7 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
     private VirtualFile resolveFromSchemaProperty(@Nullable String schemaUrl, @NotNull VirtualFile file) {
         if (schemaUrl != null) {
             VirtualFile virtualFile = findSchemaFileByReference(schemaUrl, file);
-            if (virtualFile != null) return virtualFile;
+            return virtualFile;
         }
         return null;
     }
@@ -489,12 +489,12 @@ public class JsonSchemaServiceImpl implements JsonSchemaService, ModificationTra
 
                 @NotNull
                 @Override
-                public final synchronized MultiMap<VirtualFile, fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> getValue() {
+                public synchronized MultiMap<VirtualFile, fit.jetbrains.jsonSchema.extension.JsonSchemaFileProvider> getValue() {
                     return super.getValue();
                 }
 
                 @Override
-                public final synchronized void drop() {
+                public synchronized void drop() {
                     myIsComputed.set(false);
                     super.drop();
                 }

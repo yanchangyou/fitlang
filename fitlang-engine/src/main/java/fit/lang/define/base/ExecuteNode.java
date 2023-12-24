@@ -64,9 +64,9 @@ public interface ExecuteNode {
 
     void addNextNodes(List<ExecuteNode> nodes);
 
-    public List<ExecuteNode> getChildNodes();
+    List<ExecuteNode> getChildNodes();
 
-    public void addChildNode(ExecuteNode childNode);
+    void addChildNode(ExecuteNode childNode);
 
     void addChildNodes(List<ExecuteNode> nodes);
 

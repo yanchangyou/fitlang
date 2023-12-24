@@ -18,7 +18,7 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 
@@ -39,12 +39,12 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 
         Assert.assertTrue(outputJson.containsKey("json"));
-        Assert.assertTrue(outputJson.getJSONArray("json").size() == 1);
+        Assert.assertEquals(1, outputJson.getJSONArray("json").size());
 
         Assert.assertEquals("hello", outputJson.getJSONArray("json").getJSONObject(0).get("uni"));
 

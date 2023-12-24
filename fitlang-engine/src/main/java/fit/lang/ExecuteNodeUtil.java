@@ -167,10 +167,9 @@ public class ExecuteNodeUtil {
         if (e == null) {
             return "";
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append(e.getMessage()).append("(");
-        builder.append(getAllException(e.getCause())).append(")");
-        return builder.toString();
+        String builder = e.getMessage() + "(" +
+                getAllException(e.getCause()) + ")";
+        return builder;
     }
 
     /**

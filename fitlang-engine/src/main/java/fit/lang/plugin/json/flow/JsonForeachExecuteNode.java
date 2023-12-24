@@ -99,7 +99,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
     Map<JSONObject, JSONArray> cache = new HashMap<>();
 
     JSONArray buildKeyValueList(JSONObject jsonObject) {
-        if (cache.keySet().contains(jsonObject)) {
+        if (cache.containsKey(jsonObject)) {
             return cache.get(jsonObject);
         }
         JSONArray list = new JSONArray();

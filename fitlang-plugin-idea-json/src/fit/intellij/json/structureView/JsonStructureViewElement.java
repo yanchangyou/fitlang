@@ -64,7 +64,7 @@ public class JsonStructureViewElement implements StructureViewTreeElement {
     }
     if (value instanceof fit.intellij.json.psi.JsonObject) {
       final fit.intellij.json.psi.JsonObject object = ((fit.intellij.json.psi.JsonObject)value);
-      return ContainerUtil.map2Array(object.getPropertyList(), TreeElement.class, (Function<fit.intellij.json.psi.JsonProperty, TreeElement>) property -> new JsonStructureViewElement(property));
+      return ContainerUtil.map2Array(object.getPropertyList(), TreeElement.class, property -> new JsonStructureViewElement(property));
     }
     else if (value instanceof fit.intellij.json.psi.JsonArray) {
       final fit.intellij.json.psi.JsonArray array = (fit.intellij.json.psi.JsonArray)value;

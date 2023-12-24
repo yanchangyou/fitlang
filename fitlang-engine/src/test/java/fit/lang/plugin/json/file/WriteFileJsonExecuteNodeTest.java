@@ -25,7 +25,7 @@ public class WriteFileJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 

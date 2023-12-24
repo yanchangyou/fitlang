@@ -81,7 +81,7 @@ public class JsonFileResolver {
         Url parse = Urls.parse(url, false);
         if (parse == null || StringUtil.isEmpty(parse.getAuthority()) || StringUtil.isEmpty(parse.getPath())) return null;
       }
-      if (virtualFile != null) return virtualFile;
+      return virtualFile;
     }
 
     return null;

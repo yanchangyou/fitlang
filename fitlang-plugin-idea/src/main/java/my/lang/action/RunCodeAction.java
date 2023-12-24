@@ -308,8 +308,8 @@ public abstract class RunCodeAction extends AnAction {
 
     static void scrollToEnd(ConsoleView consoleView) {
         try {
-            Method method = ConsoleView.class.getMethod("requestScrollingToEnd", new Class[0]);
-            method.invoke(consoleView, new Object[0]);
+            Method method = ConsoleView.class.getMethod("requestScrollingToEnd");
+            method.invoke(consoleView);
         } catch (Exception e) {
             e.printStackTrace();
         }

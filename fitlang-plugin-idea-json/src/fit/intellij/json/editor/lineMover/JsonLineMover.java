@@ -169,7 +169,7 @@ public class JsonLineMover extends LineMover {
       if (ch == ']' || ch == '}') {
         document.deleteString(backwardOffset - 1, backwardOffset);
       }
-      if (ch != '/') return true;
+      return ch != '/';
     }
     return false;
   }
