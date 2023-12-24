@@ -1,6 +1,7 @@
 package my.lang.action;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -79,7 +80,17 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
                 result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
 
                 if (isJsonObjectText(result)) {
-                    result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                    JSONObject jsonObject = JSON.parseObject(result);
+                    if (jsonObject.get("_raw") != null) {
+                        Object raw = jsonObject.get("_raw");
+                        if (raw instanceof JSONArray) {
+                            result = ((JSONArray) raw).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                        } else {
+                            result = raw.toString();
+                        }
+                    } else {
+                        result = jsonObject.toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                    }
                 }
 
                 print(result + "\n\n", project, projectConsoleViewMap);
