@@ -457,6 +457,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.8.7 </li>
             <li>0.8.6 add node: readEditor, writeEditor, set, setGlobal(rename by set)</li>
             <li>0.8.5 add node: sortField, getStruct, get; project plugin add sortJsonFile, sortJson and getStruct; plugin support config refresh after action</li>
             <li>0.8.4 add node: log; refine node: set, assert, writeFile, readFile; refine node template</li>
