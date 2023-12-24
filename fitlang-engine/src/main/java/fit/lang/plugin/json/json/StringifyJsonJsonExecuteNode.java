@@ -8,6 +8,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 /**
@@ -41,14 +42,14 @@ public class StringifyJsonJsonExecuteNode extends JsonExecuteNode {
                 if (Boolean.TRUE.equals(needFormat)) {
                     content = toJsonTextWithFormat(jsonObject);
                 } else {
-                    content = jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+                    content = toJsonText(jsonObject);
                 }
             } else if (value instanceof JSONArray) {
                 JSONArray array = (JSONArray) value;
                 if (Boolean.TRUE.equals(needFormat)) {
                     content = toJsonTextWithFormat(array);
                 } else {
-                    content = array.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+                    content = toJsonText(array);
                 }
             } else {
                 content = value.toString();

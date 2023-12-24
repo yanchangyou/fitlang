@@ -8,6 +8,8 @@ import fit.lang.plugin.json.json.RemoveEmptyFieldJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonText;
+
 public class RemoveEmptyFieldJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
@@ -37,7 +39,7 @@ public class RemoveEmptyFieldJsonExecuteNodeTest extends TestCase {
         Assert.assertFalse(output.containsKey("field1"));
         Assert.assertFalse(output.containsKey("field2"));
 
-        System.out.println(input.getData().toString(JSONWriter.Feature.WriteMapNullValue));
+        System.out.println(toJsonText(input.getData()));
         System.out.println(output.getData());
 
         Assert.assertEquals("world", output.getString("who"));

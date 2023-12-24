@@ -17,8 +17,7 @@ import java.io.File;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildContextParam;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.LANG_NAME;
 import static my.lang.MyLanguage.LANG_STRING_LOGO;
 
@@ -84,12 +83,12 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
                     if (jsonObject.get("_raw") != null) {
                         Object raw = jsonObject.get("_raw");
                         if (raw instanceof JSONArray) {
-                            result = ((JSONArray) raw).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                            result = toJsonTextWithFormat((JSONArray) raw);
                         } else {
                             result = raw.toString();
                         }
                     } else {
-                        result = jsonObject.toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                        result = toJsonTextWithFormat(jsonObject);
                     }
                 }
 

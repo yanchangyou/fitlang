@@ -281,7 +281,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);
-                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                response.write(toJsonTextWithFormat(welcome), getDefaultContextType());
             }
         });
 
@@ -523,7 +523,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 try {
                     reload(fitServer);
                     JSONObject welcome = getWelcomeJson(fitServer);
-                    response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                    response.write(toJsonTextWithFormat(welcome), getDefaultContextType());
                 } catch (Exception e) {
                     response.write("reload exception: " + e.getMessage());
                 }
@@ -607,7 +607,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         String _jsonFormat = request.getParam("_jsonFormat");
         String text = output;
         if (isJsonObjectText(text) && "true".equals(_jsonFormat)) {
-            text = JSON.parseObject(text).toJSONString(JSONWriter.Feature.PrettyFormat);
+            text = toJsonTextWithFormat(JSON.parseObject(text));
             response.write(text, ContentType.JSON.getValue());
         } else {
             response.write(text, contextType);

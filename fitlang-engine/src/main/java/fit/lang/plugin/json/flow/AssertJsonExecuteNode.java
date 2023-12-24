@@ -9,6 +9,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonText;
+
 /**
  * 执行节点
  */
@@ -50,7 +52,7 @@ public class AssertJsonExecuteNode extends JsonExecuteNode {
         if (success && nodeJsonDefine.get("containJson") != null) {
             type = "containJson";
             JSONObject containJson = nodeJsonDefine.getJSONObject("containJson");
-            assertResultObject = ExpressUtil.eval(containJson, input.getInputParamAndContextParam()).toJSONString(JSONWriter.Feature.WriteMapNullValue);
+            assertResultObject = toJsonText(ExpressUtil.eval(containJson, input.getInputParamAndContextParam()));
             success = true;
             for (String field : containJson.keySet()) {
                 if (!containJson.get(field).equals(input.get(field))) {

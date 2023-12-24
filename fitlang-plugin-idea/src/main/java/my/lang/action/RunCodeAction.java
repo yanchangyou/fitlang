@@ -164,7 +164,7 @@ public abstract class RunCodeAction extends AnAction {
                             }
                             String infoText;
                             if (info instanceof Map || info instanceof List) {
-                                infoText = JSON.toJSONString(info, JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                                infoText = toJsonTextWithFormat(JSONObject.from(info));
                             } else {
                                 infoText = info.toString();
                             }
@@ -229,7 +229,7 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         if (needFormatJsonInConsole && isJsonObjectText(result)) {
-            result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+            result = toJsonTextWithFormat(JSONObject.parse(result));
         }
 
         return result;
