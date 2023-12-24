@@ -106,6 +106,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - convertKeyValueList: key value list转换对象
 - get: 使用json path获取值
 - set: 使用json path设置值
+- getStruct: 获取json结构
+- sortField: 按照字段排序（字母表升序）
 
 ### 流程节点（有child子节点）
 
