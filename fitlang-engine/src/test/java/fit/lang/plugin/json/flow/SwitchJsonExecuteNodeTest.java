@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.engine;
+package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
@@ -10,13 +10,23 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-import static com.alibaba.fastjson2.JSONWriter.Feature.WriteMapNullValue;
+public class SwitchJsonExecuteNodeTest extends TestCase {
 
-public class RemoveEmptyFieldJsonExecuteNodeTest extends TestCase {
+    public void testExecuteCase1() {
 
-    public void testExecute() {
+        testExecuteCase("1", "message", "hello, world!");
 
-        JSONObject nodeDefine = JSON.parseObject("{'uni':'removeEmptyField'}");
+    }
+
+    public void testExecuteCase2() {
+
+        testExecuteCase("2", "who", "world");
+
+    }
+
+    public void testExecuteCase(String type, String outputFieldName, String expect) {
+
+        JSONObject nodeDefine = JSON.parseObject("{'uni':'switch','switchField':'type','case':{'1':{'uni':'hello'},'2':{'uni':'echo'}}}");
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(nodeDefine);
 
         JsonExecuteContext nodeContext = new JsonExecuteContext();
@@ -24,28 +34,22 @@ public class RemoveEmptyFieldJsonExecuteNodeTest extends TestCase {
         JsonExecuteNodeInput input = new JsonExecuteNodeInput(nodeContext);
 
         JsonExecuteNodeOutput output = new JsonExecuteNodeOutput(nodeContext);
-
+//
         input.set("who", "world");
-        input.set("field1", null);
-        input.set("field2", "");
+        input.set("type", type);
+//
+//        executeNode.addCaseNode("1", new HelloJsonExecuteNode());
+//        executeNode.addCaseNode("2", new EchoExecuteNode());
 
         Assert.assertTrue(output.isEmpty());
 
-        Assert.assertTrue(input.containsKey("field1"));
-        Assert.assertTrue(input.containsKey("field2"));
+//        executeNode.setswitchField("type");
 
         executeNode.execute(input, output);
 
-        Assert.assertTrue(input.containsKey("field1"));
-        Assert.assertTrue(input.containsKey("field2"));
-
-        Assert.assertFalse(output.containsKey("field1"));
-        Assert.assertFalse(output.containsKey("field2"));
-
-        System.out.println(input.getData().toString(WriteMapNullValue));
         System.out.println(output.getData());
 
-        Assert.assertEquals("world", output.getString("who"));
+        Assert.assertEquals(expect, output.get(outputFieldName));
 
     }
 }
