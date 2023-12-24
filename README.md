@@ -88,13 +88,13 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - hello: hello world demo
 - echo: 原样返回入参
 - setGlobal: 设置全局变量
-- sleep: 流程休眠节点
 - print: 控制台打印
+- log: IDE控制台输出
+- sleep: 流程休眠节点
 - perf: 耗时统计
 
 ### json数据节点
 
-- add: 支持json相加
 - convert: 转换节点，支持json到json的转换，使用转换表达式
 - removeField: 移除json字段
 - removeEmptyField: 移除空字段
@@ -108,6 +108,9 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - set: 使用json path设置值
 - getStruct: 获取json结构
 - sortField: 按照字段排序（字母表升序）
+- add: 支持json相加
+- increase: 加+1
+- decrease: 减-1
 
 ### 流程节点（有child子节点）
 
@@ -123,6 +126,11 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - call: 引用节点执行
 - catch: 异常捕获，包含try节点和catch节点两个子节点
 - assert: 断言
+- node: 子流程
+
+### 函数
+- function: 函数
+- package: 包
 
 ### http节点
 
@@ -132,6 +140,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - httpGet: http get
 - httpPut: http put
 - httpDelete: http delete
+- httpHead: http head 
+- postman: postman
 
 ### Web节点
 
@@ -155,6 +165,10 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 ### 命令行
 
 - cmd: 命令行
+- zip: 压缩
+- unzip: 解压
+
+## 网络
 - telnet: telnet
 - telnets: telnets
 - telnet.http: telnet.http
