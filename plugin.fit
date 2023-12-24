@@ -7,6 +7,7 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
+            "visible": false,
             "script": {
                 "uni": "hello",
                 "who": "fit"
@@ -15,7 +16,7 @@
         {
             "name": "FitActionGroup1",
             "title": "Run Code",
-            "visible": true,
+            "visible": false,
             "actions": [
                 {
                     "name": "java",

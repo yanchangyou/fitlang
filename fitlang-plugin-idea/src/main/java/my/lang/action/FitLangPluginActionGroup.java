@@ -60,7 +60,8 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return;
             }
             JSONObject groupConfig = getGroupConfig(pluginConfig);
-            if (groupConfig == null || groupConfig.isEmpty()) {
+            if (groupConfig == null || groupConfig.isEmpty()
+                    || Boolean.FALSE.equals(groupConfig.getBoolean("visible"))) {
                 return;
             }
             JSONObject actionScript = groupConfig.getJSONObject("script");
