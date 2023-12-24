@@ -27,6 +27,8 @@ import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.http.*;
+import fit.lang.plugin.json.ide.ReadEditorJsonExecuteNode;
+import fit.lang.plugin.json.ide.WriteEditorJsonExecuteNode;
 import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
@@ -309,6 +311,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("telnets", SslTelnetJsonExecuteNode.class);
         register("telnet.http", TelnetHttpJsonExecuteNode.class);
         register("telnet.https", SslTelnetHttpJsonExecuteNode.class);
+
+        //ide
+        register("readEditor", ReadEditorJsonExecuteNode.class);
+        register("writeEditor", WriteEditorJsonExecuteNode.class);
 
     }
 }

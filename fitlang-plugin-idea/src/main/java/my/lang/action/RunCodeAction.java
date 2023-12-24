@@ -11,6 +11,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -19,6 +20,8 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
+import fit.lang.plugin.json.ide.UserIdeInterface;
+import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
@@ -92,6 +95,9 @@ public abstract class RunCodeAction extends AnAction {
         List<String> filePathList = new ArrayList<>();
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
+
+        implementIdeOperator(editor);
+
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
         boolean needShowFile = false;
@@ -321,5 +327,35 @@ public abstract class RunCodeAction extends AnAction {
             return false;
         }
         return fileName.contains(".");
+    }
+
+
+    /**
+     * IDE 操作实现
+     *
+     * @param editor
+     */
+    public static void implementIdeOperator(Editor editor) {
+        /**
+         *
+         */
+        UserIdeManager.setUserIdeInterface(new UserIdeInterface() {
+            @Override
+            public String readEditorContent() {
+                return editor.getDocument().getText();
+            }
+
+            @Override
+            public void writeEditorContent(String content) {
+
+                WriteCommandAction.runWriteCommandAction(editor.getProject(), new Runnable() {
+                    @Override
+                    public void run() {
+                        editor.getDocument().setText(content);
+                    }
+                });
+
+            }
+        });
     }
 }
