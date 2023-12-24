@@ -8,6 +8,11 @@
             "path": "foo"
         },
         {
+            "uni": "set",
+            "path": "foo",
+            "value": "bar"
+        },
+        {
             "uni": "getStruct"
         },
         {
