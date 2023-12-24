@@ -122,59 +122,6 @@
                     "script": {
                         "uni": "unzip"
                     }
-                },
-                {
-                    "name": "sortJson",
-                    "title": "Sort Json",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readEditor",
-                                "contentField": "content"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "sortField"
-                            },
-                            {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeEditor",
-                                "contentField": "content"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "name": "getStruct",
-                    "title": "Get Json Structure",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readEditor",
-                                "contentField": "content"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "getStruct"
-                            },
-                            {
-                                "uni": "get",
-                                "path": "content"
-                            }
-                        ]
-                    }
                 }
             ]
         },
@@ -404,6 +351,59 @@
                                 }
                             ]
                         }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup6",
+            "title": "Sort Json",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "sortField"
+                    },
+                    {
+                        "uni": "stringifyJson",
+                        "jsonField": "content",
+                        "format": true
+                    },
+                    {
+                        "uni": "writeEditor",
+                        "contentField": "content"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup7",
+            "title": "Get Json Structure",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "getStruct"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
                     }
                 ]
             }
