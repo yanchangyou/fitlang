@@ -87,10 +87,9 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 
 - hello: hello world demo
 - echo: 原样返回入参
-- set: 设置全局变量
+- setGlobal: 设置全局变量
 - sleep: 流程休眠节点
 - print: 控制台打印
-- assert: 断言
 - perf: 耗时统计
 
 ### json数据节点
@@ -105,6 +104,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - parseJson: 解析json
 - stringifyJson: json转字符串
 - convertKeyValueList: key value list转换对象
+- get: 使用json path获取值
+- set: 使用json path设置值
 
 ### 流程节点（有child子节点）
 
@@ -119,6 +120,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - execute: 执行入参传递的流程
 - call: 引用节点执行
 - catch: 异常捕获，包含try节点和catch节点两个子节点
+- assert: 断言
 
 ### http节点
 
