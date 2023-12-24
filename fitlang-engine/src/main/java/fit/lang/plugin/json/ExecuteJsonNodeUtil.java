@@ -476,14 +476,14 @@ public class ExecuteJsonNodeUtil {
      * @return
      */
     public static Object parseField(String fieldName, JsonExecuteNodeInput input, JSONObject nodeJsonDefine) {
-        String fieldValue = input.getString(fieldName);
-        if (StrUtil.isBlank(fieldValue)) {
-            fieldValue = nodeJsonDefine.getString(fieldName);
+        Object fieldValue = input.get(fieldName);
+        if (fieldValue == null) {
+            fieldValue = nodeJsonDefine.get(fieldName);
         }
         //尝试从上下文获取
-        if (StrUtil.isBlank(fieldValue) && input.getNodeContext().getAttribute(fieldName) != null) {
+        if (fieldValue == null && input.getNodeContext().getAttribute(fieldName) != null) {
             //TODO toString
-            fieldValue = input.getNodeContext().getAttribute(fieldName).toString();
+            fieldValue = input.getNodeContext().getAttribute(fieldName);
         }
         JSONObject inputAndContextParam = input.getInputParamAndContextParam();
 
