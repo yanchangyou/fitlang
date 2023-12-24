@@ -358,7 +358,7 @@
         },
         {
             "name": "FitActionGroup6",
-            "title": "Sort Json",
+            "title": "Sort JSON Field",
             "script": {
                 "uni": "pipe",
                 "child": [
@@ -387,7 +387,7 @@
         },
         {
             "name": "FitActionGroup7",
-            "title": "Get Json Structure",
+            "title": "Get JSON Structure",
             "script": {
                 "uni": "pipe",
                 "child": [
