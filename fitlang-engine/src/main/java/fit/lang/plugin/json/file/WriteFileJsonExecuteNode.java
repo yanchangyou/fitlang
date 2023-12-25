@@ -46,10 +46,12 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
 
         String text;
 
-        Object content = input.get(contentField);
+        Object content;
 
         if (StrUtil.isBlank(contentField)) {
             content = input;
+        } else {
+            content = input.get(contentField);
         }
 
         Boolean format = nodeJsonDefine.getBoolean("format");
