@@ -49,7 +49,7 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         Object content;
 
         if (StrUtil.isBlank(contentField)) {
-            content = input;
+            content = input.getData();
         } else {
             content = input.get(contentField);
         }
