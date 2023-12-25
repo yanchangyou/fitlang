@@ -38,21 +38,20 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("writeFile filePath param is required!");
         }
 
-        if (StrUtil.isBlank(contentField)) {
-            contentField = "content";
-        }
-
         if (StrUtil.isBlank(charset)) {
             charset = "UTF-8";
         }
 
         String filePath = joinFilePath(workspaceDir, path);
 
-        Object content = input.get(contentField);
-        if (content == null) {
-            throw new ExecuteNodeException("write content is null, check contentField value!");
-        }
         String text;
+
+        Object content = input.get(contentField);
+
+        if (StrUtil.isBlank(contentField)) {
+            content = input;
+        }
+
         Boolean format = nodeJsonDefine.getBoolean("format");
         if (Boolean.TRUE.equals(format) && content instanceof JSONObject) {
             text = toJsonTextWithFormat((JSONObject) content);

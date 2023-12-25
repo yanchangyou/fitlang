@@ -13,6 +13,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import java.io.File;
 import java.util.List;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.joinFilePath;
 
 /**
@@ -43,10 +44,6 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             charset = "UTF-8";
         }
 
-        if (StrUtil.isBlank(contentField)) {
-            contentField = "content";
-        }
-
         String filePath = joinFilePath(workspaceDir, path);
 
         File file = new File(filePath);
@@ -57,7 +54,16 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         if (file.isFile()) {
             output.set("isFile", true);
             String content = FileUtil.readString(filePath, CharsetUtil.charset(charset));
-            output.set(contentField, content);
+            if (isJsonObjectText(content)) {
+                output.setData(JSONObject.parse(content));
+            } else {
+
+                if (StrUtil.isBlank(contentField)) {
+                    contentField = "content";
+                }
+
+                output.set(contentField, content);
+            }
         } else {
             output.set("isFile", false);
             List<String> fileNames = FileUtil.listFileNames(filePath);
