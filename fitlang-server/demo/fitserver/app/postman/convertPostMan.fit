@@ -9,14 +9,10 @@
             "uni": "readFile"
         },
         {
-            "uni": "parseJson",
-            "jsonField": "content"
-        },
-        {
             "uni": "convert",
             "express": {
-                "item": "${content.item}",
-                "collectionName": "${content.info.name}"
+                "item": "${item}",
+                "collectionName": "${info.name}"
             }
         },
         {
