@@ -27,7 +27,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         String workspaceDir = parseStringField("workspaceDir", input);
 
         String path = parseStringField("filePath", input);
-        String charset = parseStringField("charset", input);
+        String charset = nodeJsonDefine.getString("charset");
         String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
