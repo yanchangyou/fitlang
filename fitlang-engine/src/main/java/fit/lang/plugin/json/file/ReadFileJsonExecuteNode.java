@@ -54,7 +54,7 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
         if (file.isFile()) {
             output.set("isFile", true);
             String content = FileUtil.readString(filePath, CharsetUtil.charset(charset));
-            if (isJsonObjectText(content)) {
+            if (StrUtil.isBlank(contentField) && isJsonObjectText(content)) {
                 output.setData(JSONObject.parse(content));
             } else {
 
