@@ -167,12 +167,9 @@ public class ObjectValidation implements JsonSchemaValidation {
       }
       else {
         fit.jetbrains.jsonSchema.impl.JsonSchemaObject additionalPropertiesSchema = schema.getAdditionalPropertiesSchema();
-        if (additionalPropertiesSchema != null) {
-          return additionalPropertiesSchema;
-        }
+        return additionalPropertiesSchema;
       }
     }
-    return null;
   }
 
 

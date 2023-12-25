@@ -151,7 +151,7 @@ public class JsonSchemaTreeNode {
   @Override
   public String toString() {
     final StringBuilder sb = new StringBuilder("NODE#" + hashCode() + "\n");
-    sb.append(myPosition.toString());
+    sb.append(myPosition);
     sb.append("\n");
     if (myExcludingGroupNumber >= 0) sb.append("in excluding group\n");
     if (myAny) sb.append("any");

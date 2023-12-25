@@ -93,9 +93,7 @@ public class JsonSchemaRemoteContentProvider extends DefaultRemoteContentProvide
     }
 
     if (checkUpToDate(url, path, ETAG_HEADER)) return true;
-    if (checkUpToDate(url, path, LAST_MODIFIED_HEADER)) return true;
-
-    return false;
+    return checkUpToDate(url, path, LAST_MODIFIED_HEADER);
   }
 
   private boolean checkUpToDate(@NotNull Url url, @NotNull String path, @NotNull String header) {

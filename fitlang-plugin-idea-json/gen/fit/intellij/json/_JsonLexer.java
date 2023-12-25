@@ -31,7 +31,7 @@ public class _JsonLexer implements FlexLexer {
    *                  at the beginning of a line
    * l is of the form l = 2*k, k a non negative integer
    */
-  private static final int ZZ_LEXSTATE[] = { 
+  private static final int[] ZZ_LEXSTATE = {
      0, 0
   };
 
@@ -45,7 +45,7 @@ public class _JsonLexer implements FlexLexer {
   }
 
   /* The ZZ_CMAP_Z table has 2176 entries */
-  static final char ZZ_CMAP_Z[] = zzUnpackCMap(
+  static final char[] ZZ_CMAP_Z = zzUnpackCMap(
     "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1"+
     "\20\5\21\1\22\1\23\1\24\1\21\14\25\1\26\50\25\1\27\2\25\1\30\1\31\1\32\1\33"+
     "\25\25\1\34\20\21\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\21\1\44\1\45\1\46\1"+
@@ -54,7 +54,7 @@ public class _JsonLexer implements FlexLexer {
     "\25\1\65\1\66\37\21\1\25\1\66\u0582\21\1\67\u017f\21");
 
   /* The ZZ_CMAP_Y table has 3584 entries */
-  static final char ZZ_CMAP_Y[] = zzUnpackCMap(
+  static final char[] ZZ_CMAP_Y = zzUnpackCMap(
     "\1\0\1\1\1\0\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\0\1\11\1\12\1\13\1\14\1\15\1\16"+
     "\3\0\1\17\1\20\1\21\1\22\2\0\1\23\3\0\1\23\71\0\1\24\1\0\1\25\1\26\1\27\1"+
     "\30\2\26\16\0\1\31\1\32\1\33\1\34\2\0\1\35\11\0\1\36\21\0\1\35\1\37\23\0\1"+
@@ -116,7 +116,7 @@ public class _JsonLexer implements FlexLexer {
     "\74\26\1\41\3\26\14\0\20\26\36\0\2\26");
 
   /* The ZZ_CMAP_A table has 928 entries */
-  static final char ZZ_CMAP_A[] = zzUnpackCMap(
+  static final char[] ZZ_CMAP_A = zzUnpackCMap(
     "\11\30\1\3\1\2\2\1\1\2\6\30\4\0\1\3\1\30\1\7\1\0\1\30\2\0\1\11\2\30\1\6\1"+
     "\17\1\35\1\12\1\15\1\4\1\13\11\14\1\36\1\0\3\30\1\0\5\30\1\16\3\30\1\20\4"+
     "\30\1\26\4\30\1\33\1\10\1\34\2\30\1\0\1\27\3\30\1\41\1\22\2\30\1\23\2\30\1"+
@@ -325,7 +325,7 @@ public class _JsonLexer implements FlexLexer {
   }
 
   /** the input device */
-  private java.io.Reader zzReader;
+  private final java.io.Reader zzReader;
 
   /** the current state of the DFA */
   private int zzState;
@@ -363,7 +363,7 @@ public class _JsonLexer implements FlexLexer {
 
   /* user code: */
   public _JsonLexer() {
-    this((java.io.Reader)null);
+    this(null);
   }
 
 

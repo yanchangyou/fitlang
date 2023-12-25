@@ -6,8 +6,7 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonStruct;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.sortJsonField;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 
 public class SortFieldJsonExecuteNodeTest extends TestCase {
 
@@ -17,8 +16,8 @@ public class SortFieldJsonExecuteNodeTest extends TestCase {
         System.out.println(json);
 
         JSONObject out = ExecuteJsonNodeUtil.sortJsonField(json);
-        System.out.println(out.toJSONString(JSONWriter.Feature.WriteMapNullValue));
-        Assert.assertEquals("{\"a\":1,\"b\":2,\"c\":{\"c1\":1,\"c2\":2},\"d\":[{\"d1\":1,\"d2\":2},{\"d1\":11,\"d2\":22}],\"e\":null,\"f\":\"abc\"}", out.toJSONString(JSONWriter.Feature.WriteMapNullValue));
+        System.out.println(toJsonText(out));
+        Assert.assertEquals("{\"a\":1,\"b\":2,\"c\":{\"c1\":1,\"c2\":2},\"d\":[{\"d1\":1,\"d2\":2},{\"d1\":11,\"d2\":22}],\"e\":null,\"f\":\"abc\"}", toJsonText(out));
     }
 
     public void testGetStruct() {
@@ -27,8 +26,8 @@ public class SortFieldJsonExecuteNodeTest extends TestCase {
         System.out.println(json);
 
         JSONObject out = getJsonStruct(json);
-        System.out.println(out.toJSONString(JSONWriter.Feature.WriteMapNullValue));
-        Assert.assertEquals("{\"a\":0,\"b\":0,\"c\":{\"c1\":0,\"c2\":0},\"d\":[{\"d1\":0,\"d2\":0}],\"e\":null,\"f\":\"\"}", out.toJSONString(JSONWriter.Feature.WriteMapNullValue));
+        System.out.println(toJsonText(out));
+        Assert.assertEquals("{\"a\":0,\"b\":0,\"c\":{\"c1\":0,\"c2\":0},\"d\":[{\"d1\":0,\"d2\":0}],\"e\":null,\"f\":\"\"}", toJsonText(out));
 
     }
 }

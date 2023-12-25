@@ -6,6 +6,8 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+
 public class InfoJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() throws InterruptedException {
@@ -15,7 +17,7 @@ public class InfoJsonExecuteNodeTest extends TestCase {
         String output = ExecuteJsonNodeUtil.executeCode("{'who':'world'}", flow);
 
         JSONObject info = JSONObject.parse(output);
-        System.out.println(info.toJSONString(JSONWriter.Feature.PrettyFormat));
+        System.out.println(toJsonTextWithFormat(info));
 
         Assert.assertTrue(info.containsKey("env"));
 

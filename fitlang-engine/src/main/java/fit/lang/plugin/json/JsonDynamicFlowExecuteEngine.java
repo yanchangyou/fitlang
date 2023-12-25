@@ -197,6 +197,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // util
         register("hello", HelloJsonExecuteNode.class);
         register("echo", EchoExecuteNode.class);
+        register("setGlobal", SetGlobalJsonExecuteNode.class);
         register("print", PrintExecuteNode.class);
         register("log", LogJsonExecuteNode.class);
         register("sleep", SleepJsonExecuteNode.class);
@@ -214,7 +215,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("catch", CatchJsonExecuteNode.class);
         register("assert", AssertJsonExecuteNode.class);
         register("return", ReturnJsonExecuteNode.class);
-
+        register("node", JsonNodeExecuteNode.class);
         register("execute", ExecuteJsonExecuteNode.class);
 
         //json
@@ -223,13 +224,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("mix", MixJsonExecuteNode.class);
         register("eval", EvalJsonExecuteNode.class);
-        register("setGlobal", SetGlobalJsonExecuteNode.class);
-
         register("mixNode", MixNodeJsonExecuteNode.class);
+
         register("get", GetJsonExecuteNode.class);
         register("set", SetJsonExecuteNode.class);
-
-        register("node", JsonNodeExecuteNode.class);
 
         register("removeField", RemoveFieldJsonExecuteNode.class);
         register("removeEmptyField", RemoveEmptyFieldJsonExecuteNode.class);

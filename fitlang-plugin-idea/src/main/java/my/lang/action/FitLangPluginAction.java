@@ -1,6 +1,7 @@
 package my.lang.action;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,8 +17,7 @@ import java.io.File;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.buildContextParam;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.LANG_NAME;
 import static my.lang.MyLanguage.LANG_STRING_LOGO;
 
@@ -79,7 +79,17 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
                 result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
 
                 if (isJsonObjectText(result)) {
-                    result = JSON.parseObject(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                    JSONObject jsonObject = JSON.parseObject(result);
+                    if (jsonObject.get("_raw") != null) {
+                        Object raw = jsonObject.get("_raw");
+                        if (raw instanceof JSONArray) {
+                            result = toJsonTextWithFormat((JSONArray) raw);
+                        } else {
+                            result = raw.toString();
+                        }
+                    } else {
+                        result = toJsonTextWithFormat(jsonObject);
+                    }
                 }
 
                 print(result + "\n\n", project, projectConsoleViewMap);

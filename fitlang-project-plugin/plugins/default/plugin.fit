@@ -7,6 +7,7 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
+            "visible": true,
             "script": {
                 "uni": "hello",
                 "who": "fit"
@@ -110,6 +111,7 @@
                 {
                     "name": "zip",
                     "title": "Zip",
+                    "refreshParent": true,
                     "script": {
                         "uni": "zip"
                     }
@@ -117,66 +119,9 @@
                 {
                     "name": "unzip",
                     "title": "Unzip",
+                    "refreshParent": true,
                     "script": {
                         "uni": "unzip"
-                    }
-                },
-                {
-                    "name": "sortJson",
-                    "title": "Sort Json",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readFile",
-                                "filePath": "${filePath}"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "sortField"
-                            },
-                            {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeFile",
-                                "filePath": "${filePath}"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "name": "getStruct",
-                    "title": "Get Json Structure",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readFile",
-                                "filePath": "${filePath}"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "getStruct"
-                            },
-                            {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeFile",
-                                "filePath": "${filePath}"
-                            }
-                        ]
                     }
                 }
             ]
@@ -272,17 +217,13 @@
         {
             "name": "FitActionGroup5",
             "title": "Convert Postman",
+            "refreshParent": true,
             "script": {
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "mix",
-                        "json": {
-                            "filePath": "${filePath}"
-                        }
-                    },
-                    {
-                        "uni": "readFile"
+                        "uni": "readEditor",
+                        "contentField": "content"
                     },
                     {
                         "uni": "parseJson",
@@ -411,6 +352,59 @@
                                 }
                             ]
                         }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup6",
+            "title": "Sort JSON Field",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "sortField"
+                    },
+                    {
+                        "uni": "stringifyJson",
+                        "jsonField": "content",
+                        "format": true
+                    },
+                    {
+                        "uni": "writeEditor",
+                        "contentField": "content"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup7",
+            "title": "Get JSON Struct",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "getStruct"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
                     }
                 ]
             }

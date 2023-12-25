@@ -74,7 +74,7 @@ public class TelnetNodeUtil {
         String msg = "CONNECT " + ip + ":" + port + " HTTP/1.0\n" //connect
                 + "Host: " + host + "\n"// host
                 + "\n";//换行符只能有一个，不能多
-        byte b[];
+        byte[] b;
         try {
             /*
              * We really do want ASCII7 -- the http protocol doesn't change
@@ -95,7 +95,7 @@ public class TelnetNodeUtil {
          * We need to store the reply so we can create a detailed
          * error message to the user.
          */
-        byte reply[] = new byte[200];
+        byte[] reply = new byte[200];
         int replyLen = 0;
         int newlinesSeen = 0;
         boolean headerDone = false;     /* Done on first newline */

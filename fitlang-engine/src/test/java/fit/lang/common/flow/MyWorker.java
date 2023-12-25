@@ -9,6 +9,6 @@ public class MyWorker implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(Thread.currentThread().toString() + ":" + index);
+        System.out.println(Thread.currentThread() + ":" + index);
     }
 }

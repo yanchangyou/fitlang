@@ -25,7 +25,7 @@ public class JsonExecuteNodeMonitorUtilTest extends TestCase {
         list.add(item);
 
         item = new JSONObject();
-        item.put("timestamp", System.currentTimeMillis() - 0);
+        item.put("timestamp", System.currentTimeMillis());
         item.put("free", 0.5);
         item.put("used", 0.5);
         list.add(item);

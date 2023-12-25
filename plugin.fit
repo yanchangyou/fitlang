@@ -7,6 +7,7 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
+            "visible": true,
             "script": {
                 "uni": "hello",
                 "who": "fit"
@@ -122,59 +123,6 @@
                     "script": {
                         "uni": "unzip"
                     }
-                },
-                {
-                    "name": "sortJson",
-                    "title": "Sort Json",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readEditor",
-                                "contentField": "content"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "sortField"
-                            },
-                            {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeEditor",
-                                "contentField": "content"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "name": "getStruct",
-                    "title": "Get Json Structure",
-                    "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readEditor",
-                                "contentField": "content"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "content"
-                            },
-                            {
-                                "uni": "getStruct"
-                            },
-                            {
-                                "uni": "get",
-                                "path": "content"
-                            }
-                        ]
-                    }
                 }
             ]
         },
@@ -274,18 +222,13 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor",
-                        "contentField": "content"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
+                        "uni": "readEditor"
                     },
                     {
                         "uni": "convert",
                         "express": {
-                            "item": "${content.item}",
-                            "collectionName": "${content.info.name}"
+                            "item": "${item}",
+                            "collectionName": "${info.name}"
                         }
                     },
                     {
@@ -404,6 +347,39 @@
                                 }
                             ]
                         }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup6",
+            "title": "Sort JSON Field",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor"
+                    },
+                    {
+                        "uni": "sortField"
+                    },
+                    {
+                        "uni": "writeEditor"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup7",
+            "title": "Get JSON Struct",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor"
+                    },
+                    {
+                        "uni": "getStruct"
                     }
                 ]
             }

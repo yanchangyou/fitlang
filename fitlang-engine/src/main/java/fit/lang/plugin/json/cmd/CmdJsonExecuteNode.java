@@ -30,7 +30,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         List<String> cmdList = parseStringArray("cmd", input);
 
-        String charset = parseStringField("charset", input);
+        String charset = nodeJsonDefine.getString("charset");
 
         boolean debug = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("debug"));
         boolean ignoreCurrentDir = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("ignoreCurrentDir"));

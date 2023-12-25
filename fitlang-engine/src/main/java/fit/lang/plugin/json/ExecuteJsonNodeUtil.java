@@ -163,7 +163,7 @@ public class ExecuteJsonNodeUtil {
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return nodeOutput.getData().toJSONString(JSONWriter.Feature.WriteMapNullValue);
+        return toJsonText(nodeOutput.getData());
     }
 
     public static Map<String, String> toStringMap(JSONObject jsonObject) {
@@ -678,8 +678,44 @@ public class ExecuteJsonNodeUtil {
      * @param jsonObject
      * @return
      */
+    public static String toJsonText(JSONObject jsonObject) {
+        return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonArray
+     * @return
+     */
+    public static String toJsonText(JSONArray jsonArray) {
+        return jsonArray.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonObject
+     * @return
+     */
     public static String toJsonTextWithFormat(JSONObject jsonObject) {
         return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
+                .replaceAll("\\t", "    ")
+                .replace("\":\"", "\": \"")
+                .replace("\":true", "\": true")
+                .replace("\":false", "\": false")
+                .replace("\":null", "\": null")
+                ;
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonArray
+     * @return
+     */
+    public static String toJsonTextWithFormat(JSONArray jsonArray) {
+        return jsonArray.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
                 .replaceAll("\\t", "    ")
                 .replace("\":\"", "\": \"")
                 .replace("\":true", "\": true")

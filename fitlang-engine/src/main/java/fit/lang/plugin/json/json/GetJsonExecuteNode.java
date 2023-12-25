@@ -21,7 +21,7 @@ public class GetJsonExecuteNode extends JsonExecuteNode {
             data = (JSONObject) object;
         } else {
             data = new JSONObject(1);
-            data.put("value", object);
+            data.put("_raw", object);
         }
 
         output.setData(data);

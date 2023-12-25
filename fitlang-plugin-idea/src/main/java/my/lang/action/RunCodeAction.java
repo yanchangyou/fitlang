@@ -164,7 +164,7 @@ public abstract class RunCodeAction extends AnAction {
                             }
                             String infoText;
                             if (info instanceof Map || info instanceof List) {
-                                infoText = JSON.toJSONString(info, JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+                                infoText = toJsonTextWithFormat(JSONObject.from(info));
                             } else {
                                 infoText = info.toString();
                             }
@@ -229,7 +229,7 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         if (needFormatJsonInConsole && isJsonObjectText(result)) {
-            result = JSONObject.parse(result).toJSONString(JSONWriter.Feature.PrettyFormat, JSONWriter.Feature.WriteMapNullValue);
+            result = toJsonTextWithFormat(JSONObject.parse(result));
         }
 
         return result;
@@ -308,8 +308,8 @@ public abstract class RunCodeAction extends AnAction {
 
     static void scrollToEnd(ConsoleView consoleView) {
         try {
-            Method method = ConsoleView.class.getMethod("requestScrollingToEnd", new Class[0]);
-            method.invoke(consoleView, new Object[0]);
+            Method method = ConsoleView.class.getMethod("requestScrollingToEnd");
+            method.invoke(consoleView);
         } catch (Exception e) {
             e.printStackTrace();
         }

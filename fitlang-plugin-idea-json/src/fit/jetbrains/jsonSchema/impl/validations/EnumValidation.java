@@ -78,10 +78,10 @@ public class EnumValidation implements JsonSchemaValidation {
     }
     else {
       if (!walker.allowsSingleQuotes()) {
-        if (stringEq.apply(object.toString(), text)) return true;
+        return stringEq.apply(object.toString(), text);
       }
       else {
-        if (equalsIgnoreQuotes(object.toString(), text, walker.requiresValueQuotes(), stringEq)) return true;
+        return equalsIgnoreQuotes(object.toString(), text, walker.requiresValueQuotes(), stringEq);
       }
     }
 

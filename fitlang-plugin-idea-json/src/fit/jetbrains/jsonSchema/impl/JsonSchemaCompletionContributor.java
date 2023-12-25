@@ -767,7 +767,7 @@ public class JsonSchemaCompletionContributor extends CompletionContributor {
     if (!walker.requiresValueQuotes() && defaultValue != null) {
       defaultValue = StringUtil.unquoteString(defaultValue);
     }
-    final boolean isNumber = type != null && (fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer.equals(type) || JsonSchemaType._number.equals(type)) ||
+    final boolean isNumber = (JsonSchemaType._integer.equals(type) || JsonSchemaType._number.equals(type)) ||
                              type == null && (defaultValue != null &&
                                               !StringUtil.isQuotedString(defaultValue) ||
                                               values != null && ContainerUtil.and(values, v -> !(v instanceof String)));
