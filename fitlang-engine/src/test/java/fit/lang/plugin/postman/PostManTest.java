@@ -25,14 +25,10 @@ public class PostManTest extends TestCase {
                 "            \"uni\": \"readFile\"\n" +
                 "        },\n" +
                 "        {\n" +
-                "            \"uni\": \"parseJson\",\n" +
-                "            \"jsonField\": \"content\"\n" +
-                "        },\n" +
-                "        {\n" +
                 "            \"uni\": \"convert\",\n" +
                 "            \"express\": {\n" +
-                "                \"item\": \"${content.item}\",\n" +
-                "                \"collectionName\": \"${content.info.name}\"\n" +
+                "                \"item\": \"${item}\",\n" +
+                "                \"collectionName\": \"${info.name}\"\n" +
                 "            }\n" +
                 "        },\n" +
                 "        {\n" +
@@ -85,7 +81,8 @@ public class PostManTest extends TestCase {
                 "                                    },\n" +
                 "                                    {\n" +
                 "                                        \"uni\": \"writeFile\",\n" +
-                "                                        \"format\": true\n" +
+                "                                        \"format\": true,\n" +
+                "                                        \"contentField\": \"content\"\n" +
                 "                                    }\n" +
                 "                                ]\n" +
                 "                            }\n" +
