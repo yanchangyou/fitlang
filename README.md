@@ -162,6 +162,10 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - info: 获取系统信息，基于hutool SystemUtil实现(信息字段(支持屏蔽)
   ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties,env)
 
+### os节点
+- getClipboard: 读取剪贴板内容
+- setClipboard: 设置剪贴板内容
+
 ### 命令行
 
 - cmd: 命令行
