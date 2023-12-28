@@ -72,6 +72,15 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject httpParam = parseParam(nodeJsonDefine);
 
         Boolean isPostForm = isPostForm(nodeJsonDefine);
+
+        int retryTimes = nodeJsonDefine.getIntValue("retryTimes", 0);
+        Double retrySleep = nodeJsonDefine.getDouble("retrySleep");
+        String retryCondition = nodeJsonDefine.getString("retryCondition");
+
+        if (retrySleep == null) {
+            retrySleep = 0.5;
+        }
+
         if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
             parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
@@ -93,7 +102,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         HttpResponse response = request.execute();
         long timeEnd = System.currentTimeMillis();
 
-        JSONObject result = parseHttpResult(response);
+        JSONObject result = new JSONObject();
+
+        for (int i = 0; i <= retryTimes; i++) {
+            try {
+                Thread.sleep((long) (i * retrySleep * 1000L));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            result = parseHttpResult(response);
+            Object retry = ExpressUtil.eval(retryCondition, result);
+            if (!Boolean.TRUE.equals(retry) && !"true".equals(retry)) {
+                break;
+            }
+        }
 
         JSONObject out = result;
 
