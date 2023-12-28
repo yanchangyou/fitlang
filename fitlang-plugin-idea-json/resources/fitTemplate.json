@@ -245,6 +245,9 @@
         {
             "uni": "http",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 1,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -252,6 +255,9 @@
         {
             "uni": "postJson",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -259,6 +265,9 @@
         {
             "uni": "postForm",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -266,6 +275,9 @@
         {
             "uni": "httpGet",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -273,6 +285,9 @@
         {
             "uni": "httpPut",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -280,6 +295,9 @@
         {
             "uni": "httpDelete",
             "url": "http://fit.321zou.com/hello",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "param": {
                 "foo": "bar"
             }
@@ -452,6 +470,9 @@
             "uni": "postman",
             "method": "POST",
             "url": "http://fit.321zou.com/echo",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
             "proxy": {
                 "host": "",
                 "port": 8888
@@ -465,6 +486,14 @@
             "body": {
                 "hello": "world"
             }
+        },
+        {
+            "uni": "getClipboard",
+            "contentField": "content"
+        },
+        {
+            "uni": "setClipboard",
+            "contentField": "content"
         }
     ]
 }
