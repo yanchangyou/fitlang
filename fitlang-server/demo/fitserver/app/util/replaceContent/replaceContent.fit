@@ -1,0 +1,6 @@
+{
+    "uni": "replaceContent",
+    "find": "[a-z]+",
+    "replace": "123",
+    "content": "abc456"
+}

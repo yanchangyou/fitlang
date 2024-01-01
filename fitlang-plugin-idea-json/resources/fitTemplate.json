@@ -494,6 +494,12 @@
         {
             "uni": "setClipboard",
             "contentField": "content"
+        },
+        {
+            "uni": "replaceContent",
+            "find": "regexp",
+            "replace": "",
+            "content": "fieldName"
         }
     ]
 }

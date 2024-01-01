@@ -457,7 +457,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.9.0 plan: app attribute, file support append, json format refine</li>
+            <li>0.9.0 add node: replaceContent; plan: app attribute, file support append, json format refine</li>
             <li>0.8.9 add node: getClipboard, setClipboard; http add retry</li>
             <li>0.8.8 refine node: get, set, readEditor, writeEditor</li>
             <li>0.8.7 refine node: stringifyJson, getStruct, readEditor, writeEditor, cmd; refine project plugin menu</li>

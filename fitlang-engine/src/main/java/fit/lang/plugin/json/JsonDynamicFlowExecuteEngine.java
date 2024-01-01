@@ -204,8 +204,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("log", LogJsonExecuteNode.class);
         register("sleep", SleepJsonExecuteNode.class);
         register("perf", PerformanceJsonExecuteNode.class);
-        register("getClipboard", GetClipboardJsonExecuteNode.class);
-        register("setClipboard", SetClipboardJsonExecuteNode.class);
+        register("replaceContent", ReplaceContentJsonExecuteNode.class);
 
         // flow
         register("sequence", JsonSequenceExecuteNode.class);
@@ -317,6 +316,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         //ide
         register("readEditor", ReadEditorJsonExecuteNode.class);
         register("writeEditor", WriteEditorJsonExecuteNode.class);
+
+        //os
+        register("getClipboard", GetClipboardJsonExecuteNode.class);
+        register("setClipboard", SetClipboardJsonExecuteNode.class);
 
     }
 }
