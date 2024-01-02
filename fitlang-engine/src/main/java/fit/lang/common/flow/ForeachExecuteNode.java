@@ -27,8 +27,8 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
         List<ExecuteNodeData> resultDataList = new ArrayList<>();
         for (int i = 0; next(input); i++) {
-            ExecuteNodeOutput subOutput = getCurrentOutput(output);
             ExecuteNodeInput subInput = getCurrentInput(input);
+            ExecuteNodeOutput subOutput = getCurrentOutput(output);
 
             int index = i;
             Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {
