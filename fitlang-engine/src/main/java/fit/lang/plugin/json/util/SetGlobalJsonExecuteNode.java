@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.os;
+package fit.lang.plugin.json.util;
 
 import fit.lang.plugin.json.ExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
