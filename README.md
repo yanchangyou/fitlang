@@ -92,6 +92,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - log: IDE控制台输出
 - sleep: 流程休眠节点
 - perf: 耗时统计
+- replaceContent: 文本内容查找替换
 
 ### json操作节点
 
