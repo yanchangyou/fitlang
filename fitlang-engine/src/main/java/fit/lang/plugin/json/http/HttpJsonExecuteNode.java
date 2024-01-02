@@ -99,10 +99,11 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         }
 
         long timeBegin = System.currentTimeMillis();
-        HttpResponse response = request.execute();
-        long timeEnd = System.currentTimeMillis();
 
         JSONObject result = new JSONObject();
+        HttpResponse response = null;
+
+        int realRetryTimes = 0;
 
         for (int i = 0; i <= retryTimes; i++) {
             try {
@@ -110,12 +111,15 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            response = request.execute();
             result = parseHttpResult(response);
             Object retry = ExpressUtil.eval(retryCondition, result);
             if (!Boolean.TRUE.equals(retry) && !"true".equals(retry)) {
                 break;
             }
+            realRetryTimes++;
         }
+        long timeEnd = System.currentTimeMillis();
 
         JSONObject out = result;
 
@@ -131,7 +135,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
                 //ignore todo
             }
 
-            out.put("status", response.getStatus());
+            out.put("status", response == null ? 0 : response.getStatus());
             JSONObject headerInfo = parseHeader(response);
             out.put("header", headerInfo.getJSONObject("header"));
             out.put("cookie", parseCookie(response));
@@ -139,12 +143,16 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             sizeInfo.put("header", headerInfo.getIntValue("size"));
             out.put("sizeInfo", sizeInfo);
 
+            if (realRetryTimes > 0) {
+                out.put("retryTimes", realRetryTimes);
+            }
+            out.put("time", (timeEnd - timeBegin) + "ms");
+
             String body = response.body();
             if (body != null) {
                 int bodySize = response.body().length();
                 sizeInfo.put("body", bodySize);
                 out.put("size", bodySize + headerInfo.getIntValue("size"));
-                out.put("time", (timeEnd - timeBegin) + "ms");
                 out.put("body", result);
             }
         }
@@ -171,10 +179,16 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONArray parseCookie(HttpResponse response) {
+        if (response == null) {
+            return new JSONArray();
+        }
         return (JSONArray) JSON.toJSON(response.getCookies());
     }
 
     static JSONObject parseHeader(HttpResponse response) {
+        if (response == null) {
+            return new JSONObject();
+        }
         Map<String, List<String>> headers = response.headers();
         JSONObject headerJson = new JSONObject();
         int size = 0;
