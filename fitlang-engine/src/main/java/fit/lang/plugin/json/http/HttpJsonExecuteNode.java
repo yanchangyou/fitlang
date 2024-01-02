@@ -103,7 +103,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject result = new JSONObject();
         HttpResponse response = null;
 
-        int realRetryTimes = 0;
+        int realRetryTimes = -1;
 
         for (int i = 0; i <= retryTimes; i++) {
             try {
@@ -141,9 +141,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
             sizeInfo.put("header", headerInfo.getIntValue("size"));
-            if (realRetryTimes > 0) {
-                out.put("retryTimes", realRetryTimes);
-            }
+            out.put("retryTimes", realRetryTimes);
             out.put("time", (timeEnd - timeBegin) + "ms");
             out.put("sizeInfo", sizeInfo);
             String body = response == null ? null : response.body();
