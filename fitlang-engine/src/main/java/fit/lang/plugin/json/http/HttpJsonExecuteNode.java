@@ -147,8 +147,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
                 out.put("retryTimes", realRetryTimes);
             }
             out.put("time", (timeEnd - timeBegin) + "ms");
-
-            String body = response.body();
+            String body = response == null ? null : response.body();
             if (body != null) {
                 int bodySize = response.body().length();
                 sizeInfo.put("body", bodySize);
