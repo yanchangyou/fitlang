@@ -141,12 +141,11 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
             sizeInfo.put("header", headerInfo.getIntValue("size"));
-            out.put("sizeInfo", sizeInfo);
-
             if (realRetryTimes > 0) {
                 out.put("retryTimes", realRetryTimes);
             }
             out.put("time", (timeEnd - timeBegin) + "ms");
+            out.put("sizeInfo", sizeInfo);
             String body = response == null ? null : response.body();
             if (body != null) {
                 int bodySize = response.body().length();
