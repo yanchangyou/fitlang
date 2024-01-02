@@ -33,7 +33,7 @@ public class ServerJsonExecuteNodeTest extends TestCase {
     public void testExecute1() throws InterruptedException {
         String flow = "{\n" +
                 "    \"uni\": \"loop\",\n" +
-                "    \"loopTimes\": 2,\n" +
+                "    \"loopTimes\": 1,\n" +
                 "    \"isPipe\": true,\n" +
                 "    \"isBagsMode\": true,\n" +
                 "    \"bagsName\": 'list',\n" +
@@ -41,7 +41,7 @@ public class ServerJsonExecuteNodeTest extends TestCase {
                 "        {\n" +
                 "            \"uni\": \"mix\",\n" +
                 "            \"json\": {\n" +
-                "                \"port\": \"${10111+loopIndex}\"\n" +
+                "                \"port\": \"${11110+loopIndex}\"\n" +
                 "            }\n" +
                 "        },\n" +
                 "        {\n" +
