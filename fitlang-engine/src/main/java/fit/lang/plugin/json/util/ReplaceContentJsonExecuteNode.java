@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.util;
 
+import cn.hutool.core.util.StrUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -14,11 +15,24 @@ public class ReplaceContentJsonExecuteNode extends JsonExecuteNode {
 
         String find = nodeJsonDefine.getString("find");
         String replace = nodeJsonDefine.getString("replace");
+        boolean isRegexp = nodeJsonDefine.getBooleanValue("isRegexp", true);
 
-        String content = parseStringField("content", input);
+        String contentField = parseStringField("contentField", input);
 
-        String result = content.replaceAll(find, replace);
+        if (StrUtil.isBlank(contentField)) {
+            contentField = "content";
+        }
 
+        String content = parseStringField(contentField, input);
+
+        String result;
+        if (isRegexp) {
+            result = content.replaceAll(find, replace);
+        } else {
+            result = content.replace(find, replace);
+        }
+
+        output.setData(input.getData().clone());
         output.set("content", result);
 
     }

@@ -497,9 +497,11 @@
         },
         {
             "uni": "replaceContent",
-            "find": "regexp",
-            "replace": "",
-            "content": "fieldName"
+            "find": "[a-z]+",
+            "replace": "123",
+            "isRegexp": true,
+            "contentField": "content",
+            "content": "abc456"
         }
     ]
 }
