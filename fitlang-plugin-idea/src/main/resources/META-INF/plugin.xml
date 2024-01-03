@@ -457,7 +457,7 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.9.1 fix cmd charset when error</li>
+            <li>0.9.1 fix cmd charset when error; parseJson support substring; alias parseJson parse, stringifyJson stringify</li>
             <li>0.9.0 add node: replaceContent; refine node: http</li>
             <li>0.8.9 add node: getClipboard, setClipboard; http support retry</li>
             <li>0.8.8 refine node: get, set, readEditor, writeEditor</li>
