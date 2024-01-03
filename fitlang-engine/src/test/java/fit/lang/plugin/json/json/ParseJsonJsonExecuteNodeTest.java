@@ -49,4 +49,26 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
         Assert.assertEquals("hello", outputJson.getJSONArray("json").getJSONObject(0).get("uni"));
 
     }
+
+    public void testExecuteFuse() {
+        String flow = "{" +//
+                "   'uni': 'parseJson'," +
+                "   'jsonField': 'json'," +
+                "}";
+
+        String output = ExecuteJsonNodeUtil.executeCode("{ 'json': '<xml>{\"uni\":\"hello\"}</xml>'}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertFalse(output.isEmpty());
+
+        System.out.println(output);
+
+        Assert.assertTrue(outputJson.containsKey("json"));
+        Assert.assertTrue(outputJson.getJSONObject("json").containsKey("uni"));
+
+        Assert.assertEquals("hello", outputJson.getJSONObject("json").get("uni"));
+
+    }
+
 }

@@ -32,6 +32,17 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                 value = JSONObject.parse((String) value);
             } else if (isJsonArrayText(value)) {
                 value = JSONArray.parse((String) value);
+            } else {
+                String text = (String) value;
+                int begin = text.indexOf("{");
+                int end = text.indexOf("}");
+                if (begin > -1 && end > begin) {
+                    try {
+                        value = JSONObject.parse(text.substring(begin, end + 1));
+                    } catch (Exception e) {
+                        //ignore
+                    }
+                }
             }
 
             output.set(jsonField, value);
