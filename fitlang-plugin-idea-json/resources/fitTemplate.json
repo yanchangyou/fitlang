@@ -388,6 +388,7 @@
         {
             "uni": "cmd",
             "cmd": "echo hello fit",
+            "charset": "UTF-8",
             "env": {
             },
             "option": {
