@@ -10,9 +10,7 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'parseJson'," +
-                "   'jsonField': 'json'," +
-                "}";
+                "   'uni': 'parseJson'," + "   'jsonField': 'json'," + "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'json': '{\"uni\":\"hello\"}'}", flow);
 
@@ -31,9 +29,7 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecuteArray() {
         String flow = "{" +//
-                "   'uni': 'parseJson'," +
-                "   'jsonField': 'json'," +
-                "}";
+                "   'uni': 'parseJson'," + "   'jsonField': 'json'," + "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'json': '[{\"uni\":\"hello\"}]'}", flow);
 
@@ -52,9 +48,7 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecuteFuse() {
         String flow = "{" +//
-                "   'uni': 'parseJson'," +
-                "   'jsonField': 'json'," +
-                "}";
+                "   'uni': 'parseJson'," + "   'jsonField': 'json'," + "}";
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'json': '<xml>{\"uni\":\"hello\"}</xml>'}", flow);
 
@@ -71,4 +65,25 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
 
     }
 
+    public void testFindJsonArray() {
+        String[] texts = new String[]{
+                //正常
+                "{}",
+                "{'a':1}",
+                "{'a':1,'b':'abc'}",
+                "[{'a':1}]",
+                "[{'a':1},{'b':'abc'}]",
+                //异常
+                null,
+                "",
+                "{",
+                "}",
+                "{'a'}",
+                "[{]}",
+        };
+        for (String text : texts) {
+            Object obj = ParseJsonJsonExecuteNode.findJsonArray(text);
+            System.out.println(obj);
+        }
+    }
 }
