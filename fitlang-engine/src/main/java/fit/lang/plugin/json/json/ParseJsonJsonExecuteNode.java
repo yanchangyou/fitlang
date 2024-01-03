@@ -36,14 +36,18 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
             } else {
                 String text = (String) value;
                 int begin = text.indexOf("{");
-                int end = text.indexOf("}");
+                int end = text.lastIndexOf("}");
                 if (begin > -1 && end > begin) {
                     try {
                         value = JSONObject.parse(text.substring(begin, end + 1));
                     } catch (Exception e) {
                         JSONArray array = findJsonArray(text);
                         if (!array.isEmpty()) {
-                            value = array;
+                            if (array.size() == 1) {
+                                value = array.get(0);
+                            } else {
+                                value = array;
+                            }
                         }
                     }
                 }
