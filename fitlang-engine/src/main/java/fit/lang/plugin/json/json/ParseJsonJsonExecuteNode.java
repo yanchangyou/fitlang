@@ -91,12 +91,20 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
             if (nextEnd == -1 && nextBegin == -1) {
                 break;
             }
-            if (nextBegin < nextEnd && nextBegin > -1) {
-                matchFlag++;
-            }
-            if (nextEnd > -1) {
+            if (nextBegin == -1) {
                 matchFlag--;
+                index = nextEnd;
+            } else if (nextEnd == -1) {
+                matchFlag++;
+                index = nextBegin;
+            } else if (nextBegin < nextEnd) {
+                matchFlag++;
+                index = nextBegin;
+            } else {
+                matchFlag--;
+                index = nextEnd;
             }
+            index++;
 
             if (matchFlag == 0) {
                 String subText = text.substring(begin, nextEnd + 1);
@@ -111,12 +119,14 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                         break;
                     }
 
+                    index = nextBegin + 1;
+
                 } catch (Exception e) {
                     //ignore
                     System.out.println(subText + ":" + e);
                 }
             }
-            index = nextBegin + 1;
+
         }
 
         return array;

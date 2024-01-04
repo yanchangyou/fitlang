@@ -73,6 +73,7 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
                 "{'a':1,'b':'abc'}",
                 "[{'a':1}]",
                 "[{'a':1},{'b':'abc'}]",
+                "<xml>{'a':1,'o':{'b':123}},{'a':1,'o':{'b':123}}{}</xml>",
                 //异常
                 null,
                 "",
