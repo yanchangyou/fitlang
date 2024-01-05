@@ -384,6 +384,26 @@
                     }
                 ]
             }
+        },
+        {
+            "name": "FitActionGroup8",
+            "title": "Parse JSON",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
+                    }
+                ]
+            }
         }
     ]
 }
