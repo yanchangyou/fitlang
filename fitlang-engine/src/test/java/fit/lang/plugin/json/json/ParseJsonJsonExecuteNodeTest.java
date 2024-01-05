@@ -74,6 +74,8 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
                 "[{'a':1}]",
                 "[{'a':1},{'b':'abc'}]",
                 "<xml>{'a':1,'o':{'b':123}},{'a':1,'o':{'b':123}}{}</xml>",
+                "<xml>{:1,'o':{'b':123}},{'a':1,'o':{'b':123}}{}</xml>",
+                "<xml>{a=1;},{'a':1,'o':{'b':123}}{}</xml>",
                 //异常
                 null,
                 "",
@@ -82,9 +84,27 @@ public class ParseJsonJsonExecuteNodeTest extends TestCase {
                 "{'a'}",
                 "[{]}",
         };
+        String[] expectList = new String[]{
+                "[{}]",
+                "[{\"a\":1}]",
+                "[{\"a\":1,\"b\":\"abc\"}]",
+                "[{\"a\":1}]",
+                "[{\"a\":1},{\"b\":\"abc\"}]",
+                "[{\"a\":1,\"o\":{\"b\":123}},{\"a\":1,\"o\":{\"b\":123}},{}]",
+                "[{\"a\":1,\"o\":{\"b\":123}},{}]",
+                "[{\"a\":1,\"o\":{\"b\":123}},{}]",
+                "[]",
+                "[]",
+                "[]",
+                "[]",
+                "[]",
+                "[]"
+        };
+        int index = 0;
         for (String text : texts) {
             Object obj = ParseJsonJsonExecuteNode.findJsonArray(text);
             System.out.println(obj);
+            Assert.assertEquals(expectList[index++], obj.toString());
         }
     }
 }

@@ -81,7 +81,7 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
 
         int timeLimit = 0;//最大循环次数限制，避免死循环
 
-        while (matchFlag != 0 && index < text.length()) {
+        while (index < text.length()) {
             timeLimit++;
             if (timeLimit > 100000) {
                 break;
@@ -109,21 +109,27 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
             if (matchFlag == 0) {
                 String subText = text.substring(begin, nextEnd + 1);
                 try {
+
+                    begin = nextBegin;
+                    index = nextBegin + 1;
+
                     JSONObject jsonObject = JSONObject.parse(subText);
                     array.add(jsonObject);
-                    begin = nextBegin;
 
                     if (nextBegin > -1) {
                         matchFlag = 1;
                     } else {
                         break;
                     }
-
-                    index = nextBegin + 1;
-
                 } catch (Exception e) {
                     //ignore
                     System.out.println(subText + ":" + e);
+
+                    if (nextBegin > -1) {
+                        matchFlag = 1;
+                    } else {
+                        break;
+                    }
                 }
             }
 
