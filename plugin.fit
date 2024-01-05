@@ -397,6 +397,10 @@
                     {
                         "uni": "parseJson",
                         "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
                     }
                 ]
             }
