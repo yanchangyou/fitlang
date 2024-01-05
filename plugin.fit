@@ -392,7 +392,8 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor"
+                        "uni": "readEditor",
+                        "contentField": "content"
                     },
                     {
                         "uni": "parseJson",

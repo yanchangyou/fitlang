@@ -18,12 +18,11 @@ public class ReadEditorJsonExecuteNode extends JsonExecuteNode {
 
         String content = UserIdeManager.getUserIdeInterface().readEditorContent();
 
-        if (isJsonObjectText(content)) {
+        String contentField = parseStringField("contentField", input);
 
+        if (contentField == null && isJsonObjectText(content)) {
             output.setData(JSONObject.parse(content));
-
         } else {
-            String contentField = parseStringField("contentField", input);
             if (contentField == null) {
                 contentField = "content";
             }
