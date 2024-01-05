@@ -18,4 +18,14 @@ public interface UserIdeInterface {
      */
     void writeEditorContent(String content);
 
+    /**
+     * 读取查询框内容
+     */
+    String readEditorSearchContent();
+
+    /**
+     * 读取替换框内容
+     */
+    String readEditorReplaceContent();
+
 }

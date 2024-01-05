@@ -51,7 +51,7 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
 
-        implementIdeOperator(editor);
+        implementIdeOperator(e);
 
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 

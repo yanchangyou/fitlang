@@ -7,10 +7,8 @@ import com.alibaba.fastjson2.*;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.find.SearchReplaceComponent;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -26,10 +24,12 @@ import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
+import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
@@ -96,7 +96,7 @@ public abstract class RunCodeAction extends AnAction {
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
 
-        implementIdeOperator(editor);
+        implementIdeOperator(e);
 
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
@@ -333,29 +333,64 @@ public abstract class RunCodeAction extends AnAction {
     /**
      * IDE 操作实现
      *
-     * @param editor
+     * @param actionEvent
      */
-    public static void implementIdeOperator(Editor editor) {
+    public static void implementIdeOperator(AnActionEvent actionEvent) {
         /**
          *
          */
         UserIdeManager.setUserIdeInterface(new UserIdeInterface() {
+
+            Editor getEditor() {
+                return actionEvent.getData(CommonDataKeys.EDITOR);
+            }
+
+            SearchReplaceComponent getSearchReplaceComponent() {
+
+                Component findPanel = getEditor().getHeaderComponent();
+
+                if (findPanel instanceof SearchReplaceComponent) {
+                    return (SearchReplaceComponent) findPanel;
+                }
+                return null;
+            }
+
             @Override
             public String readEditorContent() {
-                return editor.getDocument().getText();
+                return getEditor().getDocument().getText();
             }
 
             @Override
             public void writeEditorContent(String content) {
 
-                WriteCommandAction.runWriteCommandAction(editor.getProject(), new Runnable() {
+                WriteCommandAction.runWriteCommandAction(getEditor().getProject(), new Runnable() {
                     @Override
                     public void run() {
-                        editor.getDocument().setText(content);
+                        getEditor().getDocument().setText(content);
                     }
                 });
-
             }
+
+            public String readEditorSearchContent() {
+
+                SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
+
+                if (searchReplaceComponent != null) {
+                    return searchReplaceComponent.getSearchTextComponent().getText();
+                }
+                return "!!!ERROR: editor search component not open!!!";
+            }
+
+            public String readEditorReplaceContent() {
+
+                SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
+
+                if (searchReplaceComponent != null) {
+                    return searchReplaceComponent.getReplaceTextComponent().getText();
+                }
+                return "!!!ERROR: editor replace component not open!!!";
+            }
+
         });
     }
 }
