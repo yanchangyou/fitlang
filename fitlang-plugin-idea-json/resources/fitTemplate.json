@@ -338,7 +338,8 @@
             "uni": "writeFile",
             "filePath": "/app/first.fit",
             "contentField": "content",
-            "charset": "UTF-8"
+            "charset": "UTF-8",
+            "format": false
         },
         {
             "uni": "deleteFile",
@@ -350,6 +351,15 @@
         },
         {
             "uni": "writeEditor",
+            "contentField": "content",
+            "format": false
+        },
+        {
+            "uni": "readEditorSearch",
+            "contentField": "content"
+        },
+        {
+            "uni": "readEditorReplace",
             "contentField": "content"
         },
         {
