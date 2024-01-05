@@ -61,4 +61,8 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
         System.out.println(item);
         Assert.assertEquals(Long.valueOf(1), item.getLong("a"));
     }
+
+    public void test() {
+        System.out.println(JSONObject.parse("{1,2}"));
+    }
 }
