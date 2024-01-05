@@ -1,1 +1,1 @@
-<xml>{'a':1}{'b':'abc'}</xml>
+<xml>{'a'=1}{'b':'abc'}</xml>

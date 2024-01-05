@@ -29,6 +29,10 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
         output.setData(outputJson);
 
         if (value instanceof String) {
+
+            output.set(jsonField, null);
+            Object oldValue = value;
+
             if (isJsonObjectText(value)) {
                 value = JSONObject.parse((String) value);
             } else if (isJsonArrayText(value)) {
@@ -53,8 +57,9 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                 }
             }
 
-            output.set(jsonField, value);
-
+            if(oldValue != value) {
+                output.set(jsonField, value);
+            }
         }
     }
 
@@ -132,7 +137,6 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                     }
                 }
             }
-
         }
 
         return array;
