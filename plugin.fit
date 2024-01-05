@@ -405,6 +405,47 @@
                     }
                 ]
             }
+        },
+        {
+            "name": "FitActionGroup9",
+            "title": "Find JSON",
+            "refreshParent": true,
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditorSearch",
+                        "contentField": "searchContent"
+                    },
+                    {
+                        "uni": "setGlobal",
+                        "key": "searchContent",
+                        "value": "${searchContent}"
+                    },
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "${searchContent}"
+                    },
+                    {
+                        "uni": "writeFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "charset": "UTF-8",
+                        "format": true
+                    }
+                ]
+            }
         }
     ]
 }
