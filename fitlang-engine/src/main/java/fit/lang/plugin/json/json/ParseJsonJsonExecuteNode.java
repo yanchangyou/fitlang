@@ -127,8 +127,8 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                         break;
                     }
                 } catch (Exception e) {
-                    //ignore
-                    System.out.println(subText + ":" + e);
+                    //ignore todo
+                    System.out.println(subText + ": " + e);
 
                     if (nextBegin > -1) {
                         matchFlag = 1;
