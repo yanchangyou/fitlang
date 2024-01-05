@@ -222,18 +222,13 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor",
-                        "contentField": "content"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
+                        "uni": "readEditor"
                     },
                     {
                         "uni": "convert",
                         "express": {
-                            "item": "${content.item}",
-                            "collectionName": "${content.info.name}"
+                            "item": "${item}",
+                            "collectionName": "${info.name}"
                         }
                     },
                     {
@@ -319,6 +314,7 @@
                                                 },
                                                 {
                                                     "uni": "writeFile",
+                                                    "contentField": "content",
                                                     "format": true
                                                 }
                                             ]
@@ -363,24 +359,13 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor",
-                        "contentField": "content"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
+                        "uni": "readEditor"
                     },
                     {
                         "uni": "sortField"
                     },
                     {
-                        "uni": "stringifyJson",
-                        "jsonField": "content",
-                        "format": true
-                    },
-                    {
-                        "uni": "writeEditor",
-                        "contentField": "content"
+                        "uni": "writeEditor"
                     }
                 ]
             }
@@ -392,19 +377,10 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor",
-                        "contentField": "content"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
+                        "uni": "readEditor"
                     },
                     {
                         "uni": "getStruct"
-                    },
-                    {
-                        "uni": "get",
-                        "path": "content"
                     }
                 ]
             }

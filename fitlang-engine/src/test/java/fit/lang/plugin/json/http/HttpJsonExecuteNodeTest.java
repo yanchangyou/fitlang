@@ -47,6 +47,9 @@ public class HttpJsonExecuteNodeTest extends TestCase {
                 "    'onlyBody': false," +
                 "    'method': 'POST'," +
                 "    'url': 'http://fit.321zou.com/echo'," +
+                "    'retryTimes':1," +
+                "    'retrySleep':1," +
+                "    'retryCondition':true," +
                 "    'header': {" +
                 "        'contentType': 'application/json'" +
                 "    }," +

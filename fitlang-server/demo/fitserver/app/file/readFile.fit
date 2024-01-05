@@ -2,13 +2,9 @@
     "uni": "pipe",
     "child": [
         {
-                    "uni": "readFile",
+            "uni": "readFile",
             "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver",
             "filePath": "/app/first.fit"
-        },
-        {
-            "uni": "parseJson",
-            "jsonField": "content"
         }
     ]
 }

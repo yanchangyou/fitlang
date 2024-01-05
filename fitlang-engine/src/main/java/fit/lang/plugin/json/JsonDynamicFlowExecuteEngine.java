@@ -37,6 +37,9 @@ import fit.lang.plugin.json.net.SslTelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.SslTelnetJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetJsonExecuteNode;
+import fit.lang.plugin.json.os.GetClipboardJsonExecuteNode;
+import fit.lang.plugin.json.os.SetClipboardJsonExecuteNode;
+import fit.lang.plugin.json.util.SetGlobalJsonExecuteNode;
 import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import fit.lang.plugin.json.util.*;
@@ -202,6 +205,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("log", LogJsonExecuteNode.class);
         register("sleep", SleepJsonExecuteNode.class);
         register("perf", PerformanceJsonExecuteNode.class);
+        register("replaceContent", ReplaceContentJsonExecuteNode.class);
 
         // flow
         register("sequence", JsonSequenceExecuteNode.class);
@@ -215,7 +219,6 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("catch", CatchJsonExecuteNode.class);
         register("assert", AssertJsonExecuteNode.class);
         register("return", ReturnJsonExecuteNode.class);
-        register("node", JsonNodeExecuteNode.class);
         register("execute", ExecuteJsonExecuteNode.class);
 
         //json
@@ -314,6 +317,10 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         //ide
         register("readEditor", ReadEditorJsonExecuteNode.class);
         register("writeEditor", WriteEditorJsonExecuteNode.class);
+
+        //os
+        register("getClipboard", GetClipboardJsonExecuteNode.class);
+        register("setClipboard", SetClipboardJsonExecuteNode.class);
 
     }
 }

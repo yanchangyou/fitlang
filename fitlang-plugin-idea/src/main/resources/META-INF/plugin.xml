@@ -448,7 +448,7 @@ getMonitorClient: 获取监控客户端列表<br/>
                 description="Run fit lang" icon="/my/lang/icon/fit.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
-            <keyboard-shortcut first-keystroke="control shift J" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="control shift J" second-keystroke="J" keymap="$default"/>
         </action>
 
     </actions>
@@ -457,7 +457,9 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.8.8 </li>
+            <li>0.9.0 add node: replaceContent; plan: app attribute, file support append, json format refine</li>
+            <li>0.8.9 add node: getClipboard, setClipboard; http add retry</li>
+            <li>0.8.8 refine node: get, set, readEditor, writeEditor</li>
             <li>0.8.7 refine node: stringifyJson, getStruct, readEditor, writeEditor, cmd; refine project plugin menu</li>
             <li>0.8.6 add node: readEditor, writeEditor, set, setGlobal(rename by set)</li>
             <li>0.8.5 add node: sortField, getStruct, get; project plugin add sortJsonFile, sortJson and getStruct; plugin support config refresh after action</li>

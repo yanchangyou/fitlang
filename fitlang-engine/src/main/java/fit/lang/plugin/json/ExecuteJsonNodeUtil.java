@@ -926,4 +926,25 @@ public class ExecuteJsonNodeUtil {
     public static JSONObject getJsonStruct(JSONObject json) {
         return sortJsonField(json, true);
     }
+
+
+    /**
+     * 从多个字段中获取值
+     *
+     * @param nodeJsonDefine
+     * @param fields
+     * @return
+     */
+    public static String getWildlyField(JSONObject nodeJsonDefine, String[] fields) {
+
+        String path = "field";
+        for (String field : fields) {
+            path = nodeJsonDefine.getString(field);
+            if (StrUtil.isNotBlank(path)) {
+                break;
+            }
+        }
+
+        return path;
+    }
 }

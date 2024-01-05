@@ -72,6 +72,15 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject httpParam = parseParam(nodeJsonDefine);
 
         Boolean isPostForm = isPostForm(nodeJsonDefine);
+
+        int retryTimes = nodeJsonDefine.getIntValue("retryTimes", 0);
+        Double retrySleep = nodeJsonDefine.getDouble("retrySleep");
+        String retryCondition = nodeJsonDefine.getString("retryCondition");
+
+        if (retrySleep == null) {
+            retrySleep = 0.5;
+        }
+
         if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
             parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
@@ -90,10 +99,27 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         }
 
         long timeBegin = System.currentTimeMillis();
-        HttpResponse response = request.execute();
-        long timeEnd = System.currentTimeMillis();
 
-        JSONObject result = parseHttpResult(response);
+        JSONObject result = new JSONObject();
+        HttpResponse response = null;
+
+        int realRetryTimes = -1;
+
+        for (int i = 0; i <= retryTimes; i++) {
+            try {
+                Thread.sleep((long) (i * retrySleep * 1000L));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            response = request.execute();
+            result = parseHttpResult(response);
+            Object retry = ExpressUtil.eval(retryCondition, result);
+            if (!Boolean.TRUE.equals(retry) && !"true".equals(retry)) {
+                break;
+            }
+            realRetryTimes++;
+        }
+        long timeEnd = System.currentTimeMillis();
 
         JSONObject out = result;
 
@@ -109,20 +135,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
                 //ignore todo
             }
 
-            out.put("status", response.getStatus());
+            out.put("status", response == null ? 0 : response.getStatus());
             JSONObject headerInfo = parseHeader(response);
             out.put("header", headerInfo.getJSONObject("header"));
             out.put("cookie", parseCookie(response));
             JSONObject sizeInfo = new JSONObject();
             sizeInfo.put("header", headerInfo.getIntValue("size"));
+            out.put("retryTimes", realRetryTimes);
+            out.put("time", (timeEnd - timeBegin) + "ms");
             out.put("sizeInfo", sizeInfo);
-
-            String body = response.body();
+            String body = response == null ? null : response.body();
             if (body != null) {
                 int bodySize = response.body().length();
                 sizeInfo.put("body", bodySize);
                 out.put("size", bodySize + headerInfo.getIntValue("size"));
-                out.put("time", (timeEnd - timeBegin) + "ms");
                 out.put("body", result);
             }
         }
@@ -149,10 +175,16 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
     }
 
     static JSONArray parseCookie(HttpResponse response) {
+        if (response == null) {
+            return new JSONArray();
+        }
         return (JSONArray) JSON.toJSON(response.getCookies());
     }
 
     static JSONObject parseHeader(HttpResponse response) {
+        if (response == null) {
+            return new JSONObject();
+        }
         Map<String, List<String>> headers = response.headers();
         JSONObject headerJson = new JSONObject();
         int size = 0;

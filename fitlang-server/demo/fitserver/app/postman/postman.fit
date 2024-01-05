@@ -2,6 +2,8 @@
     "uni": "postman",
     "method": "POST",
     "url": "http://fit.321zou.com/echo",
+    "retryTimes": 0,
+    "retryCondition": true,
     "header": {
         "contentType": "application/json"
     },

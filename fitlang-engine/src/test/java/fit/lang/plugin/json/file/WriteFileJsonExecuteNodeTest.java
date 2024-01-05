@@ -21,7 +21,7 @@ public class WriteFileJsonExecuteNodeTest extends TestCase {
                 "   'filePath': '/app/test.fit'," +
                 "}";
 
-        String output = ExecuteJsonNodeUtil.executeCode("{ 'content': '{\"uni\":\"hello\"}'}", flow);
+        String output = ExecuteJsonNodeUtil.executeCode("{\"uni\":\"hello\"}", flow);
 
         JSONObject outputJson = JSON.parseObject(output);
 
