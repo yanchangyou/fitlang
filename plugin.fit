@@ -443,6 +443,11 @@
                         "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
                         "charset": "UTF-8",
                         "format": true
+                    },
+                    {
+                        "uni": "readFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "charset": "UTF-8"
                     }
                 ]
             }
