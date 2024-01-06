@@ -23,8 +23,11 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
+import my.lang.icon.MyLanguageIcons;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -329,6 +332,24 @@ public abstract class RunCodeAction extends AnAction {
         return fileName.contains(".");
     }
 
+    //json path 查找框
+    static JPanel firstExecuteComponent = new JPanel();
+    static JTextField firstTextField = new JTextField(40);
+    static JLabel firstLabel = new JLabel("Text:");
+
+    static JButton firstButton = new JButton("Execute");
+
+    static {
+
+
+        firstExecuteComponent.setLayout(new FlowLayout(FlowLayout.LEFT));
+        firstExecuteComponent.add(new JLabel("  "));
+        firstExecuteComponent.add(firstLabel);
+        firstExecuteComponent.add(firstTextField);
+        firstExecuteComponent.add(firstButton);
+
+
+    }
 
     /**
      * IDE 操作实现
@@ -346,11 +367,10 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             SearchReplaceComponent getSearchReplaceComponent() {
+                Component headerComponent = getEditor().getHeaderComponent();
 
-                Component findPanel = getEditor().getHeaderComponent();
-
-                if (findPanel instanceof SearchReplaceComponent) {
-                    return (SearchReplaceComponent) findPanel;
+                if (headerComponent instanceof SearchReplaceComponent) {
+                    return (SearchReplaceComponent) headerComponent;
                 }
                 return null;
             }
@@ -371,8 +391,32 @@ public abstract class RunCodeAction extends AnAction {
                 });
             }
 
-            public String readEditorSearchContent() {
+            public void showFirstComponent(String title, JSONObject actionScript, JSONObject context) {
+                firstLabel.setText(title);
+                firstTextField.setText("");
+                getEditor().setHeaderComponent(firstExecuteComponent);
 
+                firstButton.setAction(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        firstButton.setText("Execute");
+                        firstButton.setFocusable(false);
+                        firstButton.setIcon(MyLanguageIcons.FILE);
+
+//                        System.out.println(e);
+                        JSONObject input = new JSONObject();
+                        input.put("textField", firstTextField.getText());
+                        String result = ExecuteJsonNodeUtil.executeCode(input, actionScript, context);
+                        System.out.println("execute first button result: " + result);
+                        firstExecuteComponent.setVisible(true);
+                    }
+                });
+                firstButton.setVisible(true);
+            }
+
+            public String readEditorSearchContent() {
+//                showFirstComponent("Test Button", JSONObject.parse("{'uni':'hello'}"), new JSONObject());
                 SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
 
                 if (searchReplaceComponent != null) {

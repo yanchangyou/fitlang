@@ -1,5 +1,7 @@
 package fit.lang.plugin.json.ide;
 
+import com.alibaba.fastjson2.JSONObject;
+
 /**
  * 用户IDE接口
  */
@@ -27,5 +29,7 @@ public interface UserIdeInterface {
      * 读取替换框内容
      */
     String readEditorReplaceContent();
+
+    void showFirstComponent(String title, JSONObject actionScript, JSONObject context);
 
 }
