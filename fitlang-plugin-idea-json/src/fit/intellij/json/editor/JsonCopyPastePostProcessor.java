@@ -67,16 +67,16 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
     // if this list is empty, processTransferableData won't be called
     return DATA_LIST;
   }
-
-  @Override
-  public void processTransferableData(Project project,
-                                      Editor editor,
-                                      RangeMarker bounds,
-                                      int caretOffset,
-                                      Ref<Boolean> indented,
-                                      List<TextBlockTransferableData> values) {
-    fixCommasOnPaste(project, editor, bounds);
-  }
+//
+//  @Override
+//  public void processTransferableData(Project project,
+//                                      Editor editor,
+//                                      RangeMarker bounds,
+//                                      int caretOffset,
+//                                      Ref<Boolean> indented,
+//                                      List<TextBlockTransferableData> values) {
+//    fixCommasOnPaste(project, editor, bounds);
+//  }
 
   private static void fixCommasOnPaste(@NotNull Project project, @NotNull Editor editor, @NotNull RangeMarker bounds) {
     if (!JsonEditorOptions.getInstance().COMMA_ON_PASTE) return;

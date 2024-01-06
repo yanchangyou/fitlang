@@ -32,12 +32,12 @@ public class JsonCopyPointerAction extends CopyReferenceAction {
     VirtualFile file = editor == null ? null : FileDocumentManager.getInstance().getFile(editor.getDocument());
     e.getPresentation().setVisible(file != null && JsonUtil.isJsonFile(file, editor.getProject()));
   }
-
-  @Override
-  protected String getQualifiedName(Editor editor, List<PsiElement> elements) {
-    if (elements.size() != 1) return null;
-    return JsonQualifiedNameProvider.generateQualifiedName(elements.get(0), JsonQualifiedNameKind.JsonPointer);
-  }
+//
+//  @Override
+//  protected String getQualifiedName(Editor editor, List<PsiElement> elements) {
+//    if (elements.size() != 1) return null;
+//    return JsonQualifiedNameProvider.generateQualifiedName(elements.get(0), JsonQualifiedNameKind.JsonPointer);
+//  }
 
   @NotNull
   @Override
