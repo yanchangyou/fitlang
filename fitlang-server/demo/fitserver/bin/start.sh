@@ -9,7 +9,7 @@ curl http://127.0.0.1:11111/_shutdown
 
 sleep 0.5
 
-java -classpath lib/fitlang-0.9.2.jar:\
+java -classpath lib/fitlang-0.9.3.jar:\
 lib/hutool-all-5.8.23.jar:\
 lib/mvel2-2.5.1.Final.jar:\
 lib/jna-5.13.0.jar:\
