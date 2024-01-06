@@ -76,6 +76,21 @@
 
 动态插件放到目录中：/fitlang-project-plugin/plugins
 
+#### default
+
+默认项目插件（从中可以查看配置方法）
+- Fit Hello: 一个最简单的HelloWorld示例
+- Run Code: 执行多种编程语言
+- Fit Tools: zip和unzip
+- Fit Info: 查看上下文信息，系统信息，基础信息
+- Fit Server: fit实现的轻量级中间件，类似于tomcat
+- Convert Postman: 转换postman v2版本成fit文件（一个较复杂的应用案例）
+- Sort Json Field: 对json进行排序
+- Get Json: 获取json结构，方便做报文结构对比
+- Parse Json: 编辑器中解析json内容，如果是多个json返回数组格式
+
+#### go-doudou
+
 开源项目go-doudou配置如下，支持项目代码生成、启动等相关操作，简化命令行操作
 
 案例：/fitlang-project-plugin/plugins/godoudou/plugin.fit
