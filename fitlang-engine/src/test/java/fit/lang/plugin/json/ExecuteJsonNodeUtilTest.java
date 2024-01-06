@@ -64,5 +64,12 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
 
     public void test() {
         System.out.println(JSONObject.parse("{1,2}"));
+        System.out.println(JSONObject.parse("{01,2}"));
+        System.out.println(JSONObject.parse("{1,02}"));
+        System.out.println(JSONObject.parse("{01,02}"));
+        System.out.println(JSONObject.parse("{10,2}"));
+        System.out.println(JSONObject.parse("{1,20}"));
+        System.out.println(JSONObject.parse("{100,2}"));
+        System.out.println(JSONObject.parse("{1,200}"));
     }
 }
