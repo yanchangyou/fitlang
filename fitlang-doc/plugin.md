@@ -25,11 +25,13 @@
 
 ```
 {
+    "enable": true,
     "debug": true,
     "groups": [
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
+            "visible": true,
             "script": {
                 "uni": "hello",
                 "who": "fit"
@@ -56,11 +58,15 @@
 
 配置项说明
 
+- enable: 配置是否启用，为true时启用
 - debug: debug为true时，修改配置就会实时生效, 为false时，需要重启IDEA生效
 - groups: 菜单组，支持两级菜单
     - name: 菜单名称，必须使用内置的名称：FitActionGroup0-9,内置了10个一级菜单（不能重复）
     - title: 菜单显示名称
     - script: 点击菜单后，会执行此处定义的脚步内容，也是fit语法
+    - visible: 配置是否可见
+    - refreshParent: 执行完是否刷新父目录，创建新文件场景需要刷新才能看见
+    - refresh: 执行完是否刷新当前文件内容，早期操作文件时需要，后面支持读取编辑器内容后，基本不再使用
     - actions: 二级菜单定义，不限数量（script和actions只使用一个，优先script配置）
         - name: 二级菜单内部名称（自定义，不能重复）
         - title: 二级菜单显示名称
