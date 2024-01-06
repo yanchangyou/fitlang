@@ -30,6 +30,6 @@ public interface UserIdeInterface {
      */
     String readEditorReplaceContent();
 
-    void showFirstComponent(String title, JSONObject actionScript, JSONObject context);
+    void openNodePage(String title, JSONObject actionScript, JSONObject context);
 
 }

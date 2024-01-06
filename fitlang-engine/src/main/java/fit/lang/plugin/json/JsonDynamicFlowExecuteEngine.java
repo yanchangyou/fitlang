@@ -27,10 +27,7 @@ import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.http.*;
-import fit.lang.plugin.json.ide.ReadEditorJsonExecuteNode;
-import fit.lang.plugin.json.ide.ReadEditorReplaceJsonExecuteNode;
-import fit.lang.plugin.json.ide.ReadEditorSearchJsonExecuteNode;
-import fit.lang.plugin.json.ide.WriteEditorJsonExecuteNode;
+import fit.lang.plugin.json.ide.*;
 import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
@@ -323,6 +320,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("writeEditor", WriteEditorJsonExecuteNode.class);
         register("readEditorSearch", ReadEditorSearchJsonExecuteNode.class);
         register("readEditorReplace", ReadEditorReplaceJsonExecuteNode.class);
+        register("openNodePage", OpenNodePageJsonExecuteNode.class);
 
         //os
         register("getClipboard", GetClipboardJsonExecuteNode.class);

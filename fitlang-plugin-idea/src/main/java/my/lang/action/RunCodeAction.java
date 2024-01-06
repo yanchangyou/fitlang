@@ -12,10 +12,12 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
+import com.intellij.ui.jcef.JBCefBrowser;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.ide.UserIdeInterface;
@@ -23,7 +25,7 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import my.lang.icon.MyLanguageIcons;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -332,25 +334,6 @@ public abstract class RunCodeAction extends AnAction {
         return fileName.contains(".");
     }
 
-    //json path 查找框
-    static JPanel firstExecuteComponent = new JPanel();
-    static JTextField firstTextField = new JTextField(40);
-    static JLabel firstLabel = new JLabel("Text:");
-
-    static JButton firstButton = new JButton("Execute");
-
-    static {
-
-
-        firstExecuteComponent.setLayout(new FlowLayout(FlowLayout.LEFT));
-        firstExecuteComponent.add(new JLabel("  "));
-        firstExecuteComponent.add(firstLabel);
-        firstExecuteComponent.add(firstTextField);
-        firstExecuteComponent.add(firstButton);
-
-
-    }
-
     /**
      * IDE 操作实现
      *
@@ -391,32 +374,34 @@ public abstract class RunCodeAction extends AnAction {
                 });
             }
 
-            public void showFirstComponent(String title, JSONObject actionScript, JSONObject context) {
-                firstLabel.setText(title);
-                firstTextField.setText("");
-                getEditor().setHeaderComponent(firstExecuteComponent);
+            public void openNodePage(String title, JSONObject actionScript, JSONObject context) {
 
-                firstButton.setAction(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+                JBCefBrowser browser = new JBCefBrowser();
+                JPanel panel = new JPanel();
+                panel.add(browser.getComponent());
 
-                        firstButton.setText("Execute");
-                        firstButton.setFocusable(false);
-                        firstButton.setIcon(MyLanguageIcons.FILE);
+                browser.openDevtools();
+//                browser.loadHTML("<h2>hello, world!</h2>");
+                browser.loadURL("http://www.baidu.com");
+                getEditor().setHeaderComponent(panel);
 
-//                        System.out.println(e);
-                        JSONObject input = new JSONObject();
-                        input.put("textField", firstTextField.getText());
-                        String result = ExecuteJsonNodeUtil.executeCode(input, actionScript, context);
-                        System.out.println("execute first button result: " + result);
-                        firstExecuteComponent.setVisible(true);
-                    }
-                });
-                firstButton.setVisible(true);
+
+//                new DialogWrapper(true) {
+//
+//                    @Override
+//                    protected @Nullable JComponent createCenterPanel() {
+//
+//                        JBCefBrowser browser = new JBCefBrowser();
+//                        browser.loadURL("http://www.baidu.com");
+////                        JPanel panel = new JPanel();
+////                        panel.add(browser.getComponent());
+////                        return panel;
+//                        return browser.getComponent();
+//                    }
+//                }.showAndGet();
             }
 
             public String readEditorSearchContent() {
-//                showFirstComponent("Test Button", JSONObject.parse("{'uni':'hello'}"), new JSONObject());
                 SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
 
                 if (searchReplaceComponent != null) {
