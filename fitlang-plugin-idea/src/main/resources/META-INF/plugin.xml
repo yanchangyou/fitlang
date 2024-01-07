@@ -447,7 +447,8 @@ getMonitorClient: 获取监控客户端列表<br/>
                 description="Run fit lang" icon="/my/lang/icon/fit.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
-            <keyboard-shortcut first-keystroke="control shift J" second-keystroke="J" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="alt J" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="shift alt J" keymap="$default"/>
         </action>
 
     </actions>
