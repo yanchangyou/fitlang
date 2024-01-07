@@ -387,7 +387,7 @@ getMonitorClient: 获取监控客户端列表<br/>
     </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="FitLang Console" anchor="bottom" order="first"
+        <toolWindow id="FitLang Console" anchor="bottom" order="first" icon="/my/lang/icon/fit.svg"
                     factoryClass="my.lang.action.ScriptConsoleWindowFactory"/>
     </extensions>
 
