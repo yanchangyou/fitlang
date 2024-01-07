@@ -13,6 +13,8 @@ public class NodePageDialogWrapper extends DialogWrapper {
         setTitle("Node Page");
         this.setModal(false);
         init();
+
+//        setOKActionEnabled(false);
     }
 
     @Nullable
@@ -20,7 +22,7 @@ public class NodePageDialogWrapper extends DialogWrapper {
     protected JComponent createCenterPanel() {
         JBCefBrowser browser = new JBCefBrowser();
         browser.loadURL("https://www.baidu.com");
-        browser.openDevtools();
+//        browser.openDevtools();
         return browser.getComponent();
     }
 

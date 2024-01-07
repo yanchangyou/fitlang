@@ -1,15 +1,18 @@
 package my.lang.action;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -26,14 +29,38 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
     PluginActionConfig actionConfig;
 
     protected FitLangPluginAction(JSONObject config) {
-        super(config.getOrDefault("title", config.getString("name")).toString());
+        super("Fit Action " + config.getOrDefault("title", config.getString("name")).toString());
+
         actionConfig = new PluginActionConfig(config);
 
-//        KeyStroke firstKeyStroke = KeyStroke.getKeyStroke("control 1");
-//        KeyStroke secondKeyStroke = KeyStroke.getKeyStroke("control 2");
-//        KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, null);
-//        this.setShortcutSet(new CustomShortcutSet(keyboardShortcut));
-  }
+        if (StrUtil.isNotBlank(actionConfig.shortCut1)) {
+            KeyStroke firstKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut1);
+            KeyStroke secondKeyStroke = null;
+            if (StrUtil.isNotBlank(actionConfig.shortCut2)) {
+                secondKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut2);
+            }
+            KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, secondKeyStroke);
+            setShortcutSet(new CustomShortcutSet(keyboardShortcut));
+        }
+
+        registerAction(actionConfig.getId(), this);
+
+    }
+
+    /**
+     * 注册action
+     *
+     * @param actionId
+     * @param action
+     */
+    public static void registerAction(String actionId, AnAction action) {
+        ActionManager actionManager = ActionManager.getInstance();
+        if (actionManager.getAction(actionId) != null) {
+            actionManager.unregisterAction(actionId);
+        }
+        actionManager.registerAction(actionId, action, PluginId.getId("FitLang"));
+    }
+
 
     @Override
     public void actionPerformed(AnActionEvent e) {

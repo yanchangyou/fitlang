@@ -4,7 +4,10 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -79,6 +82,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                     title = groupConfig.getString("name");
                 }
                 event.getPresentation().setText(title);
+
                 return;
             }
             if (actions == null || actions.isEmpty()) {
@@ -89,7 +93,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 event.getPresentation().setEnabledAndVisible(true);
             }
             debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
-            List<AnAction> actionList = new ArrayList<>();
+            List<FitLangPluginAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
             for (Object item : actions) {
                 JSONObject plugin = (JSONObject) item;
@@ -108,6 +112,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
 
             children = actionList.toArray(new AnAction[0]);
+
         }
     }
 

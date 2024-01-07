@@ -67,7 +67,6 @@ public abstract class RunCodeAction extends AnAction {
     public abstract String getLogoString();
 
     protected RunCodeAction() {
-
     }
 
     protected RunCodeAction(String title) {
