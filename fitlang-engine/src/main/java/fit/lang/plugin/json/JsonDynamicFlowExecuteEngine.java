@@ -18,8 +18,10 @@ import fit.lang.define.base.ExecuteNodeBuildable;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
 import fit.lang.plugin.json.cmd.UnzipJsonExecuteNode;
 import fit.lang.plugin.json.cmd.ZipJsonExecuteNode;
-import fit.lang.plugin.json.define.*;
-
+import fit.lang.plugin.json.define.JsonExecuteNode;
+import fit.lang.plugin.json.define.JsonExecuteNodeData;
+import fit.lang.plugin.json.define.JsonExecuteNodeInput;
+import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
 import fit.lang.plugin.json.file.ReadFileJsonExecuteNode;
 import fit.lang.plugin.json.file.WriteFileJsonExecuteNode;
@@ -38,11 +40,10 @@ import fit.lang.plugin.json.net.TelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetJsonExecuteNode;
 import fit.lang.plugin.json.os.GetClipboardJsonExecuteNode;
 import fit.lang.plugin.json.os.SetClipboardJsonExecuteNode;
-import fit.lang.plugin.json.util.SetGlobalJsonExecuteNode;
+import fit.lang.plugin.json.util.*;
 import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import fit.lang.plugin.json.util.*;
-import fit.lang.plugin.json.web.*;
+import fit.lang.plugin.json.web.WebJsonExecuteNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -321,6 +322,8 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("readEditorSearch", ReadEditorSearchJsonExecuteNode.class);
         register("readEditorReplace", ReadEditorReplaceJsonExecuteNode.class);
         register("openNodePage", OpenNodePageJsonExecuteNode.class);
+        register("openConfig", OpenConfigJsonExecuteNode.class);
+        register("getConfig", GetConfigJsonExecuteNode.class);
 
         //os
         register("getClipboard", GetClipboardJsonExecuteNode.class);

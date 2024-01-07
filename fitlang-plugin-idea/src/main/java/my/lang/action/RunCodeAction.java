@@ -389,6 +389,17 @@ public abstract class RunCodeAction extends AnAction {
 
             }
 
+            @Override
+            public void openNodeConfig(JSONObject config) {
+                NodeConfigPanel.nodeConfigPanel.resetConfig(config);
+                getEditor().setHeaderComponent(NodeConfigPanel.nodeConfigPanel.getPanel());
+            }
+
+            @Override
+            public JSONObject getNodeConfig() {
+                return NodeConfigPanel.nodeConfigPanel.getConfig();
+            }
+
             public String readEditorSearchContent() {
                 SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
 

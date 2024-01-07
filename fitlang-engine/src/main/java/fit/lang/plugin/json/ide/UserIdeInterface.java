@@ -32,4 +32,8 @@ public interface UserIdeInterface {
 
     void openNodePage(String title, JSONObject actionScript, JSONObject context);
 
+    void openNodeConfig(JSONObject config);
+
+    JSONObject getNodeConfig();
+
 }

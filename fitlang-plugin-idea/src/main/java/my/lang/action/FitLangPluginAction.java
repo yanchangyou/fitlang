@@ -29,7 +29,7 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
     PluginActionConfig actionConfig;
 
     protected FitLangPluginAction(JSONObject config) {
-        super("Fit Action " + config.getOrDefault("title", config.getString("name")).toString());
+        super(config.getOrDefault("title", config.getString("name")).toString());
 
         actionConfig = new PluginActionConfig(config);
 

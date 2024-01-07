@@ -419,13 +419,18 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditorSearch",
-                        "contentField": "searchContent"
+                        "uni": "openConfig",
+                        "config": {
+                            "jsonPath": "..uni"
+                        }
+                    },
+                    {
+                        "uni": "getConfig"
                     },
                     {
                         "uni": "setGlobal",
-                        "key": "searchContent",
-                        "value": "${searchContent}"
+                        "key": "jsonPath",
+                        "value": "${config.?jsonPath}"
                     },
                     {
                         "uni": "readEditor",
@@ -441,17 +446,17 @@
                     },
                     {
                         "uni": "get",
-                        "path": "${searchContent}"
+                        "path": "${jsonPath}"
                     },
                     {
                         "uni": "writeFile",
-                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
                         "charset": "UTF-8",
                         "format": true
                     },
                     {
                         "uni": "readFile",
-                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
                         "charset": "UTF-8"
                     }
                 ]
