@@ -1,6 +1,5 @@
 package my.lang.action;
 
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -12,7 +11,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -32,16 +30,17 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
         super(config.getOrDefault("title", config.getString("name")).toString());
 
         actionConfig = new PluginActionConfig(config);
-
-        if (StrUtil.isNotBlank(actionConfig.shortCut1)) {
-            KeyStroke firstKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut1);
-            KeyStroke secondKeyStroke = null;
-            if (StrUtil.isNotBlank(actionConfig.shortCut2)) {
-                secondKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut2);
-            }
-            KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, secondKeyStroke);
-            setShortcutSet(new CustomShortcutSet(keyboardShortcut));
-        }
+//
+        //兼容问题; TODO
+//        if (StrUtil.isNotBlank(actionConfig.shortCut1)) {
+//            KeyStroke firstKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut1);
+//            KeyStroke secondKeyStroke = null;
+//            if (StrUtil.isNotBlank(actionConfig.shortCut2)) {
+//                secondKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut2);
+//            }
+//            KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, secondKeyStroke);
+//            setShortcutSet(new CustomShortcutSet(keyboardShortcut));
+//        }
     }
 
     /**
