@@ -3,9 +3,7 @@ package my.lang.action;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -30,7 +28,12 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
     protected FitLangPluginAction(JSONObject config) {
         super(config.getOrDefault("title", config.getString("name")).toString());
         actionConfig = new PluginActionConfig(config);
-    }
+
+//        KeyStroke firstKeyStroke = KeyStroke.getKeyStroke("control 1");
+//        KeyStroke secondKeyStroke = KeyStroke.getKeyStroke("control 2");
+//        KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, null);
+//        this.setShortcutSet(new CustomShortcutSet(keyboardShortcut));
+  }
 
     @Override
     public void actionPerformed(AnActionEvent e) {

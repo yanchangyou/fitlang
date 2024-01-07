@@ -25,7 +25,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     AnAction[] children = new AnAction[0];
 
-    PluginActionConfig actionConfig;
+    protected PluginActionConfig actionConfig;
 
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
 
@@ -65,8 +65,14 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return;
             }
             JSONObject actionScript = groupConfig.getJSONObject("script");
-            if (actionScript != null) {
-                actionConfig = new PluginActionConfig(groupConfig);
+            JSONArray actions = groupConfig.getJSONArray("actions");
+
+            if (actionScript != null || actions != null && actions.size() == 1) {
+                if (actionScript != null) {
+                    actionConfig = new PluginActionConfig(groupConfig);
+                } else {
+                    actionConfig = new PluginActionConfig(actions.getJSONObject(0));
+                }
                 event.getPresentation().setEnabledAndVisible(true);
                 String title = groupConfig.getString("title");
                 if (StrUtil.isBlank(title)) {
@@ -75,7 +81,6 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 event.getPresentation().setText(title);
                 return;
             }
-            JSONArray actions = groupConfig.getJSONArray("actions");
             if (actions == null || actions.isEmpty()) {
                 return;
             }
