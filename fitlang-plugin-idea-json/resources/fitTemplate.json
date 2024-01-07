@@ -363,6 +363,18 @@
             "contentField": "content"
         },
         {
+            "uni": "openConfig",
+            "config": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "getConfig"
+        },
+        {
+            "uni": "openNodePage"
+        },
+        {
             "uni": "systemInfo",
             "shareFields": [
                 "computerManufacturer",
