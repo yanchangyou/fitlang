@@ -3,38 +3,39 @@ package my.lang.action;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson2.*;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.find.SearchReplaceComponent;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
-import com.intellij.ui.jcef.JBCefBrowser;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.ide.UserIdeInterface;
 import fit.lang.plugin.json.ide.UserIdeManager;
-import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
+import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
@@ -384,29 +385,9 @@ public abstract class RunCodeAction extends AnAction {
 
             public void openNodePage(String title, JSONObject actionScript, JSONObject context) {
 
-                JBCefBrowser browser = new JBCefBrowser();
-                JPanel panel = new JPanel();
-                panel.add(browser.getComponent());
+                NodePageDialogWrapper nodePageDialogWrapper = new NodePageDialogWrapper();
+                nodePageDialogWrapper.show();
 
-                browser.openDevtools();
-//                browser.loadHTML("<h2>hello, world!</h2>");
-                browser.loadURL("http://www.baidu.com");
-                getEditor().setHeaderComponent(panel);
-
-
-//                new DialogWrapper(true) {
-//
-//                    @Override
-//                    protected @Nullable JComponent createCenterPanel() {
-//
-//                        JBCefBrowser browser = new JBCefBrowser();
-//                        browser.loadURL("http://www.baidu.com");
-////                        JPanel panel = new JPanel();
-////                        panel.add(browser.getComponent());
-////                        return panel;
-//                        return browser.getComponent();
-//                    }
-//                }.showAndGet();
             }
 
             public String readEditorSearchContent() {

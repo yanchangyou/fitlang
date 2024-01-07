@@ -395,53 +395,58 @@ getMonitorClient: 获取监控客户端列表<br/>
         <group id="FitActionGroup9" text="Fit Actions9" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup9">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup8" text="Fit Actions8" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup8">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup7" text="Fit Actions7" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup7">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup6" text="Fit Actions6" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup6">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
 
         <group id="FitActionGroup5" text="Fit Actions5" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup5">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup4" text="Fit Actions4" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup4">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup3" text="Fit Actions3" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup3">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup2" text="Fit Actions2" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup2">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup1" text="Fit Actions1" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup1">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup0" text="Fit Actions0" icon="/my/lang/icon/fit.svg" popup="true"
                class="my.lang.action.group.FitLangPluginActionGroup0">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-<!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
+
+            <!--            <action id="FitActionGroup00" class="my.lang.action.FitLangPluginAction" text="FitActionGroup00"-->
+            <!--                    description="FitActionGroup00" icon="/my/lang/icon/fit.svg">-->
+            <!--                <keyboard-shortcut first-keystroke="control 1" keymap="$default"/>-->
+            <!--            </action>-->
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
 
         <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Fit Run"
