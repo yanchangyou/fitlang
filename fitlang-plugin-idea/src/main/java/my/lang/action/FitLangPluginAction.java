@@ -42,9 +42,6 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
             KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, secondKeyStroke);
             setShortcutSet(new CustomShortcutSet(keyboardShortcut));
         }
-
-        registerAction(actionConfig.getId(), this);
-
     }
 
     /**
@@ -55,12 +52,14 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
      */
     public static void registerAction(String actionId, AnAction action) {
         ActionManager actionManager = ActionManager.getInstance();
-        if (actionManager.getAction(actionId) != null) {
-            actionManager.unregisterAction(actionId);
+        if (actionManager.getAction(actionId) == null) {
+            try {
+                actionManager.registerAction(actionId, action, PluginId.getId("FitLang"));
+            } catch (Exception e) {
+                //ignore todo
+            }
         }
-        actionManager.registerAction(actionId, action, PluginId.getId("FitLang"));
     }
-
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -137,5 +136,4 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
             }
         });
     }
-
 }

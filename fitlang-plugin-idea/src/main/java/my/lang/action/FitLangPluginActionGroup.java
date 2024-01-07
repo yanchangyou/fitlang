@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static my.lang.action.FitLangPluginAction.actionPerformedInner;
+import static my.lang.action.FitLangPluginAction.registerAction;
 import static my.lang.action.RunCodeAction.supportLanguageMap;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
@@ -75,7 +76,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                     actionConfig = new PluginActionConfig(groupConfig);
                 } else {
                     actionConfig = new PluginActionConfig(actions.getJSONObject(0));
+                    registerAction(actionConfig.getId(), new FitLangPluginAction(actions.getJSONObject(0)));
                 }
+
                 event.getPresentation().setEnabledAndVisible(true);
                 String title = groupConfig.getString("title");
                 if (StrUtil.isBlank(title)) {
@@ -113,6 +116,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
             children = actionList.toArray(new AnAction[0]);
 
+            for (FitLangPluginAction action : actionList) {
+                registerAction(action.actionConfig.getId(), action);
+            }
         }
     }
 
