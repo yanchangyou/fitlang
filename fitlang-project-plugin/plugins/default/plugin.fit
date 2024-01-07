@@ -7,11 +7,16 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
-            "visible": true,
-            "script": {
-                "uni": "hello",
-                "who": "fit"
-            }
+            "actions": [
+                {
+                    "title": "Fit Hello",
+                    "visible": true,
+                    "script": {
+                        "uni": "hello",
+                        "who": "fit"
+                    }
+                }
+            ]
         },
         {
             "name": "FitActionGroup1",
@@ -402,6 +407,52 @@
                     {
                         "uni": "get",
                         "path": "content"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup9",
+            "title": "Find JSON",
+            "refreshParent": true,
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditorSearch",
+                        "contentField": "searchContent"
+                    },
+                    {
+                        "uni": "setGlobal",
+                        "key": "searchContent",
+                        "value": "${searchContent}"
+                    },
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "${searchContent}"
+                    },
+                    {
+                        "uni": "writeFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "charset": "UTF-8",
+                        "format": true
+                    },
+                    {
+                        "uni": "readFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "charset": "UTF-8"
                     }
                 ]
             }

@@ -7,11 +7,16 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
-            "visible": true,
-            "script": {
-                "uni": "hello",
-                "who": "fit"
-            }
+            "actions": [
+                {
+                    "title": "Fit Hello",
+                    "visible": true,
+                    "script": {
+                        "uni": "hello",
+                        "who": "fit"
+                    }
+                }
+            ]
         },
         {
             "name": "FitActionGroup1",
