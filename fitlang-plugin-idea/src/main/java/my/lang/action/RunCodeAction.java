@@ -146,53 +146,61 @@ public abstract class RunCodeAction extends AnAction {
         }
 
         boolean finalNeedShowFile = needShowFile;
-        threadPoolExecutor.submit(() -> {
 
-            for (String path : filePathList) {
-                String code = readNodeDefineFile(path);
+        if (filePathList.size() == 1 && readNodeDefineFile(filePathList.get(0)).contains("openNodePage")) {
+            execute(e, project, filePathList, finalNeedShowFile);
+        } else {
+            threadPoolExecutor.submit(() -> {
+                execute(e, project, filePathList, finalNeedShowFile);
+            });
+        }
+    }
 
-                String result;
-                try {
+    private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
+        for (String path : filePathList) {
+            String code = readNodeDefineFile(path);
 
-                    if (finalNeedShowFile) {
-                        print("run file: " + path + "\n", project, getProjectConsoleViewMap());
-                    }
+            String result;
+            try {
 
-                    String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
-
-                    //支持中间输出
-                    LogJsonExecuteNode.setPrintable(new ExecuteNodeLogActionable() {
-                        @Override
-                        public void print(Object info) {
-                            if (info == null) {
-                                info = "";
-                            }
-                            String infoText;
-                            if (info instanceof Map || info instanceof List) {
-                                infoText = toJsonTextWithFormat(JSONObject.from(info));
-                            } else {
-                                infoText = info.toString();
-                            }
-                            RunCodeAction.print(infoText + "\n", project, getProjectConsoleViewMap());
-                        }
-                    });
-                    Object resultObject = executeCode(code, path, projectPath);
-
-                    result = resultObject.toString();
-
-                } catch (Throwable exception) {
-                    exception.printStackTrace();
-                    result = "exception:" + getRootException(exception);
+                if (finalNeedShowFile) {
+                    print("run file: " + path + "\n", project, getProjectConsoleViewMap());
                 }
 
-                System.out.println("execute " + getLanguageName() + " code result:");
-                System.out.println(result);
+                String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
-                print(result.concat("\n\n"), project, getProjectConsoleViewMap());
+                //支持中间输出
+                LogJsonExecuteNode.setPrintable(new ExecuteNodeLogActionable() {
+                    @Override
+                    public void print(Object info) {
+                        if (info == null) {
+                            info = "";
+                        }
+                        String infoText;
+                        if (info instanceof Map || info instanceof List) {
+                            infoText = toJsonTextWithFormat(JSONObject.from(info));
+                        } else {
+                            infoText = info.toString();
+                        }
+                        RunCodeAction.print(infoText + "\n", project, getProjectConsoleViewMap());
+                    }
+                });
+                Object resultObject = executeCode(code, path, projectPath);
 
+                result = resultObject.toString();
 
+            } catch (Throwable exception) {
+                exception.printStackTrace();
+                result = "exception:" + getRootException(exception);
             }
-        });
+
+            System.out.println("execute " + getLanguageName() + " code result:");
+            System.out.println(result);
+
+            print(result.concat("\n\n"), project, getProjectConsoleViewMap());
+
+
+        }
     }
 
     private static boolean needFormatJsonInConsole(String code) {
