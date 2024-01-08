@@ -8,7 +8,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 /**
  * 执行节点
  */
-public class OpenConfigJsonExecuteNode extends JsonExecuteNode {
+public class ShowConfigJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {

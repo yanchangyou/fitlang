@@ -69,7 +69,7 @@ public class NodeConfigPanel extends AnAction {
         panel.setSize(900, ((config.size() + 2) / 3) * 50);
     }
 
-    public JSONObject getConfig() {
+    public JSONObject readConfig() {
         for (Map.Entry<String, JTextField> field : fieldMap.entrySet()) {
             config.put(field.getKey(), field.getValue().getText());
         }

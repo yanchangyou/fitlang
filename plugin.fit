@@ -419,13 +419,13 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "openConfig",
+                        "uni": "showConfig",
                         "config": {
                             "jsonPath": "..uni"
                         }
                     },
                     {
-                        "uni": "getConfig"
+                        "uni": "readConfig"
                     },
                     {
                         "uni": "setGlobal",

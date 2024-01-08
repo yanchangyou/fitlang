@@ -1,5 +1,5 @@
 {
-    "uni": "openConfig",
+    "uni": "showConfig",
     "reset": true,
     "config": {
         "foo": "bar",

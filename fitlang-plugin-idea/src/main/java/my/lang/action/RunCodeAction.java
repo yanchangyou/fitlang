@@ -397,7 +397,7 @@ public abstract class RunCodeAction extends AnAction {
 
             @Override
             public JSONObject getNodeConfig() {
-                return NodeConfigPanel.nodeConfigPanel.getConfig();
+                return NodeConfigPanel.nodeConfigPanel.readConfig();
             }
 
             public String readEditorSearchContent() {

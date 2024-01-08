@@ -363,13 +363,13 @@
             "contentField": "content"
         },
         {
-            "uni": "openConfig",
+            "uni": "showConfig",
             "config": {
                 "foo": "bar"
             }
         },
         {
-            "uni": "getConfig"
+            "uni": "readConfig"
         },
         {
             "uni": "openNodePage"
