@@ -147,13 +147,18 @@ public abstract class RunCodeAction extends AnAction {
 
         boolean finalNeedShowFile = needShowFile;
 
-        if (filePathList.size() == 1 && readNodeDefineFile(filePathList.get(0)).contains("openNodePage")) {
+        if (filePathList.size() == 1 && isSynchronize(filePathList.get(0))) {
             execute(e, project, filePathList, finalNeedShowFile);
         } else {
             threadPoolExecutor.submit(() -> {
                 execute(e, project, filePathList, finalNeedShowFile);
             });
         }
+    }
+
+    private static boolean isSynchronize(String filePath) {
+        String content = readNodeDefineFile(filePath);
+        return content.contains("openNodePage") || content.contains("showConfig");
     }
 
     private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
@@ -185,7 +190,7 @@ public abstract class RunCodeAction extends AnAction {
                         RunCodeAction.print(infoText + "\n", project, getProjectConsoleViewMap());
                     }
                 });
-                Object resultObject = executeCode(code, path, projectPath);
+                Object resultObject = executeCode(code, path, projectPath, project);
 
                 result = resultObject.toString();
 
@@ -207,7 +212,7 @@ public abstract class RunCodeAction extends AnAction {
         return true; //默认IDE执行的全部格式化
     }
 
-    String executeCode(String code, String codePath, String projectPath) {
+    String executeCode(String code, String codePath, String projectPath, Project project) {
 
         File file = new File(codePath);
         if (!file.exists()) {
@@ -218,6 +223,8 @@ public abstract class RunCodeAction extends AnAction {
         JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
 
         JSONObject contextParam = buildContextParam(projectPath, file);
+
+        contextParam.put("ideaProject", project);
 
         String fileName = file.getName();
 
@@ -390,9 +397,8 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public void openNodeConfig(JSONObject config) {
-                NodeConfigPanel.nodeConfigPanel.resetConfig(config);
-                getEditor().setHeaderComponent(NodeConfigPanel.nodeConfigPanel.getPanel());
+            public void showNodeConfig(JSONObject config, Project project) {
+                NodeConfigPanel.nodeConfigPanel.resetConfig(config, project);
             }
 
             @Override

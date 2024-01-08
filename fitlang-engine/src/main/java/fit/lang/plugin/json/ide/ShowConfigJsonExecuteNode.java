@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.ide;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.project.Project;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -15,7 +16,9 @@ public class ShowConfigJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject config = nodeJsonDefine.getJSONObject("config");
 
-        UserIdeManager.getUserIdeInterface().openNodeConfig(config);
+        Project project = (Project) input.getNodeContext().getAttribute("ideaProject");
+
+        UserIdeManager.getUserIdeInterface().showNodeConfig(config, project);
 
     }
 }

@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.ide;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.project.Project;
 
 /**
  * 用户IDE接口
@@ -32,7 +33,7 @@ public interface UserIdeInterface {
 
     void openNodePage(String title, JSONObject actionScript, JSONObject context);
 
-    void openNodeConfig(JSONObject config);
+    void showNodeConfig(JSONObject config, Project project);
 
     JSONObject getNodeConfig();
 

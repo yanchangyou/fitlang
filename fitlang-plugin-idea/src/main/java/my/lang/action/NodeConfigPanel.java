@@ -3,8 +3,10 @@ package my.lang.action;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.ui.content.Content;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -32,10 +34,10 @@ public class NodeConfigPanel extends AnAction {
     }
 
     public NodeConfigPanel(JSONObject config) {
-        resetConfig(config);
+        resetConfig(config, null);
     }
 
-    public void resetConfig(JSONObject config) {
+    public void resetConfig(JSONObject config, Project project) {
 
         if (config == null) {
             config = INIT_CONFIG;
@@ -62,16 +64,28 @@ public class NodeConfigPanel extends AnAction {
         for (String key : config.keySet()) {
             JPanel itemPanel = new JPanel();
             JLabel label = new JLabel(key.concat(":"));
+            label.setSize(100, 40);
             JTextField field = new JTextField(config.getString(key));
             field.setColumns(20);
             fieldMap.put(key, field);
             itemPanel.add(new JLabel("   "));
             itemPanel.add(label);
             itemPanel.add(field);
+            itemPanel.setSize(350, 42);
             panel.add(itemPanel);
         }
 
         panel.setSize(900, ((config.size() + 2) / 3) * 50);
+
+        if (project != null) {
+            ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("FitLang Console");
+            Content content = toolWindow.getContentManager().getContent(panel);
+            if (content == null) {
+                content = toolWindow.getContentManager().getFactory().createContent(panel, "Config", true);
+                toolWindow.getContentManager().addContent(content);
+                content.fireAlert();
+            }
+        }
     }
 
     public JSONObject readConfig() {
@@ -83,9 +97,5 @@ public class NodeConfigPanel extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        Editor editor = e.getData(CommonDataKeys.EDITOR);
-        if (editor != null) {
-            editor.setHeaderComponent(NodeConfigPanel.nodeConfigPanel.getPanel());
-        }
     }
 }
