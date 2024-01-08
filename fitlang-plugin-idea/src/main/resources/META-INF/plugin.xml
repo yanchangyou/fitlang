@@ -451,6 +451,12 @@ getMonitorClient: 获取监控客户端列表<br/>
             <keyboard-shortcut first-keystroke="shift alt J" keymap="$default"/>
         </action>
 
+        <action id="RunFitLangShowConfig" class="my.lang.action.NodeConfigPanel" text="Show Fit Node Config"
+                description="Show fit node config" icon="/my/lang/icon/fit.svg">
+            <keyboard-shortcut first-keystroke="alt C" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="control F12" keymap="$default"/>
+        </action>
+
     </actions>
 
     <change-notes>

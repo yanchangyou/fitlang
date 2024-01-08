@@ -3,6 +3,8 @@ package my.lang.action;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -24,6 +26,9 @@ public class NodeConfigPanel extends AnAction {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    public NodeConfigPanel() {
     }
 
     public NodeConfigPanel(JSONObject config) {
@@ -78,6 +83,9 @@ public class NodeConfigPanel extends AnAction {
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-
+        Editor editor = e.getData(CommonDataKeys.EDITOR);
+        if (editor != null) {
+            editor.setHeaderComponent(NodeConfigPanel.nodeConfigPanel.getPanel());
+        }
     }
 }

@@ -419,13 +419,18 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditorSearch",
-                        "contentField": "searchContent"
+                        "uni": "showConfig",
+                        "config": {
+                            "jsonPath": "..uni"
+                        }
+                    },
+                    {
+                        "uni": "readConfig"
                     },
                     {
                         "uni": "setGlobal",
-                        "key": "searchContent",
-                        "value": "${searchContent}"
+                        "key": "jsonPath",
+                        "value": "${config.?jsonPath}"
                     },
                     {
                         "uni": "readEditor",
@@ -441,17 +446,18 @@
                     },
                     {
                         "uni": "get",
-                        "path": "${searchContent}"
+                        "path": "${jsonPath}",
+                        "comment": "jsonPath grammar: https://alibaba.github.io/fastjson2/jsonpath_cn"
                     },
                     {
                         "uni": "writeFile",
-                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
                         "charset": "UTF-8",
                         "format": true
                     },
                     {
                         "uni": "readFile",
-                        "filePath": "${fileDir + '/' + filePrefix + '.find.json'}",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
                         "charset": "UTF-8"
                     }
                 ]
