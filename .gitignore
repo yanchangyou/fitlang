@@ -20,6 +20,8 @@
 *.rar
 *.iml
 
+*.search.json
+
 .idea
 **/.idea/**
 .gradle

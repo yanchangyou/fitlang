@@ -421,16 +421,11 @@
                     {
                         "uni": "showConfig",
                         "config": {
-                            "jsonPath": "..uni"
+                            "jsonPath": "uni"
                         }
                     },
                     {
                         "uni": "readConfig"
-                    },
-                    {
-                        "uni": "setGlobal",
-                        "key": "jsonPath",
-                        "value": "${config.?jsonPath}"
                     },
                     {
                         "uni": "readEditor",
@@ -446,7 +441,7 @@
                     },
                     {
                         "uni": "get",
-                        "path": "${jsonPath}",
+                        "path": "${config.jsonPath}",
                         "comment": "jsonPath grammar: https://alibaba.github.io/fastjson2/jsonpath_cn"
                     },
                     {

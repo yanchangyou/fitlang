@@ -312,6 +312,7 @@ public abstract class RunCodeAction extends AnAction {
         consoleView.allowHeavyFilters();
         Content content = toolWindow.getContentManager().getFactory().createContent(consoleView.getComponent(), languageName, false);
         toolWindow.getContentManager().addContent(content);
+        toolWindow.getContentManager().setSelectedContent(content);
         consoleView.print(logoString + "\n", ConsoleViewContentType.NORMAL_OUTPUT);
     }
 

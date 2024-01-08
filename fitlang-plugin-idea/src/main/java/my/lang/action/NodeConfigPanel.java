@@ -83,8 +83,8 @@ public class NodeConfigPanel extends AnAction {
             if (content == null) {
                 content = toolWindow.getContentManager().getFactory().createContent(panel, "Config", true);
                 toolWindow.getContentManager().addContent(content);
-                content.fireAlert();
             }
+            toolWindow.getContentManager().setSelectedContent(content);
         }
     }
 

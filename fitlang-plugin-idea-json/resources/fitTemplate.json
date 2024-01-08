@@ -369,7 +369,8 @@
             }
         },
         {
-            "uni": "readConfig"
+            "uni": "readConfig",
+            "configField": "config"
         },
         {
             "uni": "openNodePage"
