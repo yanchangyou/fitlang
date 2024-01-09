@@ -21,6 +21,12 @@ public interface UserIdeInterface {
      */
     void writeEditorContent(String content);
 
+    void showErrorDialog(String title, String message);
+
+    String showInputDialog(String title, String message);
+
+    int showOkCancelDialog(String title, String message, String okText, String cancelText);
+
     /**
      * 读取查询框内容
      */
@@ -37,6 +43,6 @@ public interface UserIdeInterface {
 
     JSONObject getNodeConfig();
 
-    void showMessage(int type, String title, String message);
+    void showInfoMessage(String title, String message);
 
 }

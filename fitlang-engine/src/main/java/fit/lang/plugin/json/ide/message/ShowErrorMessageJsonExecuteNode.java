@@ -1,13 +1,14 @@
-package fit.lang.plugin.json.ide;
+package fit.lang.plugin.json.ide.message;
 
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
+import fit.lang.plugin.json.ide.UserIdeManager;
 
 /**
  * 执行节点
  */
-public class ShowMessageJsonExecuteNode extends JsonExecuteNode {
+public class ShowErrorMessageJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -15,7 +16,7 @@ public class ShowMessageJsonExecuteNode extends JsonExecuteNode {
         String title = parseStringField("title", input);
         String message = parseStringField("message", input);
 
-        UserIdeManager.getUserIdeInterface().showMessage(0, title, message);
+        UserIdeManager.getUserIdeInterface().showErrorDialog(title, message);
 
     }
 }

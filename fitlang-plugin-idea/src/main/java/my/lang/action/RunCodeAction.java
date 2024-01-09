@@ -159,7 +159,7 @@ public abstract class RunCodeAction extends AnAction {
 
     private static boolean isSynchronize(String filePath) {
         String content = readNodeDefineFile(filePath);
-        return content.contains("openWebPage") || content.contains("showConfig") || content.contains("showMessage");
+        return content.contains("open") || content.contains("show");
     }
 
     private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
@@ -409,8 +409,23 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public void showMessage(int type, String title, String message) {
+            public void showInfoMessage(String title, String message) {
                 Messages.showInfoMessage(message, title);
+            }
+
+            @Override
+            public void showErrorDialog(String title, String message) {
+                Messages.showErrorDialog(message, title);
+            }
+
+            @Override
+            public String showInputDialog(String title, String message) {
+                return Messages.showInputDialog(message, title, null);
+            }
+
+            @Override
+            public int showOkCancelDialog(String title, String message, String okText, String cancelText) {
+                return Messages.showOkCancelDialog(message, title, okText, cancelText, null);
             }
 
             public String readEditorSearchContent() {
