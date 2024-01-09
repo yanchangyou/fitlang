@@ -33,6 +33,9 @@ public class WebPagePanel extends DialogWrapper {
         }
         setTitle(title);
 
+        this.setModal(!Boolean.FALSE.equals(option.getBoolean("modal")));
+
+
         this.url = StrUtil.isBlank(url) ? "http://fit.321zou.com" : url;
         this.option = option;
         this.context = context;

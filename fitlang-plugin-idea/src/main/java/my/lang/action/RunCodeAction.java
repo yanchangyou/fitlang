@@ -393,7 +393,7 @@ public abstract class RunCodeAction extends AnAction {
             public void openWebPage(String url, JSONObject option, JSONObject context) {
 
                 WebPagePanel webPagePanel = new WebPagePanel(url, option, context);
-                webPagePanel.showAndGet();
+                webPagePanel.show();
 
             }
 
