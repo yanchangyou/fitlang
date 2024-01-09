@@ -158,7 +158,7 @@ public abstract class RunCodeAction extends AnAction {
 
     private static boolean isSynchronize(String filePath) {
         String content = readNodeDefineFile(filePath);
-        return content.contains("openNodePage") || content.contains("showConfig");
+        return content.contains("openWebPage") || content.contains("showConfig");
     }
 
     private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
@@ -390,10 +390,10 @@ public abstract class RunCodeAction extends AnAction {
                 });
             }
 
-            public void openNodePage(String title, JSONObject actionScript, JSONObject context) {
+            public void openWebPage(String url, JSONObject option, JSONObject context) {
 
-                NodePageDialogWrapper nodePageDialogWrapper = new NodePageDialogWrapper();
-                nodePageDialogWrapper.show();
+                WebPagePanel webPagePanel = new WebPagePanel(url, option, context);
+                webPagePanel.showAndGet();
 
             }
 

@@ -373,7 +373,8 @@
             "configField": "config"
         },
         {
-            "uni": "openNodePage"
+            "uni": "openWebPage",
+            "url": "https://www.baidu.com"
         },
         {
             "uni": "systemInfo",

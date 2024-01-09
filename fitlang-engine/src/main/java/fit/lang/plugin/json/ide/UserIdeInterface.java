@@ -31,7 +31,7 @@ public interface UserIdeInterface {
      */
     String readEditorReplaceContent();
 
-    void openNodePage(String title, JSONObject actionScript, JSONObject context);
+    void openWebPage(String url, JSONObject option, JSONObject context);
 
     void showNodeConfig(JSONObject config, Project project);
 
