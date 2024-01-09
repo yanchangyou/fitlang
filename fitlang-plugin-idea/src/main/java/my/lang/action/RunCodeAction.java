@@ -16,6 +16,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -158,7 +159,7 @@ public abstract class RunCodeAction extends AnAction {
 
     private static boolean isSynchronize(String filePath) {
         String content = readNodeDefineFile(filePath);
-        return content.contains("openWebPage") || content.contains("showConfig");
+        return content.contains("openWebPage") || content.contains("showConfig") || content.contains("showMessage");
     }
 
     private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
@@ -405,6 +406,11 @@ public abstract class RunCodeAction extends AnAction {
             @Override
             public JSONObject getNodeConfig() {
                 return NodeConfigPanel.nodeConfigPanel.readConfig();
+            }
+
+            @Override
+            public void showMessage(int type, String title, String message) {
+                Messages.showInfoMessage(message, title);
             }
 
             public String readEditorSearchContent() {

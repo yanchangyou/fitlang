@@ -37,4 +37,6 @@ public interface UserIdeInterface {
 
     JSONObject getNodeConfig();
 
+    void showMessage(int type, String title, String message);
+
 }
