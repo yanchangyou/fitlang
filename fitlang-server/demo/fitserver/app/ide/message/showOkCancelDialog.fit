@@ -1,8 +1,8 @@
 {
     "uni": "showOkCancelDialog",
-    "title": "test",
-    "message": "hello, world",
-    "okText": "okText",
-    "cancelText": "cancelText",
+    "title": "Title",
+    "message": "Choice",
+    "okText": "OK",
+    "cancelText": "Cancel",
     "keyField": "name"
 }

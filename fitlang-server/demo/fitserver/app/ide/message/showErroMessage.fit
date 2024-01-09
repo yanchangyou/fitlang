@@ -1,5 +1,5 @@
 {
     "uni": "showErrorMessage",
-    "title": "test",
-    "message": "hello, world"
+    "title": "Error",
+    "message": "Error input!"
 }

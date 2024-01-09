@@ -1,5 +1,5 @@
 {
     "uni": "showInfoMessage",
-    "title": "test",
-    "message": "hello, world"
+    "title": "title",
+    "message": "hello, world!"
 }

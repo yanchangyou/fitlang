@@ -1,6 +1,6 @@
 {
     "uni": "showInputDialog",
-    "title": "test",
+    "title": "Input",
     "message": "name",
-    "keyField": "name1"
+    "keyField": "key"
 }
