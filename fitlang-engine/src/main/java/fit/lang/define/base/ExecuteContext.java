@@ -7,6 +7,8 @@ import fit.lang.info.NodeExecuteInfo;
  */
 public interface ExecuteContext {
 
+    String buildNextNodeId();
+
     String getInstanceId();
 
     Object getAttribute(String name);
@@ -14,6 +16,11 @@ public interface ExecuteContext {
     void setAttribute(String name, Object value);
 
     Object getAllAttribute();
+
+
+    void storeNodeInput(String nodeId, Object input);
+
+    void storeNodeOutput(String nodeId, Object output);
 
     NodeExecuteInfo getNodeExecuteInfo(String nodeId);
 

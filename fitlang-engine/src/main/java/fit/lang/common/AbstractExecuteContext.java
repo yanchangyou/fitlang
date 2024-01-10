@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.define.base.ExecuteContext;
 import fit.lang.info.NodeExecuteInfo;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,7 +13,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractExecuteContext implements ExecuteContext {
 
+    int nodeIndex = 100;
+
     Map<String, Object> attributeMap = new ConcurrentHashMap<>();
+
+    Map<String, Map<String, Object>> nodeInputOutputMap = new ConcurrentHashMap<>();
+
+    {
+        attributeMap.put("nodeInputOutput", nodeInputOutputMap);
+    }
 
     Map<String, NodeExecuteInfo> nodeExecuteInfoMap = new ConcurrentHashMap<>();
 
@@ -20,7 +29,12 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
 
     Boolean debugMode;
 
-    String instanceId;
+    String instanceId = "I-" + System.currentTimeMillis();
+
+    @Override
+    public String buildNextNodeId() {
+        return instanceId + "-" + nodeIndex++;
+    }
 
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
@@ -77,6 +91,23 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
 
     public void setNodeExecuteInfo(String nodeId, NodeExecuteInfo nodeExecuteInfo) {
         nodeExecuteInfoMap.put(nodeId, nodeExecuteInfo);
+    }
+
+    public void storeNodeInput(String nodeId, Object input) {
+        storeNodeValue(nodeId, "input", input);
+    }
+
+    public void storeNodeOutput(String nodeId, Object output) {
+        storeNodeValue(nodeId, "output", output);
+    }
+
+    public void storeNodeValue(String nodeId, String type, Object value) {
+        Map<String, Object> nodeMap = nodeInputOutputMap.get(nodeId);
+        if (nodeMap == null) {
+            nodeMap = new LinkedHashMap<>();
+            nodeInputOutputMap.put(nodeId, nodeMap);
+        }
+        nodeMap.put(type, value);
     }
 
 }

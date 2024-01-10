@@ -4,9 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.base.ExecuteNode;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -100,8 +100,8 @@ public class ExecuteNodeUtil {
     }
 
     public static void buildDefaultNodeId(ExecuteNode executeNode) {
-        if (executeNode.getId() == null) {
-            executeNode.setId(uuid());
+        if (StrUtil.isBlank(executeNode.getId())) {
+            executeNode.setId(executeNode.getNodeContext().buildNextNodeId());
             if (executeNode.getNodeDefine() != null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
                 ((JSONObject) executeNode.getNodeDefine().getData()).put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
             }
