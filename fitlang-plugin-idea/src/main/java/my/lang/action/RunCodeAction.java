@@ -40,6 +40,7 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
+import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.MyLanguage.isMyLanguageFile;
 
@@ -225,7 +226,7 @@ public abstract class RunCodeAction extends AnAction {
 
         JSONObject contextParam = buildContextParam(projectPath, file);
 
-        contextParam.put("ideaProject", project);
+        contextParam.put(FIELD_NAME_OF_IDEA_PROJECT, project);
 
         String fileName = file.getName();
 
