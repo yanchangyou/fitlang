@@ -81,8 +81,9 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             retrySleep = 0.5;
         }
 
+        Object requestBody = null;
         if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
-            parseHttpFormParam(input, request, httpParam);
+            requestBody = parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
             String httpBody;
             if (httpParam != null) {
@@ -95,6 +96,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             } else {
                 httpBody = input.getData().toJSONString();
             }
+            requestBody = httpBody;
             request.body(httpBody);
         }
 
@@ -134,6 +136,9 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             } catch (MalformedURLException e) {
                 //ignore todo
             }
+
+            out.put("requestHeader", header);
+            out.put("requestBody", requestBody);
 
             out.put("status", response == null ? 0 : response.getStatus());
             JSONObject headerInfo = parseHeader(response);

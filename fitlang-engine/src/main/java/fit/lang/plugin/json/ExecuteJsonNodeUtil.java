@@ -341,15 +341,18 @@ public class ExecuteJsonNodeUtil {
      * @param request
      * @param httpParam
      */
-    public static void parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
+    public static Object parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
         if (httpParam != null) {
             Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
             if (param instanceof JSONObject) {
                 request.form((JSONObject) param);
+                return param;
             }
         } else {
             request.form(input.getData());
+            return input;
         }
+        return null;
     }
 
     /**
