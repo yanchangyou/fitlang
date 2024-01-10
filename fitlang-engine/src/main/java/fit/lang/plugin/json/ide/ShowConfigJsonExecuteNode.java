@@ -6,6 +6,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
+
 /**
  * 执行节点
  */
@@ -16,7 +18,7 @@ public class ShowConfigJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject config = nodeJsonDefine.getJSONObject("config");
 
-        Project project = (Project) input.getNodeContext().getAttribute("ideaProject");
+        Project project = (Project) input.getNodeContext().getAttribute(FIELD_NAME_OF_IDEA_PROJECT);
 
         UserIdeManager.getUserIdeInterface().showNodeConfig(config, project);
 

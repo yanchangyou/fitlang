@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import static fit.lang.ExecuteNodeUtil.getUserHome;
+import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExpressUtil.eval;
 import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
 
@@ -34,6 +35,7 @@ import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
  * 工具类
  */
 public class ExecuteJsonNodeUtil {
+
 
     /**
      * 执行执行json
@@ -163,7 +165,14 @@ public class ExecuteJsonNodeUtil {
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return toJsonText(nodeOutput.getData());
+        JSONObject result = nodeOutput.getData();
+        if (Boolean.TRUE.equals(flow.getBoolean("debug"))) {
+            Map<String, Object> context = nodeInput.getNodeContext().getAllAttribute();
+            context.remove(FIELD_NAME_OF_IDEA_PROJECT);
+            result = nodeOutput.getData().clone();
+            result.put("_debug", context);
+        }
+        return toJsonText(result);
     }
 
     public static Map<String, String> toStringMap(JSONObject jsonObject) {

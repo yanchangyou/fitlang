@@ -23,7 +23,7 @@ public class ExecuteNodeSimpleAop {
             if (executeNode.isNeedCloneInputData()) {
                 input.getNodeData().setData(input.getNodeData().cloneData());
             }
-            input.getNodeContext().setAttribute(id + "Input", data);
+            input.getNodeContext().setAttribute(id + ".input", data);
         }
 
         if (executeNode.getNodeContext() != null) {
@@ -39,7 +39,7 @@ public class ExecuteNodeSimpleAop {
         String id = executeNode.getId();
 
         if (!(executeNode instanceof ExecuteNodeAopIgnoreTag)) {
-            input.getNodeContext().setAttribute(id + "Output", output.getNodeData().getData());
+            input.getNodeContext().setAttribute(id + ".output", output.getNodeData().getData());
         }
         if (executeNode.getNodeContext() != null) {
             executeNode.getNodeContext().getNodeExecuteInfo(id).setEndTime(System.currentTimeMillis());
