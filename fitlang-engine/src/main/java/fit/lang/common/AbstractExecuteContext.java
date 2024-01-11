@@ -32,8 +32,8 @@ public abstract class AbstractExecuteContext implements ExecuteContext {
     String instanceId = "I-" + System.currentTimeMillis();
 
     @Override
-    public String buildNextNodeId() {
-        return instanceId + "-" + nodeIndex++;
+    public String buildNextNodeId(String uni) {
+        return instanceId + "-" + uni + "-" + nodeIndex++;
     }
 
     public void setInstanceId(String instanceId) {

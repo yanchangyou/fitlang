@@ -7,7 +7,7 @@ import fit.lang.info.NodeExecuteInfo;
  */
 public interface ExecuteContext {
 
-    String buildNextNodeId();
+    String buildNextNodeId(String uni);
 
     String getInstanceId();
 

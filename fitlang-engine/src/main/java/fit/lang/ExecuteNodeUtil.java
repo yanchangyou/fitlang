@@ -100,8 +100,9 @@ public class ExecuteNodeUtil {
     }
 
     public static void buildDefaultNodeId(ExecuteNode executeNode) {
+        String nextId = executeNode.getNodeContext().buildNextNodeId(executeNode.getUni());
         if (StrUtil.isBlank(executeNode.getId())) {
-            executeNode.setId(executeNode.getNodeContext().buildNextNodeId());
+            executeNode.setId(nextId);
             if (executeNode.getNodeDefine() != null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
                 ((JSONObject) executeNode.getNodeDefine().getData()).put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
             }
