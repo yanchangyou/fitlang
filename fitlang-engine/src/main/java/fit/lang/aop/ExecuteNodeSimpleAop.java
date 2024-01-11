@@ -15,6 +15,9 @@ public class ExecuteNodeSimpleAop {
 
     public static void beforeExecute(ExecuteNodeInput input, ExecuteNode executeNode, ExecuteNodeOutput output) {
 
+        if(executeNode.getNodeContext() == null) {
+            executeNode.setNodeContext(input.getNodeContext());
+        }
         buildDefaultNodeId(executeNode);
 
         String id = executeNode.getId();
