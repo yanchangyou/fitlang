@@ -245,6 +245,7 @@
         {
             "uni": "http",
             "url": "http://fit.321zou.com/hello",
+            "cookieDomain": "fit.321zou.com",
             "retryTimes": 1,
             "retrySleep": 0.5,
             "retryCondition": "true",
