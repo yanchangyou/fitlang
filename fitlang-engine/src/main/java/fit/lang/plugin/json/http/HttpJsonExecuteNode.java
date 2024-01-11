@@ -79,7 +79,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         //add query params
         url = buildUrlByQueryParams(nodeJsonDefine, url);
 
-        URL httpUrl = null;
+        URL httpUrl;
         try {
             httpUrl = new URL(url);
         } catch (MalformedURLException e) {
@@ -115,16 +115,10 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
             requestBody = parseHttpFormParam(input, request, httpParam);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
-            String httpBody;
-            if (httpParam != null) {
-                Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
-                if (param != null) {
-                    httpBody = param.toString();
-                } else {
-                    httpBody = "";
-                }
-            } else {
-                httpBody = input.getData().toJSONString();
+            String httpBody = "";
+            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
+            if (param != null) {
+                httpBody = param.toString();
             }
             requestBody = httpBody;
             request.body(httpBody);
