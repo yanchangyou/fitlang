@@ -33,7 +33,8 @@ public class HttpJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(output.contains("{\"hello\":\"world\",\"foo\":\"bar\"}"));
-        Assert.assertTrue(output.contains("\"cookie\""));
+        Assert.assertTrue(output.contains("\"cookieArray\""));
+        Assert.assertTrue(output.contains("\"cookieObject\""));
         Assert.assertTrue(output.contains("\"header\""));
         Assert.assertTrue(output.contains("\"status\""));
         Assert.assertTrue(output.contains("\"size\""));
@@ -70,7 +71,8 @@ public class HttpJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
         Assert.assertTrue(output.contains("{\"hello\":\"world\",\"foo\":\"bar\"}"));
-        Assert.assertTrue(output.contains("\"cookie\""));
+        Assert.assertTrue(output.contains("\"cookieArray\""));
+        Assert.assertTrue(output.contains("\"cookieObject\""));
         Assert.assertTrue(output.contains("\"header\""));
         Assert.assertTrue(output.contains("\"status\""));
         Assert.assertTrue(output.contains("\"size\""));
