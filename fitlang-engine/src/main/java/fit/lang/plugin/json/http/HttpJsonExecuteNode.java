@@ -195,11 +195,11 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         if (StrUtil.isBlank(cookieDomain)) {
             cookieDomain = httpUrl.getHost();
         }
-        if (requestCookie == null) {
-            requestCookie = new JSONObject();
-        }
         JSONObject globalCookie = getGlobalCookie(cookieDomain);
-        if (globalCookie != null && requestCookie instanceof JSONObject) {
+        if (globalCookie != null && (requestCookie instanceof JSONObject || requestCookie == null)) {
+            if (requestCookie == null) {
+                requestCookie = new JSONObject();
+            }
             JSONObject requestCookieObject = (JSONObject) requestCookie;
             globalCookie = globalCookie.clone();
             globalCookie.putAll(requestCookieObject);
