@@ -29,7 +29,6 @@ import java.util.*;
 import static fit.lang.ExecuteNodeUtil.getUserHome;
 import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExpressUtil.eval;
-import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
 
 /**
  * 工具类
@@ -161,8 +160,8 @@ public class ExecuteJsonNodeUtil {
 
         executeNode.execute(nodeInput, nodeOutput);
 
-        String rawField = flow.getString("rawField");
-        if (isWebNode(flow) && rawField != null) {
+        String rawField = flow.getString("_rawField");
+        if (StrUtil.isNotBlank(rawField)) {
             Object returnValue = nodeOutput.getData().get(rawField);
             return (returnValue == null) ? "" : returnValue.toString();
         }
