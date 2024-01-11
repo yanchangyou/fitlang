@@ -150,14 +150,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         JSONObject out = result;
 
         if (Boolean.FALSE.equals(nodeJsonDefine.get("onlyBody")) || "postman".equals(nodeJsonDefine.getString("uni"))) {
+
             out = new JSONObject();
-            out.put("url", url);
 
-            out.put("host", httpUrl.getHost());
-            out.put("port", getUrlPort(httpUrl));
+            JSONObject requestObject = new JSONObject();
 
-            out.put("requestHeader", header);
-            out.put("requestBody", requestBody);
+            requestObject.put("url", url);
+
+            requestObject.put("host", httpUrl.getHost());
+            requestObject.put("port", getUrlPort(httpUrl));
+
+            requestObject.put("header", header);
+            requestObject.put("body", requestBody);
+
+            out.put("request", requestObject);
 
             out.put("status", response == null ? 0 : response.getStatus());
             JSONObject headerInfo = parseHeader(response);
