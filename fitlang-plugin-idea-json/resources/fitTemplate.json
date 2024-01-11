@@ -4,7 +4,7 @@
             "debug": "true"
         },
         {
-            "_rawField": "fieldName"
+            "outputRawField": "fieldName"
         },
         {
             "uni": "hello"
@@ -308,7 +308,7 @@
         },
         {
             "uni": "web",
-            "_rawField": "html",
+            "outputRawField": "html",
             "child": {
                 "uni": "return",
                 "json": {

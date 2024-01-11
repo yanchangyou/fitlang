@@ -160,9 +160,9 @@ public class ExecuteJsonNodeUtil {
 
         executeNode.execute(nodeInput, nodeOutput);
 
-        String rawField = flow.getString("_rawField");
-        if (StrUtil.isNotBlank(rawField)) {
-            Object returnValue = nodeOutput.getData().get(rawField);
+        String outputRawField = flow.getString("outputRawField");
+        if (StrUtil.isNotBlank(outputRawField)) {
+            Object returnValue = nodeOutput.getData().get(outputRawField);
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
