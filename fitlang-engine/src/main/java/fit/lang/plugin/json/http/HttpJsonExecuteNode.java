@@ -20,6 +20,7 @@ import java.net.HttpCookie;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,24 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
  * 执行节点
  */
 public class HttpJsonExecuteNode extends JsonExecuteNode {
+
+    /**
+     * cookie全局变量
+     */
+    static Map<String, JSONObject> globalCookieMap = new HashMap<>();
+
+    static void setGlobalCookie(String domain, String key, String value) {
+        JSONObject cookieObject = globalCookieMap.get(domain);
+        if (cookieObject == null) {
+            cookieObject = new JSONObject();
+            globalCookieMap.put(domain, cookieObject);
+        }
+        cookieObject.put(key, value);
+    }
+
+    static JSONObject getGlobalCookie(String domain) {
+        return globalCookieMap.get(domain);
+    }
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -60,10 +79,20 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         //add query params
         url = buildUrlByQueryParams(nodeJsonDefine, url);
 
+        URL httpUrl = null;
+        try {
+            httpUrl = new URL(url);
+        } catch (MalformedURLException e) {
+            throw new ExecuteNodeException("url is error: ".concat(url), e);
+        }
+
         HttpRequest request = HttpUtil.createRequest(method, url);
 
         JSONObject header = nodeJsonDefine.getJSONObject("header");
         header = ExpressUtil.eval(header, input.getInputParamAndContextParam());
+
+        header = buildHeaderCookie(nodeJsonDefine, httpUrl, header);
+
         setHttpHeader(header, request);
 
         JSONObject proxy = nodeJsonDefine.getJSONObject("proxy");
@@ -130,13 +159,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out = new JSONObject();
             out.put("url", url);
 
-            try {
-                URL httpUrl = new URL(url);
-                out.put("host", httpUrl.getHost());
-                out.put("port", getUrlPort(httpUrl));
-            } catch (MalformedURLException e) {
-                //ignore todo
-            }
+            out.put("host", httpUrl.getHost());
+            out.put("port", getUrlPort(httpUrl));
 
             out.put("requestHeader", header);
             out.put("requestBody", requestBody);
@@ -160,6 +184,29 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             }
         }
         output.setData(out);
+    }
+
+    private static JSONObject buildHeaderCookie(JSONObject nodeJsonDefine, URL httpUrl, JSONObject header) {
+        if (header == null) {
+            header = new JSONObject();
+        }
+        Object requestCookie = header.get("cookie");
+        String cookieDomain = nodeJsonDefine.getString("cookieDomain");
+        if (StrUtil.isBlank(cookieDomain)) {
+            cookieDomain = httpUrl.getHost();
+        }
+        if (requestCookie == null) {
+            requestCookie = new JSONObject();
+        }
+        JSONObject globalCookie = getGlobalCookie(cookieDomain);
+        if (globalCookie != null && requestCookie instanceof JSONObject) {
+            JSONObject requestCookieObject = (JSONObject) requestCookie;
+            globalCookie = globalCookie.clone();
+            globalCookie.putAll(requestCookieObject);
+            requestCookieObject = globalCookie;
+            header.put("cookie", requestCookieObject);
+        }
+        return header;
     }
 
 
@@ -196,6 +243,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         List<HttpCookie> list = response.getCookies();
         for (HttpCookie cookie : list) {
             cookieJson.put(cookie.getName(), cookie.getValue());
+            setGlobalCookie(cookie.getDomain(), cookie.getName(), cookie.getValue());
         }
         return cookieJson;
     }
