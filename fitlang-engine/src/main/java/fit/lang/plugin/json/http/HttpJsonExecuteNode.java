@@ -16,6 +16,7 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.net.HttpCookie;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -143,7 +144,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             out.put("status", response == null ? 0 : response.getStatus());
             JSONObject headerInfo = parseHeader(response);
             out.put("header", headerInfo.getJSONObject("header"));
-            out.put("cookie", parseCookie(response));
+            out.put("cookieArray", parseCookie(response));
+            out.put("cookieObject", parseCookieJson(response));
             JSONObject sizeInfo = new JSONObject();
             sizeInfo.put("header", headerInfo.getIntValue("size"));
             out.put("retryTimes", realRetryTimes);
@@ -186,6 +188,18 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         return (JSONArray) JSON.toJSON(response.getCookies());
     }
 
+    static JSONObject parseCookieJson(HttpResponse response) {
+        JSONObject cookieJson = new JSONObject();
+        if (response == null) {
+            return new JSONObject();
+        }
+        List<HttpCookie> list = response.getCookies();
+        for (HttpCookie cookie : list) {
+            cookieJson.put(cookie.getName(), cookie.getValue());
+        }
+        return cookieJson;
+    }
+
     static JSONObject parseHeader(HttpResponse response) {
         if (response == null) {
             return new JSONObject();
@@ -205,19 +219,6 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
         result.put("header", headerJson);
         result.put("size", size + headers.size() * 4);
         return result;
-    }
-
-    static JSONObject parseHeaderSize(HttpResponse response) {
-        Map<String, List<String>> headers = response.headers();
-        JSONObject headerJson = new JSONObject();
-
-        for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-            if (entry.getKey() == null) {
-                continue;
-            }
-            headerJson.put(entry.getKey(), entry.getValue().get(0));
-        }
-        return headerJson;
     }
 
     private static String buildUrlByQueryParams(JSONObject nodeJsonDefine, String url) {

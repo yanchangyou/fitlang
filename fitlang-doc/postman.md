@@ -48,8 +48,10 @@
 		"Date":"Sat, 16 Dec 2023 14:44:00 GMT",
 		"Content-Type":"application/json"
 	},
-	"cookie":[
+	"cookieList":[
 	],
+	"cookieObject":{
+	}
 	"sizeInfo":{
 		"header":154,
 		"body":29
