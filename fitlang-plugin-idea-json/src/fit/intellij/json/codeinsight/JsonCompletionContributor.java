@@ -20,12 +20,12 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -94,6 +94,9 @@ public class JsonCompletionContributor extends CompletionContributor {
                 String text = itemObject.toJSONString();
                 text = text.substring(1, text.length() - 1);
                 text = text.replace("\":\"", "\": \"");
+                if (text.startsWith("\"debug\"") || text.startsWith("\"outputRawField\"")) {
+                    text += ",";
+                }
                 templates.add(text);
             }
         }
