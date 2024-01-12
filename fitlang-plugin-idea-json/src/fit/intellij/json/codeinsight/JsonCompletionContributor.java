@@ -24,12 +24,16 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
 import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -49,14 +53,44 @@ public class JsonCompletionContributor extends CompletionContributor {
     private static final PsiElementPattern.Capture<PsiElement> UNI_KEY_WORD_NO_QUOTE = psiElement()
             .afterLeaf("{");
 
-    private static final PsiElementPattern.Capture<PsiElement> UNI_KEY_WORD_WITH_QUOTE = psiElement()
-            .afterLeaf("\"").withSuperParent(2, JsonProperty.class)
-            .andNot(psiElement().withParent(JsonStringLiteral.class));
 
     public JsonCompletionContributor() {
+
         extend(CompletionType.BASIC, AFTER_COLON_IN_PROPERTY, MyKeywordsCompletionProvider.INSTANCE);
         extend(CompletionType.BASIC, AFTER_COMMA_OR_BRACKET_IN_ARRAY, MyKeywordsCompletionProvider.INSTANCE);
         extend(CompletionType.BASIC, UNI_KEY_WORD_NO_QUOTE, LoadUniCompletionProviderNoQuote.INSTANCE);
+
+        Map<String, JSONObject> uniMap = loadTemplateMap();
+        PsiElementPattern.Capture<PsiElement> item_property = psiElement()
+                .afterLeaf(",");
+        extend(CompletionType.BASIC, item_property, new CompletionProvider<>() {
+            @Override
+            protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
+                PsiElement psiElement = parameters.getPosition();
+                if (psiElement.getParent() != null
+                        && psiElement.getParent().getParent() != null
+                        && psiElement.getParent().getParent().getParent() != null
+                        && psiElement.getParent().getParent().getParent() instanceof JsonObject) {
+
+                    PsiElement parent3 = psiElement.getParent().getParent().getParent();
+                    String uniValue = parent3.getChildren()[0].getLastChild().getText();
+                    JSONObject template = uniMap.get(uniValue.replace("\"", ""));
+                    for (Map.Entry<String, Object> item : template.entrySet()) {
+                        if (item.getKey().equals("uni")) {
+                            continue;
+                        }
+                        String text = "\"" + item.getKey() + "\": ";
+                        Object value = item.getValue();
+                        if (value instanceof JSONObject || value instanceof JSONArray) {
+                            text += value;
+                        } else {
+                            text += "\"" + value + "\"";
+                        }
+                        result.addElement(LookupElementBuilder.create(text).bold());
+                    }
+                }
+            }
+        });
     }
 
     private static class MyKeywordsCompletionProvider extends CompletionProvider<CompletionParameters> {
@@ -83,9 +117,23 @@ public class JsonCompletionContributor extends CompletionContributor {
         }
     }
 
+    private static Map<String, JSONObject> loadTemplateMap() {
+        JSONObject template = loadTemplateFromFile();
+        JSONArray templateList = template.getJSONArray("template");
+        Map<String, JSONObject> uniMap = new LinkedHashMap<>();
+        for (Object item : templateList) {
+            if (item instanceof JSONObject) {
+                String uni = ((JSONObject) item).getString("uni");
+                if (uni != null) {
+                    uniMap.put(uni, (JSONObject) item);
+                }
+            }
+        }
+        return uniMap;
+    }
+
     private static List<String> loadTemplate() {
-        String templateJsonText = IoUtil.readUtf8(JsonCompletionContributor.class.getClassLoader().getResourceAsStream("fitTemplate.json"));
-        JSONObject template = JSONObject.parseObject(templateJsonText);
+        JSONObject template = loadTemplateFromFile();
         JSONArray templateList = template.getJSONArray("template");
         List<String> templates = new ArrayList<>(templateList.size());
         for (Object item : templateList) {
@@ -101,5 +149,12 @@ public class JsonCompletionContributor extends CompletionContributor {
             }
         }
         return templates;
+    }
+
+    @Nullable
+    private static JSONObject loadTemplateFromFile() {
+        String templateJsonText = IoUtil.readUtf8(JsonCompletionContributor.class.getClassLoader().getResourceAsStream("fitTemplate.json"));
+        JSONObject template = JSONObject.parseObject(templateJsonText);
+        return template;
     }
 }
