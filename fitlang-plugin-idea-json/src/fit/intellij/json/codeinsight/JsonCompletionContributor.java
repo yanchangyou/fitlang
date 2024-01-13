@@ -60,23 +60,26 @@ public class JsonCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC, AFTER_COMMA_OR_BRACKET_IN_ARRAY, MyKeywordsCompletionProvider.INSTANCE);
         extend(CompletionType.BASIC, UNI_KEY_WORD_NO_QUOTE, LoadUniCompletionProviderNoQuote.INSTANCE);
 
+        addUniProperty();
+    }
+
+    private void addUniProperty() {
         Map<String, JSONObject> uniMap = loadTemplateMap();
         PsiElementPattern.Capture<PsiElement> item_property = psiElement()
                 .afterLeaf(",");
         extend(CompletionType.BASIC, item_property, new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
-                PsiElement psiElement = parameters.getPosition();
-                if (psiElement.getParent() != null
-                        && psiElement.getParent().getParent() != null
-                        && psiElement.getParent().getParent().getParent() != null
-                        && psiElement.getParent().getParent().getParent() instanceof JsonObject) {
 
-                    PsiElement parent3 = psiElement.getParent().getParent().getParent();
-                    String uniValue = parent3.getChildren()[0].getLastChild().getText();
-                    JSONObject template = uniMap.get(uniValue.replace("\"", ""));
+                PsiElement psiElement = parameters.getPosition();
+                List<String> existedPropertyList = parseExistedPropertyList(psiElement);
+
+                String uni = existedPropertyList.get(0);
+
+                if (uni != null) {
+                    JSONObject template = uniMap.get(uni);
                     for (Map.Entry<String, Object> item : template.entrySet()) {
-                        if (item.getKey().equals("uni")) {
+                        if (existedPropertyList.contains(item.getKey())) {
                             continue;
                         }
                         String text = "\"" + item.getKey() + "\": ";
@@ -86,11 +89,34 @@ public class JsonCompletionContributor extends CompletionContributor {
                         } else {
                             text += "\"" + value + "\"";
                         }
-                        result.addElement(LookupElementBuilder.create(text).bold());
+                        result.addElement(LookupElementBuilder.create(text));
                     }
                 }
             }
         });
+    }
+
+    List<String> parseExistedPropertyList(PsiElement psiElement) {
+        List<String> existedPropertyList = new ArrayList<>();
+        String uni = null;
+        if (psiElement.getParent() != null
+                && psiElement.getParent().getParent() != null
+                && psiElement.getParent().getParent().getParent() != null
+                && psiElement.getParent().getParent().getParent() instanceof JsonObject) {
+            PsiElement parent3 = psiElement.getParent().getParent().getParent();
+            PsiElement[] children = parent3.getChildren();
+            for (PsiElement child : children) {
+                if (child instanceof JsonProperty) {
+                    String propertyKey = child.getFirstChild().getText().replace("\"", "");
+                    existedPropertyList.add(propertyKey);
+                    if ("uni".equals(propertyKey)) {
+                        uni = child.getLastChild().getText().replace("\"", "");
+                    }
+                }
+            }
+        }
+        existedPropertyList.add(0, uni);
+        return existedPropertyList;
     }
 
     private static class MyKeywordsCompletionProvider extends CompletionProvider<CompletionParameters> {
