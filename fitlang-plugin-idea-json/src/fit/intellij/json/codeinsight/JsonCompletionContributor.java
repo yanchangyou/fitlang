@@ -65,7 +65,9 @@ public class JsonCompletionContributor extends CompletionContributor {
 
     private void addUniProperty() {
         Map<String, JSONObject> uniMap = loadTemplateMap();
-        PsiElementPattern.Capture<PsiElement> itemProperty = psiElement().afterLeaf(",");
+
+        PsiElementPattern.Capture<PsiElement> itemProperty = psiElement();
+
         extend(CompletionType.BASIC, itemProperty, new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
@@ -88,7 +90,11 @@ public class JsonCompletionContributor extends CompletionContributor {
                         } else {
                             text += "\"" + value + "\"";
                         }
-                        result.addElement(LookupElementBuilder.create(text));
+
+                        if (!isLastProperty(psiElement)) {
+                            text += ",";
+                        }
+                        result.addElement(LookupElementBuilder.create(text).bold());
                     }
                 }
             }
@@ -116,6 +122,20 @@ public class JsonCompletionContributor extends CompletionContributor {
         }
         existedPropertyList.add(0, uni);
         return existedPropertyList;
+    }
+
+    /**
+     * 是否最后一个属性，用于决定是否添加逗号
+     *
+     * @param psiElement
+     * @return
+     */
+    boolean isLastProperty(PsiElement psiElement) {
+        PsiElement parent2 = psiElement.getParent().getParent();
+        if (parent2.getNextSibling() != null && parent2.getNextSibling().getNextSibling() != null) {
+            return parent2.getNextSibling().getNextSibling().getText().equals("}");
+        }
+        return false;
     }
 
     private static class MyKeywordsCompletionProvider extends CompletionProvider<CompletionParameters> {
@@ -181,5 +201,21 @@ public class JsonCompletionContributor extends CompletionContributor {
         String templateJsonText = IoUtil.readUtf8(JsonCompletionContributor.class.getClassLoader().getResourceAsStream("fitTemplate.json"));
         JSONObject template = JSONObject.parseObject(templateJsonText);
         return template;
+    }
+
+    public void fillCompletionVariants(@NotNull final CompletionParameters parameters, @NotNull CompletionResultSet result) {
+
+        result = result.withPrefixMatcher(new PrefixMatcher(result.getPrefixMatcher().getPrefix()) {
+            @Override
+            public boolean prefixMatches(@NotNull String name) {
+                return true;
+            }
+
+            @Override
+            public @NotNull PrefixMatcher cloneWithPrefix(@NotNull String prefix) {
+                return new PlainPrefixMatcher(prefix);
+            }
+        });
+        super.fillCompletionVariants(parameters, result);
     }
 }
