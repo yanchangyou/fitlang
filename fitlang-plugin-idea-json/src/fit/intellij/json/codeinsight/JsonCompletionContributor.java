@@ -126,7 +126,7 @@ public class JsonCompletionContributor extends CompletionContributor {
         @Override
         protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
             for (String keyword : KEYWORDS) {
-                result.addElement(LookupElementBuilder.create(keyword).bold());
+                result.addElement(LookupElementBuilder.create(keyword));
             }
         }
     }
@@ -138,7 +138,7 @@ public class JsonCompletionContributor extends CompletionContributor {
         protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
             List<String> templates = loadTemplate();
             for (String template : templates) {
-                result.addElement(LookupElementBuilder.create(template).bold());
+                result.addElement(LookupElementBuilder.create(template));
             }
         }
     }
