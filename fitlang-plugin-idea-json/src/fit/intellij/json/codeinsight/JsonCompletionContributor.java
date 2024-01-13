@@ -65,9 +65,8 @@ public class JsonCompletionContributor extends CompletionContributor {
 
     private void addUniProperty() {
         Map<String, JSONObject> uniMap = loadTemplateMap();
-        PsiElementPattern.Capture<PsiElement> item_property = psiElement()
-                .afterLeaf(",");
-        extend(CompletionType.BASIC, item_property, new CompletionProvider<>() {
+        PsiElementPattern.Capture<PsiElement> itemProperty = psiElement().afterLeaf(",");
+        extend(CompletionType.BASIC, itemProperty, new CompletionProvider<>() {
             @Override
             protected void addCompletions(@NotNull CompletionParameters parameters, @NotNull ProcessingContext context, @NotNull CompletionResultSet result) {
 
