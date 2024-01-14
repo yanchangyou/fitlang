@@ -36,7 +36,7 @@ public interface UserIdeInterface {
 
     JSONObject showNodeConfig(JSONObject config, Project project);
 
-    JSONObject showNodeConfigDialog(JSONObject config, JSONObject option);
+    JSONObject showGlobalConfigDialog(JSONObject config, JSONObject option);
 
     JSONObject getNodeConfig();
 

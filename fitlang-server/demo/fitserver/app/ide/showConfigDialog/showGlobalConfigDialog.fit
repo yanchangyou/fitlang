@@ -1,5 +1,5 @@
 {
-    "uni": "showConfigDialog",
+    "uni": "showGlobalConfigDialog",
     "config": {
         "jsonPath": "..*"
     }

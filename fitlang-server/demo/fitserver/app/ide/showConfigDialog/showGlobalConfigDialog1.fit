@@ -1,5 +1,5 @@
 {
-    "uni": "showConfigDialog",
+    "uni": "showGlobalConfigDialog",
     "config": {
         "field1": "field1",
         "field2": "field2",

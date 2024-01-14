@@ -403,7 +403,7 @@
             "checkboxText": "check item"
         },
         {
-            "uni": "showConfigDialog",
+            "uni": "showGlobalConfigDialog",
             "config": {
                 "foo": "bar"
             }

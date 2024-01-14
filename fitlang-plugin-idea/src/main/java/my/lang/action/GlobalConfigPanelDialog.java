@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeConfigPanelDialog extends DialogWrapper {
+public class GlobalConfigPanelDialog extends DialogWrapper {
 
     public static JSONObject INIT_CONFIG = JSONObject.parse("{'name':'value'}");
 
@@ -22,7 +22,7 @@ public class NodeConfigPanelDialog extends DialogWrapper {
 
     int height = 400;
 
-    public NodeConfigPanelDialog(JSONObject config, JSONObject option) {
+    public GlobalConfigPanelDialog(JSONObject config, JSONObject option) {
 
         super(true);
 

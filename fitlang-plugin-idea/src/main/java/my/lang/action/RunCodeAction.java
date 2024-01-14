@@ -411,12 +411,12 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public JSONObject showNodeConfigDialog(JSONObject config, JSONObject option) {
+            public JSONObject showGlobalConfigDialog(JSONObject config, JSONObject option) {
 
-                NodeConfigPanelDialog nodeConfigPanelDialog = new NodeConfigPanelDialog(config, option);
-                nodeConfigPanelDialog.showAndGet();
+                GlobalConfigPanelDialog globalConfigPanelDialog = new GlobalConfigPanelDialog(config, option);
+                globalConfigPanelDialog.showAndGet();
 
-                return nodeConfigPanelDialog.readConfig();
+                return globalConfigPanelDialog.readConfig();
             }
 
 

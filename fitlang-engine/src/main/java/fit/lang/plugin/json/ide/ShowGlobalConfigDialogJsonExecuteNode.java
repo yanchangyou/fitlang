@@ -9,21 +9,26 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 /**
  * 执行节点
  */
-public class ShowConfigDialogJsonExecuteNode extends JsonExecuteNode {
+public class ShowGlobalConfigDialogJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-
-        JSONObject config = nodeJsonDefine.getJSONObject("config");
-        JSONObject option = nodeJsonDefine.getJSONObject("option");
-
-        JSONObject newConfig = UserIdeManager.getUserIdeInterface().showNodeConfigDialog(config, option);
 
         String configField = nodeJsonDefine.getString("configField");
 
         if (StrUtil.isBlank(configField)) {
             configField = "config";
         }
+
+        Object config = parseField(configField, input);
+
+        if (!(config instanceof JSONObject)) {
+            config = nodeJsonDefine.getJSONObject(configField);
+        }
+
+        JSONObject option = nodeJsonDefine.getJSONObject("option");
+
+        JSONObject newConfig = UserIdeManager.getUserIdeInterface().showGlobalConfigDialog((JSONObject) config, option);
 
         input.getNodeContext().setAttribute(configField, newConfig);
 
