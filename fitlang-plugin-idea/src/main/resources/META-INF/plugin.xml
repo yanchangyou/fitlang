@@ -89,6 +89,17 @@ proxy: proxy node<br/>
 web: config web param, such as response header<br/>
 <br/>
 
+http nodes<br/>
+http: http<br/>
+postJson: http post json<br/>
+postForm: http post form<br/>
+httpGet: http get<br/>
+httpPut: http put<br/>
+httpDelete: http delete<br/>
+httpHead: http head <br/>
+postman: postman<br/>
+<br/>
+
 info nodes<br/>
 systemInfo: os、memory info<br/>
 info: jvm jdk info<br/>
@@ -109,6 +120,27 @@ getClientMonitorData: get client monitor data<br/>
 receiveClientMonitorData: receive client monitor data<br/>
 pushClientMonitorData: push client monitor data<br/>
 getMonitorClient: get monitor client list<br/>
+<br/>
+
+IDE nodes<br/>
+readEditor: read editor<br/>
+writeEditor: write editor<br/>
+showConfig: show config<br/>
+readConfig: read config<br/>
+openWebPage: open web page<br/>
+chooseFile: choose file<br/>
+showInfoMessage: show info message<br/>
+showErrorMessage: show error message<br/>
+showInputDialog: show input dialog<br/>
+showOkCancelDialog: show Ok or cancel dialog<br/>
+<br/>
+
+Office nodes<br/>
+readExcel: read excel<br/>
+writeExcel: write excel<br/>
+mergeExcel: merge excel<br/>
+readExcelForAllSheet: read excel for all sheet<br/>
+<br/>
 
 中文: <br/>
 <br/>
@@ -193,6 +225,17 @@ proxy: 代理节点<br/>
 web: 配置web参数，响应头等<br/>
 <br/>
 
+http节点<br/>
+http: http<br/>
+postJson: http post json<br/>
+postForm: http post form<br/>
+httpGet: http get<br/>
+httpPut: http put<br/>
+httpDelete: http delete<br/>
+httpHead: http head <br/>
+postman: postman<br/>
+<br/>
+
 信息节点<br/>
 systemInfo: CPU、内存信息<br/>
 info: JVM, JDK, 运行时信息<br/>
@@ -213,6 +256,26 @@ getClientMonitorData: 获取单个客户端监控数据<br/>
 receiveClientMonitorData: 接收客户端监控数据<br/>
 pushClientMonitorData: 推送监控数据<br/>
 getMonitorClient: 获取监控客户端列表<br/>
+<br/>
+
+IDE节点<br/>
+readEditor: 获取当前编辑器内容<br/>
+writeEditor: 写入当前编辑器内容<br/>
+showConfig: 显示配置<br/>
+readConfig: 读取配置<br/>
+openWebPage: 打开web页面<br/>
+chooseFile: 选择文件<br/>
+showInfoMessage: 显示消息<br/>
+showErrorMessage: 显示错误信息<br/>
+showInputDialog: 显示输入对话框<br/>
+showOkCancelDialog: 显示确认或取消对话框<br/>
+<br/>
+
+办公软件节点<br/>
+readExcel: 读取Excel<br/>
+writeExcel: 写入Excel<br/>
+mergeExcel: 合并Excel<br/>
+readExcelForAllSheet: 读取所有sheet内容<br/>
 <br/>
 
 </p>
