@@ -30,7 +30,7 @@ dependencies {
     implementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
     implementation "net.java.dev.jna:jna:${jnaVersion}"
 //    implementation "io.netty:netty-all:${nettyVersion}"
-//    implementation "jexcelapi:jxl:${jexcelapiVersion}"
+    implementation "jexcelapi:jxl:${jexcelapiVersion}"
 //    implementation "com.alibaba:easyexcel:${easyexcelVersion}"
 }
 
