@@ -128,6 +128,30 @@
                     "script": {
                         "uni": "unzip"
                     }
+                },
+                {
+                    "name": "mergeExcel",
+                    "title": "Merge Excel",
+                    "synchronize": true,
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "chooseFile",
+                                "fileField": "inputFiles"
+                            },
+                            {
+                                "uni": "mergeExcel",
+                                "sheetName": "接口列表",
+                                "outputFile": "/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls"
+                            },
+                            {
+                                "uni": "cmd",
+                                "cmd": "open",
+                                "target": "${outputFile}"
+                            }
+                        ]
+                    }
                 }
             ]
         },

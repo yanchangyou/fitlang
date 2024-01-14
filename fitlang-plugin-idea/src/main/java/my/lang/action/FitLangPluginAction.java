@@ -93,46 +93,55 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
         String filePath = virtualFile.getPath();
 
         VirtualFile finalVirtualFile = virtualFile;
-        threadPoolExecutor.submit(() -> {
-            String result;
-            try {
 
-                String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
+        if (actionConfig.isSynchronize()) {
+            execute(e, actionConfig, project, filePath, finalVirtualFile);
+        } else {
+            threadPoolExecutor.submit(() -> {
+                execute(e, actionConfig, project, filePath, finalVirtualFile);
+            });
+        }
+    }
 
-                JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
+    private static void execute(AnActionEvent e, PluginActionConfig actionConfig, Project project, String filePath, VirtualFile finalVirtualFile) {
+        String result;
+        try {
 
-                ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
+            String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
 
-                result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
+            JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
 
-                if (isJsonObjectText(result)) {
-                    JSONObject jsonObject = JSON.parseObject(result);
-                    if (jsonObject.get("_raw") != null) {
-                        Object raw = jsonObject.get("_raw");
-                        if (raw instanceof JSONArray) {
-                            result = toJsonTextWithFormat((JSONArray) raw);
-                        } else {
-                            result = raw.toString();
-                        }
+            ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
+
+            result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
+
+            if (isJsonObjectText(result)) {
+                JSONObject jsonObject = JSON.parseObject(result);
+                if (jsonObject.get("_raw") != null) {
+                    Object raw = jsonObject.get("_raw");
+                    if (raw instanceof JSONArray) {
+                        result = toJsonTextWithFormat((JSONArray) raw);
                     } else {
-                        result = toJsonTextWithFormat(jsonObject);
+                        result = raw.toString();
                     }
+                } else {
+                    result = toJsonTextWithFormat(jsonObject);
                 }
-
-                print(result + "\n\n", project, projectConsoleViewMap);
-
-                if (actionConfig.isRefreshParent()) {
-                    finalVirtualFile.getParent().refresh(false, false);
-                }
-                if (actionConfig.isRefresh()) {
-                    finalVirtualFile.refresh(false, false);
-                }
-
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                result = "exception:" + getRootException(exception);
-                print(result + "\n\n", project, projectConsoleViewMap);
             }
-        });
+
+            print(result + "\n\n", project, projectConsoleViewMap);
+
+            if (actionConfig.isRefreshParent()) {
+                finalVirtualFile.getParent().refresh(false, false);
+            }
+            if (actionConfig.isRefresh()) {
+                finalVirtualFile.refresh(false, false);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            result = "exception:" + getRootException(exception);
+            print(result + "\n\n", project, projectConsoleViewMap);
+        }
     }
 }
