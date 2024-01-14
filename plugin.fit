@@ -142,8 +142,7 @@
                                 "isMultiple": true
                             },
                             {
-                                "uni": "mergeExcel",
-                                "sheetName": "接口列表"
+                                "uni": "mergeExcel"
                             },
                             {
                                 "uni": "cmd",
