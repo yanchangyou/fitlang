@@ -43,4 +43,6 @@ public interface UserIdeInterface {
     String showPasswordDialog(String title, String message);
 
     List<File> chooseFiles(JSONObject config);
+
+    int showYesNoCancelDialog(String title, String message);
 }

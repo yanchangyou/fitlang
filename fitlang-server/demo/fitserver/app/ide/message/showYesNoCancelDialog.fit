@@ -1,0 +1,6 @@
+{
+    "uni": "showYesNoCancelDialog",
+    "title": "Title",
+    "message": "Choice",
+    "keyField": "name"
+}

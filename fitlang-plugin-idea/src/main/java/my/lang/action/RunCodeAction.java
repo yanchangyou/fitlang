@@ -30,7 +30,6 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
@@ -442,7 +441,7 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public @Nullable String showPasswordDialog(String title, String message) {
+            public String showPasswordDialog(String title, String message) {
                 return Messages.showPasswordDialog(message, title);
             }
 
@@ -464,6 +463,11 @@ public abstract class RunCodeAction extends AnAction {
             @Override
             public int showOkCancelDialog(String title, String message, String okText, String cancelText) {
                 return Messages.showOkCancelDialog(message, title, okText, cancelText, null);
+            }
+
+            @Override
+            public int showYesNoCancelDialog(String title, String message) {
+                return Messages.showYesNoCancelDialog(message, title, null);
             }
         });
     }

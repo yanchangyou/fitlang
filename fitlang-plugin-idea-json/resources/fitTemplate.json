@@ -386,6 +386,12 @@
             "keyField": "fieldName"
         },
         {
+            "uni": "showYesNoCancelDialog",
+            "title": "Title",
+            "message": "Choice",
+            "keyField": "name"
+        },
+        {
             "uni": "showPasswordDialog",
             "title": "Input",
             "message": "password :"

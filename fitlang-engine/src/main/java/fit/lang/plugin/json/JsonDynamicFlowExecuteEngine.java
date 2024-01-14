@@ -332,6 +332,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("showErrorMessage", ShowErrorMessageJsonExecuteNode.class);
         register("showInputDialog", ShowInputDialogJsonExecuteNode.class);
         register("showOkCancelDialog", ShowOkCancelDialogJsonExecuteNode.class);
+        register("showYesNoCancelDialog", ShowYesNoCancelDialogJsonExecuteNode.class);
         register("showCheckboxOkCancelDialog", ShowCheckboxOkCancelDialogJsonExecuteNode.class);
         register("showPasswordDialog", ShowPasswordDialogJsonExecuteNode.class);
 
