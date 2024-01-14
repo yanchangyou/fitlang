@@ -545,6 +545,28 @@
             "isRegexp": true,
             "contentField": "content",
             "content": "abc456"
+        },
+        {
+            "uni": "readExcelForAllSheet",
+            "file": "path.xls"
+        },
+        {
+            "uni": "readExcel",
+            "file": "path.xls"
+        },
+        {
+            "uni": "writeExcel",
+            "file": "path.xls",
+            "arrayField": "rows",
+            "isAppend": true
+        },
+        {
+            "uni": "mergeExcel",
+            "sheetName": "sheetName",
+            "inputFiles": [
+                "path.xls"
+            ],
+            "outputFile": "path-merge.xls"
         }
     ]
 }
