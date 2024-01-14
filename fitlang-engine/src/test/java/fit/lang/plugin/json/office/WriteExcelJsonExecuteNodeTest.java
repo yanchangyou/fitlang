@@ -13,7 +13,8 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
         String flow = "{" +//
                 "   'uni': 'writeExcel'," +
                 "   'path': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-2.xls'," +
-                "   'arrayField':'list'" +
+                "   'arrayField':'list'," +
+                "   'isAppend': true," +
                 "}";
 
         String input = "{'list':[{'column0':'c0','column1':'c1','column2':'c2','column3':'c3'}]}";
