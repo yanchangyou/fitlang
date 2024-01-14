@@ -41,6 +41,7 @@ public class PluginActionConfig {
         this.refresh = Boolean.TRUE.equals(config.getBoolean("refresh"));
         this.refreshParent = Boolean.TRUE.equals(config.getBoolean("refreshParent"));
         this.visible = !Boolean.FALSE.equals(config.getBoolean("visible"));
+        this.synchronize = Boolean.TRUE.equals(config.getBoolean("synchronize"));
     }
 
     public String getId() {
