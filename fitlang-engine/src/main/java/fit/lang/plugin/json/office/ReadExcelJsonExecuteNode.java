@@ -1,5 +1,8 @@
 package fit.lang.plugin.json.office;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -11,10 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 执行节点
@@ -25,41 +24,46 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String path = nodeJsonDefine.getString("path");
-        String sheetName = nodeJsonDefine.getString("sheetName");
-        Integer headerIndex = nodeJsonDefine.getInteger("headerIndex");
 
-        List<Map<String, String>> list;
+        JSONObject excel = null;
         try {
-            list = readExcel(path, sheetName, headerIndex);
+            excel = readExcel(path);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ExecuteNodeException("read excel error: ", e);
         }
 
-        output.set("sheetData", list);
+        output.setData(excel);
     }
 
-    List<Map<String, String>> readExcel(String path, String sheetName, Integer headerIndex) throws IOException, BiffException {
-        InputStream is = Files.newInputStream(Paths.get(path));
+    JSONObject readExcel(String file) throws IOException, BiffException {
+        InputStream is = Files.newInputStream(Paths.get(file));
         jxl.Workbook rwb = Workbook.getWorkbook(is);
 
-        if (headerIndex == null) {
-            headerIndex = 0;
-        }
-        Sheet sheet = rwb.getSheet(0);
-        if (sheetName != null) {
-            sheet = rwb.getSheet(sheetName);
-        }
-        List<Map<String, String>> list = new ArrayList<>();
-        int rows = sheet.getRows();
-        for (int i = headerIndex; i < rows; i++) {
-            Map<String, String> row = new HashMap<>();
-            int column = sheet.getRow(i).length;
-            for (int j = 0; j < column; j++) {
-                row.put(j + "", sheet.getCell(j, i).getContents());
+        JSONObject excel = new JSONObject();
+        excel.put("file", file);
+
+        JSONArray sheetsData = new JSONArray();
+        Sheet[] sheets = rwb.getSheets();
+        for (Sheet sheet : sheets) {
+            String sheetName = sheet.getName();
+            JSONArray rows = new JSONArray();
+            int rowNum = sheet.getRows();
+            for (int i = 0; i < rowNum; i++) {
+                JSONObject row = new JSONObject();
+
+                int column = sheet.getRow(i).length;
+                for (int j = 0; j < column; j++) {
+                    row.put("column" + j, sheet.getCell(j, i).getContents());
+                }
+                rows.add(row);
             }
-            list.add(row);
+            JSONObject sheetData = new JSONObject();
+            sheetData.put("name", sheetName);
+            sheetData.put("rows", rows);
+            sheetsData.add(sheetData);
         }
 
-        return list;
+        excel.put("sheets", sheetsData);
+        return excel;
     }
 }

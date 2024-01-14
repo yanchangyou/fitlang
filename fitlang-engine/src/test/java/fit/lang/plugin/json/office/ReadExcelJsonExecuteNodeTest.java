@@ -23,7 +23,7 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
 
         System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
 
-        Assert.assertNotNull(outputJson.get("sheetData"));
+        Assert.assertNotNull(outputJson.get("sheets"));
 
     }
 }
