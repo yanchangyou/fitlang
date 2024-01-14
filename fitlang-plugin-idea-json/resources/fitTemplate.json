@@ -366,7 +366,8 @@
         },
         {
             "uni": "chooseFile",
-            "fileField": "file"
+            "fileField": "file",
+            "isMultiple": false
         },
         {
             "uni": "showInfoMessage",
