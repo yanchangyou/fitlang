@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.ide;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
@@ -28,17 +29,17 @@ public class ChooseFileJsonExecuteNode extends JsonExecuteNode {
 
         List<File> fileList = UserIdeManager.getUserIdeInterface().chooseFiles(config);
 
-        if (fileList != null) {
-            output.set(fileField, fileList);
-            if (!isMultiple) {
-                if (fileList.isEmpty()) {
-                    output.set(fileField, null);
-                } else {
-                    output.set(fileField, fileList.get(0));
-                }
+        JSONArray pathList = new JSONArray();
+        for (File file : fileList) {
+            pathList.add(file.getAbsolutePath());
+        }
+        output.set(fileField, pathList);
+        if (!isMultiple) {
+            if (pathList.isEmpty()) {
+                output.set(fileField, null);
+            } else {
+                output.set(fileField, pathList.get(0));
             }
-        } else {
-            output.set(fileField, null);
         }
     }
 }
