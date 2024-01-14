@@ -10,7 +10,10 @@ import jxl.write.WritableCell;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -88,23 +91,6 @@ public class NodeExcelUtil {
 
 
     static JSONObject writeExcel(String path, String sheetName, JSONArray rows, boolean isAppend) throws Exception {
-
-        File outFile = new File(path);
-        boolean canWrite = outFile.canWrite();
-        if (!canWrite) {
-            JSONObject result = new JSONObject();
-            result.put("error", "can not write file: " + outFile);
-            return result;
-        }
-        if (!outFile.exists()) {
-            try {
-                outFile.createNewFile();
-            } catch (IOException e) {
-                JSONObject result = new JSONObject();
-                result.put("error", "can not create file: " + outFile + ", error: " + e.getMessage());
-                return result;
-            }
-        }
 
         if (StrUtil.isBlank(sheetName)) {
             sheetName = "Sheet1";

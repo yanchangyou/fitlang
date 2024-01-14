@@ -49,7 +49,6 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
                     rows.addAll(inputRows);
                 }
             }
-            outputFile = outputFile.replace("[", "").replace("]", "");
             writeExcel(outputFile, sheetName, rows, true);
         } catch (Exception e) {
             throw new RuntimeException(e);
