@@ -147,7 +147,7 @@
                             {
                                 "uni": "cmd",
                                 "cmd": "open",
-                                "target": "${outputFile}"
+                                "target": "${this.?outputFile}"
                             }
                         ]
                     }
