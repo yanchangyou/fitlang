@@ -403,6 +403,12 @@
             "checkboxText": "check item"
         },
         {
+            "uni": "showConfigDialog",
+            "config": {
+                "foo": "bar"
+            }
+        },
+        {
             "uni": "systemInfo",
             "shareFields": [
                 "computerManufacturer",
