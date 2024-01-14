@@ -77,7 +77,7 @@ public class JsonCompletionContributor extends CompletionContributor {
 
                 String uni = existedPropertyList.get(0);
 
-                if (uni != null) {
+                if (uni != null && uniMap.get(uni) != null) {
                     JSONObject template = uniMap.get(uni);
                     for (Map.Entry<String, Object> item : template.entrySet()) {
                         if (existedPropertyList.contains(item.getKey())) {
