@@ -38,5 +38,7 @@ public interface UserIdeInterface {
 
     void showInfoMessage(String title, String message);
 
+    void showPasswordDialog(String title, String message);
+
     List<File> chooseFiles(JSONObject config);
 }

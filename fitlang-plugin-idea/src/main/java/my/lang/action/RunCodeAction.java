@@ -417,6 +417,11 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
+            public void showPasswordDialog(String title, String message) {
+                Messages.showPasswordDialog(message, title);
+            }
+
+            @Override
             public List<File> chooseFiles(JSONObject config) {
                 Editor editor = getEditor();
                 Project project = editor.getProject();

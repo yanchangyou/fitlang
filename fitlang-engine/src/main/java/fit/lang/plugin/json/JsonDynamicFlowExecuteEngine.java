@@ -30,10 +30,7 @@ import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.http.*;
 import fit.lang.plugin.json.ide.*;
-import fit.lang.plugin.json.ide.message.ShowErrorMessageJsonExecuteNode;
-import fit.lang.plugin.json.ide.message.ShowInfoMessageJsonExecuteNode;
-import fit.lang.plugin.json.ide.message.ShowInputDialogJsonExecuteNode;
-import fit.lang.plugin.json.ide.message.ShowOkCancelDialogJsonExecuteNode;
+import fit.lang.plugin.json.ide.message.*;
 import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
@@ -334,6 +331,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("showErrorMessage", ShowErrorMessageJsonExecuteNode.class);
         register("showOkCancelDialog", ShowOkCancelDialogJsonExecuteNode.class);
         register("showInputDialog", ShowInputDialogJsonExecuteNode.class);
+        register("showIPasswordDialog", ShowPasswordDialogJsonExecuteNode.class);
         register("chooseFile", ChooseFileJsonExecuteNode.class);
 
         //os
