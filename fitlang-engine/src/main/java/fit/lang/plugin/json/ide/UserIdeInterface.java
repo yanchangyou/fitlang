@@ -3,6 +3,9 @@ package fit.lang.plugin.json.ide;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
 
+import java.io.File;
+import java.util.List;
+
 /**
  * 用户IDE接口
  */
@@ -45,4 +48,5 @@ public interface UserIdeInterface {
 
     void showInfoMessage(String title, String message);
 
+    List<File> chooseFiles(JSONObject config);
 }

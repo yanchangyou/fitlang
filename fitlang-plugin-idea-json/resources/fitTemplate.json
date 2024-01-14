@@ -365,6 +365,34 @@
             "url": "https://www.baidu.com"
         },
         {
+            "uni": "chooseFile",
+            "fileField": "file"
+        },
+        {
+            "uni": "showInfoMessage",
+            "title": "Message",
+            "message": "hello, Fit!"
+        },
+        {
+            "uni": "showErrorMessage",
+            "title": "Error",
+            "message": "something error!"
+        },
+        {
+            "uni": "showInputDialog",
+            "title": "Input",
+            "message": "input :",
+            "keyField": "username"
+        },
+        {
+            "uni": "showOkCancelDialog",
+            "title": "Title",
+            "message": "choose",
+            "okText": "okText",
+            "cancelText": "cancelText",
+            "keyField": "fieldName"
+        },
+        {
             "uni": "systemInfo",
             "shareFields": [
                 "computerManufacturer",

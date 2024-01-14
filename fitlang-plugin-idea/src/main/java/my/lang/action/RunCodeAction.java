@@ -15,6 +15,8 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -160,7 +162,7 @@ public abstract class RunCodeAction extends AnAction {
 
     private static boolean isSynchronize(String filePath) {
         String content = readNodeDefineFile(filePath);
-        return content.contains("open") || content.contains("show");
+        return content.contains("open") || content.contains("show") || content.contains("choose");
     }
 
     private void execute(AnActionEvent e, Project project, List<String> filePathList, boolean finalNeedShowFile) {
@@ -412,6 +414,30 @@ public abstract class RunCodeAction extends AnAction {
             @Override
             public void showInfoMessage(String title, String message) {
                 Messages.showInfoMessage(message, title);
+            }
+
+            @Override
+            public List<File> chooseFiles(JSONObject config) {
+                Editor editor = getEditor();
+                Project project = editor.getProject();
+                boolean chooseFiles = true;
+                boolean chooseFolders = false;
+                boolean chooseJars = false;
+                boolean chooseJarsAsFiles = false;
+                boolean chooseJarContents = false;
+                boolean chooseMultiple = Boolean.TRUE.equals(config.getBoolean("isMultiple"));
+                FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(chooseFiles,
+                        chooseFolders,
+                        chooseJars,
+                        chooseJarsAsFiles,
+                        chooseJarContents,
+                        chooseMultiple);
+                VirtualFile[] files = FileChooser.chooseFiles(fileChooserDescriptor, project, null);
+                List<File> fileList = new ArrayList<>();
+                for (VirtualFile file : files) {
+                    fileList.add(new File(file.getPath()));
+                }
+                return fileList;
             }
 
             @Override
