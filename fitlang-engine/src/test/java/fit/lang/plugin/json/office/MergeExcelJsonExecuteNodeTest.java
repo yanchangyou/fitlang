@@ -18,7 +18,7 @@ public class MergeExcelJsonExecuteNodeTest extends TestCase {
                 "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'," +
                 "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'" +
                 "    ]," +
-                "   'outputFile': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls'," +
+//                "   'outputFile': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls'," +
                 "}";
         System.out.println(flow.replace("'", "\""));
 

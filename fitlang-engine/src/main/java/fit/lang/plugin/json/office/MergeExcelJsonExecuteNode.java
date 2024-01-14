@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.office;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -24,7 +25,7 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
 
         List<String> inputFiles = parseStringArray("inputFiles", input);
 
-        if (inputFiles == null && inputFiles.isEmpty()) {
+        if (inputFiles == null || inputFiles.isEmpty()) {
             output.set("inputFiles", inputFiles);
             return;
         }
@@ -48,11 +49,12 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
                     rows.addAll(inputRows);
                 }
             }
+            outputFile = outputFile.replace("[", "").replace("]", "");
             writeExcel(outputFile, sheetName, rows, true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        output.set("inputFiles", inputFiles);
+        output.set("inputFiles", JSON.toJSON(inputFiles));
         output.set("outputFile", outputFile);
         output.set("sheetName", sheetName);
         output.set("rows", rows);
