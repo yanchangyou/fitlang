@@ -16,6 +16,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
                 "   'arrayField':'list'," +
                 "   'isAppend': true," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String input = "{'list':[{'column0':'c0','column1':'c1','column2':'c2','column3':'c3'}]}";
         String output = ExecuteJsonNodeUtil.executeCode(input, flow);

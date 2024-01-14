@@ -37,7 +37,9 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("write excel error: ", e);
         }
 
+        output.set("arrayField", arrayField);
         output.set("result", result);
+
     }
 
 }

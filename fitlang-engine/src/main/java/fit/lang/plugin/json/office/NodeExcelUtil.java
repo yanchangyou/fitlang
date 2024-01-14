@@ -127,6 +127,11 @@ public class NodeExcelUtil {
         rwb.write();
         rwb.close();
 
+        result.put("path", path);
+        result.put("sheetName", sheetName);
+        result.put("rows", rows);
+        result.put("isAppend", isAppend);
+
         return result;
     }
 }

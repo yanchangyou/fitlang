@@ -20,6 +20,7 @@ public class MergeExcelJsonExecuteNodeTest extends TestCase {
                 "    ]," +
                 "   'outputFile': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
 
