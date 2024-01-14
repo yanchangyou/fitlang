@@ -343,14 +343,6 @@
             "format": false
         },
         {
-            "uni": "readEditorSearch",
-            "contentField": "content"
-        },
-        {
-            "uni": "readEditorReplace",
-            "contentField": "content"
-        },
-        {
             "uni": "showConfig",
             "config": {
                 "foo": "bar"

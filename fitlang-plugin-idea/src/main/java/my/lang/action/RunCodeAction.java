@@ -454,26 +454,6 @@ public abstract class RunCodeAction extends AnAction {
             public int showOkCancelDialog(String title, String message, String okText, String cancelText) {
                 return Messages.showOkCancelDialog(message, title, okText, cancelText, null);
             }
-
-            public String readEditorSearchContent() {
-                SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
-
-                if (searchReplaceComponent != null) {
-                    return searchReplaceComponent.getSearchTextComponent().getText();
-                }
-                return "!!!ERROR: editor search component not open!!!";
-            }
-
-            public String readEditorReplaceContent() {
-
-                SearchReplaceComponent searchReplaceComponent = getSearchReplaceComponent();
-
-                if (searchReplaceComponent != null) {
-                    return searchReplaceComponent.getReplaceTextComponent().getText();
-                }
-                return "!!!ERROR: editor replace component not open!!!";
-            }
-
         });
     }
 }

@@ -30,16 +30,6 @@ public interface UserIdeInterface {
 
     int showOkCancelDialog(String title, String message, String okText, String cancelText);
 
-    /**
-     * 读取查询框内容
-     */
-    String readEditorSearchContent();
-
-    /**
-     * 读取替换框内容
-     */
-    String readEditorReplaceContent();
-
     void openWebPage(String url, JSONObject option, JSONObject context);
 
     void showNodeConfig(JSONObject config, Project project);
