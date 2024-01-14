@@ -1,0 +1,6 @@
+{
+    "uni": "showCheckboxOkCancelDialog",
+    "title": "Title",
+    "message": "check",
+    "checkboxText": "check item"
+}

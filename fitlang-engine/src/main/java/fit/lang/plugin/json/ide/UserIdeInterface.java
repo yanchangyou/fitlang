@@ -24,6 +24,8 @@ public interface UserIdeInterface {
      */
     void writeEditorContent(String content);
 
+    int showCheckboxOkCancelDialog(String title, String message, String checkboxText);
+
     void showErrorDialog(String title, String message);
 
     String showInputDialog(String title, String message);
@@ -38,7 +40,7 @@ public interface UserIdeInterface {
 
     void showInfoMessage(String title, String message);
 
-    void showPasswordDialog(String title, String message);
+    String showPasswordDialog(String title, String message);
 
     List<File> chooseFiles(JSONObject config);
 }

@@ -8,17 +8,17 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 /**
  * 执行节点
  */
-public class ShowPasswordDialogJsonExecuteNode extends JsonExecuteNode {
+public class ShowCheckboxOkCancelDialogJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         String title = parseStringField("title", input);
         String message = parseStringField("message", input);
+        String checkboxText = parseStringField("checkboxText", input);
 
-        String password = UserIdeManager.getUserIdeInterface().showPasswordDialog(title, message);
-
-        output.set("password", password);
+        int checkIndex = UserIdeManager.getUserIdeInterface().showCheckboxOkCancelDialog(title, message, checkboxText);
+        output.set("checkIndex", checkIndex);
 
     }
 }

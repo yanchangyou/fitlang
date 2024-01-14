@@ -30,6 +30,7 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
@@ -412,16 +413,6 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public void showInfoMessage(String title, String message) {
-                Messages.showInfoMessage(message, title);
-            }
-
-            @Override
-            public void showPasswordDialog(String title, String message) {
-                Messages.showPasswordDialog(message, title);
-            }
-
-            @Override
             public List<File> chooseFiles(JSONObject config) {
                 Editor editor = getEditor();
                 Project project = editor.getProject();
@@ -443,6 +434,21 @@ public abstract class RunCodeAction extends AnAction {
                     fileList.add(new File(file.getPath()));
                 }
                 return fileList;
+            }
+
+            @Override
+            public void showInfoMessage(String title, String message) {
+                Messages.showInfoMessage(message, title);
+            }
+
+            @Override
+            public @Nullable String showPasswordDialog(String title, String message) {
+                return Messages.showPasswordDialog(message, title);
+            }
+
+            @Override
+            public int showCheckboxOkCancelDialog(String title, String message, String checkboxText) {
+                return Messages.showCheckboxOkCancelDialog(message, title, checkboxText, false, 0, 0, null);
             }
 
             @Override

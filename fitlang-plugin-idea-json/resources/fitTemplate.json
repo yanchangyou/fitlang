@@ -386,6 +386,17 @@
             "keyField": "fieldName"
         },
         {
+            "uni": "showPasswordDialog",
+            "title": "Input",
+            "message": "password :"
+        },
+        {
+            "uni": "showCheckboxOkCancelDialog",
+            "title": "Title",
+            "message": "check",
+            "checkboxText": "check item"
+        },
+        {
             "uni": "systemInfo",
             "shareFields": [
                 "computerManufacturer",
