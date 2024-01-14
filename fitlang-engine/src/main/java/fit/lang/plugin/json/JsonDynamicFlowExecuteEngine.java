@@ -43,6 +43,7 @@ import fit.lang.plugin.json.net.SslTelnetJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetJsonExecuteNode;
 import fit.lang.plugin.json.office.MergeExcelJsonExecuteNode;
+import fit.lang.plugin.json.office.ReadExcelForAllSheetJsonExecuteNode;
 import fit.lang.plugin.json.office.ReadExcelJsonExecuteNode;
 import fit.lang.plugin.json.office.WriteExcelJsonExecuteNode;
 import fit.lang.plugin.json.os.GetClipboardJsonExecuteNode;
@@ -342,6 +343,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("setClipboard", SetClipboardJsonExecuteNode.class);
 
         //office
+        register("readExcelForAllSheet", ReadExcelForAllSheetJsonExecuteNode.class);
         register("readExcel", ReadExcelJsonExecuteNode.class);
         register("writeExcel", WriteExcelJsonExecuteNode.class);
         register("mergeExcel", MergeExcelJsonExecuteNode.class);
