@@ -35,12 +35,12 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
         output.setData(excel);
     }
 
-    JSONObject readExcel(String file) throws IOException, BiffException {
-        InputStream is = Files.newInputStream(Paths.get(file));
+    JSONObject readExcel(String path) throws IOException, BiffException {
+        InputStream is = Files.newInputStream(Paths.get(path));
         jxl.Workbook rwb = Workbook.getWorkbook(is);
 
         JSONObject excel = new JSONObject();
-        excel.put("file", file);
+        excel.put("path", path);
 
         JSONArray sheetsData = new JSONArray();
         Sheet[] sheets = rwb.getSheets();
