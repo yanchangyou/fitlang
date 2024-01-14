@@ -21,8 +21,9 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
         String path = parseStringField("path", input);
 
         String sheetName = nodeJsonDefine.getString("sheetName");
-        boolean isAppend = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("isAppend"));
         String arrayField = nodeJsonDefine.getString("arrayField");
+        boolean isAppend = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("isAppend"));
+
         if (StrUtil.isBlank(arrayField)) {
             arrayField = "list";
         }

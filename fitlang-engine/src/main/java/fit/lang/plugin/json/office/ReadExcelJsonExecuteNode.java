@@ -6,8 +6,6 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import static fit.lang.plugin.json.office.NodeExcelUtil.readExcel;
-
 /**
  * 执行节点
  */
@@ -18,9 +16,11 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
 
         String path = nodeJsonDefine.getString("path");
 
-        JSONObject excel = null;
+        String sheetName = nodeJsonDefine.getString("sheetName");
+
+        JSONObject excel;
         try {
-            excel = readExcel(path);
+            excel = NodeExcelUtil.readExcel(path, sheetName);
         } catch (Exception e) {
             throw new ExecuteNodeException("read excel error: ", e);
         }

@@ -44,10 +44,14 @@ public class NodeExcelUtil {
     }
 
 
-    static JSONObject readSheet(String path, String sheetName) throws Exception {
+    static JSONObject readExcel(String path, String sheetName) throws Exception {
         JSONObject excel = readExcel(path);
         if (excel == null) {
             return null;
+        }
+
+        if (sheetName == null) {
+            return excel;
         }
 
         JSONArray sheets = excel.getJSONArray("sheets");
@@ -91,7 +95,7 @@ public class NodeExcelUtil {
 
         if (isAppend) {
             try {
-                JSONObject sheetData = readSheet(path, sheetName);
+                JSONObject sheetData = readExcel(path, sheetName);
                 if (sheetData != null) {
                     JSONArray oldRows = sheetData.getJSONArray("rows");
                     oldRows.addAll(rows);
