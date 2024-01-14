@@ -18,7 +18,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String path = parseStringField("path", input);
+        String file = parseStringField("file", input);
 
         String sheetName = nodeJsonDefine.getString("sheetName");
         String arrayField = nodeJsonDefine.getString("arrayField");
@@ -32,7 +32,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject result = null;
         try {
-            result = writeExcel(path, sheetName, rows, isAppend);
+            result = writeExcel(file, sheetName, rows, isAppend);
         } catch (Exception e) {
             throw new ExecuteNodeException("write excel error: ", e);
         }

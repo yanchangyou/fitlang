@@ -14,13 +14,13 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
-        String path = nodeJsonDefine.getString("path");
+        String file = nodeJsonDefine.getString("file");
 
         String sheetName = nodeJsonDefine.getString("sheetName");
 
         JSONObject excel;
         try {
-            excel = NodeExcelUtil.readExcel(path, sheetName);
+            excel = NodeExcelUtil.readExcel(file, sheetName);
         } catch (Exception e) {
             throw new ExecuteNodeException("read excel error: ", e);
         }
