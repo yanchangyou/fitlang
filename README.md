@@ -130,6 +130,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - node: 子流程
 
 ### 函数
+
 - function: 函数
 - package: 包
 
@@ -141,7 +142,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - httpGet: http get
 - httpPut: http put
 - httpDelete: http delete
-- httpHead: http head 
+- httpHead: http head
 - postman: postman
 
 ### Web节点
@@ -164,6 +165,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
   ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties,env)
 
 ### os节点
+
 - getClipboard: 读取剪贴板内容
 - setClipboard: 设置剪贴板内容
 
@@ -174,6 +176,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - unzip: 解压
 
 ### 网络
+
 - telnet: telnet
 - telnets: telnets
 - telnet.http: telnet.http
@@ -200,6 +203,10 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - showErrorMessage: 显示错误信息
 - showInputDialog: 显示输入对话框
 - showOkCancelDialog: 显示确认或取消对话框
+- showGlobalConfigDialog: 显示全局配置对话框
+- showYesNoCancelDialog: Yes, No, Cancel对话框
+- showPasswordDialog: password对话框
+- showCheckboxOkCancelDialog: 勾选对话框
 
 ### 办公软件节点
 

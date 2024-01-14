@@ -134,6 +134,10 @@ showInfoMessage: show info message<br/>
 showErrorMessage: show error message<br/>
 showInputDialog: show input dialog<br/>
 showOkCancelDialog: show Ok or cancel dialog<br/>
+showGlobalConfigDialog: show global config dialog<br/>
+showYesNoCancelDialog: show Yes, No, Cancel dialog<br/>
+showPasswordDialog: show password dialog<br/>
+showCheckboxOkCancelDialog: show checkbox Ok cancel dialog<br/>
 <br/>
 
 Office nodes<br/>
@@ -271,6 +275,10 @@ showInfoMessage: 显示消息<br/>
 showErrorMessage: 显示错误信息<br/>
 showInputDialog: 显示输入对话框<br/>
 showOkCancelDialog: 显示确认或取消对话框<br/>
+showGlobalConfigDialog: 显示全局配置对话框<br/>
+showYesNoCancelDialog: Yes, No, Cancel对话框<br/>
+showPasswordDialog: password对话框<br/>
+showCheckboxOkCancelDialog: 勾选对话框<br/>
 <br/>
 
 办公软件节点<br/>
