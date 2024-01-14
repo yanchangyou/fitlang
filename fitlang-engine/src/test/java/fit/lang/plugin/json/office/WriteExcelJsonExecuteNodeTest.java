@@ -26,7 +26,7 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
 
         System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
 
-        Assert.assertNotNull(outputJson.get("sheets"));
+        Assert.assertNotNull(outputJson.get("result"));
 
     }
 }
