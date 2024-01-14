@@ -138,12 +138,12 @@
                         "child": [
                             {
                                 "uni": "chooseFile",
-                                "fileField": "inputFiles"
+                                "fileField": "inputFiles",
+                                "isMultiple": true
                             },
                             {
                                 "uni": "mergeExcel",
-                                "sheetName": "接口列表",
-                                "outputFile": "/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls"
+                                "sheetName": "接口列表"
                             },
                             {
                                 "uni": "cmd",

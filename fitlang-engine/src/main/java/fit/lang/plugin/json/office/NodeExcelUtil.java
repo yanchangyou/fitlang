@@ -3,6 +3,7 @@ package fit.lang.plugin.json.office;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.write.Label;
@@ -10,10 +11,7 @@ import jxl.write.WritableCell;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -91,6 +89,15 @@ public class NodeExcelUtil {
 
 
     static JSONObject writeExcel(String path, String sheetName, JSONArray rows, boolean isAppend) throws Exception {
+
+        File outFile = new File(path);
+        if (!outFile.exists()) {
+            try {
+                outFile.createNewFile();
+            } catch (IOException e) {
+                throw new ExecuteNodeException("create file error: " + path, e);
+            }
+        }
 
         if (StrUtil.isBlank(sheetName)) {
             sheetName = "Sheet1";
