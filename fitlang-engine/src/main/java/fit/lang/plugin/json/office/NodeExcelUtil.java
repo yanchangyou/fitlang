@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class NodeExcelUtil {
 
-    static JSONObject readExcel(String path) throws Exception {
+    static JSONObject readExcelAllSheet(String path) throws Exception {
         File file = new File(path);
         if (!file.exists()) {
             return null;
@@ -43,18 +43,21 @@ public class NodeExcelUtil {
         return excel;
     }
 
-
     static JSONObject readExcel(String path, String sheetName) throws Exception {
-        JSONObject excel = readExcel(path);
+        JSONObject excel = readExcelAllSheet(path);
         if (excel == null) {
             return null;
         }
 
+        JSONArray sheets = excel.getJSONArray("sheets");
         if (sheetName == null) {
-            return excel;
+            if (!sheets.isEmpty()) {
+                return sheets.getJSONObject(0);
+            } else {
+                return null;
+            }
         }
 
-        JSONArray sheets = excel.getJSONArray("sheets");
         for (Object sheetObject : sheets) {
             JSONObject sheet = (JSONObject) sheetObject;
             if (sheetName.equals(sheet.getString("name"))) {
@@ -133,5 +136,9 @@ public class NodeExcelUtil {
         result.put("isAppend", isAppend);
 
         return result;
+    }
+
+    static boolean isFirstSheet(String sheetName) {
+        return "0".equals(sheetName);
     }
 }

@@ -16,7 +16,7 @@ public class MergeExcelJsonExecuteNodeTest extends TestCase {
                 "   'sheetName': '接口列表'," +
                 "   'inputFiles': [" +
                 "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'," +
-                "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls,'" +
+                "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'" +
                 "    ]," +
                 "   'outputFile': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-merge.xls'," +
                 "}";
@@ -30,7 +30,7 @@ public class MergeExcelJsonExecuteNodeTest extends TestCase {
 
         System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
 
-        Assert.assertNotNull(outputJson.get("sheets"));
+        Assert.assertNotNull(outputJson.get("rows"));
 
     }
 }

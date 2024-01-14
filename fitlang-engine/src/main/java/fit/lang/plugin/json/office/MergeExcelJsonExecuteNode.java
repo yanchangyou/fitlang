@@ -21,7 +21,7 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
 
         List<String> inputFiles = parseStringArray("inputFiles", input);
 
-        String outputFile = nodeJsonDefine.getString("outputFile");
+        String outputFile = parseStringField("outputFile", input);
 
         String sheetName = nodeJsonDefine.getString("sheetName");
 
@@ -46,4 +46,5 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
         output.set("sheetName", sheetName);
         output.set("rows", rows);
     }
+
 }
