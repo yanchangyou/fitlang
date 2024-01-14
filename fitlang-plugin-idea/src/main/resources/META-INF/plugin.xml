@@ -54,6 +54,7 @@ print: Console printing<br/>
 log: log info node<br/>
 sleep: Process sleep node<br/>
 perf: performance  node<br/>
+replaceContent: find and replace content<br/>
 <br/>
 
 json nodes<br/>
@@ -188,6 +189,7 @@ print: 控制台打印<br/>
 log: IDE控制台打印<br/>
 sleep: 流程休眠节点<br/>
 perf: 性能测试节点<br/>
+replaceContent: 查找并替换文本内容<br/>
 <br/>
 
 JSON节点<br/>
