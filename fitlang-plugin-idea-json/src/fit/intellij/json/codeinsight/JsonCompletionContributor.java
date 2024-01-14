@@ -85,10 +85,10 @@ public class JsonCompletionContributor extends CompletionContributor {
                         }
                         String text = "\"" + item.getKey() + "\": ";
                         Object value = item.getValue();
-                        if (value instanceof JSONObject || value instanceof JSONArray) {
-                            text += value;
-                        } else {
+                        if (value instanceof String) {
                             text += "\"" + value + "\"";
+                        } else {
+                            text += value;
                         }
 
                         if (!isLastProperty(psiElement)) {
