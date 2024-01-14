@@ -14,13 +14,13 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NodeConfigPanel extends AnAction {
+public class NodeConfigAction extends AnAction {
 
     public static JSONObject INIT_CONFIG = JSONObject.parse("{'name':'value'}");
 
-    static NodeConfigPanel nodeConfigPanel = new NodeConfigPanel(INIT_CONFIG);
+    static NodeConfigAction nodeConfigPanel = new NodeConfigAction(INIT_CONFIG);
 
-    private JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
     Map<String, JTextField> fieldMap = new HashMap<>();
 
@@ -30,10 +30,10 @@ public class NodeConfigPanel extends AnAction {
         return panel;
     }
 
-    public NodeConfigPanel() {
+    public NodeConfigAction() {
     }
 
-    public NodeConfigPanel(JSONObject config) {
+    public NodeConfigAction(JSONObject config) {
         resetConfig(config, null);
     }
 

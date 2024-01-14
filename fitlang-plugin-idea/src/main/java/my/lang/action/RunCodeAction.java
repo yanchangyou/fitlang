@@ -402,13 +402,27 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public void showNodeConfig(JSONObject config, Project project) {
-                NodeConfigPanel.nodeConfigPanel.resetConfig(config, project);
+            public JSONObject showNodeConfig(JSONObject config, Project project) {
+
+                NodeConfigAction.nodeConfigPanel.resetConfig(config, project);
+
+
+                return NodeConfigAction.nodeConfigPanel.readConfig();
             }
 
             @Override
+            public JSONObject showNodeConfigDialog(JSONObject config, JSONObject option) {
+
+                NodeConfigPanelDialog nodeConfigPanelDialog = new NodeConfigPanelDialog(config, option);
+                nodeConfigPanelDialog.showAndGet();
+
+                return nodeConfigPanelDialog.readConfig();
+            }
+
+
+            @Override
             public JSONObject getNodeConfig() {
-                return NodeConfigPanel.nodeConfigPanel.readConfig();
+                return NodeConfigAction.nodeConfigPanel.readConfig();
             }
 
             @Override
@@ -469,6 +483,7 @@ public abstract class RunCodeAction extends AnAction {
             public int showYesNoCancelDialog(String title, String message) {
                 return Messages.showYesNoCancelDialog(message, title, null);
             }
+
         });
     }
 }
