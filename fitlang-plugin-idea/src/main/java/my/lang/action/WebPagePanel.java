@@ -16,6 +16,8 @@ public class WebPagePanel extends DialogWrapper {
 
     JSONObject context;
 
+    JBCefBrowser browser = new JBCefBrowser();
+
     public WebPagePanel(String url, JSONObject option, JSONObject context) {
 
         super(true);
@@ -51,7 +53,6 @@ public class WebPagePanel extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
-        JBCefBrowser browser = new JBCefBrowser();
         if (Boolean.TRUE.equals(option.getBoolean("devTools"))) {
             browser.openDevtools();
         }
@@ -62,5 +63,6 @@ public class WebPagePanel extends DialogWrapper {
     @Override
     protected void doOKAction() {
         super.doOKAction();
+        browser.getCefBrowser().close(true);
     }
 }
