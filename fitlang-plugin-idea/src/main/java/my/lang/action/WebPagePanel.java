@@ -35,7 +35,6 @@ public class WebPagePanel extends DialogWrapper {
 
         this.setModal(!Boolean.FALSE.equals(option.getBoolean("modal")));
 
-
         this.url = StrUtil.isBlank(url) ? "http://fit.321zou.com" : url;
         this.option = option;
         this.context = context;
@@ -53,10 +52,10 @@ public class WebPagePanel extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         JBCefBrowser browser = new JBCefBrowser();
-        browser.loadURL(url);
         if (Boolean.TRUE.equals(option.getBoolean("devTools"))) {
             browser.openDevtools();
         }
+        browser.loadURL(url);
         return browser.getComponent();
     }
 

@@ -354,7 +354,14 @@
         },
         {
             "uni": "openWebPage",
-            "url": "https://www.baidu.com"
+            "url": "https://www.baidu.com",
+            "option": {
+                "title": "Web Page",
+                "modal": false,
+                "width": 800,
+                "height": 600,
+                "devTools": false
+            }
         },
         {
             "uni": "chooseFile",
