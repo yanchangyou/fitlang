@@ -20,6 +20,7 @@ public class GlobalConfigPanelDialog extends DialogWrapper {
     JSONObject config = INIT_CONFIG;
     JSONObject option;
 
+    int width = 400;
     int height = 400;
 
     public GlobalConfigPanelDialog(JSONObject config, JSONObject option) {
@@ -29,7 +30,6 @@ public class GlobalConfigPanelDialog extends DialogWrapper {
         if (config != null) {
             this.config = config;
         }
-        resetConfig();
 
         if (option == null) {
             option = new JSONObject();
@@ -45,7 +45,10 @@ public class GlobalConfigPanelDialog extends DialogWrapper {
 
         this.option = option;
 
-        int width = option.getIntValue("width", 800);
+        resetConfig();
+
+        int width = option.getIntValue("width", this.width);
+        int height = option.getIntValue("height", this.height);
 
         setSize(width, height);
 
@@ -62,6 +65,8 @@ public class GlobalConfigPanelDialog extends DialogWrapper {
         return getPanel();
     }
 
+    Dimension LABEL_DIMENSION = new Dimension(80, 35);
+
     public void resetConfig() {
 
         panel.removeAll();
@@ -71,18 +76,28 @@ public class GlobalConfigPanelDialog extends DialogWrapper {
         for (String key : config.keySet()) {
             JPanel itemPanel = new JPanel();
             JLabel label = new JLabel(key.concat(":"));
-            label.setSize(100, 40);
+            label.setMinimumSize(LABEL_DIMENSION);
+            label.setPreferredSize(LABEL_DIMENSION);
+            label.setMaximumSize(LABEL_DIMENSION);
+            label.setHorizontalAlignment(JLabel.RIGHT);
             JTextField field = new JTextField(config.getString(key));
             field.setColumns(20);
             fieldMap.put(key, field);
-            itemPanel.add(new JLabel("   "));
+            itemPanel.add(new JLabel("  "));
             itemPanel.add(label);
             itemPanel.add(field);
-            itemPanel.setSize(350, 42);
             panel.add(itemPanel);
         }
 
-        height = ((config.size() + 4) / 2) * 50;
+        int columns = 1;
+        if (config.size() > 5) {
+            width = 800;
+            columns = 2;
+        }
+
+        panel.setLayout(new GridLayout((config.size() + columns - 1) / columns, columns));
+
+        height = (config.size() / columns) * 50 + 20;
 
     }
 
