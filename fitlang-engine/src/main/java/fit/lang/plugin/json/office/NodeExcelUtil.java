@@ -43,29 +43,44 @@ public class NodeExcelUtil {
         return excel;
     }
 
-    static JSONObject readExcel(String path, String sheetName) throws Exception {
+    static JSONObject readExcel(String path, String sheetName, JSONObject header) throws Exception {
         JSONObject excel = readExcelAllSheet(path);
         if (excel == null) {
             return null;
         }
 
         JSONArray sheets = excel.getJSONArray("sheets");
+        if (sheets == null || sheets.isEmpty()) {
+            return null;
+        }
+        JSONObject sheet = null;
         if (sheetName == null) {
-            if (!sheets.isEmpty()) {
-                return sheets.getJSONObject(0);
-            } else {
-                return null;
+            sheet = sheets.getJSONObject(0);
+        } else {
+            for (Object sheetObject : sheets) {
+                sheet = (JSONObject) sheetObject;
+                if (sheetName.equals(sheet.getString("name"))) {
+                    break;
+                }
             }
         }
-
-        for (Object sheetObject : sheets) {
-            JSONObject sheet = (JSONObject) sheetObject;
-            if (sheetName.equals(sheet.getString("name"))) {
-                return sheet;
+        if (sheet != null) {
+            JSONArray rows = sheet.getJSONArray("rows");
+            if (header != null && rows != null && !rows.isEmpty()) {
+                JSONArray newRows = new JSONArray(rows.size() - 1);
+                for (int i = 1; i < rows.size(); i++) {
+                    JSONObject row = rows.getJSONObject(i);
+                    JSONObject newRow = new JSONObject();
+                    int index = 0;
+                    for (Map.Entry<String, Object> headerEntry : header.entrySet()) {
+                        newRow.put(headerEntry.getKey(), row.get("column" + index++));
+                    }
+                    newRows.add(newRow);
+                }
+                sheet.put("rows", newRows);
             }
         }
-
-        return null;
+        return sheet;
     }
 
 
@@ -90,15 +105,21 @@ public class NodeExcelUtil {
     }
 
 
-    static JSONObject writeExcel(String path, String sheetName, JSONArray rows, boolean isAppend) throws Exception {
+    static JSONObject writeExcel(String path, String sheetName, JSONArray rows, boolean isAppend, JSONObject header) throws Exception {
 
         if (StrUtil.isBlank(sheetName)) {
             sheetName = "Sheet1";
         }
+        if (header != null) {
+            JSONArray newRows = new JSONArray();
+            newRows.add(header);
+            newRows.addAll(rows);
+            rows = newRows;
+        }
 
         if (isAppend) {
             try {
-                JSONObject sheetData = readExcel(path, sheetName);
+                JSONObject sheetData = readExcel(path, sheetName, header);
                 if (sheetData != null) {
                     JSONArray oldRows = sheetData.getJSONArray("rows");
                     oldRows.addAll(rows);
@@ -136,9 +157,5 @@ public class NodeExcelUtil {
         result.put("isAppend", isAppend);
 
         return result;
-    }
-
-    static boolean isFirstSheet(String sheetName) {
-        return "0".equals(sheetName);
     }
 }

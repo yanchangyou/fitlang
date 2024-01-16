@@ -27,4 +27,24 @@ public class ReadExcelJsonExecuteNodeTest extends TestCase {
         Assert.assertNotNull(outputJson.get("name"));
 
     }
+
+    public void testExecuteWithHeader() {
+        String flow = "{" +//
+                "   'uni': 'readExcel'," +
+                "   'file': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'," +
+                "   'header': {'code':'接口编码','name':'接口名称', 'description':'接口描述','url':'URL'}," +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
+
+        Assert.assertNotNull(outputJson.get("name"));
+
+    }
 }

@@ -33,4 +33,30 @@ public class MergeExcelJsonExecuteNodeTest extends TestCase {
         Assert.assertNotNull(outputJson.get("rows"));
 
     }
+
+    public void testExecuteWithHeader() {
+
+        String flow = "{" +//
+                "   'uni': 'mergeExcel'," +
+                "   'sheetName': '接口列表'," +
+                "   'inputFiles': [" +
+                "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'," +
+                "               '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls'" +
+                "    ]," +
+                "   'header': {'code':'接口编码','name':'接口名称', 'description':'接口描述','url':'URL'}," +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+
+        String output = ExecuteJsonNodeUtil.executeCode("{}", flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
+
+        Assert.assertNotNull(outputJson.get("rows"));
+
+    }
+
 }

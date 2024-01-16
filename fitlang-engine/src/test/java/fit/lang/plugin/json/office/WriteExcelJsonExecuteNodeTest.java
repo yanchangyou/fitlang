@@ -30,4 +30,28 @@ public class WriteExcelJsonExecuteNodeTest extends TestCase {
         Assert.assertNotNull(outputJson.get("result"));
 
     }
+
+    public void testExecuteWithHeader() {
+        String flow = "{" +//
+                "   'uni': 'writeExcel'," +
+                "   'file': '/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-2.xls'," +
+                "   'arrayField':'list'," +
+                "   'isAppend': false," +
+                "   'header': {'code':'接口编码','name':'接口名称', 'description':'接口描述','url':'URL'}," +
+                "}";
+        System.out.println(flow.replace("'", "\""));
+
+        String input = "{'list':[{'code':'c0','name':'c1','description':'c2','url':'c3'}]}";
+        String output = ExecuteJsonNodeUtil.executeCode(input, flow);
+
+        JSONObject outputJson = JSON.parseObject(output);
+
+        Assert.assertTrue(!output.isEmpty());
+
+        System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
+
+        Assert.assertNotNull(outputJson.get("result"));
+
+    }
+
 }

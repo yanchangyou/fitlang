@@ -16,11 +16,13 @@ public class ReadExcelJsonExecuteNode extends JsonExecuteNode {
 
         String file = nodeJsonDefine.getString("file");
 
+        JSONObject header = nodeJsonDefine.getJSONObject("header");
+
         String sheetName = nodeJsonDefine.getString("sheetName");
 
         JSONObject excel;
         try {
-            excel = NodeExcelUtil.readExcel(file, sheetName);
+            excel = NodeExcelUtil.readExcel(file, sheetName, header);
         } catch (Exception e) {
             throw new ExecuteNodeException("read excel error: ", e);
         }

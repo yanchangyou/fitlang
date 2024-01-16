@@ -30,6 +30,8 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
             return;
         }
 
+        JSONObject header = nodeJsonDefine.getJSONObject("header");
+
         String outputFile = parseStringField("outputFile", input);
         if (StrUtil.isBlank(outputFile)) {
             outputFile = new File(inputFiles.get(0)).getParent() + File.separator + "merge-" + getNow("yyyyMMddHHmmss") + ".xls";
@@ -40,7 +42,7 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
         JSONArray rows = new JSONArray();
         try {
             for (String inputFile : inputFiles) {
-                JSONObject sheet = readExcel(inputFile, sheetName);
+                JSONObject sheet = readExcel(inputFile, sheetName, header);
                 if (sheet == null) {
                     continue;
                 }
@@ -49,7 +51,7 @@ public class MergeExcelJsonExecuteNode extends JsonExecuteNode {
                     rows.addAll(inputRows);
                 }
             }
-            writeExcel(outputFile, sheetName, rows, true);
+            writeExcel(outputFile, sheetName, rows, true, header);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
