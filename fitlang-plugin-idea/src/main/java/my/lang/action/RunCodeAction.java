@@ -484,6 +484,11 @@ public abstract class RunCodeAction extends AnAction {
                 return Messages.showYesNoCancelDialog(message, title, null);
             }
 
+            @Override
+            public void showWarningDialog(String title, String message) {
+                Messages.showWarningDialog(message, title);
+            }
+
         });
     }
 }

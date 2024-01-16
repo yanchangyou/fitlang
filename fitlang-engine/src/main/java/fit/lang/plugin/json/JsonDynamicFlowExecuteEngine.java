@@ -334,6 +334,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("showGlobalConfigDialog", ShowGlobalConfigDialogJsonExecuteNode.class);
         register("chooseFile", ChooseFileJsonExecuteNode.class);
         register("showInfoMessage", ShowInfoMessageJsonExecuteNode.class);
+        register("showWarningMessage", ShowWarningMessageJsonExecuteNode.class);
         register("showErrorMessage", ShowErrorMessageJsonExecuteNode.class);
         register("showInputDialog", ShowInputDialogJsonExecuteNode.class);
         register("showOkCancelDialog", ShowOkCancelDialogJsonExecuteNode.class);

@@ -47,4 +47,6 @@ public interface UserIdeInterface {
     List<File> chooseFiles(JSONObject config);
 
     int showYesNoCancelDialog(String title, String message);
+
+    void showWarningDialog(String title, String message);
 }
