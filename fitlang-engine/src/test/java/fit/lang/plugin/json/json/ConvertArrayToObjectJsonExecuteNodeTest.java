@@ -16,6 +16,7 @@ public class ConvertArrayToObjectJsonExecuteNodeTest extends TestCase {
                 "   'keyField': 'key'," +
                 "   'valueField': 'value'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{ 'list': [" +
                 "{'key':'name','value':'cat'}," +

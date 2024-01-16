@@ -14,6 +14,7 @@ public class ConvertToBasicArrayJsonExecuteNodeTest extends TestCase {
                 "   'arrayField': 'list'," +
                 "   'keyField': 'key'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{'list': [{\"key\":1},{\"key\":2},{\"key\":3}]}", flow);
 
@@ -36,6 +37,7 @@ public class ConvertToBasicArrayJsonExecuteNodeTest extends TestCase {
                 "   'arrayField': 'parent.list'," +
                 "   'keyField': 'foo'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{'parent':{\"list\":[{\"foo\":1},{\"foo\":2},{\"foo\":3}]}}", flow);
 

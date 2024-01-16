@@ -1,0 +1,18 @@
+{
+    "input": {
+        "list": [
+            {
+                "key": 1
+            },
+            {
+                "key": 2
+            },
+            {
+                "key": 3
+            }
+        ]
+    },
+    "uni": "convertToBasicArray",
+    "arrayField": "list",
+    "keyField": "key"
+}

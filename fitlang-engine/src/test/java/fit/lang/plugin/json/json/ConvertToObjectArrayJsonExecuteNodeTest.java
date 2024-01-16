@@ -14,6 +14,7 @@ public class ConvertToObjectArrayJsonExecuteNodeTest extends TestCase {
                 "   'arrayField': 'list'," +
                 "   'keyField': 'key'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{'list': [1,2,3]}", flow);
 
@@ -36,6 +37,7 @@ public class ConvertToObjectArrayJsonExecuteNodeTest extends TestCase {
                 "   'arrayField': 'parent.list'," +
                 "   'keyField': 'foo'," +
                 "}";
+        System.out.println(flow.replace("'", "\""));
 
         String output = ExecuteJsonNodeUtil.executeCode("{'parent':{'list': [1,2,3]}}", flow);
 

@@ -1,0 +1,5 @@
+{
+    "uni": "showWarningMessage",
+    "title": "Warning",
+    "message": "something warning!"
+}
