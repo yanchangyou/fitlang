@@ -9,12 +9,10 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
-import java.util.Map;
-
 /**
  * 执行节点
  */
-public class ConvertObjectToArrayJsonExecuteNode extends JsonExecuteNode {
+public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
@@ -25,7 +23,7 @@ public class ConvertObjectToArrayJsonExecuteNode extends JsonExecuteNode {
         String valueField = nodeJsonDefine.getString("valueField");
 
         if (StrUtil.isBlank(objectField)) {
-            throw new ExecuteNodeException("convertObjectToArray objectField field is required!");
+            throw new ExecuteNodeException("convertArrayToObject objectField field is required!");
         }
 
         if (StrUtil.isBlank(arrayField)) {
@@ -41,17 +39,19 @@ public class ConvertObjectToArrayJsonExecuteNode extends JsonExecuteNode {
         }
 
         JSONObject outputJson = input.getData().clone();
-        Object object = outputJson.getByPath(objectField);
-        JSONArray array = new JSONArray();
-        if (object instanceof JSONObject) {
-            JSONObject jsonObject = (JSONObject) object;
-            for (Map.Entry<String, Object> item : jsonObject.entrySet()) {
-                JSONObject itemObject = new JSONObject(2);
-                itemObject.put(keyField, item.getKey());
-                itemObject.put(valueField, item.getValue());
-                array.add(itemObject);
+        Object list = outputJson.getByPath(arrayField);
+        if (list instanceof JSONArray) {
+            JSONArray array = (JSONArray) list;
+            JSONObject jsonObject = new JSONObject();
+            for (Object item : array) {
+                if (!(item instanceof JSONObject)) {
+                    throw new ExecuteNodeException("convertArrayToObject item must be object type!");
+                }
+                JSONObject itemObject = (JSONObject) item;
+                jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
             }
-            JSONPath.set(outputJson, arrayField, array);
+            JSONPath.set(outputJson, arrayField, jsonObject);
+
         }
         output.setData(outputJson);
     }

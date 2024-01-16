@@ -6,16 +6,13 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-/**
- * use convertArrayToObject
- */
-public class ConvertKeyValueListJsonExecuteNodeTest extends TestCase {
+public class ConvertArrayToObjectJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'convertKeyValueList'," +
-                "   'jsonField': 'json'," +
-                "   'listField': 'list'," +
+                "   'uni': 'convertArrayToObject'," +
+                "   'objectField': 'json'," +
+                "   'arrayField': 'list'," +
                 "   'keyField': 'key'," +
                 "   'valueField': 'value'," +
                 "}";
