@@ -104,7 +104,11 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - eval: 表达式计算
 - parseJson: 解析json
 - stringifyJson: json转字符串
-- convertKeyValueList: key value list转换对象
+- convertKeyValueList: key value list转换对象（废弃）
+- convertObjectToArray: 对象转数组
+- convertArrayToObject: 数组转换对象
+- convertToObjectArray: 转换为对象数组
+- convertToBasicArray: 转换为基本数组
 - get: 使用json path获取值 （json path语法说明：https://alibaba.github.io/fastjson2/jsonpath_cn）
 - set: 使用json path设置值
 - getStruct: 获取json结构
@@ -200,6 +204,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - openWebPage: 打开web页面
 - chooseFile: 选择文件
 - showInfoMessage: 显示消息
+- showWarningMessage: 显示警告信息<br/>
 - showErrorMessage: 显示错误信息
 - showInputDialog: 显示输入对话框
 - showOkCancelDialog: 显示确认或取消对话框

@@ -60,6 +60,11 @@ replaceContent: find and replace content<br/>
 json nodes<br/>
 add: supports JSON addition<br/>
 convert: Transform node, supports JSON to JSON conversion, using conversion expressions<br/>
+convertKeyValueList: key value lis(deprecated)<br/>
+convertObjectToArray: convert object to array<br/>
+convertArrayToObject: convert array to object<br/>
+convertToObjectArray: convert to object array<br/>
+convertToBasicArray: convert to basic array<br/>
 removeField: Remove the JSON field<br/>
 removeEmptyField: Remove an empty field<br/>
 mix: mix a json object<br/>
@@ -199,6 +204,11 @@ replaceContent: 查找并替换文本内容<br/>
 JSON节点<br/>
 add: 支持json相加<br/>
 convert: 转换节点，支持json到json的转换，使用转换表达式<br/>
+convertKeyValueList: key value list转换对象（废弃）<br/>
+convertObjectToArray: 对象转数组<br/>
+convertArrayToObject: 数组转换对象<br/>
+convertToObjectArray: 转换为对象数组<br/>
+convertToBasicArray: 转换为基本数组<br/>
 removeField: 移除json字段<br/>
 removeEmptyField: 移除空字段<br/>
 replace: 替换结果输出<br/>
@@ -273,6 +283,7 @@ openWebPage: 打开web页面<br/>
 chooseFile: 选择文件<br/>
 showInfoMessage: 显示消息<br/>
 showErrorMessage: 显示错误信息<br/>
+showWarningMessage: 显示警告信息<br/>
 showInputDialog: 显示输入对话框<br/>
 showOkCancelDialog: 显示确认或取消对话框<br/>
 showGlobalConfigDialog: 显示全局配置对话框<br/>

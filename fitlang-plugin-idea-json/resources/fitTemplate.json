@@ -132,6 +132,30 @@
             "valueField": "value"
         },
         {
+            "uni": "convertObjectToArray",
+            "arrayField": "array",
+            "objectField": "object",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "convertArrayToObject",
+            "arrayField": "array",
+            "objectField": "object",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "convertToObjectArray",
+            "arrayField": "array",
+            "keyField": "key"
+        },
+        {
+            "uni": "convertToBasicArray",
+            "arrayField": "array",
+            "keyField": "key"
+        },
+        {
             "uni": "batch",
             "child": [
                 {
@@ -372,6 +396,11 @@
             "uni": "showInfoMessage",
             "title": "Message",
             "message": "hello, Fit!"
+        },
+        {
+            "uni": "showWarningMessage",
+            "title": "Warning",
+            "message": "something warning!"
         },
         {
             "uni": "showErrorMessage",
