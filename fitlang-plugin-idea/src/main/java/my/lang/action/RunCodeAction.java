@@ -401,6 +401,13 @@ public abstract class RunCodeAction extends AnAction {
 
             }
 
+            public void showHtml(String html, JSONObject option, JSONObject context) {
+
+                HtmlPanel htmlPanel = new HtmlPanel(html, option, context);
+                htmlPanel.show();
+
+            }
+
             @Override
             public JSONObject showNodeConfig(JSONObject config, Project project) {
 

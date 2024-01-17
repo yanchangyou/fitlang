@@ -547,7 +547,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.9.7 </li>
+            <li>0.9.7 add node: showHtml</li>
             <li>0.9.6 add node: showGlobalConfigDialog, showYesNoCancelDialog, showPasswordDialog, showCheckboxOkCancelDialog, convertObjectToArray, convertArrayToObject, convertToObjectArray, convertToBasicArray, showWarningMessage; remove node: readEditorSearch, readEditorReplace; refine node: readExcel, writeExcel, mergeExcel</li>
             <li>0.9.5 add node: chooseFile, readExcel, writeExcel, mergeExcel, readExcelForAllSheet; refine code completion; project plugin support synchronize config</li>
             <li>0.9.4 add node: openWebPage, showInfoMessage, showErrorMessage, showOkCancelDialog, showInputDialog; refine node: http; add debug mode; refine code complete</li>

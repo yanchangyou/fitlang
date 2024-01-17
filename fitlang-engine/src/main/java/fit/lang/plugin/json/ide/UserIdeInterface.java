@@ -34,6 +34,8 @@ public interface UserIdeInterface {
 
     void openWebPage(String url, JSONObject option, JSONObject context);
 
+    void showHtml(String url, JSONObject option, JSONObject context);
+
     JSONObject showNodeConfig(JSONObject config, Project project);
 
     JSONObject showGlobalConfigDialog(JSONObject config, JSONObject option);
