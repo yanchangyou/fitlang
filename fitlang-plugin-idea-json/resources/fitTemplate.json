@@ -83,6 +83,7 @@
         },
         {
             "uni": "convert",
+            "isMixMode": false,
             "express": {
                 "newField": "const",
                 "newField1": "${oldField1}",
@@ -604,13 +605,19 @@
         },
         {
             "uni": "readExcel",
-            "file": "path.xls"
+            "file": "path.xls",
+            "header": {
+                "fieldName": "title"
+            }
         },
         {
             "uni": "writeExcel",
             "file": "path.xls",
             "arrayField": "rows",
-            "isAppend": true
+            "isAppend": true,
+            "header": {
+                "fieldName": "title"
+            }
         },
         {
             "uni": "mergeExcel",
@@ -618,7 +625,10 @@
             "inputFiles": [
                 "path.xls"
             ],
-            "outputFile": "path-merge.xls"
+            "outputFile": "path-merge.xls",
+            "header": {
+                "fieldName": "title"
+            }
         }
     ]
 }
