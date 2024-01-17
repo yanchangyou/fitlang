@@ -389,6 +389,17 @@
             }
         },
         {
+            "uni": "openWebPage",
+            "html": "<h2>hello, world</h2>",
+            "option": {
+                "title": "Web Page",
+                "modal": false,
+                "width": 800,
+                "height": 600,
+                "devTools": false
+            }
+        },
+        {
             "uni": "chooseFile",
             "fileField": "file",
             "isMultiple": false

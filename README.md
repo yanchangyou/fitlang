@@ -202,6 +202,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - showConfig: 显示配置
 - readConfig: 读取配置
 - openWebPage: 打开web页面
+- showHtml: open web page<br/>
 - chooseFile: 选择文件
 - showInfoMessage: 显示消息
 - showWarningMessage: 显示警告信息<br/>
