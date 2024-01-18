@@ -409,6 +409,14 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
+            public void showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
+
+                JsonPagePanel jsonPagePanel = new JsonPagePanel(jsonPage, jsonData, option, context);
+                jsonPagePanel.show();
+
+            }
+
+            @Override
             public JSONObject showNodeConfig(JSONObject config, Project project) {
 
                 NodeConfigAction.nodeConfigPanel.resetConfig(config, project);

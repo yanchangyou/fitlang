@@ -1,0 +1,13 @@
+{
+    "uni": "showJsonPage",
+    "json": {
+        "foo": "bar"
+    },
+    "option": {
+        "title": "Web Page",
+        "modal": false,
+        "width": 800,
+        "height": 600,
+        "devTools": false
+    }
+}   
