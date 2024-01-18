@@ -134,7 +134,8 @@ writeEditor: write editor<br/>
 showConfig: show config<br/>
 readConfig: read config<br/>
 openWebPage: open web page<br/>
-showHtml: open web page<br/>
+showHtml: show web page<br/>
+showJsonPage: show json page<br/>
 chooseFile: choose file<br/>
 showInfoMessage: show info message<br/>
 showErrorMessage: show error message<br/>
@@ -281,7 +282,8 @@ writeEditor: 写入当前编辑器内容<br/>
 showConfig: 显示配置<br/>
 readConfig: 读取配置<br/>
 openWebPage: 打开web页面<br/>
-showHtml: open web page<br/>
+showHtml: show web page<br/>
+showJsonPage: show json page<br/>
 chooseFile: 选择文件<br/>
 showInfoMessage: 显示消息<br/>
 showErrorMessage: 显示错误信息<br/>

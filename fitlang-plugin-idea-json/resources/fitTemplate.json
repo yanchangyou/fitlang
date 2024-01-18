@@ -401,8 +401,11 @@
         },
         {
             "uni": "showJsonPage",
-            "json": {
-                "foo": "bar"
+            "page": {
+                "page": "data"
+            },
+            "data": {
+                "data": "bar"
             },
             "option": {
                 "title": "Web Page",
