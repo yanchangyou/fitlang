@@ -14,19 +14,19 @@ public class ShowJsonPageJsonExecuteNode extends JsonExecuteNode {
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
 
         JSONObject jsonPage = nodeJsonDefine.getJSONObject("page");
-        Object jsonData = parseField("data", input);
-        JSONObject json;
-        if (jsonData instanceof JSONObject) {
-            json = (JSONObject) jsonData;
+        Object data = parseField("data", input);
+        JSONObject jsonData;
+        if (data instanceof JSONObject) {
+            jsonData = (JSONObject) data;
         } else {
-            json = new JSONObject();
-            json.put("data", jsonData);
+            jsonData = new JSONObject();
+            jsonData.put("data", data);
         }
 
         JSONObject option = nodeJsonDefine.getJSONObject("option");
         JSONObject context = input.getInputParamAndContextParam();
 
-        UserIdeManager.getUserIdeInterface().showJsonPage(jsonPage, json, option, context);
+        UserIdeManager.getUserIdeInterface().showJsonPage(jsonPage, jsonData, option, context);
 
     }
 }
