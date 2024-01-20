@@ -539,7 +539,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
             <keyboard-shortcut first-keystroke="shift alt J" keymap="$default"/>
         </action>
 
-        <!--        <action id="RunFitLangShowConfig" class="my.lang.action.GlobalConfigPanelDialog" text="Show Fit Node Config"-->
+        <!--        <action id="RunFitLangShowConfig" class="my.lang.action.fit.GlobalConfigPanelDialog" text="Show Fit Node Config"-->
         <!--                description="Show fit node config" icon="/my/lang/icon/fit.svg">-->
         <!--            <keyboard-shortcut first-keystroke="alt C" keymap="$default"/>-->
         <!--            <keyboard-shortcut first-keystroke="control F12" keymap="$default"/>-->

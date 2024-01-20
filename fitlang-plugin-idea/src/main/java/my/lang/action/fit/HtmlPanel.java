@@ -1,4 +1,4 @@
-package my.lang.action;
+package my.lang.action.fit;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.ui.DialogWrapper;

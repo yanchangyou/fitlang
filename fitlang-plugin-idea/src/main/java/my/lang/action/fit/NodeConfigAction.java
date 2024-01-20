@@ -1,4 +1,4 @@
-package my.lang.action;
+package my.lang.action.fit;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -18,7 +18,7 @@ public class NodeConfigAction extends AnAction {
 
     public static JSONObject INIT_CONFIG = JSONObject.parse("{'name':'value'}");
 
-    static NodeConfigAction nodeConfigPanel = new NodeConfigAction(INIT_CONFIG);
+    public static NodeConfigAction nodeConfigPanel = new NodeConfigAction(INIT_CONFIG);
 
     private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 

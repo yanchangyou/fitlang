@@ -1,6 +1,5 @@
-package my.lang.action;
+package my.lang.action.fit;
 
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -8,15 +7,10 @@ import com.intellij.ui.jcef.JBCefBrowser;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.io.InputStream;
 
-public class JsonPagePanel extends DialogWrapper {
+public class WebPagePanel extends DialogWrapper {
 
-    String pageType;
-
-    JSONObject jsonPage;
-
-    JSONObject jsonData;
+    String url;
 
     JSONObject option;
 
@@ -24,7 +18,7 @@ public class JsonPagePanel extends DialogWrapper {
 
     JBCefBrowser browser = new JBCefBrowser();
 
-    public JsonPagePanel(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
+    public WebPagePanel(String url, JSONObject option, JSONObject context) {
 
         super(true);
 
@@ -43,13 +37,9 @@ public class JsonPagePanel extends DialogWrapper {
 
         this.setModal(!Boolean.FALSE.equals(option.getBoolean("modal")));
 
-        this.jsonPage = jsonPage;
-        this.jsonData = jsonData;
-
+        this.url = StrUtil.isBlank(url) ? "http://fit.321zou.com" : url;
         this.option = option;
         this.context = context;
-
-        pageType = option.getString("pageType");
 
         int width = option.getIntValue("width", 800);
         int height = option.getIntValue("height", 600);
@@ -66,14 +56,7 @@ public class JsonPagePanel extends DialogWrapper {
         if (Boolean.TRUE.equals(option.getBoolean("devTools"))) {
             browser.openDevtools();
         }
-        String path = "fit/JsonPage.html";
-        if (StrUtil.isNotBlank(pageType)) {
-            path = path.replace(".html", "-" + pageType + ".html");
-        }
-        String html = loadHtml(path);
-        html = html.replace("{\"JSON_PAGE\": \"\"}", jsonPage.toJSONString());
-        html = html.replace("{\"JSON_DATA\": \"\"}", jsonData.toJSONString());
-        browser.loadHTML(html);
+        browser.loadURL(url);
         return browser.getComponent();
     }
 
@@ -81,10 +64,5 @@ public class JsonPagePanel extends DialogWrapper {
     protected void doOKAction() {
         super.doOKAction();
         browser.getCefBrowser().close(true);
-    }
-
-    String loadHtml(String path) {
-        InputStream inputStream = JsonPagePanel.class.getClassLoader().getResourceAsStream(path);
-        return IoUtil.readUtf8(inputStream);
     }
 }
