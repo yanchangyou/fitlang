@@ -2,16 +2,17 @@
     "uni": "showJsonPage",
     "page": {
         "type": "page",
-        "title": "表单页面",
+        "title": "配置页面",
         "body": {
             "type": "form",
             "mode": "horizontal",
-            "api": "/saveForm",
+            "wrapWithPanel": false,
             "body": [
                 {
                     "label": "Name",
                     "type": "input-text",
-                    "name": "name"
+                    "name": "name",
+                    "value": "value"
                 },
                 {
                     "label": "Email",
@@ -22,7 +23,8 @@
         }
     },
     "data": {
-        "data": "bar"
+        "name": "name",
+        "email": "email@test.com"
     },
     "option": {
         "pageType": "amis",
