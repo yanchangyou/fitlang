@@ -2,7 +2,7 @@
     <id>FitLang</id>
     <name>FitLang</name>
     <vendor email="yanchangyou@gmail.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
-    <idea-version since-build="210.0" until-build="253.*"/>
+    <idea-version since-build="220.0" until-build="253.*"/>
     <description><![CDATA[
     English: (后面有中文版)
     <br/>
@@ -336,7 +336,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
                 implementation="fit.intellij.json.formatter.JsonLanguageCodeStyleSettingsProvider"/>
         <colorSettingsPage implementation="fit.intellij.json.highlighting.JsonColorsPage"/>
         <lang.formatter language="FitLang"
-                        implementationClass="fit.intellij.json.formatter.JsonFormattingBuilderModel"/>
+                        implementationClass="fit.intellij.json.formatter.FitFormattingBuilderModel"/>
         <preFormatProcessor implementation="fit.intellij.json.formatter.JsonTrailingCommaRemover"/>
         <lang.braceMatcher language="FitLang" implementationClass="fit.intellij.json.JsonBraceMatcher"/>
         <quoteHandler fileType="FitLang" className="fit.intellij.json.JsonQuoteHandler"/>
