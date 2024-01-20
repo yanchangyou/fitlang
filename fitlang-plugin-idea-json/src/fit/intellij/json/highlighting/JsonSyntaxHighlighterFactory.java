@@ -1,9 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.highlighting;
 
-import fit.intellij.json.JsonFileType;
-import fit.intellij.json.JsonLanguage;
-import fit.intellij.json.JsonLexer;
 import com.intellij.lang.Language;
 import com.intellij.lexer.LayeredLexer;
 import com.intellij.lexer.Lexer;
@@ -20,6 +17,9 @@ import com.intellij.psi.StringEscapesTokenTypes;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonFileType;
+import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.JsonLexer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,6 +56,8 @@ public class JsonSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
 
   // Added by annotators
   public static final TextAttributesKey JSON_PROPERTY_KEY = TextAttributesKey.createTextAttributesKey("JSON.PROPERTY_KEY", INSTANCE_FIELD);
+
+  public static final TextAttributesKey MY_KEYWORD = TextAttributesKey.createTextAttributesKey("MY.KEYWORD", KEYWORD);
 
   // String escapes
   public static final TextAttributesKey JSON_VALID_ESCAPE =
@@ -96,6 +98,8 @@ public class JsonSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
       fillMap(ourAttributes, JSON_VALID_ESCAPE, StringEscapesTokenTypes.VALID_STRING_ESCAPE_TOKEN);
       fillMap(ourAttributes, JSON_INVALID_ESCAPE, StringEscapesTokenTypes.INVALID_CHARACTER_ESCAPE_TOKEN);
       fillMap(ourAttributes, JSON_INVALID_ESCAPE, StringEscapesTokenTypes.INVALID_UNICODE_ESCAPE_TOKEN);
+      fillMap(ourAttributes, MY_KEYWORD, JsonElementTypes.MY_KEYWORD);
+
     }
 
     MyHighlighter(@Nullable VirtualFile file) {

@@ -41,6 +41,16 @@ public final class JsonPsiUtil {
     return element instanceof JsonValue && element.getParent() instanceof JsonArray;
   }
 
+  public static boolean isKeyword(@NotNull PsiElement element) {
+    final PsiElement parent = element.getParent();
+    return parent instanceof JsonProperty && element == ((JsonProperty) parent).getNameElement()
+            && ("\"uni\"".equals(element.getText())
+//            || "\"input\"".equals(element.getText())
+//            || "\"output\"".equals(element.getText())
+//            || "\"id\"".equals(element.getText())
+//            || "\"name\"".equals(element.getText())
+    );
+  }
   /**
    * Checks that PSI element represents key of JSON property (key-value pair of JSON object)
    *

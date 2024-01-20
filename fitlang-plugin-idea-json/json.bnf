@@ -1,19 +1,19 @@
 {
-  parserClass = 'com.intellij.json.JsonParser'
-  parserUtilClass = "com.intellij.json.psi.JsonParserUtil"
-  psiPackage = 'com.intellij.json.psi'
-  psiImplPackage = 'com.intellij.json.psi.impl'
+  parserClass = 'fit.intellij.json.JsonParser'
+  parserUtilClass = "fit.intellij.json.psi.JsonParserUtil"
+  psiPackage = 'fit.intellij.json.psi'
+  psiImplPackage = 'fit.intellij.json.psi.impl'
 
-  elementTypeHolderClass = 'com.intellij.json.JsonElementTypes'
-  elementTypeClass = 'com.intellij.json.JsonElementType'
+  elementTypeHolderClass = 'fit.intellij.json.JsonElementTypes'
+  elementTypeClass = 'fit.intellij.json.JsonElementType'
   psiClassPrefix = "Json"
   psiVisitorName = "JsonElementVisitor"
 
-  psiImplUtilClass = 'com.intellij.json.psi.impl.JsonPsiImplUtils'
-  tokenTypeClass = 'com.intellij.json.JsonTokenType'
+  psiImplUtilClass = 'fit.intellij.json.psi.impl.JsonPsiImplUtils'
+  tokenTypeClass = 'fit.intellij.json.JsonTokenType'
 
-  implements("value") = "com.intellij.json.psi.JsonElement"
-  extends("value") = "com.intellij.json.psi.impl.JsonElementImpl"
+  implements("value") = "fit.intellij.json.psi.JsonElement"
+  extends("value") = "fit.intellij.json.psi.impl.JsonElementImpl"
 
     tokens = [
         L_CURLY='{'
@@ -53,7 +53,7 @@
     extends("array|object")=container
     extends("string_literal|number_literal|boolean_literal|null_literal")=literal
     implements("property")=[
-      "com.intellij.json.psi.JsonElement"
+      "fit.intellij.json.psi.JsonElement"
       "com.intellij.psi.PsiNamedElement"
     ]
 }
@@ -89,7 +89,7 @@ property ::= property_name (':' property_value) {
     value=""
     getPresentation
   ]
-  mixin="com.intellij.json.psi.impl.JsonPropertyMixin"
+  mixin="com.intellij.json.psi.impl.JsonObjectMixin"
   pin(".*")=1
 }
 
@@ -115,7 +115,7 @@ string_literal ::= SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING {
     SINGLE_QUOTED_STRING=""
     DOUBLE_QUOTED_STRING=""
   ]
-  mixin="com.intellij.json.psi.impl.JsonStringLiteralMixin"
+  mixin="fit.intellij.json.psi.impl.JsonStringLiteralMixin"
 }
 number_literal ::= NUMBER {
   methods=[
@@ -134,13 +134,13 @@ literal ::= string_literal | number_literal | boolean_literal | null_literal {
   methods=[
     isQuotedString
   ]
-  mixin="com.intellij.json.psi.impl.JsonLiteralMixin"
+  mixin="fit.intellij.json.psi.impl.JsonLiteralMixin"
 }
 
 fake container ::=
 
 reference_expression ::= IDENTIFIER {
-  mixin="com.intellij.json.psi.impl.JsonReferenceLiteralMixin"
+  mixin="fit.intellij.json.psi.impl.JsonReferenceLiteralMixin"
 }
 
 value ::= object | array | literal | reference_expression
