@@ -19,7 +19,7 @@ public class NotValidation implements JsonSchemaValidation {
   public void validate(JsonValueAdapter propValue,
                        JsonSchemaObject schema,
                        JsonSchemaType schemaType,
-                       JsonValidationHost consumer,
+                       fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer,
                        JsonComplianceCheckerOptions options) {
     final MatchResult result = consumer.resolve(schema.getNot());
     if (result.mySchemas.isEmpty() && result.myExcludingSchemas.isEmpty()) return;

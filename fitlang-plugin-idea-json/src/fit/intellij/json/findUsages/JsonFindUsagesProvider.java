@@ -1,12 +1,12 @@
 package fit.intellij.json.findUsages;
 
-import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.JsonBundle;
 import com.intellij.lang.HelpID;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
-import fit.intellij.json.JsonBundle;
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class JsonFindUsagesProvider implements FindUsagesProvider {
   @Override
   public String getType(@NotNull PsiElement element) {
     if (element instanceof JsonProperty) {
-      return fit.intellij.json.JsonBundle.message("json.property");
+      return JsonBundle.message("json.property");
     }
     return "";
   }

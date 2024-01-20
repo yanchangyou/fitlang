@@ -6,7 +6,6 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +34,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
 
-    public boolean canBePerformed(@NotNull DataContext context) {
+    public boolean canBePerformed(@NotNull AnActionEvent e) {
         return actionConfig != null;
     }
 

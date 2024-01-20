@@ -1,12 +1,7 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.psi.impl;
 
 import com.intellij.icons.AllIcons;
-import fit.intellij.json.JsonBundle;
-import fit.intellij.json.JsonDialectUtil;
-import fit.intellij.json.JsonLanguage;
-import fit.intellij.json.JsonParserDefinition;
-import fit.intellij.json.codeinsight.JsonStandardComplianceInspection;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.navigation.ItemPresentation;
@@ -17,7 +12,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PlatformIcons;
-import fit.intellij.json.psi.JsonValue;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonDialectUtil;
+import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.JsonTokenSets;
+import fit.intellij.json.codeinsight.JsonStandardComplianceInspection;
+import fit.intellij.json.psi.JsonNumberLiteral;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class JsonPsiImplUtils {
+public final class JsonPsiImplUtils {
   static final Key<List<Pair<TextRange, String>>> STRING_FRAGMENTS = new Key<>("JSON string fragments");
 
   @NotNull
@@ -54,7 +54,7 @@ public class JsonPsiImplUtils {
   }
 
   public static boolean isQuotedString(@NotNull fit.intellij.json.psi.JsonLiteral literal) {
-    return literal.getNode().findChildByType(JsonParserDefinition.STRING_LITERALS) != null;
+    return literal.getNode().findChildByType(JsonTokenSets.STRING_LITERALS) != null;
   }
 
   @Nullable
@@ -69,7 +69,7 @@ public class JsonPsiImplUtils {
       @Nullable
       @Override
       public String getLocationString() {
-        final JsonValue value = property.getValue();
+        final fit.intellij.json.psi.JsonValue value = property.getValue();
         return value instanceof fit.intellij.json.psi.JsonLiteral ? value.getText() : null;
       }
 
@@ -93,13 +93,7 @@ public class JsonPsiImplUtils {
       @Nullable
       @Override
       public String getPresentableText() {
-        return JsonBundle.message("json.array");
-      }
-
-      @Nullable
-      @Override
-      public String getLocationString() {
-        return null;
+        return fit.intellij.json.JsonBundle.message("json.array");
       }
 
       @Nullable
@@ -117,12 +111,6 @@ public class JsonPsiImplUtils {
       @Override
       public String getPresentableText() {
         return JsonBundle.message("json.object");
-      }
-
-      @Nullable
-      @Override
-      public String getLocationString() {
-        return null;
       }
 
       @Nullable
@@ -178,7 +166,7 @@ public class JsonPsiImplUtils {
               break;
             case 'x':
               Language language = JsonDialectUtil.getLanguageOrDefaultJson(literal);
-              if (language instanceof JsonLanguage && ((JsonLanguage)language).hasPermissiveStrings()) {
+              if (language instanceof fit.intellij.json.JsonLanguage && ((JsonLanguage)language).hasPermissiveStrings()) {
                 int i2 = pos + 2;
                 for (; i2 < pos + 4; i2++) {
                   if (i2 == length || !StringUtil.isHexDigit(text.charAt(i2))) {
@@ -228,7 +216,7 @@ public class JsonPsiImplUtils {
     return literal.textMatches("true");
   }
 
-  public static double getValue(@NotNull fit.intellij.json.psi.JsonNumberLiteral literal) {
+  public static double getValue(@NotNull JsonNumberLiteral literal) {
     return Double.parseDouble(literal.getText());
   }
 }

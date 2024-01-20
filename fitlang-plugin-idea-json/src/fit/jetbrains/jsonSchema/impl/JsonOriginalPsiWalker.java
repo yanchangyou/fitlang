@@ -3,7 +3,6 @@ package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInsight.completion.CompletionUtil;
 import fit.intellij.json.JsonDialectUtil;
-import fit.intellij.json.JsonElementTypes;
 import fit.intellij.json.pointer.JsonPointerPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -14,12 +13,13 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.psi.JsonElementGenerator;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
-import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.impl.adapters.JsonJsonPropertyAdapter;
-import fit.intellij.json.psi.JsonValue;
+import fit.intellij.json.JsonElementTypes;
+import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,9 +29,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author Irina.Chernushina on 2/16/2017.
- */
 public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   public static final JsonOriginalPsiWalker INSTANCE = new JsonOriginalPsiWalker();
 
@@ -83,8 +80,7 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
     while (! (current instanceof PsiFile)) {
       final PsiElement position = current;
       current = current.getParent();
-      if (current instanceof fit.intellij.json.psi.JsonArray) {
-        fit.intellij.json.psi.JsonArray array = (fit.intellij.json.psi.JsonArray)current;
+      if (current instanceof fit.intellij.json.psi.JsonArray array) {
         final List<fit.intellij.json.psi.JsonValue> list = array.getValueList();
         int idx = -1;
         for (int i = 0; i < list.size(); i++) {
@@ -131,7 +127,7 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   @Override
   public boolean hasMissingCommaAfter(@NotNull PsiElement element) {
     PsiElement current = element instanceof fit.intellij.json.psi.JsonProperty ? element : PsiTreeUtil.getParentOfType(element, fit.intellij.json.psi.JsonProperty.class);
-    while (current != null && current.getNode().getElementType() != JsonElementTypes.COMMA) {
+    while (current != null && current.getNode().getElementType() != fit.intellij.json.JsonElementTypes.COMMA) {
       current = current.getNextSibling();
     }
     int commaOffset = current == null ? Integer.MAX_VALUE : current.getTextRange().getStartOffset();
@@ -174,13 +170,13 @@ public class JsonOriginalPsiWalker implements JsonLikePsiWalker {
   @Nullable
   @Override
   public JsonValueAdapter createValueAdapter(@NotNull PsiElement element) {
-    return element instanceof fit.intellij.json.psi.JsonValue ? JsonJsonPropertyAdapter.createAdapterByType((JsonValue)element) : null;
+    return element instanceof fit.intellij.json.psi.JsonValue ? JsonJsonPropertyAdapter.createAdapterByType((fit.intellij.json.psi.JsonValue)element) : null;
   }
 
   @Override
-  public JsonLikeSyntaxAdapter getSyntaxAdapter(Project project) {
+  public fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter getSyntaxAdapter(Project project) {
     return new JsonLikeSyntaxAdapter() {
-      private final fit.intellij.json.psi.JsonElementGenerator myGenerator = new fit.intellij.json.psi.JsonElementGenerator(project);
+      private final fit.intellij.json.psi.JsonElementGenerator myGenerator = new JsonElementGenerator(project);
       @Nullable
       @Override
       public PsiElement getPropertyValue(PsiElement property) {

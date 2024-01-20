@@ -1,122 +1,155 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-package fit.intellij.json.intentions;
+package fit.intellij.json.intentions
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.LowPriorityAction;
-import fit.intellij.json.psi.JsonObject;
-import fit.intellij.json.psi.JsonProperty;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import fit.intellij.json.JsonBundle;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.codeInsight.intention.LowPriorityAction
+import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction
+import com.intellij.ide.lightEdit.LightEditCompatible
+import fit.intellij.json.JsonBundle
+import fit.intellij.json.psi.JsonObject
+import fit.intellij.json.psi.JsonProperty
+import fit.intellij.json.psi.impl.JsonRecursiveElementVisitor
+import com.intellij.openapi.editor.Editor
+import com.intellij.openapi.editor.SelectionModel
+import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.project.Project
+import com.intellij.psi.*
+import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.psi.util.PsiTreeUtil
+import com.intellij.refactoring.util.CommonRefactoringUtil
+import com.intellij.util.IncorrectOperationException
+import org.jetbrains.annotations.Nls
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+open class JsonSortPropertiesIntention : PsiElementBaseIntentionAction(), LowPriorityAction, LightEditCompatible, DumbAware {
+  override fun getText(): @Nls(capitalization = Nls.Capitalization.Sentence) String = JsonBundle.message("json.intention.sort.properties")
 
-public class JsonSortPropertiesIntention implements IntentionAction, LowPriorityAction {
-  @Nls(capitalization = Nls.Capitalization.Sentence)
-  @NotNull
-  @Override
-  public String getText() {
-    return fit.intellij.json.JsonBundle.message("json.intention.sort.properties");
+  override fun getFamilyName(): @Nls(capitalization = Nls.Capitalization.Sentence) String =
+    JsonBundle.message("json.intention.sort.properties")
+
+  override fun isAvailable(project: Project, editor: Editor?, element: PsiElement): Boolean {
+    return editor != null && Session(editor, element).hasUnsortedObjects()
   }
 
-  @Nls(capitalization = Nls.Capitalization.Sentence)
-  @NotNull
-  @Override
-  public String getFamilyName() {
-    return fit.intellij.json.JsonBundle.message("json.intention.sort.properties");
-  }
-
-  @Override
-  public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-    PsiElement parent = findParentObject(editor, file);
-    return parent instanceof JsonObject && !isSorted((JsonObject)parent);
-  }
-
-  @Nullable
-  private static PsiElement findParentObject(@NotNull Editor editor, @NotNull PsiFile file) {
-    PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
-    JsonProperty property = PsiTreeUtil.getParentOfType(element, JsonProperty.class);
-    return property == null ? null : property.getParent();
-  }
-
-  private static boolean isSorted(@NotNull JsonObject parent) {
-    List<JsonProperty> list = parent.getPropertyList();
-    if (list.size() <= 1) return true;
-    List<String> names = ContainerUtil.map(list, p -> p.getName());
-    return ContainerUtil.equalsIdentity(ContainerUtil.sorted(names), names);
-  }
-
-  @Override
-  public void invoke(@NotNull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
-      CommonRefactoringUtil.showErrorHint(project, editor, fit.intellij.json.JsonBundle.message("file.is.readonly"),
-                                          JsonBundle.message("cannot.sort.properties"), null);
-      return;
+  @Throws(IncorrectOperationException::class)
+  override fun invoke(project: Project, editor: Editor?, element: PsiElement) {
+    editor ?: return
+    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, element)) {
+      CommonRefactoringUtil.showErrorHint(project, editor, JsonBundle.message("file.is.readonly"),
+                                          JsonBundle.message("cannot.sort.properties"), null)
+      return
     }
-    PsiElement parentObject = findParentObject(editor, file);
-    assert parentObject instanceof JsonObject;
-    // cycle-sort performs the minimal amount of modifications, and we want to patch the tree as little as possible
-    cycleSortProperties(((JsonObject)parentObject).getPropertyList());
-    SmartPsiElementPointer<PsiElement> pointer = SmartPointerManager.createPointer(parentObject);
-    PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
-    PsiElement element = pointer.getElement();
-    if (element == null) return;
-    CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-    codeStyleManager.reformatText(element.getContainingFile(), Collections.singleton(element.getTextRange()));
+    val session = Session(editor, element)
+    if (session.rootObj != null) {
+      session.sort()
+      reformat(project, editor, session.rootObj)
+    }
   }
 
-  @Override
-  public boolean startInWriteAction() {
-    return true;
+  private fun reformat(project: Project, editor: Editor, obj: JsonObject) {
+    val pointer = SmartPointerManager.createPointer<JsonObject>(obj)
+    PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.document)
+    val element = pointer.element ?: return
+    val codeStyleManager = CodeStyleManager.getInstance(project)
+    codeStyleManager.reformatText(element.containingFile, setOf(element.textRange))
   }
 
-  private static void cycleSortProperties(@NotNull List<JsonProperty> properties) {
-    int size = properties.size();
-    for (int cycleStart = 0; cycleStart < size; cycleStart++) {
-      JsonProperty item = properties.get(cycleStart);
-      int pos = advance(properties, size, cycleStart, item);
-      if (pos == -1) continue;
-      if (pos != cycleStart) {
-        exchange(properties, pos, cycleStart);
+  override fun startInWriteAction(): Boolean = true
+
+  private class Session(editor: Editor, private val contextElement: PsiElement) {
+    private val selectionModel: SelectionModel = editor.selectionModel
+    val rootObj: JsonObject?
+    private val objects: Set<JsonObject>
+
+    init {
+      rootObj = findRootObject()
+      objects = if (rootObj != null) collectObjects(rootObj) else emptySet()
+    }
+
+    private fun collectObjects(rootObj: JsonObject): Set<JsonObject> {
+      val result : MutableSet<JsonObject> = LinkedHashSet()
+      if (selectionModel.hasSelection()) {
+        object: JsonRecursiveElementVisitor() {
+          override fun visitObject(o: JsonObject) {
+            super.visitObject(o)
+            if (o.textRange?.intersects(selectionModel.selectionStart, selectionModel.selectionEnd) == true) {
+              result.add(o)
+            }
+          }
+        }.visitObject(rootObj)
       }
-      while (pos != cycleStart) {
-        pos = advance(properties, size, cycleStart, properties.get(cycleStart));
-        if (pos == -1) break;
-        if (pos != cycleStart) {
-          exchange(properties, pos, cycleStart);
+      result.add(rootObj)
+      return result
+    }
+
+    private fun findRootObject(): JsonObject? {
+      val initObj = PsiTreeUtil.getParentOfType(contextElement, JsonObject::class.java)
+      if (initObj == null || !selectionModel.hasSelection()) {
+        return initObj
+      }
+      var obj: JsonObject = initObj
+      while (obj.textRange?.containsRange(selectionModel.selectionStart, selectionModel.selectionEnd) == false) {
+        obj = PsiTreeUtil.getParentOfType(obj, JsonObject::class.java) ?: break
+      }
+      return obj
+    }
+
+    fun hasUnsortedObjects() : Boolean = objects.any { !isSorted(it) }
+
+    fun sort() {
+      objects.forEach {
+        if (!isSorted(it)) {
+          cycleSortProperties(it)
         }
       }
     }
   }
 
-  private static int advance(@NotNull List<JsonProperty> properties, int size, int cycleStart, JsonProperty item) {
-    int pos = cycleStart;
-    String itemName = item.getName();
-    for (int i = cycleStart + 1; i < size; i++) {
-      if (properties.get(i).getName().compareTo(itemName) < 0) pos++;
+  companion object {
+    private fun isSorted(obj: JsonObject): Boolean {
+      return obj.propertyList.asSequence()
+        .map { it.name }
+        .zipWithNext()
+        .all { (l, r) -> l <= r }
     }
-    if (pos == cycleStart) return -1;
-    while (Objects.equals(itemName, properties.get(pos).getName())) pos++;
-    return pos;
-  }
 
-  private static void exchange(@NotNull List<JsonProperty> properties, int pos, int item) {
-    JsonProperty propertyAtPos = properties.get(pos);
-    JsonProperty itemProperty = properties.get(item);
-    properties.set(pos, (JsonProperty)propertyAtPos.getParent().addBefore(itemProperty, propertyAtPos));
-    properties.set(item, (JsonProperty)itemProperty.getParent().addBefore(propertyAtPos, itemProperty));
-    propertyAtPos.delete();
-    itemProperty.delete();
+    // cycle-sort performs the minimal amount of modifications, and we want to patch the tree as little as possible
+    private fun cycleSortProperties(obj: JsonObject) {
+      val properties: MutableList<JsonProperty> = obj.propertyList
+      val size = properties.size
+      for (cycleStart in 0 until size) {
+        val item = properties[cycleStart]
+        var pos = advance(properties, size, cycleStart, item)
+        if (pos == -1) continue
+        if (pos != cycleStart) {
+          exchange(properties, pos, cycleStart)
+        }
+        while (pos != cycleStart) {
+          pos = advance(properties, size, cycleStart, properties[cycleStart])
+          if (pos == -1) break
+          if (pos != cycleStart) {
+            exchange(properties, pos, cycleStart)
+          }
+        }
+      }
+    }
+
+    private fun advance(properties: List<JsonProperty>, size: Int, cycleStart: Int, item: JsonProperty): Int {
+      var pos = cycleStart
+      val itemName = item.name
+      for (i in cycleStart + 1 until size) {
+        if (properties[i].name < itemName) pos++
+      }
+      if (pos == cycleStart) return -1
+      while (itemName == properties[pos].name) pos++
+      return pos
+    }
+
+    private fun exchange(properties: MutableList<JsonProperty>, pos: Int, item: Int) {
+      val propertyAtPos = properties[pos]
+      val itemProperty = properties[item]
+      properties[pos] = propertyAtPos.parent.addBefore(itemProperty, propertyAtPos) as JsonProperty
+      properties[item] = itemProperty.parent.addBefore(propertyAtPos, itemProperty) as JsonProperty
+      propertyAtPos.delete()
+      itemProperty.delete()
+    }
   }
 }

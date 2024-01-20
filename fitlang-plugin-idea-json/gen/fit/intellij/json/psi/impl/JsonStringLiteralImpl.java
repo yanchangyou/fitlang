@@ -2,47 +2,39 @@
 package fit.intellij.json.psi.impl;
 
 import java.util.List;
+
+import fit.intellij.json.psi.JsonElementVisitor;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static fit.intellij.json.JsonElementTypes.*;
-import fit.intellij.json.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 
-public class JsonStringLiteralImpl extends JsonStringLiteralMixin implements JsonStringLiteral {
+public class JsonStringLiteralImpl extends JsonStringLiteralMixin implements fit.intellij.json.psi.JsonStringLiteral {
 
   public JsonStringLiteralImpl(ASTNode node) {
     super(node);
   }
 
   @Override
-  public void accept(@NotNull JsonElementVisitor visitor) {
+  public void accept(@NotNull fit.intellij.json.psi.JsonElementVisitor visitor) {
     visitor.visitStringLiteral(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JsonElementVisitor) accept((JsonElementVisitor)visitor);
+    if (visitor instanceof fit.intellij.json.psi.JsonElementVisitor) accept((JsonElementVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public JsonMyKeyword getMyKeyword() {
-    return findChildByClass(JsonMyKeyword.class);
-  }
-
-  @Override
   public @NotNull List<Pair<TextRange, String>> getTextFragments() {
-    return JsonPsiImplUtils.getTextFragments(this);
+    return fit.intellij.json.psi.impl.JsonPsiImplUtils.getTextFragments(this);
   }
 
   @Override
   public @NotNull String getValue() {
-    return JsonPsiImplUtils.getValue(this);
+    return fit.intellij.json.psi.impl.JsonPsiImplUtils.getValue(this);
   }
 
   @Override

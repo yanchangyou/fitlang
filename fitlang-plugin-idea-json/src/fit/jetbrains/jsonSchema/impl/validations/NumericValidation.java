@@ -4,17 +4,17 @@ package fit.jetbrains.jsonSchema.impl.validations;
 import fit.intellij.json.JsonBundle;
 import com.intellij.psi.PsiElement;
 import fit.jetbrains.jsonSchema.extension.JsonErrorPriority;
+import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.extension.JsonSchemaValidation;
 import fit.jetbrains.jsonSchema.extension.JsonValidationHost;
-import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
 
 public class NumericValidation implements JsonSchemaValidation {
   public static final NumericValidation INSTANCE = new NumericValidation();
   private static void checkNumber(PsiElement propValue,
                                   fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                   fit.jetbrains.jsonSchema.impl.JsonSchemaType schemaType,
-                                  JsonValidationHost consumer) {
+                                  fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer) {
     Number value;
     String valueText = fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.getValue(propValue, schema);
     if (valueText == null) return;
@@ -58,7 +58,7 @@ public class NumericValidation implements JsonSchemaValidation {
   private static void checkMaximum(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                    Number value,
                                    PsiElement propertyValue,
-                                   JsonValidationHost consumer) {
+                                   fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer) {
 
     Number exclusiveMaximumNumber = schema.getExclusiveMaximumNumber();
     if (exclusiveMaximumNumber != null) {
@@ -86,7 +86,7 @@ public class NumericValidation implements JsonSchemaValidation {
   private static void checkMinimum(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                                    Number value,
                                    PsiElement propertyValue,
-                                   JsonValidationHost consumer) {
+                                   fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer) {
     // schema v6 - exclusiveMinimum is numeric now
     Number exclusiveMinimumNumber = schema.getExclusiveMinimumNumber();
     if (exclusiveMinimumNumber != null) {
@@ -114,10 +114,10 @@ public class NumericValidation implements JsonSchemaValidation {
 
   @Override
   public void validate(JsonValueAdapter propValue,
-                       JsonSchemaObject schema,
+                       fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                        fit.jetbrains.jsonSchema.impl.JsonSchemaType schemaType,
                        JsonValidationHost consumer,
-                       fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+                       JsonComplianceCheckerOptions options) {
     checkNumber(propValue.getDelegate(), schema, schemaType, consumer);
   }
 }

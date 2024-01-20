@@ -22,43 +22,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.areSchemaTypesCompatible;
-
-/**
- * @author Irina.Chernushina on 4/24/2017.
- */
 public class JsonSchemaResolver {
   @NotNull private final Project myProject;
-  @NotNull private final JsonSchemaObject mySchema;
+  @NotNull private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject mySchema;
   @NotNull private final JsonPointerPosition myPosition;
 
   public JsonSchemaResolver(@NotNull Project project,
-                            @NotNull JsonSchemaObject schema,
+                            @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                             @NotNull JsonPointerPosition position) {
     myProject = project;
     mySchema = schema;
     myPosition = position;
   }
 
-  public JsonSchemaResolver(@NotNull Project project, @NotNull JsonSchemaObject schema) {
+  public JsonSchemaResolver(@NotNull Project project, @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
     myProject = project;
     mySchema = schema;
     myPosition = new JsonPointerPosition();
   }
 
-  public MatchResult detailedResolve() {
-    final fit.jetbrains.jsonSchema.impl.JsonSchemaTreeNode node = JsonSchemaVariantsTreeBuilder.buildTree(myProject, mySchema, myPosition, false);
-    return MatchResult.create(node);
+  public fit.jetbrains.jsonSchema.impl.MatchResult detailedResolve() {
+    final JsonSchemaTreeNode node = JsonSchemaVariantsTreeBuilder.buildTree(myProject, mySchema, myPosition, false);
+    return fit.jetbrains.jsonSchema.impl.MatchResult.create(node);
   }
 
   @NotNull
-  public Collection<JsonSchemaObject> resolve() {
-    final MatchResult result = detailedResolve();
-    final List<JsonSchemaObject> list = new LinkedList<>();
+  public Collection<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> resolve() {
+    final fit.jetbrains.jsonSchema.impl.MatchResult result = detailedResolve();
+    final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> list = new LinkedList<>();
     list.addAll(result.mySchemas);
-    for (Collection<? extends JsonSchemaObject> myExcludingSchema : result.myExcludingSchemas) {
+    for (Collection<? extends fit.jetbrains.jsonSchema.impl.JsonSchemaObject> myExcludingSchema : result.myExcludingSchemas) {
       list.addAll(myExcludingSchema);
     }
     return list;
@@ -66,9 +60,9 @@ public class JsonSchemaResolver {
 
   @Nullable
   public PsiElement findNavigationTarget(@Nullable final PsiElement element) {
-    final fit.jetbrains.jsonSchema.impl.JsonSchemaTreeNode node = JsonSchemaVariantsTreeBuilder
+    final JsonSchemaTreeNode node = JsonSchemaVariantsTreeBuilder
       .buildTree(myProject, mySchema, myPosition, true);
-    final JsonSchemaObject schema = selectSchema(node, element, myPosition.isEmpty());
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema = selectSchema(node, element, myPosition.isEmpty());
     if (schema == null) return null;
     VirtualFile file = JsonSchemaService.Impl.get(myProject).resolveSchemaFile(schema);
     if (file == null) return null;
@@ -95,19 +89,19 @@ public class JsonSchemaResolver {
           if (value == null) return null;
         }
         else {
-          JsonPropertyAdapter props = findProperty((JsonObjectValueAdapter)value, JsonSchemaObject.PROPERTIES);
+          JsonPropertyAdapter props = findProperty((JsonObjectValueAdapter)value, fit.jetbrains.jsonSchema.impl.JsonSchemaObject.PROPERTIES);
           if (props != null) {
             value = getValue(props);
             continue;
           }
 
-          JsonPropertyAdapter defs = findProperty((JsonObjectValueAdapter)value, JsonSchemaObject.DEFINITIONS);
+          JsonPropertyAdapter defs = findProperty((JsonObjectValueAdapter)value, fit.jetbrains.jsonSchema.impl.JsonSchemaObject.DEFINITIONS);
           if (defs != null) {
             value = getValue(defs);
             continue;
           }
 
-          JsonPropertyAdapter defs9 = findProperty((JsonObjectValueAdapter)value, JsonSchemaObject.DEFINITIONS_v9);
+          JsonPropertyAdapter defs9 = findProperty((JsonObjectValueAdapter)value, fit.jetbrains.jsonSchema.impl.JsonSchemaObject.DEFINITIONS_v9);
           if (defs9 != null) {
             value = getValue(defs9);
             continue;
@@ -147,18 +141,18 @@ public class JsonSchemaResolver {
   @Nullable
   private static JsonPropertyAdapter findProperty(@NotNull JsonObjectValueAdapter value, @NotNull String name) {
     List<JsonPropertyAdapter> list = value.getPropertyList();
-    return list.stream().filter(p -> name.equals(p.getName())).findFirst().orElse(null);
+    return ContainerUtil.find(list, p -> name.equals(p.getName()));
   }
 
   @Nullable
-  private JsonSchemaObject selectSchema(@NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaTreeNode resolveRoot,
-                                        @Nullable final PsiElement element,
-                                        boolean topLevelSchema) {
-    final MatchResult matchResult = MatchResult.create(resolveRoot);
-    List<JsonSchemaObject> schemas = new ArrayList<>(matchResult.mySchemas);
-    schemas.addAll(matchResult.myExcludingSchemas.stream().flatMap(Collection::stream).collect(Collectors.toList()));
+  private fit.jetbrains.jsonSchema.impl.JsonSchemaObject selectSchema(@NotNull final JsonSchemaTreeNode resolveRoot,
+                                                                      @Nullable final PsiElement element,
+                                                                      boolean topLevelSchema) {
+    final fit.jetbrains.jsonSchema.impl.MatchResult matchResult = fit.jetbrains.jsonSchema.impl.MatchResult.create(resolveRoot);
+    List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemas = new ArrayList<>(matchResult.mySchemas);
+    schemas.addAll(matchResult.myExcludingSchemas.stream().flatMap(Collection::stream).toList());
 
-    final JsonSchemaObject firstSchema = getFirstValidSchema(schemas);
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaObject firstSchema = getFirstValidSchema(schemas);
     if (element == null || schemas.size() == 1 || firstSchema == null) {
       return firstSchema;
     }
@@ -175,7 +169,7 @@ public class JsonSchemaResolver {
       if (parentValue == null || (parentAdapter = walker.createValueAdapter(parentValue)) == null) return null;
     }
 
-    final Ref<JsonSchemaObject> schemaRef = new Ref<>();
+    final Ref<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemaRef = new Ref<>();
     MatchResult.iterateTree(resolveRoot, node -> {
       final JsonSchemaTreeNode parent = node.getParent();
       if (node.getSchema() == null || parentAdapter != null && parent != null && parent.isNothing()) return true;
@@ -194,15 +188,15 @@ public class JsonSchemaResolver {
   }
 
   @Nullable
-  private static JsonSchemaObject getFirstValidSchema(List<JsonSchemaObject> schemas) {
+  private static fit.jetbrains.jsonSchema.impl.JsonSchemaObject getFirstValidSchema(List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemas) {
     return schemas.stream().findFirst().orElse(null);
   }
 
   private boolean isCorrect(@NotNull final JsonValueAdapter value, @NotNull final JsonSchemaObject schema) {
-    final JsonSchemaType type = JsonSchemaType.getType(value);
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = JsonSchemaType.getType(value);
     if (type == null) return true;
-    if (!areSchemaTypesCompatible(schema, type)) return false;
-    final fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(myProject, JsonComplianceCheckerOptions.RELAX_ENUM_CHECK);
+    if (!JsonSchemaAnnotatorChecker.areSchemaTypesCompatible(schema, type)) return false;
+    final JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(myProject, JsonComplianceCheckerOptions.RELAX_ENUM_CHECK);
     checker.checkByScheme(value, schema);
     return checker.isCorrect();
   }

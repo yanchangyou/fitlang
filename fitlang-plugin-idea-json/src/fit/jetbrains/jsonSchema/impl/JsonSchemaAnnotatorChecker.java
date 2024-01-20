@@ -1,8 +1,11 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl;
 
+import com.intellij.codeInspection.util.InspectionMessage;
+import com.intellij.ide.nls.NlsMessages;
 import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.NlsSafe;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -11,9 +14,9 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import fit.jetbrains.jsonSchema.extension.JsonErrorPriority;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
+import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.extension.JsonSchemaValidation;
 import fit.jetbrains.jsonSchema.extension.JsonValidationHost;
-import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.impl.validations.IfThenElseValidation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,24 +24,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @author Irina.Chernushina on 4/25/2017.
- */
-public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
-  private static final Set<JsonSchemaType> PRIMITIVE_TYPES =
-    ContainerUtil.set(JsonSchemaType._integer, JsonSchemaType._number, JsonSchemaType._boolean, JsonSchemaType._string, JsonSchemaType._null);
-  private final Map<PsiElement, JsonValidationError> myErrors;
+public final class JsonSchemaAnnotatorChecker implements fit.jetbrains.jsonSchema.extension.JsonValidationHost {
+  private static final Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> PRIMITIVE_TYPES =
+    ContainerUtil.set(fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer, fit.jetbrains.jsonSchema.impl.JsonSchemaType._number, fit.jetbrains.jsonSchema.impl.JsonSchemaType._boolean, fit.jetbrains.jsonSchema.impl.JsonSchemaType._string, fit.jetbrains.jsonSchema.impl.JsonSchemaType._null);
+  private final Map<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> myErrors;
   @NotNull private final Project myProject;
-  @NotNull private final fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions myOptions;
+  @NotNull private final JsonComplianceCheckerOptions myOptions;
   private boolean myHadTypeError;
 
-  protected JsonSchemaAnnotatorChecker(@NotNull Project project, @NotNull fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+  JsonSchemaAnnotatorChecker(@NotNull Project project, @NotNull JsonComplianceCheckerOptions options) {
     myProject = project;
     myOptions = options;
     myErrors = new HashMap<>();
   }
 
-  public Map<PsiElement, JsonValidationError> getErrors() {
+  public Map<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> getErrors() {
     return myErrors;
   }
 
@@ -48,8 +48,8 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
 
   public static JsonSchemaAnnotatorChecker checkByMatchResult(@NotNull Project project,
                                                               @NotNull JsonValueAdapter elementToCheck,
-                                                              @NotNull final MatchResult result,
-                                                              @NotNull fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+                                                              @NotNull final fit.jetbrains.jsonSchema.impl.MatchResult result,
+                                                              @NotNull JsonComplianceCheckerOptions options) {
     final List<JsonSchemaAnnotatorChecker> checkers = new ArrayList<>();
     if (result.myExcludingSchemas.isEmpty() && result.mySchemas.size() == 1) {
       final JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(project, options);
@@ -79,17 +79,17 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
 
   private static JsonSchemaAnnotatorChecker mergeErrors(@NotNull Project project,
                                                         @NotNull List<JsonSchemaAnnotatorChecker> list,
-                                                        @NotNull fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options,
-                                                        @NotNull List<Collection<? extends JsonSchemaObject>> excludingSchemas) {
+                                                        @NotNull JsonComplianceCheckerOptions options,
+                                                        @NotNull List<Collection<? extends fit.jetbrains.jsonSchema.impl.JsonSchemaObject>> excludingSchemas) {
     final JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(project, options);
 
     for (JsonSchemaAnnotatorChecker ch: list) {
-      for (Map.Entry<PsiElement, JsonValidationError> element: ch.myErrors.entrySet()) {
-        JsonValidationError error = element.getValue();
-        if (error.getFixableIssueKind() == JsonValidationError.FixableIssueKind.ProhibitedProperty) {
-          String propertyName = ((JsonValidationError.ProhibitedPropertyIssueData)error.getIssueData()).propertyName;
+      for (Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> element: ch.myErrors.entrySet()) {
+        fit.jetbrains.jsonSchema.impl.JsonValidationError error = element.getValue();
+        if (error.getFixableIssueKind() == fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.ProhibitedProperty) {
+          String propertyName = ((fit.jetbrains.jsonSchema.impl.JsonValidationError.ProhibitedPropertyIssueData)error.getIssueData()).propertyName;
           boolean skip = false;
-          for (Collection<? extends JsonSchemaObject> objects : excludingSchemas) {
+          for (Collection<? extends fit.jetbrains.jsonSchema.impl.JsonSchemaObject> objects : excludingSchemas) {
             Set<String> keys = objects.stream()
               .filter(o -> !o.hasOwnExtraPropertyProhibition())
               .map(o -> o.getProperties().keySet()).flatMap(Set::stream).collect(Collectors.toSet());
@@ -104,58 +104,58 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   @Override
-  public void error(final String error, final PsiElement holder,
+  public void error(@InspectionMessage String error, final PsiElement holder,
                     JsonErrorPriority priority) {
-    error(error, holder, JsonValidationError.FixableIssueKind.None, null, priority);
+    error(error, holder, fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.None, null, priority);
   }
 
   @Override
-  public void error(final PsiElement newHolder, JsonValidationError error) {
+  public void error(final PsiElement newHolder, fit.jetbrains.jsonSchema.impl.JsonValidationError error) {
     error(error.getMessage(), newHolder, error.getFixableIssueKind(), error.getIssueData(), error.getPriority());
   }
 
   @Override
-  public void error(final String error, final PsiElement holder,
-                    JsonValidationError.FixableIssueKind fixableIssueKind,
-                    JsonValidationError.IssueData data,
+  public void error(@InspectionMessage String error, final PsiElement holder,
+                    fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind fixableIssueKind,
+                    fit.jetbrains.jsonSchema.impl.JsonValidationError.IssueData data,
                     JsonErrorPriority priority) {
     if (myErrors.containsKey(holder)) return;
-    myErrors.put(holder, new JsonValidationError(error, fixableIssueKind, data, priority));
+    myErrors.put(holder, new fit.jetbrains.jsonSchema.impl.JsonValidationError(error, fixableIssueKind, data, priority));
   }
 
   @Override
-  public void typeError(final @NotNull PsiElement value, @Nullable JsonSchemaType currentType, final JsonSchemaType @NotNull ... allowedTypes) {
+  public void typeError(final @NotNull PsiElement value, @Nullable fit.jetbrains.jsonSchema.impl.JsonSchemaType currentType, final fit.jetbrains.jsonSchema.impl.JsonSchemaType @NotNull ... allowedTypes) {
     if (allowedTypes.length == 0) return;
     String currentTypeDesc = currentType == null ? "" : (" " + JsonBundle.message("schema.validation.actual") + currentType.getName() + ".");
     String prefix = JsonBundle.message("schema.validation.incompatible.types") + "\n";
     if (allowedTypes.length == 1) {
       error(prefix + " " + JsonBundle.message("schema.validation.required.one", allowedTypes[0].getName(), currentTypeDesc), value,
-            JsonValidationError.FixableIssueKind.ProhibitedType,
-            new JsonValidationError.TypeMismatchIssueData(allowedTypes),
+            fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.ProhibitedType,
+            new fit.jetbrains.jsonSchema.impl.JsonValidationError.TypeMismatchIssueData(allowedTypes),
             JsonErrorPriority.TYPE_MISMATCH);
     } else {
       final String typesText = Arrays.stream(allowedTypes)
-                                     .map(JsonSchemaType::getName)
+                                     .map(fit.jetbrains.jsonSchema.impl.JsonSchemaType::getName)
                                      .distinct()
                                      .sorted(Comparator.naturalOrder())
                                      .collect(Collectors.joining(", "));
       error(prefix + " " + JsonBundle.message("schema.validation.required.one.of", typesText, currentTypeDesc), value,
-            JsonValidationError.FixableIssueKind.ProhibitedType,
-            new JsonValidationError.TypeMismatchIssueData(allowedTypes),
+            fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.ProhibitedType,
+            new fit.jetbrains.jsonSchema.impl.JsonValidationError.TypeMismatchIssueData(allowedTypes),
             JsonErrorPriority.TYPE_MISMATCH);
     }
     myHadTypeError = true;
   }
 
   @Override
-  public MatchResult resolve(JsonSchemaObject schemaObject) {
-    return new JsonSchemaResolver(myProject, schemaObject).detailedResolve();
+  public fit.jetbrains.jsonSchema.impl.MatchResult resolve(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject) {
+    return new fit.jetbrains.jsonSchema.impl.JsonSchemaResolver(myProject, schemaObject).detailedResolve();
   }
 
   @Override
-  public @Nullable JsonValidationHost checkByMatchResult(JsonValueAdapter adapter,
-                                                         MatchResult result,
-                                                         fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+  public @Nullable fit.jetbrains.jsonSchema.extension.JsonValidationHost checkByMatchResult(JsonValueAdapter adapter,
+                                                                                            MatchResult result,
+                                                                                            JsonComplianceCheckerOptions options) {
     return checkByMatchResult(myProject, adapter, result, options);
   }
 
@@ -164,27 +164,27 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     return myErrors.size() == 0 && !myHadTypeError;
   }
 
-  private static Collection<JsonSchemaValidation> getAllValidations(@NotNull JsonSchemaObject schema,
-                                                                    JsonSchemaType type,
-                                                                    @NotNull JsonValueAdapter value) {
-    Set<JsonSchemaValidation> validations = new LinkedHashSet<>();
+  private static Collection<fit.jetbrains.jsonSchema.extension.JsonSchemaValidation> getAllValidations(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
+                                                                                                       fit.jetbrains.jsonSchema.impl.JsonSchemaType type,
+                                                                                                       @NotNull JsonValueAdapter value) {
+    Set<fit.jetbrains.jsonSchema.extension.JsonSchemaValidation> validations = new LinkedHashSet<>();
     validations.add(fit.jetbrains.jsonSchema.impl.validations.EnumValidation.INSTANCE);
     if (type != null) {
       validations.add(fit.jetbrains.jsonSchema.impl.validations.TypeValidation.INSTANCE);
-      if (JsonSchemaType._string_number.equals(type)) {
+      if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number.equals(type)) {
         validations.add(fit.jetbrains.jsonSchema.impl.validations.NumericValidation.INSTANCE);
         validations.add(fit.jetbrains.jsonSchema.impl.validations.StringValidation.INSTANCE);
       }
-      else if (JsonSchemaType._number.equals(type) || JsonSchemaType._integer.equals(type)) {
+      else if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._number.equals(type) || fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer.equals(type)) {
         validations.add(fit.jetbrains.jsonSchema.impl.validations.NumericValidation.INSTANCE);
       }
-      else if (JsonSchemaType._string.equals(type)) {
+      else if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._string.equals(type)) {
         validations.add(fit.jetbrains.jsonSchema.impl.validations.StringValidation.INSTANCE);
       }
-      else if (JsonSchemaType._array.equals(type)) {
+      else if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._array.equals(type)) {
         validations.add(fit.jetbrains.jsonSchema.impl.validations.ArrayValidation.INSTANCE);
       }
-      else if (JsonSchemaType._object.equals(type)) {
+      else if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._object.equals(type)) {
         validations.add(fit.jetbrains.jsonSchema.impl.validations.ObjectValidation.INSTANCE);
       }
     }
@@ -219,15 +219,15 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     return validations;
   }
 
-  public void checkByScheme(@NotNull JsonValueAdapter value, @NotNull JsonSchemaObject schema) {
-    final JsonSchemaType type = JsonSchemaType.getType(value);
+  public void checkByScheme(@NotNull JsonValueAdapter value, @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = fit.jetbrains.jsonSchema.impl.JsonSchemaType.getType(value);
     for (JsonSchemaValidation validation : getAllValidations(schema, type, value)) {
       validation.validate(value, schema, type, this, myOptions);
     }
   }
 
   @Override
-  public void checkObjectBySchemaRecordErrors(@NotNull JsonSchemaObject schema, @NotNull JsonValueAdapter object) {
+  public void checkObjectBySchemaRecordErrors(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, @NotNull JsonValueAdapter object) {
     final JsonSchemaAnnotatorChecker checker = checkByMatchResult(myProject, object, new JsonSchemaResolver(myProject, schema).detailedResolve(), myOptions);
     if (checker != null) {
       myHadTypeError = checker.isHadTypeError();
@@ -241,20 +241,20 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   @NotNull
-  private static Pair<JsonSchemaObject, JsonSchemaAnnotatorChecker> processSchemasVariants(
-    @NotNull Project project, @NotNull final Collection<? extends JsonSchemaObject> collection,
+  private static Pair<fit.jetbrains.jsonSchema.impl.JsonSchemaObject, JsonSchemaAnnotatorChecker> processSchemasVariants(
+    @NotNull Project project, @NotNull final Collection<? extends fit.jetbrains.jsonSchema.impl.JsonSchemaObject> collection,
     @NotNull final JsonValueAdapter value, boolean isOneOf, JsonComplianceCheckerOptions options) {
 
     final JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(project, options);
-    final JsonSchemaType type = JsonSchemaType.getType(value);
-    JsonSchemaObject selected = null;
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = fit.jetbrains.jsonSchema.impl.JsonSchemaType.getType(value);
+    fit.jetbrains.jsonSchema.impl.JsonSchemaObject selected = null;
     if (type == null) {
       if (!value.isShouldBeIgnored()) checker.typeError(value.getDelegate(), null, getExpectedTypes(collection));
     }
     else {
-      final List<JsonSchemaObject> filtered = new ArrayList<>(collection.size());
-      JsonSchemaType altType = value.getAlternateType(type);
-      for (JsonSchemaObject schema: collection) {
+      final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> filtered = new ArrayList<>(collection.size());
+      fit.jetbrains.jsonSchema.impl.JsonSchemaType altType = value.getAlternateType(type);
+      for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema: collection) {
         if (!areSchemaTypesCompatible(schema, type)
             && !areSchemaTypesCompatible(schema, altType)) continue;
         filtered.add(schema);
@@ -278,15 +278,15 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     return Pair.create(selected, checker);
   }
 
-  private final static JsonSchemaType[] NO_TYPES = new JsonSchemaType[0];
-  public static JsonSchemaType[] getExpectedTypes(final Collection<? extends JsonSchemaObject> schemas) {
-    final List<JsonSchemaType> list = new ArrayList<>();
-    for (JsonSchemaObject schema : schemas) {
-      final JsonSchemaType type = schema.getType();
+  private final static fit.jetbrains.jsonSchema.impl.JsonSchemaType[] NO_TYPES = new fit.jetbrains.jsonSchema.impl.JsonSchemaType[0];
+  public static fit.jetbrains.jsonSchema.impl.JsonSchemaType[] getExpectedTypes(final Collection<? extends fit.jetbrains.jsonSchema.impl.JsonSchemaObject> schemas) {
+    final List<fit.jetbrains.jsonSchema.impl.JsonSchemaType> list = new ArrayList<>();
+    for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema : schemas) {
+      final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = schema.getType();
       if (type != null) {
         list.add(type);
       } else {
-        final Set<JsonSchemaType> variants = schema.getTypeVariants();
+        final Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> variants = schema.getTypeVariants();
         if (variants != null) {
           list.addAll(variants);
         }
@@ -295,8 +295,8 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     return list.isEmpty() ? NO_TYPES : list.toArray(NO_TYPES);
   }
 
-  public static boolean areSchemaTypesCompatible(@NotNull final JsonSchemaObject schema, @NotNull final JsonSchemaType type) {
-    final JsonSchemaType matchingSchemaType = getMatchingSchemaType(schema, type);
+  public static boolean areSchemaTypesCompatible(@NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaType type) {
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaType matchingSchemaType = getMatchingSchemaType(schema, type);
     if (matchingSchemaType != null) return matchingSchemaType.equals(type);
     if (schema.getEnum() != null) {
       return PRIMITIVE_TYPES.contains(type);
@@ -305,50 +305,48 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   @Nullable
-  public static JsonSchemaType getMatchingSchemaType(@NotNull JsonSchemaObject schema, @NotNull JsonSchemaType input) {
-    if (schema.getType() != null) {
-      final JsonSchemaType matchType = schema.getType();
-      if (matchType != null) {
-        if (JsonSchemaType._integer.equals(input) && JsonSchemaType._number.equals(matchType)) {
-          return input;
-        }
-        if (JsonSchemaType._string_number.equals(input) && (JsonSchemaType._number.equals(matchType)
-                                                            || JsonSchemaType._integer.equals(matchType)
-                                                            || JsonSchemaType._string.equals(matchType))) {
-          return input;
-        }
-        return matchType;
+  public static fit.jetbrains.jsonSchema.impl.JsonSchemaType getMatchingSchemaType(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema, @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaType input) {
+    final fit.jetbrains.jsonSchema.impl.JsonSchemaType matchType = schema.getType();
+    if (matchType != null) {
+      if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer.equals(input) && fit.jetbrains.jsonSchema.impl.JsonSchemaType._number.equals(matchType)) {
+        return input;
       }
+      if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number.equals(input) && (fit.jetbrains.jsonSchema.impl.JsonSchemaType._number.equals(matchType)
+                                                          || fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer.equals(matchType)
+                                                          || fit.jetbrains.jsonSchema.impl.JsonSchemaType._string.equals(matchType))) {
+        return input;
+      }
+      return matchType;
     }
     if (schema.getTypeVariants() != null) {
-      Set<JsonSchemaType> matchTypes = schema.getTypeVariants();
+      Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> matchTypes = schema.getTypeVariants();
       if (matchTypes.contains(input)) {
         return input;
       }
-      if (JsonSchemaType._integer.equals(input) && matchTypes.contains(JsonSchemaType._number)) {
+      if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer.equals(input) && matchTypes.contains(fit.jetbrains.jsonSchema.impl.JsonSchemaType._number)) {
         return input;
       }
-      if (JsonSchemaType._string_number.equals(input) &&
-          (matchTypes.contains(JsonSchemaType._number)
-           || matchTypes.contains(JsonSchemaType._integer)
-           || matchTypes.contains(JsonSchemaType._string))) {
+      if (fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number.equals(input) &&
+          (matchTypes.contains(fit.jetbrains.jsonSchema.impl.JsonSchemaType._number)
+           || matchTypes.contains(fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer)
+           || matchTypes.contains(fit.jetbrains.jsonSchema.impl.JsonSchemaType._string))) {
         return input;
       }
       //nothing matches, lets return one of the list so that other heuristics does not match
       return matchTypes.iterator().next();
     }
-    if (!schema.getProperties().isEmpty() && JsonSchemaType._object.equals(input)) return JsonSchemaType._object;
+    if (!schema.getProperties().isEmpty() && fit.jetbrains.jsonSchema.impl.JsonSchemaType._object.equals(input)) return fit.jetbrains.jsonSchema.impl.JsonSchemaType._object;
     return null;
   }
 
 
 
-  private static boolean hasMinMaxLengthChecks(JsonSchemaObject schema) {
+  private static boolean hasMinMaxLengthChecks(fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
     return schema.getMinLength() != null || schema.getMaxLength() != null;
   }
 
   @Nullable
-  public static String getValue(PsiElement propValue, JsonSchemaObject schema) {
+  public static String getValue(PsiElement propValue, fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
     final JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(propValue, schema);
     assert walker != null;
     JsonValueAdapter adapter = walker.createValueAdapter(propValue);
@@ -357,11 +355,11 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   // returns the schema, selected for annotation
-  private JsonSchemaObject processOneOf(@NotNull JsonValueAdapter value, List<JsonSchemaObject> oneOf) {
+  private fit.jetbrains.jsonSchema.impl.JsonSchemaObject processOneOf(@NotNull JsonValueAdapter value, List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> oneOf) {
     final List<JsonSchemaAnnotatorChecker> candidateErroneousCheckers = new ArrayList<>();
-    final List<JsonSchemaObject> candidateErroneousSchemas = new ArrayList<>();
-    final List<JsonSchemaObject> correct = new SmartList<>();
-    for (JsonSchemaObject object : oneOf) {
+    final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> candidateErroneousSchemas = new ArrayList<>();
+    final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> correct = new SmartList<>();
+    for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject object : oneOf) {
       // skip it if something JS awaited, we do not process it currently
       if (object.isShouldValidateAgainstJSType()) continue;
 
@@ -380,7 +378,7 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     }
     if (correct.size() == 1) return correct.get(0);
     if (correct.size() > 0) {
-      final JsonSchemaType type = JsonSchemaType.getType(value);
+      final fit.jetbrains.jsonSchema.impl.JsonSchemaType type = fit.jetbrains.jsonSchema.impl.JsonSchemaType.getType(value);
       if (type != null) {
         // also check maybe some currently not checked properties like format are different with schemes
         // todo note that JsonSchemaObject#equals is broken by design, so normally it shouldn't be used until rewritten
@@ -395,7 +393,7 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     return showErrorsAndGetLeastErroneous(candidateErroneousCheckers, candidateErroneousSchemas, true);
   }
 
-  private static boolean schemesDifferWithNotCheckedProperties(@NotNull final List<JsonSchemaObject> list) {
+  private static boolean schemesDifferWithNotCheckedProperties(@NotNull final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> list) {
     return list.stream().anyMatch(s -> !StringUtil.isEmptyOrSpaces(s.getFormat()));
   }
 
@@ -413,23 +411,16 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
     boolean hasMedium = false;
     boolean hasMissing = false;
     boolean hasHard = false;
-    Collection<JsonValidationError> values = checker.getErrors().values();
-    for (JsonValidationError value: values) {
+    Collection<fit.jetbrains.jsonSchema.impl.JsonValidationError> values = checker.getErrors().values();
+    for (fit.jetbrains.jsonSchema.impl.JsonValidationError value: values) {
       switch (value.getPriority()) {
-        case LOW_PRIORITY:
-          lowPriorityCount++;
-          break;
-        case MISSING_PROPS:
-          hasMissing = true;
-          break;
-        case MEDIUM_PRIORITY:
-          hasMedium = true;
-          break;
-        case TYPE_MISMATCH:
-          hasHard = true;
-          break;
-        case NOT_SCHEMA:
+        case LOW_PRIORITY -> lowPriorityCount++;
+        case MISSING_PROPS -> hasMissing = true;
+        case MEDIUM_PRIORITY -> hasMedium = true;
+        case TYPE_MISMATCH -> hasHard = true;
+        case NOT_SCHEMA -> {
           return AverageFailureAmount.NotSchema;
+        }
       }
     }
 
@@ -450,11 +441,11 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   // returns the schema, selected for annotation
-  private JsonSchemaObject processAnyOf(@NotNull JsonValueAdapter value, List<JsonSchemaObject> anyOf) {
+  private fit.jetbrains.jsonSchema.impl.JsonSchemaObject processAnyOf(@NotNull JsonValueAdapter value, List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> anyOf) {
     final List<JsonSchemaAnnotatorChecker> candidateErroneousCheckers = new ArrayList<>();
-    final List<JsonSchemaObject> candidateErroneousSchemas = new ArrayList<>();
+    final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> candidateErroneousSchemas = new ArrayList<>();
 
-    for (JsonSchemaObject object : anyOf) {
+    for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject object : anyOf) {
       final JsonSchemaAnnotatorChecker checker = new JsonSchemaAnnotatorChecker(myProject, myOptions);
       checker.checkByScheme(value, object);
       if (checker.isCorrect()) {
@@ -476,10 +467,10 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
    *   - by detecting the most "likely" schema corresponding to the current entity
    */
   @Nullable
-  private JsonSchemaObject showErrorsAndGetLeastErroneous(@NotNull List<JsonSchemaAnnotatorChecker> candidateErroneousCheckers,
-                                                          @NotNull List<JsonSchemaObject> candidateErroneousSchemas,
-                                                          boolean isOneOf) {
-    JsonSchemaObject current = null;
+  private fit.jetbrains.jsonSchema.impl.JsonSchemaObject showErrorsAndGetLeastErroneous(@NotNull List<JsonSchemaAnnotatorChecker> candidateErroneousCheckers,
+                                                                                        @NotNull List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> candidateErroneousSchemas,
+                                                                                        boolean isOneOf) {
+    fit.jetbrains.jsonSchema.impl.JsonSchemaObject current = null;
     JsonSchemaObject currentWithMinAverage = null;
     Optional<AverageFailureAmount> minAverage = candidateErroneousCheckers.stream()
                                                                           .map(c -> getAverageFailureAmount(c))
@@ -488,8 +479,8 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
 
     int minErrorCount = candidateErroneousCheckers.stream().map(c -> c.getErrors().size()).min(Integer::compareTo).orElse(Integer.MAX_VALUE);
 
-    MultiMap<PsiElement, JsonValidationError> errorsWithMinAverage = MultiMap.create();
-    MultiMap<PsiElement, JsonValidationError> allErrors = MultiMap.create();
+    MultiMap<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> errorsWithMinAverage = new MultiMap<>();
+    MultiMap<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> allErrors = new MultiMap<>();
     for (int i = 0; i < candidateErroneousCheckers.size(); i++) {
       JsonSchemaAnnotatorChecker checker = candidateErroneousCheckers.get(i);
       final boolean isMoreThanMinErrors = checker.getErrors().size() > minErrorCount;
@@ -502,7 +493,7 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
           current = candidateErroneousSchemas.get(i);
         }
 
-        for (Map.Entry<PsiElement, JsonValidationError> entry: checker.getErrors().entrySet()) {
+        for (Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> entry: checker.getErrors().entrySet()) {
           (isMoreThanAverage ? errorsWithMinAverage : allErrors).putValue(entry.getKey(), entry.getValue());
         }
       }
@@ -510,19 +501,19 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
 
     if (allErrors.isEmpty()) allErrors = errorsWithMinAverage;
 
-    for (Map.Entry<PsiElement, Collection<JsonValidationError>> entry : allErrors.entrySet()) {
-      Collection<JsonValidationError> value = entry.getValue();
+    for (Map.Entry<PsiElement, Collection<fit.jetbrains.jsonSchema.impl.JsonValidationError>> entry : allErrors.entrySet()) {
+      Collection<fit.jetbrains.jsonSchema.impl.JsonValidationError> value = entry.getValue();
       if (value.size() == 0) continue;
       if (value.size() == 1) {
         error(entry.getKey(), value.iterator().next());
         continue;
       }
-      JsonValidationError error = tryMergeErrors(value, isOneOf);
+      fit.jetbrains.jsonSchema.impl.JsonValidationError error = tryMergeErrors(value, isOneOf);
       if (error != null) {
         error(entry.getKey(), error);
       }
       else {
-        for (JsonValidationError validationError : value) {
+        for (fit.jetbrains.jsonSchema.impl.JsonValidationError validationError : value) {
           error(entry.getKey(), validationError);
         }
       }
@@ -539,51 +530,50 @@ public class JsonSchemaAnnotatorChecker implements JsonValidationHost {
   }
 
   @Nullable
-  private static JsonValidationError tryMergeErrors(@NotNull Collection<JsonValidationError> errors, boolean isOneOf) {
-    JsonValidationError.FixableIssueKind commonIssueKind = null;
-    for (JsonValidationError error : errors) {
-      JsonValidationError.FixableIssueKind currentIssueKind = error.getFixableIssueKind();
-      if (currentIssueKind == JsonValidationError.FixableIssueKind.None) return null;
+  private static fit.jetbrains.jsonSchema.impl.JsonValidationError tryMergeErrors(@NotNull Collection<fit.jetbrains.jsonSchema.impl.JsonValidationError> errors, boolean isOneOf) {
+    fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind commonIssueKind = null;
+    for (fit.jetbrains.jsonSchema.impl.JsonValidationError error : errors) {
+      fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind currentIssueKind = error.getFixableIssueKind();
+      if (currentIssueKind == fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.None) return null;
       else if (commonIssueKind == null) commonIssueKind = currentIssueKind;
       else if (currentIssueKind != commonIssueKind) return null;
     }
 
-    if (commonIssueKind == JsonValidationError.FixableIssueKind.NonEnumValue) {
+    if (commonIssueKind == fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.NonEnumValue) {
       String prefix = JsonBundle.message("schema.validation.enum.mismatch", "");
-      return new JsonValidationError(prefix
-                                     + errors
-                                       .stream()
-                                       // todo remove this ugly textual cutting
-                                       .map(e -> StringUtil.trimEnd(StringUtil.trimStart(e.getMessage(), prefix), prefix) /*ltr and rtl*/)
-                                       .map(e -> StringUtil.split(e, ", "))
-                                       .flatMap(e -> e.stream())
-                                       .distinct()
-                                       .collect(Collectors.joining(", ")), commonIssueKind, null, errors.iterator().next().getPriority());
+      @NlsSafe String text = errors.stream()
+        // todo remove this ugly textual cutting
+        .map(e -> StringUtil.trimEnd(StringUtil.trimStart(e.getMessage(), prefix), prefix) /*ltr and rtl*/)
+        .map(e -> StringUtil.split(e, ", "))
+        .flatMap(e -> e.stream())
+        .distinct()
+        .collect(Collectors.joining(", "));
+      return new fit.jetbrains.jsonSchema.impl.JsonValidationError(prefix + text, commonIssueKind, null, errors.iterator().next().getPriority());
     }
 
-    if (commonIssueKind == JsonValidationError.FixableIssueKind.MissingProperty) {
-      String sets = errors.stream().map(e -> (JsonValidationError.MissingMultiplePropsIssueData)e.getIssueData())
-        .map(d -> d.getMessage(false)).collect(Collectors.joining(", or "));
-      return new JsonValidationError(JsonBundle.message(
+    if (commonIssueKind == fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.MissingProperty) {
+      String sets = errors.stream().map(e -> (fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData)e.getIssueData())
+        .map(d -> d.getMessage(false)).collect(NlsMessages.joiningOr());
+      return new fit.jetbrains.jsonSchema.impl.JsonValidationError(JsonBundle.message(
         isOneOf ? "schema.validation.one.of.property.sets.required" : "schema.validation.at.least.one.of.property.sets.required", sets),
-                                     isOneOf ? JsonValidationError.FixableIssueKind.MissingOneOfProperty : JsonValidationError.FixableIssueKind.MissingAnyOfProperty,
-                                     new JsonValidationError.MissingOneOfPropsIssueData(
-                                       ContainerUtil.map(errors, e -> (JsonValidationError.MissingMultiplePropsIssueData)e.getIssueData())), errors.iterator().next().getPriority());
+                                     isOneOf ? fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.MissingOneOfProperty : fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.MissingAnyOfProperty,
+                                     new fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingOneOfPropsIssueData(
+                                       ContainerUtil.map(errors, e -> (fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData)e.getIssueData())), errors.iterator().next().getPriority());
     }
 
-    if (commonIssueKind == JsonValidationError.FixableIssueKind.ProhibitedType) {
-      final Set<JsonSchemaType> allTypes = errors.stream().map(e -> (JsonValidationError.TypeMismatchIssueData)e.getIssueData())
+    if (commonIssueKind == fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.ProhibitedType) {
+      final Set<fit.jetbrains.jsonSchema.impl.JsonSchemaType> allTypes = errors.stream().map(e -> (fit.jetbrains.jsonSchema.impl.JsonValidationError.TypeMismatchIssueData)e.getIssueData())
         .flatMap(d -> Arrays.stream(d.expectedTypes)).collect(Collectors.toSet());
 
       if (allTypes.size() == 1) return errors.iterator().next();
 
-      List<String> actualInfos = errors.stream().map(e -> e.getMessage()).map(JsonSchemaAnnotatorChecker::fetchActual).distinct().collect(Collectors.toList());
+      List<String> actualInfos = errors.stream().map(e -> e.getMessage()).map(JsonSchemaAnnotatorChecker::fetchActual).distinct().toList();
       String actualInfo = actualInfos.size() == 1 ? (" " + JsonBundle.message("schema.validation.actual") + actualInfos.get(0) + ".") : "";
       String commonTypeMessage = JsonBundle.message("schema.validation.incompatible.types") + "\n" +
                                  JsonBundle.message("schema.validation.required.one.of",
                                                     allTypes.stream().map(t -> t.getDescription()).sorted().collect(Collectors.joining(", ")),
                                                     actualInfo);
-      return new JsonValidationError(commonTypeMessage, JsonValidationError.FixableIssueKind.TypeMismatch,
+      return new fit.jetbrains.jsonSchema.impl.JsonValidationError(commonTypeMessage, fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.TypeMismatch,
                                      new JsonValidationError.TypeMismatchIssueData(ContainerUtil.toArray(allTypes, JsonSchemaType[]::new)),
                                      errors.iterator().next().getPriority());
     }

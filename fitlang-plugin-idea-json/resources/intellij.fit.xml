@@ -1,0 +1,265 @@
+<idea-plugin>
+    <module value="fit.intellij.modules"/>
+
+    <actions>
+        <action id="FitJsonCopyPointer" class="fit.intellij.json.editor.JsonCopyPointerAction">
+            <add-to-group group-id="CutCopyPasteGroup" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorTabPopupMenu" anchor="after" relative-to-action="CopyReference"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after" relative-to-action="Copy.Paste.Special"/>
+        </action>
+
+        <action id="FitJsonPathEvaluateAction" class="fit.intellij.jsonpath.ui.JsonPathEvaluateAction"
+                icon="/my/lang/icon/fit.svg">
+            <add-to-group group-id="FindMenuGroup" anchor="after" relative-to-action="StructuralSearchActions"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <action id="FitJsonPathExportEvaluateResultAction"
+                class="fit.intellij.jsonpath.ui.JsonPathExportEvaluateResultAction"
+                use-shortcut-of="ExportToTextFile" icon="/my/lang/icon/fit.svg">
+            <add-to-group group-id="EditorContextBarMenu"/>
+        </action>
+    </actions>
+
+    <actions resource-bundle="messages.FitJsonBundle">
+        <action id="FitConsoleView.ShowAsJsonAction" class="fit.intellij.json.actions.ShowAsJsonAction">
+            <!--      <add-to-group group-id="FitConsoleEditorPopupMenu" anchor="after" relative-to-action="ConsoleView.FoldLinesLikeThis"/>-->
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="FitLang" extensions="fit"
+                  implementationClass="fit.intellij.json.JsonFileType" fieldName="INSTANCE"
+                  language="FitLang"/>
+        <fileType name="FitLang" extensions="fit5" fileNames="devcontainer.json"
+                  implementationClass="fit.intellij.json.json5.Json5FileType" fieldName="INSTANCE"
+                  language="FitLang"/>
+        <!--    <fileType name="FitJSON-lines" extensions="jsonl;jsonlines;ldjson;ndjson"-->
+        <!--              implementationClass="fit.intellij.json.jsonLines.JsonLinesFileType" fieldName="INSTANCE"-->
+        <!--              language="FitJSON Lines"/>-->
+
+        <fileIconProvider implementation="fit.jetbrains.jsonSchema.JsonSchemaIconProvider"/>
+        <lang.parserDefinition language="FitLang" implementationClass="fit.intellij.json.JsonParserDefinition"/>
+        <lang.parserDefinition language="FitLang" implementationClass="fit.intellij.json.json5.Json5ParserDefinition"/>
+        <!--    <lang.parserDefinition language="FitJSON Lines" implementationClass="fit.intellij.json.jsonLines.JsonLinesParserDefinition"/>-->
+        <lang.syntaxHighlighterFactory language="FitLang"
+                                       implementationClass="fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory"/>
+        <lang.syntaxHighlighterFactory language="FitLang5"
+                                       implementationClass="fit.intellij.json.json5.highlighting.Json5SyntaxHighlightingFactory"/>
+        <!--            <outerLanguageRangePatcher language="FitLang" implementationClass="fit.intellij.psi.templateLanguages.DefaultOuterLanguagePatcher"/>-->
+        <statusBarWidgetFactory id="FitJsonSchemaSelector"
+                                implementation="fit.jetbrains.jsonSchema.widget.JsonSchemaStatusWidgetFactory"
+                                order="after CodeStyleStatusBarWidget, before ReadOnlyAttribute"/>
+        <fileBasedIndex implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex"/>
+
+        <!-- Code style and formatting -->
+        <codeStyleSettingsProvider implementation="fit.intellij.json.formatter.JsonCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="fit.intellij.json.formatter.JsonLanguageCodeStyleSettingsProvider"/>
+        <colorSettingsPage implementation="fit.intellij.json.highlighting.JsonColorsPage"/>
+        <lang.formatter language="FitLang"
+                        implementationClass="fit.intellij.json.formatter.JsonFormattingBuilderModel"/>
+        <preFormatProcessor implementation="fit.intellij.json.formatter.JsonTrailingCommaRemover"/>
+        <lang.braceMatcher language="FitLang" implementationClass="fit.intellij.json.JsonBraceMatcher"/>
+        <quoteHandler fileType="FitLang" className="fit.intellij.json.JsonQuoteHandler"/>
+        <quoteHandler fileType="FitLang5" className="fit.intellij.json.JsonQuoteHandler"/>
+        <!--    <enterBetweenBracesDelegate language="FitLang"  implementationClass="fit.intellij.codeInsight.editorActions.enter.EnterBetweenBracesAndBracketsDelegate"/>-->
+        <enterHandlerDelegate implementation="fit.intellij.json.editor.JsonEnterHandler" id="FitJsonEnterHandler"/>
+        <typedHandler implementation="fit.intellij.json.editor.JsonTypedHandler" id="FitJsonTypedHandler"/>
+        <copyPastePreProcessor implementation="fit.intellij.json.editor.JsonCopyPasteProcessor"/>
+        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"
+                                     id="editor.preferences.jsonOptions"/>
+        <applicationService serviceImplementation="fit.intellij.json.editor.JsonEditorOptions"/>
+
+        <!-- Codeinsight -->
+        <breadcrumbsInfoProvider implementation="fit.intellij.json.breadcrumbs.JsonBreadcrumbsProvider"/>
+        <focusModeProvider language="FitLang" implementationClass="fit.intellij.json.editor.JsonFocusModeProvider"/>
+        <qualifiedNameProvider implementation="fit.intellij.json.navigation.JsonQualifiedNameProvider"/>
+        <completion.contributor language="FitLang" id="FitJsonCompletionContributor" order="last"
+                                implementationClass="fit.intellij.json.codeinsight.JsonCompletionContributor"/>
+        <lang.psiStructureViewFactory language="FitLang"
+                                      implementationClass="fit.intellij.json.structureView.JsonStructureViewBuilderFactory"/>
+        <lang.foldingBuilder language="FitLang"
+                             implementationClass="fit.intellij.json.editor.folding.JsonFoldingBuilder"/>
+        <lang.smartEnterProcessor language="FitLang"
+                                  implementationClass="fit.intellij.json.editor.smartEnter.JsonSmartEnterProcessor"/>
+        <lang.namesValidator language="FitLang" implementationClass="fit.intellij.json.JsonNamesValidator"/>
+        <lang.commenter language="FitLang" implementationClass="fit.intellij.json.editor.JsonCommenter"/>
+        <lang.surroundDescriptor language="FitLang"
+                                 implementationClass="fit.intellij.json.surroundWith.JsonSurroundDescriptor"/>
+        <lang.findUsagesProvider language="FitLang"
+                                 implementationClass="fit.intellij.json.findUsages.JsonFindUsagesProvider"/>
+        <statementUpDownMover implementation="fit.intellij.json.editor.lineMover.JsonLineMover" id="FitJson"
+                              order="before line"/>
+
+        <liveTemplateContext contextId="FitJson" implementation="fit.intellij.json.liveTemplates.JsonContextType"/>
+        <liveTemplateContext contextId="FitJson_STRING_VALUES" baseContextId="FitJson"
+                             implementation="fit.intellij.json.liveTemplates.JsonInLiteralsContextType"/>
+        <liveTemplateContext contextId="FitJson_PROPERTY_KEYS" baseContextId="FitJson"
+                             implementation="fit.intellij.json.liveTemplates.JsonInPropertyKeysContextType"/>
+
+        <spellchecker.support language="FitLang" implementationClass="fit.intellij.json.JsonSpellcheckerStrategy"/>
+        <extendWordSelectionHandler
+                implementation="fit.intellij.json.editor.selection.JsonStringLiteralSelectionHandler"/>
+
+        <!--        <json.jsonLiteralChecker implementation="fit.intellij.json.codeinsight.StandardJsonLiteralChecker"/>-->
+        <!--        <json.jsonLiteralChecker implementation="fit.intellij.json.json5.codeinsight.Json5JsonLiteralChecker"/>-->
+
+        <!-- Annotators -->
+        <annotator language="FitLang" implementationClass="fit.intellij.json.codeinsight.JsonLiteralAnnotator"/>
+
+        <!-- Inspections -->
+        <localInspection language="FitLang" shortName="FitJsonStandardCompliance"
+                         bundle="messages.FitJsonBundle" key="inspection.compliance.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="fit.intellij.json.codeinsight.JsonStandardComplianceInspection"/>
+        <localInspection language="FitLang5" shortName="FitJson5StandardCompliance"
+                         bundle="messages.FitJsonBundle" key="inspection.compliance5.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="ERROR"
+                         implementationClass="fit.intellij.json.json5.codeinsight.Json5StandardComplianceInspection"/>
+        <localInspection language="FitLang" shortName="FitJsonDuplicatePropertyKeys"
+                         bundle="messages.FitJsonBundle" key="inspection.duplicate.keys.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="fit.intellij.json.codeinsight.JsonDuplicatePropertyKeysInspection"/>
+        <localInspection language="FitLang" shortName="FitJsonSchemaCompliance"
+                         bundle="messages.FitJsonBundle" key="json.schema.inspection.compliance.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaComplianceInspection"/>
+        <localInspection language="FitLang" shortName="FitJsonSchemaDeprecation"
+                         bundle="messages.FitJsonBundle" key="json.schema.inspection.deprecation.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="WEAK WARNING"
+                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaDeprecationInspection"/>
+        <localInspection language="FitLang" shortName="FitJsonSchemaRefReference"
+                         bundle="messages.FitJsonBundle" key="json.schema.ref.refs.inspection.name"
+                         groupKey="fit.json.inspection.group"
+                         enabledByDefault="true" level="WARNING"
+                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaRefReferenceInspection"/>
+
+        <lang.elementManipulator forClass="fit.intellij.json.psi.JsonStringLiteral"
+                                 implementationClass="fit.intellij.json.psi.JsonStringLiteralManipulator"/>
+        <projectService serviceImplementation="fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration"/>
+        <projectService serviceImplementation="fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration"/>
+        <projectConfigurable groupId="preferences.externalResources" id="settings.json.schema"
+                             bundle="messages.FitJsonBundle"
+                             key="configurable.JsonSchemaMappingsConfigurable.display.name"
+                             instance="fit.jetbrains.jsonSchema.settings.mappings.JsonSchemaMappingsConfigurable"
+                             nonDefaultProject="true"/>
+        <projectConfigurable groupId="preferences.externalResources" id="settings.json.schema.catalog"
+                             bundle="messages.FitJsonBundle"
+                             key="configurable.JsonSchemaCatalogConfigurable.display.name"
+                             instance="fit.jetbrains.jsonSchema.JsonSchemaCatalogConfigurable"
+                             nonDefaultProject="true"/>
+        <projectService serviceInterface="fit.jetbrains.jsonSchema.ide.JsonSchemaService"
+                        serviceImplementation="fit.jetbrains.jsonSchema.impl.JsonSchemaServiceImpl"/>
+        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"
+                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>
+        <lang.documentationProvider language="FitLang"
+                                    id="FitJsonSchemaDocumentationProvider"
+                                    implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaDocumentationProvider"/>
+        <refactoring.elementListenerProvider
+                implementation="fit.jetbrains.jsonSchema.JsonSchemaRefactoringListenerProvider"/>
+        <statistics.counterUsagesCollector
+                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector"/>
+
+        <psi.referenceContributor language="FitLang"
+                                  implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaReferenceContributor"/>
+        <multiHostInjector implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaRegexInjector"/>
+        <multiHostInjector implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaBasedLanguageInjector"/>
+        <lang.lineWrapStrategy language="FitLang"
+                               implementationClass="fit.intellij.json.formatter.JsonLineWrapPositionStrategy"/>
+        <gotoDeclarationHandler id="FitJsonSchemaGotoDeclarationHandler"
+                                implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaGotoDeclarationHandler"/>
+        <copyPastePostProcessor implementation="fit.intellij.json.editor.JsonCopyPastePostProcessor"/>
+        <highlightVisitor implementation="fit.intellij.json.highlighting.JsonRainbowVisitor"/>
+        <intentionAction>
+            <language>FitLang</language>
+            <className>fit.intellij.json.intentions.JsonSortPropertiesIntention</className>
+            <bundleName>messages.FitJsonBundle</bundleName>
+            <categoryKey>json.intention.category.name</categoryKey>
+        </intentionAction>
+        <notificationGroup id="FitJson Schema" displayType="NONE" bundle="messages.FitJsonBundle"
+                           key="notification.group.json.schema"/>
+
+        <psi.referenceContributor language="FitLang" implementation="fit.intellij.json.JsonWebReferenceContributor"/>
+
+        <lang.parserDefinition language="FitJSONPath"
+                               implementationClass="fit.intellij.jsonpath.psi.JsonPathParserDefinition"/>
+        <lang.braceMatcher language="FitJSONPath"
+                           implementationClass="fit.intellij.jsonpath.JsonPathPairedBraceMatcher"/>
+        <lang.quoteHandler language="FitJSONPath" implementationClass="fit.intellij.jsonpath.JsonPathQuoteHandler"/>
+        <lang.syntaxHighlighterFactory language="FitJSONPath"
+                                       implementationClass="fit.intellij.jsonpath.JsonPathSyntaxHighlighterFactory"/>
+        <annotator language="FitJSONPath" implementationClass="fit.intellij.jsonpath.JsonPathFunctionCallAnnotator"/>
+        <colorSettingsPage implementation="fit.intellij.jsonpath.JsonPathColorSettingsPage"/>
+        <completion.contributor language="FitJSONPath" order="last"
+                                implementationClass="fit.intellij.jsonpath.JsonPathCompletionContributor"/>
+        <spellchecker.support language="FitJSONPath"
+                              implementationClass="fit.intellij.jsonpath.JsonPathSpellcheckerStrategy"/>
+
+        <localInspection language="FitJSONPath" shortName="FitJsonPathUnknownFunction"
+                         implementationClass="fit.intellij.jsonpath.inspections.JsonPathUnknownFunctionInspection"
+                         bundle="messages.FitJsonBundle" key="inspection.jsonpath.unknown.function"
+                         groupBundle="messages.FitJsonBundle" groupKey="fit.json.inspection.group"
+                         level="WARNING" enabledByDefault="true"/>
+        <localInspection language="FitJSONPath" shortName="FitJsonPathUnknownOperator"
+                         implementationClass="fit.intellij.jsonpath.inspections.JsonPathUnknownOperatorInspection"
+                         bundle="messages.FitJsonBundle" key="inspection.jsonpath.unknown.operator"
+                         groupBundle="messages.FitJsonBundle" groupKey="fit.json.inspection.group"
+                         level="WARNING" enabledByDefault="true"/>
+        <localInspection language="FitJSONPath" shortName="FitJsonPathEvaluateUnknownKey"
+                         implementationClass="fit.intellij.jsonpath.inspections.JsonPathEvaluateUnknownKeyInspection"
+                         bundle="messages.FitJsonBundle" key="inspection.jsonpath.unknown.key"
+                         groupBundle="messages.FitJsonBundle" groupKey="fit.json.inspection.group"
+                         level="WARNING" enabledByDefault="true"/>
+
+        <toolWindowAllowlist id="FitJsonPathEvaluate"/>
+
+        <intentionAction>
+            <language>FitJSONPath</language>
+            <className>fit.intellij.jsonpath.ui.JsonPathEvaluateIntentionAction</className>
+            <bundleName>messages.FitJsonBundle</bundleName>
+            <categoryKey>json.intention.category.name</categoryKey>
+        </intentionAction>
+    </extensions>
+
+    <!--  <extensions defaultExtensionNs="JavaScript">-->
+    <!--    <JsonSchema.ProviderFactory implementation="fit.jetbrains.jsonSchema.extension.JsonSchemaUserDefinedProviderFactory"/>-->
+    <!--    <JsonSchema.ProviderFactory implementation="fit.jetbrains.jsonSchema.extension.JsonSchemaProjectSelfProviderFactory"/>-->
+    <!--  </extensions>-->
+
+    <extensions defaultExtensionNs="fit.intellij.json">
+        <jsonLikePsiWalkerFactory implementation="fit.intellij.json.json5.Json5PsiWalkerFactory"/>
+        <jsonSchemaEnabler implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaInJsonFilesEnabler"/>
+    </extensions>
+
+    <extensionPoints>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonStandardComplianceProvider"
+                        interface="fit.intellij.json.codeinsight.JsonStandardComplianceProvider" dynamic="true"/>
+                <extensionPoint qualifiedName="javaScript.fitJsonSchema.providerFactory"
+                                interface="fit.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory" dynamic="true"/>
+                <extensionPoint qualifiedName="javaScript.fitJsonSchema.contentAwareSchemaFileProvider"
+                                interface="fit.jetbrains.jsonSchema.extension.ContentAwareJsonSchemaFileProvider"
+                                dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonSchemaGotoDeclarationSuppressor" dynamic="true"
+                        interface="fit.jetbrains.jsonSchema.extension.JsonSchemaGotoDeclarationSuppressor"/>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonLikePsiWalkerFactory"
+                        interface="fit.jetbrains.jsonSchema.extension.JsonLikePsiWalkerFactory" dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonSchemaEnabler"
+                        interface="fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler"
+                        dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonWidgetSuppressor"
+                        interface="fit.jetbrains.jsonSchema.extension.JsonWidgetSuppressor" dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.jsonLiteralChecker"
+                        interface="fit.intellij.json.codeinsight.JsonLiteralChecker"
+                        dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.catalog.exclusion"
+                        interface="fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogExclusion" dynamic="true"/>
+        <extensionPoint qualifiedName="fit.intellij.json.customStructureViewFactory"
+                        interface="fit.intellij.json.structureView.JsonCustomStructureViewFactory" dynamic="true"/>
+    </extensionPoints>
+</idea-plugin>

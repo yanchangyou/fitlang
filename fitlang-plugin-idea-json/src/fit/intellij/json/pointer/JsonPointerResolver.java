@@ -11,31 +11,31 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class JsonPointerResolver {
-  private final JsonValue myRoot;
+  private final fit.intellij.json.psi.JsonValue myRoot;
   private final String myPointer;
 
-  public JsonPointerResolver(@NotNull JsonValue root, @NotNull String pointer) {
+  public JsonPointerResolver(@NotNull fit.intellij.json.psi.JsonValue root, @NotNull String pointer) {
     myRoot = root;
     myPointer = pointer;
   }
 
   @Nullable
-  public JsonValue resolve() {
-    JsonValue root = myRoot;
-    final List<JsonPointerPosition.Step> steps = JsonPointerPosition.parsePointer(myPointer).getSteps();
+  public fit.intellij.json.psi.JsonValue resolve() {
+    fit.intellij.json.psi.JsonValue root = myRoot;
+    final List<fit.intellij.json.pointer.JsonPointerPosition.Step> steps = fit.intellij.json.pointer.JsonPointerPosition.parsePointer(myPointer).getSteps();
     for (JsonPointerPosition.Step step : steps) {
       String name = step.getName();
       if (name != null) {
-        if (!(root instanceof JsonObject)) return null;
-        JsonProperty property = ((JsonObject)root).findProperty(name);
+        if (!(root instanceof fit.intellij.json.psi.JsonObject)) return null;
+        fit.intellij.json.psi.JsonProperty property = ((fit.intellij.json.psi.JsonObject)root).findProperty(name);
         root = property == null ? null : property.getValue();
       }
       else {
         int idx = step.getIdx();
         if (idx < 0) return null;
 
-        if (!(root instanceof JsonArray)) {
-          if (root instanceof JsonObject) {
+        if (!(root instanceof fit.intellij.json.psi.JsonArray)) {
+          if (root instanceof fit.intellij.json.psi.JsonObject) {
             JsonProperty property = ((JsonObject)root).findProperty(String.valueOf(idx));
             if (property == null) {
               return null;

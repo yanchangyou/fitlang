@@ -15,11 +15,11 @@
  */
 package fit.intellij.json.psi.impl;
 
-import fit.intellij.json.psi.JsonObject;
-import fit.intellij.json.psi.JsonProperty;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import fit.intellij.json.psi.JsonObject;
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,10 +30,10 @@ import java.util.Map;
  * @author Mikhail Golubev
  */
 public abstract class JsonObjectMixin extends JsonContainerImpl implements JsonObject {
-  private final CachedValueProvider<Map<String, JsonProperty>> myPropertyCache =
+  private final CachedValueProvider<Map<String, fit.intellij.json.psi.JsonProperty>> myPropertyCache =
     () -> {
-      final Map<String, JsonProperty> cache = new HashMap<>();
-      for (JsonProperty property : getPropertyList()) {
+      final Map<String, fit.intellij.json.psi.JsonProperty> cache = new HashMap<>();
+      for (fit.intellij.json.psi.JsonProperty property : getPropertyList()) {
         final String propertyName = property.getName();
         // Preserve the old behavior - return the first value in findProperty()
         if (!cache.containsKey(propertyName)) {

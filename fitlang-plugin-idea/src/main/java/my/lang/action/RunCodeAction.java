@@ -410,11 +410,12 @@ public abstract class RunCodeAction extends AnAction {
             }
 
             @Override
-            public void showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
+            public JSONObject showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
                 JsonPagePanel jsonPagePanel = new JsonPagePanel(jsonPage, jsonData, option, context);
-                jsonPagePanel.show();
+                jsonPagePanel.showAndGet();
 
+                return jsonPagePanel.getJsonData();
             }
 
             @Override

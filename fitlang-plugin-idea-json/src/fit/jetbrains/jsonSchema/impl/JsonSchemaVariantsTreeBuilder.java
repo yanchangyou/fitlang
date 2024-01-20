@@ -1,4 +1,4 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl;
 
 import fit.intellij.json.pointer.JsonPointerPosition;
@@ -9,18 +9,14 @@ import com.intellij.util.SmartList;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.jetbrains.jsonSchema.JsonPointerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static fit.jetbrains.jsonSchema.JsonPointerUtil.isSelfReference;
-
-/**
- * @author Irina.Chernushina on 4/20/2017.
- */
-public class JsonSchemaVariantsTreeBuilder {
+public final class JsonSchemaVariantsTreeBuilder {
 
   public static fit.jetbrains.jsonSchema.impl.JsonSchemaTreeNode buildTree(@NotNull Project project,
                                                                            @NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
@@ -455,7 +451,7 @@ public class JsonSchemaVariantsTreeBuilder {
     private final String myRelativePath;
 
     public SchemaUrlSplitter(@NotNull final String ref) {
-      if (isSelfReference(ref)) {
+      if (JsonPointerUtil.isSelfReference(ref)) {
         mySchemaId = null;
         myRelativePath = "";
         return;

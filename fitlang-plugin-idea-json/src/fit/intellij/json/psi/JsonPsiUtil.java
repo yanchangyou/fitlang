@@ -1,7 +1,6 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.psi;
 
-import fit.intellij.json.JsonElementTypes;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.psi.PsiElement;
@@ -10,6 +9,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonTokenSets;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,15 +19,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static fit.intellij.json.JsonParserDefinition.JSON_COMMENTARIES;
-
 /**
  * Various helper methods for working with PSI of JSON language.
  *
  * @author Mikhail Golubev
  */
 @SuppressWarnings("UnusedDeclaration")
-public class JsonPsiUtil {
+public final class JsonPsiUtil {
   private JsonPsiUtil() {
     // empty
   }
@@ -53,17 +52,6 @@ public class JsonPsiUtil {
     return parent instanceof JsonProperty && element == ((JsonProperty)parent).getNameElement();
   }
 
-  public static boolean isKeyword(@NotNull PsiElement element) {
-    final PsiElement parent = element.getParent();
-    return parent instanceof JsonProperty && element == ((JsonProperty) parent).getNameElement()
-            && ("\"uni\"".equals(element.getText())
-//            || "\"input\"".equals(element.getText())
-//            || "\"output\"".equals(element.getText())
-//            || "\"id\"".equals(element.getText())
-//            || "\"name\"".equals(element.getText())
-    );
-  }
-
   /**
    * Checks that PSI element represents value of JSON property (key-value pair of JSON object)
    *
@@ -78,7 +66,7 @@ public class JsonPsiUtil {
   /**
    * Find the furthest sibling element with the same type as given anchor.
    * <p/>
-   * Ignore white spaces for any type of element except {@link JsonElementTypes#LINE_COMMENT}
+   * Ignore white spaces for any type of element except {@link fit.intellij.json.JsonElementTypes#LINE_COMMENT}
    * where non indentation white space (that has new line in the middle) will stop the search.
    *
    * @param anchor element to start from
@@ -97,11 +85,11 @@ public class JsonPsiUtil {
         lastSeen = node;
       }
       else if (elementType == TokenType.WHITE_SPACE) {
-        if (expectedType == JsonElementTypes.LINE_COMMENT && node.getText().indexOf('\n', 1) != -1) {
+        if (expectedType == fit.intellij.json.JsonElementTypes.LINE_COMMENT && node.getText().indexOf('\n', 1) != -1) {
           break;
         }
       }
-      else if (!JSON_COMMENTARIES.contains(elementType) || JSON_COMMENTARIES.contains(expectedType)) {
+      else if (!JsonTokenSets.JSON_COMMENTARIES.contains(elementType) || JsonTokenSets.JSON_COMMENTARIES.contains(expectedType)) {
         break;
       }
       node = after ? node.getTreeNext() : node.getTreePrev();
@@ -168,7 +156,6 @@ public class JsonPsiUtil {
    * </ul>
    *
    * @param text presumably result of {@link JsonStringLiteral#getText()}
-   * @return
    */
   @NotNull
   public static String stripQuotes(@NotNull String text) {

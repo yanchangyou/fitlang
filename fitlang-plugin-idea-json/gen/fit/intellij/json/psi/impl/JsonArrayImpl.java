@@ -2,35 +2,34 @@
 package fit.intellij.json.psi.impl;
 
 import java.util.List;
+
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static fit.intellij.json.JsonElementTypes.*;
-import fit.intellij.json.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class JsonArrayImpl extends JsonContainerImpl implements JsonArray {
+public class JsonArrayImpl extends JsonContainerImpl implements fit.intellij.json.psi.JsonArray {
 
   public JsonArrayImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
-  public void accept(@NotNull JsonElementVisitor visitor) {
+  public void accept(@NotNull fit.intellij.json.psi.JsonElementVisitor visitor) {
     visitor.visitArray(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JsonElementVisitor) accept((JsonElementVisitor)visitor);
+    if (visitor instanceof fit.intellij.json.psi.JsonElementVisitor) accept((fit.intellij.json.psi.JsonElementVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<JsonValue> getValueList() {
+  public List<fit.intellij.json.psi.JsonValue> getValueList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, JsonValue.class);
   }
 

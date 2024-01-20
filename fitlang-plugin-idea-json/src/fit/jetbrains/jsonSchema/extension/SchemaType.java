@@ -15,9 +15,6 @@
  */
 package fit.jetbrains.jsonSchema.extension;
 
-/**
- * @author Irina.Chernushina on 3/29/2016.
- */
 public enum SchemaType {
   schema, embeddedSchema, userSchema, remoteSchema
 }

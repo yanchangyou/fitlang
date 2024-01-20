@@ -4,7 +4,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
@@ -27,6 +26,8 @@ public class JsonPagePanel extends DialogWrapper {
     JSONObject context;
 
     JBCefBrowser browser;
+
+    JBCefJSQuery jsQuery;
 
     public JsonPagePanel(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
@@ -67,6 +68,10 @@ public class JsonPagePanel extends DialogWrapper {
 
     }
 
+    public JSONObject getJsonData() {
+        return jsonData;
+    }
+
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
     @Nullable
     @Override
@@ -83,18 +88,33 @@ public class JsonPagePanel extends DialogWrapper {
         if (Boolean.TRUE.equals(option.getBoolean("devTools"))) {
             browser.openDevtools();
         }
+
+        jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+
+        jsQuery.addHandler((data) -> {
+
+            jsonData = JSONObject.parse(data);
+            return new JBCefJSQuery.Response(data) {
+            };
+        });
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronizeFormJson();
+            }
+        }.start();
+
         return browser.getComponent();
     }
 
     @Override
     public void doOKAction() {
-
-        registerCloseHandle();
-        try {
-            Thread.sleep(3 * 1000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         JsonPagePanel.super.doOKAction();
 
@@ -102,11 +122,11 @@ public class JsonPagePanel extends DialogWrapper {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(10 * 1000L);
+                    Thread.sleep(2 * 1000L);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                browser.getCefBrowser().close(true);
+                browser.getCefBrowser().close(false);
             }
         }.start();
     }
@@ -117,33 +137,21 @@ public class JsonPagePanel extends DialogWrapper {
         browser.getCefBrowser().close(true);
     }
 
-    void registerCloseHandle() {
+    void synchronizeFormJson() {
 
-        JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
-        jsQuery.addHandler((data) -> {
-
-            System.out.println(data);
-            return new JBCefJSQuery.Response(data) {
-                {
-                    System.out.println(data);
-                }
-            };
-        });
         //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
+        String js = jsQuery.inject("formJson");
         browser.getCefBrowser().executeJavaScript("" +
 //                        "alert(1);" +
 //                        "alert(getFormJson());" +
-//                        "alert(\"" + jsQuery.inject("'test'") + "\");" +
-//                        "window.οnbefοreunlοad = function() {" +
-//                        "   var formValue =JSON.stringify(getFormJson());" +
-//                        "   " + jsQuery.inject("formValue") +
-//                        "};" +
+                        " setInterval(function(){  var formJson = getFormJson();" +
+                        "   " + js +
+                        ";}, 300);" +
 //                        "alert(2);" +
                         ""
                 ,
                 browser.getCefBrowser().getURL(), 0
         );
-        Disposer.dispose(jsQuery);
 
     }
 

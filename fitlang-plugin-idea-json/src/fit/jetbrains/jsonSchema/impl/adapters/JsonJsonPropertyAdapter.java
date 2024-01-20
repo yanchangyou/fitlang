@@ -15,12 +15,12 @@
  */
 package fit.jetbrains.jsonSchema.impl.adapters;
 
+import com.intellij.psi.PsiElement;
+import com.intellij.util.containers.ContainerUtil;
 import fit.intellij.json.psi.JsonArray;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
 import fit.intellij.json.psi.JsonValue;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
@@ -30,11 +30,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * @author Irina.Chernushina on 2/20/2017.
- */
 public class JsonJsonPropertyAdapter implements JsonPropertyAdapter {
-  @NotNull private final JsonProperty myProperty;
+  @NotNull private final fit.intellij.json.psi.JsonProperty myProperty;
 
   public JsonJsonPropertyAdapter(@NotNull JsonProperty property) {
     myProperty = property;
@@ -48,13 +45,13 @@ public class JsonJsonPropertyAdapter implements JsonPropertyAdapter {
 
   @NotNull
   @Override
-  public Collection<JsonValueAdapter> getValues() {
+  public Collection<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> getValues() {
     return myProperty.getValue() == null ? ContainerUtil.emptyList() : Collections.singletonList(createAdapterByType(myProperty.getValue()));
   }
 
   @Nullable
   @Override
-  public JsonValueAdapter getNameValueAdapter() {
+  public fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter getNameValueAdapter() {
     return createAdapterByType(myProperty.getNameElement());
   }
 
@@ -67,13 +64,13 @@ public class JsonJsonPropertyAdapter implements JsonPropertyAdapter {
   @Nullable
   @Override
   public JsonObjectValueAdapter getParentObject() {
-    return myProperty.getParent() instanceof JsonObject ? new JsonJsonObjectAdapter((JsonObject)myProperty.getParent()) : null;
+    return myProperty.getParent() instanceof fit.intellij.json.psi.JsonObject ? new fit.jetbrains.jsonSchema.impl.adapters.JsonJsonObjectAdapter((fit.intellij.json.psi.JsonObject)myProperty.getParent()) : null;
   }
 
   @NotNull
   public static JsonValueAdapter createAdapterByType(@NotNull JsonValue value) {
-    if (value instanceof JsonObject) return new JsonJsonObjectAdapter((JsonObject)value);
-    if (value instanceof JsonArray) return new JsonJsonArrayAdapter((JsonArray)value);
+    if (value instanceof fit.intellij.json.psi.JsonObject) return new JsonJsonObjectAdapter((JsonObject)value);
+    if (value instanceof fit.intellij.json.psi.JsonArray) return new JsonJsonArrayAdapter((JsonArray)value);
     return new JsonJsonGenericValueAdapter(value);
   }
 }

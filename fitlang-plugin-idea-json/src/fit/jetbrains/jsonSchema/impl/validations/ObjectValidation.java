@@ -13,7 +13,6 @@ import fit.jetbrains.jsonSchema.extension.JsonValidationHost;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,28 +21,28 @@ import java.util.*;
 public class ObjectValidation implements JsonSchemaValidation {
   public static final ObjectValidation INSTANCE = new ObjectValidation();
   @Override
-  public void validate(JsonValueAdapter propValue,
+  public void validate(fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter propValue,
                        fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                        fit.jetbrains.jsonSchema.impl.JsonSchemaType schemaType,
-                       JsonValidationHost consumer,
+                       fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer,
                        fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
     checkObject(propValue, schema, consumer, options);
   }
-  private static void checkObject(@NotNull JsonValueAdapter value,
+  private static void checkObject(@NotNull fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter value,
                                   @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
-                                  JsonValidationHost consumer, fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+                                  fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer, fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
     final JsonObjectValueAdapter object = value.getAsObject();
     if (object == null) return;
 
-    final List<JsonPropertyAdapter> propertyList = object.getPropertyList();
+    final List<fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter> propertyList = object.getPropertyList();
     final Set<String> set = new HashSet<>();
     for (JsonPropertyAdapter property : propertyList) {
       final String name = StringUtil.notNullize(property.getName());
       fit.jetbrains.jsonSchema.impl.JsonSchemaObject propertyNamesSchema = schema.getPropertyNamesSchema();
       if (propertyNamesSchema != null) {
-        JsonValueAdapter nameValueAdapter = property.getNameValueAdapter();
+        fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter nameValueAdapter = property.getNameValueAdapter();
         if (nameValueAdapter != null) {
-          JsonValidationHost checker = consumer.checkByMatchResult(nameValueAdapter, consumer.resolve(propertyNamesSchema), options);
+          fit.jetbrains.jsonSchema.extension.JsonValidationHost checker = consumer.checkByMatchResult(nameValueAdapter, consumer.resolve(propertyNamesSchema), options);
           if (checker != null) {
             consumer.addErrorsFrom(checker);
           }
@@ -55,7 +54,7 @@ public class ObjectValidation implements JsonSchemaValidation {
       if (ThreeState.NO.equals(pair.getFirst()) && !set.contains(name)) {
         consumer.error(JsonBundle.message("json.schema.annotation.not.allowed.property", name), property.getDelegate(),
               fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.ProhibitedProperty,
-              new fit.jetbrains.jsonSchema.impl.JsonValidationError.ProhibitedPropertyIssueData(name), JsonErrorPriority.LOW_PRIORITY);
+              new fit.jetbrains.jsonSchema.impl.JsonValidationError.ProhibitedPropertyIssueData(name), fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
       }
       else if (ThreeState.UNSURE.equals(pair.getFirst())) {
         for (JsonValueAdapter propertyValue : property.getValues()) {
@@ -73,14 +72,14 @@ public class ObjectValidation implements JsonSchemaValidation {
         if (!requiredNames.isEmpty()) {
           fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData data = createMissingPropertiesData(schema, requiredNames, consumer);
           consumer.error(JsonBundle.message("schema.validation.missing.required.property.or.properties",  data.getMessage(false)), value.getDelegate(), fit.jetbrains.jsonSchema.impl.JsonValidationError.FixableIssueKind.MissingProperty, data,
-                JsonErrorPriority.MISSING_PROPS);
+                fit.jetbrains.jsonSchema.extension.JsonErrorPriority.MISSING_PROPS);
         }
       }
       if (schema.getMinProperties() != null && propertyList.size() < schema.getMinProperties()) {
-        consumer.error(JsonBundle.message("schema.validation.number.of.props.less.than", schema.getMinProperties()), value.getDelegate(), JsonErrorPriority.LOW_PRIORITY);
+        consumer.error(JsonBundle.message("schema.validation.number.of.props.less.than", schema.getMinProperties()), value.getDelegate(), fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
       }
       if (schema.getMaxProperties() != null && propertyList.size() > schema.getMaxProperties()) {
-        consumer.error(JsonBundle.message("schema.validation.number.of.props.greater.than", schema.getMaxProperties()), value.getDelegate(), JsonErrorPriority.LOW_PRIORITY);
+        consumer.error(JsonBundle.message("schema.validation.number.of.props.greater.than", schema.getMaxProperties()), value.getDelegate(), fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
       }
       final Map<String, List<String>> dependencies = schema.getPropertyDependencies();
       if (dependencies != null) {
@@ -167,14 +166,17 @@ public class ObjectValidation implements JsonSchemaValidation {
       }
       else {
         fit.jetbrains.jsonSchema.impl.JsonSchemaObject additionalPropertiesSchema = schema.getAdditionalPropertiesSchema();
-        return additionalPropertiesSchema;
+        if (additionalPropertiesSchema != null) {
+          return additionalPropertiesSchema;
+        }
       }
     }
+    return null;
   }
 
 
   @Nullable
-  private static Object getDefaultValueFromEnum(@NotNull JsonSchemaObject propertySchema, @NotNull Ref<Integer> enumCount) {
+  private static Object getDefaultValueFromEnum(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject propertySchema, @NotNull Ref<Integer> enumCount) {
     List<Object> enumValues = propertySchema.getEnum();
     if (enumValues != null) {
       enumCount.set(enumValues.size());

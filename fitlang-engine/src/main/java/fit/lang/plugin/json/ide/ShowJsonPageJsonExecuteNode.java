@@ -26,7 +26,9 @@ public class ShowJsonPageJsonExecuteNode extends JsonExecuteNode {
         JSONObject option = nodeJsonDefine.getJSONObject("option");
         JSONObject context = input.getInputParamAndContextParam();
 
-        UserIdeManager.getUserIdeInterface().showJsonPage(jsonPage, jsonData, option, context);
+        jsonData = UserIdeManager.getUserIdeInterface().showJsonPage(jsonPage, jsonData, option, context);
+
+        output.set("data", jsonData);
 
     }
 }

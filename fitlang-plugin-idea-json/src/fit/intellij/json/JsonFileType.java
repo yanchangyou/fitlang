@@ -1,18 +1,16 @@
 package fit.intellij.json;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import my.lang.icon.MyLanguageIcons;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
 /**
  * @author Mikhail Golubev
  */
-public class JsonFileType extends LanguageFileType{
+public class JsonFileType extends LanguageFileType {
   public static final JsonFileType INSTANCE = new JsonFileType();
   public static final String DEFAULT_EXTENSION = "fit";
 
@@ -24,7 +22,7 @@ public class JsonFileType extends LanguageFileType{
     super(language, secondary);
   }
 
-  public JsonFileType() {
+  protected JsonFileType() {
     super(JsonLanguage.INSTANCE);
   }
 
@@ -46,7 +44,6 @@ public class JsonFileType extends LanguageFileType{
     return DEFAULT_EXTENSION;
   }
 
-  @Nullable
   @Override
   public Icon getIcon() {
     return MyLanguageIcons.FILE;

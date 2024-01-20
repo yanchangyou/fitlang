@@ -36,7 +36,7 @@ public interface UserIdeInterface {
 
     void showHtml(String url, JSONObject option, JSONObject context);
 
-    void showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context);
+    JSONObject showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context);
 
     JSONObject showNodeConfig(JSONObject config, Project project);
 

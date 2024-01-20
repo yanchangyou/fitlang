@@ -2,10 +2,10 @@
 package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInsight.completion.CompletionUtil;
-import fit.intellij.json.navigation.JsonQualifiedNameKind;
-import fit.intellij.json.navigation.JsonQualifiedNameProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.util.NlsSafe;
+import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -19,38 +19,40 @@ import com.intellij.util.AstLoadingFilter;
 import com.intellij.util.Function;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.navigation.JsonQualifiedNameKind;
+import fit.intellij.json.navigation.JsonQualifiedNameProvider;
+import fit.intellij.json.psi.JsonFile;
 import fit.jetbrains.jsonSchema.JsonPointerUtil;
 import fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
-import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public final class JsonCachedValues {
-  private static final Key<CachedValue<fit.jetbrains.jsonSchema.impl.JsonSchemaObject>> JSON_OBJECT_CACHE_KEY = Key.create("JsonSchemaObjectCache");
+  private static final Key<CachedValue<JsonSchemaObject>> JSON_OBJECT_CACHE_KEY = Key.create("FitJsonSchemaObjectCache");
 
   @Nullable
-  public static fit.jetbrains.jsonSchema.impl.JsonSchemaObject getSchemaObject(@NotNull VirtualFile schemaFile, @NotNull Project project) {
+  public static JsonSchemaObject getSchemaObject(@NotNull VirtualFile schemaFile, @NotNull Project project) {
     JsonFileResolver.startFetchingHttpFileIfNeeded(schemaFile, project);
     return computeForFile(schemaFile, project, JsonCachedValues::computeSchemaObject, JSON_OBJECT_CACHE_KEY);
   }
 
   @Nullable
-  private static fit.jetbrains.jsonSchema.impl.JsonSchemaObject computeSchemaObject(@NotNull PsiFile f) {
+  private static JsonSchemaObject computeSchemaObject(@NotNull PsiFile f) {
     return new JsonSchemaReader(f.getVirtualFile()).read(f);
   }
 
-  static final String URL_CACHE_KEY = "JsonSchemaUrlCache";
+  static final String URL_CACHE_KEY = "FitJsonSchemaUrlCache";
   private static final Key<CachedValue<String>> SCHEMA_URL_KEY = Key.create(URL_CACHE_KEY);
   @Nullable
   public static String getSchemaUrlFromSchemaProperty(@NotNull VirtualFile file,
                                                        @NotNull Project project) {
-    String value = fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.getCachedValue(project, file, URL_CACHE_KEY);
+    String value = JsonSchemaFileValuesIndex.getCachedValue(project, file, URL_CACHE_KEY);
     if (value != null) {
-      return fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(value) ? null : value;
+      return JsonSchemaFileValuesIndex.NULL.equals(value) ? null : value;
     }
 
     PsiFile psiFile = resolveFile(file, project);
@@ -66,12 +68,12 @@ public final class JsonCachedValues {
   @Nullable
   static String fetchSchemaUrl(@Nullable PsiFile psiFile) {
     if (!(psiFile instanceof fit.intellij.json.psi.JsonFile)) return null;
-    final String url = fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.readTopLevelProps(psiFile.getFileType(), psiFile.getText()).get(URL_CACHE_KEY);
-    return url == null || fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(url) ? null : url;
+    final String url = JsonSchemaFileValuesIndex.readTopLevelProps(psiFile.getFileType(), psiFile.getText()).get(URL_CACHE_KEY);
+    return url == null || JsonSchemaFileValuesIndex.NULL.equals(url) ? null : url;
   }
 
-  static final String ID_CACHE_KEY = "JsonSchemaIdCache";
-  static final String OBSOLETE_ID_CACHE_KEY = "JsonSchemaObsoleteIdCache";
+  static final String ID_CACHE_KEY = "FitJsonSchemaIdCache";
+  static final String OBSOLETE_ID_CACHE_KEY = "FitJsonSchemaObsoleteIdCache";
   private static final Key<CachedValue<String>> SCHEMA_ID_CACHE_KEY = Key.create(ID_CACHE_KEY);
   @Nullable
   public static String getSchemaId(@NotNull final VirtualFile schemaFile,
@@ -79,11 +81,11 @@ public final class JsonCachedValues {
     //skip content loading for generated schema files (IntellijConfigurationJsonSchemaProviderFactory)
     if (schemaFile instanceof LightVirtualFile) return null;
 
-    String value = fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.getCachedValue(project, schemaFile, ID_CACHE_KEY);
-    if (value != null && !fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(value)) return JsonPointerUtil.normalizeId(value);
-    String obsoleteValue = fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.getCachedValue(project, schemaFile, OBSOLETE_ID_CACHE_KEY);
-    if (obsoleteValue != null && !fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(obsoleteValue)) return JsonPointerUtil.normalizeId(obsoleteValue);
-    if (fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(value) || fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(obsoleteValue)) return null;
+    String value = JsonSchemaFileValuesIndex.getCachedValue(project, schemaFile, ID_CACHE_KEY);
+    if (value != null && !JsonSchemaFileValuesIndex.NULL.equals(value)) return fit.jetbrains.jsonSchema.JsonPointerUtil.normalizeId(value);
+    String obsoleteValue = JsonSchemaFileValuesIndex.getCachedValue(project, schemaFile, OBSOLETE_ID_CACHE_KEY);
+    if (obsoleteValue != null && !JsonSchemaFileValuesIndex.NULL.equals(obsoleteValue)) return fit.jetbrains.jsonSchema.JsonPointerUtil.normalizeId(obsoleteValue);
+    if (JsonSchemaFileValuesIndex.NULL.equals(value) || JsonSchemaFileValuesIndex.NULL.equals(obsoleteValue)) return null;
 
     final String result = computeForFile(schemaFile, project, JsonCachedValues::fetchSchemaId, SCHEMA_ID_CACHE_KEY);
     return result == null ? null : JsonPointerUtil.normalizeId(result);
@@ -99,7 +101,7 @@ public final class JsonCachedValues {
     return getOrCompute(psiFile, eval, cacheKey);
   }
 
-  static final String ID_PATHS_CACHE_KEY = "JsonSchemaIdToPointerCache";
+  static final String ID_PATHS_CACHE_KEY = "FitJsonSchemaIdToPointerCache";
   private static final Key<CachedValue<Map<String, String>>> SCHEMA_ID_PATHS_CACHE_KEY = Key.create(ID_PATHS_CACHE_KEY);
   public static Collection<String> getAllIdsInFile(PsiFile psiFile) {
     Map<String, String> map = getOrComputeIdsMap(psiFile);
@@ -127,27 +129,27 @@ public final class JsonCachedValues {
   @Nullable
   static String fetchSchemaId(@NotNull PsiFile psiFile) {
     if (!(psiFile instanceof fit.intellij.json.psi.JsonFile)) return null;
-    final Map<String, String> props = fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.readTopLevelProps(psiFile.getFileType(), psiFile.getText());
+    final Map<String, String> props = JsonSchemaFileValuesIndex.readTopLevelProps(psiFile.getFileType(), psiFile.getText());
     final String id = props.get(ID_CACHE_KEY);
-    if (id != null && !fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex.NULL.equals(id)) return id;
+    if (id != null && !JsonSchemaFileValuesIndex.NULL.equals(id)) return id;
     final String obsoleteId = props.get(OBSOLETE_ID_CACHE_KEY);
     return obsoleteId == null || JsonSchemaFileValuesIndex.NULL.equals(obsoleteId) ? null : obsoleteId;
   }
 
 
-  private static final Key<CachedValue<List<JsonSchemaCatalogEntry>>> SCHEMA_CATALOG_CACHE_KEY = Key.create("JsonSchemaCatalogCache");
+  private static final Key<CachedValue<List<fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry>>> SCHEMA_CATALOG_CACHE_KEY = Key.create("FitJsonSchemaCatalogCache");
   @Nullable
-  public static List<JsonSchemaCatalogEntry> getSchemaCatalog(@NotNull final VirtualFile catalog,
-                                   @NotNull final Project project) {
+  public static List<fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry> getSchemaCatalog(@NotNull final VirtualFile catalog,
+                                                                                       @NotNull final Project project) {
     if (!catalog.isValid()) return null;
     return computeForFile(catalog, project, JsonCachedValues::computeSchemaCatalog, SCHEMA_CATALOG_CACHE_KEY);
   }
 
-  private static List<JsonSchemaCatalogEntry> computeSchemaCatalog(PsiFile catalog) {
+  private static List<fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry> computeSchemaCatalog(PsiFile catalog) {
     if (!catalog.isValid()) return null;
     VirtualFile virtualFile = catalog.getVirtualFile();
     if (virtualFile == null || !virtualFile.isValid()) return null;
-    fit.intellij.json.psi.JsonValue value = AstLoadingFilter.forceAllowTreeLoading(catalog, () -> catalog instanceof fit.intellij.json.psi.JsonFile ? ((fit.intellij.json.psi.JsonFile)catalog).getTopLevelValue() : null);
+    fit.intellij.json.psi.JsonValue value = AstLoadingFilter.forceAllowTreeLoading(catalog, () -> catalog instanceof fit.intellij.json.psi.JsonFile ? ((JsonFile)catalog).getTopLevelValue() : null);
     if (!(value instanceof fit.intellij.json.psi.JsonObject)) return null;
 
     fit.intellij.json.psi.JsonProperty schemas = ((fit.intellij.json.psi.JsonObject)value).findProperty("schemas");
@@ -155,12 +157,12 @@ public final class JsonCachedValues {
 
     fit.intellij.json.psi.JsonValue schemasValue = schemas.getValue();
     if (!(schemasValue instanceof fit.intellij.json.psi.JsonArray)) return null;
-    List<JsonSchemaCatalogEntry> catalogMap = new ArrayList<>();
+    List<fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry> catalogMap = new ArrayList<>();
     fillMap((fit.intellij.json.psi.JsonArray)schemasValue, catalogMap);
     return catalogMap;
   }
 
-  private static void fillMap(@NotNull fit.intellij.json.psi.JsonArray array, @NotNull List<JsonSchemaCatalogEntry> catalogMap) {
+  private static void fillMap(@NotNull fit.intellij.json.psi.JsonArray array, @NotNull List<fit.jetbrains.jsonSchema.JsonSchemaCatalogEntry> catalogMap) {
     for (fit.intellij.json.psi.JsonValue value: array.getValueList()) {
       fit.intellij.json.psi.JsonObject obj = ObjectUtils.tryCast(value, fit.intellij.json.psi.JsonObject.class);
       if (obj == null) continue;
@@ -175,7 +177,7 @@ public final class JsonCachedValues {
   }
 
   @Nullable
-  private static String readStringValue(@Nullable fit.intellij.json.psi.JsonProperty property) {
+  private static @NlsSafe String readStringValue(@Nullable fit.intellij.json.psi.JsonProperty property) {
     if (property == null) return null;
     fit.intellij.json.psi.JsonValue urlValue = property.getValue();
     if (urlValue instanceof fit.intellij.json.psi.JsonStringLiteral) {
@@ -195,7 +197,7 @@ public final class JsonCachedValues {
 
     if (value instanceof fit.intellij.json.psi.JsonArray) {
       List<String> strings = new ArrayList<>();
-      for (JsonValue val: ((fit.intellij.json.psi.JsonArray)value).getValueList()) {
+      for (fit.intellij.json.psi.JsonValue val: ((fit.intellij.json.psi.JsonArray)value).getValueList()) {
         if (val instanceof fit.intellij.json.psi.JsonStringLiteral) {
           strings.add(((fit.intellij.json.psi.JsonStringLiteral)val).getValue());
         }
@@ -213,17 +215,16 @@ public final class JsonCachedValues {
     return CachedValuesManager.getCachedValue(psiFile, key, () -> CachedValueProvider.Result.create(eval.fun(psiFile), psiFile));
   }
 
-  public static final Key<CachedValue<fit.jetbrains.jsonSchema.impl.JsonSchemaObject>> OBJECT_FOR_FILE_KEY = new Key<>("JsonCachedValues.OBJ_KEY");
+  public static final Key<CachedValue<JsonSchemaObject>> OBJECT_FOR_FILE_KEY = new Key<>("JsonCachedValues.OBJ_KEY");
 
   @Nullable
-  static fit.jetbrains.jsonSchema.impl.JsonSchemaObject computeSchemaForFile(@NotNull PsiFile file, @NotNull JsonSchemaService service) {
+  static JsonSchemaObject computeSchemaForFile(@NotNull PsiFile file, @NotNull JsonSchemaService service) {
     final PsiFile originalFile = CompletionUtil.getOriginalOrSelf(file);
-    fit.jetbrains.jsonSchema.impl.JsonSchemaObject value = CachedValuesManager.getCachedValue(originalFile, OBJECT_FOR_FILE_KEY, () -> {
-      VirtualFile virtualFile = originalFile.getVirtualFile();
-      VirtualFile schemaFile = virtualFile == null ? null : getSchemaFile(virtualFile, service);
-      fit.jetbrains.jsonSchema.impl.JsonSchemaObject schemaObject = virtualFile == null ? null : service.getSchemaObject(virtualFile);
-      PsiFile psiFile = schemaFile == null || !schemaFile.isValid() ? null : originalFile.getManager().findFile(schemaFile);
-      fit.jetbrains.jsonSchema.impl.JsonSchemaObject object = schemaObject == null ? fit.jetbrains.jsonSchema.impl.JsonSchemaObject.NULL_OBJ : schemaObject;
+    JsonSchemaObject value = CachedValuesManager.getCachedValue(originalFile, OBJECT_FOR_FILE_KEY, () -> {
+      Pair<PsiFile, JsonSchemaObject> schema = getSchemaFile(originalFile, service);
+
+      PsiFile psiFile = schema.first;
+      JsonSchemaObject object = schema.second == null ? JsonSchemaObject.NULL_OBJ : schema.second;
       return psiFile == null
              ? CachedValueProvider.Result.create(object, originalFile, service)
              : CachedValueProvider.Result.create(object, originalFile, psiFile, service);
@@ -231,8 +232,17 @@ public final class JsonCachedValues {
     return value == JsonSchemaObject.NULL_OBJ ? null : value;
   }
 
+  private static @NotNull Pair<PsiFile, JsonSchemaObject> getSchemaFile(@NotNull PsiFile originalFile,
+                                                                        @NotNull JsonSchemaService service) {
+    VirtualFile virtualFile = originalFile.getVirtualFile();
+    VirtualFile schemaFile = virtualFile == null ? null : getSchemaFile(virtualFile, service);
+    JsonSchemaObject schemaObject = virtualFile == null ? null : service.getSchemaObject(virtualFile);
+    PsiFile psiFile = schemaFile == null || !schemaFile.isValid() ? null : originalFile.getManager().findFile(schemaFile);
+    return new Pair<>(psiFile, schemaObject);
+  }
+
   static VirtualFile getSchemaFile(@NotNull VirtualFile sourceFile, @NotNull JsonSchemaService service) {
-    fit.jetbrains.jsonSchema.impl.JsonSchemaServiceImpl serviceImpl = (JsonSchemaServiceImpl)service;
+    JsonSchemaServiceImpl serviceImpl = (JsonSchemaServiceImpl)service;
     Collection<VirtualFile> schemas = serviceImpl.getSchemasForFile(sourceFile, true, false);
     if (schemas.size() == 0) return null;
     assert schemas.size() == 1;

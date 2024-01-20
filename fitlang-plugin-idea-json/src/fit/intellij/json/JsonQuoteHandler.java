@@ -3,7 +3,7 @@ package fit.intellij.json;
 
 import com.intellij.codeInsight.editorActions.MultiCharQuoteHandler;
 import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
-import fit.intellij.json.psi.JsonStringLiteral;
+import fit.intellij.json.editor.JsonTypedHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.util.TextRange;
@@ -13,16 +13,18 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import fit.intellij.json.editor.JsonTypedHandler;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import static fit.intellij.json.JsonTokenSets.STRING_LITERALS;
 
 /**
  * @author Mikhail Golubev
  */
 public class JsonQuoteHandler extends SimpleTokenSetQuoteHandler implements MultiCharQuoteHandler {
   public JsonQuoteHandler() {
-    super(JsonParserDefinition.STRING_LITERALS);
+    super(STRING_LITERALS);
   }
 
   @Nullable
@@ -42,7 +44,7 @@ public class JsonQuoteHandler extends SimpleTokenSetQuoteHandler implements Mult
   public void insertClosingQuote(@NotNull Editor editor, int offset, @NotNull PsiFile file, @NotNull CharSequence closingQuote) {
     PsiElement element = file.findElementAt(offset - 1);
     PsiElement parent = element == null ? null : element.getParent();
-    if (parent instanceof JsonStringLiteral) {
+    if (parent instanceof fit.intellij.json.psi.JsonStringLiteral) {
       PsiDocumentManager.getInstance(file.getProject()).commitDocument(editor.getDocument());
       TextRange range = parent.getTextRange();
       if (offset - 1 != range.getStartOffset() || !"\"".contentEquals(closingQuote)) {

@@ -2,11 +2,11 @@
 package fit.intellij.json.editor;
 
 import com.intellij.codeInsight.daemon.impl.focusMode.FocusModeProvider;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonObject;
 import com.intellij.openapi.util.Segment;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.SyntaxTraverser;
+import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

@@ -3,14 +3,14 @@
  */
 package fit.intellij.json.psi.impl;
 
-import fit.intellij.json.psi.JsonLiteral;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import fit.intellij.json.psi.JsonLiteral;
 import org.jetbrains.annotations.NotNull;
 
 abstract class JsonLiteralMixin extends JsonElementImpl implements JsonLiteral {
-  protected JsonLiteralMixin(ASTNode node) {
+  protected JsonLiteralMixin(@NotNull ASTNode node) {
     super(node);
   }
 

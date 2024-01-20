@@ -1,16 +1,16 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.breadcrumbs;
 
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.JsonUtil;
 import fit.intellij.json.navigation.JsonQualifiedNameKind;
 import fit.intellij.json.navigation.JsonQualifiedNameProvider;
-import fit.intellij.json.psi.JsonProperty;
 import com.intellij.lang.Language;
 import com.intellij.openapi.ide.CopyPasteManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.ui.breadcrumbs.BreadcrumbsProvider;
-import fit.intellij.json.JsonBundle;
-import fit.intellij.json.JsonLanguage;
-import fit.intellij.json.JsonUtil;
+import fit.intellij.json.psi.JsonProperty;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaDocumentationProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,16 +34,16 @@ public class JsonBreadcrumbsProvider implements BreadcrumbsProvider {
 
   @Override
   public boolean acceptElement(@NotNull PsiElement e) {
-    return e instanceof JsonProperty || fit.intellij.json.JsonUtil.isArrayElement(e);
+    return e instanceof fit.intellij.json.psi.JsonProperty || JsonUtil.isArrayElement(e);
   }
 
   @NotNull
   @Override
   public String getElementInfo(@NotNull PsiElement e) {
-    if (e instanceof JsonProperty) {
+    if (e instanceof fit.intellij.json.psi.JsonProperty) {
       return ((JsonProperty)e).getName();
     }
-    else if (fit.intellij.json.JsonUtil.isArrayElement(e)) {
+    else if (JsonUtil.isArrayElement(e)) {
       int i = JsonUtil.getArrayIndexOfItem(e);
       if (i != -1) return String.valueOf(i);
     }

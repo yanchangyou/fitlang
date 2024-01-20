@@ -2,7 +2,6 @@
 package fit.intellij.json.editor;
 
 import com.intellij.codeInsight.editorActions.CopyPastePreProcessor;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RawText;
 import com.intellij.openapi.editor.SelectionModel;
@@ -12,6 +11,8 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import fit.intellij.json.psi.JsonFile;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,15 +20,15 @@ public class JsonCopyPasteProcessor implements CopyPastePreProcessor {
   @Nullable
   @Override
   public String preprocessOnCopy(PsiFile file, int[] startOffsets, int[] endOffsets, String text) {
-    if (!JsonEditorOptions.getInstance().ESCAPE_PASTED_TEXT) {
+    if (!fit.intellij.json.editor.JsonEditorOptions.getInstance().ESCAPE_PASTED_TEXT) {
       return null;
     }
-    if (!file.isPhysical() || startOffsets.length > 1 || endOffsets.length > 1) {
+    if (!isSupportedFile(file) || startOffsets.length > 1 || endOffsets.length > 1) {
       return null;
     }
     final int selectionStart = startOffsets[0];
     final int selectionEnd = endOffsets[0];
-    final JsonStringLiteral literalExpression = getSingleElementFromSelectionOrNull(file, selectionStart, selectionEnd);
+    final fit.intellij.json.psi.JsonStringLiteral literalExpression = getSingleElementFromSelectionOrNull(file, selectionStart, selectionEnd);
 
     if (literalExpression == null) {
       return null;
@@ -37,9 +38,9 @@ public class JsonCopyPasteProcessor implements CopyPastePreProcessor {
   }
 
   @Nullable
-  private static JsonStringLiteral getSingleElementFromSelectionOrNull(PsiFile file, int start, int end) {
+  private static fit.intellij.json.psi.JsonStringLiteral getSingleElementFromSelectionOrNull(PsiFile file, int start, int end) {
     final PsiElement element = file.findElementAt(start);
-    final JsonStringLiteral literalExpression = PsiTreeUtil.getParentOfType(element, JsonStringLiteral.class);
+    final fit.intellij.json.psi.JsonStringLiteral literalExpression = PsiTreeUtil.getParentOfType(element, fit.intellij.json.psi.JsonStringLiteral.class);
     if (literalExpression == null) return null;
     TextRange textRange = literalExpression.getTextRange();
     if (start <= textRange.getStartOffset() || end >= textRange.getEndOffset()) return null;
@@ -54,7 +55,7 @@ public class JsonCopyPasteProcessor implements CopyPastePreProcessor {
     if (!JsonEditorOptions.getInstance().ESCAPE_PASTED_TEXT) {
       return text;
     }
-    if (!file.isPhysical()) {
+    if (!isSupportedFile(file)) {
       return text;
     }
 
@@ -68,5 +69,14 @@ public class JsonCopyPasteProcessor implements CopyPastePreProcessor {
     }
 
     return StringUtil.escapeStringCharacters(text);
+  }
+
+  protected boolean isSupportedFile(PsiFile file) {
+    return file instanceof JsonFile && file.isPhysical();
+  }
+
+  @Override
+  public boolean requiresAllDocumentsToBeCommitted(@NotNull Editor editor, @NotNull Project project) {
+    return false;
   }
 }

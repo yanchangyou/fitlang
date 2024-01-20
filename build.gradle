@@ -1,11 +1,29 @@
 
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://maven.aliyun.com/nexus/content/groups/public"
+        }
+        maven {
+            url "https://repo.maven.apache.org/maven2"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+    }
+}
+
 plugins {
     id "org.jetbrains.intellij" version "$ijpVersion"
 }
+
 group 'lang.plugin.idea'
 version "$pluginVersion"
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 // 可以在线访问： https://repo.maven.apache.org/maven2
 repositories {
@@ -69,7 +87,9 @@ sourceSets {
         }
     }
 }
+
 apply plugin: 'idea'
+
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = ideaVersion
