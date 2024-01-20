@@ -78,8 +78,14 @@ public class JsonPagePanel extends DialogWrapper {
     }
 
     @Override
-    protected void doOKAction() {
+    public void doOKAction() {
         super.doOKAction();
+        browser.getCefBrowser().close(true);
+    }
+
+    @Override
+    public void doCancelAction() {
+        super.doCancelAction();
         browser.getCefBrowser().close(true);
     }
 
