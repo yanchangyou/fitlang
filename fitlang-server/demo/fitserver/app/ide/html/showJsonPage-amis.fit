@@ -28,7 +28,7 @@
     },
     "option": {
         "pageType": "amis",
-        "title": "Web Page",
+        "title": "Json Page",
         "modal": false,
         "width": 800,
         "height": 600,
