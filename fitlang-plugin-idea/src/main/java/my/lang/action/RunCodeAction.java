@@ -45,7 +45,7 @@ import java.util.concurrent.*;
 import static fit.lang.ExecuteNodeUtil.getRootException;
 import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
-import static my.lang.MyLanguage.isMyLanguageFile;
+import static my.lang.MyLanguage.isFitLanguageFile;
 
 /**
  * 插件父类
@@ -152,8 +152,8 @@ public abstract class RunCodeAction extends AnAction {
 
         boolean finalNeedShowFile = needShowFile;
 
-        if (filePathList.size() == 1 && isSynchronize(filePathList.get(0))) {
-            execute(e, project, filePathList, finalNeedShowFile);
+        if (filePathList.size() == 1 && (isSynchronize(filePathList.get(0)) || filePathList.get(0).contains(".amis."))) {
+            execute(e, project, filePathList, false);
         } else {
             threadPoolExecutor.submit(() -> {
                 execute(e, project, filePathList, finalNeedShowFile);
@@ -235,13 +235,13 @@ public abstract class RunCodeAction extends AnAction {
 
         String fileSuffix = null;
         if (fileName.contains(".")) {
-            fileSuffix = fileName.split("\\.")[1];
+            fileSuffix = fileName.substring(fileName.indexOf(".") + 1);
             contextParam.put("fileSuffix", fileSuffix);
         }
 
         boolean needFormatJsonInConsole = false;
         String result;
-        if (isMyLanguageFile(fileName)) {
+        if (isFitLanguageFile(fileName)) {
             result = ExecuteJsonNodeUtil.executeCode(code, contextParam);
             needFormatJsonInConsole = needFormatJsonInConsole(code);
         } else if (fileSuffix != null && supportLanguageMap.containsKey(fileSuffix)) {
@@ -270,11 +270,13 @@ public abstract class RunCodeAction extends AnAction {
         if (isJsonObjectText(result)) {
             JSONObject resultJson = JSONObject.parseObject(result);
             JSONArray lines;
-            if (resultJson.containsKey("result")) {
+            if (resultJson.getJSONObject("result") != null) {
                 lines = resultJson.getJSONObject("result").getJSONArray("out");
-            } else {
+            } else if (resultJson.getJSONArray("list") != null) {
                 JSONArray list = resultJson.getJSONArray("list");
                 lines = list.getJSONObject(list.size() - 1).getJSONObject("result").getJSONArray("out");
+            } else {
+                return result;
             }
             return lines == null ? "" : StrUtil.join("\n", lines);
         }
