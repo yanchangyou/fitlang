@@ -106,6 +106,35 @@
                             }
                         ]
                     }
+                },
+                {
+                    "name": "amis.json",
+                    "title": "amis Page",
+                    "visible": true,
+                    "synchronize": true,
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readEditor",
+                                "contentField": "page"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "page"
+                            },
+                            {
+                                "uni": "showJsonPage",
+                                "option": {
+                                    "pageType": "amis",
+                                    "title": "Json Page",
+                                    "modal": true,
+                                    "width": 800,
+                                    "height": 600
+                                }
+                            }
+                        ]
+                    }
                 }
             ]
         },
