@@ -164,7 +164,7 @@ public class JsonPagePanel extends DialogWrapper {
         browser.getCefBrowser().executeJavaScript("" +
                         " setInterval(function(){  var formJson = getFormJson();" +
                         "   " + js +
-                        "   }, " + refreshDataInterval + "); " +
+                        "   }, " + refreshDataInterval * 1000 + "); " +
                         ""
                 ,
                 browser.getCefBrowser().getURL(), 0
