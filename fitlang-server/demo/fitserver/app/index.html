@@ -113,7 +113,7 @@
             var serviceList = JSON.parse(body).service;
             for (var i = 0; i < serviceList.length; i++) {
                 var service = serviceList[i];
-                if (service.path.indexOf(".fit") < 0) {
+                if (service.path.indexOf(".fit") < 0 || service.path.indexOf("/ide/") > -1) {
                     continue;
                 }
                 var li = document.createElement("li");
