@@ -2,7 +2,6 @@
 package fit.jetbrains.jsonSchema.settings.mappings;
 
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -19,9 +18,10 @@ import com.intellij.util.Function;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.MultiMap;
-import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
+import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaVersion;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -85,7 +85,7 @@ public class JsonSchemaMappingsConfigurable extends MasterDetailsComponent imple
         addProjectSchema();
       }
     });
-    result.add(new MyDeleteAction());
+//    result.add(new MyDeleteAction());
     return result;
   }
 
