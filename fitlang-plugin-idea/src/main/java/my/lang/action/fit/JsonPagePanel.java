@@ -157,9 +157,25 @@ public class JsonPagePanel extends DialogWrapper {
 
         JsonPagePanel.super.doOKAction();
 
-        browser.loadHTML("");
-        jbCefBrowserPools.push(browser);
+        jsQuery.clearHandlers();
 
+        //只保留5个缓存
+        if (jbCefBrowserPools.size() <= 5) {
+            browser.loadHTML("<div></div>");
+            jbCefBrowserPools.push(browser);
+        } else {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2 * 1000L);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    browser.getCefBrowser().close(false);
+                }
+            }.start();
+        }
     }
 
     @Override
