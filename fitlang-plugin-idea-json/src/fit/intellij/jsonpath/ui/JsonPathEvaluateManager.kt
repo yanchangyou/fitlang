@@ -19,12 +19,12 @@ import com.intellij.ui.content.ContentManager
 import com.intellij.util.ui.EDT
 import fit.intellij.json.JsonBundle
 import fit.intellij.json.psi.JsonFile
-import org.jetbrains.annotations.ApiStatus
+//import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.NotNull
 import java.util.function.Supplier
 
 @Service
-@ApiStatus.Experimental
+//@ApiStatus.Experimental
 class JsonPathEvaluateManager internal constructor(private val project: Project) {
   fun evaluateExpression(jsonPathExpr: String? = null) {
     val toolWindow = initToolwindow()
