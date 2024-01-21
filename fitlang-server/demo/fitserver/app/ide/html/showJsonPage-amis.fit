@@ -29,7 +29,7 @@
     "option": {
         "pageType": "amis",
         "title": "Json Page",
-        "modal": false,
+        "modal": true,
         "width": 800,
         "height": 600,
         "devTools": false

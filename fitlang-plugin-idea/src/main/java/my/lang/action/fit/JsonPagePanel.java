@@ -29,6 +29,11 @@ public class JsonPagePanel extends DialogWrapper {
 
     JBCefJSQuery jsQuery;
 
+    /**
+     * 是否模态
+     */
+    boolean modal;
+
     public JsonPagePanel(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
         super(true);
@@ -70,6 +75,11 @@ public class JsonPagePanel extends DialogWrapper {
 
     public JSONObject getJsonData() {
         return jsonData;
+    }
+
+    @Override
+    public boolean isModal() {
+        return modal;
     }
 
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用

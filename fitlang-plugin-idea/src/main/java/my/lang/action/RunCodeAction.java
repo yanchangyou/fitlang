@@ -413,7 +413,11 @@ public abstract class RunCodeAction extends AnAction {
             public JSONObject showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
                 JsonPagePanel jsonPagePanel = new JsonPagePanel(jsonPage, jsonData, option, context);
-                jsonPagePanel.showAndGet();
+                if (jsonPagePanel.isModal()) {
+                    jsonPagePanel.showAndGet();
+                } else {
+                    jsonPagePanel.show();
+                }
 
                 return jsonPagePanel.getJsonData();
             }
