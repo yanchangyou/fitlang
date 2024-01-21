@@ -78,7 +78,10 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                     registerAction(actionConfig.getId(), new FitLangPluginAction(actions.getJSONObject(0)));
                 }
 
+                event.getPresentation().setPerformGroup(true);
+                event.getPresentation().setDisableGroupIfEmpty(false);
                 event.getPresentation().setEnabledAndVisible(true);
+
                 String title = groupConfig.getString("title");
                 if (StrUtil.isBlank(title)) {
                     title = groupConfig.getString("name");
