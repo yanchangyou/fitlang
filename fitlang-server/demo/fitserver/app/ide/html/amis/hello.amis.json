@@ -1,0 +1,22 @@
+{
+    "type": "page",
+    "title": "表单页面1",
+    "body": {
+        "type": "form",
+        "mode": "horizontal",
+        "wrapWithPanel": false,
+        "body": [
+            {
+                "label": "Name",
+                "type": "input-text",
+                "name": "name",
+                "value": "value1"
+            },
+            {
+                "label": "Email",
+                "type": "input-email",
+                "name": "email"
+            }
+        ]
+    }
+}

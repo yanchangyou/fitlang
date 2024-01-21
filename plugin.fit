@@ -6,14 +6,34 @@
     "groups": [
         {
             "name": "FitActionGroup0",
-            "title": "Fit Hello",
+            "title": "Fit Page",
             "actions": [
                 {
-                    "title": "Fit Hello",
+                    "title": "Fit Page",
                     "visible": true,
+                    "synchronize": true,
                     "script": {
-                        "uni": "hello",
-                        "who": "fit"
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readEditor",
+                                "contentField": "page"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "page"
+                            },
+                            {
+                                "uni": "showJsonPage",
+                                "option": {
+                                    "pageType": "amis",
+                                    "title": "Json Page",
+                                    "modal": true,
+                                    "width": 800,
+                                    "height": 600
+                                }
+                            }
+                        ]
                     }
                 }
             ]
