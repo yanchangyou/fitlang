@@ -4,14 +4,13 @@ package fit.jetbrains.jsonSchema.extension;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides a JSON schema depending on the contents of the file this schema is requested for.
  */
-@ApiStatus.Internal
+//@ApiStatus.Internal
 public interface ContentAwareJsonSchemaFileProvider {
   ExtensionPointName<ContentAwareJsonSchemaFileProvider> EP_NAME =
     ExtensionPointName.create("javaScript.fitJsonSchema.contentAwareSchemaFileProvider");

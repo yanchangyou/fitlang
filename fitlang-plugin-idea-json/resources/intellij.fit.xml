@@ -67,8 +67,8 @@
         <enterHandlerDelegate implementation="fit.intellij.json.editor.JsonEnterHandler" id="FitJsonEnterHandler"/>
         <typedHandler implementation="fit.intellij.json.editor.JsonTypedHandler" id="FitJsonTypedHandler"/>
         <copyPastePreProcessor implementation="fit.intellij.json.editor.JsonCopyPasteProcessor"/>
-        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"
-                                     id="editor.preferences.jsonOptions"/>
+<!--        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"-->
+<!--                                     id="editor.preferences.jsonOptions"/>-->
         <applicationService serviceImplementation="fit.intellij.json.editor.JsonEditorOptions"/>
 
         <!-- Codeinsight -->

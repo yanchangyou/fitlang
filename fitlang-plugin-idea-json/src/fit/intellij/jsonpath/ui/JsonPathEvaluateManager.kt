@@ -3,8 +3,6 @@ package fit.intellij.jsonpath.ui
 
 import com.intellij.icons.AllIcons
 import com.intellij.ide.impl.ContentManagerWatcher
-import fit.intellij.json.JsonBundle
-import fit.intellij.json.psi.JsonFile
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.DumbAwareAction
@@ -19,6 +17,8 @@ import com.intellij.openapi.wm.ex.ToolWindowEx
 import com.intellij.ui.content.Content
 import com.intellij.ui.content.ContentManager
 import com.intellij.util.ui.EDT
+import fit.intellij.json.JsonBundle
+import fit.intellij.json.psi.JsonFile
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.NotNull
 import java.util.function.Supplier
@@ -133,7 +133,7 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
     @JvmField
     internal val JSON_PATH_EVALUATE_EXPRESSION_KEY: Key<Boolean> = Key.create("JSON_PATH_EVALUATE_EXPRESSION")
 
-    @ApiStatus.Internal
+//    @ApiStatus.Internal
     @JvmField
     val JSON_PATH_EVALUATE_SOURCE_KEY: Key<Supplier<JsonFile?>> = Key.create("JSON_PATH_EVALUATE_SOURCE")
 
