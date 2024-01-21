@@ -2,7 +2,7 @@
     "uni": "showJsonPage",
     "page": {
         "type": "page",
-        "title": "配置页面",
+        "title": "表单页面",
         "body": {
             "type": "form",
             "mode": "horizontal",
@@ -32,6 +32,6 @@
         "modal": true,
         "width": 800,
         "height": 600,
-        "devTools": false
+        "devTools": true
     }
-}   
+}

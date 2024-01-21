@@ -1,11 +1,10 @@
 {
-    "uni": "showHtml",
-    "html": "<h2>hello, world</h2>",
-    "option": {
-        "title": "Web Page",
-        "modal": false,
-        "width": 800,
-        "height": 600,
-        "devTools": false
-    }
+  "uni": "showHtml",
+  "option": {
+    "title": "Web Page",
+    "modal": false,
+    "width": 800,
+    "height": 600,
+    "devTools": false
+  }
 }

@@ -17,6 +17,11 @@ public class JsonPagePanel extends DialogWrapper {
 
     String pageType;
 
+    /**
+     * 保存数据的间隔秒数
+     */
+    double refreshDataInterval = 0.5;
+
     JSONObject jsonPage;
 
     JSONObject jsonData;
@@ -60,6 +65,11 @@ public class JsonPagePanel extends DialogWrapper {
         this.context = context;
 
         pageType = option.getString("pageType");
+        Double refreshDataIntervalConfig = option.getDouble("refreshDataInterval");
+
+        if (refreshDataIntervalConfig != null) {
+            refreshDataInterval = refreshDataIntervalConfig;
+        }
 
         int width = option.getIntValue("width", 800);
         int height = option.getIntValue("height", 600);
@@ -152,12 +162,9 @@ public class JsonPagePanel extends DialogWrapper {
         //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
         String js = jsQuery.inject("formJson");
         browser.getCefBrowser().executeJavaScript("" +
-//                        "alert(1);" +
-//                        "alert(getFormJson());" +
                         " setInterval(function(){  var formJson = getFormJson();" +
                         "   " + js +
-                        ";}, 300);" +
-//                        "alert(2);" +
+                        "   }, " + refreshDataInterval + "); " +
                         ""
                 ,
                 browser.getCefBrowser().getURL(), 0
