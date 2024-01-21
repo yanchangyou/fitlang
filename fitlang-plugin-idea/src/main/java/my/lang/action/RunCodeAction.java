@@ -152,7 +152,7 @@ public abstract class RunCodeAction extends AnAction {
 
         boolean finalNeedShowFile = needShowFile;
 
-        if (filePathList.size() == 1 && (isSynchronize(filePathList.get(0)) || filePathList.get(0).contains(".amis."))) {
+        if (filePathList.size() == 1 && (isSynchronize(filePathList.get(0)) || filePathList.get(0).contains(".amis.") || filePathList.get(0).contains(".xrender."))) {
             execute(e, project, filePathList, false);
         } else {
             threadPoolExecutor.submit(() -> {
