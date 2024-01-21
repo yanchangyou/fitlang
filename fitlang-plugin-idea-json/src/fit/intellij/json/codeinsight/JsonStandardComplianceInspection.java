@@ -7,10 +7,6 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.options.OptPane;
-import fit.intellij.json.JsonBundle;
-import fit.intellij.json.JsonDialectUtil;
-import fit.intellij.json.JsonLanguage;
-import fit.intellij.json.jsonLines.JsonLinesFileType;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
@@ -20,7 +16,10 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonDialectUtil;
 import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.jsonLines.JsonLinesFileType;
 import fit.intellij.json.psi.JsonElementGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,10 +145,10 @@ public class JsonStandardComplianceInspection extends LocalInspectionTool {
     @Override
     public void visitComment(@NotNull PsiComment comment) {
       if (!allowComments() && myWarnAboutComments) {
-        if (fit.intellij.json.codeinsight.JsonStandardComplianceProvider.shouldWarnAboutComment(comment) &&
-            comment.getContainingFile().getLanguage() instanceof JsonLanguage) {
-          myHolder.registerProblem(comment, JsonBundle.message("inspection.compliance.msg.comments"));
-        }
+//        if (fit.intellij.json.codeinsight.JsonStandardComplianceProvider.shouldWarnAboutComment(comment) &&
+//            comment.getContainingFile().getLanguage() instanceof JsonLanguage) {
+//          myHolder.registerProblem(comment, JsonBundle.message("inspection.compliance.msg.comments"));
+//        }
       }
     }
 
