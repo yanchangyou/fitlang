@@ -5,14 +5,14 @@ import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.SmartIndentOptionsEditor;
 import com.intellij.application.options.codeStyle.properties.CodeStyleFieldAccessor;
 import com.intellij.application.options.codeStyle.properties.MagicIntegerConstAccessor;
-import fit.intellij.json.JsonBundle;
-import fit.intellij.json.JsonLanguage;
 import com.intellij.lang.Language;
 import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,8 +52,8 @@ public class JsonLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
                                    "SPACE_AFTER_COMMA",
                                    "SPACE_BEFORE_COMMA");
       consumer.renameStandardOption("SPACE_WITHIN_BRACES", JsonBundle.message("formatter.space_within_braces.label"));
-      consumer.showCustomOption(fit.intellij.json.formatter.JsonCodeStyleSettings.class, "SPACE_BEFORE_COLON", JsonBundle.message("formatter.space_before_colon.label"), getInstance().SPACES_OTHER);
-      consumer.showCustomOption(fit.intellij.json.formatter.JsonCodeStyleSettings.class, "SPACE_AFTER_COLON", JsonBundle.message("formatter.space_after_colon.label"), getInstance().SPACES_OTHER);
+//      consumer.showCustomOption(fit.intellij.json.formatter.JsonCodeStyleSettings.class, "SPACE_BEFORE_COLON", JsonBundle.message("formatter.space_before_colon.label"), getInstance().SPACES_OTHER);
+//      consumer.showCustomOption(fit.intellij.json.formatter.JsonCodeStyleSettings.class, "SPACE_AFTER_COLON", JsonBundle.message("formatter.space_after_colon.label"), getInstance().SPACES_OTHER);
     }
     else if (settingsType == SettingsType.BLANK_LINES_SETTINGS) {
       consumer.showStandardOptions("KEEP_BLANK_LINES_IN_CODE");

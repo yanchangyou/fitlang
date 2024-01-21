@@ -156,15 +156,15 @@
                              nonDefaultProject="true"/>
         <projectService serviceInterface="fit.jetbrains.jsonSchema.ide.JsonSchemaService"
                         serviceImplementation="fit.jetbrains.jsonSchema.impl.JsonSchemaServiceImpl"/>
-        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"
-                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>
+<!--        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"-->
+<!--                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>-->
         <lang.documentationProvider language="FitLang"
                                     id="FitJsonSchemaDocumentationProvider"
                                     implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaDocumentationProvider"/>
         <refactoring.elementListenerProvider
                 implementation="fit.jetbrains.jsonSchema.JsonSchemaRefactoringListenerProvider"/>
-        <statistics.counterUsagesCollector
-                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector"/>
+<!--        <statistics.counterUsagesCollector-->
+<!--                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector"/>-->
 
         <psi.referenceContributor language="FitLang"
                                   implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaReferenceContributor"/>
