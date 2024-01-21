@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
 public class JsonPagePanel extends DialogWrapper {
 
@@ -34,10 +37,16 @@ public class JsonPagePanel extends DialogWrapper {
 
     JBCefJSQuery jsQuery;
 
+    static Stack<JBCefBrowser> jbCefBrowserPools = new Stack<>();
+
     /**
      * 是否模态
      */
     boolean modal;
+
+    static {
+        initBrowserPools(5);
+    }
 
     public JsonPagePanel(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
@@ -76,11 +85,21 @@ public class JsonPagePanel extends DialogWrapper {
 
         setSize(width, height);
 
-        browser = new JBCefBrowser();
-        browser.getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, 10000);
+        if (jbCefBrowserPools.isEmpty()) {
+            initBrowserPools(3);
+        }
+        browser = jbCefBrowserPools.pop();
 
         init();
 
+    }
+
+    private static void initBrowserPools(int size) {
+        for (int i = 0; i < size; i++) {
+            JBCefBrowser browser = new JBCefBrowser();
+            browser.getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, 1000);
+            jbCefBrowserPools.push(browser);
+        }
     }
 
     public JSONObject getJsonData() {
@@ -138,17 +157,9 @@ public class JsonPagePanel extends DialogWrapper {
 
         JsonPagePanel.super.doOKAction();
 
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(2 * 1000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                browser.getCefBrowser().close(false);
-            }
-        }.start();
+        browser.loadHTML("");
+        jbCefBrowserPools.push(browser);
+
     }
 
     @Override
@@ -172,8 +183,15 @@ public class JsonPagePanel extends DialogWrapper {
 
     }
 
+    static Map<String, String> htmlMap = new HashMap<>();
+
     String loadHtml(String path) {
-        InputStream inputStream = JsonPagePanel.class.getClassLoader().getResourceAsStream(path);
-        return IoUtil.readUtf8(inputStream);
+        String html = htmlMap.get(path);
+        if (html == null) {
+            InputStream inputStream = JsonPagePanel.class.getClassLoader().getResourceAsStream(path);
+            html = IoUtil.readUtf8(inputStream);
+            htmlMap.put(path, html);
+        }
+        return html;
     }
 }
