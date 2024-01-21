@@ -6,34 +6,14 @@
     "groups": [
         {
             "name": "FitActionGroup0",
-            "title": "Fit Page",
+            "title": "Fit Hello",
             "actions": [
                 {
-                    "title": "Fit Page",
+                    "title": "Fit Hello",
                     "visible": true,
-                    "synchronize": true,
                     "script": {
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "readEditor",
-                                "contentField": "page"
-                            },
-                            {
-                                "uni": "parseJson",
-                                "jsonField": "page"
-                            },
-                            {
-                                "uni": "showJsonPage",
-                                "option": {
-                                    "pageType": "amis",
-                                    "title": "Json Page",
-                                    "modal": true,
-                                    "width": 800,
-                                    "height": 600
-                                }
-                            }
-                        ]
+                        "uni": "hello",
+                        "who": "fit"
                     }
                 }
             ]
@@ -123,6 +103,35 @@
                             {
                                 "uni": "cmd",
                                 "cmd": "${'./'+filePrefix}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "amis.json",
+                    "title": "amis Page",
+                    "visible": true,
+                    "synchronize": true,
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readEditor",
+                                "contentField": "page"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "page"
+                            },
+                            {
+                                "uni": "showJsonPage",
+                                "option": {
+                                    "pageType": "amis",
+                                    "title": "Json Page",
+                                    "modal": true,
+                                    "width": 800,
+                                    "height": 600
+                                }
                             }
                         ]
                     }
