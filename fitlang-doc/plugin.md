@@ -144,3 +144,7 @@ https://plugins.jetbrains.com/docs/intellij/basic-action-system.html
 ```
     actionList.add(new FitLangPluginAction(name, title, script));
 ```
+
+## 插件开发资料
+- 官方文档: https://plugins.jetbrains.com/docs/intellij/welcome.html
+- 翻译版: https://gavincook.gitbooks.io/intellij-platform-sdk-devguide/content/welcome.html
