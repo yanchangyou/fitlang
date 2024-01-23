@@ -9,8 +9,7 @@
             {
                 "label": "Name",
                 "type": "input-text",
-                "name": "name",
-                "value": "value1"
+                "name": "name"
             },
             {
                 "label": "Email",
