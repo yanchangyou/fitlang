@@ -26,17 +26,13 @@ import static my.lang.action.RunCodeAction.supportLanguageMap;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
-    AnAction[] children = new AnAction[0];
+    AnAction[] children = null;
 
     protected PluginActionConfig actionConfig;
 
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
 
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
-
-    public boolean canBePerformed(@NotNull AnActionEvent e) {
-        return actionConfig != null;
-    }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
@@ -47,7 +43,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public void update(AnActionEvent event) {
-        if (children == null || children.length == 0 || debug) {
+        if (children == null || debug) {
+
+            children = new AnAction[0];
 
             event.getPresentation().setEnabledAndVisible(false);
 
