@@ -318,6 +318,10 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
                     factoryClass="my.lang.action.ScriptConsoleWindowFactory"/>
     </extensions>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <fileEditorProvider implementation="my.lang.ide.MyEditorProvider"/>
+    </extensions>
+
     <actions>
         <group id="FitActionGroup9" text="Fit Actions9" icon="/my/lang/icon/fit.svg" popup="true"
                searchable="true" class="my.lang.action.group.FitLangPluginActionGroup9">
