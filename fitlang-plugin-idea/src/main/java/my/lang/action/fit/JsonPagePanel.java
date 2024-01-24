@@ -80,8 +80,8 @@ public class JsonPagePanel extends DialogWrapper {
             refreshDataInterval = refreshDataIntervalConfig;
         }
 
-        int width = option.getIntValue("width", 800);
-        int height = option.getIntValue("height", 600);
+        int width = option.getIntValue("width", 840);
+        int height = option.getIntValue("height", 640);
 
         setSize(width, height);
 
