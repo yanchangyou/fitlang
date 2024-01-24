@@ -47,7 +47,7 @@ public class JsonPageRender implements FileEditor {
 
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title) @NotNull String getName() {
-        return "MyEditor";
+        return "JsonPage";
     }
 
     @Override
