@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class HtmlPanel extends DialogWrapper {
+public class HtmlPanelDialog extends DialogWrapper {
 
     String html;
 
@@ -17,7 +17,7 @@ public class HtmlPanel extends DialogWrapper {
 
     JBCefBrowser browser = new JBCefBrowser();
 
-    public HtmlPanel(String html, JSONObject option, JSONObject context) {
+    public HtmlPanelDialog(String html, JSONObject option, JSONObject context) {
 
         super(true);
 

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-public class JsonPagePanel extends DialogWrapper {
+public class JsonPagePanelDialog extends DialogWrapper {
 
     String pageType;
 
@@ -48,7 +48,7 @@ public class JsonPagePanel extends DialogWrapper {
         initBrowserPools(5);
     }
 
-    public JsonPagePanel(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
+    public JsonPagePanelDialog(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
         super(true);
 
@@ -155,7 +155,7 @@ public class JsonPagePanel extends DialogWrapper {
     @Override
     public void doOKAction() {
 
-        JsonPagePanel.super.doOKAction();
+        JsonPagePanelDialog.super.doOKAction();
 
         jsQuery.clearHandlers();
 
@@ -204,7 +204,7 @@ public class JsonPagePanel extends DialogWrapper {
     String loadHtml(String path) {
         String html = htmlMap.get(path);
         if (html == null) {
-            InputStream inputStream = JsonPagePanel.class.getClassLoader().getResourceAsStream(path);
+            InputStream inputStream = JsonPagePanelDialog.class.getClassLoader().getResourceAsStream(path);
             html = IoUtil.readUtf8(inputStream);
             htmlMap.put(path, html);
         }

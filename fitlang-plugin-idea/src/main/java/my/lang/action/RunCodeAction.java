@@ -406,22 +406,22 @@ public abstract class RunCodeAction extends AnAction {
 
             public void showHtml(String html, JSONObject option, JSONObject context) {
 
-                HtmlPanel htmlPanel = new HtmlPanel(html, option, context);
-                htmlPanel.show();
+                HtmlPanelDialog htmlPanelDialog = new HtmlPanelDialog(html, option, context);
+                htmlPanelDialog.show();
 
             }
 
             @Override
             public JSONObject showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context) {
 
-                JsonPagePanel jsonPagePanel = new JsonPagePanel(jsonPage, jsonData, option, context);
-                if (jsonPagePanel.isModal()) {
-                    jsonPagePanel.showAndGet();
+                JsonPagePanelDialog jsonPageDialog = new JsonPagePanelDialog(jsonPage, jsonData, option, context);
+                if (jsonPageDialog.isModal()) {
+                    jsonPageDialog.showAndGet();
                 } else {
-                    jsonPagePanel.show();
+                    jsonPageDialog.show();
                 }
 
-                return jsonPagePanel.getJsonData();
+                return jsonPageDialog.getJsonData();
             }
 
             @Override
