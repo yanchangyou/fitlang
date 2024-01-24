@@ -319,7 +319,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileEditorProvider implementation="my.lang.ide.JsonPageRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.render.JsonPageRenderProvider"/>
     </extensions>
 
     <actions>

@@ -1,4 +1,4 @@
-package my.lang.action.fit;
+package my.lang.action;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.actionSystem.AnAction;

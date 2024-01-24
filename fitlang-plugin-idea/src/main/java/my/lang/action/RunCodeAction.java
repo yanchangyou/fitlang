@@ -30,7 +30,10 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import my.lang.action.fit.*;
+import my.lang.dialog.GlobalConfigPanelDialog;
+import my.lang.dialog.HtmlPanelDialog;
+import my.lang.dialog.JsonPagePanelDialog;
+import my.lang.dialog.WebPagePanelDialog;
 
 import java.awt.*;
 import java.io.File;
@@ -399,8 +402,8 @@ public abstract class RunCodeAction extends AnAction {
 
             public void openWebPage(String url, JSONObject option, JSONObject context) {
 
-                WebPagePanel webPagePanel = new WebPagePanel(url, option, context);
-                webPagePanel.show();
+                WebPagePanelDialog webPagePanelDialog = new WebPagePanelDialog(url, option, context);
+                webPagePanelDialog.show();
 
             }
 

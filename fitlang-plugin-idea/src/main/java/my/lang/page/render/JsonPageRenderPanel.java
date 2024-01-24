@@ -1,4 +1,4 @@
-package my.lang.ide;
+package my.lang.page.render;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;

@@ -1,4 +1,4 @@
-package my.lang.ide;
+package my.lang.page.render;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -63,7 +63,7 @@ public class JsonPageRender implements FileEditor {
 
     @Override
     public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
-
+//        propertyChangeListener.propertyChange(new PropertyChangeEvent());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package my.lang.action.fit;
+package my.lang.dialog;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.jcef.JBCefBrowser;

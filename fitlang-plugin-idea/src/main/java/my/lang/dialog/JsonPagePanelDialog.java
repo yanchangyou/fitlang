@@ -1,4 +1,4 @@
-package my.lang.action.fit;
+package my.lang.dialog;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;

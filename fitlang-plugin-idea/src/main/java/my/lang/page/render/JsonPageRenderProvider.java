@@ -1,4 +1,4 @@
-package my.lang.ide;
+package my.lang.page.render;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;

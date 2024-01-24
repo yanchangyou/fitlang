@@ -1,4 +1,4 @@
-package my.lang.action.fit;
+package my.lang.dialog;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class WebPagePanel extends DialogWrapper {
+public class WebPagePanelDialog extends DialogWrapper {
 
     String url;
 
@@ -18,7 +18,7 @@ public class WebPagePanel extends DialogWrapper {
 
     JBCefBrowser browser = new JBCefBrowser();
 
-    public WebPagePanel(String url, JSONObject option, JSONObject context) {
+    public WebPagePanelDialog(String url, JSONObject option, JSONObject context) {
 
         super(true);
 
