@@ -4,7 +4,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.ui.jcef.JBCefBrowser;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,15 +31,13 @@ public class JsonPageRenderPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        JComponent component = render(type, jsonPage, browser);
-        if (component != null) {
-            add(component, BorderLayout.CENTER);
-        }
+        add(browser.getComponent(), BorderLayout.CENTER);
+
+        render(type, jsonPage, browser);
     }
 
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
-    @Nullable
-    protected JComponent render(String type, JSONObject jsonPage, JBCefBrowser browser) {
+    static void render(String type, JSONObject jsonPage, JBCefBrowser browser) {
 
         String path = "fit/JsonPage.html";
 
@@ -52,7 +49,7 @@ public class JsonPageRenderPanel extends JPanel {
 
         browser.loadHTML(html);
 
-        return browser.getComponent();
+        browser.getComponent();
     }
 
     static Map<String, String> htmlMap = new HashMap<>();
