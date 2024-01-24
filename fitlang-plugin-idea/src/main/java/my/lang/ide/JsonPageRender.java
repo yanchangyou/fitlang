@@ -19,6 +19,8 @@ public class JsonPageRender implements FileEditor {
 
     VirtualFile file;
 
+    String type = "amis";
+
     public JsonPageRender(@NotNull VirtualFile virtualFile) {
         file = virtualFile;
         String path = file.getPath();
@@ -26,13 +28,8 @@ public class JsonPageRender implements FileEditor {
         String content = FileUtil.readUtf8String(path);
 
         JSONObject jsonPage = JSONObject.parse(content);
-        JSONObject jsonData = new JSONObject();
-        JSONObject option = new JSONObject();
-        JSONObject context = new JSONObject();
 
-        option.put("pageType", "amis");
-
-        panel = new JsonPageRenderPanel(jsonPage, jsonData, option, context);
+        panel = new JsonPageRenderPanel(type, jsonPage);
     }
 
     @Override
