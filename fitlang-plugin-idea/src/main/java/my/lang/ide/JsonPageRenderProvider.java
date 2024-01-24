@@ -9,11 +9,11 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class MyEditorProvider implements FileEditorProvider, DumbAware {
+public class JsonPageRenderProvider implements FileEditorProvider, DumbAware {
 
-    MyEditor myEditor;
+    JsonPageRender jsonPageRender;
 
-    public MyEditorProvider() {
+    public JsonPageRenderProvider() {
 
     }
 
@@ -24,8 +24,8 @@ public class MyEditorProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        myEditor = new MyEditor(virtualFile);
-        return myEditor;
+        jsonPageRender = new JsonPageRender(virtualFile);
+        return jsonPageRender;
     }
 
     @Override

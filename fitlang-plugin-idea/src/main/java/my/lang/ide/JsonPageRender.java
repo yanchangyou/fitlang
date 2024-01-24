@@ -6,7 +6,6 @@ import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import my.lang.action.fit.JsonPageAmisPanel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,13 +13,13 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
-public class MyEditor implements FileEditor {
+public class JsonPageRender implements FileEditor {
 
-    JsonPageAmisPanel panel;
+    JsonPageRenderPanel panel;
 
     VirtualFile file;
 
-    public MyEditor(@NotNull VirtualFile virtualFile) {
+    public JsonPageRender(@NotNull VirtualFile virtualFile) {
         file = virtualFile;
         String path = file.getPath();
 
@@ -33,7 +32,7 @@ public class MyEditor implements FileEditor {
 
         option.put("pageType", "amis");
 
-        panel = new JsonPageAmisPanel(jsonPage, jsonData, option, context);
+        panel = new JsonPageRenderPanel(jsonPage, jsonData, option, context);
     }
 
     @Override
@@ -68,7 +67,6 @@ public class MyEditor implements FileEditor {
     @Override
     public void addPropertyChangeListener(@NotNull PropertyChangeListener propertyChangeListener) {
 
-        System.out.println(propertyChangeListener);
     }
 
     @Override
@@ -83,18 +81,15 @@ public class MyEditor implements FileEditor {
 
     @Override
     public <T> @Nullable T getUserData(@NotNull Key<T> key) {
-        System.out.println("getUserData:" + key);
         return null;
     }
 
     @Override
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
-        System.out.println("putUserData:" + key + ", t:" + t);
     }
 
     @Override
     public @NotNull VirtualFile getFile() {
         return file;
     }
-
 }
