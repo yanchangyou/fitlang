@@ -135,35 +135,8 @@ public class JsonPageAmisPanel extends JPanel {
             return new JBCefJSQuery.Response(data) {
             };
         });
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                synchronizeFormJson();
-            }
-        }.start();
 
         return browser.getComponent();
-    }
-
-    void synchronizeFormJson() {
-
-        //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
-        String js = jsQuery.inject("formJson");
-        browser.getCefBrowser().executeJavaScript("" +
-                        " setInterval(function(){  var formJson = getFormJson();" +
-                        "   " + js +
-                        "   }, " + refreshDataInterval * 1000 + "); " +
-                        ""
-                ,
-                browser.getCefBrowser().getURL(), 0
-        );
-
     }
 
     static Map<String, String> htmlMap = new HashMap<>();
