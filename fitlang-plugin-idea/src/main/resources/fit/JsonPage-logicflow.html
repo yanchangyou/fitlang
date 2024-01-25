@@ -490,7 +490,15 @@
 
     const lf = new LogicFlow({
         container: document.querySelector("#app"),
-        grid: true,
+        grid: {
+            size: 20,
+            visible: true,
+            type: "mesh",
+            config: {
+                color: "#ababab",
+                thickness: 1,
+            },
+        },
 
         plugins: [Menu, DndPanel, ContextMenu, SelectionSelect, Control]
     });

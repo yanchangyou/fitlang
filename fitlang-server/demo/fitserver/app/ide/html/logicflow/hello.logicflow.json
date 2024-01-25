@@ -1,21 +1,39 @@
 {
-    "type": "page",
-    "title": "表单页面1",
-    "body": {
-        "type": "form",
-        "mode": "horizontal",
-        "wrapWithPanel": false,
-        "body": [
-            {
-                "label": "Name",
-                "type": "input-text",
-                "name": "name"
-            },
-            {
-                "label": "Email",
-                "type": "input-email",
-                "name": "email"
-            }
-        ]
-    }
+    "nodes": [
+        {
+            "id": "1",
+            "type": "circle",
+            "x": "200",
+            "y": "200",
+            "text": "节点1"
+        },
+        {
+            "id": "2",
+            "type": "circle",
+            "x": "400",
+            "y": "100",
+            "text": "节点2"
+        },
+        {
+            "id": "3",
+            "type": "circle",
+            "x": "400",
+            "y": "300",
+            "text": "节点3"
+        }
+    ],
+    "edges": [
+        {
+            "sourceNodeId": "1",
+            "targetNodeId": "2",
+            "type": "bezier",
+            "text": "连线"
+        },
+        {
+            "sourceNodeId": "1",
+            "targetNodeId": "3",
+            "type": "bezier",
+            "text": "连线"
+        }
+    ]
 }
