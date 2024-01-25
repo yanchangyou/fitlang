@@ -9,7 +9,21 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class JsonPageRenderProvider implements FileEditorProvider, DumbAware {
+
+    static Set<String> fileTypeSet = new HashSet();
+
+    static {
+        registerFileType(".amis.json");
+        registerFileType(".logicflow.json");
+    }
+
+    static void registerFileType(String fileType) {
+        fileTypeSet.add(fileType);
+    }
 
     JsonPageRender jsonPageRender;
 
@@ -19,7 +33,12 @@ public class JsonPageRenderProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().endsWith(".amis.json");
+        for (String fileType : fileTypeSet) {
+            if (virtualFile.getName().endsWith(fileType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -30,7 +49,7 @@ public class JsonPageRenderProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull @NonNls String getEditorTypeId() {
-        return "amis.json";
+        return ".json";
     }
 
     @Override

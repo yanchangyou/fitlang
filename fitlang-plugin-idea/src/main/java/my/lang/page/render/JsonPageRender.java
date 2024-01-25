@@ -29,7 +29,17 @@ public class JsonPageRender implements FileEditor {
 
         JSONObject jsonPage = JSONObject.parse(content);
 
+        type = parseType(file.getName());
+
         panel = new JsonPageRenderPanel(type, jsonPage);
+    }
+
+    String parseType(String name) {
+        String type = "amis";
+        if (name.indexOf(".") != name.lastIndexOf(".")) {
+            type = name.substring(name.indexOf(".") + 1, name.lastIndexOf("."));
+        }
+        return type;
     }
 
     @Override
