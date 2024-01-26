@@ -13,19 +13,23 @@ import java.util.Map;
 
 public class JsonPageRenderPanel extends JPanel {
 
+    JSONObject pageDefine;
+
     String type;
 
     JSONObject jsonPage;
 
     JBCefBrowser browser;
 
-    public JsonPageRenderPanel(String type, JSONObject jsonPage) {
+    public JsonPageRenderPanel(JSONObject pageDefine) {
 
         super(true);
 
-        this.type = type;
+        this.pageDefine = pageDefine;
 
-        this.jsonPage = jsonPage;
+        this.type = pageDefine.getString("type");
+
+        this.jsonPage = pageDefine.getJSONObject("page");
 
         browser = new JBCefBrowser();
 

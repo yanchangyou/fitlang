@@ -29,9 +29,10 @@ public class JsonPageRender implements FileEditor {
 
         JSONObject jsonPage = JSONObject.parse(content);
 
-        type = parseType(file.getName());
-
-        panel = new JsonPageRenderPanel(type, jsonPage);
+        if (jsonPage.containsKey("type")) {
+            type = jsonPage.getString("type");
+        }
+        panel = new JsonPageRenderPanel(jsonPage);
     }
 
     String parseType(String name) {
