@@ -31,9 +31,9 @@
         <fileType name="FitLang" extensions="fit"
                   implementationClass="fit.intellij.json.JsonFileType" fieldName="INSTANCE"
                   language="FitLang"/>
-        <fileType name="FitLang" extensions="fit5" fileNames="devcontainer.json"
-                  implementationClass="fit.intellij.json.json5.Json5FileType" fieldName="INSTANCE"
-                  language="FitLang"/>
+<!--        <fileType name="FitLang" extensions="fit5" fileNames="fit5"-->
+<!--                  implementationClass="fit.intellij.json.json5.Json5FileType" fieldName="INSTANCE"-->
+<!--                  language="FitLang"/>-->
         <!--    <fileType name="FitJSON-lines" extensions="jsonl;jsonlines;ldjson;ndjson"-->
         <!--              implementationClass="fit.intellij.json.jsonLines.JsonLinesFileType" fieldName="INSTANCE"-->
         <!--              language="FitJSON Lines"/>-->
