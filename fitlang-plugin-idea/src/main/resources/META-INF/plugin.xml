@@ -2,7 +2,7 @@
     <id>FitLang</id>
     <name>FitLang</name>
     <vendor email="yanchangyou@gmail.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
-    <idea-version since-build="231.0" until-build="253.*"/>
+    <idea-version since-build="231.0" until-build="232.*"/>
     <description><![CDATA[
     English: (后面有中文版)
     <br/>
@@ -388,7 +388,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.10.1 </li>
+            <li>0.10.2 page json redefine</li>
             <li>0.10.0 upgrade idea version to 231; embed amis and logicflow</li>
             <li>0.9.7 add node: showHtml, showJsonPage</li>
             <li>0.9.6 add node: showGlobalConfigDialog, showYesNoCancelDialog, showPasswordDialog, showCheckboxOkCancelDialog, convertObjectToArray, convertArrayToObject, convertToObjectArray, convertToBasicArray, showWarningMessage; remove node: readEditorSearch, readEditorReplace; refine node: readExcel, writeExcel, mergeExcel</li>
