@@ -90,11 +90,14 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
 
     private fun registerToolwindow(toolWindowManager: ToolWindowManager): ToolWindow {
 
-        val toolWindow = toolWindowManager.registerToolWindow(EVALUATE_TOOLWINDOW_ID) {
-            icon = AllIcons.Toolwindows.ToolWindowJsonPath;
-            stripeTitle = null;
-            canCloseContent = false;
-        }
+        val toolWindow = toolWindowManager.registerToolWindow(
+            id = EVALUATE_TOOLWINDOW_ID,
+            {
+                icon = AllIcons.Toolwindows.ToolWindowJsonPath;
+                stripeTitle = null;
+                canCloseContent = false;
+            }
+        )
         ContentManagerWatcher.watchContentManager(toolWindow, toolWindow.contentManager)
         return toolWindow
     }
