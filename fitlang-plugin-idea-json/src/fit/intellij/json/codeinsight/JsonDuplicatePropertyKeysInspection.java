@@ -6,7 +6,7 @@ import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
-import fit.intellij.json.JsonBundle;
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
@@ -14,10 +14,9 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.PopupStep;
 import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
 import com.intellij.psi.*;
-import com.intellij.ui.IconManager;
-import com.intellij.ui.PlatformIcons;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import fit.intellij.json.JsonBundle;
 import fit.intellij.json.psi.JsonElementVisitor;
 import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.JsonProperty;
@@ -122,7 +121,7 @@ public class JsonDuplicatePropertyKeysInspection extends LocalInspectionTool {
           new BaseListPopupStep<>(JsonBundle.message("navigate.to.duplicates.header", myEntryKey), allElements) {
             @Override
             public @NotNull Icon getIconFor(PsiElement aValue) {
-              return IconManager.getInstance().getPlatformIcon(PlatformIcons.Property);
+              return AllIcons.Json.Object;
             }
 
             @Override

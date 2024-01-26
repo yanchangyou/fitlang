@@ -20,8 +20,6 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileInfoManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.ui.IconManager;
-import com.intellij.ui.PlatformIcons;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ArrayUtilRt;
 import com.intellij.util.ProcessingContext;
@@ -269,7 +267,7 @@ public final class JsonPointerReferenceProvider extends PsiReferenceProvider {
             } else if (value instanceof fit.intellij.json.psi.JsonArray) {
                 return AllIcons.Json.Array;
             }
-            return IconManager.getInstance().getPlatformIcon(PlatformIcons.Property);
+            return AllIcons.Json.Object;
         }
     }
 
