@@ -96,8 +96,6 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
             canCloseContent = false;
         }
         ContentManagerWatcher.watchContentManager(toolWindow, toolWindow.contentManager)
-
-
         return toolWindow
     }
 
