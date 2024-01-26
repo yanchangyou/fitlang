@@ -92,7 +92,7 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
 
         val toolWindow = toolWindowManager.registerToolWindow(
             id = EVALUATE_TOOLWINDOW_ID,
-            {
+            builder = {
                 icon = AllIcons.Toolwindows.ToolWindowJsonPath;
                 stripeTitle = null;
                 canCloseContent = false;
