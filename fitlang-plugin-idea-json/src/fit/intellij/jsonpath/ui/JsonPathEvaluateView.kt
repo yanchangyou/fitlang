@@ -22,16 +22,16 @@ import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.ui.popup.JBPopup
-import com.intellij.openapi.ui.popup.JBPopupFactory
-import com.intellij.openapi.ui.popup.PopupChooserBuilder
 import com.intellij.openapi.util.NlsActions
-import com.intellij.openapi.wm.IdeFocusManager
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiManager
 import com.intellij.testFramework.LightVirtualFile
 import com.intellij.ui.EditorTextField
 import com.intellij.ui.JBColor
-import com.intellij.ui.components.*
+import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.JBPanelWithEmptyText
+import com.intellij.ui.components.JBScrollPane
+import com.intellij.ui.components.JBTextArea
 import com.intellij.ui.components.panels.NonOpaquePanel
 import com.intellij.ui.popup.PopupState
 import com.intellij.util.ui.JBUI
@@ -373,39 +373,39 @@ internal abstract class JsonPathEvaluateView(protected val project: Project) : S
     override fun actionPerformed(e: AnActionEvent) {
       if (popupState.isRecentlyHidden) return
 
-      val historyList = JBList(getExpressionHistory())
-      showCompletionPopup(searchWrapper, historyList, searchTextField, popupState)
+//      val historyList = JBList(getExpressionHistory())
+//      showCompletionPopup(searchWrapper, historyList, searchTextField, popupState)
     }
 
     init {
       registerCustomShortcutSet(KeymapUtil.getActiveKeymapShortcuts("ShowSearchHistory"), searchTextField)
     }
-
-    private fun showCompletionPopup(toolbarComponent: JComponent?,
-                                    list: JList<String>,
-                                    textField: EditorTextField,
-                                    popupState: PopupState<JBPopup?>) {
-      val builder: PopupChooserBuilder<*> = JBPopupFactory.getInstance().createListPopupBuilder(list)
-      val popup = builder
-        .setMovable(false)
-        .setResizable(false)
-        .setRequestFocus(true)
-        .setItemChoosenCallback(Runnable {
-          val selectedValue = list.selectedValue
-          if (selectedValue != null) {
-            textField.text = selectedValue
-            IdeFocusManager.getGlobalInstance().requestFocus(textField, false)
-          }
-        })
-        .createPopup()
-
-      popupState.prepareToShow(popup)
-      if (toolbarComponent != null) {
-        popup.showUnderneathOf(toolbarComponent)
-      }
-      else {
-        popup.showUnderneathOf(textField)
-      }
-    }
+//
+//    private fun showCompletionPopup(toolbarComponent: JComponent?,
+//                                    list: JList<String>,
+//                                    textField: EditorTextField,
+//                                    popupState: PopupState<JBPopup?>) {
+//      val builder: PopupChooserBuilder<*> = JBPopupFactory.getInstance().createListPopupBuilder(list)
+//      val popup = builder
+//        .setMovable(false)
+//        .setResizable(false)
+//        .setRequestFocus(true)
+//        .setItemChoosenCallback(Runnable {
+//          val selectedValue = list.selectedValue
+//          if (selectedValue != null) {
+//            textField.text = selectedValue
+//            IdeFocusManager.getGlobalInstance().requestFocus(textField, false)
+//          }
+//        })
+//        .createPopup()
+//
+//      popupState.prepareToShow(popup)
+//      if (toolbarComponent != null) {
+//        popup.showUnderneathOf(toolbarComponent)
+//      }
+//      else {
+//        popup.showUnderneathOf(textField)
+//      }
+//    }
   }
 }
