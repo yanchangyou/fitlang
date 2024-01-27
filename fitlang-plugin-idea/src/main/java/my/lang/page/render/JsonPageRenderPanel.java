@@ -66,7 +66,11 @@ public class JsonPageRenderPanel extends JPanel {
         String html = htmlMap.get(path);
         if (html == null) {
             InputStream inputStream = JsonPageRenderPanel.class.getClassLoader().getResourceAsStream(path);
-            html = IoUtil.readUtf8(inputStream);
+            if (inputStream != null) {
+                html = IoUtil.readUtf8(inputStream);
+            } else {
+                html = "<h2>not supported!</h2>";
+            }
             htmlMap.put(path, html);
         }
         return html;

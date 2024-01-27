@@ -1,9 +1,8 @@
 {
     "name": "action",
-    "title": "action",
     "actions": [
         {
-            "title": "Fit Hello",
+            "title": "Run",
             "visible": true,
             "script": {
                 "uni": "hello",
