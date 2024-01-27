@@ -10,11 +10,9 @@ import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
 import com.intellij.ui.jcef.JBCefJSQuery;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,9 +57,13 @@ public class JsonPageRenderPanel extends JPanel {
 
         add(browser.getComponent(), BorderLayout.CENTER);
 
-        render(type, jsonPage, browser);
-
         jsonData = readData();
+
+        if (StrUtil.isBlank(jsonData)) {
+            jsonData = "{}";
+        }
+
+        render(type, jsonPage, JSONObject.parse(jsonData), browser);
 
         jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
@@ -88,15 +90,21 @@ public class JsonPageRenderPanel extends JPanel {
         }.start();
     }
 
-    @NotNull
-    private String getDataFilePath() {
-        return virtualFile.getPath().replace(".page.", ".");
+    private VirtualFile getDataFileOrCreate() {
+        String name = virtualFile.getName();
+        String dataName = name.replace(".page.", ".");
+        VirtualFile dataFile = virtualFile.getParent().findChild(dataName);
+        if (dataFile == null || !dataFile.exists()) {
+            FileUtil.writeUtf8String("{}", virtualFile.getPath().replace(".page.", "."));
+            dataFile = virtualFile.getParent().findChild(dataName);
+        }
+        return dataFile;
     }
 
     String readData() {
-        String path = getDataFilePath();
-        if (new File(path).exists()) {
-            return FileUtil.readUtf8String(path);
+        VirtualFile dataFile = getDataFileOrCreate();
+        if (dataFile != null) {
+            return FileUtil.readUtf8String(dataFile.getPath());
         }
         return "";
     }
@@ -106,7 +114,12 @@ public class JsonPageRenderPanel extends JPanel {
     }
 
     void writeData(String data) {
-        FileUtil.writeUtf8String(data, getDataFilePath());
+        VirtualFile dataFile = getDataFileOrCreate();
+        if (dataFile == null || !dataFile.exists()) {
+            FileUtil.createTempFile();
+        }
+        FileUtil.writeUtf8String(data, dataFile.getPath());
+        dataFile.refresh(false, false);
     }
 
     /**
@@ -121,7 +134,7 @@ public class JsonPageRenderPanel extends JPanel {
     }
 
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
-    static void render(String type, JSONObject jsonPage, JBCefBrowser browser) {
+    static void render(String type, JSONObject jsonPage, JSONObject jsonData, JBCefBrowser browser) {
 
         if (jsonPage == null) {
             jsonPage = new JSONObject();
@@ -132,8 +145,10 @@ public class JsonPageRenderPanel extends JPanel {
         if (StrUtil.isNotBlank(type)) {
             path = path.replace(".html", "-" + type + ".html");
         }
+
         String html = loadHtml(type, path);
         html = html.replace("{\"JSON_PAGE\": \"\"}", jsonPage.toJSONString());
+        html = html.replace("{\"JSON_DATA\": \"\"}", jsonData.toJSONString());
 
         browser.loadHTML(html);
 
