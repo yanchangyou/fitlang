@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 
 public class JsonActionRender implements FileEditor {
 
@@ -34,9 +33,7 @@ public class JsonActionRender implements FileEditor {
 
         JSONObject jsonAction = JSONObject.parse(content);
 
-        File actionFile = new File(path);
-
-        panel = new JsonActionRenderPanel(jsonAction, actionFile, contextParam);
+        panel = new JsonActionRenderPanel(jsonAction, file, contextParam);
     }
 
     @Override
