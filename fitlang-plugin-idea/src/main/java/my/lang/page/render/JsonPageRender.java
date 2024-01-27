@@ -31,12 +31,12 @@ public class JsonPageRender implements FileEditor {
             content = "{}";
         }
 
-        JSONObject jsonPage = JSONObject.parse(content);
+        JSONObject pageDefine = JSONObject.parse(content);
 
-        if (jsonPage.containsKey("type")) {
-            type = jsonPage.getString("type");
+        if (pageDefine.containsKey("type")) {
+            type = pageDefine.getString("type");
         }
-        panel = new JsonPageRenderPanel(jsonPage);
+        panel = new JsonPageRenderPanel(pageDefine, virtualFile);
     }
 
     @Override

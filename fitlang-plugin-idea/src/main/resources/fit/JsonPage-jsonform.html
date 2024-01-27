@@ -25701,7 +25701,7 @@
 
 </script>
 
-<form style="margin: 20px;"></form>
+<form id="json-form" style="margin: 20px;"></form>
 
 <script type="text/javascript">
 
@@ -25722,7 +25722,13 @@
         };
     }
 
-    $('form').jsonForm(jsonPage);
+    $('#json-form').jsonForm(jsonPage);
+
+
+    function getJsonData() {
+        var data = $('#json-form').jsonFormValue();
+        return JSON.stringify(data);
+    }
 
     $("[type=submit]").remove();
 
