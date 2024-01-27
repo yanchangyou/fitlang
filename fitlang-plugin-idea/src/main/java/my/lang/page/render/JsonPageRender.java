@@ -1,6 +1,7 @@
 package my.lang.page.render;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorState;
@@ -26,6 +27,9 @@ public class JsonPageRender implements FileEditor {
         String path = file.getPath();
 
         String content = FileUtil.readUtf8String(path);
+        if (StrUtil.isBlank(content)) {
+            content = "{}";
+        }
 
         JSONObject jsonPage = JSONObject.parse(content);
 
@@ -33,14 +37,6 @@ public class JsonPageRender implements FileEditor {
             type = jsonPage.getString("type");
         }
         panel = new JsonPageRenderPanel(jsonPage);
-    }
-
-    String parseType(String name) {
-        String type = "amis";
-        if (name.indexOf(".") != name.lastIndexOf(".")) {
-            type = name.substring(name.indexOf(".") + 1, name.lastIndexOf("."));
-        }
-        return type;
     }
 
     @Override

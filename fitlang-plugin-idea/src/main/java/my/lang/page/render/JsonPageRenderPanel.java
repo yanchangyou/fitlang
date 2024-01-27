@@ -43,6 +43,10 @@ public class JsonPageRenderPanel extends JPanel {
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
     static void render(String type, JSONObject jsonPage, JBCefBrowser browser) {
 
+        if (jsonPage == null) {
+            jsonPage = new JSONObject();
+        }
+
         String path = "fit/JsonPage.html";
 
         if (StrUtil.isNotBlank(type)) {
