@@ -74,7 +74,15 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
         val toolWindowManager = ToolWindowManager.getInstance(project)
         var toolWindow = toolWindowManager.getToolWindow(EVALUATE_TOOLWINDOW_ID)
         if (toolWindow == null) {
-            toolWindow = registerToolwindow(toolWindowManager)
+            toolWindow = toolWindowManager.registerToolWindow(
+                id = EVALUATE_TOOLWINDOW_ID,
+                builder = {
+                    icon = AllIcons.Toolwindows.ToolWindowJsonPath;
+                    stripeTitle = null;
+                    canCloseContent = true;
+                }
+            )
+            ContentManagerWatcher.watchContentManager(toolWindow, toolWindow.contentManager)
             (toolWindow as? ToolWindowEx)?.setTabActions(
                 object :
                     DumbAwareAction(JsonBundle.message("jsonpath.evaluate.add.tab.text"), null, AllIcons.General.Add) {
@@ -85,20 +93,6 @@ class JsonPathEvaluateManager internal constructor(private val project: Project)
                 })
         }
 
-        return toolWindow
-    }
-
-    private fun registerToolwindow(toolWindowManager: ToolWindowManager): ToolWindow {
-
-        val toolWindow = toolWindowManager.registerToolWindow(
-            id = EVALUATE_TOOLWINDOW_ID,
-            builder = {
-                icon = AllIcons.Toolwindows.ToolWindowJsonPath;
-                stripeTitle = null;
-                canCloseContent = false;
-            }
-        )
-        ContentManagerWatcher.watchContentManager(toolWindow, toolWindow.contentManager)
         return toolWindow
     }
 
