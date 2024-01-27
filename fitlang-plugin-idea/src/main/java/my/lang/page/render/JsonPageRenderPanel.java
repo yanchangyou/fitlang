@@ -52,7 +52,7 @@ public class JsonPageRenderPanel extends JPanel {
         if (StrUtil.isNotBlank(type)) {
             path = path.replace(".html", "-" + type + ".html");
         }
-        String html = loadHtml(path);
+        String html = loadHtml(type, path);
         html = html.replace("{\"JSON_PAGE\": \"\"}", jsonPage.toJSONString());
 
         browser.loadHTML(html);
@@ -62,14 +62,14 @@ public class JsonPageRenderPanel extends JPanel {
 
     static Map<String, String> htmlMap = new HashMap<>();
 
-    static String loadHtml(String path) {
+    static String loadHtml(String type, String path) {
         String html = htmlMap.get(path);
         if (html == null) {
             InputStream inputStream = JsonPageRenderPanel.class.getClassLoader().getResourceAsStream(path);
             if (inputStream != null) {
                 html = IoUtil.readUtf8(inputStream);
             } else {
-                html = "<h2>not supported!</h2>";
+                html = "<h2 style='margin:50px;color: red;'>Not support page type: " + type + "</h2>";
             }
             htmlMap.put(path, html);
         }
