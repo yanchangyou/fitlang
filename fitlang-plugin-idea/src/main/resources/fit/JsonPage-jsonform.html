@@ -25724,9 +25724,8 @@
 
     $('#json-form').jsonForm(jsonPage);
 
-
     function getJsonData() {
-        var data = $('#json-form').jsonFormValue();
+        let data = $('#json-form').jsonFormValue();
         return JSON.stringify(data);
     }
 
