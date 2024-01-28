@@ -75,7 +75,6 @@ public class JsonFormPanel extends JPanel {
 
     public void setFormData(JSONObject formData) {
         this.formData = formData;
-        setFormDataToChrome(formData);
     }
 
     public JSONObject getFormSchema() {
@@ -146,7 +145,7 @@ public class JsonFormPanel extends JPanel {
 
     }
 
-    void setFormDataToChrome(JSONObject formData) {
+    public void setFormDataToChrome(JSONObject formData) {
 
         //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
         browser.getCefBrowser().executeJavaScript("" +

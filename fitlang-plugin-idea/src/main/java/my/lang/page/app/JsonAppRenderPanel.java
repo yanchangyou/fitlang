@@ -179,6 +179,7 @@ public class JsonAppRenderPanel extends JPanel {
     private void setOutputJson(JSONObject output) {
         if (useForm) {
             outputForm.setFormData(output);
+            outputForm.setFormDataToChrome(output);
         } else {
             outputEditor.setText(toJsonTextWithFormat(output));
         }
