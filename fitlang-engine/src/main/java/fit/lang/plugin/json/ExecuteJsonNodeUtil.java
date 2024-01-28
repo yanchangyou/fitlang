@@ -715,6 +715,7 @@ public class ExecuteJsonNodeUtil {
         return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
                 .replaceAll("\\t", "    ")
                 .replace("\":\"", "\": \"")
+                .replace("\":{\"", "\": {")
                 .replace("\":true", "\": true")
                 .replace("\":false", "\": false")
                 .replace("\":null", "\": null")
