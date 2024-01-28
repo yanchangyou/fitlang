@@ -8,6 +8,7 @@ import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.LanguageTextField;
+import com.intellij.ui.components.JBScrollPane;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +63,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         JSplitPane splitPane = buildMainPanel(input, output, actions);
         splitPane.setBorder(null);
+//        splitPane.setDividerSize(4);
 
         adjustSplitPanel(splitPane);
 
@@ -89,8 +91,6 @@ public class JsonAppRenderPanel extends JPanel {
             title = "App";
         }
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
-        titleLabel.setAlignmentX(15);
-        titleLabel.setAlignmentY(15);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new JLabel(" "), BorderLayout.NORTH);
         panel.add(titleLabel, BorderLayout.CENTER);
@@ -105,9 +105,10 @@ public class JsonAppRenderPanel extends JPanel {
         JSONObject helloNode = new JSONObject();
         helloNode.put("uni", "hello");
 
-        JPanel scriptPanel = buildEditorPanel("", toJsonTextWithFormat(helloNode));
+        Object[] components = buildEditorPanel("Script JSON", toJsonTextWithFormat(helloNode));
+        JPanel scriptPanel = (JPanel) components[0];
 
-        scriptEditor = getEditor(scriptPanel);
+        scriptEditor = (LanguageTextField) components[1];
 
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -148,9 +149,8 @@ public class JsonAppRenderPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
 
-                        JsonAppRenderPanel.getEditor(scriptPanel).setText(toJsonTextWithFormat(script));
-
-                        JSONObject input = JSONObject.parse(outputEditor.getText());
+                        scriptEditor.setText(toJsonTextWithFormat(script));
+                        JSONObject input = JSONObject.parse(inputEditor.getText());
 
                         String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
 
@@ -169,16 +169,6 @@ public class JsonAppRenderPanel extends JPanel {
         return panel;
     }
 
-    @NotNull
-    private static LanguageTextField getEditor(JComponent component) {
-        return (LanguageTextField) getFirstComponent(component);
-    }
-
-    @NotNull
-    private static Component getFirstComponent(JComponent component) {
-        return component.getComponent(0);
-    }
-
     private JComponent buildInputAndOutputEditor(JSONObject input, JSONObject output) {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -187,16 +177,19 @@ public class JsonAppRenderPanel extends JPanel {
 
         String text = toJsonTextWithFormat(input);
 
-        JPanel inputPanel = buildEditorPanel("Input JSON", text);
+        Object[] inputComponents = buildEditorPanel("Input JSON", text);
 
-        inputEditor = getEditor(inputPanel);
+        JPanel inputPanel = (JPanel) inputComponents[0];
+        inputEditor = (LanguageTextField) inputComponents[1];
 
         splitPane.add(inputPanel);
 
         text = toJsonTextWithFormat(output);
 
-        JPanel outputPanel = buildEditorPanel("Output JSON", text);
-        outputEditor = getEditor(outputPanel);
+        Object[] outputComponents = buildEditorPanel("Output JSON", text);
+
+        JPanel outputPanel = (JPanel) outputComponents[0];
+        outputEditor = (LanguageTextField) outputComponents[1];
 
         splitPane.add(outputPanel);
 
@@ -222,23 +215,24 @@ public class JsonAppRenderPanel extends JPanel {
         }.start();
     }
 
-    @NotNull
-    private JPanel buildEditorPanel(String title, String text) {
+    private Object[] buildEditorPanel(String title, String text) {
 
         JPanel editorPanel = new JPanel(new BorderLayout());
 
-        LanguageTextField inputEditor = new LanguageTextField(Json5Language.INSTANCE, project, text);
-        inputEditor.setFont(EditorUtil.getEditorFont());
-        inputEditor.setOneLineMode(false);
+        LanguageTextField jsonEditor = new LanguageTextField(Json5Language.INSTANCE, project, text);
+        jsonEditor.setFont(EditorUtil.getEditorFont());
+        jsonEditor.setOneLineMode(false);
+
+        JBScrollPane jbScrollPane = new JBScrollPane(jsonEditor);
 
         // 第一个加入，方便获取
-        editorPanel.add(inputEditor, BorderLayout.CENTER);
+        editorPanel.add(jbScrollPane, BorderLayout.CENTER);
 
         JLabel label = new JLabel(title, SwingConstants.CENTER);
         label.setFont(EditorUtil.getEditorFont());
         editorPanel.add(label, BorderLayout.NORTH);
 
-        return editorPanel;
+        return new Object[]{editorPanel, jsonEditor};
     }
 
 }
