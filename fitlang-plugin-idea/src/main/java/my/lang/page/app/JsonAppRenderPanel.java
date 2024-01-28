@@ -22,24 +22,23 @@ public class JsonAppRenderPanel extends JPanel {
 
     Project project;
 
-    JSONObject actionDefine;
+    JSONObject appDefine;
 
     JSONObject contextParam;
 
-    VirtualFile actionFile;
+    VirtualFile appFile;
 
     LanguageTextField inputEditor;
     LanguageTextField outputEditor;
     LanguageTextField scriptEditor;
 
 
-    public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile actionFile, JSONObject contextParam) {
+    public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
         this.project = project;
-
-        this.actionDefine = appDefine;
+        this.appDefine = appDefine;
+        this.appFile = appFile;
         this.contextParam = contextParam;
-        this.actionFile = actionFile;
 
         String title = appDefine.getString("title");
 
