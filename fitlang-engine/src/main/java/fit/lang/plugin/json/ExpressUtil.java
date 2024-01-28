@@ -27,6 +27,13 @@ public class ExpressUtil {
 
         String realExpress = express.substring(2, express.length() - 1);
 
+        if (!param.containsKey("_FitLang")) {
+            param.put("_FitLang", FitLangExpressTool.INSTANCE);
+        }
+        if (!param.containsKey("FitLang")) {
+            param.put("FitLang", FitLangExpressTool.INSTANCE);
+        }
+
         return MVEL.eval(realExpress, param, param);
     }
 

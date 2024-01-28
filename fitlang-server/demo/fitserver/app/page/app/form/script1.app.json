@@ -1,0 +1,17 @@
+{
+    "name": "app",
+    "title": "App",
+    "useForm": true,
+    "input": {
+        "who": "world"
+    },
+    "output": {
+        "message": "hello, world!"
+    },
+    "script": {
+        "uni": "mix",
+        "json": {
+            "message": "${1}"
+        }
+    }
+}
