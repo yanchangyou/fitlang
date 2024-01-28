@@ -94,4 +94,8 @@ public class JsonAppRender implements FileEditor {
     public @NotNull VirtualFile getFile() {
         return file;
     }
+
+    static {
+//        JBCefBrowser.createBuilder().setOffScreenRendering(false);
+    }
 }
