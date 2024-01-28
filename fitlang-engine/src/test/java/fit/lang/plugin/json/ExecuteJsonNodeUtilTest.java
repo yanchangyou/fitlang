@@ -1,7 +1,6 @@
 package fit.lang.plugin.json;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -63,18 +62,4 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
         Assert.assertEquals(Long.valueOf(1), item.getLong("a"));
     }
 
-    public void test() {
-//        System.out.println(JSONObject.parse("{1,2}"));
-//        System.out.println(JSONObject.parse("{001,2}"));
-//        System.out.println(JSONObject.parse("{1,02}"));
-//        System.out.println(JSONObject.parse("{01,02}"));
-//        System.out.println(JSONObject.parse("{10,2}"));
-//        System.out.println(JSONObject.parse("{1,20}"));
-//        System.out.println(JSONObject.parse("{100,2}"));
-//        System.out.println(JSONObject.parse("{1,200}"));
-    }
-
-    public void testFormat() {
-        System.out.println(JSONObject.parseObject("{'foo':'bar'}").toJSONString(JSONWriter.Feature.PrettyFormat));
-    }
 }

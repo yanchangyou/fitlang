@@ -11,6 +11,7 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.schema.JSONSchema;
 import fit.lang.ExecuteNodeException;
 import fit.lang.define.ExecuteNode;
 import fit.lang.define.ExecuteNodeData;
@@ -960,5 +961,15 @@ public class ExecuteJsonNodeUtil {
         }
 
         return path;
+    }
+
+    /**
+     * 解析json的schema
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static JSONObject parseJsonSchema(JSONObject jsonObject) {
+        return JSONSchema.ofValue(jsonObject).toJSONObject();
     }
 }

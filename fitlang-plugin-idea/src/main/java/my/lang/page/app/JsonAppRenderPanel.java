@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseJsonSchema;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
@@ -33,6 +34,10 @@ public class JsonAppRenderPanel extends JPanel {
     LanguageTextField outputEditor;
     LanguageTextField scriptEditor;
 
+    boolean useForm;
+
+    JsonFormPanel inputForm;
+    JsonFormPanel outputForm;
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
@@ -44,7 +49,7 @@ public class JsonAppRenderPanel extends JPanel {
         String title = appDefine.getString("title");
 
         JSONArray actions = appDefine.getJSONArray("actions");
-
+        useForm = Boolean.TRUE.equals(appDefine.getBoolean("useForm"));
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
 
@@ -76,7 +81,12 @@ public class JsonAppRenderPanel extends JPanel {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
 
-        JComponent inputOutputEditor = buildInputAndOutputEditor(input, output);
+        JComponent inputOutputEditor;
+        if (useForm) {
+            inputOutputEditor = buildInputAndOutputForm(input, output);
+        } else {
+            inputOutputEditor = buildInputAndOutputEditor(input, output);
+        }
 
         splitPane.add(inputOutputEditor);
 
@@ -123,14 +133,13 @@ public class JsonAppRenderPanel extends JPanel {
 
                     JSONObject script = JSONObject.parse(scriptEditor.getText());
 
-                    JSONObject input = JSONObject.parse(inputEditor.getText());
+                    JSONObject input = getInputJson();
 
                     String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
 
                     JSONObject output = JSONObject.parse(result);
 
-                    outputEditor.setText(toJsonTextWithFormat(output));
-
+                    setOutputJson(output);
                 }
             });
             toolBar.add(button);
@@ -150,14 +159,12 @@ public class JsonAppRenderPanel extends JPanel {
                     public void actionPerformed(ActionEvent actionEvent) {
 
                         scriptEditor.setText(toJsonTextWithFormat(script));
-                        JSONObject input = JSONObject.parse(inputEditor.getText());
+                        JSONObject input = getInputJson();
 
                         String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
 
                         JSONObject output = JSONObject.parse(result);
-
-                        outputEditor.setText(toJsonTextWithFormat(output));
-
+                        setOutputJson(output);
                     }
                 });
                 toolBar.add(button);
@@ -167,6 +174,46 @@ public class JsonAppRenderPanel extends JPanel {
         panel.add(toolBar, BorderLayout.NORTH);
 
         return panel;
+    }
+
+    private void setOutputJson(JSONObject output) {
+        if (useForm) {
+            outputForm.setFormData(output);
+        } else {
+            outputEditor.setText(toJsonTextWithFormat(output));
+        }
+    }
+
+    @NotNull
+    private JSONObject getInputJson() {
+        if (useForm) {
+            return inputForm.getFormData();
+        }
+        return JSONObject.parse(inputEditor.getText());
+    }
+
+    private JComponent buildInputAndOutputForm(JSONObject input, JSONObject output) {
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerSize(3);
+        splitPane.setBorder(null);
+
+        inputForm = new JsonFormPanel(parseJsonSchema(input), input);
+
+        JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.add(inputForm, BorderLayout.CENTER);
+        splitPane.add(inputPanel);
+
+        outputForm = new JsonFormPanel(parseJsonSchema(output), output);
+
+        JPanel outputPanel = new JPanel(new BorderLayout());
+        outputPanel.add(outputForm, BorderLayout.CENTER);
+        splitPane.add(outputPanel);
+
+        adjustSplitPanel(splitPane);
+
+        return splitPane;
+
     }
 
     private JComponent buildInputAndOutputEditor(JSONObject input, JSONObject output) {
