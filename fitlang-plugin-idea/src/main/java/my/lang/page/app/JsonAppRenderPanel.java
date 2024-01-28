@@ -39,6 +39,11 @@ public class JsonAppRenderPanel extends JPanel {
     JsonFormPanel inputForm;
     JsonFormPanel outputForm;
 
+    String appTitle;
+    String inputTitle;
+    String outputTitle;
+    String scriptTitle;
+
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
         this.project = project;
@@ -46,10 +51,15 @@ public class JsonAppRenderPanel extends JPanel {
         this.appFile = appFile;
         this.contextParam = contextParam;
 
-        String title = appDefine.getString("title");
+        appTitle = appDefine.getString("title");
+        inputTitle = appDefine.getString("inputTitle");
+        outputTitle = appDefine.getString("outputTitle");
+        scriptTitle = appDefine.getString("scriptTitle");
 
         JSONArray actions = appDefine.getJSONArray("actions");
         useForm = Boolean.TRUE.equals(appDefine.getBoolean("useForm"));
+        useGraphScript = Boolean.TRUE.equals(appDefine.getBoolean("useGraphScript"));
+
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
 
@@ -64,7 +74,7 @@ public class JsonAppRenderPanel extends JPanel {
         setBorder(null);
         setLayout(new BorderLayout());
 
-        setAppTitle(title);
+        setAppTitle(appTitle);
 
         JSplitPane splitPane = buildMainPanel(input, output, actions);
         splitPane.setBorder(null);
@@ -115,7 +125,7 @@ public class JsonAppRenderPanel extends JPanel {
         JSONObject helloNode = new JSONObject();
         helloNode.put("uni", "hello");
 
-        Object[] components = buildEditorPanel("  Script JSON", SwingConstants.LEFT, toJsonTextWithFormat(helloNode));
+        Object[] components = buildEditorPanel(formatTitle(scriptTitle), SwingConstants.LEFT, toJsonTextWithFormat(helloNode));
         JPanel scriptPanel = (JPanel) components[0];
 
         scriptEditor = (LanguageTextField) components[1];
@@ -202,12 +212,14 @@ public class JsonAppRenderPanel extends JPanel {
         inputForm = new JsonFormPanel(parseJsonSchema(input), input);
 
         JPanel inputPanel = new JPanel(new BorderLayout());
+        inputPanel.add(new JLabel(formatTitle(inputTitle)), BorderLayout.NORTH);
         inputPanel.add(inputForm, BorderLayout.CENTER);
         splitPane.add(inputPanel);
 
         outputForm = new JsonFormPanel(parseJsonSchema(output), output);
 
         JPanel outputPanel = new JPanel(new BorderLayout());
+        outputPanel.add(new JLabel(formatTitle(outputTitle), SwingConstants.RIGHT), BorderLayout.NORTH);
         outputPanel.add(outputForm, BorderLayout.CENTER);
         splitPane.add(outputPanel);
 
@@ -215,6 +227,16 @@ public class JsonAppRenderPanel extends JPanel {
 
         return splitPane;
 
+    }
+
+    /**
+     * 格式化title 添加缩进
+     *
+     * @param title
+     * @return
+     */
+    String formatTitle(String title) {
+        return "  " + title + "  ";
     }
 
     private JComponent buildInputAndOutputEditor(JSONObject input, JSONObject output) {
@@ -225,7 +247,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         String text = toJsonTextWithFormat(input);
 
-        Object[] inputComponents = buildEditorPanel("  Input JSON", SwingConstants.LEFT, text);
+        Object[] inputComponents = buildEditorPanel(formatTitle(inputTitle), SwingConstants.LEFT, text);
 
         JPanel inputPanel = (JPanel) inputComponents[0];
         inputEditor = (LanguageTextField) inputComponents[1];
@@ -234,7 +256,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         text = toJsonTextWithFormat(output);
 
-        Object[] outputComponents = buildEditorPanel("Output JSON  ", SwingConstants.RIGHT, text);
+        Object[] outputComponents = buildEditorPanel(formatTitle(outputTitle), SwingConstants.RIGHT, text);
 
         JPanel outputPanel = (JPanel) outputComponents[0];
         outputEditor = (LanguageTextField) outputComponents[1];

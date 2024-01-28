@@ -30,7 +30,7 @@ public class JsonTest extends TestCase {
     }
 
     public void testSchemaObject() {
-        JSONObject jsonObject = JSONObject.parseObject("{'object':{'foo':'bar'}}");
+        JSONObject jsonObject = JSONObject.parseObject("{'key':{'foo':'bar'}}");
         JSONObject schema = parseJsonSchema(jsonObject);
         System.out.println(schema);
     }
