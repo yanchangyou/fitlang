@@ -22,7 +22,7 @@ public class JsonAppRenderProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getName().endsWith("app.json");
+        return virtualFile.getName().endsWith(".app.json");
     }
 
     @Override
@@ -33,7 +33,7 @@ public class JsonAppRenderProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull @NonNls String getEditorTypeId() {
-        return "app.json";
+        return ".app.json";
     }
 
     @Override
