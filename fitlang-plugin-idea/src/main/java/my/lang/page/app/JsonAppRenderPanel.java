@@ -1,5 +1,6 @@
 package my.lang.page.app;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.json5.Json5Language;
@@ -17,7 +18,7 @@ import java.awt.event.ActionEvent;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
-public class JsonAppRenderPanel extends JSplitPane {
+public class JsonAppRenderPanel extends JPanel {
 
     Project project;
 
@@ -34,32 +35,62 @@ public class JsonAppRenderPanel extends JSplitPane {
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile actionFile, JSONObject contextParam) {
 
-        super(JSplitPane.VERTICAL_SPLIT);
-        setBorder(null);
-//        setDividerSize(3);
-
         this.project = project;
 
         this.actionDefine = appDefine;
         this.contextParam = contextParam;
         this.actionFile = actionFile;
 
+        String title = appDefine.getString("title");
+
         JSONArray actions = appDefine.getJSONArray("actions");
 
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
 
-        addEditor(input, output);
+        setBorder(null);
+        setLayout(new BorderLayout());
 
-        addAction(actions);
+        setAppTitle(title);
 
-        adjustSplitPanel(this);
+        JSplitPane splitPane = buildMainPanel(input, output, actions);
+        splitPane.setBorder(null);
+
+        adjustSplitPanel(splitPane);
 
         implementIdeOperator(null);
 
     }
 
-    void addAction(JSONArray actions) {
+    @NotNull
+    private JSplitPane buildMainPanel(JSONObject input, JSONObject output, JSONArray actions) {
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        add(splitPane, BorderLayout.CENTER);
+
+        JComponent inputOutputEditor = buildInputAndOutputEditor(input, output);
+
+        splitPane.add(inputOutputEditor);
+
+        JComponent scriptPanel = buildScriptPanel(actions);
+
+        splitPane.add(scriptPanel);
+        return splitPane;
+    }
+
+    private void setAppTitle(String title) {
+        if (StrUtil.isBlank(title)) {
+            title = "App";
+        }
+        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
+        titleLabel.setAlignmentX(15);
+        titleLabel.setAlignmentY(15);
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(new JLabel(" "), BorderLayout.NORTH);
+        panel.add(titleLabel, BorderLayout.CENTER);
+        add(panel, BorderLayout.NORTH);
+    }
+
+    JPanel buildScriptPanel(JSONArray actions) {
 
         JPanel toolBar = new JPanel();
         toolBar.setAlignmentX(15);
@@ -126,11 +157,9 @@ public class JsonAppRenderPanel extends JSplitPane {
             }
         }
 
-        add(panel);
-
-
         panel.add(toolBar, BorderLayout.NORTH);
 
+        return panel;
     }
 
     @NotNull
@@ -143,7 +172,7 @@ public class JsonAppRenderPanel extends JSplitPane {
         return component.getComponent(0);
     }
 
-    private void addEditor(JSONObject input, JSONObject output) {
+    private JComponent buildInputAndOutputEditor(JSONObject input, JSONObject output) {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerSize(3);
@@ -164,9 +193,9 @@ public class JsonAppRenderPanel extends JSplitPane {
 
         splitPane.add(outputPanel);
 
-        add(splitPane);
-
         adjustSplitPanel(splitPane);
+
+        return splitPane;
 
     }
 
