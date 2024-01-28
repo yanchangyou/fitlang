@@ -5,7 +5,7 @@ import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.common.AbstractExecuteNode;
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 
 import java.lang.reflect.Field;

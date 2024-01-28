@@ -1,4 +1,4 @@
-package fit.lang.define.base;
+package fit.lang.define;
 
 /**
  * 执行节点: 需要自身节点

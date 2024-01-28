@@ -1,9 +1,9 @@
 package fit.lang.aop;
 
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeAopIgnoreTag;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 import fit.lang.info.NodeExecuteInfo;
 
 import static fit.lang.ExecuteNodeUtil.buildDefaultNodeId;

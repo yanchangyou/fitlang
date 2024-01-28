@@ -4,10 +4,10 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.common.flow.WrapExecuteNode;
-import fit.lang.define.base.ExecuteNodeBuildable;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;

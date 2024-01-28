@@ -1,7 +1,7 @@
 package fit.lang.common;
 
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.define.base.ExecuteContext;
+import fit.lang.define.ExecuteContext;
 import fit.lang.info.NodeExecuteInfo;
 
 import java.util.LinkedHashMap;

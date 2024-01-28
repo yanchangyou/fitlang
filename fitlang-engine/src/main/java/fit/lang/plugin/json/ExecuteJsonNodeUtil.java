@@ -12,8 +12,8 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.ExecuteNodeException;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeData;
 import fit.lang.plugin.json.define.*;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 

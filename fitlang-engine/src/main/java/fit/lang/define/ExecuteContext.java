@@ -1,4 +1,4 @@
-package fit.lang.define.base;
+package fit.lang.define;
 
 import fit.lang.info.NodeExecuteInfo;
 

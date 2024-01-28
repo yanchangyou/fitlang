@@ -1,7 +1,7 @@
 package fit.lang.plugin.json.define;
 
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.define.base.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeInput;
 
 import java.util.Map;
 

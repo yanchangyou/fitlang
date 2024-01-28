@@ -1,11 +1,10 @@
 package fit.lang.plugin.json.util;
 
+import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNode;
-import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.define.base.ExecuteNodeBuildable;
-import fit.lang.define.base.ExecuteNodeData;
 
 /**
  * 执行节点

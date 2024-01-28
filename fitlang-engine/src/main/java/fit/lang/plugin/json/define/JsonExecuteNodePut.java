@@ -2,7 +2,7 @@ package fit.lang.plugin.json.define;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeData;
 
 /**
  * 执行节点入参或出参

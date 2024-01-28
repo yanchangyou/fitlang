@@ -1,9 +1,9 @@
-package fit.lang.define.base;
+package fit.lang.define;
 
 /**
- * 执行节点出参
+ * 执行节点入参
  */
-public interface ExecuteNodeOutput {
+public interface ExecuteNodeInput {
 
     /**
      * 上下文
@@ -22,9 +22,9 @@ public interface ExecuteNodeOutput {
     void setNodeData(ExecuteNodeData executeNodeData);
 
     /**
-     * 创建出参
+     * 创建入参
      * @return
      */
-    ExecuteNodeOutput createOutput();
+    ExecuteNodeInput createInput();
 
 }
