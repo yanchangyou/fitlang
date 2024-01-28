@@ -25731,7 +25731,11 @@
         return JSON.stringify(data);
     }
 
-    $("[type=submit]").remove();
+    function setJsonData(jsonData) {
+        jsonPage['value'] = jsonData;
+        $('#json-form').empty().jsonForm(jsonPage);
+        $("[type=submit]").remove();
+    }
 
 </script>
 </body>
