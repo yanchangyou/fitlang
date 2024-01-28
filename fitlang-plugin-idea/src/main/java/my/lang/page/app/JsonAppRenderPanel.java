@@ -48,6 +48,14 @@ public class JsonAppRenderPanel extends JPanel {
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
 
+        if (input == null) {
+            input = new JSONObject();
+        }
+
+        if (output == null) {
+            output = new JSONObject();
+        }
+
         setBorder(null);
         setLayout(new BorderLayout());
 
