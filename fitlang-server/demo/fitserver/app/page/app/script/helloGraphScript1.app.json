@@ -1,0 +1,55 @@
+{
+    "name": "app",
+    "title": "App",
+    "inputTitle": "输入",
+    "outputTitle": "输出",
+    "scriptTitle": "脚本",
+    "useForm": true,
+    "useGraphScript": true,
+    "input": {
+        "who": "world"
+    },
+    "output": {
+        "message": "hello, world!"
+    },
+    "script": {
+        "uni": "hello",
+        "nodes": [
+            {
+                "id": "1",
+                "type": "circle",
+                "x": "200",
+                "y": "150",
+                "text": "开始"
+            },
+            {
+                "id": "2",
+                "type": "circle",
+                "x": "400",
+                "y": "150",
+                "text": "hello"
+            },
+            {
+                "id": "3",
+                "type": "circle",
+                "x": "600",
+                "y": "150",
+                "text": "结束"
+            }
+        ],
+        "edges": [
+            {
+                "sourceNodeId": "1",
+                "targetNodeId": "2",
+                "type": "bezier",
+                "text": "连线"
+            },
+            {
+                "sourceNodeId": "2",
+                "targetNodeId": "3",
+                "type": "bezier",
+                "text": "连线"
+            }
+        ]
+    }
+}

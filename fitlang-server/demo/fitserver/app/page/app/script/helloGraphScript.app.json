@@ -1,0 +1,15 @@
+{
+    "name": "app",
+    "title": "App",
+    "inputTitle": "输入",
+    "outputTitle": "输出",
+    "scriptTitle": "脚本",
+    "useForm": true,
+    "useGraphScript": true,
+    "input": {
+        "who": "world"
+    },
+    "output": {
+        "message": "hello, world!"
+    }
+}

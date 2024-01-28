@@ -27,6 +27,8 @@ public class JsonAppRenderPanel extends JPanel {
 
     JSONObject contextParam;
 
+    JSONObject scriptJson = JSONObject.parse("{'uni':'hello'}");
+
     VirtualFile appFile;
 
     LanguageTextField inputEditor;
@@ -37,6 +39,11 @@ public class JsonAppRenderPanel extends JPanel {
      * 使用表单
      */
     boolean useForm;
+
+    /**
+     * 使用图形脚本
+     */
+    boolean useGraphScript;
 
     JsonFormPanel inputForm;
     JsonFormPanel outputForm;
@@ -66,6 +73,10 @@ public class JsonAppRenderPanel extends JPanel {
 
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
+
+        if (appDefine.containsKey("script")) {
+            scriptJson = appDefine.getJSONObject("script");
+        }
 
         if (input == null) {
             input = new JSONObject();
@@ -104,9 +115,15 @@ public class JsonAppRenderPanel extends JPanel {
 
         splitPane.add(inputOutputEditor);
 
-        JComponent scriptPanel = buildScriptPanel(actions);
+        JComponent scriptPanel;
+        if (useGraphScript) {
+            scriptPanel = buildGraphScriptPanel(scriptJson);
+        } else {
+            scriptPanel = buildScriptPanel(actions);
+        }
 
         splitPane.add(scriptPanel);
+
         return splitPane;
     }
 
@@ -118,43 +135,30 @@ public class JsonAppRenderPanel extends JPanel {
         add(panel, BorderLayout.NORTH);
     }
 
-    JPanel buildScriptPanel(JSONArray actions) {
-
-        JPanel toolBar = new JPanel();
-        toolBar.setAlignmentX(15);
-
-        JSONObject helloNode = new JSONObject();
-        helloNode.put("uni", "hello");
-
-        Object[] components = buildEditorPanel(formatTitle(scriptTitle), SwingConstants.LEFT, toJsonTextWithFormat(helloNode));
-        JPanel scriptPanel = (JPanel) components[0];
-
-        scriptEditor = (LanguageTextField) components[1];
+    JPanel buildGraphScriptPanel(JSONObject script) {
 
         JPanel panel = new JPanel(new BorderLayout());
 
+        JPanel toolBar = buildToolBar();
+        JsonGraphScriptPanel jsonGraphScriptPanel = new JsonGraphScriptPanel(script);
+
+        panel.add(toolBar, BorderLayout.NORTH);
+        panel.add(jsonGraphScriptPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    JPanel buildScriptPanel(JSONArray actions) {
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JPanel toolBar = buildToolBar();
+
+        Object[] components = buildEditorPanel(formatTitle(scriptTitle), SwingConstants.LEFT, toJsonTextWithFormat(scriptJson));
+        scriptEditor = (LanguageTextField) components[1];
+
+        JPanel scriptPanel = (JPanel) components[0];
         panel.add(scriptPanel, BorderLayout.CENTER);
-
-        //add default Run Button
-        {
-            JButton button = new JButton(defaultButtonTitle);
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-
-                    JSONObject script = JSONObject.parse(scriptEditor.getText());
-
-                    JSONObject input = getInputJson();
-
-                    String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
-
-                    JSONObject output = JSONObject.parse(result);
-
-                    setOutputJson(output);
-                }
-            });
-            toolBar.add(button);
-        }
 
         if (actions != null) {
 
@@ -185,6 +189,41 @@ public class JsonAppRenderPanel extends JPanel {
         panel.add(toolBar, BorderLayout.NORTH);
 
         return panel;
+    }
+
+    @NotNull
+    private JPanel buildToolBar() {
+        JPanel toolBar = new JPanel();
+        toolBar.setAlignmentX(15);
+
+        //add default Run Button
+        {
+            JButton button = new JButton(defaultButtonTitle);
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+
+                    JSONObject script = getScriptJson();
+
+                    JSONObject input = getInputJson();
+
+                    String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
+
+                    JSONObject output = JSONObject.parse(result);
+
+                    setOutputJson(output);
+                }
+            });
+            toolBar.add(button);
+        }
+        return toolBar;
+    }
+
+    private JSONObject getScriptJson() {
+        if (useGraphScript) {
+            return scriptJson;
+        }
+        return JSONObject.parse(scriptEditor.getText());
     }
 
     private void setOutputJson(JSONObject output) {
@@ -233,8 +272,8 @@ public class JsonAppRenderPanel extends JPanel {
     /**
      * 格式化title 添加缩进
      *
-     * @param title
-     * @return
+     * @param title title
+     * @return title
      */
     String formatTitle(String title) {
         return "  " + title + "  ";
