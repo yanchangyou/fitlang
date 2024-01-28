@@ -1,6 +1,5 @@
 package my.lang.page.app;
 
-import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.json5.Json5Language;
@@ -34,15 +33,19 @@ public class JsonAppRenderPanel extends JPanel {
     LanguageTextField outputEditor;
     LanguageTextField scriptEditor;
 
+    /**
+     * 使用表单
+     */
     boolean useForm;
 
     JsonFormPanel inputForm;
     JsonFormPanel outputForm;
 
-    String appTitle;
-    String inputTitle;
-    String outputTitle;
-    String scriptTitle;
+    String appTitle = "App";
+    String inputTitle = "Input";
+    String outputTitle = "Output";
+    String scriptTitle = "Script";
+    String defaultButtonTitle = "Run";
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
@@ -51,10 +54,11 @@ public class JsonAppRenderPanel extends JPanel {
         this.appFile = appFile;
         this.contextParam = contextParam;
 
-        appTitle = appDefine.getString("title");
-        inputTitle = appDefine.getString("inputTitle");
-        outputTitle = appDefine.getString("outputTitle");
-        scriptTitle = appDefine.getString("scriptTitle");
+        appTitle = appDefine.containsKey("title") ? appDefine.getString("title") : appTitle;
+        inputTitle = appDefine.containsKey("inputTitle") ? appDefine.getString("inputTitle") : inputTitle;
+        outputTitle = appDefine.containsKey("outputTitle") ? appDefine.getString("outputTitle") : outputTitle;
+        scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
+        defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
 
         JSONArray actions = appDefine.getJSONArray("actions");
         useForm = Boolean.TRUE.equals(appDefine.getBoolean("useForm"));
@@ -107,9 +111,6 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setAppTitle(String title) {
-        if (StrUtil.isBlank(title)) {
-            title = "App";
-        }
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new JLabel(" "), BorderLayout.NORTH);
@@ -136,7 +137,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         //add default Run Button
         {
-            JButton button = new JButton("Run");
+            JButton button = new JButton(defaultButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
