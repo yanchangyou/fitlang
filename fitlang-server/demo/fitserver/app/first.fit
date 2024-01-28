@@ -1,4 +1,4 @@
 {
-    "uni": "echo",
-    "hello":"world"
+  "uni": "hello",
+  "message": "hello, world! 你好，世界！"
 }
