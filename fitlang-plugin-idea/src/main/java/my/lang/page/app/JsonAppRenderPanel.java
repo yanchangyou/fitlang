@@ -194,7 +194,6 @@ public class JsonAppRenderPanel extends JPanel {
     @NotNull
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
-        toolBar.setAlignmentX(15);
 
         //add default Run Button
         {
