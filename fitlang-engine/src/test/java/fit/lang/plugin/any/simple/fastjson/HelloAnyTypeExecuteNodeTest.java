@@ -1,7 +1,7 @@
 package fit.lang.plugin.any.simple.fastjson;
 
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.any.define.AnyTypeExecuteContext;
 import fit.lang.plugin.any.define.AnyTypeExecuteNodeData;
 import fit.lang.plugin.any.define.AnyTypeExecuteNodeInput;
