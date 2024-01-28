@@ -105,7 +105,7 @@ public class JsonAppRenderPanel extends JPanel {
         JSONObject helloNode = new JSONObject();
         helloNode.put("uni", "hello");
 
-        Object[] components = buildEditorPanel("Script JSON", toJsonTextWithFormat(helloNode));
+        Object[] components = buildEditorPanel("  Script JSON", SwingConstants.LEFT, toJsonTextWithFormat(helloNode));
         JPanel scriptPanel = (JPanel) components[0];
 
         scriptEditor = (LanguageTextField) components[1];
@@ -177,7 +177,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         String text = toJsonTextWithFormat(input);
 
-        Object[] inputComponents = buildEditorPanel("Input JSON", text);
+        Object[] inputComponents = buildEditorPanel("  Input JSON", SwingConstants.LEFT, text);
 
         JPanel inputPanel = (JPanel) inputComponents[0];
         inputEditor = (LanguageTextField) inputComponents[1];
@@ -186,7 +186,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         text = toJsonTextWithFormat(output);
 
-        Object[] outputComponents = buildEditorPanel("Output JSON", text);
+        Object[] outputComponents = buildEditorPanel("Output JSON  ", SwingConstants.RIGHT, text);
 
         JPanel outputPanel = (JPanel) outputComponents[0];
         outputEditor = (LanguageTextField) outputComponents[1];
@@ -200,22 +200,19 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private static void adjustSplitPanel(JSplitPane splitPane) {
-        new Thread() {
-            @Override
-            public void run() {
-                for (int i = 0; i < 10; i++) {
-                    try {
-                        Thread.sleep(500L);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    splitPane.setDividerLocation(0.5);
+        new Thread(() -> {
+            for (int i = 0; i < 10; i++) {
+                try {
+                    Thread.sleep(500L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+                splitPane.setDividerLocation(0.5);
             }
-        }.start();
+        }).start();
     }
 
-    private Object[] buildEditorPanel(String title, String text) {
+    private Object[] buildEditorPanel(String title, int horizontalAlignment, String text) {
 
         JPanel editorPanel = new JPanel(new BorderLayout());
 
@@ -228,7 +225,7 @@ public class JsonAppRenderPanel extends JPanel {
         // 第一个加入，方便获取
         editorPanel.add(jbScrollPane, BorderLayout.CENTER);
 
-        JLabel label = new JLabel(title, SwingConstants.CENTER);
+        JLabel label = new JLabel(title, horizontalAlignment);
         label.setFont(EditorUtil.getEditorFont());
         editorPanel.add(label, BorderLayout.NORTH);
 
