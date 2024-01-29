@@ -6,11 +6,22 @@ import cn.hutool.core.util.HexUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.SecureUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class FitLangExpressTool {
 
     public static FitLangExpressTool INSTANCE = new FitLangExpressTool();
 
     private FitLangExpressTool() {
+    }
+
+    public static long now() {
+        return System.currentTimeMillis();
+    }
+
+    public static String now(String format) {
+        return new SimpleDateFormat(format).format(new Date());
     }
 
     public static String encodeHex(String text) {
