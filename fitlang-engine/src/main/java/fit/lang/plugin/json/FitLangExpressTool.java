@@ -54,19 +54,19 @@ public class FitLangExpressTool {
     }
 
 //
-//    public static String encodeAesBase64(String key, String text) {
+//    public static String encodeAesBase64(String text, String key) {
 //        return SecureUtil.aes(Base64.decode(key)).encryptBase64(text);
 //    }
 //
-//    public static String encodeAesHex(String key, String text) {
+//    public static String encodeAesHex(String text, String key) {
 //        return SecureUtil.aes(key.getBytes()).encryptHex(text);
 //    }
 //
-//    public static String decodeAesBase64(String key, String text) {
+//    public static String decodeAesBase64(String text, String key) {
 //        return SecureUtil.aes(key.getBytes()).decryptStr(text);
 //    }
 //
-//    public static String decodeAesHex(String key, String text) {
+//    public static String decodeAesHex(String text, String key) {
 //        return SecureUtil.aes(key.getBytes()).decryptStr(text);
 //    }
 
