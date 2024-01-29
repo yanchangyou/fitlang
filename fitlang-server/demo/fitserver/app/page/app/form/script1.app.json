@@ -21,7 +21,12 @@
         "encodeUrl": "abc123%E4%B8%8A%E4%B8%AD%E4%B8%8B",
         "decodeHex": "abc123上中下",
         "decodeBase64": "abc123上中下",
-        "decodeUrl": "abc123上中下"
+        "decodeUrl": "abc123上中下",
+        "now": {
+            "now": 1,
+            "yyyy-MM-dd": "",
+            "yyyy-MM-dd HH:mm:ss": ""
+        }
     },
     "script": {
         "uni": "mix",
@@ -35,7 +40,12 @@
             "encodeBase64": "${FitLang.encodeBase64(text)}",
             "decodeBase64": "${FitLang.decodeBase64(decodeBase64)}",
             "encodeUrl": "${FitLang.encodeUrl(text)}",
-            "decodeUrl": "${FitLang.decodeUrl(decodeUrl)}"
+            "decodeUrl": "${FitLang.decodeUrl(decodeUrl)}",
+            "now": {
+                "now": "${FitLang.now()}",
+                "yyyy-MM-dd": "${FitLang.now('yyyy-MM-dd')}",
+                "yyyy-MM-dd HH:mm:ss": "${FitLang.now('yyyy-MM-dd HH:mm:ss')}"
+            }
         }
     }
 }
