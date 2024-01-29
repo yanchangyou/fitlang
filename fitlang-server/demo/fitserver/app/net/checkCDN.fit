@@ -1,6 +1,5 @@
 {
-    "uni": "sequence",
-    "isBagsMode": true,
+    "uni": "batch",
     "child": [
         {
             "uni": "telnet",
