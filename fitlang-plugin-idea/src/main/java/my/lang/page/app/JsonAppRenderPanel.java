@@ -33,11 +33,6 @@ public class JsonAppRenderPanel extends JPanel {
 
     JsonScriptEditorPanel scriptEditor;
 
-    /**
-     * 使用图形脚本
-     */
-    boolean useGraphScript;
-
     String appTitle = "App";
     String inputTitle = "Input";
     String outputTitle = "Output";
@@ -58,7 +53,6 @@ public class JsonAppRenderPanel extends JPanel {
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
 
         JSONArray actions = appDefine.getJSONArray("actions");
-        useGraphScript = Boolean.TRUE.equals(appDefine.getBoolean("useGraphScript"));
 
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
@@ -99,12 +93,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         splitPane.add(inputOutputEditor);
 
-        JComponent scriptPanel;
-        if (useGraphScript) {
-            scriptPanel = buildGraphScriptPanel(scriptJson);
-        } else {
-            scriptPanel = buildScriptPanel(actions);
-        }
+        JComponent scriptPanel = buildScriptPanel(actions);
 
         splitPane.add(scriptPanel);
 
@@ -120,19 +109,6 @@ public class JsonAppRenderPanel extends JPanel {
         panel.add(new JLabel(" "), BorderLayout.NORTH);
         panel.add(titleLabel, BorderLayout.CENTER);
         add(panel, BorderLayout.NORTH);
-    }
-
-    JPanel buildGraphScriptPanel(JSONObject script) {
-
-        JPanel panel = new JPanel(new BorderLayout());
-
-        JPanel toolBar = buildToolBar();
-        JsonGraphScriptPanel jsonGraphScriptPanel = new JsonGraphScriptPanel(script);
-
-        panel.add(toolBar, BorderLayout.NORTH);
-        panel.add(jsonGraphScriptPanel, BorderLayout.CENTER);
-
-        return panel;
     }
 
     JPanel buildScriptPanel(JSONArray actions) {
