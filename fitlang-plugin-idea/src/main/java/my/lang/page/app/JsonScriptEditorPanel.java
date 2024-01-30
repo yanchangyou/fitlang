@@ -7,16 +7,14 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     JsonGraphScriptPanel jsonGraphScriptPanel;
 
-    JSONObject defaultLogicFlow = JSONObject.parseObject("{}");
-
     public JsonScriptEditorPanel(JSONObject script, String title, int horizontalAlignment, Project project) {
 
         super(script, title, horizontalAlignment, project);
 
-        jsonGraphScriptPanel = new JsonGraphScriptPanel(defaultLogicFlow);
-        cardPanel.add(jsonTextEditor);
+        jsonGraphScriptPanel = new JsonGraphScriptPanel(script);
+        cardPanel.add(jsonGraphScriptPanel);
 
-        cardLayout.next(cardPanel);
+        isJsonTextEditor = true;
 
     }
 }

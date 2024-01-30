@@ -60,7 +60,7 @@ public class JsonFormPanel extends JPanel {
             public void run() {
                 super.run();
                 try {
-                    Thread.sleep(1000L);
+                    Thread.sleep(2000L);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

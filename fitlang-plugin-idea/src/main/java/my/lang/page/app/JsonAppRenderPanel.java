@@ -191,7 +191,7 @@ public class JsonAppRenderPanel extends JPanel {
 
     @NotNull
     private JSONObject getInputJson() {
-        return JSONObject.parse(inputEditor.getJsonTextEditor().getText());
+        return inputEditor.getJsonObject();
     }
 
     private JComponent buildInputAndOutputObjectPanel(JSONObject input, JSONObject output) {

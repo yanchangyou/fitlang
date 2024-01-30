@@ -20,10 +20,17 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
         cardLayout.next(cardPanel);
 
+        isJsonTextEditor = false;
     }
 
     public JsonFormPanel getJsonFormEditor() {
         return jsonFormEditor;
     }
 
+    public JSONObject getJsonObject() {
+        if (isJsonTextEditor) {
+            return JSONObject.parseObject(jsonTextEditor.getText());
+        }
+        return jsonFormEditor.getFormData();
+    }
 }

@@ -30,6 +30,8 @@ public class JsonBaseEditorPanel extends JPanel {
 
     CardLayout cardLayout = new CardLayout();
 
+    boolean isJsonTextEditor;
+
     public JsonBaseEditorPanel(JSONObject jsonObject, String title, int horizontalAlignment, Project project) {
 
         super(true);
@@ -95,6 +97,7 @@ public class JsonBaseEditorPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardLayout.next(cardPanel);
+                isJsonTextEditor = !isJsonTextEditor;
             }
         });
 
