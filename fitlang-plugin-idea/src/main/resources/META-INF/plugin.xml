@@ -390,7 +390,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.10.4 </li>
+            <li>0.10.4 refine app</li>
             <li>0.10.3 add app with json and json form</li>
             <li>0.10.2 json page support json form; add action render</li>
             <li>0.10.1 page json redefine</li>
