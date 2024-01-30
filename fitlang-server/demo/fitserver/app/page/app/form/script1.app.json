@@ -11,7 +11,7 @@
         "decodeBase64": "YWJjMTIz5LiK5Lit5LiL",
         "decodeUrl": "abc123%E4%B8%8A%E4%B8%AD%E4%B8%8B",
         "object": {
-            "value": "1234"
+            "value": "abc123上中下"
         }
     },
     "output": {
@@ -26,7 +26,7 @@
         "decodeBase64": "abc123上中下",
         "decodeUrl": "abc123上中下",
         "now": {
-            "now": 1,
+            "now": 1706623076388,
             "yyyy-MM-dd": "",
             "yyyy-MM-dd HH:mm:ss": ""
         },
