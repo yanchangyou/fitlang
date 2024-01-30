@@ -2,12 +2,8 @@ package my.lang.page.app;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.json.json5.Json5Language;
-import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.LanguageTextField;
-import com.intellij.ui.components.JBScrollPane;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,22 +27,16 @@ public class JsonAppRenderPanel extends JPanel {
 
     VirtualFile appFile;
 
-    LanguageTextField inputEditor;
-    LanguageTextField outputEditor;
-    LanguageTextField scriptEditor;
+    JsonObjectEditorPanel inputEditor;
 
-    /**
-     * 使用表单
-     */
-    boolean useForm;
+    JsonObjectEditorPanel outputEditor;
+
+    JsonScriptEditorPanel scriptEditor;
 
     /**
      * 使用图形脚本
      */
     boolean useGraphScript;
-
-    JsonFormPanel inputForm;
-    JsonFormPanel outputForm;
 
     String appTitle = "App";
     String inputTitle = "Input";
@@ -68,7 +58,6 @@ public class JsonAppRenderPanel extends JPanel {
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
 
         JSONArray actions = appDefine.getJSONArray("actions");
-        useForm = Boolean.TRUE.equals(appDefine.getBoolean("useForm"));
         useGraphScript = Boolean.TRUE.equals(appDefine.getBoolean("useGraphScript"));
 
         JSONObject input = appDefine.getJSONObject("input");
@@ -106,12 +95,7 @@ public class JsonAppRenderPanel extends JPanel {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
 
-        JComponent inputOutputEditor;
-        if (useForm) {
-            inputOutputEditor = buildInputAndOutputForm(input, output);
-        } else {
-            inputOutputEditor = buildInputAndOutputEditor(input, output);
-        }
+        JComponent inputOutputEditor = buildInputAndOutputObjectPanel(input, output);
 
         splitPane.add(inputOutputEditor);
 
@@ -157,11 +141,9 @@ public class JsonAppRenderPanel extends JPanel {
 
         JPanel toolBar = buildToolBar();
 
-        Object[] components = buildEditorPanel(formatTitle(scriptTitle), SwingConstants.LEFT, toJsonTextWithFormat(scriptJson));
-        scriptEditor = (LanguageTextField) components[1];
+        scriptEditor = new JsonScriptEditorPanel(scriptJson, scriptTitle, SwingConstants.LEFT, project);
 
-        JPanel scriptPanel = (JPanel) components[0];
-        panel.add(scriptPanel, BorderLayout.CENTER);
+        panel.add(scriptEditor, BorderLayout.CENTER);
 
         if (actions != null) {
 
@@ -176,7 +158,7 @@ public class JsonAppRenderPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
 
-                        scriptEditor.setText(toJsonTextWithFormat(script));
+                        scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
                         JSONObject input = getInputJson();
 
                         String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
@@ -222,88 +204,33 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private JSONObject getScriptJson() {
-        if (useGraphScript) {
-            return scriptJson;
-        }
-        return JSONObject.parse(scriptEditor.getText());
+        return JSONObject.parse(scriptEditor.getJsonTextEditor().getText());
     }
 
     private void setOutputJson(JSONObject output) {
-        if (useForm) {
-            outputForm.setFormData(output);
-            outputForm.setFormDataToChrome(output);
-        } else {
-            outputEditor.setText(toJsonTextWithFormat(output));
-        }
+        outputEditor.getJsonFormEditor().setFormData(output);
+        outputEditor.getJsonFormEditor().setFormDataToChrome(output);
+        outputEditor.getJsonTextEditor().setText(toJsonTextWithFormat(output));
     }
 
     @NotNull
     private JSONObject getInputJson() {
-        if (useForm) {
-            return inputForm.getFormData();
-        }
-        return JSONObject.parse(inputEditor.getText());
+        return JSONObject.parse(inputEditor.getJsonTextEditor().getText());
     }
 
-    private JComponent buildInputAndOutputForm(JSONObject input, JSONObject output) {
+    private JComponent buildInputAndOutputObjectPanel(JSONObject input, JSONObject output) {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerSize(3);
         splitPane.setBorder(null);
 
-        inputForm = new JsonFormPanel(parseJsonSchema(input), input);
+        inputEditor = new JsonObjectEditorPanel(parseJsonSchema(input), input, inputTitle, SwingConstants.LEFT, project);
 
-        JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.add(new JLabel(formatTitle(inputTitle)), BorderLayout.NORTH);
-        inputPanel.add(inputForm, BorderLayout.CENTER);
-        splitPane.add(inputPanel);
+        splitPane.add(inputEditor);
 
-        outputForm = new JsonFormPanel(parseJsonSchema(output), output);
+        outputEditor = new JsonObjectEditorPanel(parseJsonSchema(output), output, outputTitle, SwingConstants.RIGHT, project);
 
-        JPanel outputPanel = new JPanel(new BorderLayout());
-        outputPanel.add(new JLabel(formatTitle(outputTitle), SwingConstants.RIGHT), BorderLayout.NORTH);
-        outputPanel.add(outputForm, BorderLayout.CENTER);
-        splitPane.add(outputPanel);
-
-        adjustSplitPanel(splitPane);
-
-        return splitPane;
-
-    }
-
-    /**
-     * 格式化title 添加缩进
-     *
-     * @param title title
-     * @return title
-     */
-    String formatTitle(String title) {
-        return "  " + title + "  ";
-    }
-
-    private JComponent buildInputAndOutputEditor(JSONObject input, JSONObject output) {
-
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerSize(3);
-        splitPane.setBorder(null);
-
-        String text = toJsonTextWithFormat(input);
-
-        Object[] inputComponents = buildEditorPanel(formatTitle(inputTitle), SwingConstants.LEFT, text);
-
-        JPanel inputPanel = (JPanel) inputComponents[0];
-        inputEditor = (LanguageTextField) inputComponents[1];
-
-        splitPane.add(inputPanel);
-
-        text = toJsonTextWithFormat(output);
-
-        Object[] outputComponents = buildEditorPanel(formatTitle(outputTitle), SwingConstants.RIGHT, text);
-
-        JPanel outputPanel = (JPanel) outputComponents[0];
-        outputEditor = (LanguageTextField) outputComponents[1];
-
-        splitPane.add(outputPanel);
+        splitPane.add(outputEditor);
 
         adjustSplitPanel(splitPane);
 
@@ -322,26 +249,6 @@ public class JsonAppRenderPanel extends JPanel {
                 splitPane.setDividerLocation(0.5);
             }
         }).start();
-    }
-
-    private Object[] buildEditorPanel(String title, int horizontalAlignment, String text) {
-
-        JPanel editorPanel = new JPanel(new BorderLayout());
-
-        LanguageTextField jsonEditor = new LanguageTextField(Json5Language.INSTANCE, project, text);
-        jsonEditor.setFont(EditorUtil.getEditorFont());
-        jsonEditor.setOneLineMode(false);
-
-        JBScrollPane jbScrollPane = new JBScrollPane(jsonEditor);
-
-        // 第一个加入，方便获取
-        editorPanel.add(jbScrollPane, BorderLayout.CENTER);
-
-        JLabel label = new JLabel(title, horizontalAlignment);
-        label.setFont(EditorUtil.getEditorFont());
-        editorPanel.add(label, BorderLayout.NORTH);
-
-        return new Object[]{editorPanel, jsonEditor};
     }
 
 }
