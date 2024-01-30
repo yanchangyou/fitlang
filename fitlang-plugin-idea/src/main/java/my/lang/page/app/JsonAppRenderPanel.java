@@ -130,7 +130,7 @@ public class JsonAppRenderPanel extends JPanel {
     private void setAppTitle(String title) {
         JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
         Font defaultFont = titleLabel.getFont();
-        Font font = new Font(defaultFont.getName(), defaultFont.getStyle(), defaultFont.getSize() + 2);
+        Font font = new Font(null, defaultFont.getStyle(), defaultFont.getSize() + 2);
         titleLabel.setFont(font);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(new JLabel(" "), BorderLayout.NORTH);
