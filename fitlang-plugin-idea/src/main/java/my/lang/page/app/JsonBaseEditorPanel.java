@@ -97,9 +97,14 @@ public class JsonBaseEditorPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardLayout.next(cardPanel);
+                switchEditor();
                 isJsonTextEditor = !isJsonTextEditor;
             }
         });
+
+    }
+
+    protected void switchEditor() {
 
     }
 }
