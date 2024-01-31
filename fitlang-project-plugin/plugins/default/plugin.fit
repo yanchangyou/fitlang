@@ -180,6 +180,27 @@
                             }
                         ]
                     }
+                },
+                {
+                    "name": "getSchema",
+                    "title": "Get JSON Schema",
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readEditor",
+                                "contentField": "content"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "content"
+                            },
+                            {
+                                "uni": "getSchema",
+                                "path": "content"
+                            }
+                        ]
+                    }
                 }
             ]
         },
