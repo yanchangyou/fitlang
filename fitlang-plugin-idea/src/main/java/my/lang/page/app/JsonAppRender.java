@@ -79,6 +79,7 @@ public class JsonAppRender implements FileEditor {
 
     @Override
     public void dispose() {
+        panel.dispose();
     }
 
     @Override
@@ -95,7 +96,4 @@ public class JsonAppRender implements FileEditor {
         return file;
     }
 
-    static {
-//        JBCefBrowser.createBuilder().setOffScreenRendering(false);
-    }
 }

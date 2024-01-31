@@ -227,4 +227,9 @@ public class JsonAppRenderPanel extends JPanel {
         }).start();
     }
 
+    public void dispose() {
+        inputEditor.dispose();
+        outputEditor.dispose();
+        scriptEditor.dispose();
+    }
 }

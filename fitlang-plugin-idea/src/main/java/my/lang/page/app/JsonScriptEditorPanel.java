@@ -15,6 +15,15 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
         cardPanel.add(jsonGraphScriptPanel);
 
         isJsonTextEditor = true;
+    }
 
+    @Override
+    protected void switchEditor() {
+
+    }
+
+    @Override
+    public void dispose() {
+        jsonGraphScriptPanel.close();
     }
 }

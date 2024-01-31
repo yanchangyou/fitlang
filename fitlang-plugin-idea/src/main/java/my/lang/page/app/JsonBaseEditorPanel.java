@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
-public class JsonBaseEditorPanel extends JPanel {
+public abstract class JsonBaseEditorPanel extends JPanel {
 
     JSONObject jsonObject;
 
@@ -104,7 +104,7 @@ public class JsonBaseEditorPanel extends JPanel {
 
     }
 
-    protected void switchEditor() {
+    protected abstract void switchEditor();
 
-    }
+    public abstract void dispose();
 }

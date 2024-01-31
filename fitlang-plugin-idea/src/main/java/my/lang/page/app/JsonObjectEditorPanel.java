@@ -48,4 +48,9 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
         }
 
     }
+
+    @Override
+    public void dispose() {
+        jsonFormEditor.close();
+    }
 }

@@ -87,6 +87,7 @@ public class JsonGraphScriptPanel extends JPanel {
     }
 
     public void close() {
-        browser.getCefBrowser().close(false);
+        jsQuery.dispose();
+        browser.dispose();
     }
 }
