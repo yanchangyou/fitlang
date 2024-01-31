@@ -108,4 +108,8 @@ public class JsonActionRenderPanel extends JPanel {
             outputVFile.refresh(false, false);
         }
     }
+
+    public void dispose() {
+        
+    }
 }

@@ -171,8 +171,8 @@ public class JsonPageRenderPanel extends JPanel {
         return html;
     }
 
-    public void close() {
-        browser.getCefBrowser().close(false);
+    public void dispose() {
+        browser.dispose();
     }
 
 

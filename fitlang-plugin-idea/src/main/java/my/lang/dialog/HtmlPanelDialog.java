@@ -62,6 +62,6 @@ public class HtmlPanelDialog extends DialogWrapper {
     @Override
     protected void doOKAction() {
         super.doOKAction();
-        browser.getCefBrowser().close(true);
+        browser.dispose();
     }
 }

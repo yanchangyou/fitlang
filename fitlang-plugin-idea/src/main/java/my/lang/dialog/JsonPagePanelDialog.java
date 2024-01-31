@@ -181,7 +181,7 @@ public class JsonPagePanelDialog extends DialogWrapper {
     @Override
     public void doCancelAction() {
         super.doCancelAction();
-        browser.getCefBrowser().close(true);
+        browser.dispose();
     }
 
     void synchronizeFormJson() {

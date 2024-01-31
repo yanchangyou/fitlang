@@ -76,6 +76,7 @@ public class JsonActionRender implements FileEditor {
 
     @Override
     public void dispose() {
+        panel.dispose();
     }
 
     @Override

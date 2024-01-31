@@ -80,7 +80,7 @@ public class JsonPageRender implements FileEditor {
 
     @Override
     public void dispose() {
-        panel.close();
+        panel.dispose();
     }
 
     @Override
