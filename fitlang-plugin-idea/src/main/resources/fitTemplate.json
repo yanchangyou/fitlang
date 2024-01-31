@@ -19,6 +19,12 @@
             "value": "bar"
         },
         {
+            "uni": "getSchema",
+            "input": {
+                "foo": "bar"
+            }
+        },
+        {
             "uni": "getStruct"
         },
         {
