@@ -112,6 +112,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - get: 使用json path获取值 （json path语法说明：https://alibaba.github.io/fastjson2/jsonpath_cn）
 - set: 使用json path设置值
 - getStruct: 获取json结构
+- getSchema: 获取JsonSchema
 - sortField: 按照字段排序（字母表升序）
 - add: 支持json相加
 - increase: 加+1

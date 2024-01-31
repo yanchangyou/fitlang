@@ -71,6 +71,10 @@ mix: mix a json object<br/>
 replace: replace output<br/>
 mix: mix a json object<br/>
 mixNode: execute node, and mix<br/>
+get: get field value by json path<br/>
+set: set field value by json path<br/>
+getStruct: get json structure<br/>
+getSchema: get json schema<br/>
 <br/>
 
 flow nodes (with child nodes)<br/>
@@ -219,6 +223,10 @@ mixNode: 混入节点执行，用于嵌套字段场景<br/>
 parseJson: 解析json字符串成json对象
 stringifyJson: json对象转换为json字符串
 replace: 替换结果输出<br/>
+get: 用JsonPath获取字段值<br/>
+set:用JsonPath设置字段值<br/>
+getStruct: 获取json结构<br/>
+getSchema: 获取JsonSchema<br/>
 <br/>
 
 流程节点（有child子节点）<br/>

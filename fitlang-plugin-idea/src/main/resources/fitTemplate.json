@@ -19,13 +19,13 @@
             "value": "bar"
         },
         {
+            "uni": "getStruct"
+        },
+        {
             "uni": "getSchema",
             "input": {
                 "foo": "bar"
             }
-        },
-        {
-            "uni": "getStruct"
         },
         {
             "uni": "sortField"
