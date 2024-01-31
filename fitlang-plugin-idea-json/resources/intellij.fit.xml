@@ -10,8 +10,8 @@
 
         <action id="FitJsonPathEvaluateAction" class="fit.intellij.jsonpath.ui.JsonPathEvaluateAction"
                 icon="/my/lang/icon/fit.svg">
-<!--            <add-to-group group-id="FindMenuGroup" anchor="after" relative-to-action="StructuralSearchActions"/>-->
-<!--            <add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+            <!--            <add-to-group group-id="FindMenuGroup" anchor="after" relative-to-action="StructuralSearchActions"/>-->
+            <!--            <add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
         </action>
 
         <action id="FitJsonPathExportEvaluateResultAction"
@@ -28,12 +28,12 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileType name="FitLang" extensions="fit"
+        <fileType name="FitLang" extensions="fit;FIT"
                   implementationClass="fit.intellij.json.JsonFileType" fieldName="INSTANCE"
                   language="FitLang"/>
-<!--        <fileType name="FitLang" extensions="fit5" fileNames="fit5"-->
-<!--                  implementationClass="fit.intellij.json.json5.Json5FileType" fieldName="INSTANCE"-->
-<!--                  language="FitLang"/>-->
+        <!--        <fileType name="FitLang" extensions="fit5" fileNames="fit5"-->
+        <!--                  implementationClass="fit.intellij.json.json5.Json5FileType" fieldName="INSTANCE"-->
+        <!--                  language="FitLang"/>-->
         <!--    <fileType name="FitJSON-lines" extensions="jsonl;jsonlines;ldjson;ndjson"-->
         <!--              implementationClass="fit.intellij.json.jsonLines.JsonLinesFileType" fieldName="INSTANCE"-->
         <!--              language="FitJSON Lines"/>-->
@@ -67,8 +67,8 @@
         <enterHandlerDelegate implementation="fit.intellij.json.editor.JsonEnterHandler" id="FitJsonEnterHandler"/>
         <typedHandler implementation="fit.intellij.json.editor.JsonTypedHandler" id="FitJsonTypedHandler"/>
         <copyPastePreProcessor implementation="fit.intellij.json.editor.JsonCopyPasteProcessor"/>
-<!--        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"-->
-<!--                                     id="editor.preferences.jsonOptions"/>-->
+        <!--        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"-->
+        <!--                                     id="editor.preferences.jsonOptions"/>-->
         <applicationService serviceImplementation="fit.intellij.json.editor.JsonEditorOptions"/>
 
         <!-- Codeinsight -->
@@ -156,15 +156,15 @@
                              nonDefaultProject="true"/>
         <projectService serviceInterface="fit.jetbrains.jsonSchema.ide.JsonSchemaService"
                         serviceImplementation="fit.jetbrains.jsonSchema.impl.JsonSchemaServiceImpl"/>
-<!--        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"-->
-<!--                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>-->
+        <!--        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"-->
+        <!--                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>-->
         <lang.documentationProvider language="FitLang"
                                     id="FitJsonSchemaDocumentationProvider"
                                     implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaDocumentationProvider"/>
         <refactoring.elementListenerProvider
                 implementation="fit.jetbrains.jsonSchema.JsonSchemaRefactoringListenerProvider"/>
-<!--        <statistics.counterUsagesCollector-->
-<!--                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector"/>-->
+        <!--        <statistics.counterUsagesCollector-->
+        <!--                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaUsageTriggerCollector"/>-->
 
         <psi.referenceContributor language="FitLang"
                                   implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaReferenceContributor"/>

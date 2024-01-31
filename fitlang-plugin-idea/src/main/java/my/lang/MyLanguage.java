@@ -24,6 +24,6 @@ public class MyLanguage extends Language {
     }
 
     public static boolean isFitLanguageFile(String fileName) {
-        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
+        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.toUpperCase()) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
     }
 }
