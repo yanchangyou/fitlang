@@ -39,10 +39,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static fit.lang.ExecuteNodeUtil.getRootException;
@@ -190,7 +188,7 @@ public abstract class RunCodeAction extends AnAction {
                             info = "";
                         }
                         String infoText;
-                        if (info instanceof Map || info instanceof List) {
+                        if (info instanceof Map || info instanceof Collection) {
                             infoText = toJsonTextWithFormat(JSONObject.from(info));
                         } else {
                             infoText = info.toString();
