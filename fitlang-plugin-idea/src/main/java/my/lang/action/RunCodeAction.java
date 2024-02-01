@@ -3,6 +3,7 @@ package my.lang.action;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
@@ -188,10 +189,14 @@ public abstract class RunCodeAction extends AnAction {
                             info = "";
                         }
                         String infoText;
-                        if (info instanceof Map || info instanceof Collection) {
+                        if (info instanceof Map) {
                             infoText = toJsonTextWithFormat(JSONObject.from(info));
+                        } else if (info instanceof Collection) {
+                            infoText = JSON.toJSONString(info);
                         } else {
-                            infoText = info.toString();
+                            JSONObject jsonObject = new JSONObject();
+                            jsonObject.put("_raw", info);
+                            infoText = toJsonTextWithFormat(jsonObject);
                         }
                         RunCodeAction.print(infoText + "\n", project, getProjectConsoleViewMap());
                     }
