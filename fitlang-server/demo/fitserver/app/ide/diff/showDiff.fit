@@ -1,0 +1,15 @@
+{
+    "input": {
+        "json1": {
+            "foo": "bar",
+            "hello": "world1"
+        },
+        "json2": {
+            "foo": "bar1",
+            "hello": "world"
+        }
+    },
+    "uni": "showDiff",
+    "json1": "json1",
+    "json2": "json2"
+}

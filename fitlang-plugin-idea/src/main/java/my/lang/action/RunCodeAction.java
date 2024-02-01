@@ -31,10 +31,7 @@ import fit.lang.plugin.json.ide.UserIdeManager;
 import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import my.lang.dialog.GlobalConfigPanelDialog;
-import my.lang.dialog.HtmlPanelDialog;
-import my.lang.dialog.JsonPagePanelDialog;
-import my.lang.dialog.WebPagePanelDialog;
+import my.lang.dialog.*;
 
 import java.awt.*;
 import java.io.File;
@@ -429,6 +426,16 @@ public abstract class RunCodeAction extends AnAction {
 
                 return jsonPageDialog.getJsonData();
             }
+
+            @Override
+            public JSONObject showDiff(JSONObject json1, JSONObject json2, JSONObject option, JSONObject context) {
+
+                DiffDialogWrapper diffDialogWrapper = new DiffDialogWrapper(getEditor().getProject(), json1, json2);
+                diffDialogWrapper.show();
+
+                return json1;
+            }
+
 
             @Override
             public JSONObject showNodeConfig(JSONObject config, Project project) {

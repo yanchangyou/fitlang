@@ -38,6 +38,8 @@ public interface UserIdeInterface {
 
     JSONObject showJsonPage(JSONObject jsonPage, JSONObject jsonData, JSONObject option, JSONObject context);
 
+    JSONObject showDiff(JSONObject json1, JSONObject json2, JSONObject option, JSONObject context);
+
     JSONObject showNodeConfig(JSONObject config, Project project);
 
     JSONObject showGlobalConfigDialog(JSONObject config, JSONObject option);
