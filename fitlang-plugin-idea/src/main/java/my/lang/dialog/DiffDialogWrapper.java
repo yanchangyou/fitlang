@@ -8,7 +8,8 @@ import com.intellij.diff.contents.DocumentContentImpl;
 import com.intellij.diff.requests.ContentDiffRequest;
 import com.intellij.json.json5.Json5FileType;
 import com.intellij.openapi.Disposable;
-import com.intellij.openapi.editor.impl.EditorTextFieldRendererDocument;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.impl.DocumentImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.NlsContexts;
@@ -65,14 +66,14 @@ public class DiffDialogWrapper extends DialogWrapper {
             @Override
             public @NotNull List<DiffContent> getContents() {
 
-                EditorTextFieldRendererDocument document1 = new EditorTextFieldRendererDocument();
-                EditorTextFieldRendererDocument document2 = new EditorTextFieldRendererDocument();
-
                 json1 = ExecuteJsonNodeUtil.sortJsonField(json1);
                 json2 = ExecuteJsonNodeUtil.sortJsonField(json2);
 
-                document1.setText(toJsonTextWithFormat(json1));
-                document2.setText(toJsonTextWithFormat(json2));
+                Document document1 = new DocumentImpl(toJsonTextWithFormat(json1));
+                Document document2 = new DocumentImpl(toJsonTextWithFormat(json2));
+
+                document1.setReadOnly(false);
+                document2.setReadOnly(false);
 
                 DocumentContentImpl diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
                 DocumentContentImpl diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);
@@ -80,6 +81,7 @@ public class DiffDialogWrapper extends DialogWrapper {
                 List<DiffContent> list = new ArrayList<>();
                 list.add(diffContent1);
                 list.add(diffContent2);
+
                 return list;
             }
 
