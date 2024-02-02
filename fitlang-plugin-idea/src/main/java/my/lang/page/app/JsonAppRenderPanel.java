@@ -43,7 +43,7 @@ public class JsonAppRenderPanel extends JPanel {
     /**
      * 出入参结构不同，导致不能交换
      */
-    boolean showSwitchButton;
+    boolean showExchangeButton;
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
@@ -57,7 +57,7 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = appDefine.containsKey("outputTitle") ? appDefine.getString("outputTitle") : outputTitle;
         scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
-        showSwitchButton = Boolean.TRUE.equals(appDefine.getBoolean("showSwitchButton"));
+        showExchangeButton = Boolean.TRUE.equals(appDefine.getBoolean("showExchangeButton"));
 
         JSONArray actions = appDefine.getJSONArray("actions");
 
@@ -165,7 +165,7 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
-        if (showSwitchButton) {
+        if (showExchangeButton) {
 
             //add switch Run Button
             {
