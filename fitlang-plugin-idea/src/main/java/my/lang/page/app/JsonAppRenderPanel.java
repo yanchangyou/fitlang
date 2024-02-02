@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.components.JBScrollPane;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -147,7 +148,9 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        panel.add(toolBar, BorderLayout.NORTH);
+        JBScrollPane jbScrollPane = new JBScrollPane(toolBar);
+
+        panel.add(jbScrollPane, BorderLayout.NORTH);
 
         return panel;
     }
