@@ -51,7 +51,7 @@ public class JsonDiffRender implements FileEditor {
 
     @Override
     public @Nls(capitalization = Nls.Capitalization.Title) @NotNull String getName() {
-        return "JsonApp";
+        return "Diff";
     }
 
     @Override

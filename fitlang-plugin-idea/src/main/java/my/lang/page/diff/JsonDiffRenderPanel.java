@@ -48,16 +48,8 @@ public class JsonDiffRenderPanel extends JPanel {
         input2Title = diffDefine.containsKey("input2Title") ? diffDefine.getString("input2Title") : input2Title;
         diffResultTitle = diffDefine.containsKey("scriptTitle") ? diffDefine.getString("scriptTitle") : diffResultTitle;
 
-        JSONObject input1 = diffDefine.getJSONObject("input1");
-        JSONObject input2 = diffDefine.getJSONObject("input2");
-
-        if (input1 == null) {
-            input1 = new JSONObject();
-        }
-
-        if (input2 == null) {
-            input2 = new JSONObject();
-        }
+        Object input1 = diffDefine.get("input1");
+        Object input2 = diffDefine.get("input2");
 
         setBorder(null);
         setLayout(new BorderLayout());
@@ -74,7 +66,7 @@ public class JsonDiffRenderPanel extends JPanel {
     }
 
     @NotNull
-    private JSplitPane buildMainPanel(JSONObject input, JSONObject output) {
+    private JSplitPane buildMainPanel(Object input, Object output) {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
 
@@ -102,9 +94,9 @@ public class JsonDiffRenderPanel extends JPanel {
 
     JPanel buildDiffResultPanel() {
 
-        JSONObject json1 = JSONObject.parse(json1InputPanel.getJsonTextEditor().getText());
+        Object json1 = json1InputPanel.getJsonTextEditor().getText();
 
-        JSONObject json2 = JSONObject.parse(json2InputPanel.getJsonTextEditor().getText());
+        Object json2 = json2InputPanel.getJsonTextEditor().getText();
 
         jsonDiffResultPanel = new JsonDiffResultPanel(project);
 
@@ -131,10 +123,10 @@ public class JsonDiffRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    JSONObject json1 = JSONObject.parse(json1InputPanel.jsonTextEditor.getText());
-                    JSONObject json2 = JSONObject.parse(json2InputPanel.jsonTextEditor.getText());
+                    Object input1 = json1InputPanel.jsonTextEditor.getText();
+                    Object input2 = json2InputPanel.jsonTextEditor.getText();
 
-                    jsonDiffResultPanel.showDiff(json1, json2);
+                    jsonDiffResultPanel.showDiff(input1, input2);
 
                 }
             });
@@ -143,15 +135,15 @@ public class JsonDiffRenderPanel extends JPanel {
         return toolBar;
     }
 
-    private JComponent buildInputAndOutputObjectPanel(JSONObject input, JSONObject output) {
+    private JComponent buildInputAndOutputObjectPanel(Object input1, Object input2) {
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPane.setDividerSize(3);
         splitPane.setBorder(null);
 
-        json1InputPanel = new JsonInputPanel(input, input1Title, SwingConstants.LEFT, project);
+        json1InputPanel = new JsonInputPanel(input1, input1Title, SwingConstants.LEFT, project);
 
-        json2InputPanel = new JsonInputPanel(output, input2Title, SwingConstants.RIGHT, project);
+        json2InputPanel = new JsonInputPanel(input2, input2Title, SwingConstants.RIGHT, project);
 
         splitPane.add(json1InputPanel);
         splitPane.add(json2InputPanel);

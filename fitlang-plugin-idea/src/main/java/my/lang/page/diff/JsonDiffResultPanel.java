@@ -1,6 +1,5 @@
 package my.lang.page.diff;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.intellij.diff.DiffManager;
 import com.intellij.diff.DiffRequestPanel;
 import com.intellij.diff.contents.DiffContent;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.ui.ComponentUtil.getWindow;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonDiffResultPanel extends JPanel {
 
@@ -55,18 +53,18 @@ public class JsonDiffResultPanel extends JPanel {
         return diffRequestPanel.getComponent();
     }
 
-    public void showDiff(JSONObject json1, JSONObject json2) {
+    public void showDiff(Object json1, Object json2) {
 
         diffRequestPanel.setRequest(new ContentDiffRequest() {
             @Override
             public @NotNull List<DiffContent> getContents() {
 
 
-                Document document1 = new DocumentImpl(toJsonTextWithFormat(json1));
-                Document document2 = new DocumentImpl(toJsonTextWithFormat(json2));
+                Document document1 = new DocumentImpl(json1.toString());
+                Document document2 = new DocumentImpl(json2.toString());
 
-                document1.setReadOnly(false);
-                document2.setReadOnly(false);
+                document1.setReadOnly(true);
+                document2.setReadOnly(true);
 
                 DocumentContentImpl diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
                 DocumentContentImpl diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);

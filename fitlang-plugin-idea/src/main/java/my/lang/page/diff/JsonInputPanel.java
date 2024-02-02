@@ -2,7 +2,9 @@ package my.lang.page.diff;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.json5.Json5Language;
+import com.intellij.lang.Language;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
+import com.intellij.openapi.fileTypes.PlainTextLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBScrollPane;
@@ -10,11 +12,9 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import java.awt.*;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
-
 public class JsonInputPanel extends JPanel {
 
-    JSONObject jsonObject;
+    Object object;
 
     LanguageTextField jsonTextEditor;
 
@@ -24,24 +24,30 @@ public class JsonInputPanel extends JPanel {
 
     int horizontalAlignment;
 
-    public JsonInputPanel(JSONObject jsonObject, String title, int horizontalAlignment, Project project) {
+
+    public JsonInputPanel(Object object, String title, int horizontalAlignment, Project project) {
 
         super(true);
 
         setLayout(new BorderLayout());
 
-        this.jsonObject = jsonObject;
+        this.object = object;
         this.project = project;
         this.title = title;
         this.horizontalAlignment = horizontalAlignment;
 
-        jsonTextEditor = new LanguageTextField(Json5Language.INSTANCE, project, toJsonTextWithFormat(jsonObject));
+        Language language = PlainTextLanguage.INSTANCE;
+
+        if (object instanceof JSONObject) {
+            language = Json5Language.INSTANCE;
+        }
+
+        jsonTextEditor = new LanguageTextField(language, project, object.toString());
+
         jsonTextEditor.setFont(EditorUtil.getEditorFont());
         jsonTextEditor.setOneLineMode(false);
 
-
         addJsonEditorPanel();
-
 
     }
 
