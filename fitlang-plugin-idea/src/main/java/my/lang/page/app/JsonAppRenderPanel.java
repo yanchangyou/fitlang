@@ -159,6 +159,25 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
+        //add switch Run Button
+        {
+            JButton button = new JButton("<->");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+
+                    JSONObject input = getInputJson();
+
+                    JSONObject output = getOutputJson();
+
+                    setOutputJson(input);
+                    setInputJson(output);
+
+                }
+            });
+            toolBar.add(button);
+        }
+
         //add default Run Button
         {
             JButton button = new JButton(defaultButtonTitle);
@@ -179,7 +198,18 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(button);
         }
+
         return toolBar;
+    }
+
+    private void setInputJson(JSONObject input) {
+        inputEditor.getJsonFormEditor().setFormData(input);
+        inputEditor.getJsonFormEditor().setFormDataToChrome(input);
+        inputEditor.getJsonTextEditor().setText(toJsonTextWithFormat(input));
+    }
+
+    private JSONObject getOutputJson() {
+        return outputEditor.getJsonObject();
     }
 
     private JSONObject getScriptJson() {
