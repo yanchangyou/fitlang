@@ -40,6 +40,11 @@ public class JsonAppRenderPanel extends JPanel {
     String scriptTitle = "Script";
     String defaultButtonTitle = "Run";
 
+    /**
+     * 出入参结构不同，导致不能交换
+     */
+    boolean showSwitchButton;
+
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
         this.project = project;
@@ -52,6 +57,7 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = appDefine.containsKey("outputTitle") ? appDefine.getString("outputTitle") : outputTitle;
         scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
+        showSwitchButton = Boolean.TRUE.equals(appDefine.getBoolean("showSwitchButton"));
 
         JSONArray actions = appDefine.getJSONArray("actions");
 
@@ -159,23 +165,26 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
-        //add switch Run Button
-        {
-            JButton button = new JButton("<->");
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
+        if (showSwitchButton) {
 
-                    JSONObject input = getInputJson();
+            //add switch Run Button
+            {
+                JButton button = new JButton("<->");
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
 
-                    JSONObject output = getOutputJson();
+                        JSONObject input = getInputJson();
 
-                    setOutputJson(input);
-                    setInputJson(output);
+                        JSONObject output = getOutputJson();
 
-                }
-            });
-            toolBar.add(button);
+                        setOutputJson(input);
+                        setInputJson(output);
+
+                    }
+                });
+                toolBar.add(button);
+            }
         }
 
         //add default Run Button
