@@ -4,7 +4,6 @@
     "inputTitle": "输入",
     "outputTitle": "输出",
     "scriptTitle": "脚本",
-    "useForm": true,
     "input": {
         "who": "world"
     },

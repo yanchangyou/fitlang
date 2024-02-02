@@ -5,13 +5,7 @@
     "outputTitle": "出参",
     "scriptTitle": "脚本",
     "input": {
-        "text": "abc123上中下",
-        "decodeHex": "616263313233e4b88ae4b8ade4b88b",
-        "decodeBase64": "YWJjMTIz5LiK5Lit5LiL",
-        "decodeUrl": "abc123%E4%B8%8A%E4%B8%AD%E4%B8%8B",
-        "object": {
-            "value": "abc123上中下"
-        }
+        "text": "abc123上中下"
     },
     "output": {
         "md5": "bd9f004ab3a71c521288f88cd0bcc985",

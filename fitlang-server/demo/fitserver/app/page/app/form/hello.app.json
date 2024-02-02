@@ -4,7 +4,6 @@
     "inputTitle": "Input",
     "outputTitle": "Output",
     "scriptTitle": "Script",
-    "useForm": true,
     "input": {
         "who": "world"
     },
