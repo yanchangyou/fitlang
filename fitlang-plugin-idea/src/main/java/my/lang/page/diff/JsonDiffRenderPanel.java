@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
 public class JsonDiffRenderPanel extends JPanel {
@@ -27,12 +28,15 @@ public class JsonDiffRenderPanel extends JPanel {
 
     JsonDiffResultPanel jsonDiffResultPanel;
 
-    String appTitle = "App";
+    String appTitle = "Diff";
     String input1Title = "Input1";
     String input2Title = "Input2";
     String diffResultTitle = "Result";
 
+    String defaultButtonTitle = "Compare";
+
     String type = "json";
+    JButton button;
 
     public JsonDiffRenderPanel(@NotNull Project project, JSONObject diffDefine, VirtualFile appFile, JSONObject contextParam) {
 
@@ -47,6 +51,7 @@ public class JsonDiffRenderPanel extends JPanel {
         input1Title = diffDefine.containsKey("input1Title") ? diffDefine.getString("input1Title") : input1Title;
         input2Title = diffDefine.containsKey("input2Title") ? diffDefine.getString("input2Title") : input2Title;
         diffResultTitle = diffDefine.containsKey("scriptTitle") ? diffDefine.getString("scriptTitle") : diffResultTitle;
+        defaultButtonTitle = diffDefine.containsKey("defaultButtonTitle") ? diffDefine.getString("defaultButtonTitle") : defaultButtonTitle;
 
         Object input1 = diffDefine.get("input1");
         Object input2 = diffDefine.get("input2");
@@ -94,13 +99,7 @@ public class JsonDiffRenderPanel extends JPanel {
 
     JPanel buildDiffResultPanel() {
 
-        Object json1 = json1InputPanel.getJsonTextEditor().getText();
-
-        Object json2 = json2InputPanel.getJsonTextEditor().getText();
-
         jsonDiffResultPanel = new JsonDiffResultPanel(project);
-
-        jsonDiffResultPanel.showDiff(json1, json2);
 
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -108,6 +107,8 @@ public class JsonDiffRenderPanel extends JPanel {
 
         panel.add(toolBar, BorderLayout.NORTH);
         panel.add(jsonDiffResultPanel, BorderLayout.CENTER);
+
+        button.doClick();
 
         return panel;
     }
@@ -118,13 +119,21 @@ public class JsonDiffRenderPanel extends JPanel {
 
         //add default Run Button
         {
-            JButton button = new JButton("Run");
+            button = new JButton(defaultButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
                     Object input1 = json1InputPanel.jsonTextEditor.getText();
                     Object input2 = json2InputPanel.jsonTextEditor.getText();
+
+                    if (isJsonObjectText(input1)) {
+                        input1 = JSONObject.parse(input1.toString());
+                    }
+
+                    if (isJsonObjectText(input2)) {
+                        input2 = JSONObject.parse(input2.toString());
+                    }
 
                     jsonDiffResultPanel.showDiff(input1, input2);
 

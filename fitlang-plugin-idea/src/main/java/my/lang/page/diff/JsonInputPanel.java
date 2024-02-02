@@ -12,6 +12,8 @@ import com.intellij.ui.components.JBScrollPane;
 import javax.swing.*;
 import java.awt.*;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+
 public class JsonInputPanel extends JPanel {
 
     Object object;
@@ -40,6 +42,7 @@ public class JsonInputPanel extends JPanel {
 
         if (object instanceof JSONObject) {
             language = Json5Language.INSTANCE;
+            object = toJsonTextWithFormat(((JSONObject) object));
         }
 
         jsonTextEditor = new LanguageTextField(language, project, object.toString());
