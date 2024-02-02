@@ -1,0 +1,15 @@
+{
+    "defaultButtonTitle": "比较",
+    "title": "比较文本",
+    "input1Title": "输入1",
+    "input2Title": "输入2",
+    "input1": {
+        "foo": "bar",
+        "hello": "world"
+    },
+    "input2": {
+        "foo": "bar",
+        "hello": "fit",
+        "more": 1
+    }
+}
