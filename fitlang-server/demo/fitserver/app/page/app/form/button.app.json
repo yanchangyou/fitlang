@@ -8,42 +8,122 @@
         "text": "abc123上中下"
     },
     "output": {
-        "md5": "bd9f004ab3a71c521288f88cd0bcc985",
-        "sha1": "34383b719c76632dd1b4ab57851dd13a5225f359",
-        "encodeHex": "616263313233e4b88ae4b8ade4b88b",
-        "encodeBase64": "YWJjMTIz5LiK5Lit5LiL",
-        "uuid": "9affc956-b6a3-4191-a3d1-8d5d10e7203a",
-        "uuidSimple": "f41933df885b405ca4576d8ae383a0ce",
-        "encodeUrl": "abc123%E4%B8%8A%E4%B8%AD%E4%B8%8B",
-        "decodeHex": "abc123上中下",
-        "decodeBase64": "abc123上中下",
-        "decodeUrl": "abc123上中下",
-        "now": {
-            "now": 1706623076388,
-            "yyyy-MM-dd": "",
-            "yyyy-MM-dd HH:mm:ss": ""
-        },
-        "objectValue": ""
+        "text": ""
     },
     "script": {
         "uni": "mix",
         "json": {
-            "md5": "${FitLang.md5(text)}",
-            "sha1": "${FitLang.sha1(text)}",
-            "uuid": "${FitLang.uuid()}",
-            "uuidSimple": "${FitLang.uuidSimple()}",
-            "encodeHex": "${FitLang.encodeHex(text)}",
-            "decodeHex": "${FitLang.decodeHex(decodeHex)}",
-            "encodeBase64": "${FitLang.encodeBase64(text)}",
-            "decodeBase64": "${FitLang.decodeBase64(decodeBase64)}",
-            "encodeUrl": "${FitLang.encodeUrl(text)}",
-            "decodeUrl": "${FitLang.decodeUrl(decodeUrl)}",
-            "now": {
-                "now": "${FitLang.now()}",
-                "yyyy-MM-dd": "${FitLang.now('yyyy-MM-dd')}",
-                "yyyy-MM-dd HH:mm:ss": "${FitLang.now('yyyy-MM-dd HH:mm:ss')}"
-            },
-            "objectValue": "${(object.value)}"
+            "text": "${FitLang.md5(text)}"
         }
-    }
+    },
+    "actions": [
+        {
+            "title": "MD5",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.md5(text)}"
+                }
+            }
+        },
+        {
+            "title": "SHA1",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.sha1(text)}"
+                }
+            }
+        },
+        {
+            "title": "UUID",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.uuid()}"
+                }
+            }
+        },
+        {
+            "title": "UUID simple",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.uuidSimple()}"
+                }
+            }
+        },
+        {
+            "title": "encodeHex",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeHex(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeHex",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeHex(text)}"
+                }
+            }
+        },
+        {
+            "title": "encodeBase64",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeBase64(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeBase64",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeBase64(text)}"
+                }
+            }
+        },
+        {
+            "title": "encodeUrl",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeUrl(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeUrl",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeUrl(text)}"
+                }
+            }
+        },
+        {
+            "title": "now-date",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.now()}"
+                }
+            }
+        },
+        {
+            "title": "now-datetime",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.now('yyyy-MM-dd HH:mm:ss')}"
+                }
+            }
+        }
+    ]
 }
