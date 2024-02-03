@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.ide;
+package fit.lang.plugin.json.ide.node;
 
 /**
  * 执行节点

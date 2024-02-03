@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.ide;
+package fit.lang.plugin.json.ide.node;
 
 import fit.lang.ExecuteNodeException;
 
