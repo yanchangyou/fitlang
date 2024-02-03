@@ -4,9 +4,8 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import fit.intellij.json.psi.JsonObject;
+import fit.intellij.json.psi.JsonElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class JsonStructureViewElement implements StructureViewTreeElement {
 
   @Override
   public TreeElement @NotNull [] getChildren() {
-    fit.intellij.json.psi.JsonElement value = null;
+    JsonElement value = null;
     if (myElement instanceof fit.intellij.json.psi.JsonFile) {
       value = ((fit.intellij.json.psi.JsonFile)myElement).getTopLevelValue();
     }
@@ -62,14 +61,12 @@ public class JsonStructureViewElement implements StructureViewTreeElement {
     else if (PsiTreeUtil.instanceOf(myElement, fit.intellij.json.psi.JsonObject.class, fit.intellij.json.psi.JsonArray.class)) {
       value = myElement;
     }
-    if (value instanceof fit.intellij.json.psi.JsonObject) {
-      final fit.intellij.json.psi.JsonObject object = ((fit.intellij.json.psi.JsonObject)value);
+    if (value instanceof fit.intellij.json.psi.JsonObject object) {
       return ContainerUtil.map2Array(object.getPropertyList(), TreeElement.class, property -> new JsonStructureViewElement(property));
     }
-    else if (value instanceof fit.intellij.json.psi.JsonArray) {
-      final fit.intellij.json.psi.JsonArray array = (fit.intellij.json.psi.JsonArray)value;
+    else if (value instanceof fit.intellij.json.psi.JsonArray array) {
       final List<TreeElement> childObjects = ContainerUtil.mapNotNull(array.getValueList(), value1 -> {
-        if (value1 instanceof fit.intellij.json.psi.JsonObject && !((JsonObject)value1).getPropertyList().isEmpty()) {
+        if (value1 instanceof fit.intellij.json.psi.JsonObject && !((fit.intellij.json.psi.JsonObject)value1).getPropertyList().isEmpty()) {
           return new JsonStructureViewElement(value1);
         }
         else if (value1 instanceof fit.intellij.json.psi.JsonArray && PsiTreeUtil.findChildOfType(value1, fit.intellij.json.psi.JsonProperty.class) != null) {

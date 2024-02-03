@@ -6,6 +6,9 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+/**
+ * use convertArrayToObject
+ */
 public class ConvertKeyValueListJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {

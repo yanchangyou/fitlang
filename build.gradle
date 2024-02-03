@@ -1,11 +1,28 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://maven.aliyun.com/nexus/content/groups/public"
+        }
+        maven {
+            url "https://repo.maven.apache.org/maven2"
+        }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlin_version}"
+    }
+}
 
 plugins {
     id "org.jetbrains.intellij" version "$ijpVersion"
 }
+
 group 'lang.plugin.idea'
 version "$pluginVersion"
 
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 // 可以在线访问： https://repo.maven.apache.org/maven2
 repositories {
@@ -20,6 +37,8 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
+    implementation "com.jayway.jsonpath:json-path:${jsonpathVersion}"
 //    implementation "com.googlecode.aviator:aviator:${aviatorVersion}"
     implementation "com.alibaba.fastjson2:fastjson2:${fastjsonVersion2}"
     implementation "cn.hutool:hutool-all:${hutoolVersion}"
@@ -30,7 +49,7 @@ dependencies {
     implementation "org.slf4j:slf4j-jdk14:${slf4jVersion}"
     implementation "net.java.dev.jna:jna:${jnaVersion}"
 //    implementation "io.netty:netty-all:${nettyVersion}"
-//    implementation "jexcelapi:jxl:${jexcelapiVersion}"
+    implementation "jexcelapi:jxl:${jexcelapiVersion}"
 //    implementation "com.alibaba:easyexcel:${easyexcelVersion}"
 }
 
@@ -69,7 +88,9 @@ sourceSets {
         }
     }
 }
+
 apply plugin: 'idea'
+
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     version = ideaVersion

@@ -1,7 +1,7 @@
 package fit.lang.plugin.object.define;
 
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeInput;
 
 /**
  * 执行节点入参

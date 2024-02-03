@@ -1,12 +1,12 @@
 package fit.intellij.json.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonValue;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.util.PsiTreeUtil;
+import fit.intellij.json.psi.JsonFile;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,13 +26,13 @@ public class JsonFileImpl extends PsiFileBase implements JsonFile {
 
   @Nullable
   @Override
-  public JsonValue getTopLevelValue() {
-    return PsiTreeUtil.getChildOfType(this, JsonValue.class);
+  public fit.intellij.json.psi.JsonValue getTopLevelValue() {
+    return PsiTreeUtil.getChildOfType(this, fit.intellij.json.psi.JsonValue.class);
   }
 
   @NotNull
   @Override
-  public List<JsonValue> getAllTopLevelValues() {
+  public List<fit.intellij.json.psi.JsonValue> getAllTopLevelValues() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, JsonValue.class);
   }
 

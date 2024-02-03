@@ -1,0 +1,6 @@
+{
+    "uni": "getSchema",
+    "input": {
+        "foo": "bar"
+    }
+}

@@ -3,8 +3,8 @@ package fit.lang.plugin.json.flow;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
 import fit.lang.common.flow.PipeExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteNodeData;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 

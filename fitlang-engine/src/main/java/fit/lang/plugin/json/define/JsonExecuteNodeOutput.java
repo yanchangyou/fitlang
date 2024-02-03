@@ -1,6 +1,6 @@
 package fit.lang.plugin.json.define;
 
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNodeOutput;
 
 /**
  * 执行节点出参

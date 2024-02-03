@@ -13,8 +13,10 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 public class RemoveProhibitedPropertyFix implements LocalQuickFix {
+  @SafeFieldForPreview
   private final fit.jetbrains.jsonSchema.impl.JsonValidationError.ProhibitedPropertyIssueData myData;
-  private final JsonLikeSyntaxAdapter myQuickFixAdapter;
+  @SafeFieldForPreview
+  private final fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter myQuickFixAdapter;
 
   public RemoveProhibitedPropertyFix(JsonValidationError.ProhibitedPropertyIssueData data,
                                      JsonLikeSyntaxAdapter quickFixAdapter) {

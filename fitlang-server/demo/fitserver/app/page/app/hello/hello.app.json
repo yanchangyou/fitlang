@@ -1,0 +1,24 @@
+{
+    "name": "app",
+    "title": "App",
+    "input": {
+        "who": "world"
+    },
+    "output": {
+        "message": "hello, world!"
+    },
+    "actions": [
+        {
+            "title": "Button1",
+            "script": {
+                "uni": "hello"
+            }
+        },
+        {
+            "title": "Button2",
+            "script": {
+                "uni": "showInfoMessage"
+            }
+        }
+    ]
+}

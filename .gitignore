@@ -20,6 +20,8 @@
 *.rar
 *.iml
 
+*.search.json
+
 .idea
 **/.idea/**
 .gradle
@@ -32,3 +34,6 @@ replay_pid*
 /out
 target
 /fitlang-server/demo/fitserver/app/cmd/lang/rust/hello
+/fitlang-server/demo/fitserver/app/postman/fit-test
+/fitlang-server/demo/fitserver/app/postman/fit-test/folder
+

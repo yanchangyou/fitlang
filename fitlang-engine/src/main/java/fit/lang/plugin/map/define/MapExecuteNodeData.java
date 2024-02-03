@@ -1,6 +1,6 @@
 package fit.lang.plugin.map.define;
 
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeData;
 
 import java.util.HashMap;
 import java.util.Map;

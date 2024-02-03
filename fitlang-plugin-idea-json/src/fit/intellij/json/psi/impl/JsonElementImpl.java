@@ -1,9 +1,9 @@
 package fit.intellij.json.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import fit.intellij.json.psi.JsonElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
+import fit.intellij.json.psi.JsonElement;
 import org.jetbrains.annotations.NotNull;
 
 /**

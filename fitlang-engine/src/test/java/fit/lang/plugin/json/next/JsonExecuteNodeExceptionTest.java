@@ -2,7 +2,7 @@ package fit.lang.plugin.json.next;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;

@@ -2,10 +2,7 @@
 package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandler;
-import fit.intellij.json.JsonElementTypes;
 import fit.intellij.json.pointer.JsonPointerPosition;
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -14,7 +11,12 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import com.intellij.util.containers.ContainerUtil;
+import fit.jetbrains.jsonSchema.extension.JsonSchemaGotoDeclarationSuppressor;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -22,14 +24,18 @@ import java.util.Arrays;
 public class JsonSchemaGotoDeclarationHandler implements GotoDeclarationHandler {
   @Override
   public PsiElement @Nullable [] getGotoDeclarationTargets(@Nullable PsiElement sourceElement, int offset, Editor editor) {
+    boolean shouldSuppressNavigation =
+      ContainerUtil.exists(JsonSchemaGotoDeclarationSuppressor.EP_NAME.getExtensionList(), it -> it.shouldSuppressGtd(sourceElement));
+    if (shouldSuppressNavigation) return null;
+
     final IElementType elementType = PsiUtilCore.getElementType(sourceElement);
-    if (elementType != JsonElementTypes.DOUBLE_QUOTED_STRING && elementType != JsonElementTypes.SINGLE_QUOTED_STRING) return null;
-    final JsonStringLiteral literal = PsiTreeUtil.getParentOfType(sourceElement, JsonStringLiteral.class);
+    if (elementType != fit.intellij.json.JsonElementTypes.DOUBLE_QUOTED_STRING && elementType != JsonElementTypes.SINGLE_QUOTED_STRING) return null;
+    final fit.intellij.json.psi.JsonStringLiteral literal = PsiTreeUtil.getParentOfType(sourceElement, JsonStringLiteral.class);
     if (literal == null) return null;
     final PsiElement parent = literal.getParent();
     if (literal.getReferences().length == 0
-        && parent instanceof JsonProperty
-        && ((JsonProperty)parent).getNameElement() == literal
+        && parent instanceof fit.intellij.json.psi.JsonProperty
+        && ((fit.intellij.json.psi.JsonProperty)parent).getNameElement() == literal
         && canNavigateToSchema(parent)) {
       final PsiFile containingFile = literal.getContainingFile();
       final JsonSchemaService service = JsonSchemaService.Impl.get(literal.getProject());

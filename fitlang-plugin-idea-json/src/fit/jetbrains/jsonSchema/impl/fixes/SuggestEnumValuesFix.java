@@ -1,4 +1,4 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl.fixes;
 
 import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
@@ -9,7 +9,7 @@ import com.intellij.codeInspection.CommonProblemDescriptor;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import fit.intellij.json.JsonBundle;
-import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonElementGenerator;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
@@ -22,16 +22,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.util.PsiUtilCore;
+import fit.intellij.json.psi.JsonProperty;
 import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
-import fit.intellij.json.psi.JsonElementGenerator;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class SuggestEnumValuesFix implements LocalQuickFix, BatchQuickFix<CommonProblemDescriptor> {
-  private final JsonLikeSyntaxAdapter myQuickFixAdapter;
+public class SuggestEnumValuesFix implements LocalQuickFix, BatchQuickFix {
+  private final fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter myQuickFixAdapter;
 
   public SuggestEnumValuesFix(JsonLikeSyntaxAdapter quickFixAdapter) {
     myQuickFixAdapter = quickFixAdapter;
@@ -65,7 +65,7 @@ public class SuggestEnumValuesFix implements LocalQuickFix, BatchQuickFix<Common
     }
     boolean shouldAddWhitespace = myQuickFixAdapter.fixWhitespaceBefore(initialElement, element);
     PsiElement parent = element.getParent();
-    boolean isJsonPropName = parent instanceof JsonProperty && ((JsonProperty)parent).getNameElement() == element;
+    boolean isJsonPropName = parent instanceof fit.intellij.json.psi.JsonProperty && ((fit.intellij.json.psi.JsonProperty)parent).getNameElement() == element;
     if (isJsonPropName) {
       WriteAction.run(() -> element.replace(new JsonElementGenerator(project).createStringLiteral("")));
     }

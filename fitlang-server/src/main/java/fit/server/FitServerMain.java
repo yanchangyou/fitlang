@@ -15,8 +15,8 @@ public class FitServerMain {
 
     public static void main(String[] args) {
 
-        System.out.println("FitLang-0.9.0");
-        String fitPath = "app";
+        System.out.println("FitLang-0.10.6");
+        String fitPath = "/opt/github/fitlang/fitlang-server/demo/fitserver/app";
         String serverFilePath = "server.fit";
         String httpPrefix = "http://127.0.0.1";
         int port = 11111;
@@ -32,20 +32,19 @@ public class FitServerMain {
                 fitPath = args[2];
             }
         }
+
+        String code = "{'uni':'server'}";
+
         File serverFile = new File(fitPath.concat("/").concat(serverFilePath));
 
-        if (!serverFile.exists()) {
-            System.out.println("server file not existed: " + serverFile.getAbsoluteFile());
-            return;
+        if (serverFile.exists()) {
+            code = readNodeDefineFile(serverFile);
+            System.out.println("start server from: " + serverFile.getAbsoluteFile());
+
+            ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
+            ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
+            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
         }
-
-        String code = readNodeDefineFile(serverFile);
-
-        System.out.println("start server from " + serverFile.getAbsoluteFile());
-
-        ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
-        ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
-        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
 
         String result = ExecuteJsonNodeUtil.executeCode(code);
         System.out.println(result);

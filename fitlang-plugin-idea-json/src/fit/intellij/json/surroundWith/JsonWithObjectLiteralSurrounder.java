@@ -1,12 +1,12 @@
 package fit.intellij.json.surroundWith;
 
-import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.IncorrectOperationException;
-import fit.intellij.json.psi.JsonValue;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.psi.JsonElementGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,11 +55,11 @@ public class JsonWithObjectLiteralSurrounder extends JsonSurrounderBase {
       return null;
     }
 
-    final fit.intellij.json.psi.JsonElementGenerator generator = new fit.intellij.json.psi.JsonElementGenerator(project);
+    final fit.intellij.json.psi.JsonElementGenerator generator = new JsonElementGenerator(project);
 
     final PsiElement firstElement = elements[0];
     final fit.intellij.json.psi.JsonElement newNameElement;
-    if (firstElement instanceof JsonValue) {
+    if (firstElement instanceof fit.intellij.json.psi.JsonValue) {
       assert elements.length == 1 : "Only single JSON value can be wrapped in object literal";
       fit.intellij.json.psi.JsonObject replacement = generator.createValue(createReplacementText(firstElement.getText()));
       replacement = (fit.intellij.json.psi.JsonObject)firstElement.replace(replacement);

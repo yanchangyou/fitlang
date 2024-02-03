@@ -1,0 +1,689 @@
+{
+    "template": [
+        {
+            "debug": "true"
+        },
+        {
+            "outputRawField": "fieldName"
+        },
+        {
+            "uni": "hello"
+        },
+        {
+            "uni": "get",
+            "path": "foo"
+        },
+        {
+            "uni": "set",
+            "path": "foo",
+            "value": "bar"
+        },
+        {
+            "uni": "getStruct"
+        },
+        {
+            "uni": "getSchema",
+            "input": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "sortField"
+        },
+        {
+            "uni": "increase",
+            "field": "num"
+        },
+        {
+            "uni": "decrease",
+            "field": "num"
+        },
+        {
+            "uni": "echo"
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "containJson": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "expected": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "assert",
+            "needToString": true,
+            "containField": [
+                "hello"
+            ]
+        },
+        {
+            "uni": "setGlobal",
+            "key": "keyName",
+            "value": "value"
+        },
+        {
+            "uni": "sleep",
+            "second": 0.5
+        },
+        {
+            "uni": "perf",
+            "child": {}
+        },
+        {
+            "uni": "print",
+            "info": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "log",
+            "info": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "convert",
+            "isMixMode": false,
+            "express": {
+                "newField": "const",
+                "newField1": "${oldField1}",
+                "parent.newField2": "${parent.oldField2}",
+                "list[].newField2": "${list[].oldField2}"
+            }
+        },
+        {
+            "uni": "removeField",
+            "fieldNames": [
+                "field1"
+            ]
+        },
+        {
+            "uni": "removeEmptyField"
+        },
+        {
+            "uni": "mix",
+            "json": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "mixNode",
+            "json": {
+                "key": {
+                    "uni": "hello"
+                }
+            }
+        },
+        {
+            "uni": "eval"
+        },
+        {
+            "uni": "parseJson",
+            "jsonField": "fieldName"
+        },
+        {
+            "uni": "stringifyJson",
+            "jsonField": "fieldName",
+            "format": true
+        },
+        {
+            "uni": "convertKeyValueList",
+            "listField": "list",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "convertObjectToArray",
+            "arrayField": "array",
+            "objectField": "object",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "convertArrayToObject",
+            "arrayField": "array",
+            "objectField": "object",
+            "keyField": "key",
+            "valueField": "value"
+        },
+        {
+            "uni": "convertToObjectArray",
+            "arrayField": "array",
+            "keyField": "key"
+        },
+        {
+            "uni": "convertToBasicArray",
+            "arrayField": "array",
+            "keyField": "key"
+        },
+        {
+            "uni": "batch",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "sequence",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "pipe",
+            "child": [
+                {
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "foreach",
+            "foreachField": "list",
+            "isPipe": true,
+            "parallelism": 1,
+            "child": [
+                {
+                    "uni": "increase"
+                }
+            ]
+        },
+        {
+            "uni": "loop",
+            "loopTimes": 10,
+            "isPipe": true,
+            "isBagsMode": true,
+            "bagsName": "list",
+            "bagsStep": 1,
+            "parallelism": 2,
+            "child": {
+                "uni": "mix",
+                "json": {
+                    "index": "${loopIndex}"
+                }
+            }
+        },
+        {
+            "uni": "switch",
+            "switchField": "type",
+            "child": [
+                {
+                    "id": "case2",
+                    "case": "2",
+                    "uni": "echo"
+                },
+                {
+                    "case": "1",
+                    "uni": "hello"
+                }
+            ]
+        },
+        {
+            "uni": "return",
+            "json": {
+                "message": "mock data!"
+            }
+        },
+        {
+            "uni": "thread",
+            "child": {
+                "uni": "hello"
+            }
+        },
+        {
+            "uni": "execute"
+        },
+        {
+            "uni": "call",
+            "nodeId": "nodeId"
+        },
+        {
+            "uni": "catch",
+            "child": {
+                "uni": "mix",
+                "json": {
+                    "message": "${1/0}"
+                }
+            }
+        },
+        {
+            "uni": "package",
+            "name": "packageName",
+            "mainFunction": "main",
+            "import": [
+            ],
+            "child": [
+                {
+                    "uni": "function",
+                    "name": "hello",
+                    "child": {
+                        "uni": "hello"
+                    }
+                },
+                {
+                    "uni": "function",
+                    "name": "main",
+                    "child": {
+                        "uni": "call",
+                        "function": "packageName.hello"
+                    }
+                }
+            ]
+        },
+        {
+            "uni": "http",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "postJson",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "postForm",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "httpGet",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "httpPut",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "httpDelete",
+            "url": "http://fit.321zou.com/hello",
+            "param": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "server",
+            "port": 11111,
+            "service": {
+                "/hello": {
+                    "uni": "hello"
+                },
+                "/echo": {
+                    "uni": "echo"
+                }
+            }
+        },
+        {
+            "uni": "proxy",
+            "url": "http://fit.321zou.com/hello"
+        },
+        {
+            "uni": "web",
+            "outputRawField": "html",
+            "child": {
+                "uni": "return",
+                "json": {
+                    "html": "<h1>hello, world!</h1>"
+                }
+            }
+        },
+        {
+            "uni": "readFile",
+            "filePath": "/app/first.fit",
+            "contentField": "content",
+            "charset": "UTF-8"
+        },
+        {
+            "uni": "writeFile",
+            "filePath": "/app/first.fit",
+            "contentField": "content",
+            "charset": "UTF-8",
+            "format": false
+        },
+        {
+            "uni": "deleteFile",
+            "filePath": "/app/first.fit"
+        },
+        {
+            "uni": "readEditor",
+            "contentField": "content"
+        },
+        {
+            "uni": "writeEditor",
+            "contentField": "content",
+            "format": false
+        },
+        {
+            "uni": "showConfig",
+            "config": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "readConfig",
+            "configField": "config"
+        },
+        {
+            "uni": "openWebPage",
+            "url": "https://www.baidu.com",
+            "option": {
+                "title": "Web Page",
+                "modal": false,
+                "width": 800,
+                "height": 600,
+                "devTools": false
+            }
+        },
+        {
+            "uni": "showHtml",
+            "html": "<h2>hello, world</h2>",
+            "option": {
+                "title": "Web Page",
+                "modal": false,
+                "width": 800,
+                "height": 600,
+                "devTools": false
+            }
+        },
+        {
+            "uni": "showJsonPage",
+            "page": {
+                "type": "page",
+                "title": "表单页面",
+                "body": {
+                    "type": "form",
+                    "mode": "horizontal",
+                    "wrapWithPanel": false,
+                    "body": [
+                        {
+                            "label": "Name",
+                            "type": "input-text",
+                            "name": "name",
+                            "value": "value"
+                        },
+                        {
+                            "label": "Email",
+                            "type": "input-email",
+                            "name": "email"
+                        }
+                    ]
+                }
+            },
+            "data": {
+                "name": "name",
+                "email": "email@test.com"
+            },
+            "option": {
+                "pageType": "amis",
+                "title": "Json Page",
+                "modal": true,
+                "width": 800,
+                "height": 600,
+                "devTools": true,
+                "refreshDataInterval": 0.3
+            }
+        },
+        {
+            "uni": "chooseFile",
+            "fileField": "file",
+            "isMultiple": false
+        },
+        {
+            "uni": "showInfoMessage",
+            "title": "Message",
+            "message": "hello, Fit!"
+        },
+        {
+            "uni": "showWarningMessage",
+            "title": "Warning",
+            "message": "something warning!"
+        },
+        {
+            "uni": "showErrorMessage",
+            "title": "Error",
+            "message": "something error!"
+        },
+        {
+            "uni": "showInputDialog",
+            "title": "Input",
+            "message": "input :",
+            "keyField": "username"
+        },
+        {
+            "uni": "showOkCancelDialog",
+            "title": "Title",
+            "message": "choose",
+            "okText": "okText",
+            "cancelText": "cancelText",
+            "keyField": "fieldName"
+        },
+        {
+            "uni": "showYesNoCancelDialog",
+            "title": "Title",
+            "message": "Choice",
+            "keyField": "name"
+        },
+        {
+            "uni": "showPasswordDialog",
+            "title": "Input",
+            "message": "password :"
+        },
+        {
+            "uni": "showCheckboxOkCancelDialog",
+            "title": "Title",
+            "message": "check",
+            "checkboxText": "check item"
+        },
+        {
+            "uni": "showGlobalConfigDialog",
+            "config": {
+                "foo": "bar"
+            }
+        },
+        {
+            "uni": "systemInfo",
+            "shareFields": [
+                "computerManufacturer",
+                "computerModel",
+                "processorName",
+                "processorPhysicalCount",
+                "processorLogicalCount",
+                "processorMaxFreq",
+                "memoryTotal",
+                "memoryAvailable",
+                "osManufacturer",
+                "osFamily",
+                "osVersion",
+                "osBit",
+                "net"
+            ]
+        },
+        {
+            "uni": "info",
+            "shareFields": [
+                "os",
+                "memory",
+                "jvm",
+                "host",
+                "runtime",
+                "javaSpec",
+                "jvm",
+                "user",
+                "properties",
+                "env"
+            ]
+        },
+        {
+            "uni": "cmd",
+            "cmd": "echo hello fit",
+            "charset": "UTF-8",
+            "env": {
+            },
+            "option": {
+            },
+            "target": "",
+            "param": [
+                ""
+            ]
+        },
+        {
+            "uni": "cmd:ping",
+            "env": {
+            },
+            "option": {
+            },
+            "target": "www.baidu.com",
+            "param": [
+                "-c 2"
+            ]
+        },
+        {
+            "uni": "cmd:javac",
+            "target": "${currentDir+'/Hello.java'}"
+        },
+        {
+            "uni": "cmd:java",
+            "option": {
+                "-cp": "${currentDir}"
+            },
+            "target": "Hello",
+            "param": [
+                ""
+            ]
+        },
+        {
+            "uni": "zip",
+            "path": ""
+        },
+        {
+            "uni": "unzip",
+            "path": ""
+        },
+        {
+            "uni": "telnet",
+            "host": "www.baidu.com",
+            "port": 80,
+            "input": [
+                "GET / HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
+            ]
+        },
+        {
+            "uni": "telnets",
+            "host": "www.baidu.com",
+            "port": 443,
+            "input": [
+                "GET / HTTP/1.0",
+                "Host: www.baidu.com",
+                ""
+            ]
+        },
+        {
+            "uni": "telnet.http",
+            "method": "GET",
+            "url": "http://116.62.65.251/hello",
+            "header": {
+                "Host": "fit.321zou.com"
+            }
+        },
+        {
+            "uni": "telnet.https",
+            "method": "HEAD",
+            "url": "https://180.101.50.242",
+            "header": {
+                "Host": "www.baidu.com"
+            }
+        },
+        {
+            "uni": "postman",
+            "method": "POST",
+            "isPostForm": false,
+            "url": "http://fit.321zou.com/echo",
+            "cookieDomain": "fit.321zou.com",
+            "retryTimes": 0,
+            "retrySleep": 0.5,
+            "retryCondition": "true",
+            "proxy": {
+                "host": "",
+                "port": 8888
+            },
+            "header": {
+                "contentType": "application/json"
+            },
+            "query": {
+                "foo": "bar"
+            },
+            "body": {
+                "hello": "world"
+            }
+        },
+        {
+            "uni": "getClipboard",
+            "contentField": "content"
+        },
+        {
+            "uni": "setClipboard",
+            "contentField": "content"
+        },
+        {
+            "uni": "replaceContent",
+            "find": "[a-z]+",
+            "replace": "123",
+            "isRegexp": true,
+            "contentField": "content",
+            "content": "abc456"
+        },
+        {
+            "uni": "readExcelForAllSheet",
+            "file": "path.xls"
+        },
+        {
+            "uni": "readExcel",
+            "file": "path.xls",
+            "header": {
+                "fieldName": "title"
+            }
+        },
+        {
+            "uni": "writeExcel",
+            "file": "path.xls",
+            "arrayField": "rows",
+            "isAppend": true,
+            "header": {
+                "fieldName": "title"
+            }
+        },
+        {
+            "uni": "mergeExcel",
+            "sheetName": "sheetName",
+            "inputFiles": [
+                "path.xls"
+            ],
+            "outputFile": "path-merge.xls",
+            "header": {
+                "fieldName": "title"
+            }
+        }
+    ]
+}

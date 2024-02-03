@@ -1,12 +1,12 @@
 package fit.intellij.json.psi.impl;
 
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonValue;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
  * @author Mikhail Golubev
  */
 public class JsonPropertyNameReference implements PsiReference {
-  private final JsonProperty myProperty;
+  private final fit.intellij.json.psi.JsonProperty myProperty;
 
-  public JsonPropertyNameReference(@NotNull JsonProperty property) {
+  public JsonPropertyNameReference(@NotNull fit.intellij.json.psi.JsonProperty property) {
     myProperty = property;
   }
 
@@ -58,11 +58,10 @@ public class JsonPropertyNameReference implements PsiReference {
 
   @Override
   public boolean isReferenceTo(@NotNull PsiElement element) {
-    if (!(element instanceof JsonProperty)) {
+    if (!(element instanceof JsonProperty otherProperty)) {
       return false;
     }
     // May reference to the property with the same name for compatibility with JavaScript JSON support
-    final JsonProperty otherProperty = (JsonProperty)element;
     final PsiElement selfResolve = resolve();
     return otherProperty.getName().equals(getCanonicalText()) && selfResolve != otherProperty;
   }

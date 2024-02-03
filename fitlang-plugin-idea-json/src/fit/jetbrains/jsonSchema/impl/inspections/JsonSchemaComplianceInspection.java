@@ -3,21 +3,22 @@ package fit.jetbrains.jsonSchema.impl.inspections;
 
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.codeInspection.options.OptPane;
 import fit.intellij.json.JsonBundle;
-import fit.intellij.json.psi.JsonElementVisitor;
-import fit.intellij.json.psi.JsonValue;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.psi.JsonElementVisitor;
+import fit.intellij.json.psi.JsonValue;
+import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaComplianceChecker;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import static com.intellij.codeInspection.options.OptPane.checkbox;
+import static com.intellij.codeInspection.options.OptPane.pane;
 
 public class JsonSchemaComplianceInspection extends JsonSchemaBasedInspectionBase {
   public boolean myCaseInsensitiveEnum = false;
@@ -41,12 +42,10 @@ public class JsonSchemaComplianceInspection extends JsonSchemaBasedInspectionBas
     };
   }
 
-  @Nullable
   @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox(JsonBundle.message("json.schema.inspection.case.insensitive.enum"), "myCaseInsensitiveEnum");
-    return optionsPanel;
+  public @NotNull OptPane getOptionsPane() {
+    return pane(
+      checkbox("myCaseInsensitiveEnum", JsonBundle.message("json.schema.inspection.case.insensitive.enum")));
   }
 
   private static void annotate(@NotNull PsiElement element,
@@ -54,7 +53,7 @@ public class JsonSchemaComplianceInspection extends JsonSchemaBasedInspectionBas
                                @NotNull ProblemsHolder holder,
                                @NotNull LocalInspectionToolSession session,
                                JsonComplianceCheckerOptions options) {
-    final JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(element, rootSchema);
+    final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(element, rootSchema);
     if (walker == null) return;
     new JsonSchemaComplianceChecker(rootSchema, holder, walker, session, options).annotate(element);
   }

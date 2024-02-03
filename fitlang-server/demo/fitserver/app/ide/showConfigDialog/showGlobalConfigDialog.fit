@@ -1,0 +1,6 @@
+{
+    "uni": "showGlobalConfigDialog",
+    "config": {
+        "jsonPath": "..*"
+    }
+}

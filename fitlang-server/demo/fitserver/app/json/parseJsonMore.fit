@@ -1,0 +1,7 @@
+{
+    "input": {
+        "json": "<xml>{'hello':'world'}</xml>"
+    },
+    "uni": "parseJson",
+    "jsonField": "json"
+}

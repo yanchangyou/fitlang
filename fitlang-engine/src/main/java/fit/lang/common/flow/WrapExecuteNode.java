@@ -1,9 +1,7 @@
 package fit.lang.common.flow;
 
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
-
-import java.util.List;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 
 /**
  * 执行节点

@@ -12,16 +12,13 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/**
- * @author Irina.Chernushina on 5/23/2017.
- */
 public class JsonSchemaIconProvider implements FileIconProvider {
   @Nullable
   @Override
   public Icon getIcon(@NotNull VirtualFile file, int flags, @Nullable Project project) {
     if (project != null
         && JsonSchemaEnabler.EXTENSION_POINT_NAME.getExtensionList().stream().anyMatch(e -> e.canBeSchemaFile(file))) {
-      fit.jetbrains.jsonSchema.ide.JsonSchemaService service = JsonSchemaService.Impl.get(project);
+      JsonSchemaService service = JsonSchemaService.Impl.get(project);
       if (service.isApplicableToFile(file) && service.isSchemaFile(file)) {
         return AllIcons.FileTypes.JsonSchema;
       }

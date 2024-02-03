@@ -4,6 +4,7 @@ package fit.jetbrains.jsonSchema.impl.inspections;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.util.InspectionMessage;
 import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.paths.WebReference;
 import com.intellij.psi.PsiElement;
@@ -11,9 +12,9 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.psi.JsonStringLiteral;
 import fit.jetbrains.jsonSchema.impl.JsonPointerReferenceProvider;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
-import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,8 +50,8 @@ public class JsonSchemaRefReferenceInspection extends JsonSchemaBasedInspectionB
         super.visitProperty(o);
       }
 
-      private void doCheck(JsonValue value) {
-        if (!(value instanceof fit.intellij.json.psi.JsonStringLiteral)) return;
+      private void doCheck(fit.intellij.json.psi.JsonValue value) {
+        if (!(value instanceof JsonStringLiteral)) return;
         for (PsiReference reference : value.getReferences()) {
           if (reference instanceof WebReference) continue;
           final PsiElement resolved = reference.resolve();
@@ -60,7 +61,7 @@ public class JsonSchemaRefReferenceInspection extends JsonSchemaBasedInspectionB
         }
       }
 
-      private String getReferenceErrorDesc(PsiReference reference) {
+      private @InspectionMessage String getReferenceErrorDesc(PsiReference reference) {
         final String text = reference.getCanonicalText();
         if (reference instanceof FileReference) {
           final int hash = text.indexOf('#');

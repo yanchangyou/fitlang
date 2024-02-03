@@ -2,35 +2,34 @@
 package fit.intellij.json.psi.impl;
 
 import java.util.List;
+
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static fit.intellij.json.JsonElementTypes.*;
-import fit.intellij.json.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class JsonObjectImpl extends JsonObjectMixin implements JsonObject {
+public class JsonObjectImpl extends JsonObjectMixin implements fit.intellij.json.psi.JsonObject {
 
   public JsonObjectImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   @Override
-  public void accept(@NotNull JsonElementVisitor visitor) {
+  public void accept(@NotNull fit.intellij.json.psi.JsonElementVisitor visitor) {
     visitor.visitObject(this);
   }
 
   @Override
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof JsonElementVisitor) accept((JsonElementVisitor)visitor);
+    if (visitor instanceof fit.intellij.json.psi.JsonElementVisitor) accept((fit.intellij.json.psi.JsonElementVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<JsonProperty> getPropertyList() {
+  public List<fit.intellij.json.psi.JsonProperty> getPropertyList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, JsonProperty.class);
   }
 

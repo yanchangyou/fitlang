@@ -1,0 +1,12 @@
+{
+    "input": {
+        "list": [
+            1,
+            2,
+            3
+        ]
+    },
+    "uni": "convertToObjectArray",
+    "arrayField": "list",
+    "keyField": "key"
+}

@@ -4,7 +4,6 @@ package fit.intellij.json.structureView;
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import fit.intellij.json.psi.JsonFile;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
  * the behaviour is undefined and can be changed by `order` option in plugin.xml.
  * Therefore, there is no guarantee that the expected builder will be returned every time.
  */
-@ApiStatus.Internal
+//@ApiStatus.Internal
 public interface JsonCustomStructureViewFactory {
   ExtensionPointName<JsonCustomStructureViewFactory> EP_NAME = ExtensionPointName.create("fit.intellij.json.customStructureViewFactory");
 

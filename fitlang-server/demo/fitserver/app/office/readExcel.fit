@@ -1,0 +1,4 @@
+{
+    "uni": "readExcel",
+    "file": "/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls"
+}

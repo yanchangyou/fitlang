@@ -2,8 +2,8 @@ package fit.lang.common.util;
 
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 
 /**
  * 执行节点:空节点，无任何逻辑，类属于数学的0，用于语法完整

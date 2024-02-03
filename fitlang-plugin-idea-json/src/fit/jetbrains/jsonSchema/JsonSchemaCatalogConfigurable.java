@@ -1,14 +1,15 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema;
 
+import fit.intellij.json.JsonBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.panel.ComponentPanelBuilder;
+import com.intellij.openapi.util.NlsContexts.DetailedDescription;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.FormBuilder;
-import fit.intellij.json.JsonBundle;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -26,9 +27,9 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
 
   public JsonSchemaCatalogConfigurable(@NotNull final Project project) {
     myProject = project;
-    myCatalogCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.use.schemastore.org.json.schema.catalog"));
-    myRemoteCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.allow.downloading.json.schemas.from.remote.sources"));
-    myPreferRemoteCheckBox = new JBCheckBox(fit.intellij.json.JsonBundle.message("checkbox.always.download.the.most.recent.version.of.schemas"));
+    myCatalogCheckBox = new JBCheckBox(JsonBundle.message("checkbox.use.schemastore.org.json.schema.catalog"));
+    myRemoteCheckBox = new JBCheckBox(JsonBundle.message("checkbox.allow.downloading.json.schemas.from.remote.sources"));
+    myPreferRemoteCheckBox = new JBCheckBox(JsonBundle.message("checkbox.always.download.the.most.recent.version.of.schemas"));
   }
 
   @Nullable
@@ -47,12 +48,12 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
         myPreferRemoteCheckBox.setSelected(false);
       }
     });
-    addWithComment(builder, myCatalogCheckBox, fit.intellij.json.JsonBundle.message("schema.catalog.hint"));
-    addWithComment(builder, myPreferRemoteCheckBox, fit.intellij.json.JsonBundle.message("schema.catalog.remote.hint"));
+    addWithComment(builder, myCatalogCheckBox, JsonBundle.message("schema.catalog.hint"));
+    addWithComment(builder, myPreferRemoteCheckBox, JsonBundle.message("schema.catalog.remote.hint"));
     return wrap(builder.getPanel());
   }
 
-  private static void addWithComment(FormBuilder builder, JBCheckBox box, String s) {
+  private static void addWithComment(FormBuilder builder, JBCheckBox box, @DetailedDescription String s) {
     builder.addComponent(new ComponentPanelBuilder(box).withComment(s).createPanel());
   }
 
@@ -63,7 +64,7 @@ public class JsonSchemaCatalogConfigurable implements Configurable {
   }
 
   @Override
-  public JComponent getPreferredFocusedComponent() {
+  public @Nullable JComponent getPreferredFocusedComponent() {
     return myCatalogCheckBox;
   }
 

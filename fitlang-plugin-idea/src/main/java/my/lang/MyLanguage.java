@@ -2,6 +2,7 @@ package my.lang;
 
 import com.intellij.lang.Language;
 import fit.lang.FitLang;
+import fit.lang.plugin.json.ide.FitPluginInit;
 
 /**
  * @author yanchangyou
@@ -23,7 +24,12 @@ public class MyLanguage extends Language {
         super(LANG_FILE_SUFFIX);
     }
 
-    public static boolean isMyLanguageFile(String fileName) {
-        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
+    public static boolean isFitLanguageFile(String fileName) {
+        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.toUpperCase()) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
+    }
+
+    //初始化，后续优化
+    static {
+        FitPluginInit.init();
     }
 }

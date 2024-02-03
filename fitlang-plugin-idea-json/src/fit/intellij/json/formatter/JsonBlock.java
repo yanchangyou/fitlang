@@ -2,32 +2,31 @@
 package fit.intellij.json.formatter;
 
 import com.intellij.formatting.*;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonObject;
-import fit.intellij.json.psi.JsonProperty;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.tree.TokenSet;
-import fit.intellij.json.JsonParserDefinition;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonTokenSets;
+import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonObject;
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static fit.intellij.json.JsonElementTypes.*;
 import static fit.intellij.json.psi.JsonPsiUtil.hasElementType;
 
 /**
  * @author Mikhail Golubev
  */
 public class JsonBlock implements ASTBlock {
-  private static final TokenSet JSON_OPEN_BRACES = TokenSet.create(L_BRACKET, L_CURLY);
-  private static final TokenSet JSON_CLOSE_BRACES = TokenSet.create(R_BRACKET, R_CURLY);
+  private static final TokenSet JSON_OPEN_BRACES = TokenSet.create(JsonElementTypes.L_BRACKET, JsonElementTypes.L_CURLY);
+  private static final TokenSet JSON_CLOSE_BRACES = TokenSet.create(JsonElementTypes.R_BRACKET, JsonElementTypes.R_CURLY);
   private static final TokenSet JSON_ALL_BRACES = TokenSet.orSet(JSON_OPEN_BRACES, JSON_CLOSE_BRACES);
 
   private final JsonBlock myParent;
@@ -45,22 +44,6 @@ public class JsonBlock implements ASTBlock {
   private final Alignment myPropertyValueAlignment;
   private final Wrap myChildWrap;
 
-  /**
-   * @deprecated Please use overload with settings JsonCodeStyleSettings and spacingBuilder.
-   * Getting settings should be done only for the root block.
-   */
-  @Deprecated
-  @SuppressWarnings("unused") //used externally
-  public JsonBlock(@Nullable JsonBlock parent,
-                   @NotNull ASTNode node,
-                   @NotNull CodeStyleSettings settings,
-                   @Nullable Alignment alignment,
-                   @NotNull Indent indent,
-                   @Nullable Wrap wrap) {
-    this(parent, node, settings.getCustomSettings(JsonCodeStyleSettings.class), alignment, indent, wrap,
-         JsonFormattingBuilderModel.createSpacingBuilder(settings));
-  }
-
   public JsonBlock(@Nullable JsonBlock parent,
                    @NotNull ASTNode node,
                    @NotNull JsonCodeStyleSettings customSettings,
@@ -77,7 +60,7 @@ public class JsonBlock implements ASTBlock {
     mySpacingBuilder = spacingBuilder;
     myCustomSettings = customSettings;
 
-    if (myPsiElement instanceof JsonObject) {
+    if (myPsiElement instanceof fit.intellij.json.psi.JsonObject) {
       myChildWrap = Wrap.createWrap(myCustomSettings.OBJECT_WRAPPING, true);
     }
     else if (myPsiElement instanceof JsonArray) {
@@ -121,8 +104,8 @@ public class JsonBlock implements ASTBlock {
     Alignment alignment = null;
     Wrap wrap = null;
 
-    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonParserDefinition.JSON_CONTAINERS)) {
-      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, COMMA)) {
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonTokenSets.JSON_CONTAINERS)) {
+      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JsonElementTypes.COMMA)) {
         wrap = Wrap.createWrap(WrapType.NONE, true);
       }
       else if (!fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JSON_ALL_BRACES)) {
@@ -139,13 +122,13 @@ public class JsonBlock implements ASTBlock {
       }
     }
     // Handle properties alignment
-    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, PROPERTY) ) {
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonElementTypes.PROPERTY) ) {
       assert myParent != null && myParent.myPropertyValueAlignment != null;
-      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, COLON) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_COLON) {
+      if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JsonElementTypes.COLON) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_COLON) {
         alignment = myParent.myPropertyValueAlignment;
       }
       else if (fit.intellij.json.psi.JsonPsiUtil.isPropertyValue(childNode.getPsi()) && propertyAlignment == JsonCodeStyleSettings.ALIGN_PROPERTY_ON_VALUE) {
-        if (!fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JsonParserDefinition.JSON_CONTAINERS)) {
+        if (!fit.intellij.json.psi.JsonPsiUtil.hasElementType(childNode, JsonTokenSets.JSON_CONTAINERS)) {
           alignment = myParent.myPropertyValueAlignment;
         }
       }
@@ -180,7 +163,7 @@ public class JsonBlock implements ASTBlock {
   @NotNull
   @Override
   public ChildAttributes getChildAttributes(int newChildIndex) {
-    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonParserDefinition.JSON_CONTAINERS)) {
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonTokenSets.JSON_CONTAINERS)) {
       // WEB-13675: For some reason including alignment in child attributes causes
       // indents to consist solely of spaces when both USE_TABS and SMART_TAB
       // options are enabled.
@@ -196,13 +179,13 @@ public class JsonBlock implements ASTBlock {
   @Override
   public boolean isIncomplete() {
     final ASTNode lastChildNode = myNode.getLastChildNode();
-    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, OBJECT)) {
-      return lastChildNode != null && lastChildNode.getElementType() != R_CURLY;
+    if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonElementTypes.OBJECT)) {
+      return lastChildNode != null && lastChildNode.getElementType() != JsonElementTypes.R_CURLY;
     }
-    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, ARRAY)) {
-      return lastChildNode != null && lastChildNode.getElementType() != R_BRACKET;
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonElementTypes.ARRAY)) {
+      return lastChildNode != null && lastChildNode.getElementType() != JsonElementTypes.R_BRACKET;
     }
-    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, PROPERTY)) {
+    else if (fit.intellij.json.psi.JsonPsiUtil.hasElementType(myNode, JsonElementTypes.PROPERTY)) {
       return ((JsonProperty)myPsiElement).getValue() == null;
     }
     return false;

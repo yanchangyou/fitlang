@@ -2,11 +2,10 @@ package fit.lang.plugin.json.json;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.plugin.json.json.AddJsonExecuteNode;
 import junit.framework.TestCase;
 import org.junit.Assert;
 

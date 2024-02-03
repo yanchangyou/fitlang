@@ -3,8 +3,6 @@ package fit.intellij.json.editor;
 
 import com.intellij.codeInsight.editorActions.EnterHandler;
 import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.JsonLanguage;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Document;
@@ -18,7 +16,9 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ObjectUtils;
-import fit.intellij.json.psi.JsonValue;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
 public class JsonEnterHandler extends EnterHandlerDelegateAdapter {
@@ -34,7 +34,7 @@ public class JsonEnterHandler extends EnterHandlerDelegateAdapter {
     }
 
     Language language = EnterHandler.getLanguage(dataContext);
-    if (!(language instanceof JsonLanguage)) {
+    if (!(language instanceof fit.intellij.json.JsonLanguage)) {
       return Result.Continue;
     }
 
@@ -67,16 +67,16 @@ public class JsonEnterHandler extends EnterHandlerDelegateAdapter {
 
     LeafPsiElement leafPsiElement = ObjectUtils.tryCast(nextSibling, LeafPsiElement.class);
     IElementType elementType = leafPsiElement == null ? null : leafPsiElement.getElementType();
-    if (elementType == JsonElementTypes.COMMA || elementType == JsonElementTypes.R_CURLY) {
+    if (elementType == fit.intellij.json.JsonElementTypes.COMMA || elementType == fit.intellij.json.JsonElementTypes.R_CURLY) {
       PsiElement prevSibling = nextSibling.getPrevSibling();
       while (prevSibling instanceof PsiWhiteSpace) {
         prevSibling = prevSibling.getPrevSibling();
       }
 
       if (prevSibling instanceof fit.intellij.json.psi.JsonProperty && ((fit.intellij.json.psi.JsonProperty)prevSibling).getValue() != null) {
-        int offset = elementType == JsonElementTypes.COMMA ? nextSibling.getTextRange().getEndOffset() : prevSibling.getTextRange().getEndOffset();
+        int offset = elementType == fit.intellij.json.JsonElementTypes.COMMA ? nextSibling.getTextRange().getEndOffset() : prevSibling.getTextRange().getEndOffset();
         if (offset < editor.getDocument().getTextLength()) {
-          if (elementType == JsonElementTypes.R_CURLY && hasNewlineBefore) {
+          if (elementType == fit.intellij.json.JsonElementTypes.R_CURLY && hasNewlineBefore) {
             editor.getDocument().insertString(offset, ",");
             offset++;
           }
@@ -106,7 +106,7 @@ public class JsonEnterHandler extends EnterHandlerDelegateAdapter {
     return false;
   }
 
-  private static void handleJsonValue(@NotNull JsonValue literal, @NotNull Editor editor, @NotNull Ref<Integer> caretOffsetRef) {
+  private static void handleJsonValue(@NotNull fit.intellij.json.psi.JsonValue literal, @NotNull Editor editor, @NotNull Ref<Integer> caretOffsetRef) {
     PsiElement parent = literal.getParent();
     if (!(parent instanceof fit.intellij.json.psi.JsonProperty) || ((fit.intellij.json.psi.JsonProperty)parent).getValue() != literal) {
       return;
@@ -120,8 +120,8 @@ public class JsonEnterHandler extends EnterHandlerDelegateAdapter {
     int offset = literal.getTextRange().getEndOffset();
 
     if (literal instanceof fit.intellij.json.psi.JsonObject || literal instanceof fit.intellij.json.psi.JsonArray) {
-      if (nextSibling instanceof LeafPsiElement && ((LeafPsiElement)nextSibling).getElementType() == JsonElementTypes.COMMA
-        || !(nextSibling instanceof fit.intellij.json.psi.JsonProperty)) {
+      if (nextSibling instanceof LeafPsiElement && ((LeafPsiElement)nextSibling).getElementType() == fit.intellij.json.JsonElementTypes.COMMA
+        || !(nextSibling instanceof JsonProperty)) {
         return;
       }
       Document document = editor.getDocument();

@@ -1,0 +1,130 @@
+{
+    "name": "app",
+    "title": "加密解密",
+    "inputTitle": "入参",
+    "outputTitle": "出参",
+    "scriptTitle": "脚本",
+    "showExchangeButton": true,
+    "input": {
+        "text": "abc123上中下"
+    },
+    "output": {
+        "text": ""
+    },
+    "script": {
+        "uni": "mix",
+        "json": {
+            "text": "${FitLang.md5(text)}"
+        }
+    },
+    "actions": [
+        {
+            "title": "MD5",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.md5(text)}"
+                }
+            }
+        },
+        {
+            "title": "SHA1",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.sha1(text)}"
+                }
+            }
+        },
+        {
+            "title": "UUID",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.uuid()}"
+                }
+            }
+        },
+        {
+            "title": "UUID simple",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.uuidSimple()}"
+                }
+            }
+        },
+        {
+            "title": "encodeHex",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeHex(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeHex",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeHex(text)}"
+                }
+            }
+        },
+        {
+            "title": "encodeBase64",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeBase64(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeBase64",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeBase64(text)}"
+                }
+            }
+        },
+        {
+            "title": "encodeUrl",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.encodeUrl(text)}"
+                }
+            }
+        },
+        {
+            "title": "decodeUrl",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.decodeUrl(text)}"
+                }
+            }
+        },
+        {
+            "title": "now-date",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.now()}"
+                }
+            }
+        },
+        {
+            "title": "now-datetime",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "text": "${FitLang.now('yyyy-MM-dd HH:mm:ss')}"
+                }
+            }
+        }
+    ]
+}

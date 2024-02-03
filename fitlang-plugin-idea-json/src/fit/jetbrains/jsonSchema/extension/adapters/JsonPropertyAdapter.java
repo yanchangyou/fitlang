@@ -21,12 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-/**
- * @author Irina.Chernushina on 2/20/2017.
- */
 public interface JsonPropertyAdapter {
   @Nullable String getName();
-  @Nullable JsonValueAdapter getNameValueAdapter();
+  @Nullable fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter getNameValueAdapter();
   @NotNull Collection<JsonValueAdapter> getValues();
   @NotNull PsiElement getDelegate();
   @Nullable JsonObjectValueAdapter getParentObject();

@@ -1,6 +1,6 @@
 package fit.lang.common;
 
-import fit.lang.define.base.*;
+import fit.lang.define.*;
 import fit.lang.info.NodeExecuteInfo;
 
 import java.util.ArrayList;

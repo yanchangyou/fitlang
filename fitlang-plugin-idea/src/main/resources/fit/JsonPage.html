@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Json Page</title>
+</head>
+<body>
+<script>
+
+    const jsonPage = {"JSON_PAGE": ""};
+    const jsonData = {"JSON_DATA": ""};
+
+</script>
+<h2 style="text-align: center">Json Page</h2>
+<div>
+    <center>
+    <textarea id="jsonPage" cols="60" rows="10">
+    </textarea>
+
+        <textarea id="jsonData" cols="60" rows="10">
+    </textarea>
+    </center>
+</div>
+<script>
+    document.getElementById("jsonPage").innerHTML = JSON.stringify(jsonPage, null, '    ');
+    document.getElementById("jsonData").innerHTML = JSON.stringify(jsonData, null, '    ');
+    // setInterval()
+</script>
+</body>
+</html>

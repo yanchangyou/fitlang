@@ -11,9 +11,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.schema.JSONSchema;
 import fit.lang.ExecuteNodeException;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeData;
 import fit.lang.plugin.json.define.*;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
@@ -27,13 +28,14 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import static fit.lang.ExecuteNodeUtil.getUserHome;
+import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExpressUtil.eval;
-import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
 
 /**
  * 工具类
  */
 public class ExecuteJsonNodeUtil {
+
 
     /**
      * 执行执行json
@@ -155,15 +157,24 @@ public class ExecuteJsonNodeUtil {
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
 
+        executeNode.setNodeContext(nodeContext);
+
         executeNode.execute(nodeInput, nodeOutput);
 
-        String rawField = flow.getString("rawField");
-        if (isWebNode(flow) && rawField != null) {
-            Object returnValue = nodeOutput.getData().get(rawField);
+        String outputRawField = flow.getString("outputRawField");
+        if (StrUtil.isNotBlank(outputRawField)) {
+            Object returnValue = nodeOutput.getData().get(outputRawField);
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return toJsonText(nodeOutput.getData());
+        JSONObject result = nodeOutput.getData();
+        if (Boolean.TRUE.equals(flow.getBoolean("debug"))) {
+            Map<String, Object> context = nodeInput.getNodeContext().getAllAttribute();
+            context.remove(FIELD_NAME_OF_IDEA_PROJECT);
+            result = nodeOutput.getData().clone();
+            result.put("_debug", context);
+        }
+        return toJsonText(result);
     }
 
     public static Map<String, String> toStringMap(JSONObject jsonObject) {
@@ -341,15 +352,18 @@ public class ExecuteJsonNodeUtil {
      * @param request
      * @param httpParam
      */
-    public static void parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
+    public static Object parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
         if (httpParam != null) {
             Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
             if (param instanceof JSONObject) {
                 request.form((JSONObject) param);
+                return param;
             }
         } else {
             request.form(input.getData());
+            return input;
         }
+        return null;
     }
 
     /**
@@ -702,6 +716,7 @@ public class ExecuteJsonNodeUtil {
         return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
                 .replaceAll("\\t", "    ")
                 .replace("\":\"", "\": \"")
+                .replace("\":{\"", "\": {")
                 .replace("\":true", "\": true")
                 .replace("\":false", "\": false")
                 .replace("\":null", "\": null")
@@ -946,5 +961,15 @@ public class ExecuteJsonNodeUtil {
         }
 
         return path;
+    }
+
+    /**
+     * 解析json的schema
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static JSONObject parseJsonSchema(JSONObject jsonObject) {
+        return JSONSchema.ofValue(jsonObject).toJSONObject();
     }
 }

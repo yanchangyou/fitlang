@@ -4,37 +4,38 @@ package fit.jetbrains.jsonSchema.impl;
 import com.intellij.codeInspection.LocalInspectionToolSession;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
-import fit.intellij.json.pointer.JsonPointerPosition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.SmartList;
+import fit.intellij.json.pointer.JsonPointerPosition;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class JsonSchemaComplianceChecker {
-  private static final Key<Set<PsiElement>> ANNOTATED_PROPERTIES = Key.create("JsonSchema.Properties.Annotated");
+  private static final Key<Set<PsiElement>> ANNOTATED_PROPERTIES = Key.create("FitJsonSchema.Properties.Annotated");
 
-  @NotNull private final JsonSchemaObject myRootSchema;
+  @NotNull private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject myRootSchema;
   @NotNull private final ProblemsHolder myHolder;
   @NotNull private final JsonLikePsiWalker myWalker;
   private final LocalInspectionToolSession mySession;
-  @NotNull private final fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions myOptions;
-  @Nullable private final String myMessagePrefix;
+  @NotNull private final JsonComplianceCheckerOptions myOptions;
+  @Nullable private final @Nls String myMessagePrefix;
 
-  public JsonSchemaComplianceChecker(@NotNull JsonSchemaObject rootSchema,
+  public JsonSchemaComplianceChecker(@NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaObject rootSchema,
                                      @NotNull ProblemsHolder holder,
                                      @NotNull JsonLikePsiWalker walker,
                                      @NotNull LocalInspectionToolSession session,
-                                     @NotNull fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
+                                     @NotNull JsonComplianceCheckerOptions options) {
     this(rootSchema, holder, walker, session, options, null);
   }
 
@@ -43,7 +44,7 @@ public class JsonSchemaComplianceChecker {
                                      @NotNull JsonLikePsiWalker walker,
                                      @NotNull LocalInspectionToolSession session,
                                      @NotNull JsonComplianceCheckerOptions options,
-                                     @Nullable String messagePrefix) {
+                                     @Nullable @Nls String messagePrefix) {
     myRootSchema = rootSchema;
     myHolder = holder;
     myWalker = walker;
@@ -58,9 +59,9 @@ public class JsonSchemaComplianceChecker {
     if (firstProp != null) {
       final JsonPointerPosition position = myWalker.findPosition(firstProp.getDelegate(), true);
       if (position == null || position.isEmpty()) return;
-      final MatchResult result = new JsonSchemaResolver(project, myRootSchema, position).detailedResolve();
+      final fit.jetbrains.jsonSchema.impl.MatchResult result = new fit.jetbrains.jsonSchema.impl.JsonSchemaResolver(project, myRootSchema, position).detailedResolve();
       for (JsonValueAdapter value : firstProp.getValues()) {
-        createWarnings(JsonSchemaAnnotatorChecker.checkByMatchResult(project, value, result, myOptions));
+        createWarnings(fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.checkByMatchResult(project, value, result, myOptions));
       }
     }
     checkRoot(element, firstProp);
@@ -79,7 +80,7 @@ public class JsonSchemaComplianceChecker {
     if (rootToCheck != null) {
       Project project = element.getProject();
       final MatchResult matchResult = new JsonSchemaResolver(project, myRootSchema).detailedResolve();
-      createWarnings(JsonSchemaAnnotatorChecker.checkByMatchResult(project, rootToCheck, matchResult, myOptions));
+      createWarnings(fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.checkByMatchResult(project, rootToCheck, matchResult, myOptions));
     }
   }
 
@@ -87,8 +88,8 @@ public class JsonSchemaComplianceChecker {
     if (checker == null || checker.isCorrect()) return;
     // compute intersecting ranges - we'll solve warning priorities based on this information
     List<TextRange> ranges = new ArrayList<>();
-    List<List<Map.Entry<PsiElement, JsonValidationError>>> entries = new ArrayList<>();
-    for (Map.Entry<PsiElement, JsonValidationError> entry : checker.getErrors().entrySet()) {
+    List<List<Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError>>> entries = new ArrayList<>();
+    for (Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> entry : checker.getErrors().entrySet()) {
       TextRange range = entry.getKey().getTextRange();
       boolean processed = false;
       for (int i = 0; i < ranges.size(); i++) {
@@ -103,14 +104,14 @@ public class JsonSchemaComplianceChecker {
       if (processed) continue;
 
       ranges.add(range);
-      entries.add(ContainerUtil.newArrayList(entry));
+      entries.add(new SmartList<>(entry));
     }
 
     // for each set of intersecting ranges, compute the best errors to show
-    for (List<Map.Entry<PsiElement, JsonValidationError>> entryList : entries) {
+    for (List<Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError>> entryList : entries) {
       int min = entryList.stream().map(v -> v.getValue().getPriority().ordinal()).min(Integer::compareTo).orElse(Integer.MAX_VALUE);
-      for (Map.Entry<PsiElement, JsonValidationError> entry : entryList) {
-        JsonValidationError validationError = entry.getValue();
+      for (Map.Entry<PsiElement, fit.jetbrains.jsonSchema.impl.JsonValidationError> entry : entryList) {
+        fit.jetbrains.jsonSchema.impl.JsonValidationError validationError = entry.getValue();
         PsiElement psiElement = entry.getKey();
         if (validationError.getPriority().ordinal() > min) {
           continue;

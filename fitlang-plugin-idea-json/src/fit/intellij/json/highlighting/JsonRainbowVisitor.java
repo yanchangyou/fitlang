@@ -7,8 +7,8 @@ import fit.intellij.json.pointer.JsonPointerPosition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.psi.JsonFile;
 import fit.jetbrains.jsonSchema.impl.JsonOriginalPsiWalker;
-import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public class JsonRainbowVisitor extends RainbowVisitor {
 
   @Override
   public boolean suitableForFile(@NotNull PsiFile file) {
-    return file instanceof fit.intellij.json.psi.JsonFile;
+    return file instanceof JsonFile;
   }
 
   @Override
@@ -46,15 +46,15 @@ public class JsonRainbowVisitor extends RainbowVisitor {
         if (position != null && Holder.blacklist.get(fileName).contains(position.toJsonPointer())) return;
       }
       String name = ((fit.intellij.json.psi.JsonProperty)element).getName();
-      addInfo(getInfo(file, ((fit.intellij.json.psi.JsonProperty)element).getNameElement(), name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY));
+      addInfo(getInfo(file, ((fit.intellij.json.psi.JsonProperty)element).getNameElement(), name, JsonSyntaxHighlighterFactory.JSON_PROPERTY_KEY));
       fit.intellij.json.psi.JsonValue value = ((fit.intellij.json.psi.JsonProperty)element).getValue();
       if (value instanceof fit.intellij.json.psi.JsonObject) {
-        addInfo(getInfo(file, value.getFirstChild(), name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_BRACES));
-        addInfo(getInfo(file, value.getLastChild(), name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_BRACES));
+        addInfo(getInfo(file, value.getFirstChild(), name, JsonSyntaxHighlighterFactory.JSON_BRACES));
+        addInfo(getInfo(file, value.getLastChild(), name, JsonSyntaxHighlighterFactory.JSON_BRACES));
       }
       else if (value instanceof fit.intellij.json.psi.JsonArray) {
-        addInfo(getInfo(file, value.getFirstChild(), name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_BRACKETS));
-        addInfo(getInfo(file, value.getLastChild(), name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_BRACKETS));
+        addInfo(getInfo(file, value.getFirstChild(), name, JsonSyntaxHighlighterFactory.JSON_BRACKETS));
+        addInfo(getInfo(file, value.getLastChild(), name, JsonSyntaxHighlighterFactory.JSON_BRACKETS));
         for (fit.intellij.json.psi.JsonValue jsonValue : ((fit.intellij.json.psi.JsonArray)value).getValueList()) {
           addSimpleValueInfo(name, file, jsonValue);
         }
@@ -65,12 +65,12 @@ public class JsonRainbowVisitor extends RainbowVisitor {
     }
   }
 
-  private void addSimpleValueInfo(String name, PsiFile file, JsonValue value) {
+  private void addSimpleValueInfo(String name, PsiFile file, fit.intellij.json.psi.JsonValue value) {
     if (value instanceof fit.intellij.json.psi.JsonStringLiteral) {
-      addInfo(getInfo(file, value, name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_STRING));
+      addInfo(getInfo(file, value, name, JsonSyntaxHighlighterFactory.JSON_STRING));
     }
     else if (value instanceof fit.intellij.json.psi.JsonNumberLiteral) {
-      addInfo(getInfo(file, value, name, fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory.JSON_NUMBER));
+      addInfo(getInfo(file, value, name, JsonSyntaxHighlighterFactory.JSON_NUMBER));
     }
     else if (value instanceof fit.intellij.json.psi.JsonLiteral) {
       addInfo(getInfo(file, value, name, JsonSyntaxHighlighterFactory.JSON_KEYWORD));

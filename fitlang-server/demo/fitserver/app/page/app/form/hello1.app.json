@@ -1,0 +1,10 @@
+{
+    "name": "app",
+    "title": "App",
+    "input": {
+        "who": "world"
+    },
+    "output": {
+        "message": "hello, world!"
+    }
+}

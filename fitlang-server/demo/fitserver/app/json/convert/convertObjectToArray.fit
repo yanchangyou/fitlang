@@ -1,0 +1,13 @@
+{
+    "input": {
+        "object": {
+            "key": "name",
+            "value": "cat"
+        }
+    },
+    "uni": "convertObjectToArray",
+    "objectField": "object",
+    "keyField": "foo",
+    "valueField": "bar",
+    "arrayField": "list"
+}

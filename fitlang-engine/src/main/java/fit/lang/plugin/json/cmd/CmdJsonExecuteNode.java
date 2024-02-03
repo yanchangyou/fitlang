@@ -96,7 +96,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                             process = RuntimeUtil.exec(envArray, cmd);
                         }
 
-                        resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
+                        //异常文件字符集字符集配置
+                        resultLines = IoUtil.readLines(process.getErrorStream(), getFileCharset(), new ArrayList<>());
+
                         if (resultLines == null || resultLines.isEmpty()) {
                             resultLines = IoUtil.readLines(process.getInputStream(), getCharset(charset), new ArrayList<>());
                         }

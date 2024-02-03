@@ -3,11 +3,9 @@ package my.lang.action;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
@@ -30,7 +28,36 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
     protected FitLangPluginAction(JSONObject config) {
         super(config.getOrDefault("title", config.getString("name")).toString());
+
         actionConfig = new PluginActionConfig(config);
+//
+        //兼容问题; TODO
+//        if (StrUtil.isNotBlank(actionConfig.shortCut1)) {
+//            KeyStroke firstKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut1);
+//            KeyStroke secondKeyStroke = null;
+//            if (StrUtil.isNotBlank(actionConfig.shortCut2)) {
+//                secondKeyStroke = KeyStroke.getKeyStroke(actionConfig.shortCut2);
+//            }
+//            KeyboardShortcut keyboardShortcut = new KeyboardShortcut(firstKeyStroke, secondKeyStroke);
+//            setShortcutSet(new CustomShortcutSet(keyboardShortcut));
+//        }
+    }
+
+    /**
+     * 注册action
+     *
+     * @param actionId
+     * @param action
+     */
+    public static void registerAction(String actionId, AnAction action) {
+        ActionManager actionManager = ActionManager.getInstance();
+        if (actionManager.getAction(actionId) == null) {
+            try {
+                actionManager.registerAction(actionId, action, PluginId.getId("FitLang"));
+            } catch (Exception e) {
+                //ignore todo
+            }
+        }
     }
 
     @Override
@@ -51,7 +78,7 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
 
-        implementIdeOperator(editor);
+        implementIdeOperator(e);
 
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
@@ -66,47 +93,55 @@ public class FitLangPluginAction extends ScriptRunCodeAction {
         String filePath = virtualFile.getPath();
 
         VirtualFile finalVirtualFile = virtualFile;
-        threadPoolExecutor.submit(() -> {
-            String result;
-            try {
 
-                String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
-
-                JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
-
-                ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
-
-                result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
-
-                if (isJsonObjectText(result)) {
-                    JSONObject jsonObject = JSON.parseObject(result);
-                    if (jsonObject.get("_raw") != null) {
-                        Object raw = jsonObject.get("_raw");
-                        if (raw instanceof JSONArray) {
-                            result = toJsonTextWithFormat((JSONArray) raw);
-                        } else {
-                            result = raw.toString();
-                        }
-                    } else {
-                        result = toJsonTextWithFormat(jsonObject);
-                    }
-                }
-
-                print(result + "\n\n", project, projectConsoleViewMap);
-
-                if (actionConfig.isRefreshParent()) {
-                    finalVirtualFile.getParent().refresh(false, false);
-                }
-                if (actionConfig.isRefresh()) {
-                    finalVirtualFile.refresh(false, false);
-                }
-
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                result = "exception:" + getRootException(exception);
-                print(result + "\n\n", project, projectConsoleViewMap);
-            }
-        });
+        if (actionConfig.isSynchronize()) {
+            execute(e, actionConfig, project, filePath, finalVirtualFile);
+        } else {
+            threadPoolExecutor.submit(() -> {
+                execute(e, actionConfig, project, filePath, finalVirtualFile);
+            });
+        }
     }
 
+    private static void execute(AnActionEvent e, PluginActionConfig actionConfig, Project project, String filePath, VirtualFile finalVirtualFile) {
+        String result;
+        try {
+
+            String projectPath = e.getProject() == null ? "" : e.getProject().getBasePath();
+
+            JSONObject contextParam = buildContextParam(projectPath, new File(filePath));
+
+            ServerJsonExecuteNode.setCurrentServerFilePath(filePath);
+
+            result = ExecuteJsonNodeUtil.executeCode(null, actionConfig.getScript(), contextParam);
+
+            if (isJsonObjectText(result)) {
+                JSONObject jsonObject = JSON.parseObject(result);
+                if (jsonObject.get("_raw") != null) {
+                    Object raw = jsonObject.get("_raw");
+                    if (raw instanceof JSONArray) {
+                        result = toJsonTextWithFormat((JSONArray) raw);
+                    } else {
+                        result = raw.toString();
+                    }
+                } else {
+                    result = toJsonTextWithFormat(jsonObject);
+                }
+            }
+
+            print(result + "\n\n", project, projectConsoleViewMap);
+
+            if (actionConfig.isRefreshParent()) {
+                finalVirtualFile.getParent().refresh(false, false);
+            }
+            if (actionConfig.isRefresh()) {
+                finalVirtualFile.refresh(false, false);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            result = "exception:" + getRootException(exception);
+            print(result + "\n\n", project, projectConsoleViewMap);
+        }
+    }
 }

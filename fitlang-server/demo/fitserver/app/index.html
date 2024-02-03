@@ -39,7 +39,7 @@
         &nbsp;<a target="_blank" href="https://github.com/yanchangyou/fitlang">github</a>
         &nbsp;<a target="_blank" href="https://github.com/yanchangyou/fitlang-demo">demo</a>
     </div>
-    <h2 class="title">FitServer 0.9.0</h2>
+    <h2 class="title">FitServer 0.10.6</h2>
 
     <table width="100%">
         <tr>
@@ -113,7 +113,7 @@
             var serviceList = JSON.parse(body).service;
             for (var i = 0; i < serviceList.length; i++) {
                 var service = serviceList[i];
-                if (service.path.indexOf(".fit") < 0) {
+                if (service.path.indexOf(".fit") < 0 || service.path.indexOf("/ide/") > -1) {
                     continue;
                 }
                 var li = document.createElement("li");

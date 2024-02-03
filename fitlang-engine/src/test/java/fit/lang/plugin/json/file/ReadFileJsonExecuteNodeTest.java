@@ -55,5 +55,6 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(outputJson.getJSONArray("files").getJSONObject(0).containsKey("name"));
 
+//        HexUtil.encodeHexStr();
     }
 }

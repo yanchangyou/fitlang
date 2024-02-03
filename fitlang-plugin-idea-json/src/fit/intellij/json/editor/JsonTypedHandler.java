@@ -4,8 +4,6 @@ package fit.intellij.json.editor;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.codeInsight.editorActions.smartEnter.SmartEnterProcessor;
-import fit.intellij.json.JsonDialectUtil;
-import fit.intellij.json.JsonElementTypes;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
@@ -15,6 +13,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import fit.intellij.json.JsonDialectUtil;
+import fit.intellij.json.JsonElementTypes;
 import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   }
 
   private static void handleMoveOutsideQuotes(char c, Editor editor, PsiFile file) {
-    fit.intellij.json.editor.JsonEditorOptions options = fit.intellij.json.editor.JsonEditorOptions.getInstance();
+    JsonEditorOptions options = JsonEditorOptions.getInstance();
     if (c == ':' && options.COLON_MOVE_OUTSIDE_QUOTES || c == ',' && options.COMMA_MOVE_OUTSIDE_QUOTES) {
       int offset = editor.getCaretModel().getOffset();
       CharSequence sequence = editor.getDocument().getCharsSequence();
@@ -65,10 +65,10 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
 
   private static boolean validatePositionToMoveOutOfQuotes(char c, PsiElement element) {
     // comma can be after the element, but only the comma
-    if (PsiUtilCore.getElementType(element) == JsonElementTypes.R_CURLY) {
+    if (PsiUtilCore.getElementType(element) == fit.intellij.json.JsonElementTypes.R_CURLY) {
       return c == ',' && element.getPrevSibling() instanceof fit.intellij.json.psi.JsonProperty;
     }
-    if (PsiUtilCore.getElementType(element) == JsonElementTypes.R_BRACKET) {
+    if (PsiUtilCore.getElementType(element) == fit.intellij.json.JsonElementTypes.R_BRACKET) {
       return c == ',' && element.getPrevSibling() instanceof fit.intellij.json.psi.JsonStringLiteral;
     }
 
@@ -87,7 +87,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   }
 
   private void removeRedundantWhitespaceIfAfterColon(char c, Editor editor, PsiFile file) {
-    if (!myWhitespaceAdded || c != ' ' || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
+    if (!myWhitespaceAdded || c != ' ' || !JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
       if (c != ':') {
         myWhitespaceAdded = false;
       }
@@ -118,7 +118,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   private void addWhiteSpaceAfterColonIfNeeded(char c,
                                                @NotNull Editor editor,
                                                @NotNull PsiFile file) {
-    if (c != ':' || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
+    if (c != ':' || !JsonEditorOptions.getInstance().AUTO_WHITESPACE_AFTER_COLON) {
       if (c != ' ') {
         myWhitespaceAdded = false;
       }
@@ -153,7 +153,7 @@ public class JsonTypedHandler extends TypedHandlerDelegate {
   private static void addPropertyNameQuotesIfNeeded(char c,
                                                     @NotNull Editor editor,
                                                     @NotNull PsiFile file) {
-    if (c != ':' || !JsonDialectUtil.isStandardJson(file) || !fit.intellij.json.editor.JsonEditorOptions.getInstance().AUTO_QUOTE_PROP_NAME) return;
+    if (c != ':' || !JsonDialectUtil.isStandardJson(file) || !JsonEditorOptions.getInstance().AUTO_QUOTE_PROP_NAME) return;
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = PsiTreeUtil.skipWhitespacesBackward(file.findElementAt(offset));
     if (!(element instanceof fit.intellij.json.psi.JsonProperty)) return;

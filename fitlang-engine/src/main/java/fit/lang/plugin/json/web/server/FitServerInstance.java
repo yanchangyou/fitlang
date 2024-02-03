@@ -1,5 +1,6 @@
 package fit.lang.plugin.json.web.server;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.server.SimpleServer;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
@@ -12,7 +13,7 @@ public class FitServerInstance {
 
     JSONArray serviceList = new JSONArray();
 
-    private String serverDir;
+    private String serverDir = ".";
 
     private String serverFile;
 
@@ -44,6 +45,9 @@ public class FitServerInstance {
     }
 
     public void setServerDir(String serverDir) {
+        if (StrUtil.isBlank(serverDir)) {
+            return;
+        }
         this.serverDir = serverDir;
     }
 

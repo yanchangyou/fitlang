@@ -1,11 +1,11 @@
 package fit.intellij.json.psi;
 
-import fit.intellij.json.JsonFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import fit.intellij.json.JsonFileType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,7 +27,7 @@ public class JsonElementGenerator {
   @NotNull
   public PsiFile createDummyFile(@NotNull String content) {
     final PsiFileFactory psiFileFactory = PsiFileFactory.getInstance(myProject);
-    return psiFileFactory.createFileFromText("dummy." + JsonFileType.INSTANCE.getDefaultExtension(), JsonFileType.INSTANCE, content);
+    return psiFileFactory.createFileFromText("dummy." + fit.intellij.json.JsonFileType.INSTANCE.getDefaultExtension(), JsonFileType.INSTANCE, content);
   }
 
   /**
@@ -49,7 +49,6 @@ public class JsonElementGenerator {
   @NotNull
   public JsonObject createObject(@NotNull String content) {
     final PsiFile file = createDummyFile("{" + content + "}");
-    // noinspection ConstantConditions
     return (JsonObject) file.getFirstChild();
   }
 
@@ -67,7 +66,6 @@ public class JsonElementGenerator {
   @NotNull
   public JsonProperty createProperty(@NotNull final String name, @NotNull final String value) {
     final PsiFile file = createDummyFile("{\"" + name + "\": " + value + "}");
-    // noinspection ConstantConditions
     return ((JsonObject) file.getFirstChild()).getPropertyList().get(0);
   }
 

@@ -1,28 +1,26 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl;
 
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.JsonFileType;
-import fit.intellij.json.JsonLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonFileType;
+import fit.intellij.json.JsonLexer;
 import fit.intellij.json.json5.Json5FileType;
 import fit.intellij.json.json5.Json5Lexer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, String> {
@@ -37,7 +35,7 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
   }
 
   private final DataIndexer<String, String, FileContent> myIndexer =
-    new DataIndexer<String, String, FileContent>() {
+    new DataIndexer<>() {
       @Override
       @NotNull
       public Map<String, String> map(@NotNull FileContent inputData) {
@@ -82,12 +80,7 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
   @Nullable
   public static String getCachedValue(Project project, VirtualFile file, String requestedKey) {
     if (project.isDisposed() || !file.isValid() || DumbService.isDumb(project)) return NULL;
-    List<String> values = FileBasedIndex.getInstance().getValues(INDEX_ID, requestedKey, GlobalSearchScope.fileScope(project, file));
-    if (values.size() == 1) {
-      return values.get(0);
-    }
-
-    return null;
+    return FileBasedIndex.getInstance().getFileData(INDEX_ID, file, project).get(requestedKey);
   }
 
   @NotNull
@@ -106,40 +99,28 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
     while (!(idFound && schemaFound && obsoleteIdFound) && lexer.getTokenStart() < lexer.getBufferEnd()) {
       IElementType token = lexer.getTokenType();
       // Nesting level can only change at curly braces.
-      if (token == JsonElementTypes.L_CURLY) {
+      if (token == fit.intellij.json.JsonElementTypes.L_CURLY) {
         nesting++;
       }
-      else if (token == JsonElementTypes.R_CURLY) {
+      else if (token == fit.intellij.json.JsonElementTypes.R_CURLY) {
         nesting--;
       }
       else if (nesting == 1 &&
-               (token == JsonElementTypes.DOUBLE_QUOTED_STRING
-                || token == JsonElementTypes.SINGLE_QUOTED_STRING
-                || token == JsonElementTypes.IDENTIFIER)) {
+               (token == fit.intellij.json.JsonElementTypes.DOUBLE_QUOTED_STRING
+                || token == fit.intellij.json.JsonElementTypes.SINGLE_QUOTED_STRING
+                || token == fit.intellij.json.JsonElementTypes.IDENTIFIER)) {
         // We are looking for two special properties at the root level.
         switch (lexer.getTokenText()) {
-          case "$id":
-          case "\"$id\"":
-          case "'$id'":
-            idFound |= captureValueIfString(lexer, map, JsonCachedValues.ID_CACHE_KEY);
-            break;
-          case "id":
-          case "\"id\"":
-          case "'id'":
-            obsoleteIdFound |= captureValueIfString(lexer, map, JsonCachedValues.OBSOLETE_ID_CACHE_KEY);
-            break;
-          case "$schema":
-          case "\"$schema\"":
-          case "'$schema'":
-            schemaFound |= captureValueIfString(lexer, map, JsonCachedValues.URL_CACHE_KEY);
-            break;
+          case "$id", "\"$id\"", "'$id'" -> idFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY);
+          case "id", "\"id\"", "'id'" -> obsoleteIdFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY);
+          case "$schema", "\"$schema\"", "'$schema'" -> schemaFound |= captureValueIfString(lexer, map, fit.jetbrains.jsonSchema.impl.JsonCachedValues.URL_CACHE_KEY);
         }
       }
       lexer.advance();
     }
-    if (!map.containsKey(JsonCachedValues.ID_CACHE_KEY)) map.put(JsonCachedValues.ID_CACHE_KEY, NULL);
-    if (!map.containsKey(JsonCachedValues.OBSOLETE_ID_CACHE_KEY)) map.put(JsonCachedValues.OBSOLETE_ID_CACHE_KEY, NULL);
-    if (!map.containsKey(JsonCachedValues.URL_CACHE_KEY)) map.put(JsonCachedValues.URL_CACHE_KEY, NULL);
+    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY)) map.put(fit.jetbrains.jsonSchema.impl.JsonCachedValues.ID_CACHE_KEY, NULL);
+    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY)) map.put(fit.jetbrains.jsonSchema.impl.JsonCachedValues.OBSOLETE_ID_CACHE_KEY, NULL);
+    if (!map.containsKey(fit.jetbrains.jsonSchema.impl.JsonCachedValues.URL_CACHE_KEY)) map.put(JsonCachedValues.URL_CACHE_KEY, NULL);
     return map;
   }
 
@@ -147,10 +128,10 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
     IElementType token;
     lexer.advance();
     token = skipWhitespacesAndGetTokenType(lexer);
-    if (token == JsonElementTypes.COLON) {
+    if (token == fit.intellij.json.JsonElementTypes.COLON) {
       lexer.advance();
       token = skipWhitespacesAndGetTokenType(lexer);
-      if (token == JsonElementTypes.DOUBLE_QUOTED_STRING || token == JsonElementTypes.SINGLE_QUOTED_STRING) {
+      if (token == fit.intellij.json.JsonElementTypes.DOUBLE_QUOTED_STRING || token == fit.intellij.json.JsonElementTypes.SINGLE_QUOTED_STRING) {
         String text = lexer.getTokenText();
         destMap.put(key, text.length() <= 1 ? "" : text.substring(1, text.length() - 1));
         return true;
@@ -162,7 +143,7 @@ public class JsonSchemaFileValuesIndex extends FileBasedIndexExtension<String, S
   @Nullable
   private static IElementType skipWhitespacesAndGetTokenType(@NotNull Lexer lexer) {
     while (lexer.getTokenType() == TokenType.WHITE_SPACE ||
-           lexer.getTokenType() == JsonElementTypes.LINE_COMMENT ||
+           lexer.getTokenType() == fit.intellij.json.JsonElementTypes.LINE_COMMENT ||
            lexer.getTokenType() == JsonElementTypes.BLOCK_COMMENT) {
       lexer.advance();
     }

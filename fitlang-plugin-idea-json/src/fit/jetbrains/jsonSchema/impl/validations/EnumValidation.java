@@ -11,7 +11,7 @@ import fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
-import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
+import fit.jetbrains.jsonSchema.impl.EnumObjectValueWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,14 +22,14 @@ import java.util.function.BiFunction;
 public class EnumValidation implements JsonSchemaValidation {
   public static final EnumValidation INSTANCE = new EnumValidation();
   @Override
-  public void validate(JsonValueAdapter propValue,
-                       JsonSchemaObject schema,
+  public void validate(fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter propValue,
+                       fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                        fit.jetbrains.jsonSchema.impl.JsonSchemaType schemaType,
                        JsonValidationHost consumer,
                        fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions options) {
     List<Object> enumItems = schema.getEnum();
     if (enumItems == null) return;
-    final JsonLikePsiWalker walker = JsonLikePsiWalker.getWalker(propValue.getDelegate(), schema);
+    final fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker walker = fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker.getWalker(propValue.getDelegate(), schema);
     if (walker == null) return;
     final String text = StringUtil.notNullize(walker.getNodeTextForValidation(propValue.getDelegate()));
     BiFunction<String, String, Boolean> eq = options.isCaseInsensitiveEnumCheck() || schema.isForceCaseInsensitive()
@@ -44,13 +44,13 @@ public class EnumValidation implements JsonSchemaValidation {
 
   private static boolean checkEnumValue(@NotNull Object object,
                                         @NotNull JsonLikePsiWalker walker,
-                                        @Nullable JsonValueAdapter adapter,
+                                        @Nullable fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter adapter,
                                         @NotNull String text,
                                         @NotNull BiFunction<String, String, Boolean> stringEq) {
     if (adapter != null && !adapter.shouldCheckAsValue()) return true;
     if (object instanceof fit.jetbrains.jsonSchema.impl.EnumArrayValueWrapper) {
-      if (adapter instanceof JsonArrayValueAdapter) {
-        List<JsonValueAdapter> elements = ((JsonArrayValueAdapter)adapter).getElements();
+      if (adapter instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter) {
+        List<fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter> elements = ((JsonArrayValueAdapter)adapter).getElements();
         Object[] values = ((fit.jetbrains.jsonSchema.impl.EnumArrayValueWrapper)object).getValues();
         if (elements.size() == values.length) {
           for (int i = 0; i < values.length; i++) {
@@ -61,9 +61,9 @@ public class EnumValidation implements JsonSchemaValidation {
       }
     }
     else if (object instanceof fit.jetbrains.jsonSchema.impl.EnumObjectValueWrapper) {
-      if (adapter instanceof JsonObjectValueAdapter) {
-        List<JsonPropertyAdapter> props = ((JsonObjectValueAdapter)adapter).getPropertyList();
-        Map<String, Object> values = ((fit.jetbrains.jsonSchema.impl.EnumObjectValueWrapper)object).getValues();
+      if (adapter instanceof fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter) {
+        List<fit.jetbrains.jsonSchema.extension.adapters.JsonPropertyAdapter> props = ((JsonObjectValueAdapter)adapter).getPropertyList();
+        Map<String, Object> values = ((EnumObjectValueWrapper)object).getValues();
         if (props.size() == values.size()) {
           for (JsonPropertyAdapter prop : props) {
             if (!values.containsKey(prop.getName())) return false;
@@ -78,10 +78,10 @@ public class EnumValidation implements JsonSchemaValidation {
     }
     else {
       if (!walker.allowsSingleQuotes()) {
-        return stringEq.apply(object.toString(), text);
+        if (stringEq.apply(object.toString(), text)) return true;
       }
       else {
-        return equalsIgnoreQuotes(object.toString(), text, walker.requiresValueQuotes(), stringEq);
+        if (equalsIgnoreQuotes(object.toString(), text, walker.requiresValueQuotes(), stringEq)) return true;
       }
     }
 
