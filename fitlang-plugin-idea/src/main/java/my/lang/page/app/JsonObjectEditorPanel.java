@@ -3,8 +3,6 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
-
 public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     JSONObject formSchema;
@@ -39,9 +37,6 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
         if (isJsonTextEditor) {
             JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
             jsonFormEditor.setFormDataToChrome(newJson);
-        } else {
-            String newJsonText = toJsonTextWithFormat(jsonFormEditor.getFormData());
-            jsonTextEditor.setText(newJsonText);
         }
     }
 
