@@ -550,37 +550,134 @@
     let jsonPage= {"JSON_PAGE": ""};
     let jsonData = {"JSON_DATA": ""};
 
-    if(jsonPage['nodes']==null) {
-        jsonPage = {
-            nodes: [
-                {
-                    id: "1",
-                    type: "rect",
-                    x: 300,
-                    y: 200,
-                    text: "节点1",
-                },
-                {
-                    id: "2",
-                    type: "circle",
-                    x: 500,
-                    y: 200,
-                    text: "节点2",
-                },
-            ],
-            edges: [
-                {
-                    sourceNodeId: "1",
-                    targetNodeId: "2",
-                    type: "polyline",
-                    text: "连线",
-                    // type: "bezier"
-                },
-            ],
-        };
+    let nodeIdIndex = 100;
+
+    function getNextNodeIndex() {
+        return nodeIdIndex++;
     }
 
-    lf.render(jsonPage);
+    function buildFlowData(script) {
+        let nodes = [];
+        let edges = [];
+        let x = 200;
+        let y = 150;
+        let root = buildNextNode(script, x, y);
+        nodes.push(root);
+        buildNextNodes(root, nodes, edges);
+
+        return {
+            nodes: nodes,
+            edges: edges
+        }
+    }
+
+    function buildNextNodes(node, nodes, edges) {
+        let x = node.x;
+        let y = node.y;
+        let properties = node.properties;
+        if(properties && properties.next) {
+            if(typeof(properties.next['length']) === 'undefined') {
+                properties.next = [properties.next];
+            }
+            for(let i=0; i<properties.next.length; i++) {
+                let nextNode = buildNextNode(properties.next[i], x+200, y + 150*i);
+                nodes.push(nextNode);
+                edges.push({
+                    "sourceNodeId": node.id,
+                    "targetNodeId": nextNode.id,
+                    "type": "bezier"
+                })
+                buildNextNodes(nextNode, nodes, edges);
+            }
+        }
+    }
+
+    function buildNextNode(nodeData, x, y) {
+        let id = "node-" + nodeData.uni + "-" + getNextNodeIndex();
+        let node = {
+            id: id,
+            type: "rect",
+            text: nodeData.uni + "\n\n" + (nodeData.name?nodeData.name:""),
+            x: x,
+            y: y,
+            properties: nodeData
+        };
+        return node;
+    }
+
+    lf.adapterIn = function(userData) {
+
+        let nodes = [];
+        let edges = [];
+        let script = userData['script'];
+        if(script) {
+            var logicFlowData = buildFlowData(script);
+            return logicFlowData;
+        }
+
+        if(userData['nodes']==null) {
+            userData = {
+                nodes: [
+                    {
+                        id: "1",
+                        type: "rect",
+                        x: 300,
+                        y: 200,
+                        text: "节点1",
+                    },
+                    {
+                        id: "2",
+                        type: "circle",
+                        x: 500,
+                        y: 200,
+                        text: "节点2",
+                    },
+                ],
+                edges: [
+                    {
+                        sourceNodeId: "1",
+                        targetNodeId: "2",
+                        type: "polyline",
+                        text: "连线",
+                        // type: "bezier"
+                    },
+                ],
+            };
+        }
+
+        return userData;
+    };
+
+    lf.adapterOut = function (logicFlowData) {
+
+        let scriptData = {};
+
+        scriptData['raw'] = logicFlowData;
+
+        return scriptData;
+    };
+
+    function buildScriptData(logicFlowData) {
+        let nodes = logicFlowData.nodes;
+        let edges = logicFlowData.edges;
+
+        let script = {};
+
+    }
+
+    if(!jsonPage['script']) {
+        jsonPage['script'] = {"uni":"hello", "name":"Hello"}
+    }
+
+    function setScriptData(scriptData){
+        lf.render(scriptData);
+    }
+
+    function getScriptData() {
+       return lf.getGraphData();
+    }
+
+    setScriptData(jsonPage);
 
 </script>
 </body>

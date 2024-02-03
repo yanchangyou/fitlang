@@ -3,6 +3,8 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+
 public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     JsonGraphScriptPanel jsonGraphScriptPanel;
@@ -20,6 +22,13 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
     @Override
     protected void switchEditor() {
 
+        if (isJsonTextEditor) {
+            JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
+            jsonGraphScriptPanel.setScriptDataToChrome(newJson);
+        } else {
+            String newJsonText = toJsonTextWithFormat(jsonGraphScriptPanel.getScriptData());
+            jsonTextEditor.setText(newJsonText);
+        }
     }
 
     @Override
