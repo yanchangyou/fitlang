@@ -39,13 +39,12 @@ public class FitServerMain {
 
         if (serverFile.exists()) {
             code = readNodeDefineFile(serverFile);
+            System.out.println("start server from: " + serverFile.getAbsoluteFile());
+
+            ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
+            ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
+            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
         }
-
-        System.out.println("start server from " + serverFile.getAbsoluteFile());
-
-        ServerJsonExecuteNode.setCurrentServerFilePath(serverFile.getAbsolutePath());
-        ServerJsonExecuteNode.setHttpPrefix(httpPrefix);
-        JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
 
         String result = ExecuteJsonNodeUtil.executeCode(code);
         System.out.println(result);

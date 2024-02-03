@@ -142,7 +142,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public JSONObject reload(FitServerInstance fitServer) {
 
         JSONArray serviceList = fitServer.getServiceList();
-        String serverFile = fitServer.getServerFile();
         String serviceDir = fitServer.getServerDir();
 
         fitServer.setServerFile(getCurrentServerFilePath());
@@ -660,6 +659,9 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             String serviceDefineText = readNodeDefineFile(serviceFile);
             JSONObject serviceDefine = JSONObject.parseObject(serviceDefineText);
             String servicePath = convertPath(serviceFile.getAbsolutePath().substring(serviceRootDir.length()));
+            if (".".equals(serviceRootDir)) {
+                servicePath = serviceFile.getPath().substring(1);
+            }
             serviceDefine.put("path", servicePath);
             serviceDefine.put("loadType", "fileSystem");
             registerService(serverInstance, servicePath, serviceDefine);
