@@ -32,14 +32,14 @@ public class FitServerMain {
                 fitPath = args[2];
             }
         }
+
+        String code = "{'uni':'server'}";
+
         File serverFile = new File(fitPath.concat("/").concat(serverFilePath));
 
-        if (!serverFile.exists()) {
-            System.out.println("server file not existed: " + serverFile.getAbsoluteFile());
-            return;
+        if (serverFile.exists()) {
+            code = readNodeDefineFile(serverFile);
         }
-
-        String code = readNodeDefineFile(serverFile);
 
         System.out.println("start server from " + serverFile.getAbsoluteFile());
 
