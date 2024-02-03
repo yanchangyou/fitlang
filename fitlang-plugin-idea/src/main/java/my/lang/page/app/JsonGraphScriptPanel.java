@@ -2,6 +2,8 @@ package my.lang.page.app;
 
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
@@ -13,7 +15,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonGraphScriptPanel extends JPanel {
 
@@ -27,11 +29,14 @@ public class JsonGraphScriptPanel extends JPanel {
 
     String jsonData = "{}";
 
-    public JsonGraphScriptPanel(JSONObject script) {
+    LanguageTextField jsonTextEditor;
+
+    public JsonGraphScriptPanel(JSONObject script, LanguageTextField jsonTextEditor) {
 
         super(true);
 
         this.script = script;
+        this.jsonTextEditor = jsonTextEditor;
 
         browser = new JBCefBrowser();
         browser.getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, 1000);
@@ -42,37 +47,6 @@ public class JsonGraphScriptPanel extends JPanel {
 
         render(script, browser);
 
-        jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
-
-        jsQuery.addHandler((data) -> {
-            if (isJsonObjectText(data) && !jsonData.equals(data)) {
-                jsonData = data;
-            }
-            return new JBCefJSQuery.Response(data) {
-            };
-        });
-
-
-        jsQuery.addHandler((data) -> {
-            if (isJsonObjectText(data) && !jsonData.equals(data)) {
-                jsonData = data;
-                setScript(JSONObject.parse(data));
-            }
-            return new JBCefJSQuery.Response(data) {
-            };
-        });
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(2000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                synchronizeScriptJson();
-            }
-        }.start();
     }
 
     public JSONObject getScript() {
@@ -117,28 +91,6 @@ public class JsonGraphScriptPanel extends JPanel {
         return html;
     }
 
-
-    void synchronizeScriptJson() {
-
-        //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
-        String js = jsQuery.inject("scriptData");
-        browser.getCefBrowser().executeJavaScript("" +
-                        " let oldJsonData = '';" +
-                        " setInterval(function() {\n" +
-                        "   if(getScriptData){" +
-                        "       let scriptData = getScriptData();\n" +
-                        "       if(oldJsonData != scriptData) {" +
-                        "           oldJsonData = scriptData;" +
-                        "           " + js +
-                        "       }" +
-                        "   }}, " + refreshDataInterval * 1000 + "); " +
-                        ""
-                ,
-                browser.getCefBrowser().getURL(), 0
-        );
-
-    }
-
     public void close() {
         jsQuery.dispose();
         browser.dispose();
@@ -155,7 +107,38 @@ public class JsonGraphScriptPanel extends JPanel {
         );
     }
 
-    public JSONObject getScriptData() {
-        return script;
+    public void synchroniseScriptDataToEditor() {
+
+        jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+
+        jsQuery.addHandler((data) -> {
+
+            jsonData = data;
+
+            setScript(JSONObject.parse(data).getJSONObject("script"));
+
+            String newJsonText = toJsonTextWithFormat(script);
+
+            ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    jsonTextEditor.setText(newJsonText);
+                }
+            });
+
+            jsQuery.dispose();
+            return new JBCefJSQuery.Response(data) {
+            };
+        });
+        String js = jsQuery.inject("scriptData");
+
+        browser.getCefBrowser().executeJavaScript("" +
+                        "let scriptData = getScriptData();" +
+                        "" + js +
+                        ""
+                ,
+                browser.getCefBrowser().getURL(), 0
+        );
+
     }
 }
