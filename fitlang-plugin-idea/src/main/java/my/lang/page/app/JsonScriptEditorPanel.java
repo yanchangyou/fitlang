@@ -14,6 +14,8 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
         jsonGraphScriptPanel = new JsonGraphScriptPanel(script, jsonTextEditor);
         cardPanel.add(jsonGraphScriptPanel);
 
+        cardLayout.next(cardPanel);
+
         isJsonTextEditor = true;
     }
 
