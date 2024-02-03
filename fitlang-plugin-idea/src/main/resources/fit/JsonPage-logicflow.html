@@ -30649,7 +30649,7 @@
 
         let scriptData = {};
 
-        scriptData['raw'] = logicFlowData;
+        // scriptData['raw'] = logicFlowData;
         scriptData['script'] = buildScriptData(logicFlowData);
 
         return scriptData;
@@ -30684,7 +30684,7 @@
                 let targetNode = nodeIdMap[edges[i].targetNodeId];
                 let nodeData = targetNode.properties;
                 nodeData.id = targetNode.id;
-                findNextNodesAndSet(targetNode, nodes, edges, nodeData);
+                findNextNodesAndSet(targetNode, nodes, edges, nodeData, nodeIdMap);
                 next.push(nodeData);
             }
         }

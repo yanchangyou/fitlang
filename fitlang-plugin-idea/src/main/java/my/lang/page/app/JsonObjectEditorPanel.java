@@ -17,7 +17,7 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
         this.formSchema = formSchema;
 
-        jsonFormEditor = new JsonFormPanel(formSchema, formData);
+        jsonFormEditor = new JsonFormPanel(formSchema, formData, jsonTextEditor);
         cardPanel.add(jsonFormEditor);
 
         cardLayout.next(cardPanel);
@@ -30,10 +30,7 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
     }
 
     public JSONObject getJsonObject() {
-        if (isJsonTextEditor) {
-            return JSONObject.parseObject(jsonTextEditor.getText());
-        }
-        return jsonFormEditor.getFormData();
+        return JSONObject.parseObject(jsonTextEditor.getText());
     }
 
     @Override
@@ -46,7 +43,6 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
             String newJsonText = toJsonTextWithFormat(jsonFormEditor.getFormData());
             jsonTextEditor.setText(newJsonText);
         }
-
     }
 
     @Override

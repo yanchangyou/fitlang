@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonGraphScriptPanel extends JPanel {
@@ -46,6 +47,56 @@ public class JsonGraphScriptPanel extends JPanel {
         add(browser.getComponent(), BorderLayout.CENTER);
 
         render(script, browser);
+
+        jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+
+        jsQuery.addHandler((data) -> {
+            if (isJsonObjectText(data) && !jsonData.equals(data)) {
+                jsonData = data;
+                setScript(JSONObject.parse(data).getJSONObject("script"));
+                ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        String newJsonText = toJsonTextWithFormat(getScript());
+                        jsonTextEditor.setText(newJsonText);
+                    }
+                });
+            }
+            return new JBCefJSQuery.Response(data) {
+            };
+        });
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                synchronizeFormJson();
+            }
+        }.start();
+    }
+
+    void synchronizeFormJson() {
+
+        //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
+        String js = jsQuery.inject("scriptData");
+        browser.getCefBrowser().executeJavaScript("" +
+                        " let oldJsonData = '';" +
+                        " setInterval(function() {\n" +
+                        "   if(getScriptData){" +
+                        "       let scriptData = getScriptData();\n" +
+                        "       if(oldJsonData != scriptData) {" +
+                        "           oldJsonData = scriptData;" +
+                        "           " + js +
+                        "       }" +
+                        "   }}, " + refreshDataInterval * 1000 + "); " +
+                        ""
+                ,
+                browser.getCefBrowser().getURL(), 0
+        );
 
     }
 
@@ -107,38 +158,4 @@ public class JsonGraphScriptPanel extends JPanel {
         );
     }
 
-    public void synchroniseScriptDataToEditor() {
-
-        jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
-
-        jsQuery.addHandler((data) -> {
-
-            jsonData = data;
-
-            setScript(JSONObject.parse(data).getJSONObject("script"));
-
-            String newJsonText = toJsonTextWithFormat(script);
-
-            ApplicationManager.getApplication().invokeAndWait(new Runnable() {
-                @Override
-                public void run() {
-                    jsonTextEditor.setText(newJsonText);
-                }
-            });
-
-            jsQuery.dispose();
-            return new JBCefJSQuery.Response(data) {
-            };
-        });
-        String js = jsQuery.inject("scriptData");
-
-        browser.getCefBrowser().executeJavaScript("" +
-                        "let scriptData = getScriptData();" +
-                        "" + js +
-                        ""
-                ,
-                browser.getCefBrowser().getURL(), 0
-        );
-
-    }
 }
