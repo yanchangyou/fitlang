@@ -399,7 +399,8 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.10.5 add node: showDiff; support diff.json file type</li>
+            <li>0.10.6 </li>
+            <li>0.10.5 add node: showDiff; support diff.json file type; app define support exchange input output; fix fit server path bug</li>
             <li>0.10.4 add node: getSchema; fix JBCefBrowser not dispose; refine app define</li>
             <li>0.10.3 add app with json and json form</li>
             <li>0.10.2 json page support json form; add action render</li>
