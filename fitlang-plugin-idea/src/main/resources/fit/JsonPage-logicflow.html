@@ -589,6 +589,8 @@
                 })
                 buildNextNodes(nextNode, nodes, edges);
             }
+            //删除next避免后续数据干扰
+            delete node.properties.next;
         }
     }
 
@@ -653,6 +655,7 @@
         let scriptData = {};
 
         scriptData['raw'] = logicFlowData;
+        scriptData['script'] = buildScriptData(logicFlowData);
 
         return scriptData;
     };
@@ -661,8 +664,34 @@
         let nodes = logicFlowData.nodes;
         let edges = logicFlowData.edges;
 
-        let script = {};
+        let root = nodes[0];
+        let script = root.properties;
+        let nodeIdMap =  buildNodeIdMap(nodes);
 
+        findNextNodesAndSet(root, nodes, edges, script, nodeIdMap);
+
+        return script;
+    }
+    function buildNodeIdMap(nodes) {
+        let nodeIdMap = {};
+        for(let i=0; i<nodes.length; i++) {
+            nodeIdMap[nodes[i].id] = nodes[i];
+        }
+        return nodeIdMap;
+    }
+
+    function findNextNodesAndSet(node, nodes, edges, script, nodeIdMap) {
+        let next = [];
+        for(let i=0; i<edges.length; i++) {
+            if(edges[i].sourceNodeId === node.id) {
+                let targetNode = nodeIdMap[edges[i].targetNodeId];
+                findNextNodesAndSet(targetNode, nodes, edges, targetNode.properties);
+                next.push(targetNode.properties);
+            }
+        }
+        if(next.length>0) {
+            script.next = next;
+        }
     }
 
     if(!jsonPage['script']) {
