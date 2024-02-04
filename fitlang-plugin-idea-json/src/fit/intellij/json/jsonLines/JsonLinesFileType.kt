@@ -2,24 +2,24 @@
 package fit.intellij.json.jsonLines
 
 import com.intellij.icons.AllIcons
-import fit.intellij.json.JsonBundle
-import fit.intellij.json.JsonFileType
 import com.intellij.openapi.util.NlsContexts
 import com.intellij.openapi.util.NlsSafe
+import fit.intellij.json.JsonBundle
+import fit.intellij.json.JsonFileType
 import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
 class JsonLinesFileType private constructor() : JsonFileType(JsonLinesLanguage) {
-  override fun getName(): @NonNls String = "JSON-lines"
+    override fun getName(): @NonNls String = "Fit-lines"
 
-  override fun getDescription(): @NlsContexts.Label String = JsonBundle.message("filetype.json_lines.description")
+    override fun getDescription(): @NlsContexts.Label String = JsonBundle.message("filetype.json_lines.description")
 
-  override fun getDefaultExtension(): @NlsSafe String = "jsonl"
+    override fun getDefaultExtension(): @NlsSafe String = "fitl"
 
-  override fun getIcon(): Icon = AllIcons.FileTypes.Json
+    override fun getIcon(): Icon = AllIcons.FileTypes.Json
 
-  companion object {
-    @JvmField
-    val INSTANCE = JsonLinesFileType()
-  }
+    companion object {
+        @JvmField
+        val INSTANCE = JsonLinesFileType()
+    }
 }

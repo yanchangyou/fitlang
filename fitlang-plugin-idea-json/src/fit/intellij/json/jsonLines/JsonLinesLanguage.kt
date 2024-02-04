@@ -3,4 +3,4 @@ package fit.intellij.json.jsonLines
 
 import fit.intellij.json.JsonLanguage
 
-object JsonLinesLanguage : JsonLanguage("JSON Lines", "application/json-lines")
+object JsonLinesLanguage : JsonLanguage("Fit Lines", "application/json-lines")
