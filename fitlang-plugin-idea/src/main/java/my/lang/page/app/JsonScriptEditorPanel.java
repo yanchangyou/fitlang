@@ -34,6 +34,6 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     @Override
     public void dispose() {
-        jsonGraphScriptPanel.close();
+        jsonGraphScriptPanel.dispose();
     }
 }

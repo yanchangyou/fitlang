@@ -51,7 +51,7 @@ public class JsonGraphScriptPanel extends JPanel {
         jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
         jsQuery.addHandler((data) -> {
-            if (isJsonObjectText(data) && !jsonData.equals(data)) {
+            if (jsonTextEditor != null && isJsonObjectText(data) && !jsonData.equals(data)) {
                 jsonData = data;
                 setScript(JSONObject.parse(data).getJSONObject("script"));
                 ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
@@ -142,7 +142,7 @@ public class JsonGraphScriptPanel extends JPanel {
         return html;
     }
 
-    public void close() {
+    public void dispose() {
         jsQuery.dispose();
         browser.dispose();
     }
