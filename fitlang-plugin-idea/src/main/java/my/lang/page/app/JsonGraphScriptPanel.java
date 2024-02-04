@@ -54,7 +54,7 @@ public class JsonGraphScriptPanel extends JPanel {
             if (isJsonObjectText(data) && !jsonData.equals(data)) {
                 jsonData = data;
                 setScript(JSONObject.parse(data).getJSONObject("script"));
-                ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
                     @Override
                     public void run() {
                         String newJsonText = toJsonTextWithFormat(getScript());

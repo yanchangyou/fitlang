@@ -57,7 +57,7 @@ public class JsonFormPanel extends JPanel {
             if (isJsonObjectText(data) && !jsonData.equals(data)) {
                 jsonData = data;
                 setFormData(JSONObject.parse(data));
-                ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
                     @Override
                     public void run() {
                         String newJsonText = toJsonTextWithFormat(getFormData());
