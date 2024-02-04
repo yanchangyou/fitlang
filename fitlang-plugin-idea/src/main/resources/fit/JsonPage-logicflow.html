@@ -30552,14 +30552,17 @@
         return getGUID();
     }
 
+    let preNode = null;
+
     function buildFlowData(script) {
         let nodes = [];
         let edges = [];
         let x = 300;
         let y = 150;
-        let root = buildNextNode(script, x, y);
+        let root = buildNextNode(script, x, y, 0);
         nodes.push(root);
-        buildNextNodes(root, nodes, edges);
+        preNode = {};
+        buildNextNodes(root, nodes, edges, 0);
 
         return {
             nodes: nodes,
@@ -30567,7 +30570,7 @@
         }
     }
 
-    function buildNextNodes(node, nodes, edges) {
+    function buildNextNodes(node, nodes, edges, level) {
         let x = node.x;
         let y = node.y;
         let properties = node.properties;
@@ -30576,21 +30579,86 @@
                 properties.next = [properties.next];
             }
             for (let i = 0; i < properties.next.length; i++) {
-                let nextNode = buildNextNode(properties.next[i], x + 200, y + 150 * i);
+
+                let nextNode = buildNextNode(properties.next[i], x + 200, y + 100 + 200 * (i - Math.ceil(properties.child.length / 2)));
                 nodes.push(nextNode);
-                edges.push({
-                    "sourceNodeId": node.id,
-                    "targetNodeId": nextNode.id,
-                    "type": "bezier"
-                })
+                edges.push(buildNextEdge(node, nextNode));
                 buildNextNodes(nextNode, nodes, edges);
             }
             //删除next避免后续数据干扰
             delete node.properties.next;
         }
+        if (properties && properties.child) {
+            if (typeof (properties.child['length']) === 'undefined') {
+                properties.child = [properties.child];
+            }
+            let firstX = 0;
+            let lastX = 0;
+            for (let i = 0; i < properties.child.length; i++) {
+                let childX = node.x;
+                if (typeof (preNode.x) !== 'number') {
+                    let isOdd = properties.child.length % 2 !== 0;
+                    if (isOdd) {
+                        childX = x + 200 * (i - Math.floor(properties.child.length / 2));
+                    } else {
+                        childX = x + 100 + 200 * (i - Math.ceil(properties.child.length / 2));
+                    }
+                } else {
+                    childX = preNode.x + 200;
+                }
+                if(i===0) {
+                    firstX = childX;
+                }
+
+                let nextNode = buildNextNode(properties.child[i], childX, y + 180, level+1);
+                nodes.push(nextNode);
+                edges.push(buildChildEdge(node, nextNode));
+                if(properties.child.length!==1 && i === properties.child.length-1) {
+                    preNode = nextNode;
+                } else {
+                    preNode = {};
+                }
+                buildNextNodes(nextNode, nodes, edges);
+                // preNode = {};
+            }
+            //删除next避免后续数据干扰
+            delete node.properties.child;
+        }
     }
 
-    function buildNextNode(nodeData, x, y) {
+    function buildNextEdge(node, nextNode) {
+        return {
+            "sourceNodeId": node.id,
+            "targetNodeId": nextNode.id,
+            "type": "bezier",
+            startPoint: {
+                x: node.x + 50,
+                y: node.y
+            },
+            endPoint: {
+                x: nextNode.x - 50,
+                y: nextNode.y
+            }
+        };
+    }
+
+    function buildChildEdge(node, nextNode) {
+        return {
+            "sourceNodeId": node.id,
+            "targetNodeId": nextNode.id,
+            "type": "bezier",
+            startPoint: {
+                x: node.x,
+                y: node.y + 50
+            },
+            endPoint: {
+                x: nextNode.x,
+                y: nextNode.y - 30
+            }
+        };
+    }
+
+    function buildNextNode(nodeData, x, y, level) {
         let id = nodeData.id ? nodeData.id : buildNodeId();
         let node = {
             id: id,
@@ -30598,7 +30666,8 @@
             text: nodeData.uni + "\n\n" + (nodeData.name ? nodeData.name : ""),
             x: x,
             y: y,
-            properties: nodeData
+            properties: nodeData,
+            level: level
         };
         return node;
     }
@@ -30680,18 +30749,40 @@
 
     function findNextNodesAndSet(node, nodes, edges, script, nodeIdMap) {
         let next = [];
+        let child = [];
         for (let i = 0; i < edges.length; i++) {
             if (edges[i].sourceNodeId === node.id) {
                 let targetNode = nodeIdMap[edges[i].targetNodeId];
                 let nodeData = targetNode.properties;
                 nodeData.id = targetNode.id;
                 findNextNodesAndSet(targetNode, nodes, edges, nodeData, nodeIdMap);
-                next.push(nodeData);
+                if (isChild(node, edges[i])) {
+                    child.push(nodeData);
+                } else if (isNext(node, edges[i])) {
+                    next.push(nodeData);
+                }
             }
         }
         if (next.length > 0) {
             script.next = next;
         }
+        if (child.length > 0) {
+            script.child = child;
+        }
+    }
+
+    function isChild(node, edge) {
+        if (!edge.startPoint) {
+            return false;
+        }
+        return node.x === edge.startPoint.x && node.y < edge.startPoint.y;
+    }
+
+    function isNext(node, edge) {
+        if (!edge.startPoint) {
+            return false;
+        }
+        return node.y === edge.startPoint.y && node.x < edge.startPoint.x;
     }
 
     if (!jsonPage['script']) {
