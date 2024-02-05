@@ -51,16 +51,19 @@ public class JsonGraphScriptPanel extends JPanel {
         jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
         jsQuery.addHandler((data) -> {
-            if (jsonTextEditor != null && isJsonObjectText(data) && !jsonData.equals(data)) {
+            if (isJsonObjectText(data) && !jsonData.equals(data)) {
                 jsonData = data;
                 setScript(JSONObject.parse(data).getJSONObject("script"));
-                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String newJsonText = toJsonTextWithFormat(getScript());
-                        jsonTextEditor.setText(newJsonText);
-                    }
-                });
+
+                if (jsonTextEditor != null) {
+                    ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String newJsonText = toJsonTextWithFormat(getScript());
+                            jsonTextEditor.setText(newJsonText);
+                        }
+                    });
+                }
             }
             return new JBCefJSQuery.Response(data) {
             };
@@ -124,6 +127,18 @@ public class JsonGraphScriptPanel extends JPanel {
         browser.loadHTML(html);
 
         browser.getComponent();
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(2000L);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                browser.openDevtools();
+            }
+        }.start();
     }
 
     static Map<String, String> htmlMap = new HashMap<>();

@@ -3,6 +3,7 @@ package my.lang.page.fit;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
@@ -14,7 +15,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonFitRender implements FileEditor {
 
@@ -23,6 +29,7 @@ public class JsonFitRender implements FileEditor {
     VirtualFile file;
     JSONObject contextParam;
     Project project;
+    JPanel mainPanel;
 
     public JsonFitRender(@NotNull Project project, @NotNull VirtualFile virtualFile, JSONObject contextParam) {
         this.project = project;
@@ -38,16 +45,50 @@ public class JsonFitRender implements FileEditor {
         JSONObject fitDefineJson = JSONObject.parse(content);
 
         jsonGraphScriptPanel = new JsonGraphScriptPanel(fitDefineJson, null);
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(jsonGraphScriptPanel, BorderLayout.CENTER);
+
+        JPanel toolBar = buildToolBar();
+
+        mainPanel.add(toolBar, BorderLayout.NORTH);
+
+    }
+
+    private JPanel buildToolBar() {
+        JPanel toolBar = new JPanel();
+
+        JButton button = new JButton("保存");
+        button.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                JSONObject script = jsonGraphScriptPanel.getScript();
+                ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            String newJsonText = toJsonTextWithFormat(script);
+                            file.setBinaryContent(newJsonText.getBytes());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+
+            }
+        });
+        toolBar.add(button);
+        return toolBar;
     }
 
     @Override
     public @NotNull JComponent getComponent() {
-        return jsonGraphScriptPanel;
+        return mainPanel;
     }
 
     @Override
     public @Nullable JComponent getPreferredFocusedComponent() {
-        return jsonGraphScriptPanel;
+        return mainPanel;
     }
 
     @Override

@@ -30570,7 +30570,7 @@
         }
     }
 
-    function buildNextNodes(node, nodes, edges, level) {
+    function buildNextNodes(node, nodes, edges) {
         let x = node.x;
         let y = node.y;
         let properties = node.properties;
@@ -30579,8 +30579,7 @@
                 properties.next = [properties.next];
             }
             for (let i = 0; i < properties.next.length; i++) {
-
-                let nextNode = buildNextNode(properties.next[i], x + 200, y + 100 + 200 * (i - Math.ceil(properties.child.length / 2)));
+                let nextNode = buildNextNode(properties.next[i], x + 200, y + 100 + 200 * (i - Math.ceil(properties.next.length / 2)));
                 nodes.push(nextNode);
                 edges.push(buildNextEdge(node, nextNode));
                 buildNextNodes(nextNode, nodes, edges);
@@ -30674,6 +30673,7 @@
 
     lf.adapterIn = function (userData) {
 
+        console.info("userData:", userData);
         let nodes = [];
         let edges = [];
         let script = userData['script'];
@@ -30728,6 +30728,10 @@
     function buildScriptData(logicFlowData) {
         let nodes = logicFlowData.nodes;
         let edges = logicFlowData.edges;
+
+        if (nodes.length == 0) {
+            return {};
+        }
 
         let root = nodes[0];
         let script = root.properties;
