@@ -156,7 +156,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         JBScrollPane jbScrollPane = new JBScrollPane(toolBar);
-        Dimension dimension = new Dimension(toolBar.getWidth(), toolBar.getHeight() + 65);
+        Dimension dimension = new Dimension(toolBar.getWidth(), toolBar.getHeight() + 60);
         jbScrollPane.setPreferredSize(dimension);
         jbScrollPane.setBorder(JBUI.Borders.empty(5));
         panel.add(jbScrollPane, BorderLayout.NORTH);
