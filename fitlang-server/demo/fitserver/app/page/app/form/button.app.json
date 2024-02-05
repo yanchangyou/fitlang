@@ -8,8 +8,24 @@
     "input": {
         "text": "abc123上中下"
     },
+    "inputForm": {
+        "form": [
+            {
+                "key": "text",
+                "type": "textarea"
+            }
+        ]
+    },
     "output": {
         "text": ""
+    },
+    "outputForm": {
+        "form": [
+            {
+                "key": "text",
+                "type": "textarea"
+            }
+        ]
     },
     "script": {
         "uni": "mix",
