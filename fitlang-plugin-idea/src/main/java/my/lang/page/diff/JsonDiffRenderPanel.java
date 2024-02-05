@@ -28,6 +28,8 @@ public class JsonDiffRenderPanel extends JPanel {
 
     JsonDiffResultPanel jsonDiffResultPanel;
 
+    JCheckBox isNeedSort = new JCheckBox("Need Sort");
+
     String appTitle = "Diff";
     String input1Title = "Input1";
     String input2Title = "Input2";
@@ -117,6 +119,7 @@ public class JsonDiffRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
+        toolBar.add(isNeedSort);
         //add default Run Button
         {
             button = new JButton(defaultButtonTitle);
@@ -135,7 +138,7 @@ public class JsonDiffRenderPanel extends JPanel {
                         input2 = JSONObject.parse(input2.toString());
                     }
 
-                    jsonDiffResultPanel.showDiff(input1, input2);
+                    jsonDiffResultPanel.showDiff(input1, input2, isNeedSort.isSelected());
 
                 }
             });

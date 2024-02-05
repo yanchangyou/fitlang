@@ -56,7 +56,7 @@ public class JsonDiffResultPanel extends JPanel {
         return diffRequestPanel.getComponent();
     }
 
-    public void showDiff(final Object input1, final Object input2) {
+    public void showDiff(final Object input1, final Object input2, boolean needSort) {
 
         diffRequestPanel.setRequest(new ContentDiffRequest() {
             @Override
@@ -66,10 +66,16 @@ public class JsonDiffResultPanel extends JPanel {
                 Object object2 = input2;
 
                 if (input1 instanceof JSONObject) {
-                    object1 = toJsonTextWithFormat(ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1));
+                    if (needSort) {
+                        object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
+                    }
+                    object1 = toJsonTextWithFormat((JSONObject) object1);
                 }
                 if (input2 instanceof JSONObject) {
-                    object2 = toJsonTextWithFormat(ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2));
+                    if (needSort) {
+                        object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
+                    }
+                    object2 = toJsonTextWithFormat((JSONObject) object2);
                 }
 
                 Document document1 = new DocumentImpl(object1.toString());
