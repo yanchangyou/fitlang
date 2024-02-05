@@ -30557,8 +30557,8 @@
     function buildFlowData(script) {
         let nodes = [];
         let edges = [];
-        let x = 300;
-        let y = 150;
+        let x = script.x || 300;
+        let y = script.x || 150;
         let root = buildNextNode(script, x, y, 0);
         nodes.push(root);
         preNode = {};
@@ -30606,14 +30606,14 @@
                 } else {
                     childX = preNode.x + 200;
                 }
-                if(i===0) {
+                if (i === 0) {
                     firstX = childX;
                 }
 
-                let nextNode = buildNextNode(properties.child[i], childX, y + 180, level+1);
+                let nextNode = buildNextNode(properties.child[i], childX, y + 180, level + 1);
                 nodes.push(nextNode);
                 edges.push(buildChildEdge(node, nextNode));
-                if(properties.child.length!==1 && i === properties.child.length-1) {
+                if (properties.child.length !== 1 && i === properties.child.length - 1) {
                     preNode = nextNode;
                 } else {
                     preNode = {};
@@ -30664,8 +30664,8 @@
             id: id,
             type: "rect",
             text: nodeData.uni + "\n\n" + (nodeData.name ? nodeData.name : ""),
-            x: x,
-            y: y,
+            x: nodeData.x || x,
+            y: nodeData.y || y,
             properties: nodeData,
             level: level
         };
@@ -30678,7 +30678,7 @@
         let edges = [];
         let script = userData['script'];
         if (script) {
-            var logicFlowData = buildFlowData(script);
+            let logicFlowData = buildFlowData(script);
             return logicFlowData;
         }
 
@@ -30733,6 +30733,8 @@
         let script = root.properties;
         let nodeIdMap = buildNodeIdMap(nodes);
         script.id = root.id;
+        script.x = root.x;
+        script.y = root.y;
 
         findNextNodesAndSet(root, nodes, edges, script, nodeIdMap);
 
@@ -30755,6 +30757,8 @@
                 let targetNode = nodeIdMap[edges[i].targetNodeId];
                 let nodeData = targetNode.properties;
                 nodeData.id = targetNode.id;
+                nodeData.x = targetNode.x;
+                nodeData.y = targetNode.y;
                 findNextNodesAndSet(targetNode, nodes, edges, nodeData, nodeIdMap);
                 if (isChild(node, edges[i])) {
                     child.push(nodeData);
