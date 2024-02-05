@@ -125,7 +125,17 @@ public class JsonPagePanelDialog extends DialogWrapper {
         html = html.replace("{\"JSON_DATA\": \"\"}", jsonData.toJSONString());
         browser.loadHTML(html);
         if (Boolean.TRUE.equals(option.getBoolean("devTools"))) {
-            browser.openDevtools();
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(2000L);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    browser.openDevtools();
+                }
+            }.start();
         }
 
         jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
