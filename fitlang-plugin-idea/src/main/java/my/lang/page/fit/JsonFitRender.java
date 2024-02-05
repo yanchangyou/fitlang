@@ -78,6 +78,29 @@ public class JsonFitRender implements FileEditor {
             }
         });
         toolBar.add(button);
+
+        JButton debugButton = new JButton("打开Chrome Dev");
+        debugButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                jsonGraphScriptPanel.openDevtools();
+
+            }
+        });
+        toolBar.add(debugButton);
+
+//        JButton closeDebugButton = new JButton("关闭Chrome Dev");
+//        closeDebugButton.addActionListener(new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//
+//                jsonGraphScriptPanel.closeDevtools();
+//
+//            }
+//        });
+//        toolBar.add(closeDebugButton);
+
         return toolBar;
     }
 

@@ -127,18 +127,7 @@ public class JsonGraphScriptPanel extends JPanel {
         browser.loadHTML(html);
 
         browser.getComponent();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Thread.sleep(2000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                browser.openDevtools();
-            }
-        }.start();
+
     }
 
     static Map<String, String> htmlMap = new HashMap<>();
@@ -173,4 +162,11 @@ public class JsonGraphScriptPanel extends JPanel {
         );
     }
 
+    public void openDevtools() {
+        browser.openDevtools();
+    }
+
+    public void closeDevtools() {
+        browser.getCefBrowser().getDevTools().close(true);
+    }
 }
