@@ -7,6 +7,7 @@ import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import fit.lang.plugin.json.ide.FitPluginInit;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,4 +42,8 @@ public class JsonAppRenderProvider implements FileEditorProvider, DumbAware {
         return FileEditorPolicy.PLACE_BEFORE_DEFAULT_EDITOR;
     }
 
+    //初始化，后续优化
+    static {
+        FitPluginInit.init();
+    }
 }
