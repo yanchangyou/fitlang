@@ -87,6 +87,13 @@ public class JsonFitRender implements FileEditor {
                         try {
                             String newJsonText = toJsonTextWithFormat(script);
                             file.setBinaryContent(newJsonText.getBytes());
+                            file.refresh(false, false);
+                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Messages.showInfoMessage("保存成功!", "Info");
+                                }
+                            });
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
