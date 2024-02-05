@@ -30609,7 +30609,7 @@
                     firstX = childX;
                 }
 
-                let nextNode = buildNextNode(properties.child[i], childX, y + 180, level + 1);
+                let nextNode = buildNextNode(properties.child[i], childX, y + 180);
                 nodes.push(nextNode);
                 edges.push(buildChildEdge(node, nextNode));
                 if (properties.child.length !== 1 && i === properties.child.length - 1) {
@@ -30657,7 +30657,7 @@
         };
     }
 
-    function buildNextNode(nodeData, x, y, level) {
+    function buildNextNode(nodeData, x, y) {
         let id = nodeData.id ? nodeData.id : buildNodeId();
         let node = {
             id: id,
@@ -30665,8 +30665,7 @@
             text: nodeData.uni + "\n\n" + (nodeData.name ? nodeData.name : ""),
             x: nodeData.x || x,
             y: nodeData.y || y,
-            properties: nodeData,
-            level: level
+            properties: nodeData
         };
         return node;
     }

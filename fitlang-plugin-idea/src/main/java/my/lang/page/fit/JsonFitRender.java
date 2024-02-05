@@ -7,8 +7,10 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
+import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import my.lang.page.app.JsonGraphScriptPanel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+import static my.lang.action.RunCodeAction.implementIdeOperator;
 
 public class JsonFitRender implements FileEditor {
 
@@ -52,10 +55,24 @@ public class JsonFitRender implements FileEditor {
 
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
+        implementIdeOperator(null);
+
     }
 
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
+
+        JButton runButton = new JButton("执行");
+        runButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                JSONObject script = jsonGraphScriptPanel.getScript();
+                execute(new JSONObject(), script);
+
+            }
+        });
+        toolBar.add(runButton);
 
         JButton button = new JButton("保存");
         button.addActionListener(new AbstractAction() {
@@ -159,6 +176,16 @@ public class JsonFitRender implements FileEditor {
     @Override
     public @NotNull VirtualFile getFile() {
         return file;
+    }
+
+    void execute(JSONObject input, JSONObject script) {
+        try {
+            String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
+            JSONObject output = JSONObject.parse(result);
+            System.out.println(output);
+        } catch (Exception e) {
+            Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
+        }
     }
 
 }
