@@ -11,6 +11,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import my.lang.dialog.JsonDataPanelDialog;
 import my.lang.page.app.JsonGraphScriptPanel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -182,6 +183,12 @@ public class JsonFitRender implements FileEditor {
         try {
             String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
             JSONObject output = JSONObject.parse(result);
+
+            JsonDataPanelDialog jsonDataPanelDialog = new JsonDataPanelDialog(project, output, null, null);
+            jsonDataPanelDialog.setModal(true);
+            jsonDataPanelDialog.showAndGet();
+            jsonDataPanelDialog.disposeIfNeeded();
+
             System.out.println(output);
         } catch (Exception e) {
             Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
