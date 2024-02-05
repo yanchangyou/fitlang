@@ -3,6 +3,7 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
@@ -162,11 +163,7 @@ public class JsonAppRenderPanel extends JPanel {
 
                         scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
                         JSONObject input = getInputJson();
-
-                        String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
-
-                        JSONObject output = JSONObject.parse(result);
-                        setOutputJson(output);
+                        execute(input, script);
                     }
                 });
                 toolBar.add(button);
@@ -180,6 +177,17 @@ public class JsonAppRenderPanel extends JPanel {
         panel.add(jbScrollPane, BorderLayout.NORTH);
 
         return panel;
+    }
+
+    private void execute(JSONObject input, JSONObject script) {
+        try {
+            String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
+
+            JSONObject output = JSONObject.parse(result);
+            setOutputJson(output);
+        } catch (Exception e) {
+            Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
+        }
     }
 
     @NotNull
@@ -219,11 +227,8 @@ public class JsonAppRenderPanel extends JPanel {
 
                     JSONObject input = getInputJson();
 
-                    String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
+                    execute(input, script);
 
-                    JSONObject output = JSONObject.parse(result);
-
-                    setOutputJson(output);
                 }
             });
             toolBar.add(button);
