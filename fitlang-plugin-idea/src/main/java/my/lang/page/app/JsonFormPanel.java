@@ -20,6 +20,9 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonFormPanel extends JPanel {
 
+    /**
+     * https://jsonform.github.io/jsonform/playground/index.html?example=fields-radios
+     */
     JSONObject formSchema;
 
     JSONObject formData;
@@ -101,14 +104,14 @@ public class JsonFormPanel extends JPanel {
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
     static void render(JSONObject formSchema, JSONObject formData, JBCefBrowser browser) {
 
-        JSONObject jsonPage = new JSONObject();
-        jsonPage.put("schema", formSchema);
+//        JSONObject jsonPage = new JSONObject();
+//        jsonPage.put("schema", formSchema);
 
         String path = "fit/JsonPage-jsonform.html";
 
         String type = "jsonform";
         String html = loadHtml(type, path);
-        html = html.replace("{\"JSON_PAGE\": \"\"}", jsonPage.toJSONString());
+        html = html.replace("{\"JSON_PAGE\": \"\"}", formSchema.toJSONString());
         html = html.replace("{\"JSON_DATA\": \"\"}", formData.toJSONString());
 
         browser.loadHTML(html);

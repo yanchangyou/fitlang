@@ -33,6 +33,10 @@ public class JsonAppRenderPanel extends JPanel {
 
     JsonObjectEditorPanel outputEditor;
 
+    JSONObject inputForm;
+
+    JSONObject outputForm;
+
     JsonScriptEditorPanel scriptEditor;
 
     String appTitle = "App";
@@ -62,6 +66,17 @@ public class JsonAppRenderPanel extends JPanel {
 
         JSONArray actions = appDefine.getJSONArray("actions");
 
+        inputForm = appDefine.getJSONObject("inputForm");
+        outputForm = appDefine.getJSONObject("outputForm");
+
+        if (inputForm == null) {
+            inputForm = new JSONObject();
+        }
+
+        if (outputForm == null) {
+            outputForm = new JSONObject();
+        }
+
         JSONObject input = appDefine.getJSONObject("input");
         JSONObject output = appDefine.getJSONObject("output");
 
@@ -76,6 +91,9 @@ public class JsonAppRenderPanel extends JPanel {
         if (output == null) {
             output = new JSONObject();
         }
+
+        inputForm.put("schema", parseJsonSchema(input));
+        outputForm.put("schema", parseJsonSchema(output));
 
         setBorder(null);
         setLayout(new BorderLayout());
@@ -245,11 +263,11 @@ public class JsonAppRenderPanel extends JPanel {
         splitPane.setDividerSize(3);
         splitPane.setBorder(null);
 
-        inputEditor = new JsonObjectEditorPanel(parseJsonSchema(input), input, inputTitle, SwingConstants.LEFT, project);
+        inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, project);
 
         splitPane.add(inputEditor);
 
-        outputEditor = new JsonObjectEditorPanel(parseJsonSchema(output), output, outputTitle, SwingConstants.RIGHT, project);
+        outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, project);
 
         splitPane.add(outputEditor);
 
