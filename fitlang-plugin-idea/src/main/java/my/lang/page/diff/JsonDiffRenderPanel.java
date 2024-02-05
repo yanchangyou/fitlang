@@ -28,7 +28,7 @@ public class JsonDiffRenderPanel extends JPanel {
 
     JsonDiffResultPanel jsonDiffResultPanel;
 
-    JCheckBox isNeedSort = new JCheckBox("Need Sort");
+    JCheckBox isNeedSort = new JCheckBox("字段排序");
 
     String appTitle = "Diff";
     String input1Title = "Input1";
