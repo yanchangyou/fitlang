@@ -1,0 +1,15 @@
+{
+    "script":{
+        "uni": "hello",
+        "id": "4c47f3e8-ba67-7d6a-364b-63808c878e01",
+        "x":400,
+        "y":80
+    },
+    "input":{
+        "who": "world"
+    },
+    "output":{
+        "message": "hello, world!"
+    },
+    "uni": "mini"
+}
