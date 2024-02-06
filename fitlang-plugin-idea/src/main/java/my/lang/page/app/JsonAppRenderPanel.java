@@ -268,7 +268,12 @@ public class JsonAppRenderPanel extends JPanel {
                             miniAppDefine.put("uni", "mini");
                             String content = IoUtil.readUtf8(appFile.getInputStream());
                             JSONObject rawMiniAppDefine = JSONObject.parse(content);
-                            rawMiniAppDefine.putAll(miniAppDefine);
+                            if ("mini".equals(rawMiniAppDefine.getString("uni"))) {
+                                rawMiniAppDefine.putAll(miniAppDefine);
+                            } else {
+                                miniAppDefine.put("script", rawMiniAppDefine);
+                                rawMiniAppDefine = miniAppDefine;
+                            }
                             String newJsonText = toJsonTextWithFormat(rawMiniAppDefine);
                             appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                             appFile.refresh(false, false);
