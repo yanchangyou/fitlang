@@ -200,7 +200,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         if (showExchangeButton) {
 
-            //add switch Run Button
+            //add exchange Run Button
             {
                 JButton button = new JButton("<->");
                 button.addActionListener(new AbstractAction() {
@@ -220,6 +220,20 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
+        //add switch Run Button
+        {
+            JButton button = new JButton("切换视图");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+
+                    inputEditor.cardLayout.next(inputEditor.cardPanel);
+                    outputEditor.cardLayout.next(outputEditor.cardPanel);
+
+                }
+            });
+            toolBar.add(button);
+        }
         //add default Run Button
         {
             JButton button = new JButton(defaultButtonTitle);
