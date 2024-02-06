@@ -1,4 +1,13 @@
 {
-  "uni": "hello",
-  "message": "hello, world! 你好，世界！"
+    "script":{
+        "uni": "hello",
+        "message": "hello, world! 你好，世界！"
+    },
+    "input":{
+        
+    },
+    "output":{
+        
+    },
+    "uni": "mini"
 }
