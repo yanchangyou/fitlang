@@ -30558,11 +30558,11 @@
         let nodes = [];
         let edges = [];
         let x = script.x || 300;
-        let y = script.x || 150;
-        let root = buildNextNode(script, x, y, 0);
+        let y = script.y || 160;
+        let root = buildNextNode(script, x, y);
         nodes.push(root);
         preNode = {};
-        buildNextNodes(root, nodes, edges, 0);
+        buildNextNodes(root, nodes, edges);
 
         return {
             nodes: nodes,
@@ -30591,10 +30591,8 @@
             if (typeof (properties.child['length']) === 'undefined') {
                 properties.child = [properties.child];
             }
-            let firstX = 0;
-            let lastX = 0;
             for (let i = 0; i < properties.child.length; i++) {
-                let childX = node.x;
+                let childX = x;
                 if (typeof (preNode.x) !== 'number') {
                     let isOdd = properties.child.length % 2 !== 0;
                     if (isOdd) {
@@ -30605,11 +30603,7 @@
                 } else {
                     childX = preNode.x + 200;
                 }
-                if (i === 0) {
-                    firstX = childX;
-                }
-
-                let nextNode = buildNextNode(properties.child[i], childX, y + 180);
+                let nextNode = buildNextNode(properties.child[i], childX, y + 160);
                 nodes.push(nextNode);
                 edges.push(buildChildEdge(node, nextNode));
                 if (properties.child.length !== 1 && i === properties.child.length - 1) {
@@ -30641,18 +30635,18 @@
         };
     }
 
-    function buildChildEdge(node, nextNode) {
+    function buildChildEdge(node, childNode) {
         return {
             "sourceNodeId": node.id,
-            "targetNodeId": nextNode.id,
+            "targetNodeId": childNode.id,
             "type": "bezier",
             startPoint: {
                 x: node.x,
                 y: node.y + 40
             },
             endPoint: {
-                x: nextNode.x,
-                y: nextNode.y - 40
+                x: childNode.x,
+                y: childNode.y - 40
             }
         };
     }
@@ -30665,7 +30659,9 @@
             text: nodeData.uni + "\n\n" + (nodeData.name ? nodeData.name : ""),
             x: nodeData.x || x,
             y: nodeData.y || y,
-            properties: nodeData
+            width: 100,
+            height: 80,
+            properties: nodeData,
         };
         return node;
     }
