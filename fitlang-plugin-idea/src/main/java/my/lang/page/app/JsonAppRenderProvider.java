@@ -15,7 +15,7 @@ public class JsonAppRenderProvider implements FileEditorProvider, DumbAware {
 
     JsonAppRender jsonAppRender;
 
-    JSONObject contextParam;
+    protected JSONObject contextParam;
 
     public JsonAppRenderProvider() {
         this.contextParam = new JSONObject();

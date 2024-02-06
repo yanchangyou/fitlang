@@ -331,7 +331,8 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <fileEditorProvider implementation="my.lang.page.action.JsonActionRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.app.JsonAppRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.diff.JsonDiffRenderProvider"/>
-        <fileEditorProvider implementation="my.lang.page.fit.JsonFitRenderProvider"/>
+<!--        <fileEditorProvider implementation="my.lang.page.fit.JsonFitRenderProvider"/>-->
+        <fileEditorProvider implementation="my.lang.page.mini.MiniJsonAppRenderProvider"/>
     </extensions>
 
     <actions>
@@ -400,7 +401,8 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.10.8 fit support visualization; refine diff, toolbar</li>
+            <li>0.10.8 fix script visualization edge height; update idea version to 232; fix writeExcel bug</li>
+            <li>0.10.7 fit support visualization; refine diff, toolbar</li>
             <li>0.10.6 support script and graph synchronize; some bug fix</li>
             <li>0.10.5 add node: showDiff; support diff.json file type; app define support exchange input output; fix fit server path bug</li>
             <li>0.10.4 add node: getSchema; fix JBCefBrowser not dispose; refine app define</li>

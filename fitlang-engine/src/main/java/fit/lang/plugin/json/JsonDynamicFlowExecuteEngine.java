@@ -15,6 +15,7 @@ import fit.lang.define.ExecuteContext;
 import fit.lang.define.ExecuteNode;
 import fit.lang.define.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.plugin.json.app.MiniAppJsoMinnExecuteNode;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
 import fit.lang.plugin.json.cmd.UnzipJsonExecuteNode;
 import fit.lang.plugin.json.cmd.ZipJsonExecuteNode;
@@ -333,6 +334,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("readExcel", ReadExcelJsonExecuteNode.class);
         register("writeExcel", WriteExcelJsonExecuteNode.class);
         register("mergeExcel", MergeExcelJsonExecuteNode.class);
+
+        //mini app
+        register("mini", MiniAppJsoMinnExecuteNode.class);
 
     }
 }

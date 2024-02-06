@@ -1,7 +1,9 @@
 package my.lang.page.app;
 
+import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -13,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseJsonSchema;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
@@ -233,6 +237,53 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(button);
         }
+
+        JButton button = new JButton("保存");
+        button.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject miniAppDefine = new JSONObject();
+                            miniAppDefine.put("script", getScriptJson());
+                            miniAppDefine.put("input", getInputJson());
+                            miniAppDefine.put("output", getOutputJson());
+                            miniAppDefine.put("uni", "mini");
+                            String content = IoUtil.readUtf8(appFile.getInputStream());
+                            JSONObject rawMiniAppDefine = JSONObject.parse(content);
+                            rawMiniAppDefine.putAll(miniAppDefine);
+                            String newJsonText = toJsonTextWithFormat(rawMiniAppDefine);
+                            appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
+                            appFile.refresh(false, false);
+                            ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Messages.showInfoMessage("保存成功!", "Info");
+                                }
+                            });
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+
+            }
+        });
+        toolBar.add(button);
+
+        JButton debugButton = new JButton("打开Chrome Dev");
+        debugButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                scriptEditor.jsonGraphScriptPanel.openDevtools();
+
+            }
+        });
+        toolBar.add(debugButton);
 
         return toolBar;
     }
