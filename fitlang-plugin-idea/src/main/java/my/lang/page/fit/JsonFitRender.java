@@ -22,6 +22,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
@@ -86,9 +87,9 @@ public class JsonFitRender implements FileEditor {
                     public void run() {
                         try {
                             String newJsonText = toJsonTextWithFormat(script);
-                            file.setBinaryContent(newJsonText.getBytes());
+                            file.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                             file.refresh(false, false);
-                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                            ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     Messages.showInfoMessage("保存成功!", "Info");
