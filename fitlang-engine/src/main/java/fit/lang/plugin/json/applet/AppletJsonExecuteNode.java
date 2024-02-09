@@ -41,7 +41,7 @@ public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNod
             outputJson = new JSONObject();
         }
         nodeDefine.put("child", scriptJson);
-        ExecuteNodeUtil.buildChildNode(this, scriptJson);
+        ExecuteNodeUtil.buildChildNode(this, nodeDefine);
     }
 
     @Override
