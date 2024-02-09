@@ -1,4 +1,4 @@
-package fit.lang.plugin.json.app;
+package fit.lang.plugin.json.applet;
 
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeUtil;
@@ -15,7 +15,7 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 /**
  * 执行节点
  */
-public class MiniAppJsoMinnExecuteNode extends JsonExecuteNode implements ExecuteNodeBuildable {
+public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNodeBuildable {
 
     JSONObject scriptJson;
 

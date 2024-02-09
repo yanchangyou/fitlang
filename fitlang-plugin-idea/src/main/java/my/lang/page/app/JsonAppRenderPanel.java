@@ -265,10 +265,10 @@ public class JsonAppRenderPanel extends JPanel {
                             miniAppDefine.put("script", getScriptJson());
                             miniAppDefine.put("input", getInputJson());
                             miniAppDefine.put("output", getOutputJson());
-                            miniAppDefine.put("uni", "mini");
+                            miniAppDefine.put("uni", "applet");
                             String content = new String(IoUtil.readBytes(appFile.getInputStream()));
                             JSONObject rawMiniAppDefine = JSONObject.parse(content);
-                            if ("mini".equals(rawMiniAppDefine.getString("uni"))) {
+                            if ("applet".equals(rawMiniAppDefine.getString("uni"))) {
                                 rawMiniAppDefine.putAll(miniAppDefine);
                             } else {
                                 miniAppDefine.put("script", rawMiniAppDefine);

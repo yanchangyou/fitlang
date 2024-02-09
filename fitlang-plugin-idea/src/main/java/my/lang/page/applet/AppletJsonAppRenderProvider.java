@@ -1,4 +1,4 @@
-package my.lang.page.mini;
+package my.lang.page.applet;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.project.Project;
@@ -7,21 +7,20 @@ import my.lang.page.app.JsonAppRenderProvider;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-public class MiniJsonAppRenderProvider extends JsonAppRenderProvider {
+public class AppletJsonAppRenderProvider extends JsonAppRenderProvider {
 
-    MiniJsonAppRender miniJsonAppRender;
+    AppletJsonAppRender appletJsonAppRender;
 
     @Override
     public @NotNull FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        miniJsonAppRender = new MiniJsonAppRender(project, virtualFile, contextParam);
-        return miniJsonAppRender;
+        appletJsonAppRender = new AppletJsonAppRender(project, virtualFile, contextParam);
+        return appletJsonAppRender;
     }
 
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
         return virtualFile.getName().endsWith(".fit");
     }
-
 
     @Override
     public @NotNull @NonNls String getEditorTypeId() {

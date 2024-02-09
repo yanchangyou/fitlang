@@ -11,5 +11,5 @@
     "output":{
         "message": "hello, world!"
     },
-    "uni": "mini"
+    "uni": "applet"
 }

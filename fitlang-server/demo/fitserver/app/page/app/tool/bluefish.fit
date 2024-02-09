@@ -1,0 +1,54 @@
+{
+    "script": {
+        "uni": "mix",
+        "json": {
+            "result": "${a+b}"
+        }
+    },
+    "input": {
+        "a": 3,
+        "b": 2
+    },
+    "output": {
+        "result": ""
+    },
+    "actions": [
+        {
+            "title": "+",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a+b}"
+                }
+            }
+        },
+        {
+            "title": "-",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a-b}"
+                }
+            }
+        },
+        {
+            "title": "*",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a*b}"
+                }
+            }
+        },
+        {
+            "title": "/",
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a/b}"
+                }
+            }
+        }
+    ],
+    "uni": "page"
+}

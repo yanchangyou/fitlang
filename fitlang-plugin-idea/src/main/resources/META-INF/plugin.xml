@@ -332,7 +332,7 @@ readExcelForAllSheet: 读取所有sheet内容<br/>
         <fileEditorProvider implementation="my.lang.page.app.JsonAppRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.diff.JsonDiffRenderProvider"/>
         <!--        <fileEditorProvider implementation="my.lang.page.fit.JsonFitRenderProvider"/>-->
-        <fileEditorProvider implementation="my.lang.page.mini.MiniJsonAppRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.applet.AppletJsonAppRenderProvider"/>
     </extensions>
 
     <actions>
