@@ -55,6 +55,10 @@ public class JsonAppRenderPanel extends JPanel {
      */
     boolean showExchangeButton;
 
+    JSplitPane inputOutputSplitPane;
+
+    JSplitPane scriptSplitPane;
+
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
         this.project = project;
@@ -105,11 +109,11 @@ public class JsonAppRenderPanel extends JPanel {
 
         setAppTitle(appTitle);
 
-        JSplitPane splitPane = buildMainPanel(input, output, actions);
-        splitPane.setBorder(null);
+        scriptSplitPane = buildMainPanel(input, output, actions);
+        scriptSplitPane.setBorder(null);
 //        splitPane.setDividerSize(4);
 
-        adjustSplitPanel(splitPane);
+        adjustSplitPanel(scriptSplitPane);
 
         implementIdeOperator(null);
 
@@ -218,6 +222,19 @@ public class JsonAppRenderPanel extends JPanel {
                 });
                 toolBar.add(button);
             }
+        }
+
+        //reset view
+        {
+            JButton button = new JButton("重置布局");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    adjustSplitPanel(scriptSplitPane);
+                    adjustSplitPanel(inputOutputSplitPane);
+                }
+            });
+            toolBar.add(button);
         }
 
         //add switch Run Button
@@ -334,27 +351,27 @@ public class JsonAppRenderPanel extends JPanel {
 
     private JComponent buildInputAndOutputObjectPanel(JSONObject input, JSONObject output) {
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerSize(3);
-        splitPane.setBorder(null);
+        inputOutputSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        inputOutputSplitPane.setDividerSize(3);
+        inputOutputSplitPane.setBorder(null);
 
         inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, project);
 
-        splitPane.add(inputEditor);
+        inputOutputSplitPane.add(inputEditor);
 
         outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, project);
 
-        splitPane.add(outputEditor);
+        inputOutputSplitPane.add(outputEditor);
 
-        adjustSplitPanel(splitPane);
+        adjustSplitPanel(inputOutputSplitPane);
 
-        return splitPane;
+        return inputOutputSplitPane;
 
     }
 
     private static void adjustSplitPanel(JSplitPane splitPane) {
         new Thread(() -> {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 2; i++) {
                 try {
                     Thread.sleep(500L);
                 } catch (InterruptedException e) {
