@@ -279,18 +279,19 @@ public class JsonAppRenderPanel extends JPanel {
                     public void run() {
                         try {
                             JSONObject appletDefine = new JSONObject();
-                            appletDefine.put("script", getScriptJson());
-                            appletDefine.put("input", getInputJson());
-                            appletDefine.put("output", getOutputJson());
                             appletDefine.put("uni", "applet");
+                            appletDefine.put("input", getInputJson());
+                            appletDefine.put("script", getScriptJson());
                             String content = new String(IoUtil.readBytes(appFile.getInputStream()));
                             JSONObject rawAppletDefine = JSONObject.parse(content);
                             if ("applet".equals(rawAppletDefine.getString("uni"))) {
                                 rawAppletDefine.putAll(appletDefine);
                             } else {
                                 appletDefine.put("script", rawAppletDefine);
+                                rawAppletDefine.remove("input");
                                 rawAppletDefine = appletDefine;
                             }
+                            appletDefine.put("output", getOutputJson());
                             String newJsonText = toJsonTextWithFormat(rawAppletDefine);
                             appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                             appFile.refresh(false, false);
