@@ -19,5 +19,5 @@ lib/fastjson2-2.0.46.jar:\
 lib/slf4j-api-2.0.9.jar:\
 lib/slf4j-jdk14-2.0.9.jar:\
 lib/jul-to-slf4j-2.0.9.jar:\
- fit.server.FitServerMain server.fit $httpPrefix $fitPath&
+ fit.server.FitServerMain server.fit $httpPrefix $fitPath
 
