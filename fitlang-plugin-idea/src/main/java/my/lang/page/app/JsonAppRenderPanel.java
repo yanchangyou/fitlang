@@ -278,20 +278,20 @@ public class JsonAppRenderPanel extends JPanel {
                     @Override
                     public void run() {
                         try {
-                            JSONObject miniAppDefine = new JSONObject();
-                            miniAppDefine.put("script", getScriptJson());
-                            miniAppDefine.put("input", getInputJson());
-                            miniAppDefine.put("output", getOutputJson());
-                            miniAppDefine.put("uni", "applet");
+                            JSONObject appletDefine = new JSONObject();
+                            appletDefine.put("script", getScriptJson());
+                            appletDefine.put("input", getInputJson());
+                            appletDefine.put("output", getOutputJson());
+                            appletDefine.put("uni", "applet");
                             String content = new String(IoUtil.readBytes(appFile.getInputStream()));
-                            JSONObject rawMiniAppDefine = JSONObject.parse(content);
-                            if ("applet".equals(rawMiniAppDefine.getString("uni"))) {
-                                rawMiniAppDefine.putAll(miniAppDefine);
+                            JSONObject rawAppletDefine = JSONObject.parse(content);
+                            if ("applet".equals(rawAppletDefine.getString("uni"))) {
+                                rawAppletDefine.putAll(appletDefine);
                             } else {
-                                miniAppDefine.put("script", rawMiniAppDefine);
-                                rawMiniAppDefine = miniAppDefine;
+                                appletDefine.put("script", rawAppletDefine);
+                                rawAppletDefine = appletDefine;
                             }
-                            String newJsonText = toJsonTextWithFormat(rawMiniAppDefine);
+                            String newJsonText = toJsonTextWithFormat(rawAppletDefine);
                             appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                             appFile.refresh(false, false);
                             ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
