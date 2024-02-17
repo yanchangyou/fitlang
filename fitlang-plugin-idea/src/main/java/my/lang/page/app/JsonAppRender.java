@@ -36,6 +36,13 @@ public class JsonAppRender implements FileEditor {
 
         JSONObject appDefineJson = JSONObject.parse(content);
 
+        //兼容无script的场景
+        if (!appDefineJson.containsKey("script")) {
+            JSONObject scriptJson = appDefineJson;
+            appDefineJson = new JSONObject();
+            appDefineJson.put("script", scriptJson);
+        }
+
         panel = new JsonAppRenderPanel(project, appDefineJson, file, contextParam);
     }
 
