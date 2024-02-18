@@ -9,18 +9,23 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     JsonFormPanel jsonFormEditor;
 
-    public JsonObjectEditorPanel(JSONObject formSchema, JSONObject formData, String title, int horizontalAlignment, Project project) {
+    boolean enableGraph;
+
+    public JsonObjectEditorPanel(JSONObject formSchema, JSONObject formData, String title, int horizontalAlignment, boolean enableGraph, Project project) {
 
         super(formData, title, horizontalAlignment, project);
 
         this.formSchema = formSchema;
+        this.enableGraph = enableGraph;
 
-        jsonFormEditor = new JsonFormPanel(formSchema, formData, jsonTextEditor);
-        cardPanel.add(jsonFormEditor);
+        if (enableGraph) {
+            jsonFormEditor = new JsonFormPanel(formSchema, formData, jsonTextEditor);
+            cardPanel.add(jsonFormEditor);
+            isJsonTextEditor = false;
+        }
 
-        cardLayout.next(cardPanel);
+//        cardLayout.next(cardPanel);
 
-        isJsonTextEditor = false;
     }
 
     public JsonFormPanel getJsonFormEditor() {
@@ -34,7 +39,7 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
     @Override
     protected void switchEditor() {
 
-        if (isJsonTextEditor) {
+        if (isJsonTextEditor && enableGraph) {
             JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
             jsonFormEditor.setFormDataToChrome(newJson);
         }
@@ -42,6 +47,8 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     @Override
     public void dispose() {
-        jsonFormEditor.close();
+        if (enableGraph) {
+            jsonFormEditor.close();
+        }
     }
 }

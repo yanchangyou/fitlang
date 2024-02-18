@@ -7,16 +7,19 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     JsonGraphScriptPanel jsonGraphScriptPanel;
 
-    public JsonScriptEditorPanel(JSONObject script, String title, int horizontalAlignment, Project project) {
+    boolean enableGraph;
+
+    public JsonScriptEditorPanel(JSONObject script, String title, int horizontalAlignment, boolean enableGraph, Project project) {
 
         super(script, title, horizontalAlignment, project);
+        this.enableGraph = enableGraph;
+        if (enableGraph) {
+            jsonGraphScriptPanel = new JsonGraphScriptPanel(script, jsonTextEditor);
+            cardPanel.add(jsonGraphScriptPanel);
+            isJsonTextEditor = true;
+        }
+//        cardLayout.next(cardPanel);
 
-        jsonGraphScriptPanel = new JsonGraphScriptPanel(script, jsonTextEditor);
-        cardPanel.add(jsonGraphScriptPanel);
-
-        cardLayout.next(cardPanel);
-
-        isJsonTextEditor = true;
     }
 
     public JSONObject getScript() {
@@ -26,7 +29,7 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
     @Override
     protected void switchEditor() {
 
-        if (isJsonTextEditor) {
+        if (isJsonTextEditor && enableGraph) {
             JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
             jsonGraphScriptPanel.setScriptDataToChrome(newJson);
         }
@@ -34,6 +37,8 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     @Override
     public void dispose() {
-        jsonGraphScriptPanel.dispose();
+        if (enableGraph) {
+            jsonGraphScriptPanel.dispose();
+        }
     }
 }

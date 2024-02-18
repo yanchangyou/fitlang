@@ -50,6 +50,8 @@ public class JsonAppRenderPanel extends JPanel {
     String scriptTitle = "Script";
     String defaultButtonTitle = "Run";
 
+    boolean enableGraph;
+
     /**
      * 出入参结构不同，导致不能交换
      */
@@ -72,6 +74,7 @@ public class JsonAppRenderPanel extends JPanel {
         scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
         showExchangeButton = Boolean.TRUE.equals(appDefine.getBoolean("showExchangeButton"));
+        enableGraph = Boolean.TRUE.equals(appDefine.getBoolean("enableGraph"));
 
         JSONArray actions = appDefine.getJSONArray("actions");
 
@@ -152,7 +155,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         JPanel toolBar = buildToolBar();
 
-        scriptEditor = new JsonScriptEditorPanel(scriptJson, scriptTitle, SwingConstants.LEFT, project);
+        scriptEditor = new JsonScriptEditorPanel(scriptJson, scriptTitle, SwingConstants.LEFT, enableGraph, project);
 
         panel.add(scriptEditor, BorderLayout.CENTER);
 
@@ -238,18 +241,20 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         //add switch Run Button
-        {
-            JButton button = new JButton("切换视图");
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
+        if (enableGraph) {
+            {
+                JButton button = new JButton("切换视图");
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
 
-                    inputEditor.cardLayout.next(inputEditor.cardPanel);
-                    outputEditor.cardLayout.next(outputEditor.cardPanel);
+                        inputEditor.cardLayout.next(inputEditor.cardPanel);
+                        outputEditor.cardLayout.next(outputEditor.cardPanel);
 
-                }
-            });
-            toolBar.add(button);
+                    }
+                });
+                toolBar.add(button);
+            }
         }
         //add default Run Button
         {
@@ -292,7 +297,7 @@ public class JsonAppRenderPanel extends JPanel {
                                 rawAppletDefine = appletDefine;
                             }
                             appletDefine.put("output", getOutputJson());
-                            String newJsonText = toJsonTextWithFormat(rawAppletDefine);
+                            String newJsonText = toJsonTextWithFormat(appletDefine);
                             appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                             appFile.refresh(false, false);
                             ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
@@ -326,8 +331,10 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setInputJson(JSONObject input) {
-        inputEditor.getJsonFormEditor().setFormData(input);
-        inputEditor.getJsonFormEditor().setFormDataToChrome(input);
+        if (enableGraph) {
+            inputEditor.getJsonFormEditor().setFormData(input);
+            inputEditor.getJsonFormEditor().setFormDataToChrome(input);
+        }
         inputEditor.getJsonTextEditor().setText(toJsonTextWithFormat(input));
     }
 
@@ -340,8 +347,10 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setOutputJson(JSONObject output) {
-        outputEditor.getJsonFormEditor().setFormData(output);
-        outputEditor.getJsonFormEditor().setFormDataToChrome(output);
+        if (enableGraph) {
+            outputEditor.getJsonFormEditor().setFormData(output);
+            outputEditor.getJsonFormEditor().setFormDataToChrome(output);
+        }
         outputEditor.getJsonTextEditor().setText(toJsonTextWithFormat(output));
     }
 
@@ -356,11 +365,11 @@ public class JsonAppRenderPanel extends JPanel {
         inputOutputSplitPane.setDividerSize(3);
         inputOutputSplitPane.setBorder(null);
 
-        inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, project);
+        inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, enableGraph, project);
 
         inputOutputSplitPane.add(inputEditor);
 
-        outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, project);
+        outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, enableGraph, project);
 
         inputOutputSplitPane.add(outputEditor);
 
@@ -372,7 +381,7 @@ public class JsonAppRenderPanel extends JPanel {
 
     private static void adjustSplitPanel(JSplitPane splitPane) {
         new Thread(() -> {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 4; i++) {
                 try {
                     Thread.sleep(500L);
                 } catch (InterruptedException e) {

@@ -30,7 +30,7 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
     CardLayout cardLayout = new CardLayout();
 
-    boolean isJsonTextEditor;
+    boolean isJsonTextEditor = true;
 
     public JsonBaseEditorPanel(JSONObject jsonObject, String title, int horizontalAlignment, Project project) {
 
