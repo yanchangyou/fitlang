@@ -55,7 +55,7 @@ public class JsonAppRenderPanel extends JPanel {
     /**
      * 出入参结构不同，导致不能交换
      */
-    boolean showExchangeButton;
+    boolean showExchangeButton = true;
 
     JSplitPane inputOutputSplitPane;
 
@@ -73,7 +73,9 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = appDefine.containsKey("outputTitle") ? appDefine.getString("outputTitle") : outputTitle;
         scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
-        showExchangeButton = Boolean.TRUE.equals(appDefine.getBoolean("showExchangeButton"));
+        if (appDefine.containsKey("showExchangeButton")) {
+            showExchangeButton = Boolean.TRUE.equals(appDefine.getBoolean("showExchangeButton"));
+        }
         enableGraph = Boolean.TRUE.equals(appDefine.getBoolean("enableGraph"));
 
         JSONArray actions = appDefine.getJSONArray("actions");
