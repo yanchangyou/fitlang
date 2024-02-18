@@ -229,19 +229,6 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        //reset view
-        {
-            JButton button = new JButton("重置布局");
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    adjustSplitPanel(scriptSplitPane);
-                    adjustSplitPanel(inputOutputSplitPane);
-                }
-            });
-            toolBar.add(button);
-        }
-
         //add switch Run Button
         if (enableGraph) {
             {
@@ -275,61 +262,76 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(button);
         }
-
-        JButton button = new JButton("保存");
-        button.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-                ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject appletDefine = new JSONObject();
-                            appletDefine.put("uni", "applet");
-                            appletDefine.put("input", getInputJson());
-                            appletDefine.put("script", getScriptJson());
-                            String content = new String(IoUtil.readBytes(appFile.getInputStream()));
-                            JSONObject rawAppletDefine = JSONObject.parse(content);
-                            if ("applet".equals(rawAppletDefine.getString("uni"))) {
-                                rawAppletDefine.putAll(appletDefine);
-                            } else {
-                                appletDefine.put("script", rawAppletDefine);
-                                rawAppletDefine.remove("input");
-                                rawAppletDefine = appletDefine;
-                            }
-                            appletDefine.put("output", getOutputJson());
-                            String newJsonText = toJsonTextWithFormat(appletDefine);
-                            appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
-                            appFile.refresh(false, false);
-                            ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Messages.showInfoMessage("保存成功!", "Info");
-                                }
-                            });
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                });
-
-            }
-        });
-        toolBar.add(button);
-
-        if (enableGraph) {
-
-            JButton debugButton = new JButton("打开Chrome Dev");
-            debugButton.addActionListener(new AbstractAction() {
+        {
+            JButton button = new JButton("保存");
+            button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    scriptEditor.jsonGraphScriptPanel.openDevtools();
+                    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONObject appletDefine = new JSONObject();
+                                appletDefine.put("uni", "applet");
+                                appletDefine.put("input", getInputJson());
+                                appletDefine.put("script", getScriptJson());
+                                String content = new String(IoUtil.readBytes(appFile.getInputStream()));
+                                JSONObject rawAppletDefine = JSONObject.parse(content);
+                                if ("applet".equals(rawAppletDefine.getString("uni"))) {
+                                    rawAppletDefine.putAll(appletDefine);
+                                } else {
+                                    appletDefine.put("script", rawAppletDefine);
+                                    rawAppletDefine.remove("input");
+                                    rawAppletDefine = appletDefine;
+                                }
+                                appletDefine.put("output", getOutputJson());
+                                String newJsonText = toJsonTextWithFormat(appletDefine);
+                                appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
+                                appFile.refresh(false, false);
+                                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Messages.showInfoMessage("保存成功!", "Info");
+                                    }
+                                });
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
 
                 }
             });
-            toolBar.add(debugButton);
+            toolBar.add(button);
+        }
+
+        if (enableGraph) {
+            {
+                JButton debugButton = new JButton("打开Chrome Dev");
+                debugButton.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        scriptEditor.jsonGraphScriptPanel.openDevtools();
+
+                    }
+                });
+                toolBar.add(debugButton);
+            }
+        }
+
+        //reset view
+        {
+            JButton button = new JButton("重置布局");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    adjustSplitPanel(scriptSplitPane);
+                    adjustSplitPanel(inputOutputSplitPane);
+                }
+            });
+            toolBar.add(button);
         }
 
         return toolBar;
