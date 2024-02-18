@@ -1,16 +1,19 @@
 {
-    "script": {
-        "uni": "mix",
-        "json": {
-            "result": "${a+b}"
-        }
-    },
+    "uni": "applet",
     "input": {
         "a": 3,
         "b": 2
     },
     "output": {
-        "result": ""
+        "a": 3,
+        "b": 2,
+        "result": 5
+    },
+    "script": {
+        "uni": "mix",
+        "json": {
+            "result": "${a+b}"
+        }
     },
     "actions": [
         {
@@ -49,6 +52,5 @@
                 }
             }
         }
-    ],
-    "uni": "applet"
+    ]
 }
