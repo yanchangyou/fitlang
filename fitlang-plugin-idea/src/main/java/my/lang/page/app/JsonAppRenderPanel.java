@@ -318,16 +318,19 @@ public class JsonAppRenderPanel extends JPanel {
         });
         toolBar.add(button);
 
-        JButton debugButton = new JButton("打开Chrome Dev");
-        debugButton.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+        if (enableGraph) {
 
-                scriptEditor.jsonGraphScriptPanel.openDevtools();
+            JButton debugButton = new JButton("打开Chrome Dev");
+            debugButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-            }
-        });
-        toolBar.add(debugButton);
+                    scriptEditor.jsonGraphScriptPanel.openDevtools();
+
+                }
+            });
+            toolBar.add(debugButton);
+        }
 
         return toolBar;
     }
