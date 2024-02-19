@@ -21,7 +21,7 @@
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
-        "enableGraph": true,
+        "enableGraph": false,
         "enableExchangeButton": true,
         "actions": [
             {

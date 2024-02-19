@@ -215,6 +215,52 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
+        //reset view
+        {
+            JButton button = new JButton("重置布局");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    adjustSplitPanel(scriptSplitPane);
+                    adjustSplitPanel(inputOutputSplitPane);
+                }
+            });
+            toolBar.add(button);
+        }
+
+        //add switch Run Button
+        if (enableGraph) {
+            {
+                JButton button = new JButton("切换视图");
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        inputEditor.cardLayout.next(inputEditor.cardPanel);
+                        outputEditor.cardLayout.next(outputEditor.cardPanel);
+                        scriptEditor.cardLayout.next(scriptEditor.cardPanel);
+
+                    }
+                });
+                toolBar.add(button);
+            }
+        }
+
+        if (enableGraph) {
+            {
+                JButton debugButton = new JButton("打开Chrome Dev");
+                debugButton.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        scriptEditor.jsonGraphScriptPanel.openDevtools();
+
+                    }
+                });
+                toolBar.add(debugButton);
+            }
+        }
+
         if (enableExchangeButton) {
 
             //add exchange Run Button
@@ -237,22 +283,6 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        //add switch Run Button
-        if (enableGraph) {
-            {
-                JButton button = new JButton("切换视图");
-                button.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        inputEditor.cardLayout.next(inputEditor.cardPanel);
-                        outputEditor.cardLayout.next(outputEditor.cardPanel);
-
-                    }
-                });
-                toolBar.add(button);
-            }
-        }
         //add default Run Button
         {
             JButton button = new JButton(defaultButtonTitle);
@@ -312,34 +342,6 @@ public class JsonAppRenderPanel extends JPanel {
                         }
                     });
 
-                }
-            });
-            toolBar.add(button);
-        }
-
-        if (enableGraph) {
-            {
-                JButton debugButton = new JButton("打开Chrome Dev");
-                debugButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        scriptEditor.jsonGraphScriptPanel.openDevtools();
-
-                    }
-                });
-                toolBar.add(debugButton);
-            }
-        }
-
-        //reset view
-        {
-            JButton button = new JButton("重置布局");
-            button.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    adjustSplitPanel(scriptSplitPane);
-                    adjustSplitPanel(inputOutputSplitPane);
                 }
             });
             toolBar.add(button);
