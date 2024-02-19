@@ -15,42 +15,51 @@
             "result": "${a+b}"
         }
     },
-    "actions": [
-        {
-            "title": "+",
-            "script": {
-                "uni": "mix",
-                "json": {
-                    "result": "${a+b}"
+    "ui": {
+        "name": "app",
+        "title": "App",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "useGraphScript": true,
+        "showExchangeButton": true,
+        "actions": [
+            {
+                "title": "+",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a+b}"
+                    }
+                }
+            },
+            {
+                "title": "-",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a-b}"
+                    }
+                }
+            },
+            {
+                "title": "*",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a*b}"
+                    }
+                }
+            },
+            {
+                "title": "/",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a/b}"
+                    }
                 }
             }
-        },
-        {
-            "title": "-",
-            "script": {
-                "uni": "mix",
-                "json": {
-                    "result": "${a-b}"
-                }
-            }
-        },
-        {
-            "title": "*",
-            "script": {
-                "uni": "mix",
-                "json": {
-                    "result": "${a*b}"
-                }
-            }
-        },
-        {
-            "title": "/",
-            "script": {
-                "uni": "mix",
-                "json": {
-                    "result": "${a/b}"
-                }
-            }
-        }
-    ]
+        ]
+    }
 }

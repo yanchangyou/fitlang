@@ -30,7 +30,7 @@ public class JsonAppRenderPanel extends JPanel {
 
     JSONObject contextParam;
 
-    JSONObject scriptJson = JSONObject.parse("{'uni':'hello'}");
+    JSONObject scriptDefine = JSONObject.parse("{'uni':'hello'}");
 
     VirtualFile appFile;
 
@@ -68,20 +68,25 @@ public class JsonAppRenderPanel extends JPanel {
         this.appFile = appFile;
         this.contextParam = contextParam;
 
-        appTitle = appDefine.containsKey("title") ? appDefine.getString("title") : appTitle;
-        inputTitle = appDefine.containsKey("inputTitle") ? appDefine.getString("inputTitle") : inputTitle;
-        outputTitle = appDefine.containsKey("outputTitle") ? appDefine.getString("outputTitle") : outputTitle;
-        scriptTitle = appDefine.containsKey("scriptTitle") ? appDefine.getString("scriptTitle") : scriptTitle;
-        defaultButtonTitle = appDefine.containsKey("defaultButtonTitle") ? appDefine.getString("defaultButtonTitle") : defaultButtonTitle;
-        if (appDefine.containsKey("showExchangeButton")) {
-            showExchangeButton = Boolean.TRUE.equals(appDefine.getBoolean("showExchangeButton"));
+        JSONObject uiDefine = appDefine;
+        if (appDefine.containsKey("ui")) {
+            uiDefine = appDefine.getJSONObject("ui");
         }
-        enableGraph = Boolean.TRUE.equals(appDefine.getBoolean("enableGraph"));
 
-        JSONArray actions = appDefine.getJSONArray("actions");
+        appTitle = uiDefine.containsKey("title") ? uiDefine.getString("title") : appTitle;
+        inputTitle = uiDefine.containsKey("inputTitle") ? uiDefine.getString("inputTitle") : inputTitle;
+        outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
+        scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
+        defaultButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : defaultButtonTitle;
+        if (uiDefine.containsKey("showExchangeButton")) {
+            showExchangeButton = Boolean.TRUE.equals(uiDefine.getBoolean("showExchangeButton"));
+        }
+        enableGraph = Boolean.TRUE.equals(uiDefine.getBoolean("enableGraph"));
 
-        inputForm = appDefine.getJSONObject("inputForm");
-        outputForm = appDefine.getJSONObject("outputForm");
+        JSONArray actions = uiDefine.getJSONArray("actions");
+
+        inputForm = uiDefine.getJSONObject("inputForm");
+        outputForm = uiDefine.getJSONObject("outputForm");
 
         if (inputForm == null) {
             inputForm = new JSONObject();
@@ -95,7 +100,7 @@ public class JsonAppRenderPanel extends JPanel {
         JSONObject output = appDefine.getJSONObject("output");
 
         if (appDefine.containsKey("script")) {
-            scriptJson = appDefine.getJSONObject("script");
+            scriptDefine = appDefine.getJSONObject("script");
         }
 
         if (input == null) {
@@ -157,7 +162,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         JPanel toolBar = buildToolBar();
 
-        scriptEditor = new JsonScriptEditorPanel(scriptJson, scriptTitle, SwingConstants.LEFT, enableGraph, project);
+        scriptEditor = new JsonScriptEditorPanel(scriptDefine, scriptTitle, SwingConstants.LEFT, enableGraph, project);
 
         panel.add(scriptEditor, BorderLayout.CENTER);
 
@@ -252,7 +257,7 @@ public class JsonAppRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    JSONObject script = getScriptJson();
+                    JSONObject script = getScriptDefine();
 
                     JSONObject input = getInputJson();
 
@@ -276,7 +281,7 @@ public class JsonAppRenderPanel extends JPanel {
                                 appletDefine.put("uni", "applet");
                                 appletDefine.put("input", getInputJson());
                                 appletDefine.put("output", getOutputJson());
-                                appletDefine.put("script", getScriptJson());
+                                appletDefine.put("script", getScriptDefine());
                                 String content = new String(IoUtil.readBytes(appFile.getInputStream()));
                                 JSONObject rawAppletDefine = JSONObject.parse(content);
                                 if ("applet".equals(rawAppletDefine.getString("uni"))) {
@@ -286,8 +291,8 @@ public class JsonAppRenderPanel extends JPanel {
                                     rawAppletDefine.remove("input");
                                     rawAppletDefine = appletDefine;
                                 }
-                                if(rawAppletDefine.containsKey("actions")) {
-                                    appletDefine.put("actions", rawAppletDefine.getJSONArray("actions"));
+                                if (rawAppletDefine.containsKey("ui")) {
+                                    appletDefine.put("ui", rawAppletDefine.getJSONObject("ui"));
                                 }
                                 String newJsonText = toJsonTextWithFormat(appletDefine);
                                 appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
@@ -352,7 +357,7 @@ public class JsonAppRenderPanel extends JPanel {
         return outputEditor.getJsonObject();
     }
 
-    private JSONObject getScriptJson() {
+    private JSONObject getScriptDefine() {
         return JSONObject.parse(scriptEditor.getJsonTextEditor().getText());
     }
 
