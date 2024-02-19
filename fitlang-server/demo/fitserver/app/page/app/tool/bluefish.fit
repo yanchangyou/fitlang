@@ -7,12 +7,12 @@
     "output": {
         "a": 3,
         "b": 2,
-        "result": 5
+        "result": 1.5
     },
     "script": {
         "uni": "mix",
         "json": {
-            "result": "${a+b}"
+            "result": "${a/b}"
         }
     },
     "ui": {
@@ -21,8 +21,8 @@
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
-        "useGraphScript": true,
-        "showExchangeButton": true,
+        "enableGraph": true,
+        "enableExchangeButton": true,
         "actions": [
             {
                 "title": "+",

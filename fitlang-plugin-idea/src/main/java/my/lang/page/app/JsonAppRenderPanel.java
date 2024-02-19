@@ -50,12 +50,15 @@ public class JsonAppRenderPanel extends JPanel {
     String scriptTitle = "Script";
     String defaultButtonTitle = "Run";
 
+    /**
+     * 是否使用图形界面，chrome有内存泄露问题
+     */
     boolean enableGraph;
 
     /**
      * 出入参结构不同，导致不能交换
      */
-    boolean showExchangeButton = true;
+    boolean enableExchangeButton = true;
 
     JSplitPane inputOutputSplitPane;
 
@@ -78,8 +81,8 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : defaultButtonTitle;
-        if (uiDefine.containsKey("showExchangeButton")) {
-            showExchangeButton = Boolean.TRUE.equals(uiDefine.getBoolean("showExchangeButton"));
+        if (uiDefine.containsKey("enableExchangeButton")) {
+            enableExchangeButton = Boolean.TRUE.equals(uiDefine.getBoolean("enableExchangeButton"));
         }
         enableGraph = Boolean.TRUE.equals(uiDefine.getBoolean("enableGraph"));
 
@@ -212,7 +215,7 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
-        if (showExchangeButton) {
+        if (enableExchangeButton) {
 
             //add exchange Run Button
             {
