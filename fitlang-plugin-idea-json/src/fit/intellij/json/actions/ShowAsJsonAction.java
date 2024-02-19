@@ -2,6 +2,7 @@
 package fit.intellij.json.actions;
 
 import com.google.common.base.CharMatcher;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -120,10 +121,10 @@ class ShowAsJsonAction extends DumbAwareAction {
     }
   }
 
-//  @Override
-//  public @NotNull ActionUpdateThread getActionUpdateThread() {
-//    return ActionUpdateThread.BGT;
-//  }
+  @Override
+  public @NotNull ActionUpdateThread getActionUpdateThread() {
+    return ActionUpdateThread.BGT;
+  }
 
   @Override
   public void update(@NotNull AnActionEvent e) {

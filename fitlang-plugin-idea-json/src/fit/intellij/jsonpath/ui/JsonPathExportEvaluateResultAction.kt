@@ -1,9 +1,9 @@
 // Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.jsonpath.ui
 
-//import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.ide.scratch.ScratchFileService
 import com.intellij.ide.scratch.ScratchRootType
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
@@ -17,7 +17,7 @@ import fit.intellij.jsonpath.ui.JsonPathEvaluateManager.Companion.JSON_PATH_EVAL
 
 internal class JsonPathExportEvaluateResultAction : DumbAwareAction() {
 
-//  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
+  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
   override fun actionPerformed(e: AnActionEvent) {
     val project = e.project ?: return
