@@ -282,6 +282,7 @@
         {
             "uni": "http",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -289,6 +290,7 @@
         {
             "uni": "postJson",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -296,6 +298,7 @@
         {
             "uni": "postForm",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -303,6 +306,7 @@
         {
             "uni": "httpGet",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -310,6 +314,7 @@
         {
             "uni": "httpPut",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -317,6 +322,7 @@
         {
             "uni": "httpDelete",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }

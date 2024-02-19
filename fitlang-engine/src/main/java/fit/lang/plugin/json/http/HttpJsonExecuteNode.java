@@ -86,6 +86,8 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("url is error: ".concat(url), e);
         }
 
+        boolean useInput = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("useInput"));
+
         HttpRequest request = HttpUtil.createRequest(method, url);
 
         JSONObject header = nodeJsonDefine.getJSONObject("header");
@@ -113,13 +115,16 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
 
         Object requestBody = null;
         if (method == Method.GET || method == Method.HEAD || (method == Method.POST && Boolean.TRUE.equals(isPostForm))) {
-            requestBody = parseHttpFormParam(input, request, httpParam);
+            requestBody = parseHttpFormParam(input, request, httpParam, useInput);
         } else if (method == Method.POST || method == Method.PUT || method == Method.DELETE) {
-            String httpBody = "";
-            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
-            if (param != null) {
-                httpBody = param.toString();
+            String httpBody;
+            JSONObject param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
+            if (useInput) {
+                JSONObject inputParam = input.getData().clone();
+                inputParam.putAll(param);
+                param = inputParam;
             }
+            httpBody = param.toString();
             requestBody = httpBody;
             request.body(httpBody);
         }
