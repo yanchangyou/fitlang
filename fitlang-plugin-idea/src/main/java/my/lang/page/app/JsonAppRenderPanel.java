@@ -238,6 +238,8 @@ public class JsonAppRenderPanel extends JPanel {
 
                         inputEditor.cardLayout.next(inputEditor.cardPanel);
                         outputEditor.cardLayout.next(outputEditor.cardPanel);
+
+                        scriptEditor.cardLayout.first(scriptEditor.cardPanel);
                         scriptEditor.cardLayout.next(scriptEditor.cardPanel);
 
                     }
@@ -283,6 +285,23 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
+        //add 比较 Button
+        {
+            JCheckBox isNeedSort = new JCheckBox("排序");
+            toolBar.add(isNeedSort);
+
+            JButton button = new JButton("比较");
+            button.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+
+                    scriptEditor.jsonDiffResultPanel.showDiff(inputEditor.getJsonObject(), outputEditor.getJsonObject(), true);
+                    scriptEditor.cardLayout.last(scriptEditor.cardPanel);
+                }
+            });
+            toolBar.add(button);
+        }
+
         //add default Run Button
         {
             JButton button = new JButton(defaultButtonTitle);
@@ -295,11 +314,13 @@ public class JsonAppRenderPanel extends JPanel {
                     JSONObject input = getInputJson();
 
                     execute(input, script);
+                    scriptEditor.cardLayout.first(scriptEditor.cardPanel);
 
                 }
             });
             toolBar.add(button);
         }
+
         {
             JButton button = new JButton("保存");
             button.addActionListener(new AbstractAction() {

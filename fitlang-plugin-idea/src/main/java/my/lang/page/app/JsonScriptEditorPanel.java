@@ -2,10 +2,13 @@ package my.lang.page.app;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
+import my.lang.page.diff.JsonDiffResultPanel;
 
 public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     JsonGraphScriptPanel jsonGraphScriptPanel;
+
+    JsonDiffResultPanel jsonDiffResultPanel;
 
     boolean enableGraph;
 
@@ -18,7 +21,9 @@ public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
             cardPanel.add(jsonGraphScriptPanel);
             isJsonTextEditor = true;
         }
-//        cardLayout.next(cardPanel);
+
+        jsonDiffResultPanel = new JsonDiffResultPanel(project);
+        cardPanel.add(jsonDiffResultPanel);
 
     }
 
