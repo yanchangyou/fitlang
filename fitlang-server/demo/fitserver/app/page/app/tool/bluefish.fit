@@ -20,9 +20,20 @@
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
-        "defaultButtonTitle": "执行",
-        "showGraph": false,
-        "enableExchangeButton": true,
+        "executeButtonTitle": "执行",
+        "relayoutButtonTitle": "重置布局",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "showGraph": true,
+        "hideButtons": [
+            //            "exchange",
+            //            "compare",
+            //            "save",
+            //            "execute"
+        ],
         "actions": [
             {
                 "title": "+",

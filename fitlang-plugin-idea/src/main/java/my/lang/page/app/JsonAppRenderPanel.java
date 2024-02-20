@@ -49,7 +49,7 @@ public class JsonAppRenderPanel extends JPanel {
     String outputTitle = "Output";
     String scriptTitle = "Script";
     String executeButtonTitle = "Execute";
-    String resetLayoutButtonTitle = "Layout";
+    String relayoutButtonTitle = "Relayout";
     String needSortButtonTitle = "Sort";
     String compareButtonTitle = "Compare";
     String saveButtonTitle = "Save";
@@ -92,8 +92,8 @@ public class JsonAppRenderPanel extends JPanel {
         inputTitle = uiDefine.containsKey("inputTitle") ? uiDefine.getString("inputTitle") : inputTitle;
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
-        executeButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : executeButtonTitle;
-        resetLayoutButtonTitle = uiDefine.containsKey("resetLayoutButtonTitle") ? uiDefine.getString("resetLayoutButtonTitle") : resetLayoutButtonTitle;
+        executeButtonTitle = uiDefine.containsKey("executeButtonTitle") ? uiDefine.getString("executeButtonTitle") : executeButtonTitle;
+        relayoutButtonTitle = uiDefine.containsKey("relayoutButtonTitle") ? uiDefine.getString("relayoutButtonTitle") : relayoutButtonTitle;
         saveButtonTitle = uiDefine.containsKey("saveButtonTitle") ? uiDefine.getString("saveButtonTitle") : saveButtonTitle;
         compareButtonTitle = uiDefine.containsKey("compareButtonTitle") ? uiDefine.getString("compareButtonTitle") : compareButtonTitle;
         needSortButtonTitle = uiDefine.containsKey("needSortButtonTitle") ? uiDefine.getString("needSortButtonTitle") : needSortButtonTitle;
@@ -243,7 +243,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         //reset view
         {
-            JButton button = new JButton(resetLayoutButtonTitle);
+            JButton button = new JButton(relayoutButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
