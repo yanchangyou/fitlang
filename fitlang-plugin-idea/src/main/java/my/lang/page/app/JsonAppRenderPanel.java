@@ -241,7 +241,7 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
-        //reset view
+        //reset layout
         {
             JButton button = new JButton(relayoutButtonTitle);
             button.addActionListener(new AbstractAction() {
@@ -265,7 +265,7 @@ public class JsonAppRenderPanel extends JPanel {
                         inputEditor.cardLayout.next(inputEditor.cardPanel);
                         outputEditor.cardLayout.next(outputEditor.cardPanel);
 
-                        scriptEditor.cardLayout.first(scriptEditor.cardPanel);
+                        // TODO BUG
                         scriptEditor.cardLayout.next(scriptEditor.cardPanel);
 
                     }

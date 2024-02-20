@@ -1,0 +1,49 @@
+{
+    "uni": "applet",
+    "input":{
+        "a":3,
+        "b":2
+    },
+    "output":{
+        "a":3,
+        "b":2,
+        "result":1
+    },
+    "script":{
+        "uni": "mix",
+        "json":{
+            "result": "${a-b}"
+        }
+    },
+    "ui":{
+        "title": "App",
+        "inputTitle": "Input",
+        "outputTitle": "Output",
+        "scriptTitle": "Script",
+        "executeButtonTitle": "Execute",
+        "relayoutButtonTitle": "Relayout",
+        "needSortButtonTitle": "Sort",
+        "compareButtonTitle": "Compare",
+        "saveButtonTitle": "Save",
+        "openChromeDevButtonTitle": "Open Chrome Dev",
+        "switchViewButtonTitle": "Switch View",
+        "showGraph": false,
+        "hideButtons_":[
+            "exchange",
+            "compare",
+            "save",
+            "execute"
+        ],
+        "actions":[
+            {
+                "title": "+",
+                "script":{
+                    "uni": "mix",
+                    "json":{
+                        "result": "${a+b}"
+                    }
+                }
+            }
+        ]
+    }
+}
