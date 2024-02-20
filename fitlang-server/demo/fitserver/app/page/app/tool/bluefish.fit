@@ -16,11 +16,11 @@
         }
     },
     "ui": {
-        "name": "app",
         "title": "App",
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
+        "defaultButtonTitle": "执行",
         "enableGraph": false,
         "enableExchangeButton": true,
         "actions": [

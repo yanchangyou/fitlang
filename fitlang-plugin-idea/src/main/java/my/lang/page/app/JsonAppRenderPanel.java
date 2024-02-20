@@ -48,7 +48,7 @@ public class JsonAppRenderPanel extends JPanel {
     String inputTitle = "Input";
     String outputTitle = "Output";
     String scriptTitle = "Script";
-    String defaultButtonTitle = "Run";
+    String defaultButtonTitle = "执行";
 
     /**
      * 是否使用图形界面，chrome有内存泄露问题
