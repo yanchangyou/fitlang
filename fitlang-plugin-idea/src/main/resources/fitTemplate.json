@@ -690,6 +690,44 @@
             "header": {
                 "fieldName": "title"
             }
+        },
+        {
+            "uni": "applet",
+            "input": {
+                "a": 3,
+                "b": 2
+            },
+            "output": {
+                "a": 3,
+                "b": 2,
+                "result": 1
+            },
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a-b}"
+                }
+            },
+            "ui": {
+                "title": "App",
+                "inputTitle": "输入",
+                "outputTitle": "输出",
+                "scriptTitle": "脚本",
+                "defaultButtonTitle": "执行",
+                "enableGraph": false,
+                "showExchangeButton": true,
+                "actions": [
+                    {
+                        "title": "+",
+                        "script": {
+                            "uni": "mix",
+                            "json": {
+                                "result": "${a+b}"
+                            }
+                        }
+                    }
+                ]
+            }
         }
     ]
 }
