@@ -16,7 +16,7 @@
         }
     },
     "ui": {
-        "title": "App",
+        "title": "简单计算器",
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
@@ -27,7 +27,7 @@
         "saveButtonTitle": "保存",
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
-        "showGraph": true,
+        //        "showGraph": true,
         "hideButtons": [
             //            "exchange",
             //            "compare",

@@ -1,0 +1,76 @@
+{
+    "uni": "applet",
+    "input": {
+        "a": 3,
+        "b": 2
+    },
+    "output": {
+        "a": 3,
+        "b": 2,
+        "result": 1.5
+    },
+    "script": {
+        "uni": "mix",
+        "json": {
+            "result": "${a/b}"
+        }
+    },
+    "ui": {
+        "title": "简单计算器",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "executeButtonTitle": "执行",
+        "relayoutButtonTitle": "重置布局",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        //        "showGraph": true,
+        "hideButtons": [
+            //            "exchange",
+            //            "compare",
+            //            "save",
+            //            "execute"
+        ],
+        "actions": [
+            {
+                "title": "+",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a+b}"
+                    }
+                }
+            },
+            {
+                "title": "-",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a-b}"
+                    }
+                }
+            },
+            {
+                "title": "*",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a*b}"
+                    }
+                }
+            },
+            {
+                "title": "/",
+                "script": {
+                    "uni": "mix",
+                    "json": {
+                        "result": "${a/b}"
+                    }
+                }
+            }
+        ]
+    }
+}
