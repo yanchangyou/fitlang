@@ -86,7 +86,7 @@ public class HttpJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("url is error: ".concat(url), e);
         }
 
-        boolean useInput = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("useInput"));
+        boolean useInput = !Boolean.FALSE.equals(nodeJsonDefine.getBoolean("useInput"));
 
         HttpRequest request = HttpUtil.createRequest(method, url);
 
