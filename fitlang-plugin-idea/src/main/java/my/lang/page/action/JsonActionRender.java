@@ -1,6 +1,5 @@
 package my.lang.page.action;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -14,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.readNodeDefineFile;
+
 public class JsonActionRender implements FileEditor {
 
     JsonActionRenderPanel panel;
@@ -26,7 +27,7 @@ public class JsonActionRender implements FileEditor {
         this.contextParam = contextParam;
         String path = file.getPath();
 
-        String content = FileUtil.readUtf8String(path);
+        String content = readNodeDefineFile(path);
         if (StrUtil.isBlank(content)) {
             content = "{}";
         }

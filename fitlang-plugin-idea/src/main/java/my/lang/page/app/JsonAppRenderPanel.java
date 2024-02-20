@@ -53,12 +53,18 @@ public class JsonAppRenderPanel extends JPanel {
     /**
      * 是否使用图形界面，chrome有内存泄露问题
      */
-    boolean enableGraph;
+    boolean showGraph;
 
     /**
      * 出入参结构不同，导致不能交换
      */
-    boolean enableExchangeButton = true;
+    boolean showExchangeButton = true;
+
+    boolean showExecuteButton = true;
+
+    boolean showSaveButton = true;
+
+    boolean showCompareButton = true;
 
     JSplitPane inputOutputSplitPane;
 
@@ -81,10 +87,18 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
         defaultButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : defaultButtonTitle;
-        if (uiDefine.containsKey("enableExchangeButton")) {
-            enableExchangeButton = Boolean.TRUE.equals(uiDefine.getBoolean("enableExchangeButton"));
+
+        showGraph = Boolean.TRUE.equals(uiDefine.getBoolean("showGraph"));
+
+        JSONArray hideButtons = uiDefine.getJSONArray("hideButtons");
+        if (hideButtons == null) {
+            hideButtons = new JSONArray();
         }
-        enableGraph = Boolean.TRUE.equals(uiDefine.getBoolean("enableGraph"));
+
+        showExchangeButton = !hideButtons.contains("exchange");
+        showSaveButton = !hideButtons.contains("save");
+        showExecuteButton = !hideButtons.contains("execute");
+        showCompareButton = !hideButtons.contains("compare");
 
         JSONArray actions = uiDefine.getJSONArray("actions");
 
@@ -165,7 +179,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         JPanel toolBar = buildToolBar();
 
-        scriptEditor = new JsonScriptEditorPanel(scriptDefine, scriptTitle, SwingConstants.LEFT, enableGraph, project);
+        scriptEditor = new JsonScriptEditorPanel(scriptDefine, scriptTitle, SwingConstants.LEFT, showGraph, project);
 
         panel.add(scriptEditor, BorderLayout.CENTER);
 
@@ -229,7 +243,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         //add switch Run Button
-        if (enableGraph) {
+        if (showGraph) {
             {
                 JButton button = new JButton("切换视图");
                 button.addActionListener(new AbstractAction() {
@@ -248,7 +262,7 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        if (enableGraph) {
+        if (showGraph) {
             {
                 JButton debugButton = new JButton("打开Chrome Dev");
                 debugButton.addActionListener(new AbstractAction() {
@@ -263,7 +277,7 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        if (enableExchangeButton) {
+        if (showExchangeButton) {
 
             //add exchange Run Button
             {
@@ -286,7 +300,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         //add 比较 Button
-        {
+        if (showCompareButton) {
             JCheckBox isNeedSort = new JCheckBox("排序");
             toolBar.add(isNeedSort);
 
@@ -302,8 +316,8 @@ public class JsonAppRenderPanel extends JPanel {
             toolBar.add(button);
         }
 
-        //add default Run Button
-        {
+        //add default execute Button
+        if (showExecuteButton) {
             JButton button = new JButton(defaultButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
@@ -321,7 +335,7 @@ public class JsonAppRenderPanel extends JPanel {
             toolBar.add(button);
         }
 
-        {
+        if (showSaveButton) {
             JButton button = new JButton("保存");
             button.addActionListener(new AbstractAction() {
                 @Override
@@ -372,7 +386,7 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setInputJson(JSONObject input) {
-        if (enableGraph) {
+        if (showGraph) {
             inputEditor.getJsonFormEditor().setFormData(input);
             inputEditor.getJsonFormEditor().setFormDataToChrome(input);
         }
@@ -388,7 +402,7 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setOutputJson(JSONObject output) {
-        if (enableGraph) {
+        if (showGraph) {
             outputEditor.getJsonFormEditor().setFormData(output);
             outputEditor.getJsonFormEditor().setFormDataToChrome(output);
         }
@@ -406,11 +420,11 @@ public class JsonAppRenderPanel extends JPanel {
         inputOutputSplitPane.setDividerSize(3);
         inputOutputSplitPane.setBorder(null);
 
-        inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, enableGraph, project);
+        inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, showGraph, project);
 
         inputOutputSplitPane.add(inputEditor);
 
-        outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, enableGraph, project);
+        outputEditor = new JsonObjectEditorPanel(outputForm, output, outputTitle, SwingConstants.RIGHT, showGraph, project);
 
         inputOutputSplitPane.add(outputEditor);
 

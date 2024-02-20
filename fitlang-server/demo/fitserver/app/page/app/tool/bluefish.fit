@@ -21,7 +21,7 @@
         "outputTitle": "输出",
         "scriptTitle": "脚本",
         "defaultButtonTitle": "执行",
-        "enableGraph": false,
+        "showGraph": false,
         "enableExchangeButton": true,
         "actions": [
             {
