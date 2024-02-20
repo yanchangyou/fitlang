@@ -48,7 +48,13 @@ public class JsonAppRenderPanel extends JPanel {
     String inputTitle = "Input";
     String outputTitle = "Output";
     String scriptTitle = "Script";
-    String defaultButtonTitle = "执行";
+    String executeButtonTitle = "Execute";
+    String resetLayoutButtonTitle = "Layout";
+    String needSortButtonTitle = "Sort";
+    String compareButtonTitle = "Compare";
+    String saveButtonTitle = "Save";
+    String openChromeDevButtonTitle = "Open Chrome Dev";
+    String switchViewButtonTitle = "Switch View";
 
     /**
      * 是否使用图形界面，chrome有内存泄露问题
@@ -86,7 +92,13 @@ public class JsonAppRenderPanel extends JPanel {
         inputTitle = uiDefine.containsKey("inputTitle") ? uiDefine.getString("inputTitle") : inputTitle;
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
-        defaultButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : defaultButtonTitle;
+        executeButtonTitle = uiDefine.containsKey("defaultButtonTitle") ? uiDefine.getString("defaultButtonTitle") : executeButtonTitle;
+        resetLayoutButtonTitle = uiDefine.containsKey("resetLayoutButtonTitle") ? uiDefine.getString("resetLayoutButtonTitle") : resetLayoutButtonTitle;
+        saveButtonTitle = uiDefine.containsKey("saveButtonTitle") ? uiDefine.getString("saveButtonTitle") : saveButtonTitle;
+        compareButtonTitle = uiDefine.containsKey("compareButtonTitle") ? uiDefine.getString("compareButtonTitle") : compareButtonTitle;
+        needSortButtonTitle = uiDefine.containsKey("needSortButtonTitle") ? uiDefine.getString("needSortButtonTitle") : needSortButtonTitle;
+        openChromeDevButtonTitle = uiDefine.containsKey("openChromeDevButtonTitle") ? uiDefine.getString("openChromeDevButtonTitle") : openChromeDevButtonTitle;
+        switchViewButtonTitle = uiDefine.containsKey("switchViewButtonTitle") ? uiDefine.getString("switchViewButtonTitle") : switchViewButtonTitle;
 
         showGraph = Boolean.TRUE.equals(uiDefine.getBoolean("showGraph"));
 
@@ -231,7 +243,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         //reset view
         {
-            JButton button = new JButton("重置布局");
+            JButton button = new JButton(resetLayoutButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -245,7 +257,7 @@ public class JsonAppRenderPanel extends JPanel {
         //add switch Run Button
         if (showGraph) {
             {
-                JButton button = new JButton("切换视图");
+                JButton button = new JButton(switchViewButtonTitle);
                 button.addActionListener(new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
@@ -264,7 +276,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         if (showGraph) {
             {
-                JButton debugButton = new JButton("打开Chrome Dev");
+                JButton debugButton = new JButton(openChromeDevButtonTitle);
                 debugButton.addActionListener(new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
@@ -301,15 +313,15 @@ public class JsonAppRenderPanel extends JPanel {
 
         //add 比较 Button
         if (showCompareButton) {
-            JCheckBox isNeedSort = new JCheckBox("排序");
+            JCheckBox isNeedSort = new JCheckBox(needSortButtonTitle);
             toolBar.add(isNeedSort);
 
-            JButton button = new JButton("比较");
+            JButton button = new JButton(compareButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    scriptEditor.jsonDiffResultPanel.showDiff(inputEditor.getJsonObject(), outputEditor.getJsonObject(), true);
+                    scriptEditor.jsonDiffResultPanel.showDiff(inputEditor.getJsonObject(), outputEditor.getJsonObject(), isNeedSort.isSelected());
                     scriptEditor.cardLayout.last(scriptEditor.cardPanel);
                 }
             });
@@ -318,7 +330,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         //add default execute Button
         if (showExecuteButton) {
-            JButton button = new JButton(defaultButtonTitle);
+            JButton button = new JButton(executeButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -336,7 +348,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         if (showSaveButton) {
-            JButton button = new JButton("保存");
+            JButton button = new JButton(saveButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
