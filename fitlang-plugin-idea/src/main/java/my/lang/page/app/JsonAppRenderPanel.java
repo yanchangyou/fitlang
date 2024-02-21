@@ -454,7 +454,7 @@ public class JsonAppRenderPanel extends JPanel {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                splitPane.setDividerLocation(0.5);
+                splitPane.setDividerLocation(0.46);
             }
         }).start();
     }
