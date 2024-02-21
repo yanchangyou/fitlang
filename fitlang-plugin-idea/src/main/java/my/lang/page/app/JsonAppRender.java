@@ -30,6 +30,13 @@ public class JsonAppRender implements FileEditor {
         this.contextParam = contextParam;
         String path = file.getPath();
 
+        JSONObject appDefineJson = readAppDefine(path);
+
+        panel = new JsonAppRenderPanel(project, appDefineJson, file, contextParam);
+    }
+
+    @NotNull
+    public static JSONObject readAppDefine(String path) {
         String content = readNodeDefineFile(path);
         if (StrUtil.isBlank(content)) {
             content = "{}";
@@ -48,8 +55,13 @@ public class JsonAppRender implements FileEditor {
                 appDefineJson.put("input", scriptJson.remove("input"));
             }
         }
-
-        panel = new JsonAppRenderPanel(project, appDefineJson, file, contextParam);
+        if (!appDefineJson.containsKey("input")) {
+            appDefineJson.put("input", new JSONObject());
+        }
+        if (!appDefineJson.containsKey("output")) {
+            appDefineJson.put("output", new JSONObject());
+        }
+        return appDefineJson;
     }
 
     @Override

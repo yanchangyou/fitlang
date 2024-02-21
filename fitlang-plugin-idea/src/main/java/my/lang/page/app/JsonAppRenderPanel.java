@@ -51,6 +51,7 @@ public class JsonAppRenderPanel extends JPanel {
     String outputTitle = "Output";
     String scriptTitle = "Script";
 
+    String reloadButtonTitle = "Reload";
     String clearOutputButtonTitle = "Clear Output";
     String executeButtonTitle = "Execute";
     String resetLayoutButtonTitle = "Reset Layout";
@@ -69,6 +70,8 @@ public class JsonAppRenderPanel extends JPanel {
      * 出入参结构不同，导致不能交换
      */
     boolean showExchangeButton = true;
+
+    boolean showReloadButton = true;
 
     boolean showClearOutputButton = true;
 
@@ -103,6 +106,7 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
 
+        reloadButtonTitle = uiDefine.containsKey("reloadButtonTitle") ? uiDefine.getString("reloadButtonTitle") : reloadButtonTitle;
         clearOutputButtonTitle = uiDefine.containsKey("clearOutputButtonTitle") ? uiDefine.getString("clearOutputButtonTitle") : clearOutputButtonTitle;
         executeButtonTitle = uiDefine.containsKey("executeButtonTitle") ? uiDefine.getString("executeButtonTitle") : executeButtonTitle;
         resetLayoutButtonTitle = uiDefine.containsKey("resetLayoutButtonTitle") ? uiDefine.getString("resetLayoutButtonTitle") : resetLayoutButtonTitle;
@@ -119,6 +123,7 @@ public class JsonAppRenderPanel extends JPanel {
             hideButtons = new JSONArray();
         }
 
+        showReloadButton = !hideButtons.contains("reload");
         showExchangeButton = !hideButtons.contains("exchange");
         showSaveButton = !hideButtons.contains("save");
         showExecuteButton = !hideButtons.contains("execute");
@@ -304,6 +309,33 @@ public class JsonAppRenderPanel extends JPanel {
                     }
                 });
                 toolBar.add(debugButton);
+            }
+        }
+
+        //reload
+        if (showReloadButton) {
+
+            //add reload Button
+            {
+                JButton button = new JButton(reloadButtonTitle);
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
+
+                        JSONObject input = theAppDefine.getJSONObject("input");
+                        JSONObject output = theAppDefine.getJSONObject("output");
+                        JSONObject script = theAppDefine.getJSONObject("script");
+
+                        setOutputJson(output);
+                        setInputJson(input);
+
+                        scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
+
+                    }
+                });
+                toolBar.add(button);
             }
         }
 
