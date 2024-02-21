@@ -37,7 +37,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public @NotNull ActionUpdateThread getActionUpdateThread() {
-        return ActionUpdateThread.BGT;
+        return ActionUpdateThread.EDT;
     }
 
     @Override
@@ -73,6 +73,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             }
             JSONObject actionScript = groupConfig.getJSONObject("script");
             JSONArray actions = groupConfig.getJSONArray("actions");
+            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
 
             if (actionScript != null || actions != null && actions.size() == 1) {
                 if (actionScript != null) {
@@ -101,7 +102,6 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (!Boolean.FALSE.equals(groupConfig.getBoolean("visible"))) {
                 event.getPresentation().setEnabledAndVisible(true);
             }
-            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
             List<FitLangPluginAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
             for (Object item : actions) {
