@@ -49,7 +49,7 @@ public class JsonAppRenderPanel extends JPanel {
     String outputTitle = "Output";
     String scriptTitle = "Script";
     String executeButtonTitle = "Execute";
-    String relayoutButtonTitle = "Relayout";
+    String resetLayoutButtonTitle = "ResetLayout";
     String needSortButtonTitle = "Sort";
     String compareButtonTitle = "Compare";
     String saveButtonTitle = "Save";
@@ -93,7 +93,7 @@ public class JsonAppRenderPanel extends JPanel {
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
         executeButtonTitle = uiDefine.containsKey("executeButtonTitle") ? uiDefine.getString("executeButtonTitle") : executeButtonTitle;
-        relayoutButtonTitle = uiDefine.containsKey("relayoutButtonTitle") ? uiDefine.getString("relayoutButtonTitle") : relayoutButtonTitle;
+        resetLayoutButtonTitle = uiDefine.containsKey("resetLayoutButtonTitle") ? uiDefine.getString("resetLayoutButtonTitle") : resetLayoutButtonTitle;
         saveButtonTitle = uiDefine.containsKey("saveButtonTitle") ? uiDefine.getString("saveButtonTitle") : saveButtonTitle;
         compareButtonTitle = uiDefine.containsKey("compareButtonTitle") ? uiDefine.getString("compareButtonTitle") : compareButtonTitle;
         needSortButtonTitle = uiDefine.containsKey("needSortButtonTitle") ? uiDefine.getString("needSortButtonTitle") : needSortButtonTitle;
@@ -243,7 +243,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         //reset layout
         {
-            JButton button = new JButton(relayoutButtonTitle);
+            JButton button = new JButton(resetLayoutButtonTitle);
             button.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {

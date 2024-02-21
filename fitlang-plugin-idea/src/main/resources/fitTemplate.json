@@ -714,7 +714,7 @@
                 "outputTitle": "Output",
                 "scriptTitle": "Script",
                 "executeButtonTitle": "Execute",
-                "relayoutButtonTitle": "Relayout",
+                "resetLayoutButtonTitle": "ResetLayout",
                 "needSortButtonTitle": "Sort",
                 "compareButtonTitle": "Compare",
                 "saveButtonTitle": "Save",
