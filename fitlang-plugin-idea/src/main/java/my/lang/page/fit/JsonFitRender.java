@@ -57,7 +57,7 @@ public class JsonFitRender implements FileEditor {
 
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
-        implementIdeOperator(null);
+        implementIdeOperator(null, project);
 
     }
 

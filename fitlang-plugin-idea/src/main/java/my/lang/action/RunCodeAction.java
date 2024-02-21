@@ -105,7 +105,7 @@ public abstract class RunCodeAction extends AnAction {
 
         final Editor editor = e.getData(CommonDataKeys.EDITOR);
 
-        implementIdeOperator(e);
+        implementIdeOperator(e, project);
 
         VirtualFile[] virtualFiles = e.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY);
 
@@ -364,8 +364,9 @@ public abstract class RunCodeAction extends AnAction {
      * IDE 操作实现
      *
      * @param actionEvent
+     * @param theProject
      */
-    public static void implementIdeOperator(AnActionEvent actionEvent) {
+    public static void implementIdeOperator(AnActionEvent actionEvent, Project theProject) {
         /**
          *
          */
@@ -373,6 +374,13 @@ public abstract class RunCodeAction extends AnAction {
 
             Editor getEditor() {
                 return actionEvent.getData(CommonDataKeys.EDITOR);
+            }
+
+            Project getProject() {
+                if (actionEvent != null) {
+                    actionEvent.getProject();
+                }
+                return theProject;
             }
 
             SearchReplaceComponent getSearchReplaceComponent() {
@@ -463,8 +471,7 @@ public abstract class RunCodeAction extends AnAction {
 
             @Override
             public List<File> chooseFiles(JSONObject config) {
-                Editor editor = getEditor();
-                Project project = editor.getProject();
+                Project project = getProject();
                 boolean chooseFiles = true;
                 boolean chooseFolders = false;
                 boolean chooseJars = false;

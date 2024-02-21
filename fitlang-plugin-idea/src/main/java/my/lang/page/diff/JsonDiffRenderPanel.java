@@ -68,7 +68,7 @@ public class JsonDiffRenderPanel extends JPanel {
 
         adjustSplitPanel(splitPane);
 
-        implementIdeOperator(null);
+        implementIdeOperator(null, project);
 
     }
 

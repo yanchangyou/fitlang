@@ -60,7 +60,7 @@ public class JsonActionRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    implementIdeOperator(null);
+                    implementIdeOperator(null, null);
 
                     JSONObject input = getActionInput();
                     String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);

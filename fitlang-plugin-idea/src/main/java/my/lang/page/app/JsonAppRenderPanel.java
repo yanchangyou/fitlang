@@ -171,7 +171,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         adjustSplitPanel(scriptSplitPane);
 
-        implementIdeOperator(null);
+        implementIdeOperator(null, project);
 
     }
 
@@ -245,6 +245,8 @@ public class JsonAppRenderPanel extends JPanel {
 
     private void execute(JSONObject input, JSONObject script) {
         try {
+
+            implementIdeOperator(null, project);
 
             ServerJsonExecuteNode.setCurrentServerFilePath(appFile.getPath());
             JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
