@@ -50,8 +50,10 @@ public class JsonAppRenderPanel extends JPanel {
     String inputTitle = "Input";
     String outputTitle = "Output";
     String scriptTitle = "Script";
+
+    String clearOutputButtonTitle = "Clear Output";
     String executeButtonTitle = "Execute";
-    String resetLayoutButtonTitle = "ResetLayout";
+    String resetLayoutButtonTitle = "Reset Layout";
     String needSortButtonTitle = "Sort";
     String compareButtonTitle = "Compare";
     String saveButtonTitle = "Save";
@@ -67,6 +69,8 @@ public class JsonAppRenderPanel extends JPanel {
      * 出入参结构不同，导致不能交换
      */
     boolean showExchangeButton = true;
+
+    boolean showClearOutputButton = true;
 
     boolean showExecuteButton = true;
 
@@ -98,6 +102,8 @@ public class JsonAppRenderPanel extends JPanel {
         inputTitle = uiDefine.containsKey("inputTitle") ? uiDefine.getString("inputTitle") : inputTitle;
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
         scriptTitle = uiDefine.containsKey("scriptTitle") ? uiDefine.getString("scriptTitle") : scriptTitle;
+
+        clearOutputButtonTitle = uiDefine.containsKey("clearOutputButtonTitle") ? uiDefine.getString("clearOutputButtonTitle") : clearOutputButtonTitle;
         executeButtonTitle = uiDefine.containsKey("executeButtonTitle") ? uiDefine.getString("executeButtonTitle") : executeButtonTitle;
         resetLayoutButtonTitle = uiDefine.containsKey("resetLayoutButtonTitle") ? uiDefine.getString("resetLayoutButtonTitle") : resetLayoutButtonTitle;
         saveButtonTitle = uiDefine.containsKey("saveButtonTitle") ? uiDefine.getString("saveButtonTitle") : saveButtonTitle;
@@ -316,6 +322,24 @@ public class JsonAppRenderPanel extends JPanel {
 
                         setOutputJson(input);
                         setInputJson(output);
+
+                    }
+                });
+                toolBar.add(button);
+            }
+        }
+
+        if (showClearOutputButton) {
+
+            //add clear output Button
+            {
+                JButton button = new JButton(clearOutputButtonTitle);
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        JSONObject output = new JSONObject();
+                        setOutputJson(output);
 
                     }
                 });
