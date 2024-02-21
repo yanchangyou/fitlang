@@ -10,16 +10,18 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.function.JsonPackageExecuteNode;
+import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseJsonSchema;
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
 public class JsonAppRenderPanel extends JPanel {
@@ -77,6 +79,10 @@ public class JsonAppRenderPanel extends JPanel {
     JSplitPane scriptSplitPane;
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
+
+        if (contextParam == null) {
+            contextParam = new JSONObject();
+        }
 
         this.project = project;
         this.appDefine = appDefine;
@@ -228,6 +234,12 @@ public class JsonAppRenderPanel extends JPanel {
 
     private void execute(JSONObject input, JSONObject script) {
         try {
+
+            ServerJsonExecuteNode.setCurrentServerFilePath(appFile.getPath());
+            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
+
+            JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
+            contextParam.putAll(newContextParam);
             String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
 
             JSONObject output = JSONObject.parse(result);
@@ -254,7 +266,7 @@ public class JsonAppRenderPanel extends JPanel {
             toolBar.add(button);
         }
 
-        //add switch Run Button
+        //add switch view Button
         if (showGraph) {
             {
                 JButton button = new JButton(switchViewButtonTitle);
@@ -291,7 +303,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         if (showExchangeButton) {
 
-            //add exchange Run Button
+            //add exchange Button
             {
                 JButton button = new JButton("<->");
                 button.addActionListener(new AbstractAction() {
