@@ -223,6 +223,10 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - mergeExcel: 合并Excel
 - readExcelForAllSheet: 读取所有sheet内容
 
+### 小应用
+
+- applet: 小应用
+
 ## 🔋 JetBrains开源授权
 
 FitLang在JetBrains公司的免费开源授权下，通过IDEA IDE开发，在此表达我的感谢。

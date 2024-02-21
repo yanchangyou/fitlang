@@ -158,6 +158,10 @@ mergeExcel: merge excel<br/>
 readExcelForAllSheet: read excel for all sheet<br/>
 <br/>
 
+applet<br/>
+applet: applet<br/>
+<br/>
+
 中文: <br/>
 <br/>
 <p>
@@ -309,6 +313,10 @@ readExcel: 读取Excel<br/>
 writeExcel: 写入Excel<br/>
 mergeExcel: 合并Excel<br/>
 readExcelForAllSheet: 读取所有sheet内容<br/>
+<br/>
+
+小应用<br/>
+applet: 小应用<br/>
 <br/>
 
 </p>
