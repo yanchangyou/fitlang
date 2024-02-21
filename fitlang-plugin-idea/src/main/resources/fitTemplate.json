@@ -724,6 +724,8 @@
                 "switchViewButtonTitle": "Switch View",
                 "showGraph": false,
                 "hideButtons_": [
+                    "reload",
+                    "clearOutput",
                     "exchange",
                     "compare",
                     "save",

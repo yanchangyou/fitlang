@@ -124,6 +124,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         showReloadButton = !hideButtons.contains("reload");
+        showClearOutputButton = !hideButtons.contains("clearOutput");
         showExchangeButton = !hideButtons.contains("exchange");
         showSaveButton = !hideButtons.contains("save");
         showExecuteButton = !hideButtons.contains("execute");
