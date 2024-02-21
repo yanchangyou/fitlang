@@ -409,7 +409,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.10.10 http support useInput config; applet support reload, clear output; fix project plugin, choose file in applet</li>
+            <li>0.10.11 http support useInput config; applet support reload, clear output; fix project plugin, choose file in applet</li>
             <li>0.10.9 rename mini app to applet; refine applet support ui field</li>
             <li>0.10.8 add node: mini app; refine fix script visualization; update idea version to 232; fix writeExcel bug</li>
             <li>0.10.7 fit support visualization; refine diff, toolbar</li>
