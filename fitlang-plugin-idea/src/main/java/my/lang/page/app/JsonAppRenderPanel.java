@@ -339,6 +339,24 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
+        if (showClearOutputButton) {
+
+            //add clear output Button
+            {
+                JButton button = new JButton(clearOutputButtonTitle);
+                button.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        JSONObject output = new JSONObject();
+                        setOutputJson(output);
+
+                    }
+                });
+                toolBar.add(button);
+            }
+        }
+
         if (showExchangeButton) {
 
             //add exchange Button
@@ -354,24 +372,6 @@ public class JsonAppRenderPanel extends JPanel {
 
                         setOutputJson(input);
                         setInputJson(output);
-
-                    }
-                });
-                toolBar.add(button);
-            }
-        }
-
-        if (showClearOutputButton) {
-
-            //add clear output Button
-            {
-                JButton button = new JButton(clearOutputButtonTitle);
-                button.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        JSONObject output = new JSONObject();
-                        setOutputJson(output);
 
                     }
                 });
