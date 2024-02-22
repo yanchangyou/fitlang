@@ -1,0 +1,52 @@
+{
+    "uni": "applet",
+    "input":{
+        "text": "中文乱码"
+    },
+    "output":{
+        "result":{
+            "GBK => UTF8": "��������",
+            "GBK => ISO8859-1": "ÖÐÎÄÂÒÂë",
+            "UTF8 => GBK": "涓枃涔辩爜",
+            "UTF8 => ISO8859-1": "ä¸­æä¹±ç ",
+            "ISO8859-1 => GBK": "????",
+            "ISO8859-1 => UTF8": "????"
+        }
+    },
+    "script":{
+        "uni": "eval",
+        "json":{
+            "result": "${FitLang.convertCharset(text)}"
+        }
+    },
+    "ui":{
+        "title": "文本工具",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "executeButtonTitle": "执行",
+        "resetLayoutButtonTitle": "重置布局",
+        "reloadButtonTitle": "加载",
+        "clearOutputButtonTitle": "清空出参",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "showGraph": false,
+        "hideButtons":[
+            
+        ],
+        "actions":[
+            {
+                "title": "字符集转换",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertCharset(text)}"
+                    }
+                }
+            }
+        ]
+    }
+}
