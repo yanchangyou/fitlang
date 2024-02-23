@@ -705,7 +705,7 @@
             "script": {
                 "uni": "mix",
                 "json": {
-                    "result": "${a-b}"
+                    "result": "${a+b}"
                 }
             },
             "ui": {
@@ -723,13 +723,17 @@
                 "openChromeDevButtonTitle": "Open Chrome Dev",
                 "switchViewButtonTitle": "Switch View",
                 "showGraph": false,
-                "hideButtons_": [
+                "hideButtonsAll": [
                     "reload",
                     "clearOutput",
                     "exchange",
                     "compare",
                     "save",
                     "execute"
+                ],
+                "hideButtons": [
+                    "clearOutput",
+                    "compare"
                 ],
                 "actions": [
                     {
