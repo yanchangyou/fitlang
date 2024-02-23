@@ -54,7 +54,7 @@ public class JsonAppRenderPanel extends JPanel {
     String reloadButtonTitle = "Reload";
     String clearOutputButtonTitle = "Clear Output";
     String executeButtonTitle = "Execute";
-    String resetLayoutButtonTitle = "Reset Layout";
+    String resetLayoutButtonTitle = "Layout";
     String needSortButtonTitle = "Sort";
     String compareButtonTitle = "Compare";
     String saveButtonTitle = "Save";
