@@ -286,7 +286,11 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void addActionButtons(JSONArray actions) {
-        buttonsPanel.removeAll();
+
+        for (Component component : buttonsPanel.getComponents()) {
+            buttonsPanel.remove(component);
+        }
+
         if (actions != null) {
             for (int i = 0; i < actions.size(); i++) {
 
@@ -405,6 +409,8 @@ public class JsonAppRenderPanel extends JPanel {
                         if (uiDefine != null) {
                             JSONArray actions = uiDefine.getJSONArray("actions");
                             addActionButtons(actions);
+
+                            appTitleLabel.requestFocus();
 
                             resetAllTitle(uiDefine);
                             resetAllButtonName(uiDefine);
