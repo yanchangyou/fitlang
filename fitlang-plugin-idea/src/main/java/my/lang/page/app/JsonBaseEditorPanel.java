@@ -26,6 +26,8 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
     int horizontalAlignment;
 
+    JLabel titleLabel;
+
     JPanel cardPanel;
 
     CardLayout cardLayout = new CardLayout();
@@ -51,7 +53,6 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
         addJsonEditorPanel();
 
-
     }
 
     public LanguageTextField getJsonTextEditor() {
@@ -72,6 +73,7 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
     public void setTitle(String title) {
         this.title = title;
+        titleLabel.setText("  " + title + "  ");
     }
 
     protected void addJsonEditorPanel() {
@@ -83,9 +85,9 @@ public abstract class JsonBaseEditorPanel extends JPanel {
         // 第一个加入，方便获取
         editorPanel.add(jbScrollPane, BorderLayout.CENTER);
 
-        JLabel label = new JLabel("  " + title + "  ", horizontalAlignment);
-        label.setFont(EditorUtil.getEditorFont());
-        editorPanel.add(label, BorderLayout.NORTH);
+        titleLabel = new JLabel("  " + title + "  ", horizontalAlignment);
+        titleLabel.setFont(EditorUtil.getEditorFont());
+        editorPanel.add(titleLabel, BorderLayout.NORTH);
 
         cardPanel.add(jbScrollPane);
 
@@ -93,7 +95,7 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
         add(editorPanel, BorderLayout.CENTER);
 
-        label.addMouseListener(new MouseAdapter() {
+        titleLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardLayout.next(cardPanel);
