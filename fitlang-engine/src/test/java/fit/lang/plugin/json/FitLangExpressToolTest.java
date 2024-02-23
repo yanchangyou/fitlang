@@ -99,10 +99,10 @@ public class FitLangExpressToolTest extends TestCase {
 
     public void testConvertCharset() throws UnsupportedEncodingException {
         String text = "中文乱码";
-        String expected = "{\"GBK=>GBK\":\"中文乱码\",\"GBK=>UTF8\":\"��������\",\"GBK=>ISO8859-1\":\"ÖÐÎÄÂÒÂë\",\"UTF8=>GBK\":\"涓\uE15F枃涔辩爜\",\"UTF8=>UTF8\":\"中文乱码\",\"UTF8=>ISO8859-1\":\"ä¸\u00ADæ\u0096\u0087ä¹±ç \u0081\",\"ISO8859-1=>GBK\":\"????\",\"ISO8859-1=>UTF8\":\"????\",\"ISO8859-1=>ISO8859-1\":\"????\"}";
+        String expected = "{\"GBK => UTF8\":\"��������\",\"GBK => ISO8859-1\":\"ÖÐÎÄÂÒÂë\",\"UTF8 => GBK\":\"涓\uE15F枃涔辩爜\",\"UTF8 => ISO8859-1\":\"ä¸\u00ADæ\u0096\u0087ä¹±ç \u0081\",\"ISO8859-1 => GBK\":\"????\",\"ISO8859-1 => UTF8\":\"????\"}";
         JSONObject result = FitLangExpressTool.convertCharset(text);
         System.out.println(result.toString(JSONWriter.Feature.PrettyFormat));
-        Assert.assertEquals(expected, result);
+        Assert.assertEquals(expected, result.toJSONString());
 
     }
 
