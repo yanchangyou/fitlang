@@ -35,11 +35,11 @@
         "switchViewButtonTitle": "切换视图",
         "showGraph": false,
         "hideButtons":[
-            
+            "compare"
         ],
         "actions":[
             {
-                "title": "字符集转换",
+                "title": "字符集探测",
                 "script":{
                     "uni": "eval",
                     "json":{
