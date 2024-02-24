@@ -4,7 +4,7 @@
         "text": "中文乱码"
     },
     "output":{
-        "timestamp": "2024-02-24 15:17:42.085",
+        "timestamp": "2024-02-24 15:22:40.580",
         "result1":{
             "GBK => UTF8": "��������",
             "GBK => ISO8859-1": "ÖÐÎÄÂÒÂë",
@@ -97,6 +97,7 @@
                 "script":{
                     "uni": "eval",
                     "json":{
+                        "timestamp": "${FitLang.now('yyyy-MM-dd HH:mm:ss.SSS')}",
                         "result1": "${FitLang.convertCharset(text)}",
                         "result2": "${FitLang.convertCharset(FitLang.convertCharset(text))}"
                     }
