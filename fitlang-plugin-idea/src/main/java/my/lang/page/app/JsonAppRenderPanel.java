@@ -296,11 +296,12 @@ public class JsonAppRenderPanel extends JPanel {
             buttonsPanel.remove(component);
         }
 
-
         if (actions != null) {
-            for (int i = 0; i < actions.size() && actionComBox.getItemCount() > 2; i++) {
+
+            while (actionComBox.getItemCount() > 2) {
                 actionComBox.removeItemAt(2);
             }
+
             for (int i = 0; i < actions.size(); i++) {
 
                 JSONObject action = actions.getJSONObject(i);
