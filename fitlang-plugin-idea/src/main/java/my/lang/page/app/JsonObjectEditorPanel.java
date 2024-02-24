@@ -3,6 +3,8 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
+
 public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     JSONObject formSchema;
@@ -33,20 +35,33 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     }
 
-    public JsonFormPanel getJsonFormEditor() {
-        return jsonFormEditor;
+//    public JsonFormPanel getJsonFormEditor() {
+//        return jsonFormEditor;
+//    }
+
+    public void setJsonObject(JSONObject jsonObject) {
+        jsonNativeFormEditor.buildForm(jsonObject, project);
+        jsonTextEditor.setText(toJsonTextWithFormat(jsonObject));
     }
 
     public JSONObject getJsonObject() {
-        return JSONObject.parseObject(jsonTextEditor.getText());
+        if (isJsonTextEditor) {
+            return JSONObject.parseObject(jsonTextEditor.getText());
+        }
+        return jsonNativeFormEditor.getFormData();
     }
 
     @Override
     protected void switchEditor() {
 
-        if (isJsonTextEditor && showGraph) {
+        if (isJsonTextEditor) {
             JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
-            jsonFormEditor.setFormDataToChrome(newJson);
+            if (showGraph) {
+                jsonFormEditor.setFormDataToChrome(newJson);
+            }
+            jsonNativeFormEditor.buildForm(newJson, project);
+        } else {
+            jsonTextEditor.setText(toJsonTextWithFormat(jsonNativeFormEditor.getFormData()));
         }
     }
 

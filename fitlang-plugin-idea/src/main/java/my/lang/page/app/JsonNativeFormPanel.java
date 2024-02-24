@@ -11,6 +11,8 @@ import fit.intellij.json.JsonLanguage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
@@ -19,14 +21,23 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
  */
 public class JsonNativeFormPanel extends JPanel {
 
-    JSONObject formData;
     Dimension LABEL_DIMENSION = new Dimension(100, 35);
 
+    Map<String, JComponent> fieldMap = new HashMap<>();
+
     public JsonNativeFormPanel(JSONObject formData, Project project) {
+        buildForm(formData, project);
+    }
+
+    public void buildForm(JSONObject formData, Project project) {
 
         GridLayout layout = new GridLayout(formData.keySet().size(), 1);
         setLayout(layout);
         layout.setVgap(3);
+
+        fieldMap.clear();
+        this.removeAll();
+
         for (String key : formData.keySet()) {
             JPanel itemPanel = new JPanel(new BorderLayout());
             JLabel label = new JLabel(key.concat("  :  "));
@@ -53,10 +64,32 @@ public class JsonNativeFormPanel extends JPanel {
                 field = new JBTextArea(formData.getString(key));
             }
 
+            fieldMap.put(key, field);
             JBScrollPane jbScrollPane = new JBScrollPane(field);
             itemPanel.add(label, BorderLayout.WEST);
             itemPanel.add(jbScrollPane, BorderLayout.CENTER);
             this.add(itemPanel);
         }
+    }
+
+    public JSONObject getFormData() {
+        JSONObject formData = new JSONObject();
+
+        for (Map.Entry<String, JComponent> entry : fieldMap.entrySet()) {
+            JComponent field = entry.getValue();
+            Object value;
+            if (field instanceof JBTextArea) {
+                value = ((JBTextArea) field).getText();
+            } else {
+                String text = ((LanguageTextField) field).getText();
+                if (text.startsWith("{")) {
+                    value = JSONObject.parse(text);
+                } else {
+                    value = JSONArray.parse(text);
+                }
+            }
+            formData.put(entry.getKey(), value);
+        }
+        return formData;
     }
 }

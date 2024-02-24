@@ -103,12 +103,16 @@ public abstract class JsonBaseEditorPanel extends JPanel {
         titleLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                cardLayout.next(cardPanel);
-                switchEditor();
-                isJsonTextEditor = !isJsonTextEditor;
+                switchView();
             }
         });
 
+    }
+
+    public void switchView() {
+        cardLayout.next(cardPanel);
+        switchEditor();
+        isJsonTextEditor = !isJsonTextEditor;
     }
 
     protected abstract void switchEditor();
