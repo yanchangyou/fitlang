@@ -29,7 +29,7 @@
         "switchViewButtonTitle": "切换视图",
         "showGraph": false,
         "hideButtons":[
-            
+           "compare"
         ],
         "actions":[
             {

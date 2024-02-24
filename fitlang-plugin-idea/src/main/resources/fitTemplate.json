@@ -722,6 +722,7 @@
                 "saveButtonTitle": "Save",
                 "openChromeDevButtonTitle": "Open Chrome Dev",
                 "switchViewButtonTitle": "Switch View",
+                "switchFormButtonTitle": "Switch",
                 "showGraph": false,
                 "hideButtonsAll": [
                     "reload",
