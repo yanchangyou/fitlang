@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
@@ -43,6 +44,10 @@ public class JsonAppRenderPanel extends JPanel {
     JSONObject inputForm;
 
     JSONObject outputForm;
+
+    JSONArray actions;
+
+    JComboBox<String> actionComBox;
 
     JsonScriptEditorPanel scriptEditor;
 
@@ -148,7 +153,7 @@ public class JsonAppRenderPanel extends JPanel {
         showExecuteButton = !hideButtons.contains("execute");
         showCompareButton = !hideButtons.contains("compare");
 
-        JSONArray actions = uiDefine.getJSONArray("actions");
+        actions = uiDefine.getJSONArray("actions");
 
         inputForm = uiDefine.getJSONObject("inputForm");
         outputForm = uiDefine.getJSONObject("outputForm");
@@ -291,7 +296,11 @@ public class JsonAppRenderPanel extends JPanel {
             buttonsPanel.remove(component);
         }
 
+
         if (actions != null) {
+            for (int i = 0; i < actions.size() && actionComBox.getItemCount() > 2; i++) {
+                actionComBox.removeItemAt(2);
+            }
             for (int i = 0; i < actions.size(); i++) {
 
                 JSONObject action = actions.getJSONObject(i);
@@ -309,8 +318,13 @@ public class JsonAppRenderPanel extends JPanel {
                     }
                 });
                 buttonsPanel.add(button);
+
+                actionComBox.addItem(title);
+
             }
         }
+
+
     }
 
     private void execute(JSONObject input, JSONObject script) {
@@ -407,7 +421,7 @@ public class JsonAppRenderPanel extends JPanel {
 
                         JSONObject uiDefine = theAppDefine.getJSONObject("ui");
                         if (uiDefine != null) {
-                            JSONArray actions = uiDefine.getJSONArray("actions");
+                            actions = uiDefine.getJSONArray("actions");
                             addActionButtons(actions);
 
                             appTitleLabel.requestFocus();
@@ -479,6 +493,37 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
+        //下拉选择action
+        {
+            String[] actionList = new String[]{"Default", "New"};
+            actionComBox = new ComboBox<>(actionList);
+
+            actionComBox.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    JSONObject script = new JSONObject();
+                    Object selected = actionComBox.getSelectedItem();
+
+                    if ("Default".equals(selected)) {
+                        script = scriptDefine;
+                    } else if ("New".equals(selected)) {
+                        //TODO
+                    } else {
+                        for (Object action : actions) {
+                            JSONObject actionJson = ((JSONObject) action);
+                            String title = actionJson.getString("title");
+                            if (title.equals(selected)) {
+                                script = actionJson.getJSONObject("script");
+                            }
+                        }
+                    }
+
+                    scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
+                }
+            });
+            toolBar.add(actionComBox);
+        }
+
         //add default execute Button
         if (showExecuteButton) {
             executeButton = new JButton(executeButtonTitle);
@@ -512,7 +557,8 @@ public class JsonAppRenderPanel extends JPanel {
                                 appletDefine.put("uni", "applet");
                                 appletDefine.put("input", getInputJson());
                                 appletDefine.put("output", getOutputJson());
-                                appletDefine.put("script", getScriptDefine());
+                                JSONObject script = getScriptDefine();
+                                appletDefine.put("script", script);
                                 String content = new String(IoUtil.readBytes(appFile.getInputStream()));
                                 JSONObject rawAppletDefine = JSONObject.parse(content);
                                 if ("applet".equals(rawAppletDefine.getString("uni"))) {
@@ -522,8 +568,44 @@ public class JsonAppRenderPanel extends JPanel {
                                     rawAppletDefine.remove("input");
                                     rawAppletDefine = appletDefine;
                                 }
+                                Object selectItem = actionComBox.getSelectedItem();
                                 if (rawAppletDefine.containsKey("ui")) {
-                                    appletDefine.put("ui", rawAppletDefine.getJSONObject("ui"));
+                                    JSONObject ui = rawAppletDefine.getJSONObject("ui");
+                                    appletDefine.put("ui", ui);
+
+                                    //deal action
+                                    JSONArray actions = ui.getJSONArray("actions");
+                                    for (Object action : actions) {
+                                        JSONObject actionJson = (JSONObject) action;
+                                        String title = actionJson.getString("title");
+                                        if (title.equals(selectItem)) {
+                                            actionJson.put("script", script);
+                                            break;
+                                        }
+                                    }
+                                }
+                                {
+
+                                    if ("New".equals(selectItem)) {
+                                        JSONObject ui = appletDefine.getJSONObject("ui");
+                                        if (ui == null) {
+                                            ui = new JSONObject();
+                                            appletDefine.put("ui", ui);
+                                        }
+                                        JSONArray actions = ui.getJSONArray("actions");
+                                        if (actions == null) {
+                                            actions = new JSONArray();
+                                            ui.put("actions", actions);
+                                        }
+                                        String newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
+                                        if (newActionTitle == null) {
+                                            newActionTitle = "Action";
+                                        }
+                                        JSONObject newAction = new JSONObject();
+                                        newAction.put("title", newActionTitle);
+                                        newAction.put("script", script);
+                                        actions.add(newAction);
+                                    }
                                 }
                                 String newJsonText = toJsonTextWithFormat(appletDefine);
                                 appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
@@ -531,7 +613,7 @@ public class JsonAppRenderPanel extends JPanel {
                                 ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Messages.showInfoMessage("保存成功!", "Info");
+                                        Messages.showInfoMessage("Save OK!", "Info");
                                     }
                                 });
                             } catch (IOException e) {
