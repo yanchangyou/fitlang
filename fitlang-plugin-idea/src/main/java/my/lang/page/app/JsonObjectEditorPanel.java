@@ -9,6 +9,8 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     JsonFormPanel jsonFormEditor;
 
+    JsonNativeFormPanel jsonNativeFormEditor;
+
     boolean showGraph;
 
     public JsonObjectEditorPanel(JSONObject formSchema, JSONObject formData, String title, int horizontalAlignment, boolean showGraph, Project project) {
@@ -23,6 +25,9 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
             cardPanel.add(jsonFormEditor);
             isJsonTextEditor = false;
         }
+
+        jsonNativeFormEditor = new JsonNativeFormPanel(formData);
+        cardPanel.add(jsonNativeFormEditor);
 
 //        cardLayout.next(cardPanel);
 
