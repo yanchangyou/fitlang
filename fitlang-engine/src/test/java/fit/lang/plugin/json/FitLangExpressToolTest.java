@@ -106,6 +106,18 @@ public class FitLangExpressToolTest extends TestCase {
 
     }
 
+
+    public void testConvertCharsetJson() throws UnsupportedEncodingException {
+        String text = "中文乱码";
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data", text);
+        String expected = "{\"data\":{\"GBK => UTF8\":\"��������\",\"GBK => ISO8859-1\":\"ÖÐÎÄÂÒÂë\",\"UTF8 => GBK\":\"涓\uE15F枃涔辩爜\",\"UTF8 => ISO8859-1\":\"ä¸\u00ADæ\u0096\u0087ä¹±ç \u0081\",\"ISO8859-1 => GBK\":\"????\",\"ISO8859-1 => UTF8\":\"????\"}}";
+        JSONObject result = FitLangExpressTool.convertCharset(jsonObject);
+        System.out.println(result.toString(JSONWriter.Feature.PrettyFormat));
+        Assert.assertEquals(expected, result.toJSONString());
+
+    }
+
 //    public void testEncodeAesBase64() {
 //        String text = "abc123上中下";
 //        String key = "9MgYwmuPrjiecPMx61O6zIuy3MtIXQQ0E59T3xB6u0Gyf1gYs2i3K9Jxaa0zj4gTMazJuApwd6+jdyeI5iGHvhQyDHGVlAuYTgJrbFDrfB22Fpil2NfNnWFBTXyf7SDI";

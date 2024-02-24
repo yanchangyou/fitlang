@@ -5,18 +5,60 @@
     },
     "output":{
         "result":{
-            "GBK => UTF8": "��������",
-            "GBK => ISO8859-1": "ÖÐÎÄÂÒÂë",
-            "UTF8 => GBK": "涓枃涔辩爜",
-            "UTF8 => ISO8859-1": "ä¸­æä¹±ç ",
-            "ISO8859-1 => GBK": "????",
-            "ISO8859-1 => UTF8": "????"
+            "GBK => UTF8":{
+                "GBK => UTF8": "????????",
+                "GBK => ISO8859-1": "????????",
+                "UTF8 => GBK": "锟斤拷锟斤拷锟斤拷锟斤拷",
+                "UTF8 => ISO8859-1": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+                "ISO8859-1 => GBK": "????????",
+                "ISO8859-1 => UTF8": "????????"
+            },
+            "GBK => ISO8859-1":{
+                "GBK => UTF8": "????????",
+                "GBK => ISO8859-1": "????????",
+                "UTF8 => GBK": "脰脨脦脛脗脪脗毛",
+                "UTF8 => ISO8859-1": "ÃÃÃÃÃÃÃÃ«",
+                "ISO8859-1 => GBK": "中文乱码",
+                "ISO8859-1 => UTF8": "��������"
+            },
+            "UTF8 => GBK":{
+                "GBK => UTF8": "中文乱码",
+                "GBK => ISO8859-1": "ä¸­æä¹±ç ",
+                "UTF8 => GBK": "娑擃厽鏋冩稊杈╃垳",
+                "UTF8 => ISO8859-1": "æ¶îææ¶è¾©ç",
+                "ISO8859-1 => GBK": "??????",
+                "ISO8859-1 => UTF8": "??????"
+            },
+            "UTF8 => ISO8859-1":{
+                "GBK => UTF8": "????????��???",
+                "GBK => ISO8859-1": "????????¡À???",
+                "UTF8 => GBK": "盲赂颅忙聳聡盲鹿卤莽聽聛",
+                "UTF8 => ISO8859-1": "Ã¤Â¸Â­Ã¦ÂÂÃ¤Â¹Â±Ã§Â Â",
+                "ISO8859-1 => GBK": "涓枃涔辩爜",
+                "ISO8859-1 => UTF8": "中文乱码"
+            },
+            "ISO8859-1 => GBK":{
+                "GBK => UTF8": "????",
+                "GBK => ISO8859-1": "????",
+                "UTF8 => GBK": "????",
+                "UTF8 => ISO8859-1": "????",
+                "ISO8859-1 => GBK": "????",
+                "ISO8859-1 => UTF8": "????"
+            },
+            "ISO8859-1 => UTF8":{
+                "GBK => UTF8": "????",
+                "GBK => ISO8859-1": "????",
+                "UTF8 => GBK": "????",
+                "UTF8 => ISO8859-1": "????",
+                "ISO8859-1 => GBK": "????",
+                "ISO8859-1 => UTF8": "????"
+            }
         }
     },
     "script":{
         "uni": "eval",
         "json":{
-            "result": "${FitLang.convertCharset(text)}"
+            "result": "${FitLang.convertCharset(FitLang.convertCharset(text))}"
         }
     },
     "ui":{
@@ -44,6 +86,15 @@
                     "uni": "eval",
                     "json":{
                         "result": "${FitLang.convertCharset(text)}"
+                    }
+                }
+            },
+            {
+                "title": "字符集两次探测",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertCharset(FitLang.convertCharset(text))}"
                     }
                 }
             }
