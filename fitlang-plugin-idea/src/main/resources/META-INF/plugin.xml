@@ -409,6 +409,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.10.12 </li>
             <li>0.10.11 applet support save action; refine applet; add number tool and text tool</li>
             <li>0.10.10 http support useInput config; applet support reload, clear output; fix project plugin, choose file in applet</li>
             <li>0.10.9 rename mini app to applet; refine applet support ui field</li>
