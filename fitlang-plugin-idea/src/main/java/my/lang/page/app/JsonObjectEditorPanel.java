@@ -26,7 +26,7 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
             isJsonTextEditor = false;
         }
 
-        jsonNativeFormEditor = new JsonNativeFormPanel(formData);
+        jsonNativeFormEditor = new JsonNativeFormPanel(formData, project);
         cardPanel.add(jsonNativeFormEditor);
 
 //        cardLayout.next(cardPanel);
