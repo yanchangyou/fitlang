@@ -253,7 +253,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("convertToBasicArray", ConvertToBasicArrayJsonExecuteNode.class);
         register("convertToJsonPath", ConvertToJsonPathJsonExecuteNode.class);
         register("compare", CompareJsonJsonExecuteNode.class);
-//        register("diff", DiffJsonJsonExecuteNode.class);
+        register("diff", DiffJsonJsonExecuteNode.class);
 
         register("add", AddJsonExecuteNode.class);
 

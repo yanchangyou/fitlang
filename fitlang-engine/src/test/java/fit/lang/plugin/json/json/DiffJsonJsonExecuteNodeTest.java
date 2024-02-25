@@ -7,16 +7,16 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-public class CompareJsonJsonExecuteNodeTest extends TestCase {
+public class DiffJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         JSONObject input = JSONObject.parseObject("{" +
                 "'json1':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "'json2':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "}");
-        Object expected = "{\"object.string\":{\"equal\":true},\"number\":{\"equal\":true},\"object.double\":{\"equal\":true},\"string\":{\"equal\":true},\"double\":{\"equal\":true},\"array[2].key\":{\"equal\":true},\"object.number\":{\"equal\":true},\"array[0].key\":{\"equal\":true},\"array[1].key\":{\"equal\":true}}";
+        Object expected = "{}";
         String flow = "{" +//
-                "   'uni': 'compare'," +
+                "   'uni': 'diff'," +
                 "}";
         System.out.println(flow.replace("'", "\""));
 
@@ -41,7 +41,7 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
                 "}");
         Object expected = "{\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"number\":{\"equal\":false,\"type\":\"ADD\"},\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"}}";
         String flow = "{" +//
-                "   'uni': 'compare'," +
+                "   'uni': 'diff'," +
                 "}";
         System.out.println(flow.replace("'", "\""));
 
@@ -57,12 +57,12 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
 
     public void testExecute2() {
         JSONObject input = JSONObject.parseObject("{" +
-                "'json1':{'number':123,'double':1.230,'string':'abcd','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
+                "'json1':{'number':11,'double':1.10,'string':'abcd','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "'json2':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "}");
-        Object expected = "{\"object.string\":{\"equal\":true},\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"object.double\":{\"equal\":true},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"double\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"array[2].key\":{\"equal\":true},\"object.number\":{\"equal\":true},\"array[0].key\":{\"equal\":true},\"array[1].key\":{\"equal\":true}}";
+        Object expected = "{\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"double\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
         String flow = "{" +//
-                "   'uni': 'compare'," +
+                "   'uni': 'diff'," +
                 "}";
         System.out.println(flow.replace("'", "\""));
 

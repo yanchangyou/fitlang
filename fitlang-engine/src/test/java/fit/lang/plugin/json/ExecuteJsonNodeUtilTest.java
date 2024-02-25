@@ -171,6 +171,8 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
                 "'object': {'number':1,'string':'abc',}," +
                 "'array': [{'number':1,'string':'abc',}]," +
                 "}");
+        System.out.println(json1);
+        System.out.println(json2);
         JSONObject result = ExecuteJsonNodeUtil.compareJsonObject(json1, json2);
         System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
         String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
@@ -190,6 +192,8 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
                 "'object': {'number':123,'string':'abc',}," +
                 "'array': [{'number':123,'string':'abc',}]," +
                 "}");
+        System.out.println(json1);
+        System.out.println(json2);
         JSONObject result = ExecuteJsonNodeUtil.compareJsonObject(json1, json2);
         System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
         String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"}}";
