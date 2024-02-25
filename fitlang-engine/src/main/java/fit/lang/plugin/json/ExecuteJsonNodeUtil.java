@@ -1,6 +1,7 @@
 package fit.lang.plugin.json;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
@@ -974,7 +975,6 @@ public class ExecuteJsonNodeUtil {
         return JSONSchema.ofValue(jsonObject).toJSONObject();
     }
 
-
     /**
      * json到map转换
      *
@@ -1040,6 +1040,96 @@ public class ExecuteJsonNodeUtil {
             return "['".concat(key).concat("']");
         }
         return key;
+    }
+
+    /**
+     * 比较json，只保留差异部分
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static JSONObject diffJsonObject(JSONObject json1, JSONObject json2) {
+        JSONObject result = compareJsonObject(json1, json2);
+        List<String> equalPathList = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : result.entrySet()) {
+            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get("equal"))) {
+                equalPathList.add(entry.getKey());
+            }
+        }
+        for (String path : equalPathList) {
+            result.remove(path);
+        }
+        return result;
+    }
+
+    /**
+     * 比较json
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static JSONObject compareJsonObject(JSONObject json1, JSONObject json2) {
+
+        JSONObject jsonPath1 = convertToJsonPath(json1);
+        JSONObject jsonPath2 = convertToJsonPath(json2);
+
+        JSONObject result = new JSONObject();
+
+        Set<String> jsonPathList = new HashSet<>();
+        jsonPathList.addAll(jsonPath1.keySet());
+        jsonPathList.addAll(jsonPath2.keySet());
+
+        for (String path : jsonPathList) {
+            boolean json1Contain = jsonPath1.containsKey(path);
+            boolean json2Contain = jsonPath2.containsKey(path);
+
+            JSONObject pathResult = new JSONObject();
+            if (json1Contain && !json2Contain) {
+                pathResult.put("equal", false);
+                pathResult.put("type", "REMOVE");
+            } else if (!json1Contain && json2Contain) {
+                pathResult.put("equal", false);
+                pathResult.put("type", "ADD");
+            } else if (json1Contain && json2Contain) {
+                Object value1 = json1.getByPath(path);
+                Object value2 = json2.getByPath(path);
+                pathResult = compareJsonValue(value1, value2);
+                if (Boolean.FALSE.equals(pathResult.get("equal"))) {
+                    pathResult.put("type", "MODIFY");
+                }
+            }
+
+            result.put(path, pathResult);
+        }
+
+        return result;
+    }
+
+    /**
+     * 比较值
+     *
+     * @param value1 value1
+     * @param value2 value2
+     * @return result
+     */
+    private static JSONObject compareJsonValue(Object value1, Object value2) {
+        JSONObject result = new JSONObject();
+
+        boolean equal = ObjectUtil.equals(value1, value2);
+        result.put("equal", equal);
+
+        if (!equal) {
+            if (value1 != null && value2 != null) {
+                boolean typeEqual = (value1.getClass().equals(value2.getClass()));
+                result.put("typeEqual", typeEqual);
+            } else {
+                result.put("typeEqual", false);
+            }
+        }
+
+        return result;
     }
 
 }
