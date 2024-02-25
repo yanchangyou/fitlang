@@ -20,7 +20,7 @@
         "scriptTitle": "脚本",
         "executeButtonTitle": "执行",
         "resetLayoutButtonTitle": "重置布局",
-        "reloadButtonTitle": "加载",
+        "reloadButtonTitle": "刷新",
         "clearOutputButtonTitle": "清空出参",
         "needSortButtonTitle": "排序",
         "compareButtonTitle": "比较",

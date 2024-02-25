@@ -713,7 +713,7 @@
                 "inputTitle": "Input",
                 "outputTitle": "Output",
                 "scriptTitle": "Script",
-                "reloadButtonTitle": "Reload",
+                "reloadButtonTitle": "Refresh",
                 "clearOutputButtonTitle": "Clear Output",
                 "executeButtonTitle": "Execute",
                 "resetLayoutButtonTitle": "Layout",

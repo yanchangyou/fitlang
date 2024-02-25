@@ -20,7 +20,7 @@
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
-        "reloadButtonTitle": "加载",
+        "reloadButtonTitle": "刷新",
         "clearOutputButtonTitle": "清空出参",
         "executeButtonTitle": "执行",
         "resetLayoutButtonTitle": "重置布局",

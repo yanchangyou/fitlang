@@ -77,7 +77,7 @@ public class JsonAppRenderPanel extends JPanel {
     JButton switchFormButton;
     JButton resetLayoutButton;
 
-    String reloadButtonTitle = "Reload";
+    String reloadButtonTitle = "Refresh";
     String clearOutputButtonTitle = "Clear Output";
     String executeButtonTitle = "Execute";
     String resetLayoutButtonTitle = "Layout";
@@ -384,16 +384,16 @@ public class JsonAppRenderPanel extends JPanel {
         JPanel toolBar = new JPanel();
 
         //reset layout
-        {
-            resetLayoutButton = new JButton(resetLayoutButtonTitle);
-            resetLayoutButton.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    readLayoutConfig(null);
-                }
-            });
-            toolBar.add(resetLayoutButton);
-        }
+//        {
+//            resetLayoutButton = new JButton(resetLayoutButtonTitle);
+//            resetLayoutButton.addActionListener(new AbstractAction() {
+//                @Override
+//                public void actionPerformed(ActionEvent actionEvent) {
+//                    readLayoutConfig(null);
+//                }
+//            });
+//            toolBar.add(resetLayoutButton);
+//        }
 
         //switchForm
         if (showGraph) {
