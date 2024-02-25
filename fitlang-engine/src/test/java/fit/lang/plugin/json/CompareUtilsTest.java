@@ -83,7 +83,7 @@ public class CompareUtilsTest extends TestCase {
         Assert.assertEquals(expected, result.toString());
     }
 
-    public void testcompare() {
+    public void testCompare() {
         JSONObject json1 = JSONObject.parseObject("{" +
                 "'number':1," +
                 "'string':'abc'," +
@@ -102,7 +102,7 @@ public class CompareUtilsTest extends TestCase {
         Assert.assertEquals(expected, result.toString());
     }
 
-    public void testcompare1() {
+    public void testCompare1() {
         JSONObject json1 = JSONObject.parseObject("{" +
                 "'number':11," +
                 "'string':'abcd'," +
@@ -123,7 +123,7 @@ public class CompareUtilsTest extends TestCase {
         Assert.assertEquals(expected, result.toString());
     }
 
-    public void testcompare2() {
+    public void testCompare2() {
         JSONObject json1 = JSONObject.parseObject("{" +
                 "'number':'abc'," +
                 "'string':123," +
@@ -144,7 +144,7 @@ public class CompareUtilsTest extends TestCase {
         Assert.assertEquals(expected, result.toString());
     }
 
-    public void testcompare3() {
+    public void testCompare3() {
         JSONObject json1 = JSONObject.parseObject("{" +
 //                "'number':'abc'," +
                 "'string':123," +
