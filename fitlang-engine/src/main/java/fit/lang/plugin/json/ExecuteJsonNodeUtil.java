@@ -1051,16 +1051,39 @@ public class ExecuteJsonNodeUtil {
      */
     public static JSONObject diffJsonObject(JSONObject json1, JSONObject json2) {
         JSONObject result = compareJsonObject(json1, json2);
-        List<String> equalPathList = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : result.entrySet()) {
-            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get("equal"))) {
-                equalPathList.add(entry.getKey());
-            }
-        }
+        List<String> equalPathList = getEqualsJsonPathList(result);
         for (String path : equalPathList) {
             result.remove(path);
         }
         return result;
+    }
+
+    /**
+     * 获取差异的json path列表
+     *
+     * @param jsonCompareResult json比较结果
+     * @return json path列表
+     */
+    private static List<String> getEqualsJsonPathList(JSONObject jsonCompareResult) {
+        List<String> equalPathList = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : jsonCompareResult.entrySet()) {
+            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get("equal"))) {
+                equalPathList.add(entry.getKey());
+            }
+        }
+        return equalPathList;
+    }
+
+    /**
+     * 比较json是否相同
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static boolean jsonObjectEquals(JSONObject json1, JSONObject json2) {
+        JSONObject result = diffJsonObject(json1, json2);
+        return result.isEmpty();
     }
 
     /**

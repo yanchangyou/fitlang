@@ -64,6 +64,79 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
     }
 
     public void testDiffJsonObject() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        JSONObject result = ExecuteJsonNodeUtil.diffJsonObject(json1, json2);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        String expected = "{}";
+        Assert.assertEquals(expected, result.toString());
+    }
+
+    public void testDiffJsonObject1() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        JSONObject result = ExecuteJsonNodeUtil.diffJsonObject(json1, json2);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        String expected = "{}";
+        Assert.assertEquals(expected, result.toString());
+    }
+
+    public void testDiffJsonObject2() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+                "'number':'abc'," +
+                "'string':123," +
+                "'object': {'number':'abc','string':123,}," +
+                "'array': [{'number':'abc','string':123,}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':123,'string':'abc',}," +
+                "'array': [{'number':123,'string':'abc',}]," +
+                "}");
+        JSONObject result = ExecuteJsonNodeUtil.diffJsonObject(json1, json2);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"}}";
+        Assert.assertEquals(expected, result.toString());
+    }
+
+    public void testDiffJsonObject3() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+//                "'number':'abc'," +
+                "'string':123," +
+                "'object': {'number':'abc','string':123,}," +
+                "'array': [{'number':'abc','string':123,}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+//                "'string':'abc'," +
+//                "'object': {'number':123,'string':'abc',}," +
+                "'array': [{'number':123,'string':'abc',}]," +
+                "}");
+        JSONObject result = ExecuteJsonNodeUtil.diffJsonObject(json1, json2);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        String expected = "{\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"number\":{\"equal\":false,\"type\":\"ADD\"},\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"}}";
+        Assert.assertEquals(expected, result.toString());
     }
 
     public void testCompareJsonObject() {
@@ -119,7 +192,7 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
                 "}");
         JSONObject result = ExecuteJsonNodeUtil.compareJsonObject(json1, json2);
         System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
-        String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
+        String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"}}";
         Assert.assertEquals(expected, result.toString());
     }
 
@@ -138,7 +211,47 @@ public class ExecuteJsonNodeUtilTest extends TestCase {
                 "}");
         JSONObject result = ExecuteJsonNodeUtil.compareJsonObject(json1, json2);
         System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
-        String expected = "{\"object.string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
+        String expected = "{\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"number\":{\"equal\":false,\"type\":\"ADD\"},\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"}}";
         Assert.assertEquals(expected, result.toString());
+    }
+
+    public void testJsonObjectEquals() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+                "'string':'abc'," +
+                "'object': {'number':1,'string':'abc',}," +
+                "'array': [{'number':1,'string':'abc',}]," +
+                "}");
+        boolean result = ExecuteJsonNodeUtil.jsonObjectEquals(json1, json2);
+        System.out.println(result);
+        Object expected = true;
+        Assert.assertEquals(expected, result);
+    }
+
+    public void testJsonObjectEquals3() {
+        {
+            JSONObject json1 = JSONObject.parseObject("{" +
+//                "'number':'abc'," +
+                    "'string':123," +
+                    "'object': {'number':'abc','string':123,}," +
+                    "'array': [{'number':'abc','string':123,}]," +
+                    "}");
+            JSONObject json2 = JSONObject.parseObject("{" +
+                    "'number':1," +
+//                "'string':'abc'," +
+//                "'object': {'number':123,'string':'abc',}," +
+                    "'array': [{'number':123,'string':'abc',}]," +
+                    "}");
+            boolean result = ExecuteJsonNodeUtil.jsonObjectEquals(json1, json2);
+            System.out.println(result);
+            Object expected = false;
+            Assert.assertEquals(expected, result);
+        }
     }
 }
