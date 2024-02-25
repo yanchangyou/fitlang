@@ -67,9 +67,8 @@ public class CompareUtils {
         JSONObject jsonPath2 = convertWithJsonPath(json2);
 
         JSONObject result = new JSONObject();
-        List<String> jsonPathList = new ArrayList<>();
 
-        jsonPathList.addAll(jsonPath1.keySet());
+        List<String> jsonPathList = new ArrayList<>(jsonPath1.keySet());
         for (String path : jsonPath2.keySet()) {
             if (!jsonPathList.contains(path)) {
                 jsonPathList.add(path);
@@ -87,7 +86,7 @@ public class CompareUtils {
             } else if (!json1Contain && json2Contain) {
                 pathResult.put("equal", false);
                 pathResult.put("type", DIFF_TYPE_OF_ADD);
-            } else if (json1Contain && json2Contain) {
+            } else if (json1Contain) {
                 Object value1 = json1.getByPath(path);
                 Object value2 = json2.getByPath(path);
                 pathResult = compareValue(value1, value2);
@@ -196,8 +195,8 @@ public class CompareUtils {
     /**
      * 处理特殊key，key中有点号，然后冲突
      *
-     * @param key
-     * @return
+     * @param key key
+     * @return newKey
      */
     static String buildJsonPathKey(String key) {
         //TODO 避免json path解析报错，key包含特殊字符
