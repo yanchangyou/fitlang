@@ -109,6 +109,12 @@ public abstract class JsonBaseEditorPanel extends JPanel {
 
     }
 
+    public void initView(boolean showJsonEditor) {
+        if (showJsonEditor != isJsonTextEditor) {
+            switchView();
+        }
+    }
+
     public void switchView() {
         cardLayout.next(cardPanel);
         switchEditor();

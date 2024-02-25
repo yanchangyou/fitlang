@@ -724,6 +724,8 @@
                 "switchViewButtonTitle": "Switch View",
                 "switchFormButtonTitle": "Switch",
                 "showGraph": false,
+                "showInputForm": false,
+                "showOutputForm": false,
                 "inputOutputSplitRatio": 0.5,
                 "scriptSplitRatio": 0.4,
                 "hideButtonsAll": [
