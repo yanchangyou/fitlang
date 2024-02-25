@@ -95,5 +95,12 @@
     },
     "script":{
         "uni": "compare"
+    },
+    "ui":{
+        "inputOutputSplitRatio":0.8,
+        "scriptSplitRatio":0.8,
+        "actions":[
+            
+        ]
     }
 }

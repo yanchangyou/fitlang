@@ -1,7 +1,8 @@
 {
     "uni": "applet",
     "input":{
-        "json1":{
+        "json2":{
+            "fieldAdd": "2",
             "number":123,
             "double":123.456,
             "string": "abc",
@@ -23,7 +24,8 @@
                 }
             ]
         },
-        "json2":{
+        "json1":{
+            "fieldRemove": "1",
             "number":123,
             "double":123.456,
             "string": "abc",
@@ -51,5 +53,12 @@
     },
     "script":{
         "uni": "diff"
+    },
+    "ui":{
+        "inputOutputSplitRatio":0.8,
+        "scriptSplitRatio":0.8,
+        "actions":[
+            
+        ]
     }
 }
