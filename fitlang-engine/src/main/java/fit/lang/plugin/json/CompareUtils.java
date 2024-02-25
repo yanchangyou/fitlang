@@ -20,7 +20,7 @@ import java.util.Objects;
  * <p>
  * * @author yanchangyou
  */
-public class JsonCompareUtils {
+public class CompareUtils {
 
     public static final String DIFF_TYPE_OF_MODIFY = "MODIFY";
     public static final String DIFF_TYPE_OF_ADD = "ADD";
