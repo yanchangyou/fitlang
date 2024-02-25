@@ -1,87 +1,99 @@
 {
     "uni": "applet",
-    "input": {
-        "json2": {
-            "field": 123456,
-            "double": 123.456789,
+    "input":{
+        "json1":{
+            "field":123456,
+            "double":123.456789,
             "string": "abcd",
             "boolean": true,
-            "object": {
-                "number": 123,
-                "double": 123.456,
+            "object":{
+                "number":123,
+                "double":123.456,
                 "string": "abc",
                 "boolean": true
             },
-            "array": [
+            "array":[
                 {
-                    "object": {
-                        "number": 123,
-                        "double": 123.456,
+                    "object":{
+                        "number":123,
+                        "double":123.456,
                         "string": "abc",
                         "boolean": true
                     }
                 }
             ]
         },
-        "json1": {
+        "json2":{
             "field": "abc",
-            "number": 123,
+            "number":123,
             "string": "abc",
-            "object": {
-                "number": 123,
+            "object":{
+                "number":123,
                 "string": "abc",
                 "boolean": true
             },
-            "array": [
+            "array":[
                 {
-                    "object": {
-                        "number": 123,
-                        "double": 123.456,
+                    "object":{
+                        "number":123,
+                        "double":123.456,
                         "string": "abc"
                     }
                 }
             ]
         }
     },
-    "output": {
-        "object.string": {
+    "output":{
+        "field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
+        },
+        "double":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "boolean":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "object.number":{
             "equal": true
         },
-        "number": {
+        "object.double":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "object.string":{
             "equal": true
         },
-        "object.double": {
+        "object.boolean":{
             "equal": true
         },
-        "boolean": {
+        "array[0].object.number":{
             "equal": true
         },
-        "string": {
+        "array[0].object.double":{
             "equal": true
         },
-        "array[0].object.number": {
+        "array[0].object.string":{
             "equal": true
         },
-        "double": {
-            "equal": true
+        "array[0].object.boolean":{
+            "equal": false,
+            "type": "REMOVE"
         },
-        "array[0].object.string": {
-            "equal": true
-        },
-        "object.number": {
-            "equal": true
-        },
-        "array[0].object.double": {
-            "equal": true
-        },
-        "array[0].object.boolean": {
-            "equal": true
-        },
-        "object.boolean": {
-            "equal": true
+        "number":{
+            "equal": false,
+            "type": "ADD"
         }
     },
-    "script": {
+    "script":{
         "uni": "compare"
     }
 }

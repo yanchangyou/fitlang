@@ -1,7 +1,7 @@
 {
     "uni": "applet",
     "input":{
-        "json2":{
+        "json1":{
             "number":123456,
             "double":123.456789,
             "string": "abcd",
@@ -23,7 +23,7 @@
                 }
             ]
         },
-        "json1":{
+        "json2":{
             "number":123,
             "double":123.456,
             "string": "abc",
@@ -47,46 +47,48 @@
         }
     },
     "output":{
-        "object.string":{
-            "equal": true
-        },
         "number":{
             "equal": false,
             "typeEqual": true,
             "type": "MODIFY"
-        },
-        "object.double":{
-            "equal": true
-        },
-        "boolean":{
-            "equal": true
-        },
-        "string":{
-            "equal": false,
-            "typeEqual": true,
-            "type": "MODIFY"
-        },
-        "array[0].object.number":{
-            "equal": true
         },
         "double":{
             "equal": false,
             "typeEqual": true,
             "type": "MODIFY"
         },
-        "array[0].object.string":{
-            "equal": true
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "boolean":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
         },
         "object.number":{
+            "equal": true
+        },
+        "object.double":{
+            "equal": true
+        },
+        "object.string":{
+            "equal": true
+        },
+        "object.boolean":{
+            "equal": true
+        },
+        "array[0].object.number":{
             "equal": true
         },
         "array[0].object.double":{
             "equal": true
         },
-        "array[0].object.boolean":{
+        "array[0].object.string":{
             "equal": true
         },
-        "object.boolean":{
+        "array[0].object.boolean":{
             "equal": true
         }
     },

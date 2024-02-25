@@ -1,7 +1,7 @@
 {
     "uni": "applet",
     "input":{
-        "json2":{
+        "json1":{
             "number":123,
             "double":123.456,
             "string": "abc",
@@ -23,7 +23,7 @@
                 }
             ]
         },
-        "json1":{
+        "json2":{
             "number":123,
             "double":123.456,
             "string": "abc",

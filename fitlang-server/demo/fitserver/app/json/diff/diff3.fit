@@ -1,7 +1,7 @@
 {
     "uni": "applet",
     "input":{
-        "json2":{
+        "json1":{
             "field":123456,
             "double":123.456789,
             "string": "abcd",
@@ -23,7 +23,7 @@
                 }
             ]
         },
-        "json1":{
+        "json2":{
             "field": "abc",
             "number":123,
             "string": "abc",
@@ -44,33 +44,33 @@
         }
     },
     "output":{
-        "string":{
-            "equal": false,
-            "typeEqual": true,
-            "type": "MODIFY"
-        },
-        "double":{
-            "equal": false,
-            "type": "ADD"
-        },
-        "number":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "object.double":{
-            "equal": false,
-            "type": "ADD"
-        },
-        "boolean":{
-            "equal": false,
-            "type": "ADD"
-        },
         "field":{
             "equal": false,
             "typeEqual": false,
             "type": "MODIFY"
         },
+        "double":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "boolean":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "object.double":{
+            "equal": false,
+            "type": "REMOVE"
+        },
         "array[0].object.boolean":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "number":{
             "equal": false,
             "type": "ADD"
         }
