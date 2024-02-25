@@ -75,6 +75,8 @@ get: get field value by json path<br/>
 set: set field value by json path<br/>
 getStruct: get json structure<br/>
 getSchema: get json schema<br/>
+compare: compare json<br/>
+diff: diff json<br/>
 <br/>
 
 flow nodes (with child nodes)<br/>
@@ -231,6 +233,8 @@ get: 用JsonPath获取字段值<br/>
 set:用JsonPath设置字段值<br/>
 getStruct: 获取json结构<br/>
 getSchema: 获取JsonSchema<br/>
+compare: 比较json<br/>
+diff: 比较json，只显示差异<br/>
 <br/>
 
 流程节点（有child子节点）<br/>
@@ -409,6 +413,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.10.13 </li>
             <li>0.10.12 add native form, json compare; applet support config split index</li>
             <li>0.10.11 applet support save action; refine applet; add number tool and text tool</li>
             <li>0.10.10 http support useInput config; applet support reload, clear output; fix project plugin, choose file in applet</li>

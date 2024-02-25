@@ -117,6 +117,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - add: 支持json相加
 - increase: 加+1
 - decrease: 减-1
+- compare: 比较json
+- diff: 比较json，只显示差异
 
 ### 流程节点（有child子节点）
 
