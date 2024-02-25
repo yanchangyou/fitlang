@@ -413,6 +413,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
+            <li>0.10.14 </li>
             <li>0.10.13 refine compare and applet</li>
             <li>0.10.12 add native form, json compare; applet support config split index</li>
             <li>0.10.11 applet support save action; refine applet; add number tool and text tool</li>
