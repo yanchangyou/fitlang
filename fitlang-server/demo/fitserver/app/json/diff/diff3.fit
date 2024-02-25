@@ -1,0 +1,81 @@
+{
+    "uni": "applet",
+    "input":{
+        "json2":{
+            "field":123456,
+            "double":123.456789,
+            "string": "abcd",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        },
+        "json1":{
+            "field": "abc",
+            "number":123,
+            "string": "abc",
+            "object":{
+                "number":123,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc"
+                    }
+                }
+            ]
+        }
+    },
+    "output":{
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "double":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "number":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "object.double":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "boolean":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
+        },
+        "array[0].object.boolean":{
+            "equal": false,
+            "type": "ADD"
+        }
+    },
+    "script":{
+        "uni": "diff"
+    }
+}

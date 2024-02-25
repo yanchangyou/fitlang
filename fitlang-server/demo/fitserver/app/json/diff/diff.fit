@@ -1,0 +1,55 @@
+{
+    "uni": "applet",
+    "input":{
+        "json2":{
+            "number":123,
+            "double":123.456,
+            "string": "abc",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        },
+        "json1":{
+            "number":123,
+            "double":123.456,
+            "string": "abc",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        }
+    },
+    "output":{
+        
+    },
+    "script":{
+        "uni": "diff"
+    }
+}

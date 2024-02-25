@@ -1,0 +1,76 @@
+{
+    "uni": "applet",
+    "input":{
+        "json2":{
+            "field":123456,
+            "number":123456,
+            "double":123.456789,
+            "string": "abcd",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        },
+        "json1":{
+            "field": "abc",
+            "number":123,
+            "double":123.456,
+            "string": "abc",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        }
+    },
+    "output":{
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "double":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "number":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
+        }
+    },
+    "script":{
+        "uni": "diff"
+    }
+}
