@@ -11,7 +11,6 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
-import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import org.jetbrains.annotations.NotNull;
@@ -371,7 +370,7 @@ public class JsonAppRenderPanel extends JPanel {
 
             JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
             contextParam.putAll(newContextParam);
-            String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
+            String result = executeCode(input, script, contextParam);
 
             JSONObject output = JSONObject.parse(result);
             setOutputJson(output);
@@ -598,9 +597,20 @@ public class JsonAppRenderPanel extends JPanel {
         if (showSaveButton) {
             saveButton = new JButton(saveButtonTitle);
             saveButton.addActionListener(new AbstractAction() {
+
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
+                    Object selectItem = actionComBox.getSelectedItem();
+                    String newActionTitle = "";
+                    if ("New".equals(selectItem)) {
+                        newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
+                        if (StrUtil.isBlank(newActionTitle)) {
+                            return;
+                        }
+                    }
+
+                    String finalNewActionTitle = newActionTitle;
                     ApplicationManager.getApplication().runWriteAction(new Runnable() {
                         @Override
                         public void run() {
@@ -623,7 +633,6 @@ public class JsonAppRenderPanel extends JPanel {
                                     rawAppletDefine.remove("input");
                                     rawAppletDefine = appletDefine;
                                 }
-                                Object selectItem = actionComBox.getSelectedItem();
                                 if (rawAppletDefine.containsKey("ui")) {
                                     JSONObject ui = rawAppletDefine.getJSONObject("ui");
                                     appletDefine.put("ui", ui);
@@ -662,12 +671,9 @@ public class JsonAppRenderPanel extends JPanel {
                                             actions = new JSONArray();
                                             ui.put("actions", actions);
                                         }
-                                        String newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
-                                        if (StrUtil.isBlank(newActionTitle)) {
-                                            return;
-                                        }
+
                                         JSONObject newAction = new JSONObject();
-                                        newAction.put("title", newActionTitle);
+                                        newAction.put("title", finalNewActionTitle);
                                         newAction.put("script", script);
                                         actions.add(newAction);
                                     }
