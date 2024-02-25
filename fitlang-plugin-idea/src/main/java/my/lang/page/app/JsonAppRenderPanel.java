@@ -200,9 +200,9 @@ public class JsonAppRenderPanel extends JPanel {
 
         setAppTitle(appTitle);
 
-        scriptSplitPane = buildMainPanel(input, output, actions);
+        readLayoutConfig(uiDefine);
 
-        resetLayout(uiDefine);
+        scriptSplitPane = buildMainPanel(input, output, actions);
 
         resetAllTitle(uiDefine);
 
@@ -223,7 +223,7 @@ public class JsonAppRenderPanel extends JPanel {
 
     }
 
-    private void resetLayout(JSONObject uiDefine) {
+    private void readLayoutConfig(JSONObject uiDefine) {
 
         inputOutputSplitRatio = uiDefine.containsKey("inputOutputSplitRatio") ? uiDefine.getDouble("inputOutputSplitRatio") : inputOutputSplitRatio;
         scriptSplitRatio = uiDefine.containsKey("scriptSplitRatio") ? uiDefine.getDouble("scriptSplitRatio") : scriptSplitRatio;
@@ -444,7 +444,7 @@ public class JsonAppRenderPanel extends JPanel {
 
                             appTitleLabel.requestFocus();
 
-                            resetLayout(uiDefine);
+                            readLayoutConfig(uiDefine);
                             resetAllTitle(uiDefine);
                             resetAllButtonName(uiDefine);
                         }
