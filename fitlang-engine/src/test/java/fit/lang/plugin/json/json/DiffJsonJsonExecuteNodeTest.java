@@ -28,7 +28,6 @@ public class DiffJsonJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-//        Assert.assertEquals(9, outputJson.size());
 
         Assert.assertEquals(expected, outputJson.toString());
 
@@ -74,7 +73,6 @@ public class DiffJsonJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-//        Assert.assertEquals(9, outputJson.size());
 
         Assert.assertEquals(expected, outputJson.toString());
 
