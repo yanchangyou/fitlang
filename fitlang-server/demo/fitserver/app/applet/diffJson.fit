@@ -1,91 +1,84 @@
 {
     "uni": "applet",
-    "input": {
-        "json2": {
-            "field": 123456,
-            "double": 123.456789,
+    "input":{
+        "json2":{
+            "field":123456,
+            "double":123.456789,
             "string": "abcd",
             "boolean": true,
-            "object": {
-                "number": 123,
-                "double": 123.456,
+            "object":{
+                "number":123,
+                "double":123.456,
                 "string": "abc",
                 "boolean": true
             },
-            "array": [
+            "array":[
                 {
-                    "object": {
-                        "number": 123,
-                        "double": 123.456,
+                    "object":{
+                        "number":123,
+                        "double":123.456,
                         "string": "abc",
-                        "boolean": true
                         "boolean": true
                     }
                 }
             ]
         },
-        "json1": {
+        "json1":{
             "field": "abc",
-            "number": 123,
+            "number":123,
             "string": "abc",
-            "object": {
-                "number": 123,
+            "object":{
+                "number":123,
                 "string": "abc",
                 "boolean": true
             },
-            "array": [
+            "array":[
                 {
-                    "object": {
-                        "number": 123,
-                        "double": 123.456,
+                    "object":{
+                        "number":123,
+                        "double":123.456,
                         "string": "abc"
                     }
                 }
             ]
         }
     },
-    "output": {
-        "object.string": {
-            "equal": true
+    "output":{
+        "field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
         },
-        "number": {
-            "equal": true
+        "number":{
+            "equal": false,
+            "type": "REMOVE"
         },
-        "object.double": {
-            "equal": true
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
         },
-        "boolean": {
-            "equal": true
+        "double":{
+            "equal": false,
+            "type": "ADD"
         },
-        "string": {
-            "equal": true
+        "boolean":{
+            "equal": false,
+            "type": "ADD"
         },
-        "array[0].object.number": {
-            "equal": true
+        "object.double":{
+            "equal": false,
+            "type": "ADD"
         },
-        "double": {
-            "equal": true
-        },
-        "array[0].object.string": {
-            "equal": true
-        },
-        "object.number": {
-            "equal": true
-        },
-        "array[0].object.double": {
-            "equal": true
-        },
-        "array[0].object.boolean": {
-            "equal": true
-        },
-        "object.boolean": {
-            "equal": true
+        "array[0].object.boolean":{
+            "equal": false,
+            "type": "ADD"
         }
     },
-    "script": {
+    "script":{
         "uni": "diff"
     },
-    "ui": {
+    "ui":{
         "title": "JSON对比",
         "inputTitle": "输入",
         "outputTitle": "输出",
@@ -102,15 +95,14 @@
         "switchFormButtonTitle": "切换",
         "showGraph": false,
         "showInputForm": true,
-        "inputOutputSplitRatio": 0.65,
-        "scriptSplitRatio": 0.8,
-        "hideButtons": [
-            //            "reload",
-            //            "exchange",
-            //            "clearOutput",
-            "compare"
-            //            "save",
-            //            "execute"
+        "inputOutputSplitRatio":0.65,
+        "scriptSplitRatio":0.9,
+        "hideButtons":[
+            "compare",
+            "clearOutput"
+        ],
+        "actions":[
+            
         ]
     }
 }
