@@ -97,7 +97,7 @@
         "uni": "compare"
     },
     "ui":{
-        "inputOutputSplitRatio":0.8,
+        "inputOutputSplitRatio":0.7,
         "scriptSplitRatio":0.8,
         "actions":[
             
