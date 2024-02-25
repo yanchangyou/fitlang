@@ -1,0 +1,19 @@
+{
+    "input": {
+        "list": [
+            {
+                "key": "name",
+                "value": "cat"
+            },
+            {
+                "key": "code",
+                "value": "001"
+            }
+        ]
+    },
+    "uni": "convertArrayToObject",
+    "objectField": "json",
+    "arrayField": "list",
+    "keyField": "key",
+    "valueField": "value"
+}

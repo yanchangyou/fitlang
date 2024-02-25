@@ -14,7 +14,7 @@ public class JsonStringLiteralManipulator extends AbstractElementManipulator<Jso
 
     final String originalContent = element.getText();
     final TextRange withoutQuotes = getRangeInElement(element);
-    final JsonElementGenerator generator = new JsonElementGenerator(element.getProject());
+    final fit.intellij.json.psi.JsonElementGenerator generator = new JsonElementGenerator(element.getProject());
     final String replacement = originalContent.substring(withoutQuotes.getStartOffset(), range.getStartOffset()) +
                                newContent +
                                originalContent.substring(range.getEndOffset(), withoutQuotes.getEndOffset());

@@ -1,12 +1,12 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.codeinsight;
 
-import fit.intellij.json.psi.JsonStringLiteral;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonDialectUtil;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import fit.intellij.json.JsonBundle;
-import fit.intellij.json.JsonDialectUtil;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -25,7 +25,7 @@ public class StandardJsonLiteralChecker implements JsonLiteralChecker {
         !MINUS_INF.equals(literalText) &&
         !NAN.equals(literalText) &&
         !VALID_NUMBER_LITERAL.matcher(literalText).matches()) {
-      return fit.intellij.json.JsonBundle.message("syntax.error.illegal.floating.point.literal");
+      return JsonBundle.message("syntax.error.illegal.floating.point.literal");
     }
     return null;
   }
@@ -43,7 +43,7 @@ public class StandardJsonLiteralChecker implements JsonLiteralChecker {
           char c = array[i];
           if (c <= '\u001F') {
             return Pair.create(new TextRange(startOffset + i, startOffset + i + 1),
-                               fit.intellij.json.JsonBundle
+                               JsonBundle
                                  .message("syntax.error.control.char.in.string", "\\u" + Integer.toHexString(c | 0x10000).substring(1)));
           }
         }
@@ -57,7 +57,7 @@ public class StandardJsonLiteralChecker implements JsonLiteralChecker {
   public static String getStringError(String fragmentText) {
     if (fragmentText.startsWith("\\") && fragmentText.length() > 1 && !VALID_ESCAPE.matcher(fragmentText).matches()) {
       if (fragmentText.startsWith("\\u")) {
-        return fit.intellij.json.JsonBundle.message("syntax.error.illegal.unicode.escape.sequence");
+        return JsonBundle.message("syntax.error.illegal.unicode.escape.sequence");
       }
       else {
         return JsonBundle.message("syntax.error.illegal.escape.sequence");

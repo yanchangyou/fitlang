@@ -1,6 +1,7 @@
 package fit.lang.plugin.json;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.http.HttpRequest;
@@ -11,9 +12,10 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONWriter;
+import com.alibaba.fastjson2.schema.JSONSchema;
 import fit.lang.ExecuteNodeException;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeData;
 import fit.lang.plugin.json.define.*;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 
@@ -27,13 +29,14 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import static fit.lang.ExecuteNodeUtil.getUserHome;
+import static fit.lang.plugin.json.ExecuteJsonNodeConst.FIELD_NAME_OF_IDEA_PROJECT;
 import static fit.lang.plugin.json.ExpressUtil.eval;
-import static fit.lang.plugin.json.web.ServerJsonExecuteNode.isWebNode;
 
 /**
  * 工具类
  */
 public class ExecuteJsonNodeUtil {
+
 
     /**
      * 执行执行json
@@ -155,15 +158,24 @@ public class ExecuteJsonNodeUtil {
 
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(flow);
 
+        executeNode.setNodeContext(nodeContext);
+
         executeNode.execute(nodeInput, nodeOutput);
 
-        String rawField = flow.getString("rawField");
-        if (isWebNode(flow) && rawField != null) {
-            Object returnValue = nodeOutput.getData().get(rawField);
+        String outputRawField = flow.getString("outputRawField");
+        if (StrUtil.isNotBlank(outputRawField)) {
+            Object returnValue = nodeOutput.getData().get(outputRawField);
             return (returnValue == null) ? "" : returnValue.toString();
         }
 
-        return nodeOutput.getData().toJSONString(JSONWriter.Feature.WriteMapNullValue);
+        JSONObject result = nodeOutput.getData();
+        if (Boolean.TRUE.equals(flow.getBoolean("debug"))) {
+            Map<String, Object> context = nodeInput.getNodeContext().getAllAttribute();
+            context.remove(FIELD_NAME_OF_IDEA_PROJECT);
+            result = nodeOutput.getData().clone();
+            result.put("_debug", context);
+        }
+        return toJsonText(result);
     }
 
     public static Map<String, String> toStringMap(JSONObject jsonObject) {
@@ -340,16 +352,20 @@ public class ExecuteJsonNodeUtil {
      * @param input
      * @param request
      * @param httpParam
+     * @param useInput
      */
-    public static void parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam) {
-        if (httpParam != null) {
-            Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
-            if (param instanceof JSONObject) {
-                request.form((JSONObject) param);
+    public static Object parseHttpFormParam(JsonExecuteNodeInput input, HttpRequest request, Object httpParam, boolean useInput) {
+        Object param = ExpressUtil.eval(httpParam, input.getInputParamAndContextParam());
+        if (param instanceof JSONObject) {
+            if (useInput) {
+                JSONObject inputParam = input.getData().clone();
+                inputParam.putAll((JSONObject) param);
+                param = inputParam;
             }
-        } else {
-            request.form(input.getData());
+            request.form((JSONObject) param);
+            return param;
         }
+        return null;
     }
 
     /**
@@ -678,8 +694,45 @@ public class ExecuteJsonNodeUtil {
      * @param jsonObject
      * @return
      */
+    public static String toJsonText(JSONObject jsonObject) {
+        return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonArray
+     * @return
+     */
+    public static String toJsonText(JSONArray jsonArray) {
+        return jsonArray.toJSONString(JSONWriter.Feature.WriteMapNullValue);
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonObject
+     * @return
+     */
     public static String toJsonTextWithFormat(JSONObject jsonObject) {
         return jsonObject.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
+                .replaceAll("\\t", "    ")
+                .replace("\":\"", "\": \"")
+                .replace("\":{\"", "\": {")
+                .replace("\":true", "\": true")
+                .replace("\":false", "\": false")
+                .replace("\":null", "\": null")
+                ;
+    }
+
+    /**
+     * 转换为json 文本
+     *
+     * @param jsonArray
+     * @return
+     */
+    public static String toJsonTextWithFormat(JSONArray jsonArray) {
+        return jsonArray.toJSONString(JSONWriter.Feature.WriteMapNullValue, JSONWriter.Feature.PrettyFormat)
                 .replaceAll("\\t", "    ")
                 .replace("\":\"", "\": \"")
                 .replace("\":true", "\": true")
@@ -890,4 +943,220 @@ public class ExecuteJsonNodeUtil {
     public static JSONObject getJsonStruct(JSONObject json) {
         return sortJsonField(json, true);
     }
+
+
+    /**
+     * 从多个字段中获取值
+     *
+     * @param nodeJsonDefine
+     * @param fields
+     * @return
+     */
+    public static String getWildlyField(JSONObject nodeJsonDefine, String[] fields) {
+
+        String path = "field";
+        for (String field : fields) {
+            path = nodeJsonDefine.getString(field);
+            if (StrUtil.isNotBlank(path)) {
+                break;
+            }
+        }
+
+        return path;
+    }
+
+    /**
+     * 解析json的schema
+     *
+     * @param jsonObject
+     * @return
+     */
+    public static JSONObject parseJsonSchema(JSONObject jsonObject) {
+        return JSONSchema.ofValue(jsonObject).toJSONObject();
+    }
+
+    /**
+     * json到map转换
+     *
+     * @param json 入参json
+     * @return 返回map
+     */
+    public static JSONObject convertToJsonPath(JSONObject json) {
+
+        JSONObject newMap = new JSONObject();
+        if (json == null) {
+            return newMap;
+        }
+        for (Map.Entry<String, Object> field : json.entrySet()) {
+            Object value = field.getValue();
+            String fieldName = buildJsonPathKey((field.getKey()));
+            if (value instanceof JSONObject || value instanceof JSONArray) {
+                JSONArray array;
+                boolean isArray = true;
+                if (value instanceof JSONObject) {
+                    array = new JSONArray(1);
+                    array.add(value);
+                    isArray = false;
+                } else {
+                    array = (JSONArray) value;
+                }
+                int index = 0;
+                for (Object item : array) {
+                    String arrayFieldName = fieldName.concat("[".concat(index + "").concat("]"));
+                    if (item instanceof JSONObject) {
+                        JSONObject subMap = convertToJsonPath((JSONObject) item);
+                        for (Map.Entry<String, Object> entry : subMap.entrySet()) {
+                            String newKey = entry.getKey();
+                            if (!newKey.startsWith("[")) {
+                                newKey = ".".concat(newKey);
+                            }
+                            String newFieldName = isArray ? arrayFieldName.concat(newKey) : fieldName.concat(newKey);
+                            newMap.put((newFieldName), entry.getValue());
+                        }
+                    } else {
+                        newMap.put((arrayFieldName), item);
+                    }
+                    index++;
+                }
+            } else {
+                newMap.put((fieldName), value);
+            }
+        }
+        return newMap;
+    }
+
+    /**
+     * 处理特殊key，key中有点号，然后冲突
+     *
+     * @param key
+     * @return
+     */
+    static String buildJsonPathKey(String key) {
+        //TODO 避免xpath解析报错
+        if (key.contains("[")) {
+            key = key.replace("[", "").replace("]", "");
+        }
+        if (key.contains(".") || key.contains("-")) {
+            return "['".concat(key).concat("']");
+        }
+        return key;
+    }
+
+    /**
+     * 比较json，只保留差异部分
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static JSONObject diffJsonObject(JSONObject json1, JSONObject json2) {
+        JSONObject result = compareJsonObject(json1, json2);
+        List<String> equalPathList = getEqualsJsonPathList(result);
+        for (String path : equalPathList) {
+            result.remove(path);
+        }
+        return result;
+    }
+
+    /**
+     * 获取差异的json path列表
+     *
+     * @param jsonCompareResult json比较结果
+     * @return json path列表
+     */
+    private static List<String> getEqualsJsonPathList(JSONObject jsonCompareResult) {
+        List<String> equalPathList = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : jsonCompareResult.entrySet()) {
+            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get("equal"))) {
+                equalPathList.add(entry.getKey());
+            }
+        }
+        return equalPathList;
+    }
+
+    /**
+     * 比较json是否相同
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static boolean jsonObjectEquals(JSONObject json1, JSONObject json2) {
+        JSONObject result = diffJsonObject(json1, json2);
+        return result.isEmpty();
+    }
+
+    /**
+     * 比较json
+     *
+     * @param json1 json1
+     * @param json2 json2
+     * @return result
+     */
+    public static JSONObject compareJsonObject(JSONObject json1, JSONObject json2) {
+
+        JSONObject jsonPath1 = convertToJsonPath(json1);
+        JSONObject jsonPath2 = convertToJsonPath(json2);
+
+        JSONObject result = new JSONObject();
+        List<String> jsonPathList = new ArrayList<>();
+
+        jsonPathList.addAll(jsonPath1.keySet());
+        for (String path : jsonPath2.keySet()) {
+            if (!jsonPathList.contains(path)) {
+                jsonPathList.add(path);
+            }
+        }
+
+        for (String path : jsonPathList) {
+            boolean json1Contain = jsonPath1.containsKey(path);
+            boolean json2Contain = jsonPath2.containsKey(path);
+
+            JSONObject pathResult = new JSONObject();
+            if (json1Contain && !json2Contain) {
+                pathResult.put("equal", false);
+                pathResult.put("type", "REMOVE");
+            } else if (!json1Contain && json2Contain) {
+                pathResult.put("equal", false);
+                pathResult.put("type", "ADD");
+            } else if (json1Contain && json2Contain) {
+                Object value1 = json1.getByPath(path);
+                Object value2 = json2.getByPath(path);
+                pathResult = compareJsonValue(value1, value2);
+                if (Boolean.FALSE.equals(pathResult.get("equal"))) {
+                    pathResult.put("type", "MODIFY");
+                }
+            }
+
+            result.put(path, pathResult);
+        }
+
+        return result;
+    }
+
+    /**
+     * 比较值
+     *
+     * @param value1 value1
+     * @param value2 value2
+     * @return result
+     */
+    private static JSONObject compareJsonValue(Object value1, Object value2) {
+        JSONObject result = new JSONObject();
+
+        boolean equal = ObjectUtil.equals(value1, value2);
+        result.put("equal", equal);
+
+        if (!equal) {
+            if (value1 != null && value2 != null) {
+                boolean typeEqual = (value1.getClass().equals(value2.getClass()));
+                result.put("typeEqual", typeEqual);
+            } else {
+                result.put("typeEqual", false);
+            }
+        }
+
+        return result;
+    }
+
 }

@@ -1,0 +1,13 @@
+{
+    "name": "action",
+    "actions": [
+        {
+            "title": "Run",
+            "visible": true,
+            "script": {
+                "uni": "hello",
+                "who": "world"
+            }
+        }
+    ]
+}

@@ -1,6 +1,6 @@
 package fit.lang.common;
 
-import fit.lang.define.base.*;
+import fit.lang.define.*;
 import fit.lang.info.NodeExecuteInfo;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public abstract class AbstractExecuteNode implements ExecuteNode {
     /**
      * 是否next的执行模式是否pipe
      */
-    protected String nextMode;
+    protected String nextMode = "pipe";
 
     protected ExecuteNodeData nodeDefine;
 
@@ -163,13 +163,14 @@ public abstract class AbstractExecuteNode implements ExecuteNode {
 
         execute(input, output);
 
-        //next是否执行采用pipe模式
-        if (isPipeNext()) {
-            input.setNodeData(output.getNodeData().cloneThis());
-        }
-
         //顺序执行next节点
-        if (getNextNodes() != null) {
+        if (getNextNodes() != null && !getNextNodes().isEmpty()) {
+
+            //next是否执行采用pipe模式
+            if (isPipeNext()) {
+                input.setNodeData(output.getNodeData().cloneThis());
+            }
+
             for (ExecuteNode nextNode : getNextNodes()) {
                 if (this.isNeedCloneInputData()) {
                     input.getNodeData().setData(input.getNodeData().cloneData());

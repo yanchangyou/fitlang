@@ -4,9 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.system.SystemUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.common.AbstractExecuteNode;
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
+import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -100,8 +100,9 @@ public class ExecuteNodeUtil {
     }
 
     public static void buildDefaultNodeId(ExecuteNode executeNode) {
-        if (executeNode.getId() == null) {
-            executeNode.setId(uuid());
+        String nextId = executeNode.getNodeContext().buildNextNodeId(executeNode.getUni());
+        if (StrUtil.isBlank(executeNode.getId())) {
+            executeNode.setId(nextId);
             if (executeNode.getNodeDefine() != null && executeNode.getNodeDefine().getData() instanceof JSONObject) {
                 ((JSONObject) executeNode.getNodeDefine().getData()).put(ExecuteNodeEngineConst.DEFINE_KEYWORDS_OF_ID, executeNode.getId());
             }
@@ -167,10 +168,9 @@ public class ExecuteNodeUtil {
         if (e == null) {
             return "";
         }
-        StringBuilder builder = new StringBuilder();
-        builder.append(e.getMessage()).append("(");
-        builder.append(getAllException(e.getCause())).append(")");
-        return builder.toString();
+        String builder = e.getMessage() + "(" +
+                getAllException(e.getCause()) + ")";
+        return builder;
     }
 
     /**

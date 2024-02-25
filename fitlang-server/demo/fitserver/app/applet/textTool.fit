@@ -1,0 +1,109 @@
+{
+    "uni": "applet",
+    "input": {
+        "text": "中文乱码"
+    },
+    "output": {
+        "timestamp": "2024-02-24 15:22:40.580",
+        "result1": {
+            "GBK => UTF8": "��������",
+            "GBK => ISO8859-1": "ÖÐÎÄÂÒÂë",
+            "UTF8 => GBK": "涓枃涔辩爜",
+            "UTF8 => ISO8859-1": "ä¸­æä¹±ç ",
+            "ISO8859-1 => GBK": "????",
+            "ISO8859-1 => UTF8": "????"
+        },
+        "result2": {
+            "GBK => UTF8": {
+                "GBK => UTF8": "????????",
+                "GBK => ISO8859-1": "????????",
+                "UTF8 => GBK": "锟斤拷锟斤拷锟斤拷锟斤拷",
+                "UTF8 => ISO8859-1": "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",
+                "ISO8859-1 => GBK": "????????",
+                "ISO8859-1 => UTF8": "????????"
+            },
+            "GBK => ISO8859-1": {
+                "GBK => UTF8": "????????",
+                "GBK => ISO8859-1": "????????",
+                "UTF8 => GBK": "脰脨脦脛脗脪脗毛",
+                "UTF8 => ISO8859-1": "ÃÃÃÃÃÃÃÃ«",
+                "ISO8859-1 => GBK": "中文乱码",
+                "ISO8859-1 => UTF8": "��������"
+            },
+            "UTF8 => GBK": {
+                "GBK => UTF8": "中文乱码",
+                "GBK => ISO8859-1": "ä¸­æä¹±ç ",
+                "UTF8 => GBK": "娑擃厽鏋冩稊杈╃垳",
+                "UTF8 => ISO8859-1": "æ¶îææ¶è¾©ç",
+                "ISO8859-1 => GBK": "??????",
+                "ISO8859-1 => UTF8": "??????"
+            },
+            "UTF8 => ISO8859-1": {
+                "GBK => UTF8": "????????��???",
+                "GBK => ISO8859-1": "????????¡À???",
+                "UTF8 => GBK": "盲赂颅忙聳聡盲鹿卤莽聽聛",
+                "UTF8 => ISO8859-1": "Ã¤Â¸Â­Ã¦ÂÂÃ¤Â¹Â±Ã§Â Â",
+                "ISO8859-1 => GBK": "涓枃涔辩爜",
+                "ISO8859-1 => UTF8": "中文乱码"
+            },
+            "ISO8859-1 => GBK": {
+                "GBK => UTF8": "????",
+                "GBK => ISO8859-1": "????",
+                "UTF8 => GBK": "????",
+                "UTF8 => ISO8859-1": "????",
+                "ISO8859-1 => GBK": "????",
+                "ISO8859-1 => UTF8": "????"
+            },
+            "ISO8859-1 => UTF8": {
+                "GBK => UTF8": "????",
+                "GBK => ISO8859-1": "????",
+                "UTF8 => GBK": "????",
+                "UTF8 => ISO8859-1": "????",
+                "ISO8859-1 => GBK": "????",
+                "ISO8859-1 => UTF8": "????"
+            }
+        }
+    },
+    "script": {
+        "uni": "eval",
+        "json": {
+            "timestamp": "${FitLang.now('yyyy-MM-dd HH:mm:ss.SSS')}",
+            "result1": "${FitLang.convertCharset(text)}",
+            "result2": "${FitLang.convertCharset(FitLang.convertCharset(text))}"
+        }
+    },
+    "ui": {
+        "title": "文本工具",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "executeButtonTitle": "执行",
+        "resetLayoutButtonTitle": "重置布局",
+        "reloadButtonTitle": "刷新",
+        "clearOutputButtonTitle": "清空出参",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "switchFormButtonTitle": "切换",
+        "showGraph": false,
+        "hideButtons": [
+            "compare",
+            "clearOutput"
+        ],
+        "actions": [
+            {
+                "title": "字符集探测",
+                "script": {
+                    "uni": "eval",
+                    "json": {
+                        "timestamp": "${FitLang.now('yyyy-MM-dd HH:mm:ss.SSS')}",
+                        "result1": "${FitLang.convertCharset(text)}",
+                        "result2": "${FitLang.convertCharset(FitLang.convertCharset(text))}"
+                    }
+                }
+            }
+        ]
+    }
+}

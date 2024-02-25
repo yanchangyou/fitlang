@@ -7,10 +7,16 @@
         {
             "name": "FitActionGroup0",
             "title": "Fit Hello",
-            "script": {
-                "uni": "hello",
-                "who": "fit"
-            }
+            "actions": [
+                {
+                    "title": "Fit Hello",
+                    "visible": true,
+                    "script": {
+                        "uni": "hello",
+                        "who": "fit"
+                    }
+                }
+            ]
         },
         {
             "name": "FitActionGroup1",
@@ -100,6 +106,35 @@
                             }
                         ]
                     }
+                },
+                {
+                    "name": "amis.json",
+                    "title": "amis Page",
+                    "visible": true,
+                    "synchronize": true,
+                    "script": {
+                        "uni": "pipe",
+                        "child": [
+                            {
+                                "uni": "readEditor",
+                                "contentField": "page"
+                            },
+                            {
+                                "uni": "parseJson",
+                                "jsonField": "page"
+                            },
+                            {
+                                "uni": "showJsonPage",
+                                "option": {
+                                    "pageType": "amis",
+                                    "title": "Json Page",
+                                    "modal": true,
+                                    "width": 800,
+                                    "height": 600
+                                }
+                            }
+                        ]
+                    }
                 }
             ]
         },
@@ -124,37 +159,31 @@
                     }
                 },
                 {
-                    "name": "sortJson",
-                    "title": "Sort Json",
+                    "name": "mergeExcel",
+                    "title": "Merge Excel",
+                    "synchronize": true,
                     "script": {
                         "uni": "pipe",
                         "child": [
                             {
-                                "uni": "readEditor",
-                                "contentField": "content"
+                                "uni": "chooseFile",
+                                "fileField": "inputFiles",
+                                "isMultiple": true
                             },
                             {
-                                "uni": "parseJson",
-                                "jsonField": "content"
+                                "uni": "mergeExcel"
                             },
                             {
-                                "uni": "sortField"
-                            },
-                            {
-                                "uni": "stringifyJson",
-                                "jsonField": "content",
-                                "format": true
-                            },
-                            {
-                                "uni": "writeEditor",
-                                "contentField": "content"
+                                "uni": "cmd",
+                                "cmd": "open",
+                                "target": "${this.?outputFile}"
                             }
                         ]
                     }
                 },
                 {
-                    "name": "getStruct",
-                    "title": "Get Json Structure",
+                    "name": "getSchema",
+                    "title": "Get JSON Schema",
                     "script": {
                         "uni": "pipe",
                         "child": [
@@ -167,10 +196,7 @@
                                 "jsonField": "content"
                             },
                             {
-                                "uni": "getStruct"
-                            },
-                            {
-                                "uni": "get",
+                                "uni": "getSchema",
                                 "path": "content"
                             }
                         ]
@@ -274,18 +300,13 @@
                 "uni": "pipe",
                 "child": [
                     {
-                        "uni": "readEditor",
-                        "contentField": "content"
-                    },
-                    {
-                        "uni": "parseJson",
-                        "jsonField": "content"
+                        "uni": "readEditor"
                     },
                     {
                         "uni": "convert",
                         "express": {
-                            "item": "${content.item}",
-                            "collectionName": "${content.info.name}"
+                            "item": "${item}",
+                            "collectionName": "${info.name}"
                         }
                     },
                     {
@@ -371,6 +392,7 @@
                                                 },
                                                 {
                                                     "uni": "writeFile",
+                                                    "contentField": "content",
                                                     "format": true
                                                 }
                                             ]
@@ -404,6 +426,107 @@
                                 }
                             ]
                         }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup6",
+            "title": "Sort JSON Field",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor"
+                    },
+                    {
+                        "uni": "sortField"
+                    },
+                    {
+                        "uni": "writeEditor"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup7",
+            "title": "Get JSON Struct",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor"
+                    },
+                    {
+                        "uni": "getStruct"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup8",
+            "title": "Parse JSON",
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "FitActionGroup9",
+            "title": "Find JSON",
+            "refreshParent": true,
+            "script": {
+                "uni": "pipe",
+                "child": [
+                    {
+                        "uni": "showConfig",
+                        "config": {
+                            "jsonPath": "uni"
+                        }
+                    },
+                    {
+                        "uni": "readConfig"
+                    },
+                    {
+                        "uni": "readEditor",
+                        "contentField": "content"
+                    },
+                    {
+                        "uni": "parseJson",
+                        "jsonField": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "content"
+                    },
+                    {
+                        "uni": "get",
+                        "path": "${config.jsonPath}",
+                        "comment": "jsonPath grammar: https://alibaba.github.io/fastjson2/jsonpath_cn"
+                    },
+                    {
+                        "uni": "writeFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
+                        "charset": "UTF-8",
+                        "format": true
+                    },
+                    {
+                        "uni": "readFile",
+                        "filePath": "${fileDir + '/' + filePrefix + '.search.json'}",
+                        "charset": "UTF-8"
                     }
                 ]
             }

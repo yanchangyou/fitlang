@@ -1,4 +1,7 @@
 {
     "uni": "httpGet",
+    "retryTimes": 1,
+    "retrySleep": 1,
+    "retryCondition": "true",
     "url": "http://fit.321zou.com/hello"
 }

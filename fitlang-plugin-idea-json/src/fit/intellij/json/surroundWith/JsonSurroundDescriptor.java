@@ -1,15 +1,15 @@
 package fit.intellij.json.surroundWith;
 
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonValue;
 import com.intellij.lang.surroundWith.SurroundDescriptor;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.SmartList;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class JsonSurroundDescriptor implements SurroundDescriptor {
 
     // Extend selection beyond possible delimiters
     while (firstElement != null &&
-           (firstElement instanceof PsiWhiteSpace || firstElement.getNode().getElementType() == JsonElementTypes.COMMA)) {
+           (firstElement instanceof PsiWhiteSpace || firstElement.getNode().getElementType() == fit.intellij.json.JsonElementTypes.COMMA)) {
       firstElement = firstElement.getNextSibling();
     }
     while (lastElement != null &&
@@ -45,12 +45,12 @@ public class JsonSurroundDescriptor implements SurroundDescriptor {
       endOffset = lastElement.getTextRange().getEndOffset();
     }
 
-    final JsonProperty property = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, JsonProperty.class);
+    final fit.intellij.json.psi.JsonProperty property = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, fit.intellij.json.psi.JsonProperty.class);
     if (property != null) {
       return collectElements(endOffset, property, JsonProperty.class);
     }
 
-    final JsonValue value = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, JsonValue.class);
+    final fit.intellij.json.psi.JsonValue value = PsiTreeUtil.findElementOfClassAtRange(file, startOffset, endOffset, fit.intellij.json.psi.JsonValue.class);
     if (value != null) {
       return collectElements(endOffset, value, JsonValue.class);
     }
@@ -58,7 +58,7 @@ public class JsonSurroundDescriptor implements SurroundDescriptor {
   }
 
   private static <T extends PsiElement> PsiElement @NotNull [] collectElements(int endOffset, @NotNull T property, @NotNull Class<T> kind) {
-    final List<T> properties = ContainerUtil.newArrayList(property);
+    final List<T> properties = new SmartList<>(property);
     PsiElement nextSibling = property.getNextSibling();
     while (nextSibling != null && nextSibling.getTextRange().getEndOffset() <= endOffset) {
       if (kind.isInstance(nextSibling)) {

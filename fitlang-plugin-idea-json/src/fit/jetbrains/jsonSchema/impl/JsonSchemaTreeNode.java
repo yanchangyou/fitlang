@@ -10,23 +10,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * @author Irina.Chernushina on 4/20/2017.
- */
 public class JsonSchemaTreeNode {
   private boolean myAny;
   private boolean myNothing;
   private int myExcludingGroupNumber = -1;
-  @NotNull private fit.jetbrains.jsonSchema.impl.SchemaResolveState myResolveState = fit.jetbrains.jsonSchema.impl.SchemaResolveState.normal;
+  @NotNull private SchemaResolveState myResolveState = SchemaResolveState.normal;
 
-  @Nullable private final JsonSchemaObject mySchema;
+  @Nullable private final fit.jetbrains.jsonSchema.impl.JsonSchemaObject mySchema;
   @NotNull private final JsonPointerPosition myPosition;
 
   @Nullable private final JsonSchemaTreeNode myParent;
   @NotNull private final List<JsonSchemaTreeNode> myChildren = new ArrayList<>();
 
   public JsonSchemaTreeNode(@Nullable JsonSchemaTreeNode parent,
-                            @Nullable JsonSchemaObject schema) {
+                            @Nullable fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
     assert schema != null || parent != null;
     myParent = parent;
     mySchema = schema;
@@ -47,7 +44,7 @@ public class JsonSchemaTreeNode {
   }
 
   public void createChildrenFromOperation(@NotNull JsonSchemaVariantsTreeBuilder.Operation operation) {
-    if (!fit.jetbrains.jsonSchema.impl.SchemaResolveState.normal.equals(operation.myState)) {
+    if (!SchemaResolveState.normal.equals(operation.myState)) {
       final JsonSchemaTreeNode node = new JsonSchemaTreeNode(this, null);
       node.myResolveState = operation.myState;
       myChildren.add(node);
@@ -58,7 +55,7 @@ public class JsonSchemaTreeNode {
     }
     if (!operation.myOneOfGroup.isEmpty()) {
       for (int i = 0; i < operation.myOneOfGroup.size(); i++) {
-        final List<JsonSchemaObject> group = operation.myOneOfGroup.get(i);
+        final List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> group = operation.myOneOfGroup.get(i);
         final List<JsonSchemaTreeNode> children = convertToNodes(group);
         final int number = i;
         children.forEach(c -> c.myExcludingGroupNumber = number);
@@ -67,16 +64,16 @@ public class JsonSchemaTreeNode {
     }
   }
 
-  private List<JsonSchemaTreeNode> convertToNodes(List<JsonSchemaObject> children) {
+  private List<JsonSchemaTreeNode> convertToNodes(List<fit.jetbrains.jsonSchema.impl.JsonSchemaObject> children) {
     List<JsonSchemaTreeNode> nodes = new ArrayList<>(children.size());
-    for (JsonSchemaObject child: children) {
+    for (fit.jetbrains.jsonSchema.impl.JsonSchemaObject child: children) {
       nodes.add(new JsonSchemaTreeNode(this, child));
     }
     return nodes;
   }
 
   @NotNull
-  public fit.jetbrains.jsonSchema.impl.SchemaResolveState getResolveState() {
+  public SchemaResolveState getResolveState() {
     return myResolveState;
   }
 
@@ -89,7 +86,7 @@ public class JsonSchemaTreeNode {
   }
 
 
-  public void setChild(@NotNull final JsonSchemaObject schema) {
+  public void setChild(@NotNull final fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema) {
     myChildren.add(new JsonSchemaTreeNode(this, schema));
   }
 
@@ -156,7 +153,7 @@ public class JsonSchemaTreeNode {
     if (myExcludingGroupNumber >= 0) sb.append("in excluding group\n");
     if (myAny) sb.append("any");
     else if (myNothing) sb.append("nothing");
-    else if (!fit.jetbrains.jsonSchema.impl.SchemaResolveState.normal.equals(myResolveState)) sb.append(myResolveState.name());
+    else if (!SchemaResolveState.normal.equals(myResolveState)) sb.append(myResolveState.name());
     else {
       assert mySchema != null;
       sb.append("schema").append("\n");

@@ -4,7 +4,10 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -19,20 +22,22 @@ import java.util.concurrent.TimeUnit;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
 import static my.lang.action.FitLangPluginAction.actionPerformedInner;
+import static my.lang.action.FitLangPluginAction.registerAction;
 import static my.lang.action.RunCodeAction.supportLanguageMap;
 
 public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
-    AnAction[] children = new AnAction[0];
+    AnAction[] children = null;
 
-    PluginActionConfig actionConfig;
+    protected PluginActionConfig actionConfig;
 
     private final BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(100);
 
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8, 100, 100, TimeUnit.MINUTES, workQueue);
 
-    public boolean canBePerformed(@NotNull DataContext context) {
-        return actionConfig != null;
+    @Override
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.EDT;
     }
 
     @Override
@@ -44,7 +49,9 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
 
     @Override
     public void update(AnActionEvent event) {
-        if (children == null || children.length == 0 || debug) {
+        if (children == null || debug) {
+
+            children = new AnAction[0];
 
             event.getPresentation().setEnabledAndVisible(false);
 
@@ -60,21 +67,34 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
                 return;
             }
             JSONObject groupConfig = getGroupConfig(pluginConfig);
-            if (groupConfig == null || groupConfig.isEmpty()) {
+            if (groupConfig == null || groupConfig.isEmpty()
+                    || Boolean.FALSE.equals(groupConfig.getBoolean("visible"))) {
                 return;
             }
             JSONObject actionScript = groupConfig.getJSONObject("script");
-            if (actionScript != null) {
-                actionConfig = new PluginActionConfig(groupConfig);
+            JSONArray actions = groupConfig.getJSONArray("actions");
+            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
+
+            if (actionScript != null || actions != null && actions.size() == 1) {
+                if (actionScript != null) {
+                    actionConfig = new PluginActionConfig(groupConfig);
+                } else {
+                    actionConfig = new PluginActionConfig(actions.getJSONObject(0));
+                    registerAction(actionConfig.getId(), new FitLangPluginAction(actions.getJSONObject(0)));
+                }
+
+                event.getPresentation().setPerformGroup(true);
+                event.getPresentation().setDisableGroupIfEmpty(false);
                 event.getPresentation().setEnabledAndVisible(true);
+
                 String title = groupConfig.getString("title");
                 if (StrUtil.isBlank(title)) {
                     title = groupConfig.getString("name");
                 }
                 event.getPresentation().setText(title);
+
                 return;
             }
-            JSONArray actions = groupConfig.getJSONArray("actions");
             if (actions == null || actions.isEmpty()) {
                 return;
             }
@@ -82,8 +102,7 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             if (!Boolean.FALSE.equals(groupConfig.getBoolean("visible"))) {
                 event.getPresentation().setEnabledAndVisible(true);
             }
-            debug = Boolean.TRUE.equals(pluginConfig.getBoolean("debug"));
-            List<AnAction> actionList = new ArrayList<>();
+            List<FitLangPluginAction> actionList = new ArrayList<>();
             Set<String> pluginNameSet = new HashSet<>();
             for (Object item : actions) {
                 JSONObject plugin = (JSONObject) item;
@@ -102,6 +121,10 @@ public abstract class FitLangPluginActionGroup extends DefaultActionGroup {
             System.out.println("FitLang: loaded plugin: ".concat(pluginNameSet.toString()));
 
             children = actionList.toArray(new AnAction[0]);
+
+            for (FitLangPluginAction action : actionList) {
+                registerAction(action.actionConfig.getId(), action);
+            }
         }
     }
 

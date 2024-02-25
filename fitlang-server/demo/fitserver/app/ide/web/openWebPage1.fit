@@ -1,0 +1,11 @@
+{
+    "uni": "openWebPage",
+    "url": "https://www.baidu.com",
+    "option": {
+        "title": "Web Page",
+        "modal": false,
+        "width": 800,
+        "height": 600,
+        "devTools": true
+    }
+}

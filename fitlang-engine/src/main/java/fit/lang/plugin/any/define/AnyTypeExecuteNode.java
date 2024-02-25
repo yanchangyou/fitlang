@@ -1,9 +1,9 @@
 package fit.lang.plugin.any.define;
 
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 
 /**
  * 执行节点

@@ -87,15 +87,15 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 
 - hello: hello world demo
 - echo: 原样返回入参
-- set: 设置全局变量
-- sleep: 流程休眠节点
+- setGlobal: 设置全局变量
 - print: 控制台打印
-- assert: 断言
+- log: IDE控制台输出
+- sleep: 流程休眠节点
 - perf: 耗时统计
+- replaceContent: 文本内容查找替换
 
-### json数据节点
+### json操作节点
 
-- add: 支持json相加
 - convert: 转换节点，支持json到json的转换，使用转换表达式
 - removeField: 移除json字段
 - removeEmptyField: 移除空字段
@@ -104,7 +104,21 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - eval: 表达式计算
 - parseJson: 解析json
 - stringifyJson: json转字符串
-- convertKeyValueList: key value list转换对象
+- convertKeyValueList: key value list转换对象（废弃）
+- convertObjectToArray: 对象转数组
+- convertArrayToObject: 数组转换对象
+- convertToObjectArray: 转换为对象数组
+- convertToBasicArray: 转换为基本数组
+- get: 使用json path获取值 （json path语法说明：https://alibaba.github.io/fastjson2/jsonpath_cn）
+- set: 使用json path设置值
+- getStruct: 获取json结构
+- getSchema: 获取JsonSchema
+- sortField: 按照字段排序（字母表升序）
+- add: 支持json相加
+- increase: 加+1
+- decrease: 减-1
+- compare: 比较json
+- diff: 比较json，只显示差异
 
 ### 流程节点（有child子节点）
 
@@ -119,6 +133,13 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - execute: 执行入参传递的流程
 - call: 引用节点执行
 - catch: 异常捕获，包含try节点和catch节点两个子节点
+- assert: 断言
+- node: 子流程
+
+### 函数
+
+- function: 函数
+- package: 包
 
 ### http节点
 
@@ -128,6 +149,8 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - httpGet: http get
 - httpPut: http put
 - httpDelete: http delete
+- httpHead: http head
+- postman: postman
 
 ### Web节点
 
@@ -146,11 +169,21 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - systemInfo: 获取系统信息，基于oshi实现(信息字段(支持屏蔽)
   ：computerManufacturer,computerModel,processorName,processorPhysicalCount,processorLogicalCount,processorMaxFreq,memoryTotal,memoryAvailable,osManufacturer,osFamily,osVersion,osBit)
 - info: 获取系统信息，基于hutool SystemUtil实现(信息字段(支持屏蔽)
-  ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties)
+  ：os,memory,jvm,host,runtime,javaSpec,jvm,user,properties,env)
+
+### os节点
+
+- getClipboard: 读取剪贴板内容
+- setClipboard: 设置剪贴板内容
 
 ### 命令行
 
 - cmd: 命令行
+- zip: 压缩
+- unzip: 解压
+
+### 网络
+
 - telnet: telnet
 - telnets: telnets
 - telnet.http: telnet.http
@@ -169,6 +202,32 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 
 - readEditor: 获取当前编辑器内容
 - writeEditor: 写入当前编辑器内容
+- showConfig: 显示配置
+- readConfig: 读取配置
+- openWebPage: 打开web页面
+- showHtml: open web page
+  showJsonPage: show json page
+- chooseFile: 选择文件
+- showInfoMessage: 显示消息
+- showWarningMessage: 显示警告信息
+- showErrorMessage: 显示错误信息
+- showInputDialog: 显示输入对话框
+- showOkCancelDialog: 显示确认或取消对话框
+- showGlobalConfigDialog: 显示全局配置对话框
+- showYesNoCancelDialog: Yes, No, Cancel对话框
+- showPasswordDialog: password对话框
+- showCheckboxOkCancelDialog: 勾选对话框
+
+### 办公软件节点
+
+- readExcel: 读取Excel
+- writeExcel: 写入Excel
+- mergeExcel: 合并Excel
+- readExcelForAllSheet: 读取所有sheet内容
+
+### 小应用
+
+- applet: 小应用
 
 ## 🔋 JetBrains开源授权
 

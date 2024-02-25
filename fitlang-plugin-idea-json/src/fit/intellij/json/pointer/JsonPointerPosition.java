@@ -1,4 +1,4 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.pointer;
 
 import com.intellij.util.containers.ContainerUtil;
@@ -26,13 +26,13 @@ public class JsonPointerPosition {
 
   public static JsonPointerPosition parsePointer(@NotNull String pointer) {
     final List<String> chain = JsonPointerUtil.split(JsonPointerUtil.normalizeSlashes(JsonPointerUtil.normalizeId(pointer)));
-    List<Step> steps = new ArrayList<>(chain.size());
+    List<JsonPointerPosition.Step> steps = new ArrayList<>(chain.size());
     for (String s: chain) {
       try {
-        steps.add(Step.createArrayElementStep(Integer.parseInt(s)));
+        steps.add(JsonPointerPosition.Step.createArrayElementStep(Integer.parseInt(s)));
       }
       catch (NumberFormatException e) {
-        steps.add(Step.createPropertyStep(JsonPointerUtil.unescapeJsonPointerPart(s)));
+        steps.add(JsonPointerPosition.Step.createPropertyStep(JsonPointerUtil.unescapeJsonPointerPart(s)));
       }
     }
     return new JsonPointerPosition(steps);
@@ -133,7 +133,7 @@ public class JsonPointerPosition {
     return steps.size() >= pos;
   }
 
-  static class Step {
+  static final class Step {
     @Nullable private final String myName;
     private final int myIdx;
 

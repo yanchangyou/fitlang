@@ -4,12 +4,6 @@ package fit.intellij.json.editor;
 import com.intellij.codeInsight.editorActions.CopyPastePostProcessor;
 import com.intellij.codeInsight.editorActions.TextBlockTransferableData;
 import com.intellij.ide.scratch.ScratchUtil;
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.JsonFileType;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonFile;
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonValue;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
@@ -22,6 +16,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.JsonFileType;
+import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonFile;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,46 +35,31 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
   static class DumbData implements TextBlockTransferableData {
     private static final DataFlavor DATA_FLAVOR = new DataFlavor(JsonCopyPastePostProcessor.class, "class: JsonCopyPastePostProcessor");
     @Override
-    public DataFlavor getFlavor()  {
+    public @Nullable DataFlavor getFlavor()  {
       return  DATA_FLAVOR;
-    }
-
-    @Override
-    public int getOffsetCount() {
-      return 0;
-    }
-
-    @Override
-    public int getOffsets(int[] offsets, int index) {
-      return index;
-    }
-
-    @Override
-    public int setOffsets(int[] offsets, int index) {
-      return index;
     }
   }
 
   @NotNull
   @Override
-  public List<TextBlockTransferableData> collectTransferableData(PsiFile file, Editor editor, int[] startOffsets, int[] endOffsets) {
+  public List<TextBlockTransferableData> collectTransferableData(@NotNull PsiFile file, @NotNull Editor editor, int @NotNull [] startOffsets, int @NotNull [] endOffsets) {
     return ContainerUtil.emptyList();
   }
 
   @NotNull
   @Override
-  public List<TextBlockTransferableData> extractTransferableData(Transferable content) {
+  public List<TextBlockTransferableData> extractTransferableData(@NotNull Transferable content) {
     // if this list is empty, processTransferableData won't be called
     return DATA_LIST;
   }
 
   @Override
-  public void processTransferableData(Project project,
-                                      Editor editor,
-                                      RangeMarker bounds,
+  public void processTransferableData(@NotNull Project project,
+                                      @NotNull Editor editor,
+                                      @NotNull RangeMarker bounds,
                                       int caretOffset,
-                                      Ref<Boolean> indented,
-                                      List<TextBlockTransferableData> values) {
+                                      @NotNull Ref<? super Boolean> indented,
+                                      @NotNull List<? extends TextBlockTransferableData> values) {
     fixCommasOnPaste(project, editor, bounds);
   }
 
@@ -103,7 +88,7 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
 
   private static void fixLeadingComma(@NotNull RangeMarker bounds, @NotNull PsiFile psiFile, @NotNull PsiDocumentManager manager) {
     final PsiElement startElement = skipWhitespaces(psiFile.findElementAt(bounds.getStartOffset()));
-    PsiElement propertyOrArrayItem = startElement instanceof JsonProperty ? startElement : getParentPropertyOrArrayItem(startElement);
+    PsiElement propertyOrArrayItem = startElement instanceof fit.intellij.json.psi.JsonProperty ? startElement : getParentPropertyOrArrayItem(startElement);
 
     if (propertyOrArrayItem == null) return;
 
@@ -117,8 +102,8 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
 
   @Nullable
   private static PsiElement getParentPropertyOrArrayItem(@Nullable PsiElement startElement) {
-    PsiElement propertyOrArrayItem = PsiTreeUtil.getParentOfType(startElement, JsonProperty.class, JsonArray.class);
-    if (propertyOrArrayItem instanceof JsonArray) {
+    PsiElement propertyOrArrayItem = PsiTreeUtil.getParentOfType(startElement, JsonProperty.class, fit.intellij.json.psi.JsonArray.class);
+    if (propertyOrArrayItem instanceof fit.intellij.json.psi.JsonArray) {
       for (JsonValue value : ((JsonArray)propertyOrArrayItem).getValueList()) {
         if (PsiTreeUtil.isAncestor(value, startElement, false)) {
           return value;
@@ -135,9 +120,9 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
       endElement = PsiTreeUtil.skipWhitespacesBackward(endElement);
     }
 
-    if (endElement instanceof LeafPsiElement && ((LeafPsiElement)endElement).getElementType() == JsonElementTypes.COMMA) {
+    if (endElement instanceof LeafPsiElement && ((LeafPsiElement)endElement).getElementType() == fit.intellij.json.JsonElementTypes.COMMA) {
       final PsiElement nextNext = skipWhitespaces(endElement.getNextSibling());
-      if (nextNext instanceof LeafPsiElement && (((LeafPsiElement)nextNext).getElementType() == JsonElementTypes.R_CURLY ||
+      if (nextNext instanceof LeafPsiElement && (((LeafPsiElement)nextNext).getElementType() == fit.intellij.json.JsonElementTypes.R_CURLY ||
                                                   ((LeafPsiElement)nextNext).getElementType() == JsonElementTypes.R_BRACKET)) {
         PsiElement finalEndElement = endElement;
         ApplicationManager.getApplication().runWriteAction(() -> finalEndElement.delete());
@@ -165,5 +150,10 @@ public class JsonCopyPastePostProcessor extends CopyPastePostProcessor<TextBlock
       element = element.getNextSibling();
     }
     return element;
+  }
+
+  @Override
+  public boolean requiresAllDocumentsToBeCommitted(@NotNull Editor editor, @NotNull Project project) {
+    return false;
   }
 }

@@ -1,10 +1,12 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.remote;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Couple;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.JarFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
@@ -23,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-public class JsonFileResolver {
+public final class JsonFileResolver {
   public static boolean isRemoteEnabled(Project project) {
     return !ApplicationManager.getApplication().isUnitTestMode() &&
            JsonSchemaCatalogProjectConfiguration.getInstance(project).isRemoteActivityEnabled();
@@ -31,17 +33,17 @@ public class JsonFileResolver {
 
   @Nullable
   public static VirtualFile urlToFile(@NotNull String urlString) {
-    if (urlString.startsWith(JsonSchemaObject.TEMP_URL)) {
-      return TempFileSystem.getInstance().findFileByPath(urlString.substring(JsonSchemaObject.TEMP_URL.length() - 1));
+    if (urlString.startsWith(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.TEMP_URL)) {
+      return TempFileSystem.getInstance().findFileByPath(urlString.substring(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.TEMP_URL.length() - 1));
     }
-    return VirtualFileManager.getInstance().findFileByUrl(replaceUnsafeSchemaStoreUrls(urlString));
+    return VirtualFileManager.getInstance().findFileByUrl(FileUtil.toSystemIndependentName(replaceUnsafeSchemaStoreUrls(urlString)));
   }
 
   @Nullable
   @Contract("null -> null; !null -> !null")
   public static String replaceUnsafeSchemaStoreUrls(@Nullable String urlString) {
     if (urlString == null) return null;
-    if (urlString.equals(fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogManager.DEFAULT_CATALOG)) {
+    if (urlString.equals(JsonSchemaCatalogManager.DEFAULT_CATALOG)) {
       return JsonSchemaCatalogManager.DEFAULT_CATALOG_HTTPS;
     }
     if (StringUtil.startsWithIgnoreCase(urlString, JsonSchemaRemoteContentProvider.STORE_URL_PREFIX_HTTP)) {
@@ -69,7 +71,7 @@ public class JsonFileResolver {
       // relative path
       VirtualFile parent = currentFile == null ? null : currentFile.getParent();
       schemaUrl = parent == null ? null :
-                  parent.getUrl().startsWith(JsonSchemaObject.TEMP_URL) ? ("temp:///" + parent.getPath() + "/" + schemaUrl) :
+                  parent.getUrl().startsWith(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.TEMP_URL) ? ("temp:///" + parent.getPath() + "/" + schemaUrl) :
                   VfsUtilCore.pathToUrl(parent.getPath() + File.separator + schemaUrl);
     }
 
@@ -105,11 +107,11 @@ public class JsonFileResolver {
   }
 
   public static boolean isAbsoluteUrl(@NotNull String path) {
-    return isHttpPath(path) || path.startsWith(JsonSchemaObject.TEMP_URL);
+    return isHttpPath(path) || path.startsWith(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.TEMP_URL) || FileUtil.toSystemIndependentName(path).startsWith(JarFileSystem.PROTOCOL_PREFIX);
   }
 
   public static boolean isTempOrMockUrl(@NotNull String path) {
-    return path.startsWith(JsonSchemaObject.TEMP_URL) || path.startsWith(JsonSchemaObject.MOCK_URL);
+    return path.startsWith(fit.jetbrains.jsonSchema.impl.JsonSchemaObject.TEMP_URL) || path.startsWith(JsonSchemaObject.MOCK_URL);
   }
 
   public static boolean isSchemaUrl(@Nullable String url) {

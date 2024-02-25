@@ -1,0 +1,108 @@
+{
+    "uni": "applet",
+    "input":{
+        "json2":{
+            "field":123456,
+            "double":123.456789,
+            "string": "abcd",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        },
+        "json1":{
+            "field": "abc",
+            "number":123,
+            "string": "abc",
+            "object":{
+                "number":123,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc"
+                    }
+                }
+            ]
+        }
+    },
+    "output":{
+        "field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
+        },
+        "number":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "double":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "boolean":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "object.double":{
+            "equal": false,
+            "type": "ADD"
+        },
+        "array[0].object.boolean":{
+            "equal": false,
+            "type": "ADD"
+        }
+    },
+    "script":{
+        "uni": "diff"
+    },
+    "ui":{
+        "title": "JSON对比",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "executeButtonTitle": "执行",
+        "resetLayoutButtonTitle": "重置布局",
+        "reloadButtonTitle": "刷新",
+        "clearOutputButtonTitle": "清空出参",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "switchFormButtonTitle": "切换",
+        "showGraph": false,
+        "showInputForm": true,
+        "inputOutputSplitRatio":0.65,
+        "scriptSplitRatio":0.9,
+        "hideButtons":[
+            "compare",
+            "clearOutput"
+        ],
+        "actions":[
+            
+        ]
+    }
+}

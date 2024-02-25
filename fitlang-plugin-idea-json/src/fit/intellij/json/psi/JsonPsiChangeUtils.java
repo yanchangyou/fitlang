@@ -1,10 +1,11 @@
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.psi;
 
-import fit.intellij.json.JsonElementTypes;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.TokenType;
+import fit.intellij.json.JsonElementTypes;
 
-public class JsonPsiChangeUtils {
+public final class JsonPsiChangeUtils {
   public static void removeCommaSeparatedFromList(final ASTNode myNode, final ASTNode parent) {
     ASTNode from = myNode, to = myNode.getTreeNext();
 
@@ -15,7 +16,7 @@ public class JsonPsiChangeUtils {
       toCandidate = toCandidate.getTreeNext();
     }
 
-    if (toCandidate != null && toCandidate.getElementType() == JsonElementTypes.COMMA) {
+    if (toCandidate != null && toCandidate.getElementType() == fit.intellij.json.JsonElementTypes.COMMA) {
       toCandidate = toCandidate.getTreeNext();
       to = toCandidate;
       seenComma = true;

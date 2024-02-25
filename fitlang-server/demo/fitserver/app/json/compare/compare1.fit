@@ -1,0 +1,98 @@
+{
+    "uni": "applet",
+    "input":{
+        "json1":{
+            "number":123456,
+            "double":123.456789,
+            "string": "abcd",
+            "boolean": false,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        },
+        "json2":{
+            "number":123,
+            "double":123.456,
+            "string": "abc",
+            "boolean": true,
+            "object":{
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
+        }
+    },
+    "output":{
+        "number":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "double":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "string":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "boolean":{
+            "equal": false,
+            "typeEqual": true,
+            "type": "MODIFY"
+        },
+        "object.number":{
+            "equal": true
+        },
+        "object.double":{
+            "equal": true
+        },
+        "object.string":{
+            "equal": true
+        },
+        "object.boolean":{
+            "equal": true
+        },
+        "array[0].object.number":{
+            "equal": true
+        },
+        "array[0].object.double":{
+            "equal": true
+        },
+        "array[0].object.string":{
+            "equal": true
+        },
+        "array[0].object.boolean":{
+            "equal": true
+        }
+    },
+    "script":{
+        "uni": "compare"
+    }
+}

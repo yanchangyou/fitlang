@@ -20,9 +20,6 @@ import fit.jetbrains.jsonSchema.impl.JsonSchemaType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Irina.Chernushina on 2/20/2017.
- */
 public interface JsonValueAdapter {
   default boolean isShouldBeIgnored() {return false;}
   boolean isObject();

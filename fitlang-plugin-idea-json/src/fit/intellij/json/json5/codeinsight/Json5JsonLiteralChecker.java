@@ -1,15 +1,15 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.json5.codeinsight;
 
-import fit.intellij.json.JsonDialectUtil;
-import fit.intellij.json.codeinsight.JsonLiteralChecker;
-import fit.intellij.json.codeinsight.StandardJsonLiteralChecker;
 import fit.intellij.json.json5.Json5Language;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import fit.intellij.json.JsonDialectUtil;
+import fit.intellij.json.codeinsight.JsonLiteralChecker;
+import fit.intellij.json.codeinsight.StandardJsonLiteralChecker;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -37,7 +37,7 @@ public class Json5JsonLiteralChecker implements JsonLiteralChecker {
       return null;
     }
 
-    if (!StandardJsonLiteralChecker.VALID_ESCAPE.matcher(fragmentText).matches() && !INVALID_NUMERIC_ESCAPE.matcher(fragmentText).matches()) {
+    if (!fit.intellij.json.codeinsight.StandardJsonLiteralChecker.VALID_ESCAPE.matcher(fragmentText).matches() && !INVALID_NUMERIC_ESCAPE.matcher(fragmentText).matches()) {
       return null;
     }
 

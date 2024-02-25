@@ -1,0 +1,23 @@
+{
+    "type": "amis",
+    "page": {
+        "type": "page",
+        "title": "表单页面1",
+        "body": {
+            "type": "form",
+            "mode": "horizontal",
+            "body": [
+                {
+                    "label": "Name",
+                    "type": "input-text",
+                    "name": "name"
+                },
+                {
+                    "label": "Email",
+                    "type": "input-email",
+                    "name": "email"
+                }
+            ]
+        }
+    }
+}

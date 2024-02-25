@@ -5,9 +5,6 @@ import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.lookup.LookupElement;
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.psi.JsonProperty;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
@@ -15,6 +12,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ObjectUtils;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.psi.JsonProperty;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
 
 public class JsonStringPropertyInsertHandler implements InsertHandler<LookupElement> {
@@ -28,9 +28,9 @@ public class JsonStringPropertyInsertHandler implements InsertHandler<LookupElem
   @Override
   public void handleInsert(@NotNull InsertionContext context, @NotNull LookupElement item) {
     PsiElement element = context.getFile().findElementAt(context.getStartOffset());
-    JsonStringLiteral literal = PsiTreeUtil.getParentOfType(element, JsonStringLiteral.class, false);
+    fit.intellij.json.psi.JsonStringLiteral literal = PsiTreeUtil.getParentOfType(element, JsonStringLiteral.class, false);
     if (literal == null) return;
-    JsonProperty property = ObjectUtils.tryCast(literal.getParent(), JsonProperty.class);
+    fit.intellij.json.psi.JsonProperty property = ObjectUtils.tryCast(literal.getParent(), fit.intellij.json.psi.JsonProperty.class);
     if (property == null) return;
     final TextRange toDelete;
     String textToInsert = "";
@@ -62,7 +62,7 @@ public class JsonStringPropertyInsertHandler implements InsertHandler<LookupElem
     }
   }
 
-  private static boolean needCommaAfter(@NotNull JsonProperty property) {
+  private static boolean needCommaAfter(@NotNull fit.intellij.json.psi.JsonProperty property) {
     PsiElement element = property.getNextSibling();
     while (element != null) {
       if (element instanceof JsonProperty) {

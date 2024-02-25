@@ -1,6 +1,5 @@
 package fit.intellij.json.editor.smartEnter;
 
-import fit.intellij.json.JsonDialectUtil;
 import com.intellij.lang.SmartEnterProcessorWithFixers;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
@@ -12,13 +11,12 @@ import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import fit.intellij.json.psi.JsonValue;
+import fit.intellij.json.JsonDialectUtil;
+import fit.intellij.json.JsonElementTypes;
+import fit.intellij.json.psi.JsonReferenceExpression;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static fit.intellij.json.JsonElementTypes.COLON;
-import static fit.intellij.json.JsonElementTypes.COMMA;
 
 /**
  * This processor allows
@@ -66,13 +64,12 @@ public class JsonSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     return nextLeaf != null && nextLeaf.getNode().getElementType() == type;
   }
 
-  private static class JsonArrayElementFixer extends Fixer<JsonSmartEnterProcessor> {
+  private static class JsonArrayElementFixer extends SmartEnterProcessorWithFixers.Fixer<JsonSmartEnterProcessor> {
     @Override
     public void apply(@NotNull Editor editor, @NotNull JsonSmartEnterProcessor processor, @NotNull PsiElement element)
       throws IncorrectOperationException {
-      if (element instanceof fit.intellij.json.psi.JsonValue && element.getParent() instanceof fit.intellij.json.psi.JsonArray) {
-        final fit.intellij.json.psi.JsonValue arrayElement = (fit.intellij.json.psi.JsonValue)element;
-        if (terminatedOnCurrentLine(editor, arrayElement) && !isFollowedByTerminal(element, COMMA)) {
+      if (element instanceof fit.intellij.json.psi.JsonValue arrayElement && element.getParent() instanceof fit.intellij.json.psi.JsonArray) {
+        if (terminatedOnCurrentLine(editor, arrayElement) && !isFollowedByTerminal(element, JsonElementTypes.COMMA)) {
           editor.getDocument().insertString(arrayElement.getTextRange().getEndOffset(), ",");
           processor.myShouldAddNewline = true;
         }
@@ -80,26 +77,26 @@ public class JsonSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     }
   }
 
-  private static class JsonObjectPropertyFixer extends Fixer<JsonSmartEnterProcessor> {
+  private static class JsonObjectPropertyFixer extends SmartEnterProcessorWithFixers.Fixer<JsonSmartEnterProcessor> {
     @Override
     public void apply(@NotNull Editor editor, @NotNull JsonSmartEnterProcessor processor, @NotNull PsiElement element)
       throws IncorrectOperationException {
       if (element instanceof fit.intellij.json.psi.JsonProperty) {
         final fit.intellij.json.psi.JsonValue propertyValue = ((fit.intellij.json.psi.JsonProperty)element).getValue();
         if (propertyValue != null) {
-          if (terminatedOnCurrentLine(editor, propertyValue) && !isFollowedByTerminal(propertyValue, COMMA)) {
+          if (terminatedOnCurrentLine(editor, propertyValue) && !isFollowedByTerminal(propertyValue, JsonElementTypes.COMMA)) {
             editor.getDocument().insertString(propertyValue.getTextRange().getEndOffset(), ",");
             processor.myShouldAddNewline = true;
           }
         }
         else {
-          final JsonValue propertyKey = ((fit.intellij.json.psi.JsonProperty)element).getNameElement();
+          final fit.intellij.json.psi.JsonValue propertyKey = ((fit.intellij.json.psi.JsonProperty)element).getNameElement();
           TextRange keyRange = propertyKey.getTextRange();
           final int keyStartOffset = keyRange.getStartOffset();
           int keyEndOffset = keyRange.getEndOffset();
           //processor.myFirstErrorOffset = keyEndOffset;
-          if (terminatedOnCurrentLine(editor, propertyKey) && !isFollowedByTerminal(propertyKey, COLON)) {
-            boolean shouldQuoteKey = propertyKey instanceof fit.intellij.json.psi.JsonReferenceExpression && JsonDialectUtil.isStandardJson(propertyKey);
+          if (terminatedOnCurrentLine(editor, propertyKey) && !isFollowedByTerminal(propertyKey, JsonElementTypes.COLON)) {
+            boolean shouldQuoteKey = propertyKey instanceof JsonReferenceExpression && JsonDialectUtil.isStandardJson(propertyKey);
             if (shouldQuoteKey) {
               editor.getDocument().insertString(keyStartOffset, "\"");
               keyEndOffset++;
@@ -114,7 +111,7 @@ public class JsonSmartEnterProcessor extends SmartEnterProcessorWithFixers {
     }
   }
 
-  private class JsonEnterProcessor extends FixEnterProcessor {
+  private class JsonEnterProcessor extends SmartEnterProcessorWithFixers.FixEnterProcessor {
     @Override
     public boolean doEnter(PsiElement atCaret, PsiFile file, @NotNull Editor editor, boolean modified) {
       if (myShouldAddNewline) {

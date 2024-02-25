@@ -1,6 +1,6 @@
 package fit.lang.plugin.map;
 
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.map.define.MapExecuteContext;
 import fit.lang.plugin.map.define.MapExecuteNodeInput;
 import fit.lang.plugin.map.define.MapExecuteNodeOutput;

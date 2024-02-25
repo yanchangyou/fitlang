@@ -26,7 +26,7 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
         String workspaceDir = parseStringField("workspaceDir", input);
 
         String path = parseStringField("filePath", input);
-        String charset = parseStringField("charset", input);
+        String charset = nodeJsonDefine.getString("charset");
         String contentField = parseStringField("contentField", input);
 
         if (StrUtil.isBlank(workspaceDir)) {
@@ -38,21 +38,22 @@ public class WriteFileJsonExecuteNode extends JsonExecuteNode {
             throw new ExecuteNodeException("writeFile filePath param is required!");
         }
 
-        if (StrUtil.isBlank(contentField)) {
-            contentField = "content";
-        }
-
         if (StrUtil.isBlank(charset)) {
             charset = "UTF-8";
         }
 
         String filePath = joinFilePath(workspaceDir, path);
 
-        Object content = input.get(contentField);
-        if (content == null) {
-            throw new ExecuteNodeException("write content is null, check contentField value!");
-        }
         String text;
+
+        Object content;
+
+        if (StrUtil.isBlank(contentField)) {
+            content = input.getData();
+        } else {
+            content = input.get(contentField);
+        }
+
         Boolean format = nodeJsonDefine.getBoolean("format");
         if (Boolean.TRUE.equals(format) && content instanceof JSONObject) {
             text = toJsonTextWithFormat((JSONObject) content);

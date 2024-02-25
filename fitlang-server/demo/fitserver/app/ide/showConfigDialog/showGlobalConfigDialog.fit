@@ -1,0 +1,9 @@
+{
+    "uni": "showGlobalConfigDialog",
+    "config":{
+        "jsonPath": "..*"
+    },
+    "id": "5a09ec8e-3e6b-0910-b47a-29a0acc9a24d",
+    "x":300,
+    "y":160
+}

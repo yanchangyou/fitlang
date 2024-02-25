@@ -1,11 +1,11 @@
 package fit.lang.common.flow;
 
-import fit.lang.common.AbstractParallelExecuteNode;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.aop.ExecuteNodeSimpleAop;
+import fit.lang.common.AbstractParallelExecuteNode;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 import fit.lang.info.NodeExecuteInfo;
 
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
 
         List<ExecuteNodeData> resultDataList = new ArrayList<>();
         for (int i = 0; next(input); i++) {
-            ExecuteNodeOutput subOutput = getCurrentOutput(output);
             ExecuteNodeInput subInput = getCurrentInput(input);
+            ExecuteNodeOutput subOutput = getCurrentOutput(output);
 
             int index = i;
             Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {

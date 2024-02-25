@@ -1,0 +1,16 @@
+{
+    "type": "jsonform",
+    "page": {
+        "schema": {
+            "who": {
+                "title": "Who",
+                "description": "hello who",
+                "type": "string",
+                "default": "world"
+            }
+        },
+        "value": {
+            "who": "fit1"
+        }
+    }
+}

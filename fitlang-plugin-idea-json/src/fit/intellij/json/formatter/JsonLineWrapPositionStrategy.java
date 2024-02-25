@@ -1,7 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.formatter;
 
-import fit.intellij.json.JsonElementTypes;
 import com.intellij.openapi.editor.DefaultLineWrapPositionStrategy;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
@@ -12,6 +11,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
+import fit.intellij.json.JsonElementTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,18 +44,18 @@ public class JsonLineWrapPositionStrategy extends DefaultLineWrapPositionStrateg
     if (psiFile != null) {
       PsiElement currElement = psiFile.findElementAt(offset);
       final IElementType elementType = PsiUtilCore.getElementType(currElement);
-      if (elementType == JsonElementTypes.DOUBLE_QUOTED_STRING
-          || elementType == JsonElementTypes.SINGLE_QUOTED_STRING
-          || elementType == JsonElementTypes.LITERAL
-          || elementType == JsonElementTypes.BOOLEAN_LITERAL
-          || elementType == JsonElementTypes.TRUE
-          || elementType == JsonElementTypes.FALSE
-          || elementType == JsonElementTypes.IDENTIFIER
-          || elementType == JsonElementTypes.NULL_LITERAL
-          || elementType == JsonElementTypes.NUMBER_LITERAL) {
+      if (elementType == fit.intellij.json.JsonElementTypes.DOUBLE_QUOTED_STRING
+          || elementType == fit.intellij.json.JsonElementTypes.SINGLE_QUOTED_STRING
+          || elementType == fit.intellij.json.JsonElementTypes.LITERAL
+          || elementType == fit.intellij.json.JsonElementTypes.BOOLEAN_LITERAL
+          || elementType == fit.intellij.json.JsonElementTypes.TRUE
+          || elementType == fit.intellij.json.JsonElementTypes.FALSE
+          || elementType == fit.intellij.json.JsonElementTypes.IDENTIFIER
+          || elementType == fit.intellij.json.JsonElementTypes.NULL_LITERAL
+          || elementType == fit.intellij.json.JsonElementTypes.NUMBER_LITERAL) {
         return currElement.getTextRange().getEndOffset();
       }
-      if (elementType == JsonElementTypes.COLON) {
+      if (elementType == fit.intellij.json.JsonElementTypes.COLON) {
         return SKIP_WRAPPING;
       }
       if (currElement != null) {

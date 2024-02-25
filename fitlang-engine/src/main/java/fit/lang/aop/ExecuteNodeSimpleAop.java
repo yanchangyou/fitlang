@@ -1,9 +1,9 @@
 package fit.lang.aop;
 
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeAopIgnoreTag;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 import fit.lang.info.NodeExecuteInfo;
 
 import static fit.lang.ExecuteNodeUtil.buildDefaultNodeId;
@@ -15,6 +15,9 @@ public class ExecuteNodeSimpleAop {
 
     public static void beforeExecute(ExecuteNodeInput input, ExecuteNode executeNode, ExecuteNodeOutput output) {
 
+        if(executeNode.getNodeContext() == null) {
+            executeNode.setNodeContext(input.getNodeContext());
+        }
         buildDefaultNodeId(executeNode);
 
         String id = executeNode.getId();
@@ -23,7 +26,7 @@ public class ExecuteNodeSimpleAop {
             if (executeNode.isNeedCloneInputData()) {
                 input.getNodeData().setData(input.getNodeData().cloneData());
             }
-            input.getNodeContext().setAttribute(id + "Input", data);
+            input.getNodeContext().storeNodeInput(id, data);
         }
 
         if (executeNode.getNodeContext() != null) {
@@ -39,7 +42,7 @@ public class ExecuteNodeSimpleAop {
         String id = executeNode.getId();
 
         if (!(executeNode instanceof ExecuteNodeAopIgnoreTag)) {
-            input.getNodeContext().setAttribute(id + "Output", output.getNodeData().getData());
+            input.getNodeContext().storeNodeOutput(id, output.getNodeData().getData());
         }
         if (executeNode.getNodeContext() != null) {
             executeNode.getNodeContext().getNodeExecuteInfo(id).setEndTime(System.currentTimeMillis());

@@ -15,8 +15,8 @@
  */
 package fit.jetbrains.jsonSchema.impl.adapters;
 
-import fit.intellij.json.psi.JsonArray;
 import com.intellij.psi.PsiElement;
+import fit.intellij.json.psi.JsonArray;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
@@ -26,11 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author Irina.Chernushina on 2/20/2017.
- */
-public class JsonJsonArrayAdapter implements JsonArrayValueAdapter {
-  @NotNull private final JsonArray myArray;
+public class JsonJsonArrayAdapter implements fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter {
+  @NotNull private final fit.intellij.json.psi.JsonArray myArray;
 
   public JsonJsonArrayAdapter(@NotNull JsonArray array) {myArray = array;}
 

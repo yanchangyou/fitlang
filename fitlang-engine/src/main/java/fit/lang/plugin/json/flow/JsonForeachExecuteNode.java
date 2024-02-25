@@ -2,19 +2,18 @@ package fit.lang.plugin.json.flow;
 
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
+import fit.lang.ExecuteNodeException;
 import fit.lang.ExecuteNodeUtil;
+import fit.lang.common.flow.ForeachExecuteNode;
+import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
+import fit.lang.plugin.json.define.JsonExecuteContext;
 import fit.lang.plugin.json.define.JsonExecuteNodeData;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
-import fit.lang.ExecuteNodeException;
-import fit.lang.common.flow.ForeachExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeBuildable;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
-import fit.lang.plugin.json.define.JsonExecuteContext;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +98,7 @@ public class JsonForeachExecuteNode extends ForeachExecuteNode implements Execut
     Map<JSONObject, JSONArray> cache = new HashMap<>();
 
     JSONArray buildKeyValueList(JSONObject jsonObject) {
-        if (cache.keySet().contains(jsonObject)) {
+        if (cache.containsKey(jsonObject)) {
             return cache.get(jsonObject);
         }
         JSONArray list = new JSONArray();

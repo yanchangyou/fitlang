@@ -25,14 +25,11 @@ import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.filters.position.FilterPattern;
 import com.intellij.util.ObjectUtils;
+import fit.intellij.json.psi.JsonFile;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
-import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Irina.Chernushina on 3/31/2016.
- */
 public class JsonSchemaReferenceContributor extends PsiReferenceContributor {
   private static class Holder {
     private static final PsiElementPattern.Capture<fit.intellij.json.psi.JsonValue> REF_PATTERN = createPropertyValuePattern("$ref", true, false);
@@ -55,14 +52,12 @@ public class JsonSchemaReferenceContributor extends PsiReferenceContributor {
       @Override
       public boolean isAcceptable(Object element, @Nullable PsiElement context) {
         if (element instanceof fit.intellij.json.psi.JsonValue) {
-          final fit.intellij.json.psi.JsonValue value = (JsonValue) element;
-          if (schemaOnly && !JsonSchemaService.isSchemaFile(CompletionUtil.getOriginalOrSelf(value.getContainingFile()))) return false;
-
-          final fit.intellij.json.psi.JsonProperty property = ObjectUtils.tryCast(value.getParent(), fit.intellij.json.psi.JsonProperty.class);
-          if (property != null && property.getValue() == element) {
+          fit.intellij.json.psi.JsonProperty property = ObjectUtils.tryCast(((fit.intellij.json.psi.JsonValue)element).getParent(), fit.intellij.json.psi.JsonProperty.class);
+          if (property != null && property.getValue() == element && propertyName.equals(property.getName())) {
             final PsiFile file = property.getContainingFile();
-            if (rootOnly && (!(file instanceof fit.intellij.json.psi.JsonFile) || ((fit.intellij.json.psi.JsonFile)file).getTopLevelValue() != property.getParent())) return false;
-            return propertyName.equals(property.getName());
+            if (rootOnly && (!(file instanceof fit.intellij.json.psi.JsonFile) || ((JsonFile)file).getTopLevelValue() != property.getParent())) return false;
+            if (schemaOnly && !JsonSchemaService.isSchemaFile(CompletionUtil.getOriginalOrSelf(file))) return false;
+            return true;
           }
         }
         return false;
@@ -80,12 +75,12 @@ public class JsonSchemaReferenceContributor extends PsiReferenceContributor {
       @Override
       public boolean isAcceptable(Object element, @Nullable PsiElement context) {
         if (!(element instanceof fit.intellij.json.psi.JsonStringLiteral)) return false;
-        if (!JsonSchemaService.isSchemaFile(((fit.intellij.json.psi.JsonStringLiteral)element).getContainingFile())) return false;
         final PsiElement parent = ((fit.intellij.json.psi.JsonStringLiteral)element).getParent();
         if (!(parent instanceof fit.intellij.json.psi.JsonArray)) return false;
         PsiElement property = parent.getParent();
         if (!(property instanceof fit.intellij.json.psi.JsonProperty)) return false;
-        return "required".equals(((fit.intellij.json.psi.JsonProperty)property).getName());
+        return "required".equals(((fit.intellij.json.psi.JsonProperty)property).getName()) &&
+               JsonSchemaService.isSchemaFile(((fit.intellij.json.psi.JsonStringLiteral)element).getContainingFile());
       }
 
       @Override

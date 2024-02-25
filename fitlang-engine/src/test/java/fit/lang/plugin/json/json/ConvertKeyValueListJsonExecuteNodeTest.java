@@ -6,6 +6,9 @@ import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+/**
+ * use convertArrayToObject
+ */
 public class ConvertKeyValueListJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
@@ -24,7 +27,7 @@ public class ConvertKeyValueListJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 

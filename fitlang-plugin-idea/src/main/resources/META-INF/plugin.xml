@@ -1,8 +1,8 @@
-<idea-plugin>
+<idea-plugin xmlns:xi="http://www.w3.org/2001/XInclude">
     <id>FitLang</id>
     <name>FitLang</name>
     <vendor email="yanchangyou@gmail.com" url="https://github.com/yanchangyou">yanchangyou</vendor>
-    <idea-version since-build="201.0" until-build="253.*"/>
+    <idea-version since-build="231.0" until-build="331.*"/>
     <description><![CDATA[
     English: (后面有中文版)
     <br/>
@@ -54,17 +54,29 @@ print: Console printing<br/>
 log: log info node<br/>
 sleep: Process sleep node<br/>
 perf: performance  node<br/>
+replaceContent: find and replace content<br/>
 <br/>
 
 json nodes<br/>
 add: supports JSON addition<br/>
 convert: Transform node, supports JSON to JSON conversion, using conversion expressions<br/>
+convertKeyValueList: key value lis(deprecated)<br/>
+convertObjectToArray: convert object to array<br/>
+convertArrayToObject: convert array to object<br/>
+convertToObjectArray: convert to object array<br/>
+convertToBasicArray: convert to basic array<br/>
 removeField: Remove the JSON field<br/>
 removeEmptyField: Remove an empty field<br/>
 mix: mix a json object<br/>
 replace: replace output<br/>
 mix: mix a json object<br/>
 mixNode: execute node, and mix<br/>
+get: get field value by json path<br/>
+set: set field value by json path<br/>
+getStruct: get json structure<br/>
+getSchema: get json schema<br/>
+compare: compare json<br/>
+diff: diff json<br/>
 <br/>
 
 flow nodes (with child nodes)<br/>
@@ -89,6 +101,17 @@ proxy: proxy node<br/>
 web: config web param, such as response header<br/>
 <br/>
 
+http nodes<br/>
+http: http<br/>
+postJson: http post json<br/>
+postForm: http post form<br/>
+httpGet: http get<br/>
+httpPut: http put<br/>
+httpDelete: http delete<br/>
+httpHead: http head <br/>
+postman: postman<br/>
+<br/>
+
 info nodes<br/>
 systemInfo: os、memory info<br/>
 info: jvm jdk info<br/>
@@ -109,6 +132,37 @@ getClientMonitorData: get client monitor data<br/>
 receiveClientMonitorData: receive client monitor data<br/>
 pushClientMonitorData: push client monitor data<br/>
 getMonitorClient: get monitor client list<br/>
+<br/>
+
+IDE nodes<br/>
+readEditor: read editor<br/>
+writeEditor: write editor<br/>
+showConfig: show config<br/>
+readConfig: read config<br/>
+openWebPage: open web page<br/>
+showHtml: show web page<br/>
+showJsonPage: show json page<br/>
+chooseFile: choose file<br/>
+showInfoMessage: show info message<br/>
+showErrorMessage: show error message<br/>
+showInputDialog: show input dialog<br/>
+showOkCancelDialog: show Ok or cancel dialog<br/>
+showGlobalConfigDialog: show global config dialog<br/>
+showYesNoCancelDialog: show Yes, No, Cancel dialog<br/>
+showPasswordDialog: show password dialog<br/>
+showCheckboxOkCancelDialog: show checkbox Ok cancel dialog<br/>
+<br/>
+
+Office nodes<br/>
+readExcel: read excel<br/>
+writeExcel: write excel<br/>
+mergeExcel: merge excel<br/>
+readExcelForAllSheet: read excel for all sheet<br/>
+<br/>
+
+applet<br/>
+applet: applet<br/>
+<br/>
 
 中文: <br/>
 <br/>
@@ -156,11 +210,17 @@ print: 控制台打印<br/>
 log: IDE控制台打印<br/>
 sleep: 流程休眠节点<br/>
 perf: 性能测试节点<br/>
+replaceContent: 查找并替换文本内容<br/>
 <br/>
 
 JSON节点<br/>
 add: 支持json相加<br/>
 convert: 转换节点，支持json到json的转换，使用转换表达式<br/>
+convertKeyValueList: key value list转换对象（废弃）<br/>
+convertObjectToArray: 对象转数组<br/>
+convertArrayToObject: 数组转换对象<br/>
+convertToObjectArray: 转换为对象数组<br/>
+convertToBasicArray: 转换为基本数组<br/>
 removeField: 移除json字段<br/>
 removeEmptyField: 移除空字段<br/>
 replace: 替换结果输出<br/>
@@ -169,6 +229,12 @@ mixNode: 混入节点执行，用于嵌套字段场景<br/>
 parseJson: 解析json字符串成json对象
 stringifyJson: json对象转换为json字符串
 replace: 替换结果输出<br/>
+get: 用JsonPath获取字段值<br/>
+set:用JsonPath设置字段值<br/>
+getStruct: 获取json结构<br/>
+getSchema: 获取JsonSchema<br/>
+compare: 比较json<br/>
+diff: 比较json，只显示差异<br/>
 <br/>
 
 流程节点（有child子节点）<br/>
@@ -193,6 +259,17 @@ proxy: 代理节点<br/>
 web: 配置web参数，响应头等<br/>
 <br/>
 
+http节点<br/>
+http: http<br/>
+postJson: http post json<br/>
+postForm: http post form<br/>
+httpGet: http get<br/>
+httpPut: http put<br/>
+httpDelete: http delete<br/>
+httpHead: http head <br/>
+postman: postman<br/>
+<br/>
+
 信息节点<br/>
 systemInfo: CPU、内存信息<br/>
 info: JVM, JDK, 运行时信息<br/>
@@ -215,240 +292,119 @@ pushClientMonitorData: 推送监控数据<br/>
 getMonitorClient: 获取监控客户端列表<br/>
 <br/>
 
+IDE节点<br/>
+readEditor: 获取当前编辑器内容<br/>
+writeEditor: 写入当前编辑器内容<br/>
+showConfig: 显示配置<br/>
+readConfig: 读取配置<br/>
+openWebPage: 打开web页面<br/>
+showHtml: show web page<br/>
+showJsonPage: show json page<br/>
+chooseFile: 选择文件<br/>
+showInfoMessage: 显示消息<br/>
+showErrorMessage: 显示错误信息<br/>
+showWarningMessage: 显示警告信息<br/>
+showInputDialog: 显示输入对话框<br/>
+showOkCancelDialog: 显示确认或取消对话框<br/>
+showGlobalConfigDialog: 显示全局配置对话框<br/>
+showYesNoCancelDialog: Yes, No, Cancel对话框<br/>
+showPasswordDialog: password对话框<br/>
+showCheckboxOkCancelDialog: 勾选对话框<br/>
+<br/>
+
+办公软件节点<br/>
+readExcel: 读取Excel<br/>
+writeExcel: 写入Excel<br/>
+mergeExcel: 合并Excel<br/>
+readExcelForAllSheet: 读取所有sheet内容<br/>
+<br/>
+
+小应用<br/>
+applet: 小应用<br/>
+<br/>
+
 </p>
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
+    <xi:include href="intellij.fit.xml">
+        <xi:fallback/>
+    </xi:include>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!--        <fileType language="FitLang" name="FitLang" patterns="*.fit"-->
-        <!--                  implementationClass="my.lang.MyLanguageFileType" fieldName="INSTANCE" extensions="fit"/>-->
-
-        <fileType language="FitLang" name="FitLang" extensions="fit" patterns="*.fit(.json)?"
-                  implementationClass="fit.intellij.json.JsonFileType"
-                  fieldName="INSTANCE"/>
-        <fileType language="FitLang5" name="FitLang5" extensions="fit5"
-                  implementationClass="fit.intellij.json.json5.Json5FileType"
-                  fieldName="INSTANCE"/>
-        <!--        <fileIconProvider implementation="fit.jetbrains.jsonSchema.JsonSchemaIconProvider"/>-->
-        <lang.parserDefinition language="FitLang" implementationClass="fit.intellij.json.JsonParserDefinition"/>
-        <lang.parserDefinition language="FitLang5" implementationClass="fit.intellij.json.json5.Json5ParserDefinition"/>
-        <lang.syntaxHighlighterFactory language="FitLang"
-                                       implementationClass="fit.intellij.json.highlighting.JsonSyntaxHighlighterFactory"/>
-        <lang.syntaxHighlighterFactory language="FitLang5"
-                                       implementationClass="fit.intellij.json.json5.highlighting.Json5SyntaxHighlightingFactory"/>
-        <!--        <statusBarWidgetProvider implementation="fit.jetbrains.jsonSchema.widget.JsonSchemaStatusWidgetProvider"/>-->
-        <!--        <fileBasedIndex implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaFileValuesIndex"/>-->
-
-        <!-- Code style and formatting -->
-        <codeStyleSettingsProvider implementation="fit.intellij.json.formatter.JsonCodeStyleSettingsProvider"/>
-        <langCodeStyleSettingsProvider
-                implementation="fit.intellij.json.formatter.JsonLanguageCodeStyleSettingsProvider"/>
-        <colorSettingsPage implementation="fit.intellij.json.highlighting.JsonColorsPage"/>
-        <lang.formatter language="FitLang"
-                        implementationClass="fit.intellij.json.formatter.JsonFormattingBuilderModel"/>
-        <preFormatProcessor implementation="fit.intellij.json.formatter.JsonTrailingCommaRemover"/>
-        <lang.braceMatcher language="FitLang" implementationClass="fit.intellij.json.JsonBraceMatcher"/>
-        <quoteHandler fileType="FitLang" className="fit.intellij.json.JsonQuoteHandler"/>
-        <enterBetweenBracesDelegate language="FitLang"
-                                    implementationClass="com.intellij.codeInsight.editorActions.enter.EnterBetweenBracesAndBracketsDelegate"/>
-        <enterHandlerDelegate implementation="fit.intellij.json.editor.JsonEnterHandler" id="FitJsonEnterHandler"/>
-        <typedHandler implementation="fit.intellij.json.editor.JsonTypedHandler" id="FitJsonTypedHandler"/>
-        <copyPastePreProcessor implementation="fit.intellij.json.editor.JsonCopyPasteProcessor"/>
-        <!--        <editorSmartKeysConfigurable instance="fit.intellij.json.editor.JsonSmartKeysConfigurable"/>-->
-        <applicationService serviceImplementation="fit.intellij.json.editor.JsonEditorOptions"/>
-
-        <!-- Codeinsight -->
-        <breadcrumbsInfoProvider implementation="fit.intellij.json.breadcrumbs.JsonBreadcrumbsProvider"/>
-        <focusModeProvider language="FitLang" implementationClass="fit.intellij.json.editor.JsonFocusModeProvider"/>
-        <qualifiedNameProvider implementation="fit.intellij.json.navigation.JsonQualifiedNameProvider"/>
-        <completion.contributor language="FitLang" id="FitJsonCompletionContributor" order="last"
-                                implementationClass="fit.intellij.json.codeinsight.JsonCompletionContributor"/>
-        <lang.psiStructureViewFactory language="FitLang"
-                                      implementationClass="fit.intellij.json.structureView.JsonStructureViewBuilderFactory"/>
-        <lang.foldingBuilder language="FitLang"
-                             implementationClass="fit.intellij.json.editor.folding.JsonFoldingBuilder"/>
-        <lang.smartEnterProcessor language="FitLang"
-                                  implementationClass="fit.intellij.json.editor.smartEnter.JsonSmartEnterProcessor"/>
-        <lang.namesValidator language="FitLang" implementationClass="fit.intellij.json.JsonNamesValidator"/>
-        <lang.commenter language="FitLang" implementationClass="fit.intellij.json.editor.JsonCommenter"/>
-        <lang.surroundDescriptor language="FitLang"
-                                 implementationClass="fit.intellij.json.surroundWith.JsonSurroundDescriptor"/>
-        <lang.findUsagesProvider language="FitLang"
-                                 implementationClass="fit.intellij.json.findUsages.JsonFindUsagesProvider"/>
-        <statementUpDownMover implementation="fit.intellij.json.editor.lineMover.JsonLineMover" id="FitLang"
-                              order="before line"/>
-        <liveTemplateContext implementation="fit.intellij.json.liveTemplates.JsonContextType"/>
-        <liveTemplateContext implementation="fit.intellij.json.liveTemplates.JsonInLiteralsContextType"/>
-        <liveTemplateContext implementation="fit.intellij.json.liveTemplates.JsonInPropertyKeysContextType"/>
-        <spellchecker.support language="FitLang" implementationClass="fit.intellij.json.JsonSpellcheckerStrategy"/>
-        <extendWordSelectionHandler
-                implementation="fit.intellij.json.editor.selection.JsonStringLiteralSelectionHandler"/>
-
-        <!--        <json.jsonLiteralChecker implementation="fit.intellij.json.codeinsight.StandardJsonLiteralChecker"/>-->
-        <!--        <json.jsonLiteralChecker implementation="fit.intellij.json.json5.codeinsight.Json5JsonLiteralChecker"/>-->
-
-        <!-- Annotators -->
-        <annotator language="FitLang" implementationClass="fit.intellij.json.codeinsight.JsonLiteralAnnotator"/>
-
-        <!-- Inspections -->
-        <localInspection language="FitLang" shortName="FitJsonStandardCompliance"
-                         bundle="fit.intellij.json.JsonBundle" key="inspection.compliance.name"
-                         groupKey="json.inspection.group"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="fit.intellij.json.codeinsight.JsonStandardComplianceInspection"/>
-        <localInspection language="FitLang5" shortName="FitJson5StandardCompliance"
-                         bundle="fit.intellij.json.JsonBundle" key="inspection.compliance5.name"
-                         groupKey="json.inspection.group"
-                         enabledByDefault="true" level="ERROR"
-                         implementationClass="fit.intellij.json.json5.codeinsight.Json5StandardComplianceInspection"/>
-        <localInspection language="FitLang" shortName="FitJsonDuplicatePropertyKeys"
-                         bundle="fit.intellij.json.JsonBundle" key="inspection.duplicate.keys.name"
-                         groupKey="json.inspection.group"
-                         enabledByDefault="true" level="WARNING"
-                         implementationClass="fit.intellij.json.codeinsight.JsonDuplicatePropertyKeysInspection"/>
-        <!--        <localInspection language="FitLang" shortName="FitJsonSchemaCompliance"-->
-        <!--                         bundle="fit.intellij.json.JsonBundle" key="json.schema.inspection.compliance.name"-->
-        <!--                         groupKey="json.inspection.group"-->
-        <!--                         enabledByDefault="true" level="WARNING"-->
-        <!--                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaComplianceInspection"/>-->
-        <!--        <localInspection language="FitLang" shortName="FitJsonSchemaDeprecation"-->
-        <!--                         bundle="fit.intellij.json.JsonBundle" key="json.schema.inspection.deprecation.name"-->
-        <!--                         groupKey="json.inspection.group"-->
-        <!--                         enabledByDefault="true" level="WEAK WARNING"-->
-        <!--                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaDeprecationInspection"/>-->
-        <!--        <localInspection language="FitLang" shortName="FitJsonSchemaRefReference"-->
-        <!--                         bundle="fit.intellij.json.JsonBundle" key="json.schema.ref.refs.inspection.name"-->
-        <!--                         groupKey="json.inspection.group"-->
-        <!--                         enabledByDefault="true" level="WARNING"-->
-        <!--                         implementationClass="fit.jetbrains.jsonSchema.impl.inspections.JsonSchemaRefReferenceInspection"/>-->
-
-        <lang.elementManipulator forClass="fit.intellij.json.psi.JsonStringLiteral"
-                                 implementationClass="fit.intellij.json.psi.JsonStringLiteralManipulator"/>
-        <projectService serviceImplementation="fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration"/>
-        <projectService serviceImplementation="fit.jetbrains.jsonSchema.JsonSchemaCatalogProjectConfiguration"/>
-        <!--        <projectConfigurable groupId="preferences.externalResources" id="settings.json.schema"-->
-        <!--                             displayName="FitJSON Schema Mappings"-->
-        <!--                             instance="fit.jetbrains.jsonSchema.settings.mappings.JsonSchemaMappingsConfigurable"-->
-        <!--                             nonDefaultProject="true"/>-->
-        <!--        <projectConfigurable groupId="preferences.externalResources" id="settings.json.schema.catalog"-->
-        <!--                             displayName="Remote JSON Schemas"-->
-        <!--                             instance="fit.jetbrains.jsonSchema.JsonSchemaCatalogConfigurable"-->
-        <!--                             nonDefaultProject="true"/>-->
-        <projectService serviceInterface="fit.jetbrains.jsonSchema.ide.JsonSchemaService"
-                        serviceImplementation="fit.jetbrains.jsonSchema.impl.JsonSchemaServiceImpl"/>
-        <!--        <completion.contributor order="last, before JsonCompletionContributor" language="FitLang"-->
-        <!--                                implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaCompletionContributor"/>-->
-        <!--        <lang.documentationProvider language="FitLang"-->
-        <!--                                    implementationClass="fit.jetbrains.jsonSchema.impl.JsonSchemaDocumentationProvider"/>-->
-        <!--        <refactoring.elementListenerProvider-->
-        <!--                implementation="fit.jetbrains.jsonSchema.JsonSchemaRefactoringListenerProvider"/>-->
-        <!--        <statistics.counterUsagesCollector groupId="fitjson.schema" version="1"/>-->
-
-        <!--        <psi.referenceContributor language="FitLang"-->
-        <!--                                  implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaReferenceContributor"/>-->
-        <!--        <multiHostInjector implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaRegexInjector"/>-->
-        <!--        <multiHostInjector implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaBasedLanguageInjector"/>-->
-        <!--        <lang.lineWrapStrategy language="FitLang"-->
-        <!--                               implementationClass="fit.intellij.json.formatter.JsonLineWrapPositionStrategy"/>-->
-        <!--        <gotoDeclarationHandler implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaGotoDeclarationHandler"/>-->
-        <!--        <copyPastePostProcessor implementation="fit.intellij.json.editor.JsonCopyPastePostProcessor"/>-->
-        <!--        <highlightVisitor implementation="fit.intellij.json.highlighting.JsonRainbowVisitor"/>-->
-    </extensions>
-    <!--    <extensions defaultExtensionNs="FitJavaScript">-->
-    <!--        <JsonSchema.ProviderFactory-->
-    <!--                implementation="fit.jetbrains.jsonSchema.extension.JsonSchemaUserDefinedProviderFactory"/>-->
-    <!--        <JsonSchema.ProviderFactory-->
-    <!--                implementation="fit.jetbrains.jsonSchema.extension.JsonSchemaProjectSelfProviderFactory"/>-->
-    <!--    </extensions>-->
-
-    <!--    <extensions defaultExtensionNs="fit.intellij.json">-->
-    <!--        <jsonLikePsiWalkerFactory implementation="fit.intellij.json.json5.Json5PsiWalkerFactory"/>-->
-    <!--        <jsonSchemaEnabler implementation="fit.jetbrains.jsonSchema.impl.JsonSchemaInJsonFilesEnabler"/>-->
-    <!--    </extensions>-->
-
-    <extensionPoints>
-        <extensionPoint qualifiedName="fit.intellij.json.jsonStandardComplianceProvider"
-                        interface="fit.intellij.json.codeinsight.JsonStandardComplianceProvider"/>
-        <!--        <extensionPoint qualifiedName="FitJavaScript.JsonSchema.ProviderFactory"-->
-        <!--                        interface="fit.jetbrains.jsonSchema.extension.JsonSchemaProviderFactory"/>-->
-        <!--        <extensionPoint qualifiedName="fit.intellij.json.jsonLikePsiWalkerFactory"-->
-        <!--                        interface="fit.jetbrains.jsonSchema.extension.JsonLikePsiWalkerFactory"/>-->
-        <!--        <extensionPoint qualifiedName="fit.intellij.json.jsonSchemaEnabler"-->
-        <!--                        interface="fit.jetbrains.jsonSchema.extension.JsonSchemaEnabler"/>-->
-        <!--        <extensionPoint qualifiedName="fit.intellij.json.jsonWidgetSuppressor"-->
-        <!--                        interface="fit.jetbrains.jsonSchema.extension.JsonWidgetSuppressor"/>-->
-        <extensionPoint qualifiedName="fit.intellij.json.jsonLiteralChecker"
-                        interface="fit.intellij.json.codeinsight.JsonLiteralChecker"/>
-        <!--        <extensionPoint qualifiedName="fit.intellij.json.catalog.exclusion"-->
-        <!--                        interface="fit.jetbrains.jsonSchema.remote.JsonSchemaCatalogExclusion"/>-->
-    </extensionPoints>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="FitLang Console" anchor="bottom" order="first"
+        <toolWindow id="FitLang Console" anchor="bottom" order="first" icon="/my/lang/icon/fit.svg"
                     factoryClass="my.lang.action.ScriptConsoleWindowFactory"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileEditorProvider implementation="my.lang.page.render.JsonPageRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.action.JsonActionRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.app.JsonAppRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.diff.JsonDiffRenderProvider"/>
+        <!--        <fileEditorProvider implementation="my.lang.page.fit.JsonFitRenderProvider"/>-->
+        <fileEditorProvider implementation="my.lang.page.applet.AppletJsonAppRenderProvider"/>
     </extensions>
 
     <actions>
         <group id="FitActionGroup9" text="Fit Actions9" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup9">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup9">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup8" text="Fit Actions8" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup8">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup8">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup7" text="Fit Actions7" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup7">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup7">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup6" text="Fit Actions6" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup6">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup6">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
 
         <group id="FitActionGroup5" text="Fit Actions5" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup5">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup5">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup4" text="Fit Actions4" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup4">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup4">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup3" text="Fit Actions3" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup3">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup3">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup2" text="Fit Actions2" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup2">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup2">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup1" text="Fit Actions1" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup1">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup1">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <!--            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>-->
         </group>
         <group id="FitActionGroup0" text="Fit Actions0" icon="/my/lang/icon/fit.svg" popup="true"
-               class="my.lang.action.group.FitLangPluginActionGroup0">
+               searchable="true" class="my.lang.action.group.FitLangPluginActionGroup0">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </group>
 
         <action id="RunFitLang" class="my.lang.action.ScriptRunCodeAction" text="Fit Run"
                 description="Run fit lang" icon="/my/lang/icon/fit.svg">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
-            <keyboard-shortcut first-keystroke="control shift J" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="alt J" keymap="$default"/>
+            <keyboard-shortcut first-keystroke="shift alt J" keymap="$default"/>
         </action>
 
     </actions>
@@ -457,7 +413,31 @@ getMonitorClient: 获取监控客户端列表<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.8.7 </li>
+            <li>0.10.13 </li>
+            <li>0.10.12 add native form, json compare; applet support config split index</li>
+            <li>0.10.11 applet support save action; refine applet; add number tool and text tool</li>
+            <li>0.10.10 http support useInput config; applet support reload, clear output; fix project plugin, choose file in applet</li>
+            <li>0.10.9 rename mini app to applet; refine applet support ui field</li>
+            <li>0.10.8 add node: mini app; refine fix script visualization; update idea version to 232; fix writeExcel bug</li>
+            <li>0.10.7 fit support visualization; refine diff, toolbar</li>
+            <li>0.10.6 support script and graph synchronize; some bug fix</li>
+            <li>0.10.5 add node: showDiff; support diff.json file type; app define support exchange input output; fix fit server path bug</li>
+            <li>0.10.4 add node: getSchema; fix JBCefBrowser not dispose; refine app define</li>
+            <li>0.10.3 add app with json and json form</li>
+            <li>0.10.2 json page support json form; add action render</li>
+            <li>0.10.1 page json redefine</li>
+            <li>0.10.0 upgrade idea version to 231; embed amis and logicflow</li>
+            <li>0.9.7 add node: showHtml, showJsonPage</li>
+            <li>0.9.6 add node: showGlobalConfigDialog, showYesNoCancelDialog, showPasswordDialog, showCheckboxOkCancelDialog, convertObjectToArray, convertArrayToObject, convertToObjectArray, convertToBasicArray, showWarningMessage; remove node: readEditorSearch, readEditorReplace; refine node: readExcel, writeExcel, mergeExcel</li>
+            <li>0.9.5 add node: chooseFile, readExcel, writeExcel, mergeExcel, readExcelForAllSheet; refine code completion; project plugin support synchronize config</li>
+            <li>0.9.4 add node: openWebPage, showInfoMessage, showErrorMessage, showOkCancelDialog, showInputDialog; refine node: http; add debug mode; refine code complete</li>
+            <li>0.9.3 add node: openNodePage, showConfig, readConfig; refine project plugin config; refine node: switch</li>
+            <li>0.9.2 fix parse json from substring; refine node: readEditor</li>
+            <li>0.9.1 fix cmd charset when error; parseJson support substring; alias parseJson parse, stringifyJson stringify</li>
+            <li>0.9.0 add node: replaceContent; refine node: http</li>
+            <li>0.8.9 add node: getClipboard, setClipboard; http support retry</li>
+            <li>0.8.8 refine node: get, set, readEditor, writeEditor</li>
+            <li>0.8.7 refine node: stringifyJson, getStruct, readEditor, writeEditor, cmd; refine project plugin menu</li>
             <li>0.8.6 add node: readEditor, writeEditor, set, setGlobal(rename by set)</li>
             <li>0.8.5 add node: sortField, getStruct, get; project plugin add sortJsonFile, sortJson and getStruct; plugin support config refresh after action</li>
             <li>0.8.4 add node: log; refine node: set, assert, writeFile, readFile; refine node template</li>

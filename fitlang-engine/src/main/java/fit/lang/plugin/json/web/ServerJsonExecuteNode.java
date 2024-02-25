@@ -14,7 +14,6 @@ import cn.hutool.http.server.action.Action;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 import fit.lang.plugin.json.define.JsonExecuteContext;
@@ -143,7 +142,6 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
     public JSONObject reload(FitServerInstance fitServer) {
 
         JSONArray serviceList = fitServer.getServiceList();
-        String serverFile = fitServer.getServerFile();
         String serviceDir = fitServer.getServerDir();
 
         fitServer.setServerFile(getCurrentServerFilePath());
@@ -281,7 +279,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
             @Override
             public void doAction(HttpServerRequest request, HttpServerResponse response) {
                 JSONObject welcome = getWelcomeJson(fitServerInstance);
-                response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                response.write(toJsonTextWithFormat(welcome), getDefaultContextType());
             }
         });
 
@@ -523,7 +521,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
                 try {
                     reload(fitServer);
                     JSONObject welcome = getWelcomeJson(fitServer);
-                    response.write(welcome.toJSONString(JSONWriter.Feature.PrettyFormat), getDefaultContextType());
+                    response.write(toJsonTextWithFormat(welcome), getDefaultContextType());
                 } catch (Exception e) {
                     response.write("reload exception: " + e.getMessage());
                 }
@@ -607,7 +605,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         String _jsonFormat = request.getParam("_jsonFormat");
         String text = output;
         if (isJsonObjectText(text) && "true".equals(_jsonFormat)) {
-            text = JSON.parseObject(text).toJSONString(JSONWriter.Feature.PrettyFormat);
+            text = toJsonTextWithFormat(JSON.parseObject(text));
             response.write(text, ContentType.JSON.getValue());
         } else {
             response.write(text, contextType);
@@ -685,6 +683,7 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         fitServerInstance.setSimpleServer(simpleServer);
         serverMap.put(port, fitServerInstance);
         fitServerInstance.setRunning(true);
+        fitServerInstance.setServerDir(getServerFileDir());
         return fitServerInstance;
     }
 

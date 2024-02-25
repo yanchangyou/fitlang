@@ -9,18 +9,17 @@ import fit.jetbrains.jsonSchema.extension.JsonSchemaValidation;
 import fit.jetbrains.jsonSchema.extension.JsonValidationHost;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.impl.JsonComplianceCheckerOptions;
+import fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaObject;
 import fit.jetbrains.jsonSchema.impl.JsonSchemaType;
-
-import static fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.getValue;
 
 public class StringValidation implements JsonSchemaValidation {
   public static final StringValidation INSTANCE = new StringValidation();
   @Override
   public void validate(JsonValueAdapter propValue,
-                       JsonSchemaObject schema,
+                       fit.jetbrains.jsonSchema.impl.JsonSchemaObject schema,
                        JsonSchemaType schemaType,
-                       JsonValidationHost consumer,
+                       fit.jetbrains.jsonSchema.extension.JsonValidationHost consumer,
                        JsonComplianceCheckerOptions options) {
     checkString(propValue.getDelegate(), schema, consumer);
   }
@@ -28,25 +27,25 @@ public class StringValidation implements JsonSchemaValidation {
   private static void checkString(PsiElement propValue,
                                   JsonSchemaObject schema,
                                   JsonValidationHost consumer) {
-    String v = getValue(propValue, schema);
+    String v = JsonSchemaAnnotatorChecker.getValue(propValue, schema);
     if (v == null) return;
     final String value = StringUtil.unquoteString(v);
     if (schema.getMinLength() != null) {
       if (value.length() < schema.getMinLength()) {
-        consumer.error(JsonBundle.message("schema.validation.string.shorter.than", schema.getMinLength()), propValue, JsonErrorPriority.LOW_PRIORITY);
+        consumer.error(JsonBundle.message("schema.validation.string.shorter.than", schema.getMinLength()), propValue, fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
         return;
       }
     }
     if (schema.getMaxLength() != null) {
       if (value.length() > schema.getMaxLength()) {
-        consumer.error(JsonBundle.message("schema.validation.string.longer.than", schema.getMaxLength()), propValue, JsonErrorPriority.LOW_PRIORITY);
+        consumer.error(JsonBundle.message("schema.validation.string.longer.than", schema.getMaxLength()), propValue, fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
         return;
       }
     }
     if (schema.getPattern() != null) {
       if (schema.getPatternError() != null) {
         consumer.error(JsonBundle.message("schema.validation.invalid.string.pattern", StringUtil.convertLineSeparators(schema.getPatternError())),
-              propValue, JsonErrorPriority.LOW_PRIORITY);
+              propValue, fit.jetbrains.jsonSchema.extension.JsonErrorPriority.LOW_PRIORITY);
       }
       if (!schema.checkByPattern(value)) {
         consumer.error(JsonBundle.message("schema.validation.string.violates.pattern", StringUtil.convertLineSeparators(schema.getPattern())), propValue, JsonErrorPriority.LOW_PRIORITY);

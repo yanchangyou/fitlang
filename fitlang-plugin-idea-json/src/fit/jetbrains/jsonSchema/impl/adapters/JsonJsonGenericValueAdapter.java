@@ -16,20 +16,17 @@
 package fit.jetbrains.jsonSchema.impl.adapters;
 
 import com.intellij.psi.PsiElement;
+import fit.intellij.json.psi.JsonNullLiteral;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonArrayValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonObjectValueAdapter;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
-import fit.intellij.json.psi.JsonValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Irina.Chernushina on 2/20/2017.
- */
 public class JsonJsonGenericValueAdapter implements JsonValueAdapter {
   @NotNull private final fit.intellij.json.psi.JsonValue myValue;
 
-  public JsonJsonGenericValueAdapter(@NotNull JsonValue value) {myValue = value;}
+  public JsonJsonGenericValueAdapter(@NotNull fit.intellij.json.psi.JsonValue value) {myValue = value;}
 
   @Override
   public boolean isObject() {
@@ -58,7 +55,7 @@ public class JsonJsonGenericValueAdapter implements JsonValueAdapter {
 
   @Override
   public boolean isNull() {
-    return myValue instanceof fit.intellij.json.psi.JsonNullLiteral;
+    return myValue instanceof JsonNullLiteral;
   }
 
   @NotNull

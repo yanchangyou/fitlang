@@ -16,10 +16,10 @@ public class TypeValidation implements JsonSchemaValidation {
   @Override
   public void validate(JsonValueAdapter propValue,
                        JsonSchemaObject schema,
-                       JsonSchemaType schemaType,
+                       fit.jetbrains.jsonSchema.impl.JsonSchemaType schemaType,
                        JsonValidationHost consumer,
                        JsonComplianceCheckerOptions options) {
-    JsonSchemaType otherType = JsonSchemaAnnotatorChecker.getMatchingSchemaType(schema, schemaType);
+    JsonSchemaType otherType = fit.jetbrains.jsonSchema.impl.JsonSchemaAnnotatorChecker.getMatchingSchemaType(schema, schemaType);
     if (otherType != null && !otherType.equals(schemaType) && !otherType.equals(propValue.getAlternateType(schemaType))) {
       consumer.typeError(propValue.getDelegate(), propValue.getAlternateType(schemaType), JsonSchemaAnnotatorChecker.getExpectedTypes(Collections.singleton(schema)));
     }

@@ -6,16 +6,13 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.BeforeAfter;
 import com.intellij.util.ThreeState;
-import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
+import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-/**
- * @author Irina.Chernushina on 2/17/2016.
- */
 public class JsonSchemaPatternComparator {
   @NotNull
   private final Project myProject;
@@ -36,7 +33,7 @@ public class JsonSchemaPatternComparator {
     String leftPath = left.getPath();
     String rightPath = right.getPath();
 
-    if (fit.jetbrains.jsonSchema.remote.JsonFileResolver.isTempOrMockUrl(leftPath) || JsonFileResolver.isTempOrMockUrl(rightPath)) {
+    if (JsonFileResolver.isTempOrMockUrl(leftPath) || JsonFileResolver.isTempOrMockUrl(rightPath)) {
       return leftPath.equals(rightPath) ? ThreeState.YES : ThreeState.NO;
     }
     final File leftFile = new File(myProject.getBasePath(), leftPath);

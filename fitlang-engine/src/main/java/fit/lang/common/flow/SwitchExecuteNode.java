@@ -1,12 +1,12 @@
 package fit.lang.common.flow;
 
-import fit.lang.ExecuteNodeUtil;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
 import fit.lang.ExecuteNodeException;
+import fit.lang.ExecuteNodeUtil;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +40,10 @@ public abstract class SwitchExecuteNode extends AbstractExecuteNode {
         }
 
         ExecuteNode caseNode = getCaseNode(caseValue);
+
+        if (caseNode == null) {
+            caseNode = getCaseNode("default");
+        }
 
         if (caseNode == null) {
             throw new ExecuteNodeException("switch case node is empty: " + ExecuteNodeUtil.getExecuteNodeBasicInfo(this));

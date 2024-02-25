@@ -1,0 +1,7 @@
+{
+    "uni": "showConfig",
+    "reset": true,
+    "config": {
+        "jsonPath": "..uni"
+    }
+}

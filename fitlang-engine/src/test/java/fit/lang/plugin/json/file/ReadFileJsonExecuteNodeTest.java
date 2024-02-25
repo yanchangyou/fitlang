@@ -25,16 +25,13 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("content"));
+        Assert.assertTrue(outputJson.containsKey("script"));
 
-        Assert.assertEquals("{\n" +
-                "    \"uni\": \"hello\",\n" +
-                "    \"message\": \"hello, world! 你好，世界！\"\n" +
-                "}", outputJson.getString("content"));
+        Assert.assertEquals("{\"script\":{\"uni\":\"hello\",\"message\":\"hello, world! 你好，世界！\"},\"input\":{},\"output\":{},\"uni\":\"applet\",\"absolutePath\":\"/opt/github/fitlang/fitlang-server/demo/fitserver/app/first.fit\"}", outputJson.toJSONString());
 
     }
 
@@ -49,7 +46,7 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         JSONObject outputJson = JSON.parseObject(output);
 
-        Assert.assertTrue(!output.isEmpty());
+        Assert.assertFalse(output.isEmpty());
 
         System.out.println(output);
 
@@ -58,5 +55,6 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         Assert.assertTrue(outputJson.getJSONArray("files").getJSONObject(0).containsKey("name"));
 
+//        HexUtil.encodeHexStr();
     }
 }

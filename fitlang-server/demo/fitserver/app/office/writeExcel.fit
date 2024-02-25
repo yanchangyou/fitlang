@@ -1,0 +1,16 @@
+{
+    "uni": "pipe",
+    "child": [
+        {
+            "uni": "readExcel",
+            "file": "/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例.xls",
+            "sheetName": "接口列表"
+        },
+        {
+            "uni": "writeExcel",
+            "file": "/opt/github/fitlang/fitlang-engine/src/test/resources/fit/lang/plugin/json/excel/测试用例-write.xls",
+            "arrayField": "rows",
+            "isAppend": true
+        }
+    ]
+}

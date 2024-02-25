@@ -1,4 +1,4 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.impl.fixes;
 
 import com.intellij.codeInsight.template.Template;
@@ -38,9 +38,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix<CommonProblemDescriptor> {
+public class AddMissingPropertyFix implements LocalQuickFix, BatchQuickFix {
   private final fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData myData;
-  private final JsonLikeSyntaxAdapter myQuickFixAdapter;
+  private final fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter myQuickFixAdapter;
 
   public AddMissingPropertyFix(fit.jetbrains.jsonSchema.impl.JsonValidationError.MissingMultiplePropsIssueData data,
                                JsonLikeSyntaxAdapter quickFixAdapter) {

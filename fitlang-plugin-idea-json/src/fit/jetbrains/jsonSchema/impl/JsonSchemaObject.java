@@ -1,20 +1,26 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.UserDataHolderBase;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.impl.http.HttpVirtualFile;
 import com.intellij.openapi.vfs.impl.http.RemoteFileInfo;
 import com.intellij.openapi.vfs.impl.http.RemoteFileState;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.containers.CollectionFactory;
 import com.intellij.util.containers.ContainerUtil;
-import fit.jetbrains.jsonSchema.JsonSchemaVfsListener;
+import fit.jetbrains.jsonSchema.JsonDependencyModificationTracker;
 import fit.jetbrains.jsonSchema.extension.adapters.JsonValueAdapter;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
 import fit.jetbrains.jsonSchema.remote.JsonFileResolver;
+import fit.jetbrains.jsonSchema.JsonPointerUtil;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,18 +28,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static fit.jetbrains.jsonSchema.JsonPointerUtil.*;
-
-/**
- * @author Irina.Chernushina on 8/28/2015.
- */
-public class JsonSchemaObject {
+public final class JsonSchemaObject {
   private static final Logger LOG = Logger.getInstance(JsonSchemaObject.class);
 
   public static final String MOCK_URL = "mock:///";
@@ -53,8 +53,6 @@ public class JsonSchemaObject {
   @Nullable private final VirtualFile myRawFile;
   @Nullable private Map<String, JsonSchemaObject> myDefinitionsMap;
   @NotNull public static final JsonSchemaObject NULL_OBJ = new JsonSchemaObject("$_NULL_$");
-  @NotNull private final ConcurrentMap<String, JsonSchemaObject> myComputedRefs = new ConcurrentHashMap<>();
-  @NotNull private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
   @NotNull private Map<String, JsonSchemaObject> myProperties;
 
   @Nullable private PatternProperties myPatternProperties;
@@ -130,6 +128,8 @@ public class JsonSchemaObject {
 
   private boolean myForceCaseInsensitive = false;
 
+  private final UserDataHolderBase myUserDataHolder = new UserDataHolderBase();
+
   public boolean isValidByExclusion() {
     return myIsValidByExclusion;
   }
@@ -146,7 +146,7 @@ public class JsonSchemaObject {
 
   public JsonSchemaObject(@Nullable VirtualFile file, @NotNull String pointer) {
     myFileUrl = file == null ? null : file.getUrl();
-    myRawFile = myFileUrl != null && fit.jetbrains.jsonSchema.remote.JsonFileResolver.isTempOrMockUrl(myFileUrl) ? file : null;
+    myRawFile = myFileUrl != null && JsonFileResolver.isTempOrMockUrl(myFileUrl) ? file : null;
     myPointer = pointer;
     myProperties = new HashMap<>();
   }
@@ -226,31 +226,25 @@ public class JsonSchemaObject {
                                                                                @NotNull fit.jetbrains.jsonSchema.impl.JsonSchemaType otherType) {
     if (otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._any) return selfType;
     if (selfType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._any) return otherType;
-    switch (selfType) {
-      case _string:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._string : null;
-      case _number:
-        if (otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer) return fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer;
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._number : null;
-      case _integer:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number
-               || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number
-               || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer : null;
-      case _object:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._object ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._object : null;
-      case _array:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._array ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._array : null;
-      case _boolean:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._boolean ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._boolean : null;
-      case _null:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._null ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._null : null;
-      case _string_number:
-        return otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer
-               || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number
-               || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string
-               || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? otherType : null;
-    }
-    return otherType;
+    return switch (selfType) {
+      case _string -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._string : null;
+      case _number -> {
+        if (otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer) yield JsonSchemaType._integer;
+        yield otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._number : null;
+      }
+      case _integer -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number
+                       || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number
+                       || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer : null;
+      case _object -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._object ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._object : null;
+      case _array -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._array ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._array : null;
+      case _boolean -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._boolean ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._boolean : null;
+      case _null -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._null ? fit.jetbrains.jsonSchema.impl.JsonSchemaType._null : null;
+      case _string_number -> otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._integer
+                             || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._number
+                             || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string
+                             || otherType == fit.jetbrains.jsonSchema.impl.JsonSchemaType._string_number ? otherType : null;
+      default -> otherType;
+    };
   }
 
   @Nullable
@@ -320,6 +314,9 @@ public class JsonSchemaObject {
     }
     if (!StringUtil.isEmptyOrSpaces(other.myHtmlDescription)) {
       myHtmlDescription = other.myHtmlDescription;
+    }
+    if (!StringUtil.isEmptyOrSpaces(other.myDeprecationMessage)) {
+      myDeprecationMessage = other.myDeprecationMessage;
     }
 
     myType = mergeTypes(myType, other.myType, other.myTypeVariants);
@@ -908,14 +905,14 @@ public class JsonSchemaObject {
 
   @Nullable
   public JsonSchemaObject findRelativeDefinition(@NotNull String ref) {
-    if (isSelfReference(ref)) {
+    if (JsonPointerUtil.isSelfReference(ref)) {
       return this;
     }
     if (!ref.startsWith("#/")) {
       return null;
     }
     ref = ref.substring(2);
-    final List<String> parts = split(ref);
+    final List<String> parts = JsonPointerUtil.split(ref);
     JsonSchemaObject current = this;
     for (int i = 0; i < parts.size(); i++) {
       if (current == null) return null;
@@ -924,13 +921,13 @@ public class JsonSchemaObject {
         if (i == (parts.size() - 1)) return null;
         //noinspection AssignmentToForLoopParameter
         final String nextPart = parts.get(++i);
-        current = current.getDefinitionsMap() == null ? null : current.getDefinitionsMap().get(unescapeJsonPointerPart(nextPart));
+        current = current.getDefinitionsMap() == null ? null : current.getDefinitionsMap().get(JsonPointerUtil.unescapeJsonPointerPart(nextPart));
         continue;
       }
       if (PROPERTIES.equals(part)) {
         if (i == (parts.size() - 1)) return null;
         //noinspection AssignmentToForLoopParameter
-        current = current.getProperties().get(unescapeJsonPointerPart(parts.get(++i)));
+        current = current.getProperties().get(JsonPointerUtil.unescapeJsonPointerPart(parts.get(++i)));
         continue;
       }
       if (ITEMS.equals(part)) {
@@ -1010,7 +1007,7 @@ public class JsonSchemaObject {
       return false;
     } catch (Exception e) {
       // catch exceptions around to prevent things like:
-      // https://bugs.openjdk.java.net/browse/JDK-6984178
+      // https://bugs.openjdk.org/browse/JDK-6984178
       Logger.getInstance(JsonSchemaObject.class).info(e);
       return false;
     }
@@ -1128,14 +1125,11 @@ public class JsonSchemaObject {
   public JsonSchemaObject resolveRefSchema(@NotNull JsonSchemaService service) {
     final String ref = getRef();
     assert !StringUtil.isEmptyOrSpaces(ref);
-    JsonSchemaObject schemaObject = myComputedRefs.getOrDefault(ref, NULL_OBJ);
+    ConcurrentMap<String, JsonSchemaObject> refsStorage = getComputedRefsStorage(service.getProject());
+    JsonSchemaObject schemaObject = refsStorage.getOrDefault(ref, NULL_OBJ);
     if (schemaObject == NULL_OBJ) {
       JsonSchemaObject value = fetchSchemaFromRefDefinition(ref, this, service, isRefRecursive());
-      if (!mySubscribed.get()) {
-        service.getProject().getMessageBus().connect().subscribe(JsonSchemaVfsListener.JSON_DEPS_CHANGED, () -> myComputedRefs.clear());
-        mySubscribed.set(true);
-      }
-      if (!fit.jetbrains.jsonSchema.remote.JsonFileResolver.isHttpPath(ref)) {
+      if (!JsonFileResolver.isHttpPath(ref)) {
         service.registerReference(ref);
       }
       else if (value != null) {
@@ -1148,10 +1142,17 @@ public class JsonSchemaObject {
       if (value != null && value != NULL_OBJ && !Objects.equals(value.myFileUrl, myFileUrl)) {
         value.setBackReference(this);
       }
-      myComputedRefs.put(ref, value == null ? NULL_OBJ : value);
+      refsStorage.put(ref, value == null ? NULL_OBJ : value);
       return value;
     }
     return schemaObject;
+  }
+
+  private ConcurrentMap<String, JsonSchemaObject> getComputedRefsStorage(@NotNull Project project) {
+    return CachedValuesManager.getManager(project).getCachedValue(
+      myUserDataHolder,
+      () -> CachedValueProvider.Result.create(new ConcurrentHashMap<String, JsonSchemaObject>(), JsonDependencyModificationTracker.forProject(project))
+    );
   }
 
   @Nullable
@@ -1178,7 +1179,7 @@ public class JsonSchemaObject {
       while (rootSchema.isRecursiveAnchor()) {
         JsonSchemaObject backRef = rootSchema.myBackRef;
         if (backRef == null) break;
-        VirtualFile file = ObjectUtils.coalesce(backRef.myRawFile, backRef.myFileUrl == null ? null : fit.jetbrains.jsonSchema.remote.JsonFileResolver.urlToFile(backRef.myFileUrl));
+        VirtualFile file = ObjectUtils.coalesce(backRef.myRawFile, backRef.myFileUrl == null ? null : JsonFileResolver.urlToFile(backRef.myFileUrl));
         if (file == null) break;
         try {
           rootSchema = JsonSchemaReader.readFromFile(service.getProject(), file);
@@ -1227,7 +1228,7 @@ public class JsonSchemaObject {
     final String path = splitter.getRelativePath();
     if (StringUtil.isEmptyOrSpaces(path)) {
       final String id = splitter.getSchemaId();
-      if (isSelfReference(id)) {
+      if (JsonPointerUtil.isSelfReference(id)) {
         return schema;
       }
       if (id != null && id.startsWith("#") ) {
@@ -1267,7 +1268,7 @@ public class JsonSchemaObject {
       final Pair<Pattern, String> pair = compilePattern(pattern);
       myPatternError = pair.getSecond();
       myCompiledPattern = pair.getFirst();
-      myValuePatternCache = ContainerUtil.createConcurrentWeakKeyWeakValueMap();
+      myValuePatternCache = CollectionFactory.createConcurrentWeakKeyWeakValueMap();
     }
 
     @Nullable
@@ -1299,7 +1300,7 @@ public class JsonSchemaObject {
       mySchemasMap = new HashMap<>();
       schemasMap.keySet().forEach(key -> mySchemasMap.put(StringUtil.unescapeBackSlashes(key), schemasMap.get(key)));
       myCachedPatterns = new HashMap<>();
-      myCachedPatternProperties = ContainerUtil.createConcurrentWeakKeyWeakValueMap();
+      myCachedPatternProperties = CollectionFactory.createConcurrentWeakKeyWeakValueMap();
       mySchemasMap.keySet().forEach(key -> {
         final Pair<Pattern, String> pair = compilePattern(key);
         if (pair.getSecond() == null) {

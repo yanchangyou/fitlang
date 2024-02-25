@@ -1,9 +1,9 @@
 package fit.intellij.json.liveTemplates;
 
 import com.intellij.codeInsight.template.FileTypeBasedContextType;
+import com.intellij.psi.PsiFile;
 import fit.intellij.json.JsonBundle;
 import fit.intellij.json.JsonFileType;
-import com.intellij.psi.PsiFile;
 import fit.intellij.json.psi.JsonFile;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class JsonContextType extends FileTypeBasedContextType {
   protected JsonContextType() {
-    super("FitLang", JsonBundle.message("json.template.context.type"), JsonFileType.INSTANCE);
+    super(JsonBundle.message("json.template.context.type"), JsonFileType.INSTANCE);
   }
 
   @Override

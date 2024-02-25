@@ -1,0 +1,37 @@
+{
+    "uni": "showJsonPage",
+    "page": {
+        "type": "page",
+        "title": "表单页面",
+        "body": {
+            "type": "form",
+            "mode": "horizontal",
+            "wrapWithPanel": false,
+            "body": [
+                {
+                    "label": "Name",
+                    "type": "input-text",
+                    "name": "name",
+                    "value": "value"
+                },
+                {
+                    "label": "Email",
+                    "type": "input-email",
+                    "name": "email"
+                }
+            ]
+        }
+    },
+    "data": {
+        "name": "name",
+        "email": "email@test.com"
+    },
+    "option": {
+        "pageType": "amis",
+        "title": "Json Page",
+        "modal": true,
+        "width": 800,
+        "height": 600,
+        "devTools": true
+    }
+}

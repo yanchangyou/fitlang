@@ -23,7 +23,8 @@ public class MyLanguage extends Language {
         super(LANG_FILE_SUFFIX);
     }
 
-    public static boolean isMyLanguageFile(String fileName) {
-        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
+    public static boolean isFitLanguageFile(String fileName) {
+        return fileName != null && (fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.toUpperCase()) || fileName.endsWith(LANG_FILE_SUFFIX_WITH_DOT.concat(".json")));
     }
+
 }

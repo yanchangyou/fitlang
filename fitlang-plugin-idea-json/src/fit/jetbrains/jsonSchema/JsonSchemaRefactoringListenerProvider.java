@@ -15,6 +15,7 @@
  */
 package fit.jetbrains.jsonSchema;
 
+import fit.intellij.json.JsonLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -24,13 +25,9 @@ import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.listeners.RefactoringElementListenerProvider;
 import com.intellij.refactoring.listeners.UndoRefactoringElementAdapter;
-import fit.intellij.json.JsonLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * @author Irina.Chernushina on 2/17/2016.
- */
 public class JsonSchemaRefactoringListenerProvider implements RefactoringElementListenerProvider {
   @Nullable
   @Override
@@ -48,7 +45,7 @@ public class JsonSchemaRefactoringListenerProvider implements RefactoringElement
 
     final String oldRelativePath = VfsUtilCore.getRelativePath(oldFile, project.getBaseDir());
     if (oldRelativePath != null) {
-      final fit.jetbrains.jsonSchema.JsonSchemaMappingsProjectConfiguration configuration = JsonSchemaMappingsProjectConfiguration.getInstance(project);
+      final JsonSchemaMappingsProjectConfiguration configuration = JsonSchemaMappingsProjectConfiguration.getInstance(project);
       return new UndoRefactoringElementAdapter() {
         @Override
         protected void refactored(@NotNull PsiElement element, @Nullable String oldQualifiedName) {

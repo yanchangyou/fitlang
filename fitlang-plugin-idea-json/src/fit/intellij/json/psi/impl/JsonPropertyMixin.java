@@ -1,6 +1,5 @@
 package fit.intellij.json.psi.impl;
 
-import fit.intellij.json.psi.JsonProperty;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
@@ -9,6 +8,7 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import fit.intellij.json.psi.JsonElementGenerator;
+import fit.intellij.json.psi.JsonProperty;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ abstract class JsonPropertyMixin extends JsonElementImpl implements JsonProperty
 
   @Override
   public PsiReference getReference() {
-    return new fit.intellij.json.psi.impl.JsonPropertyNameReference(this);
+    return new JsonPropertyNameReference(this);
   }
 
   @Override

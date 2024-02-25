@@ -1,24 +1,7 @@
-/*
- * Copyright 2000-2017 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.intellij.json.formatter;
 
 import com.intellij.application.options.CodeStyle;
-import fit.intellij.json.JsonElementTypes;
-import fit.intellij.json.psi.JsonArray;
-import fit.intellij.json.psi.JsonObject;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
@@ -27,13 +10,15 @@ import com.intellij.psi.impl.source.codeStyle.PreFormatProcessor;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import fit.intellij.json.JsonElementTypes;
 import fit.intellij.json.JsonLanguage;
+import fit.intellij.json.psi.JsonArray;
+import fit.intellij.json.psi.JsonObject;
 import fit.intellij.json.psi.impl.JsonRecursiveElementVisitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class JsonTrailingCommaRemover implements PreFormatProcessor {
-
+public final class JsonTrailingCommaRemover implements PreFormatProcessor {
   @NotNull
   @Override
   public TextRange process(@NotNull ASTNode element, @NotNull TextRange range) {
@@ -41,7 +26,7 @@ public class JsonTrailingCommaRemover implements PreFormatProcessor {
     if (rootPsi.getLanguage() != JsonLanguage.INSTANCE) {
       return range;
     }
-    JsonCodeStyleSettings settings = CodeStyle.getCustomSettings(rootPsi.getContainingFile(), JsonCodeStyleSettings.class);
+    fit.intellij.json.formatter.JsonCodeStyleSettings settings = CodeStyle.getCustomSettings(rootPsi.getContainingFile(), JsonCodeStyleSettings.class);
     if (settings.KEEP_TRAILING_COMMA) {
       return range;
     }
@@ -50,7 +35,7 @@ public class JsonTrailingCommaRemover implements PreFormatProcessor {
     if (document == null) {
       return range;
     }
-    DocumentUtil.executeInBulk(document, true, () -> {
+    DocumentUtil.executeInBulk(document, () -> {
       psiDocumentManager.doPostponedOperationsAndUnblockDocument(document);
       PsiElementVisitor visitor = new Visitor(document);
       rootPsi.accept(visitor);
@@ -71,7 +56,7 @@ public class JsonTrailingCommaRemover implements PreFormatProcessor {
     public void visitArray(@NotNull JsonArray o) {
       super.visitArray(o);
       PsiElement lastChild = o.getLastChild();
-      if (lastChild == null || lastChild.getNode().getElementType() != JsonElementTypes.R_BRACKET) {
+      if (lastChild == null || lastChild.getNode().getElementType() != fit.intellij.json.JsonElementTypes.R_BRACKET) {
         return;
       }
       deleteTrailingCommas(ObjectUtils.coalesce(ContainerUtil.getLastItem(o.getValueList()), o.getFirstChild()));
@@ -81,7 +66,7 @@ public class JsonTrailingCommaRemover implements PreFormatProcessor {
     public void visitObject(@NotNull JsonObject o) {
       super.visitObject(o);
       PsiElement lastChild = o.getLastChild();
-      if (lastChild == null || lastChild.getNode().getElementType() != JsonElementTypes.R_CURLY) {
+      if (lastChild == null || lastChild.getNode().getElementType() != fit.intellij.json.JsonElementTypes.R_CURLY) {
         return;
       }
       deleteTrailingCommas(ObjectUtils.coalesce(ContainerUtil.getLastItem(o.getPropertyList()), o.getFirstChild()));

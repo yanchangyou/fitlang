@@ -2,7 +2,6 @@
 package fit.jetbrains.jsonSchema.impl;
 
 import fit.intellij.json.pointer.JsonPointerPosition;
-import fit.intellij.json.psi.JsonStringLiteral;
 import com.intellij.lang.Language;
 import com.intellij.lang.injection.MultiHostRegistrar;
 import com.intellij.openapi.project.Project;
@@ -11,6 +10,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.ThreeState;
 import fit.jetbrains.jsonSchema.extension.JsonLikePsiWalker;
 import fit.jetbrains.jsonSchema.ide.JsonSchemaService;
+import fit.intellij.json.psi.JsonStringLiteral;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import java.util.Collection;
 public class JsonSchemaBasedLanguageInjector extends JsonSchemaInjectorBase {
   @Override
   public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
-    if (!(context instanceof JsonStringLiteral)) return;
+    if (!(context instanceof fit.intellij.json.psi.JsonStringLiteral)) return;
     InjectedLanguageData language = getLanguageToInject(context, false);
     if (language == null) return;
     injectForHost(registrar, (JsonStringLiteral)context, language);

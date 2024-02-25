@@ -11,15 +11,18 @@ import fit.lang.ExecuteReturnNodeException;
 import fit.lang.common.flow.ThreadExecuteNode;
 import fit.lang.common.util.EchoExecuteNode;
 import fit.lang.common.util.PrintExecuteNode;
-import fit.lang.define.base.ExecuteContext;
-import fit.lang.define.base.ExecuteNode;
-import fit.lang.define.base.ExecuteNodeAopIgnoreTag;
-import fit.lang.define.base.ExecuteNodeBuildable;
+import fit.lang.define.ExecuteContext;
+import fit.lang.define.ExecuteNode;
+import fit.lang.define.ExecuteNodeAopIgnoreTag;
+import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.plugin.json.applet.AppletJsonExecuteNode;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
 import fit.lang.plugin.json.cmd.UnzipJsonExecuteNode;
 import fit.lang.plugin.json.cmd.ZipJsonExecuteNode;
-import fit.lang.plugin.json.define.*;
-
+import fit.lang.plugin.json.define.JsonExecuteNode;
+import fit.lang.plugin.json.define.JsonExecuteNodeData;
+import fit.lang.plugin.json.define.JsonExecuteNodeInput;
+import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import fit.lang.plugin.json.file.DeleteFileJsonExecuteNode;
 import fit.lang.plugin.json.file.ReadFileJsonExecuteNode;
 import fit.lang.plugin.json.file.WriteFileJsonExecuteNode;
@@ -27,8 +30,6 @@ import fit.lang.plugin.json.flow.*;
 import fit.lang.plugin.json.function.JsonFunctionExecuteNode;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
 import fit.lang.plugin.json.http.*;
-import fit.lang.plugin.json.ide.ReadEditorJsonExecuteNode;
-import fit.lang.plugin.json.ide.WriteEditorJsonExecuteNode;
 import fit.lang.plugin.json.info.InfoJsonExecuteNode;
 import fit.lang.plugin.json.info.SystemBaseInfoJsonExecuteNode;
 import fit.lang.plugin.json.json.*;
@@ -37,10 +38,16 @@ import fit.lang.plugin.json.net.SslTelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.SslTelnetJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetHttpJsonExecuteNode;
 import fit.lang.plugin.json.net.TelnetJsonExecuteNode;
+import fit.lang.plugin.json.office.MergeExcelJsonExecuteNode;
+import fit.lang.plugin.json.office.ReadExcelForAllSheetJsonExecuteNode;
+import fit.lang.plugin.json.office.ReadExcelJsonExecuteNode;
+import fit.lang.plugin.json.office.WriteExcelJsonExecuteNode;
+import fit.lang.plugin.json.os.GetClipboardJsonExecuteNode;
+import fit.lang.plugin.json.os.SetClipboardJsonExecuteNode;
+import fit.lang.plugin.json.util.*;
 import fit.lang.plugin.json.web.ProxyJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import fit.lang.plugin.json.util.*;
-import fit.lang.plugin.json.web.*;
+import fit.lang.plugin.json.web.WebJsonExecuteNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -197,10 +204,12 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         // util
         register("hello", HelloJsonExecuteNode.class);
         register("echo", EchoExecuteNode.class);
+        register("setGlobal", SetGlobalJsonExecuteNode.class);
         register("print", PrintExecuteNode.class);
         register("log", LogJsonExecuteNode.class);
         register("sleep", SleepJsonExecuteNode.class);
         register("perf", PerformanceJsonExecuteNode.class);
+        register("replaceContent", ReplaceContentJsonExecuteNode.class);
 
         // flow
         register("sequence", JsonSequenceExecuteNode.class);
@@ -214,22 +223,21 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("catch", CatchJsonExecuteNode.class);
         register("assert", AssertJsonExecuteNode.class);
         register("return", ReturnJsonExecuteNode.class);
-
         register("execute", ExecuteJsonExecuteNode.class);
 
         //json
         register("parseJson", ParseJsonJsonExecuteNode.class);
         register("stringifyJson", StringifyJsonJsonExecuteNode.class);
+        register("parse", ParseJsonJsonExecuteNode.class);
+        register("stringify", StringifyJsonJsonExecuteNode.class);
 
         register("mix", MixJsonExecuteNode.class);
         register("eval", EvalJsonExecuteNode.class);
-        register("setGlobal", SetGlobalJsonExecuteNode.class);
-
         register("mixNode", MixNodeJsonExecuteNode.class);
+
+        register("getSchema", GetSchemaJsonExecuteNode.class);
         register("get", GetJsonExecuteNode.class);
         register("set", SetJsonExecuteNode.class);
-
-        register("node", JsonNodeExecuteNode.class);
 
         register("removeField", RemoveFieldJsonExecuteNode.class);
         register("removeEmptyField", RemoveEmptyFieldJsonExecuteNode.class);
@@ -239,6 +247,13 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
 
         register("convert", ConvertJsonExecuteNode.class);
         register("convertKeyValueList", ConvertKeyValueListJsonExecuteNode.class);
+        register("convertArrayToObject", ConvertArrayToObjectJsonExecuteNode.class);
+        register("convertObjectToArray", ConvertObjectToArrayJsonExecuteNode.class);
+        register("convertToObjectArray", ConvertToObjectArrayJsonExecuteNode.class);
+        register("convertToBasicArray", ConvertToBasicArrayJsonExecuteNode.class);
+        register("convertToJsonPath", ConvertToJsonPathJsonExecuteNode.class);
+        register("compare", CompareJsonJsonExecuteNode.class);
+        register("diff", DiffJsonJsonExecuteNode.class);
 
         register("add", AddJsonExecuteNode.class);
 
@@ -313,9 +328,18 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("telnet.http", TelnetHttpJsonExecuteNode.class);
         register("telnet.https", SslTelnetHttpJsonExecuteNode.class);
 
-        //ide
-        register("readEditor", ReadEditorJsonExecuteNode.class);
-        register("writeEditor", WriteEditorJsonExecuteNode.class);
+        //os
+        register("getClipboard", GetClipboardJsonExecuteNode.class);
+        register("setClipboard", SetClipboardJsonExecuteNode.class);
+
+        //office
+        register("readExcelForAllSheet", ReadExcelForAllSheetJsonExecuteNode.class);
+        register("readExcel", ReadExcelJsonExecuteNode.class);
+        register("writeExcel", WriteExcelJsonExecuteNode.class);
+        register("mergeExcel", MergeExcelJsonExecuteNode.class);
+
+        //applet
+        register("applet", AppletJsonExecuteNode.class);
 
     }
 }

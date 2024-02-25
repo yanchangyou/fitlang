@@ -1,0 +1,14 @@
+{
+    "uni": "applet",
+    "input":{
+        "hello": "fit"
+    },
+    "output":{
+        "hello": "fit"
+    },
+    "script":{
+        "uni": "http",
+        "url": "http://fit.321zou.com/echo",
+        "useInput": true
+    }
+}

@@ -12,4 +12,12 @@ public class ExpressUtilTest extends TestCase {
         Object result = ExpressUtil.eval(express, param);
         System.out.println(result);
     }
+
+    public void testEvalJava() {
+        JSONObject param = new JSONObject();
+        param.put("foo", "bar");
+        String express = "${FitLang.encodeHex('abc')}";
+        Object result = ExpressUtil.eval(express, param);
+        System.out.println(result);
+    }
 }

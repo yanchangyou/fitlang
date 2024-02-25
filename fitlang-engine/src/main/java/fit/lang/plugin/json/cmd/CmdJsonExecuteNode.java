@@ -30,7 +30,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
 
         List<String> cmdList = parseStringArray("cmd", input);
 
-        String charset = parseStringField("charset", input);
+        String charset = nodeJsonDefine.getString("charset");
 
         boolean debug = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("debug"));
         boolean ignoreCurrentDir = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("ignoreCurrentDir"));
@@ -96,7 +96,9 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
                             process = RuntimeUtil.exec(envArray, cmd);
                         }
 
-                        resultLines = IoUtil.readUtf8Lines(process.getErrorStream(), new ArrayList<>());
+                        //异常文件字符集字符集配置
+                        resultLines = IoUtil.readLines(process.getErrorStream(), getFileCharset(), new ArrayList<>());
+
                         if (resultLines == null || resultLines.isEmpty()) {
                             resultLines = IoUtil.readLines(process.getInputStream(), getCharset(charset), new ArrayList<>());
                         }

@@ -3,12 +3,13 @@ package fit.intellij.json.formatter;
 import com.intellij.application.options.CodeStyleAbstractConfigurable;
 import com.intellij.application.options.CodeStyleAbstractPanel;
 import com.intellij.application.options.TabbedLanguageCodeStylePanel;
+import fit.intellij.json.JsonBundle;
+import fit.intellij.json.JsonLanguage;
 import com.intellij.lang.Language;
-import com.intellij.openapi.options.Configurable;
+import com.intellij.psi.codeStyle.CodeStyleConfigurable;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
 import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
-import fit.intellij.json.JsonLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,13 +17,13 @@ import org.jetbrains.annotations.Nullable;
  * @author Mikhail Golubev
  */
 public class JsonCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
-  @NotNull
   @Override
-  public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
-    return new CodeStyleAbstractConfigurable(settings, originalSettings, "FitLang") {
+  public @NotNull CodeStyleConfigurable createConfigurable(@NotNull CodeStyleSettings settings,
+                                                           @NotNull CodeStyleSettings originalSettings) {
+    return new CodeStyleAbstractConfigurable(settings, originalSettings, JsonBundle.message("settings.display.name.json")) {
       @Override
-      protected CodeStyleAbstractPanel createPanel(CodeStyleSettings settings) {
-        final Language language = fit.intellij.json.JsonLanguage.INSTANCE;
+      protected @NotNull CodeStyleAbstractPanel createPanel(@NotNull CodeStyleSettings settings) {
+        final Language language = JsonLanguage.INSTANCE;
         final CodeStyleSettings currentSettings = getCurrentSettings();
         return new TabbedLanguageCodeStylePanel(language, currentSettings, settings) {
           @Override
@@ -35,9 +36,8 @@ public class JsonCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
         };
       }
 
-      @Nullable
       @Override
-      public String getHelpTopic() {
+      public @NotNull String getHelpTopic() {
         return "reference.settingsdialog.codestyle.json";
       }
     };
@@ -51,7 +51,12 @@ public class JsonCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
 
   @Nullable
   @Override
-  public CustomCodeStyleSettings createCustomSettings(CodeStyleSettings settings) {
+  public CustomCodeStyleSettings createCustomSettings(@NotNull CodeStyleSettings settings) {
     return new JsonCodeStyleSettings(settings);
+  }
+
+  @Override
+  public @Nullable Language getLanguage() {
+    return JsonLanguage.INSTANCE;
   }
 }

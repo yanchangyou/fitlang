@@ -3,7 +3,7 @@ package fit.intellij.json;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static fit.intellij.json.JsonElementTypes.*;
+
 import static fit.intellij.json.psi.JsonParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
@@ -36,22 +36,22 @@ public class JsonParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(ARRAY, BOOLEAN_LITERAL, LITERAL, NULL_LITERAL,
-      NUMBER_LITERAL, OBJECT, REFERENCE_EXPRESSION, STRING_LITERAL,
-      VALUE),
+    create_token_set_(JsonElementTypes.ARRAY, JsonElementTypes.BOOLEAN_LITERAL, JsonElementTypes.LITERAL, JsonElementTypes.NULL_LITERAL,
+      JsonElementTypes.NUMBER_LITERAL, JsonElementTypes.OBJECT, JsonElementTypes.REFERENCE_EXPRESSION, JsonElementTypes.STRING_LITERAL,
+      JsonElementTypes.VALUE),
   };
 
   /* ********************************************************** */
   // '[' array_element* ']'
   public static boolean array(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "array")) return false;
-    if (!nextTokenIs(b, L_BRACKET)) return false;
+    if (!nextTokenIs(b, JsonElementTypes.L_BRACKET)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ARRAY, null);
-    r = consumeToken(b, L_BRACKET);
+    Marker m = enter_section_(b, l, _NONE_, JsonElementTypes.ARRAY, null);
+    r = consumeToken(b, JsonElementTypes.L_BRACKET);
     p = r; // pin = 1
     r = r && report_error_(b, array_1(b, l + 1));
-    r = p && consumeToken(b, R_BRACKET) && r;
+    r = p && consumeToken(b, JsonElementTypes.R_BRACKET) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -85,7 +85,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "array_element_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
+    r = consumeToken(b, JsonElementTypes.COMMA);
     if (!r) r = array_element_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -96,7 +96,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "array_element_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _AND_);
-    r = consumeToken(b, R_BRACKET);
+    r = consumeToken(b, JsonElementTypes.R_BRACKET);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -105,29 +105,25 @@ public class JsonParser implements PsiParser, LightPsiParser {
   // TRUE | FALSE
   public static boolean boolean_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "boolean_literal")) return false;
-    if (!nextTokenIs(b, "<boolean literal>", FALSE, TRUE)) return false;
+    if (!nextTokenIs(b, "<boolean literal>", JsonElementTypes.FALSE, JsonElementTypes.TRUE)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BOOLEAN_LITERAL, "<boolean literal>");
-    r = consumeToken(b, TRUE);
-    if (!r) r = consumeToken(b, FALSE);
+    Marker m = enter_section_(b, l, _NONE_, JsonElementTypes.BOOLEAN_LITERAL, "<boolean literal>");
+    r = consumeToken(b, JsonElementTypes.TRUE);
+    if (!r) r = consumeToken(b, JsonElementTypes.FALSE);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // value+
+  // value*
   static boolean json(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "json")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = value(b, l + 1);
-    while (r) {
+    while (true) {
       int c = current_position_(b);
       if (!value(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "json", c)) break;
     }
-    exit_section_(b, m, null, r);
-    return r;
+    return true;
   }
 
   /* ********************************************************** */
@@ -135,26 +131,11 @@ public class JsonParser implements PsiParser, LightPsiParser {
   public static boolean literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "literal")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, LITERAL, "<literal>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, JsonElementTypes.LITERAL, "<literal>");
     r = string_literal(b, l + 1);
     if (!r) r = number_literal(b, l + 1);
     if (!r) r = boolean_literal(b, l + 1);
     if (!r) r = null_literal(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // UNI | INPUT | OUTPUT | ID | NAME
-  public static boolean my_keyword(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "my_keyword")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, MY_KEYWORD, "<my keyword>");
-    r = consumeToken(b, UNI);
-    if (!r) r = consumeToken(b, INPUT);
-    if (!r) r = consumeToken(b, OUTPUT);
-    if (!r) r = consumeToken(b, ID);
-    if (!r) r = consumeToken(b, NAME);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -174,7 +155,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
   private static boolean not_brace_or_next_value_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "not_brace_or_next_value_0")) return false;
     boolean r;
-    r = consumeToken(b, R_CURLY);
+    r = consumeToken(b, JsonElementTypes.R_CURLY);
     if (!r) r = value(b, l + 1);
     return r;
   }
@@ -194,7 +175,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
   private static boolean not_bracket_or_next_value_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "not_bracket_or_next_value_0")) return false;
     boolean r;
-    r = consumeToken(b, R_BRACKET);
+    r = consumeToken(b, JsonElementTypes.R_BRACKET);
     if (!r) r = value(b, l + 1);
     return r;
   }
@@ -203,11 +184,11 @@ public class JsonParser implements PsiParser, LightPsiParser {
   // NULL
   public static boolean null_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "null_literal")) return false;
-    if (!nextTokenIs(b, NULL)) return false;
+    if (!nextTokenIs(b, JsonElementTypes.NULL)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, NULL);
-    exit_section_(b, m, NULL_LITERAL, r);
+    r = consumeToken(b, JsonElementTypes.NULL);
+    exit_section_(b, m, JsonElementTypes.NULL_LITERAL, r);
     return r;
   }
 
@@ -215,11 +196,11 @@ public class JsonParser implements PsiParser, LightPsiParser {
   // NUMBER
   public static boolean number_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "number_literal")) return false;
-    if (!nextTokenIs(b, NUMBER)) return false;
+    if (!nextTokenIs(b, JsonElementTypes.NUMBER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, NUMBER);
-    exit_section_(b, m, NUMBER_LITERAL, r);
+    r = consumeToken(b, JsonElementTypes.NUMBER);
+    exit_section_(b, m, JsonElementTypes.NUMBER_LITERAL, r);
     return r;
   }
 
@@ -227,13 +208,13 @@ public class JsonParser implements PsiParser, LightPsiParser {
   // '{' object_element* '}'
   public static boolean object(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "object")) return false;
-    if (!nextTokenIs(b, L_CURLY)) return false;
+    if (!nextTokenIs(b, JsonElementTypes.L_CURLY)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, OBJECT, null);
-    r = consumeToken(b, L_CURLY);
+    Marker m = enter_section_(b, l, _NONE_, JsonElementTypes.OBJECT, null);
+    r = consumeToken(b, JsonElementTypes.L_CURLY);
     p = r; // pin = 1
     r = r && report_error_(b, object_1(b, l + 1));
-    r = p && consumeToken(b, R_CURLY) && r;
+    r = p && consumeToken(b, JsonElementTypes.R_CURLY) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -267,7 +248,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "object_element_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
+    r = consumeToken(b, JsonElementTypes.COMMA);
     if (!r) r = object_element_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -278,17 +259,17 @@ public class JsonParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "object_element_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _AND_);
-    r = consumeToken(b, R_CURLY);
+    r = consumeToken(b, JsonElementTypes.R_CURLY);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // property_name (':' value)
+  // property_name (':' property_value)
   public static boolean property(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "property")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, PROPERTY, "<property>");
+    Marker m = enter_section_(b, l, _NONE_, JsonElementTypes.PROPERTY, "<property>");
     r = property_name(b, l + 1);
     p = r; // pin = 1
     r = r && property_1(b, l + 1);
@@ -296,14 +277,14 @@ public class JsonParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ':' value
+  // ':' property_value
   private static boolean property_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "property_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, COLON);
+    r = consumeToken(b, JsonElementTypes.COLON);
     p = r; // pin = 1
-    r = r && value(b, l + 1);
+    r = r && property_value(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -319,26 +300,32 @@ public class JsonParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // value
+  static boolean property_value(PsiBuilder b, int l) {
+    return value(b, l + 1);
+  }
+
+  /* ********************************************************** */
   // IDENTIFIER
   public static boolean reference_expression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "reference_expression")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    if (!nextTokenIs(b, JsonElementTypes.IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, REFERENCE_EXPRESSION, r);
+    r = consumeToken(b, JsonElementTypes.IDENTIFIER);
+    exit_section_(b, m, JsonElementTypes.REFERENCE_EXPRESSION, r);
     return r;
   }
 
   /* ********************************************************** */
-  // my_keyword | SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
+  // SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
   public static boolean string_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "string_literal")) return false;
+    if (!nextTokenIs(b, "<string literal>", JsonElementTypes.DOUBLE_QUOTED_STRING, JsonElementTypes.SINGLE_QUOTED_STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, STRING_LITERAL, "<string literal>");
-    r = my_keyword(b, l + 1);
-    if (!r) r = consumeToken(b, SINGLE_QUOTED_STRING);
-    if (!r) r = consumeToken(b, DOUBLE_QUOTED_STRING);
+    Marker m = enter_section_(b, l, _NONE_, JsonElementTypes.STRING_LITERAL, "<string literal>");
+    r = consumeToken(b, JsonElementTypes.SINGLE_QUOTED_STRING);
+    if (!r) r = consumeToken(b, JsonElementTypes.DOUBLE_QUOTED_STRING);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -348,7 +335,7 @@ public class JsonParser implements PsiParser, LightPsiParser {
   public static boolean value(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "value")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, VALUE, "<value>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, JsonElementTypes.VALUE, "<value>");
     r = object(b, l + 1);
     if (!r) r = array(b, l + 1);
     if (!r) r = literal(b, l + 1);

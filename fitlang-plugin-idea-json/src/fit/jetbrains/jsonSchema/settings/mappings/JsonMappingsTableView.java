@@ -1,10 +1,10 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package fit.jetbrains.jsonSchema.settings.mappings;
 
+import fit.intellij.json.JsonBundle;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.table.TableView;
 import com.intellij.util.ui.StatusText;
-import fit.intellij.json.JsonBundle;
 import fit.jetbrains.jsonSchema.JsonMappingKind;
 import fit.jetbrains.jsonSchema.UserDefinedJsonSchemaConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ class JsonMappingsTableView extends TableView<UserDefinedJsonSchemaConfiguration
         return isEmpty();
       }
     };
-    myEmptyText.setText(fit.intellij.json.JsonBundle.message("no.schema.mappings.defined"))
+    myEmptyText.setText(JsonBundle.message("no.schema.mappings.defined"))
                .appendSecondaryText(JsonBundle.message("add.mapping.for.a"), SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
 
     fit.jetbrains.jsonSchema.JsonMappingKind[] values = fit.jetbrains.jsonSchema.JsonMappingKind.values();
@@ -41,7 +41,7 @@ class JsonMappingsTableView extends TableView<UserDefinedJsonSchemaConfiguration
   public void setCellEditor(TableCellEditor anEditor) {
     super.setCellEditor(anEditor);
     if (anEditor != null) {
-      ((fit.jetbrains.jsonSchema.settings.mappings.JsonMappingsTableCellEditor)anEditor).myComponent.getTextField().requestFocus();
+      ((JsonMappingsTableCellEditor)anEditor).myComponent.getTextField().requestFocus();
     }
   }
 

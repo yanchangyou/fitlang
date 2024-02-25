@@ -1,6 +1,6 @@
 package fit.lang.plugin.object.simple;
 
-import fit.lang.define.base.ExecuteNode;
+import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.object.define.ObjectExecuteContext;
 import fit.lang.plugin.object.define.ObjectExecuteNodeData;
 import fit.lang.plugin.object.define.ObjectExecuteNodeInput;

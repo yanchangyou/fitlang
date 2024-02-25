@@ -4,9 +4,9 @@ import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.aop.ExecuteNodeSimpleAop;
 import fit.lang.common.AbstractExecuteNode;
-import fit.lang.define.base.ExecuteNodeData;
-import fit.lang.define.base.ExecuteNodeInput;
-import fit.lang.define.base.ExecuteNodeOutput;
+import fit.lang.define.ExecuteNodeData;
+import fit.lang.define.ExecuteNodeInput;
+import fit.lang.define.ExecuteNodeOutput;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
 
 import java.util.List;

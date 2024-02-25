@@ -2,12 +2,14 @@
 package fit.jetbrains.jsonSchema.impl;
 
 import com.intellij.codeInspection.LocalQuickFix;
+import com.intellij.codeInspection.util.InspectionMessage;
 import fit.intellij.json.JsonBundle;
+import com.intellij.openapi.util.NlsSafe;
 import fit.jetbrains.jsonSchema.extension.JsonErrorPriority;
-import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import fit.jetbrains.jsonSchema.impl.fixes.AddMissingPropertyFix;
 import fit.jetbrains.jsonSchema.impl.fixes.RemoveProhibitedPropertyFix;
 import fit.jetbrains.jsonSchema.impl.fixes.SuggestEnumValuesFix;
+import fit.jetbrains.jsonSchema.extension.JsonLikeSyntaxAdapter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,11 +98,11 @@ public class JsonValidationError {
 
   public static class MissingPropertyIssueData implements IssueData {
     public final String propertyName;
-    public final JsonSchemaType propertyType;
+    public final fit.jetbrains.jsonSchema.impl.JsonSchemaType propertyType;
     public final Object defaultValue;
     public final int enumItemsCount;
 
-    public MissingPropertyIssueData(String propertyName, JsonSchemaType propertyType, Object defaultValue, int enumItemsCount) {
+    public MissingPropertyIssueData(String propertyName, fit.jetbrains.jsonSchema.impl.JsonSchemaType propertyType, Object defaultValue, int enumItemsCount) {
       this.propertyName = propertyName;
       this.propertyType = propertyType;
       this.defaultValue = defaultValue;
@@ -109,27 +111,27 @@ public class JsonValidationError {
   }
 
   public static class ProhibitedPropertyIssueData implements IssueData {
-    public final String propertyName;
+    public final @NlsSafe String propertyName;
 
-    public ProhibitedPropertyIssueData(String propertyName) {
+    public ProhibitedPropertyIssueData(@NlsSafe String propertyName) {
       this.propertyName = propertyName;
     }
   }
 
   public static class TypeMismatchIssueData implements IssueData {
-    public final JsonSchemaType[] expectedTypes;
+    public final fit.jetbrains.jsonSchema.impl.JsonSchemaType[] expectedTypes;
 
     public TypeMismatchIssueData(JsonSchemaType[] expectedTypes) {
       this.expectedTypes = expectedTypes;
     }
   }
 
-  private final String myMessage;
+  private final @InspectionMessage String myMessage;
   private final FixableIssueKind myFixableIssueKind;
   private final IssueData myIssueData;
   private final JsonErrorPriority myPriority;
 
-  public JsonValidationError(String message, FixableIssueKind fixableIssueKind, IssueData issueData,
+  public JsonValidationError(@InspectionMessage String message, FixableIssueKind fixableIssueKind, IssueData issueData,
                              JsonErrorPriority priority) {
     myMessage = message;
     myFixableIssueKind = fixableIssueKind;
@@ -137,7 +139,7 @@ public class JsonValidationError {
     myPriority = priority;
   }
 
-  public String getMessage() {
+  public @InspectionMessage String getMessage() {
     return myMessage;
   }
 
@@ -147,18 +149,16 @@ public class JsonValidationError {
 
   public LocalQuickFix @NotNull [] createFixes(@Nullable JsonLikeSyntaxAdapter quickFixAdapter) {
     if (quickFixAdapter == null) return LocalQuickFix.EMPTY_ARRAY;
-    switch (myFixableIssueKind) {
-      case MissingProperty:
-        return new AddMissingPropertyFix[]{new AddMissingPropertyFix((MissingMultiplePropsIssueData)myIssueData, quickFixAdapter)};
-      case MissingOneOfProperty:
-      case MissingAnyOfProperty:
-        return ((MissingOneOfPropsIssueData)myIssueData).myExclusiveOptions.stream().map(d -> new AddMissingPropertyFix(d, quickFixAdapter)).toArray(LocalQuickFix[]::new);
-      case ProhibitedProperty:
-        return new RemoveProhibitedPropertyFix[]{new RemoveProhibitedPropertyFix((ProhibitedPropertyIssueData)myIssueData, quickFixAdapter)};
-      case NonEnumValue:
-        return new SuggestEnumValuesFix[]{new SuggestEnumValuesFix(quickFixAdapter)};
-      default:
-        return LocalQuickFix.EMPTY_ARRAY;
-    }
+    return switch (myFixableIssueKind) {
+      case MissingProperty ->
+        new AddMissingPropertyFix[]{new AddMissingPropertyFix((MissingMultiplePropsIssueData)myIssueData, quickFixAdapter)};
+      case MissingOneOfProperty, MissingAnyOfProperty ->
+        ((MissingOneOfPropsIssueData)myIssueData).myExclusiveOptions.stream().map(d -> new AddMissingPropertyFix(d, quickFixAdapter))
+          .toArray(LocalQuickFix[]::new);
+      case ProhibitedProperty ->
+        new RemoveProhibitedPropertyFix[]{new RemoveProhibitedPropertyFix((ProhibitedPropertyIssueData)myIssueData, quickFixAdapter)};
+      case NonEnumValue -> new SuggestEnumValuesFix[]{new SuggestEnumValuesFix(quickFixAdapter)};
+      default -> LocalQuickFix.EMPTY_ARRAY;
+    };
   }
 }
