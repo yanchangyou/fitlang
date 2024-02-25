@@ -973,4 +973,75 @@ public class ExecuteJsonNodeUtil {
     public static JSONObject parseJsonSchema(JSONObject jsonObject) {
         return JSONSchema.ofValue(jsonObject).toJSONObject();
     }
+
+
+    /**
+     * json到map转换
+     *
+     * @param json 入参json
+     * @return 返回map
+     */
+    public static JSONObject convertToJsonPath(JSONObject json) {
+
+        JSONObject newMap = new JSONObject();
+        if (json == null) {
+            return newMap;
+        }
+        for (Map.Entry<String, Object> field : json.entrySet()) {
+            Object value = field.getValue();
+            String fieldName = buildJsonPathKey((field.getKey()));
+            if (value instanceof JSONObject || value instanceof JSONArray) {
+                JSONArray array;
+                boolean isArray = true;
+                if (value instanceof JSONObject) {
+                    array = new JSONArray(1);
+                    array.add(value);
+                    isArray = false;
+                } else {
+                    array = (JSONArray) value;
+                }
+                int index = 0;
+                for (Object item : array) {
+                    String arrayFieldName = fieldName.concat("[".concat(index + "").concat("]"));
+                    if (item instanceof JSONObject) {
+                        JSONObject subMap = convertToJsonPath((JSONObject) item);
+                        for (Map.Entry<String, Object> entry : subMap.entrySet()) {
+                            String newKey = entry.getKey();
+                            if (!newKey.startsWith("[")) {
+                                newKey = ".".concat(newKey);
+                            }
+                            String newFieldName = isArray ? arrayFieldName.concat(newKey) : fieldName.concat(newKey);
+                            newMap.put((newFieldName), entry.getValue());
+                        }
+                    } else {
+                        String newValue = item == null ? null : item.toString();
+                        newMap.put((arrayFieldName), newValue);
+                    }
+                    index++;
+                }
+            } else {
+                String newValue = value == null ? null : value.toString();
+                newMap.put((fieldName), newValue);
+            }
+        }
+        return newMap;
+    }
+
+    /**
+     * 处理特殊key，key中有点号，然后冲突
+     *
+     * @param key
+     * @return
+     */
+    static String buildJsonPathKey(String key) {
+        //TODO 避免xpath解析报错
+        if (key.contains("[")) {
+            key = key.replace("[", "").replace("]", "");
+        }
+        if (key.contains(".") || key.contains("-")) {
+            return "['".concat(key).concat("']");
+        }
+        return key;
+    }
+
 }

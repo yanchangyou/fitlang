@@ -251,6 +251,7 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("convertObjectToArray", ConvertObjectToArrayJsonExecuteNode.class);
         register("convertToObjectArray", ConvertToObjectArrayJsonExecuteNode.class);
         register("convertToBasicArray", ConvertToBasicArrayJsonExecuteNode.class);
+        register("convertToJsonPath", ConvertToJsonPathJsonExecuteNode.class);
 
         register("add", AddJsonExecuteNode.class);
 
