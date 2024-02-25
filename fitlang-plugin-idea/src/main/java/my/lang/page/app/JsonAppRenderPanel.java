@@ -110,9 +110,9 @@ public class JsonAppRenderPanel extends JPanel {
 
     boolean showCompareButton = true;
 
-    boolean showInputForm = true;
+    boolean showInputForm = false;
 
-    boolean showOutputForm = true;
+    boolean showOutputForm = false;
 
     JSplitPane inputOutputSplitPane;
 
@@ -230,7 +230,7 @@ public class JsonAppRenderPanel extends JPanel {
         showOutputForm = Boolean.TRUE.equals(uiDefine.getBoolean("showOutputForm"));
 
         inputEditor.initView(showInputForm);
-        inputEditor.initView(showOutputForm);
+        outputEditor.initView(showOutputForm);
 
     }
 
