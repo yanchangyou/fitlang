@@ -2,7 +2,7 @@ package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.CompareUtils;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -31,7 +31,7 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        JSONObject outputJson = ExecuteJsonNodeUtil.compareJsonObject(json1, json2);
+        JSONObject outputJson = CompareUtils.compare(json1, json2);
 
         output.setData(outputJson);
     }

@@ -110,9 +110,9 @@ public class JsonAppRenderPanel extends JPanel {
 
     boolean showCompareButton = true;
 
-    boolean showInputForm = true;
+    boolean showInputForm = false;
 
-    boolean showOutputForm = true;
+    boolean showOutputForm = false;
 
     JSplitPane inputOutputSplitPane;
 
@@ -230,7 +230,7 @@ public class JsonAppRenderPanel extends JPanel {
         showOutputForm = Boolean.TRUE.equals(uiDefine.getBoolean("showOutputForm"));
 
         inputEditor.initView(showInputForm);
-        inputEditor.initView(showOutputForm);
+        outputEditor.initView(showOutputForm);
 
     }
 
@@ -665,7 +665,7 @@ public class JsonAppRenderPanel extends JPanel {
                                 String newJsonText = toJsonTextWithFormat(appletDefine);
                                 appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                                 appFile.refresh(false, false);
-                                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                                ApplicationManager.getApplication().invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
                                         Messages.showInfoMessage("Save OK!", "Info");

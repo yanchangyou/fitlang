@@ -46,10 +46,18 @@ fit语言是一门轻量级编程语言，兼具开发人员友好和工具处�
 
 插件审核通过后，遇到.fit结尾文件时会提示下载，预览版需要下载zip包，然后在IDEA中按照，使用方式如下
 
+plugin:
 ![](https://plugins.jetbrains.com/files/22593/screenshot_cc167984-8557-41da-8211-36eeb5864633)
+
+script:
 ![](https://plugins.jetbrains.com/files/22593/screenshot_2ce2a61a-43b9-4569-bcc1-9d98e8b5f306)
 ![](https://plugins.jetbrains.com/files/22593/screenshot_573fe927-a2e3-4abf-b012-8c4a25029419)
+
+server:
 ![](https://plugins.jetbrains.com/files/22593/screenshot_610c35af-8ae6-45cd-a102-bf3b90a74745)
+
+applet:
+![](https://plugins.jetbrains.com/files/22593/screenshot_f515df32-000b-4f4b-9cdd-676e2342666b)
 
 ## demo
 
@@ -118,7 +126,7 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - increase: 加+1
 - decrease: 减-1
 - compare: 比较json
-- diff: 比较json，只显示差异
+- diff: 比较json，只返回差异
 
 ### 流程节点（有child子节点）
 

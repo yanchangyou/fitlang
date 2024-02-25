@@ -234,7 +234,7 @@ set:用JsonPath设置字段值<br/>
 getStruct: 获取json结构<br/>
 getSchema: 获取JsonSchema<br/>
 compare: 比较json<br/>
-diff: 比较json，只显示差异<br/>
+diff: 比较json，只返回差异<br/>
 <br/>
 
 流程节点（有child子节点）<br/>

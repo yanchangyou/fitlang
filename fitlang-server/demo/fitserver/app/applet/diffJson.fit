@@ -2,32 +2,11 @@
     "uni": "applet",
     "input":{
         "json2":{
-            "field":123456,
-            "double":123.456789,
-            "string": "abcd",
-            "boolean": true,
-            "object":{
-                "number":123,
-                "double":123.456,
-                "string": "abc",
-                "boolean": true
-            },
-            "array":[
-                {
-                    "object":{
-                        "number":123,
-                        "double":123.456,
-                        "string": "abc",
-                        "boolean": true
-                    }
-                }
-            ]
-        },
-        "json1":{
             "field": "abc",
             "number":123,
             "string": "abc",
             "object":{
+                "field": "abc",
                 "number":123,
                 "string": "abc",
                 "boolean": true
@@ -41,6 +20,30 @@
                     }
                 }
             ]
+        },
+        "json1":{
+            "field":123456,
+            "double":123.456789,
+            "string": "abcd",
+            "boolean": true,
+            "object":{
+                "field":123456,
+                "number":123,
+                "double":123.456,
+                "string": "abc",
+                "boolean": true,
+                "newField":123
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc",
+                        "boolean": true
+                    }
+                }
+            ]
         }
     },
     "output":{
@@ -49,7 +52,7 @@
             "typeEqual": false,
             "type": "MODIFY"
         },
-        "number":{
+        "double":{
             "equal": false,
             "type": "REMOVE"
         },
@@ -58,19 +61,28 @@
             "typeEqual": true,
             "type": "MODIFY"
         },
-        "double":{
-            "equal": false,
-            "type": "ADD"
-        },
         "boolean":{
             "equal": false,
-            "type": "ADD"
+            "type": "REMOVE"
+        },
+        "object.field":{
+            "equal": false,
+            "typeEqual": false,
+            "type": "MODIFY"
         },
         "object.double":{
             "equal": false,
-            "type": "ADD"
+            "type": "REMOVE"
+        },
+        "object.newField":{
+            "equal": false,
+            "type": "REMOVE"
         },
         "array[0].object.boolean":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "number":{
             "equal": false,
             "type": "ADD"
         }
@@ -96,7 +108,7 @@
         "showGraph": false,
         "showInputForm": true,
         "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.9,
+        "scriptSplitRatio":0.92,
         "hideButtons":[
             "compare",
             "clearOutput"

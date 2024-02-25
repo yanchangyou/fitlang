@@ -110,7 +110,7 @@ public abstract class JsonBaseEditorPanel extends JPanel {
     }
 
     public void initView(boolean showJsonEditor) {
-        if (showJsonEditor != isJsonTextEditor) {
+        if (showJsonEditor && isJsonTextEditor) {
             switchView();
         }
     }

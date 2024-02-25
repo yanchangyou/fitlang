@@ -2,13 +2,13 @@ package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
-import fit.lang.plugin.json.ExecuteJsonNodeUtil;
+import fit.lang.plugin.json.CompareUtils;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 /**
- * 比较两个json,只显示差异部分
+ * 比较两个json,只返回差异部分
  */
 public class DiffJsonJsonExecuteNode extends JsonExecuteNode {
 
@@ -31,7 +31,7 @@ public class DiffJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        JSONObject outputJson = ExecuteJsonNodeUtil.diffJsonObject(json1, json2);
+        JSONObject outputJson = CompareUtils.diff(json1, json2);
 
         output.setData(outputJson);
     }
