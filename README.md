@@ -1,10 +1,13 @@
 ## 介绍
 
-FitLang是面向开发人员群体的， 适合做一个IDEA环境下小工具：postman、json比较、乱码探测、加密解密、进制转换、RPA、中间件，只要有IDEA，安装FitLang插件，添加对应的工具json代码，这些工具都有了
+FitLang是面向开发人员群体的，适合做一个IDEA环境下小工具：postman、json比较、乱码探测、加密解密、进制转换、RPA、中间件，只要有IDEA，安装FitLang插件，添加对应的工具json代码，这些工具都有了
 
 把日常开发工作中，遇到的json数据处理地方，沉淀到工具箱，方便后续使用，目前积累了近百个节点服务，适合DIY扩展
 
-IDEA + 如意插件 = 可视化脚本语言 + 中间件 + 动态插件 + 迷你应用 + 迷你工具（json，flow，http，excel ，telnet，clipboard，file，cmd，ide，info，test，mock，perf，monitor）
+IDEA + 如意插件 = 可视化脚本语言 + 中间件 + 动态插件 + 迷你应用 + 迷你工具
+
+支持节点组: json，flow，http，excel，telnet，clipboard，file，cmd，ide，info，test，mock，perf，monitor
+最后有详细列表
 
 fit语言是一门轻量级编程语言，兼具开发人员友好和工具处理友好。
 
