@@ -29,6 +29,7 @@
         "saveButtonTitle": "保存",
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
+        "switchFormButtonTitle": "切换",
         "showGraph": false,
         "hideButtons": [
             //            "reload",

@@ -38,7 +38,7 @@ public class DiffJsonJsonExecuteNodeTest extends TestCase {
                 "'json1':{\"string\":123,\"object\":{\"number\":\"abc\",\"string\":123},\"array\":[{\"number\":\"abc\",\"string\":123}]}," +
                 "'json2':{\"number\":1,\"array\":[{\"number\":123,\"string\":\"abc\"}]}" +
                 "}");
-        Object expected = "{\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"number\":{\"equal\":false,\"type\":\"ADD\"},\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"}}";
+        Object expected = "{\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"},\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"type\":\"ADD\"}}";
         String flow = "{" +//
                 "   'uni': 'diff'," +
                 "}";
@@ -59,7 +59,7 @@ public class DiffJsonJsonExecuteNodeTest extends TestCase {
                 "'json1':{'number':11,'double':1.10,'string':'abcd','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "'json2':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "}");
-        Object expected = "{\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"double\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
+        Object expected = "{\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"double\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"}}";
         String flow = "{" +//
                 "   'uni': 'diff'," +
                 "}";

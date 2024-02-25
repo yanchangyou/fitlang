@@ -1099,10 +1099,14 @@ public class ExecuteJsonNodeUtil {
         JSONObject jsonPath2 = convertToJsonPath(json2);
 
         JSONObject result = new JSONObject();
+        List<String> jsonPathList = new ArrayList<>();
 
-        Set<String> jsonPathList = new HashSet<>();
         jsonPathList.addAll(jsonPath1.keySet());
-        jsonPathList.addAll(jsonPath2.keySet());
+        for (String path : jsonPath2.keySet()) {
+            if (!jsonPathList.contains(path)) {
+                jsonPathList.add(path);
+            }
+        }
 
         for (String path : jsonPathList) {
             boolean json1Contain = jsonPath1.containsKey(path);
