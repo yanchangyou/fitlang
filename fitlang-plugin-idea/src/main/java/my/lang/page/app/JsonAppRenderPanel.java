@@ -610,6 +610,10 @@ public class JsonAppRenderPanel extends JPanel {
 
                                     //deal action
                                     JSONArray actions = ui.getJSONArray("actions");
+                                    if (actions == null) {
+                                        actions = new JSONArray();
+                                        ui.put("actions", actions);
+                                    }
                                     for (Object action : actions) {
                                         JSONObject actionJson = (JSONObject) action;
                                         String title = actionJson.getString("title");
