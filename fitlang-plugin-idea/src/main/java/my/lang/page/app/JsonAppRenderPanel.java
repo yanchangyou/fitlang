@@ -665,7 +665,7 @@ public class JsonAppRenderPanel extends JPanel {
                                 String newJsonText = toJsonTextWithFormat(appletDefine);
                                 appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
                                 appFile.refresh(false, false);
-                                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                                ApplicationManager.getApplication().invokeLater(new Runnable() {
                                     @Override
                                     public void run() {
                                         Messages.showInfoMessage("Save OK!", "Info");
