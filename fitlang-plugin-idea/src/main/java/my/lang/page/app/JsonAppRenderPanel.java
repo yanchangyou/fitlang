@@ -389,23 +389,6 @@ public class JsonAppRenderPanel extends JPanel {
             }
         }
 
-        //add switch view Button
-        if (showSwitchFormButton) {
-            {
-                switchFormButton = new JButton(switchFormButtonTitle);
-                switchFormButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-
-                        inputEditor.switchView();
-                        outputEditor.switchView();
-
-                    }
-                });
-                toolBar.add(switchFormButton);
-            }
-        }
-
         if (showGraph) {
             {
                 openChromeDevButton = new JButton(openChromeDevButtonTitle);
@@ -456,6 +439,23 @@ public class JsonAppRenderPanel extends JPanel {
                     }
                 });
                 toolBar.add(reloadButton);
+            }
+        }
+
+        //add switch view Button
+        if (showSwitchFormButton) {
+            {
+                switchFormButton = new JButton(switchFormButtonTitle);
+                switchFormButton.addActionListener(new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+
+                        inputEditor.switchView();
+                        outputEditor.switchView();
+
+                    }
+                });
+                toolBar.add(switchFormButton);
             }
         }
 
