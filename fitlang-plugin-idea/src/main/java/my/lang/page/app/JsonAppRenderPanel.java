@@ -114,6 +114,10 @@ public class JsonAppRenderPanel extends JPanel {
 
     JSplitPane scriptSplitPane;
 
+    private Double inputOutputSplitRatio = 0.5;
+
+    private Double scriptSplitRatio = 0.4;
+
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
         if (contextParam == null) {
@@ -130,7 +134,7 @@ public class JsonAppRenderPanel extends JPanel {
         scriptSplitPane.setBorder(null);
 //        splitPane.setDividerSize(4);
 
-        adjustSplitPanel(scriptSplitPane);
+        adjustSplitPanel(scriptSplitPane, scriptSplitRatio);
 
         implementIdeOperator(null, project);
 
@@ -198,6 +202,8 @@ public class JsonAppRenderPanel extends JPanel {
 
         scriptSplitPane = buildMainPanel(input, output, actions);
 
+        resetLayout(uiDefine);
+
         resetAllTitle(uiDefine);
 
         resetAllButtonName(uiDefine);
@@ -214,6 +220,13 @@ public class JsonAppRenderPanel extends JPanel {
         inputEditor.setTitle(inputTitle);
         outputEditor.setTitle(outputTitle);
         scriptEditor.setTitle(scriptTitle);
+
+    }
+
+    private void resetLayout(JSONObject uiDefine) {
+
+        inputOutputSplitRatio = uiDefine.containsKey("inputOutputSplitRatio") ? uiDefine.getDouble("inputOutputSplitRatio") : inputOutputSplitRatio;
+        scriptSplitRatio = uiDefine.containsKey("scriptSplitRatio") ? uiDefine.getDouble("scriptSplitRatio") : scriptSplitRatio;
 
     }
 
@@ -361,8 +374,8 @@ public class JsonAppRenderPanel extends JPanel {
             resetLayoutButton.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    adjustSplitPanel(scriptSplitPane);
-                    adjustSplitPanel(inputOutputSplitPane);
+                    adjustSplitPanel(scriptSplitPane, scriptSplitRatio);
+                    adjustSplitPanel(inputOutputSplitPane, inputOutputSplitRatio);
                 }
             });
             toolBar.add(resetLayoutButton);
@@ -431,6 +444,7 @@ public class JsonAppRenderPanel extends JPanel {
 
                             appTitleLabel.requestFocus();
 
+                            resetLayout(uiDefine);
                             resetAllTitle(uiDefine);
                             resetAllButtonName(uiDefine);
                         }
@@ -686,13 +700,13 @@ public class JsonAppRenderPanel extends JPanel {
 
         inputOutputSplitPane.add(outputEditor);
 
-        adjustSplitPanel(inputOutputSplitPane);
+        adjustSplitPanel(inputOutputSplitPane, inputOutputSplitRatio);
 
         return inputOutputSplitPane;
 
     }
 
-    private static void adjustSplitPanel(JSplitPane splitPane) {
+    private static void adjustSplitPanel(JSplitPane splitPane, double splitRatio) {
         new Thread(() -> {
             for (int i = 0; i < 4; i++) {
                 try {
@@ -700,11 +714,7 @@ public class JsonAppRenderPanel extends JPanel {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                if (splitPane.getOrientation() == JSplitPane.HORIZONTAL_SPLIT) {
-                    splitPane.setDividerLocation(0.5);
-                } else {
-                    splitPane.setDividerLocation(0.4);
-                }
+                splitPane.setDividerLocation(splitRatio);
             }
         }).start();
     }
