@@ -229,8 +229,7 @@ public class JsonAppRenderPanel extends JPanel {
         switchViewButtonTitle = uiDefine.containsKey("switchViewButtonTitle") ? uiDefine.getString("switchViewButtonTitle") : switchViewButtonTitle;
         switchFormButtonTitle = uiDefine.containsKey("switchFormButtonTitle") ? uiDefine.getString("switchFormButtonTitle") : switchFormButtonTitle;
 
-        exchangeButton.setText("<->");
-
+        if (exchangeButton != null) exchangeButton.setText("<->");
         if (reloadButton != null) reloadButton.setText(reloadButtonTitle);
         if (clearOutputButton != null) clearOutputButton.setText(clearOutputButtonTitle);
         if (executeButton != null) executeButton.setText(executeButtonTitle);
