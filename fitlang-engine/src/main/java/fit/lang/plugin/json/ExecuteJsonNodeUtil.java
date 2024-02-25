@@ -1014,14 +1014,12 @@ public class ExecuteJsonNodeUtil {
                             newMap.put((newFieldName), entry.getValue());
                         }
                     } else {
-                        String newValue = item == null ? null : item.toString();
-                        newMap.put((arrayFieldName), newValue);
+                        newMap.put((arrayFieldName), item);
                     }
                     index++;
                 }
             } else {
-                String newValue = value == null ? null : value.toString();
-                newMap.put((fieldName), newValue);
+                newMap.put((fieldName), value);
             }
         }
         return newMap;
