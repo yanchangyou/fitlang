@@ -4,12 +4,28 @@
     "inputTitle": "入参",
     "outputTitle": "出参",
     "scriptTitle": "脚本",
-    "showExchangeButton": true,
+    "enableExchangeButton": true,
     "input": {
         "text": "abc123上中下"
     },
+    "inputForm": {
+        "form": [
+            {
+                "key": "text",
+                "type": "textarea"
+            }
+        ]
+    },
     "output": {
         "text": ""
+    },
+    "outputForm": {
+        "form": [
+            {
+                "key": "text",
+                "type": "textarea"
+            }
+        ]
     },
     "script": {
         "uni": "mix",

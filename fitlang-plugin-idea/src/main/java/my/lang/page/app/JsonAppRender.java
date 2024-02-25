@@ -1,6 +1,5 @@
 package my.lang.page.app;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.fileEditor.FileEditor;
@@ -14,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
+
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.readNodeDefineFile;
 
 public class JsonAppRender implements FileEditor {
 
@@ -29,14 +30,38 @@ public class JsonAppRender implements FileEditor {
         this.contextParam = contextParam;
         String path = file.getPath();
 
-        String content = FileUtil.readUtf8String(path);
+        JSONObject appDefineJson = readAppDefine(path);
+
+        panel = new JsonAppRenderPanel(project, appDefineJson, file, contextParam);
+    }
+
+    @NotNull
+    public static JSONObject readAppDefine(String path) {
+        String content = readNodeDefineFile(path);
         if (StrUtil.isBlank(content)) {
             content = "{}";
         }
 
         JSONObject appDefineJson = JSONObject.parse(content);
 
-        panel = new JsonAppRenderPanel(project, appDefineJson, file, contextParam);
+        //兼容无script的场景
+        if (!appDefineJson.containsKey("script")) {
+            JSONObject scriptJson = appDefineJson;
+            appDefineJson = new JSONObject();
+            appDefineJson.put("script", scriptJson);
+
+            //兼容input字段
+            if (scriptJson.containsKey("input")) {
+                appDefineJson.put("input", scriptJson.remove("input"));
+            }
+        }
+        if (!appDefineJson.containsKey("input")) {
+            appDefineJson.put("input", new JSONObject());
+        }
+        if (!appDefineJson.containsKey("output")) {
+            appDefineJson.put("output", new JSONObject());
+        }
+        return appDefineJson;
     }
 
     @Override

@@ -15,6 +15,7 @@ import fit.lang.define.ExecuteContext;
 import fit.lang.define.ExecuteNode;
 import fit.lang.define.ExecuteNodeAopIgnoreTag;
 import fit.lang.define.ExecuteNodeBuildable;
+import fit.lang.plugin.json.applet.AppletJsonExecuteNode;
 import fit.lang.plugin.json.cmd.CmdJsonExecuteNode;
 import fit.lang.plugin.json.cmd.UnzipJsonExecuteNode;
 import fit.lang.plugin.json.cmd.ZipJsonExecuteNode;
@@ -250,6 +251,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("convertObjectToArray", ConvertObjectToArrayJsonExecuteNode.class);
         register("convertToObjectArray", ConvertToObjectArrayJsonExecuteNode.class);
         register("convertToBasicArray", ConvertToBasicArrayJsonExecuteNode.class);
+        register("convertToJsonPath", ConvertToJsonPathJsonExecuteNode.class);
+        register("compare", CompareJsonJsonExecuteNode.class);
+        register("diff", DiffJsonJsonExecuteNode.class);
 
         register("add", AddJsonExecuteNode.class);
 
@@ -333,6 +337,9 @@ public class JsonDynamicFlowExecuteEngine extends JsonExecuteNode implements Exe
         register("readExcel", ReadExcelJsonExecuteNode.class);
         register("writeExcel", WriteExcelJsonExecuteNode.class);
         register("mergeExcel", MergeExcelJsonExecuteNode.class);
+
+        //applet
+        register("applet", AppletJsonExecuteNode.class);
 
     }
 }

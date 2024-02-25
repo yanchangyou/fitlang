@@ -23,7 +23,7 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
         if (jsonField == null) {
             throw new ExecuteNodeException("parseJson jsonField is required!");
         }
-        Object value = input.get(jsonField);
+        Object value = input.getData().getByPath(jsonField);
 
         JSONObject outputJson = input.getData().clone();
         output.setData(outputJson);
@@ -57,7 +57,7 @@ public class ParseJsonJsonExecuteNode extends JsonExecuteNode {
                 }
             }
 
-            if(oldValue != value) {
+            if (oldValue != value) {
                 output.set(jsonField, value);
             }
         }

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.readNodeDefineFile;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
 public class JsonActionRenderPanel extends JPanel {
@@ -59,7 +60,7 @@ public class JsonActionRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    implementIdeOperator(null);
+                    implementIdeOperator(null, null);
 
                     JSONObject input = getActionInput();
                     String result = ExecuteJsonNodeUtil.executeCode(input, script, contextParam);
@@ -88,7 +89,7 @@ public class JsonActionRenderPanel extends JPanel {
             return result;
         }
 
-        String content = FileUtil.readUtf8String(inputFile);
+        String content = readNodeDefineFile(inputFile);
         if (!isJsonObjectText(content)) {
             result.put("data", content);
             return result;
@@ -110,6 +111,6 @@ public class JsonActionRenderPanel extends JPanel {
     }
 
     public void dispose() {
-        
+
     }
 }

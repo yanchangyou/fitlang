@@ -1,137 +1,205 @@
 {
-    "input": {
+    "input":{
         "workspaceDir": "/opt/github/fitlang/fitlang-server/demo/fitserver/app/postman/",
         "filePath": "fit-test.postman_collection.json"
     },
     "uni": "pipe",
-    "child": [
+    "id": "0f8ff10b-3861-abdb-081d-0e7ff1b4f983",
+    "x":360,
+    "y":140,
+    "child":[
         {
-            "uni": "readFile"
+            "uni": "readFile",
+            "id": "d6b61a5e-31e7-fc2d-a1c3-028d226a6b64",
+            "x":260,
+            "y":340
         },
         {
             "uni": "convert",
-            "express": {
+            "express":{
                 "item": "${item}",
                 "collectionName": "${info.name}"
-            }
+            },
+            "id": "cbe46290-d5cb-a678-2212-5c783140ff8d",
+            "x":200,
+            "y":340
         },
         {
             "uni": "setGlobal",
             "key": "collectionName",
-            "value": "${collectionName}"
+            "value": "${collectionName}",
+            "id": "2782c869-73c2-daca-6138-406a119f3406",
+            "x":480,
+            "y":340
         },
         {
             "uni": "foreach",
             "foreachField": "item",
-            "child": {
-                "id": "switch",
-                "uni": "switch",
-                "switchField": "${this.?item!=null}",
-                "child": [
-                    {
-                        "case": "false",
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "mix",
-                                "json": {
-                                    "isFolder": false
-                                }
-                            },
-                            {
-                                "id": "convertItem",
-                                "uni": "pipe",
-                                "child": [
-                                    {
-                                        "uni": "setGlobal",
-                                        "key": "contentType",
-                                        "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}"
+            "id": "c93b7b73-1530-d99b-c5bc-6033fe997c5c",
+            "x":700,
+            "y":320,
+            "child":[
+                {
+                    "id": "switch",
+                    "uni": "switch",
+                    "switchField": "${this.?item!=null}",
+                    "x":1260,
+                    "y":500,
+                    "child":[
+                        {
+                            "case": "false",
+                            "uni": "pipe",
+                            "id": "ffde1f89-8a02-4116-3ec9-44961239cf4d",
+                            "x":700,
+                            "y":700,
+                            "child":[
+                                {
+                                    "uni": "mix",
+                                    "json":{
+                                        "isFolder": false
                                     },
-                                    {
-                                        "uni": "convert",
-                                        "express": {
-                                            "name": "${name}",
-                                            "content.name": "${name}",
-                                            "content.uni": "postman",
-                                            "content.method": "${request.method}",
-                                            "content.header": "${request.header}",
-                                            "content.header.contentType": "${contentType}",
-                                            "content.url": "${request.url.raw}",
-                                            "content.query": "${request.body.urlencoded}",
-                                            "content.body": "${request.body.raw}",
-                                            "isFolder": "${isFolder}",
-                                            "contentType": "${contentType}"
+                                    "id": "db0f3def-9581-02b9-9fe6-01a27f7388ea",
+                                    "x":600,
+                                    "y":880
+                                },
+                                {
+                                    "id": "convertItem",
+                                    "uni": "pipe",
+                                    "x":800,
+                                    "y":880,
+                                    "child":[
+                                        {
+                                            "uni": "setGlobal",
+                                            "key": "contentType",
+                                            "value": "${this.?request.?body.?urlencoded!=null?'application/x-www-form-urlencoded':''}",
+                                            "id": "e213d805-25a8-1371-a387-eec84c34e994",
+                                            "x":1000,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "convert",
+                                            "express":{
+                                                "name": "${name}",
+                                                "content.name": "${name}",
+                                                "content.uni": "postman",
+                                                "content.method": "${request.method}",
+                                                "content.header": "${request.header}",
+                                                "content.header.contentType": "${contentType}",
+                                                "content.url": "${request.url.raw}",
+                                                "content.query": "${request.body.urlencoded}",
+                                                "content.body": "${request.body.raw}",
+                                                "isFolder": "${isFolder}",
+                                                "contentType": "${contentType}"
+                                            },
+                                            "id": "5fbad960-ff1b-95d9-dd91-1efaa12dc307",
+                                            "x":200,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "convertKeyValueList",
+                                            "listField": "content.query",
+                                            "keyField": "key",
+                                            "valueField": "value",
+                                            "id": "56dc6254-1395-21c8-18ab-b0bb40ef7297",
+                                            "x":400,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "convertKeyValueList",
+                                            "listField": "content.header",
+                                            "keyField": "key",
+                                            "valueField": "value",
+                                            "id": "4657f03c-13ac-be2a-dd2b-291186067491",
+                                            "x":600,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "convert",
+                                            "isMixMode": true,
+                                            "express":{
+                                                "content.header.contentType": "${contentType}"
+                                            },
+                                            "id": "6ad5ba63-7c7e-6121-f172-0dcfdc04faa2",
+                                            "x":800,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "mix",
+                                            "json":{
+                                                "filePath": "${collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
+                                            },
+                                            "id": "d56b8bf0-34ca-0a7b-e73c-700de7990e68",
+                                            "x":1000,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "parseJson",
+                                            "jsonField": "content.query",
+                                            "id": "750d00eb-7759-31cb-88a9-5b15ca57226b",
+                                            "x":1200,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "parseJson",
+                                            "jsonField": "content.body",
+                                            "id": "2a992cd0-439c-2d46-c56b-4c26a08a5c2c",
+                                            "x":1400,
+                                            "y":1060
+                                        },
+                                        {
+                                            "uni": "writeFile",
+                                            "format": true,
+                                            "contentField": "content",
+                                            "id": "55678a61-6759-e325-ec48-fbbcd8550ca6",
+                                            "x":1600,
+                                            "y":1060
                                         }
-                                    },
-                                    {
-                                        "uni": "convertKeyValueList",
-                                        "listField": "content.query",
-                                        "keyField": "key",
-                                        "valueField": "value"
-                                    },
-                                    {
-                                        "uni": "convertKeyValueList",
-                                        "listField": "content.header",
-                                        "keyField": "key",
-                                        "valueField": "value"
-                                    },
-                                    {
-                                        "uni": "convert",
-                                        "isMixMode": true,
-                                        "express": {
-                                            "content.header.contentType": "${contentType}"
-                                        }
-                                    },
-                                    {
-                                        "uni": "mix",
-                                        "json": {
-                                            "filePath": "${collectionName + (isFolder?parentName:'') + '/' + name+'.fit'}"
-                                        }
-                                    },
-                                    {
-                                        "uni": "parseJson",
-                                        "jsonField": "content.query"
-                                    },
-                                    {
-                                        "uni": "parseJson",
-                                        "jsonField": "content.body"
-                                    },
-                                    {
-                                        "uni": "writeFile",
-                                        "format": true,
-                                        "contentField": "content"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "case": "true",
-                        "uni": "pipe",
-                        "child": [
-                            {
-                                "uni": "mix",
-                                "json": {
-                                    "parentName": "${'/'+name}",
-                                    "isFolder": true
+                                    ]
                                 }
-                            },
-                            {
-                                "uni": "foreach",
-                                "foreachField": "item",
-                                "mixToItemField": [
-                                    "parentName",
-                                    "isFolder"
-                                ],
-                                "child": {
-                                    "uni": "call",
-                                    "nodeId": "convertItem"
+                            ]
+                        },
+                        {
+                            "case": "true",
+                            "uni": "pipe",
+                            "id": "06911e65-8c7d-54a5-8514-da1f1891e623",
+                            "x":1880,
+                            "y":700,
+                            "child":[
+                                {
+                                    "uni": "mix",
+                                    "json":{
+                                        "parentName": "${'/'+name}",
+                                        "isFolder": true
+                                    },
+                                    "id": "5342499d-2a2d-c4c3-522f-4456f2b98f15",
+                                    "x":2000,
+                                    "y":880
+                                },
+                                {
+                                    "uni": "foreach",
+                                    "foreachField": "item",
+                                    "mixToItemField":[
+                                        "parentName",
+                                        "isFolder"
+                                    ],
+                                    "id": "597a61f3-b0f1-ba36-a645-a89f748f1cc4",
+                                    "x":1760,
+                                    "y":880,
+                                    "child":[
+                                        {
+                                            "uni": "call",
+                                            "nodeId": "convertItem",
+                                            "id": "ad58b4ff-f64f-c05f-acaf-09effc7e6b4d",
+                                            "x":1760,
+                                            "y":1060
+                                        }
+                                    ]
                                 }
-                            }
-                        ]
-                    }
-                ]
-            }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

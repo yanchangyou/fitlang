@@ -2,28 +2,48 @@ package my.lang.page.app;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.project.Project;
+import my.lang.page.diff.JsonDiffResultPanel;
 
 public class JsonScriptEditorPanel extends JsonBaseEditorPanel {
 
     JsonGraphScriptPanel jsonGraphScriptPanel;
 
-    public JsonScriptEditorPanel(JSONObject script, String title, int horizontalAlignment, Project project) {
+    JsonDiffResultPanel jsonDiffResultPanel;
+
+    boolean showGraph;
+
+    public JsonScriptEditorPanel(JSONObject script, String title, int horizontalAlignment, boolean showGraph, Project project) {
 
         super(script, title, horizontalAlignment, project);
+        this.showGraph = showGraph;
+        if (showGraph) {
+            jsonGraphScriptPanel = new JsonGraphScriptPanel(script, jsonTextEditor);
+            cardPanel.add(jsonGraphScriptPanel);
+            isJsonTextEditor = true;
+        }
 
-        jsonGraphScriptPanel = new JsonGraphScriptPanel(script);
-        cardPanel.add(jsonGraphScriptPanel);
+        jsonDiffResultPanel = new JsonDiffResultPanel(project);
+        cardPanel.add(jsonDiffResultPanel);
 
-        isJsonTextEditor = true;
+    }
+
+    public JSONObject getScript() {
+        return JSONObject.parseObject(jsonTextEditor.getText());
     }
 
     @Override
     protected void switchEditor() {
 
+        if (isJsonTextEditor && showGraph) {
+            JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
+            jsonGraphScriptPanel.setScriptDataToChrome(newJson);
+        }
     }
 
     @Override
     public void dispose() {
-        jsonGraphScriptPanel.close();
+        if (showGraph) {
+            jsonGraphScriptPanel.dispose();
+        }
     }
 }

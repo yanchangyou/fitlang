@@ -29,9 +29,9 @@ public class ReadFileJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("message"));
+        Assert.assertTrue(outputJson.containsKey("script"));
 
-        Assert.assertEquals("{\"uni\":\"hello\",\"message\":\"hello, world! 你好，世界！\",\"absolutePath\":\"/opt/github/fitlang/fitlang-server/demo/fitserver/app/first.fit\"}", outputJson.toJSONString());
+        Assert.assertEquals("{\"script\":{\"uni\":\"hello\",\"message\":\"hello, world! 你好，世界！\"},\"input\":{},\"output\":{},\"uni\":\"applet\",\"absolutePath\":\"/opt/github/fitlang/fitlang-server/demo/fitserver/app/first.fit\"}", outputJson.toJSONString());
 
     }
 

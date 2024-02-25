@@ -13,7 +13,12 @@ public class EvalJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        JSONObject evalResult = ExpressUtil.eval(input.getData(), input.getInputParamAndContextParam());
+
+        JSONObject evalJson = nodeJsonDefine.getJSONObject("json");
+        if (evalJson == null) {
+            evalJson = input.getData();
+        }
+        JSONObject evalResult = ExpressUtil.eval(evalJson, input.getInputParamAndContextParam());
         output.setData(evalResult);
     }
 }

@@ -1,0 +1,82 @@
+{
+    "uni": "applet",
+    "input":{
+        "num":1234567890123,
+        "radix":32
+    },
+    "output":{
+        "result": "13TOVM16B"
+    },
+    "script":{
+        "uni": "eval",
+        "json":{
+            "result": "${FitLang.convertNumber(num,radix)}"
+        }
+    },
+    "ui":{
+        "title": "数字工具",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "executeButtonTitle": "执行",
+        "resetLayoutButtonTitle": "重置布局",
+        "reloadButtonTitle": "刷新",
+        "clearOutputButtonTitle": "清空出参",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "showGraph": false,
+        "hideButtons":[
+           "compare"
+        ],
+        "actions":[
+            {
+                "title": "转日期",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${new java.util.Date(num)}"
+                    }
+                }
+            },
+            {
+                "title": "转2进制",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertNumber(num,2)}"
+                    }
+                }
+            },
+            {
+                "title": "转8进制",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertNumber(num,8)}"
+                    }
+                }
+            },
+            {
+                "title": "转16进制",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertNumber(num,16)}"
+                    }
+                }
+            },
+            {
+                "title": "转进制",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${FitLang.convertNumber(num,radix)}"
+                    }
+                }
+            }
+        ]
+    }
+}

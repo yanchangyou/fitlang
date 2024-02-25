@@ -116,6 +116,7 @@ public class NodeExcelUtil {
         if (header != null) {
             JSONArray newRows = new JSONArray();
             newRows.add(header);
+            newRows.addAll(rows);
             rows = newRows;
         }
 

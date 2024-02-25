@@ -282,6 +282,7 @@
         {
             "uni": "http",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -289,6 +290,7 @@
         {
             "uni": "postJson",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -296,6 +298,7 @@
         {
             "uni": "postForm",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -303,6 +306,7 @@
         {
             "uni": "httpGet",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -310,6 +314,7 @@
         {
             "uni": "httpPut",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -317,6 +322,7 @@
         {
             "uni": "httpDelete",
             "url": "http://fit.321zou.com/hello",
+            "useInput": true,
             "param": {
                 "foo": "bar"
             }
@@ -683,6 +689,68 @@
             "outputFile": "path-merge.xls",
             "header": {
                 "fieldName": "title"
+            }
+        },
+        {
+            "uni": "applet",
+            "input": {
+                "a": 3,
+                "b": 2
+            },
+            "output": {
+                "a": 3,
+                "b": 2,
+                "result": 1
+            },
+            "script": {
+                "uni": "mix",
+                "json": {
+                    "result": "${a+b}"
+                }
+            },
+            "ui": {
+                "title": "App",
+                "inputTitle": "Input",
+                "outputTitle": "Output",
+                "scriptTitle": "Script",
+                "reloadButtonTitle": "Refresh",
+                "clearOutputButtonTitle": "Clear Output",
+                "executeButtonTitle": "Execute",
+                "resetLayoutButtonTitle": "Layout",
+                "needSortButtonTitle": "Sort",
+                "compareButtonTitle": "Compare",
+                "saveButtonTitle": "Save",
+                "openChromeDevButtonTitle": "Open Chrome Dev",
+                "switchViewButtonTitle": "Switch View",
+                "switchFormButtonTitle": "Switch",
+                "showGraph": false,
+                "showInputForm": false,
+                "showOutputForm": false,
+                "inputOutputSplitRatio": 0.5,
+                "scriptSplitRatio": 0.4,
+                "hideButtonsAll": [
+                    "reload",
+                    "clearOutput",
+                    "exchange",
+                    "compare",
+                    "save",
+                    "execute"
+                ],
+                "hideButtons": [
+                    "clearOutput",
+                    "compare"
+                ],
+                "actions": [
+                    {
+                        "title": "+",
+                        "script": {
+                            "uni": "mix",
+                            "json": {
+                                "result": "${a+b}"
+                            }
+                        }
+                    }
+                ]
             }
         }
     ]

@@ -11,29 +11,44 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     JsonFormPanel jsonFormEditor;
 
-    public JsonObjectEditorPanel(JSONObject formSchema, JSONObject formData, String title, int horizontalAlignment, Project project) {
+    JsonNativeFormPanel jsonNativeFormEditor;
+
+    boolean showGraph;
+
+    public JsonObjectEditorPanel(JSONObject formSchema, JSONObject formData, String title, int horizontalAlignment, boolean showGraph, Project project) {
 
         super(formData, title, horizontalAlignment, project);
 
         this.formSchema = formSchema;
+        this.showGraph = showGraph;
 
-        jsonFormEditor = new JsonFormPanel(formSchema, formData);
-        cardPanel.add(jsonFormEditor);
+        if (showGraph) {
+            jsonFormEditor = new JsonFormPanel(formSchema, formData, jsonTextEditor);
+            cardPanel.add(jsonFormEditor);
+            isJsonTextEditor = false;
+        }
 
-        cardLayout.next(cardPanel);
+        jsonNativeFormEditor = new JsonNativeFormPanel(formData, project);
+        cardPanel.add(jsonNativeFormEditor);
 
-        isJsonTextEditor = false;
+//        cardLayout.next(cardPanel);
+
     }
 
-    public JsonFormPanel getJsonFormEditor() {
-        return jsonFormEditor;
+//    public JsonFormPanel getJsonFormEditor() {
+//        return jsonFormEditor;
+//    }
+
+    public void setJsonObject(JSONObject jsonObject) {
+        jsonNativeFormEditor.buildForm(jsonObject, project);
+        jsonTextEditor.setText(toJsonTextWithFormat(jsonObject));
     }
 
     public JSONObject getJsonObject() {
         if (isJsonTextEditor) {
             return JSONObject.parseObject(jsonTextEditor.getText());
         }
-        return jsonFormEditor.getFormData();
+        return jsonNativeFormEditor.getFormData();
     }
 
     @Override
@@ -41,16 +56,19 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
         if (isJsonTextEditor) {
             JSONObject newJson = JSONObject.parse(jsonTextEditor.getText());
-            jsonFormEditor.setFormDataToChrome(newJson);
+            if (showGraph) {
+                jsonFormEditor.setFormDataToChrome(newJson);
+            }
+            jsonNativeFormEditor.buildForm(newJson, project);
         } else {
-            String newJsonText = toJsonTextWithFormat(jsonFormEditor.getFormData());
-            jsonTextEditor.setText(newJsonText);
+            jsonTextEditor.setText(toJsonTextWithFormat(jsonNativeFormEditor.getFormData()));
         }
-
     }
 
     @Override
     public void dispose() {
-        jsonFormEditor.close();
+        if (showGraph) {
+            jsonFormEditor.close();
+        }
     }
 }

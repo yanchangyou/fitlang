@@ -2,6 +2,8 @@ package my.lang.page.app;
 
 import cn.hutool.core.io.IoUtil;
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
@@ -14,9 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.isJsonObjectText;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 
 public class JsonFormPanel extends JPanel {
 
+    /**
+     * https://jsonform.github.io/jsonform/playground/index.html?example=fields-radios
+     */
     JSONObject formSchema;
 
     JSONObject formData;
@@ -25,16 +31,19 @@ public class JsonFormPanel extends JPanel {
 
     JBCefJSQuery jsQuery;
 
+    LanguageTextField jsonTextEditor;
+
     private double refreshDataInterval = 0.3;
 
     String jsonData = "{}";
 
-    public JsonFormPanel(JSONObject formSchema, JSONObject formData) {
+    public JsonFormPanel(JSONObject formSchema, JSONObject formData, LanguageTextField jsonTextEditor) {
 
         super(true);
 
         this.formSchema = formSchema;
         this.formData = formData;
+        this.jsonTextEditor = jsonTextEditor;
 
         browser = new JBCefBrowser();
         browser.getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, 1000);
@@ -51,6 +60,13 @@ public class JsonFormPanel extends JPanel {
             if (isJsonObjectText(data) && !jsonData.equals(data)) {
                 jsonData = data;
                 setFormData(JSONObject.parse(data));
+                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String newJsonText = toJsonTextWithFormat(getFormData());
+                        jsonTextEditor.setText(newJsonText);
+                    }
+                });
             }
             return new JBCefJSQuery.Response(data) {
             };
@@ -88,14 +104,14 @@ public class JsonFormPanel extends JPanel {
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
     static void render(JSONObject formSchema, JSONObject formData, JBCefBrowser browser) {
 
-        JSONObject jsonPage = new JSONObject();
-        jsonPage.put("schema", formSchema);
+//        JSONObject jsonPage = new JSONObject();
+//        jsonPage.put("schema", formSchema);
 
         String path = "fit/JsonPage-jsonform.html";
 
         String type = "jsonform";
         String html = loadHtml(type, path);
-        html = html.replace("{\"JSON_PAGE\": \"\"}", jsonPage.toJSONString());
+        html = html.replace("{\"JSON_PAGE\": \"\"}", formSchema.toJSONString());
         html = html.replace("{\"JSON_DATA\": \"\"}", formData.toJSONString());
 
         browser.loadHTML(html);
