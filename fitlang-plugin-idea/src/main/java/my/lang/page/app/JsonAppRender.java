@@ -39,7 +39,7 @@ public class JsonAppRender implements FileEditor {
     public static JSONObject readAppDefine(String path) {
         String content = readNodeDefineFile(path);
         if (StrUtil.isBlank(content)) {
-            content = "{}";
+            content = "{'uni':'hello'}";
         }
 
         JSONObject appDefineJson = JSONObject.parse(content);

@@ -1,6 +1,7 @@
 package my.lang.page.app;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.application.ApplicationManager;
@@ -558,7 +559,7 @@ public class JsonAppRenderPanel extends JPanel {
                     if ("Default".equals(selected)) {
                         script = scriptDefine;
                     } else if ("New".equals(selected)) {
-                        //TODO
+                        script = scriptDefine;
                     } else {
                         for (Object action : actions) {
                             JSONObject actionJson = ((JSONObject) action);
@@ -611,6 +612,9 @@ public class JsonAppRenderPanel extends JPanel {
                                 JSONObject script = getScriptDefine();
                                 appletDefine.put("script", script);
                                 String content = new String(IoUtil.readBytes(appFile.getInputStream()));
+                                if (StrUtil.isBlank(content)) {
+                                    content = "{'uni':'hello'}";
+                                }
                                 JSONObject rawAppletDefine = JSONObject.parse(content);
                                 if ("applet".equals(rawAppletDefine.getString("uni"))) {
                                     rawAppletDefine.putAll(appletDefine);
@@ -638,6 +642,12 @@ public class JsonAppRenderPanel extends JPanel {
                                             break;
                                         }
                                     }
+
+                                    if (!ui.containsKey("hideButtons")) {
+                                        ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
+                                    }
+                                } else {
+                                    rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
                                 }
                                 {
 
@@ -653,8 +663,8 @@ public class JsonAppRenderPanel extends JPanel {
                                             ui.put("actions", actions);
                                         }
                                         String newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
-                                        if (newActionTitle == null) {
-                                            newActionTitle = "Action";
+                                        if (StrUtil.isBlank(newActionTitle)) {
+                                            return;
                                         }
                                         JSONObject newAction = new JSONObject();
                                         newAction.put("title", newActionTitle);
