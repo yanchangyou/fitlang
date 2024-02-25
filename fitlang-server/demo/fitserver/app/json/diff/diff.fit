@@ -49,7 +49,14 @@
         }
     },
     "output":{
-        
+        "fieldRemove":{
+            "equal": false,
+            "type": "REMOVE"
+        },
+        "fieldAdd":{
+            "equal": false,
+            "type": "ADD"
+        }
     },
     "script":{
         "uni": "diff"
