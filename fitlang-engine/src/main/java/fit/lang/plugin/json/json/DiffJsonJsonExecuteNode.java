@@ -8,7 +8,7 @@ import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 /**
- * 比较两个json,只显示差异部分
+ * 比较两个json,只返回差异部分
  */
 public class DiffJsonJsonExecuteNode extends JsonExecuteNode {
 
