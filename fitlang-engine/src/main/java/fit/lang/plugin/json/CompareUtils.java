@@ -21,10 +21,13 @@ import java.util.Objects;
  * * @author yanchangyou
  */
 public class CompareUtils {
-
     public static final String DIFF_TYPE_OF_MODIFY = "MODIFY";
     public static final String DIFF_TYPE_OF_ADD = "ADD";
     public static final String DIFF_TYPE_OF_REMOVE = "REMOVE";
+
+    public static final String FIELD_NAME_OF_VALUE_EQUAL = "valueEqual";
+    public static final String FIELD_NAME_OF_TYPE_EQUAL = "typeEqual";
+    public static final String FIELD_NAME_OF_DIFF_TYPE = "diffType";
 
     /**
      * 比较json是否相同
@@ -36,6 +39,13 @@ public class CompareUtils {
     public static boolean equals(JSONObject json1, JSONObject json2) {
         JSONObject result = diff(json1, json2);
         return result.isEmpty();
+    }
+
+    public static JSONArray diffToArray(JSONObject json1, JSONObject json2) {
+        JSONObject diffJson = diff(json1, json2);
+        JSONArray array = new JSONArray(diffJson.size());
+        array.addAll(diffJson.values());
+        return array;
     }
 
     /**
@@ -54,6 +64,13 @@ public class CompareUtils {
         return result;
     }
 
+    public static JSONArray compareToArray(JSONObject json1, JSONObject json2) {
+        JSONObject diffJson = compare(json1, json2);
+        JSONArray array = new JSONArray(diffJson.size());
+        array.addAll(diffJson.values());
+        return array;
+    }
+
     /**
      * 比较json
      *
@@ -62,13 +79,13 @@ public class CompareUtils {
      * @return result
      */
     public static JSONObject compare(JSONObject json1, JSONObject json2) {
-
         JSONObject jsonPath1 = convertWithJsonPath(json1);
         JSONObject jsonPath2 = convertWithJsonPath(json2);
 
         JSONObject result = new JSONObject();
+        List<String> jsonPathList = new ArrayList<>();
 
-        List<String> jsonPathList = new ArrayList<>(jsonPath1.keySet());
+        jsonPathList.addAll(jsonPath1.keySet());
         for (String path : jsonPath2.keySet()) {
             if (!jsonPathList.contains(path)) {
                 jsonPathList.add(path);
@@ -80,18 +97,25 @@ public class CompareUtils {
             boolean json2Contain = jsonPath2.containsKey(path);
 
             JSONObject pathResult = new JSONObject();
+            pathResult.put("path", path);
+
             if (json1Contain && !json2Contain) {
-                pathResult.put("equal", false);
-                pathResult.put("type", DIFF_TYPE_OF_REMOVE);
+                pathResult.put(FIELD_NAME_OF_VALUE_EQUAL, false);
+                pathResult.put(FIELD_NAME_OF_DIFF_TYPE, DIFF_TYPE_OF_REMOVE);
+                Object value1 = json1.getByPath(path);
+                pathResult.put("value1", value1);
             } else if (!json1Contain && json2Contain) {
-                pathResult.put("equal", false);
-                pathResult.put("type", DIFF_TYPE_OF_ADD);
-            } else if (json1Contain) {
+                pathResult.put(FIELD_NAME_OF_VALUE_EQUAL, false);
+                pathResult.put(FIELD_NAME_OF_DIFF_TYPE, DIFF_TYPE_OF_ADD);
+                Object value2 = json2.getByPath(path);
+                pathResult.put("value2", value2);
+            } else if (json1Contain && json2Contain) {
                 Object value1 = json1.getByPath(path);
                 Object value2 = json2.getByPath(path);
-                pathResult = compareValue(value1, value2);
-                if (Boolean.FALSE.equals(pathResult.get("equal"))) {
-                    pathResult.put("type", DIFF_TYPE_OF_MODIFY);
+                pathResult.putAll(compareValue(value1, value2));
+                if (Boolean.FALSE.equals(pathResult.get(FIELD_NAME_OF_VALUE_EQUAL))) {
+                    pathResult.put("value1", value1);
+                    pathResult.put("value2", value2);
                 }
             }
 
@@ -108,7 +132,6 @@ public class CompareUtils {
      * @return 返回 json object
      */
     public static JSONObject convertWithJsonPath(JSONObject json) {
-
         JSONObject newMap = new JSONObject();
         if (json == null) {
             return newMap;
@@ -162,14 +185,15 @@ public class CompareUtils {
         JSONObject result = new JSONObject();
 
         boolean equal = Objects.equals(value1, value2);
-        result.put("equal", equal);
+        result.put(FIELD_NAME_OF_VALUE_EQUAL, equal);
 
         if (!equal) {
+            result.put(FIELD_NAME_OF_DIFF_TYPE, DIFF_TYPE_OF_MODIFY);
             if (value1 != null && value2 != null) {
                 boolean typeEqual = (value1.getClass().equals(value2.getClass()));
-                result.put("typeEqual", typeEqual);
+                result.put(FIELD_NAME_OF_TYPE_EQUAL, typeEqual);
             } else {
-                result.put("typeEqual", false);
+                result.put(FIELD_NAME_OF_TYPE_EQUAL, false);
             }
         }
 
@@ -185,7 +209,7 @@ public class CompareUtils {
     private static List<String> getEqualsJSONPathList(JSONObject jsonCompareResult) {
         List<String> equalPathList = new ArrayList<>();
         for (Map.Entry<String, Object> entry : jsonCompareResult.entrySet()) {
-            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get("equal"))) {
+            if (Boolean.TRUE.equals(((JSONObject) entry.getValue()).get(FIELD_NAME_OF_VALUE_EQUAL))) {
                 equalPathList.add(entry.getKey());
             }
         }
@@ -195,8 +219,8 @@ public class CompareUtils {
     /**
      * 处理特殊key，key中有点号，然后冲突
      *
-     * @param key key
-     * @return newKey
+     * @param key
+     * @return
      */
     static String buildJsonPathKey(String key) {
         //TODO 避免json path解析报错，key包含特殊字符
