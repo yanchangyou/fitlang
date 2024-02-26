@@ -692,6 +692,11 @@
             }
         },
         {
+            "uni": "compare",
+            "onlyDiff": true,
+            "toArray": false
+        },
+        {
             "uni": "applet",
             "input": {
                 "a": 3,

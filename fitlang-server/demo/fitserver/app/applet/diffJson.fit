@@ -109,7 +109,9 @@
         }
     },
     "script":{
-        "uni": "diff"
+        "uni": "compare",
+        "onlyDiff": true,
+        "toArray": false
     },
     "ui":{
         "title": "JSON对比",
