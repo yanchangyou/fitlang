@@ -50,8 +50,8 @@
         "field":{
             "path": "field",
             "valueEqual": false,
-            "diffType": "MODIFY",
             "typeEqual": false,
+            "diffType": "MODIFY",
             "value1":123456,
             "value2": "abc"
         },
@@ -64,8 +64,8 @@
         "string":{
             "path": "string",
             "valueEqual": false,
-            "diffType": "MODIFY",
             "typeEqual": true,
+            "diffType": "MODIFY",
             "value1": "abcd",
             "value2": "abc"
         },
@@ -78,8 +78,8 @@
         "object.field":{
             "path": "object.field",
             "valueEqual": false,
-            "diffType": "MODIFY",
             "typeEqual": false,
+            "diffType": "MODIFY",
             "value1":123456,
             "value2": "abc"
         },
