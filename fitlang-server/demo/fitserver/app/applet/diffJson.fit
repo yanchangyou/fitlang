@@ -48,43 +48,64 @@
     },
     "output":{
         "field":{
-            "equal": false,
+            "path": "field",
+            "valueEqual": false,
+            "diffType": "MODIFY",
             "typeEqual": false,
-            "type": "MODIFY"
+            "value1":123456,
+            "value2": "abc"
         },
         "double":{
-            "equal": false,
-            "type": "REMOVE"
+            "path": "double",
+            "valueEqual": false,
+            "diffType": "REMOVE",
+            "value1":123.456789
         },
         "string":{
-            "equal": false,
+            "path": "string",
+            "valueEqual": false,
+            "diffType": "MODIFY",
             "typeEqual": true,
-            "type": "MODIFY"
+            "value1": "abcd",
+            "value2": "abc"
         },
         "boolean":{
-            "equal": false,
-            "type": "REMOVE"
+            "path": "boolean",
+            "valueEqual": false,
+            "diffType": "REMOVE",
+            "value1": true
         },
         "object.field":{
-            "equal": false,
+            "path": "object.field",
+            "valueEqual": false,
+            "diffType": "MODIFY",
             "typeEqual": false,
-            "type": "MODIFY"
+            "value1":123456,
+            "value2": "abc"
         },
         "object.double":{
-            "equal": false,
-            "type": "REMOVE"
+            "path": "object.double",
+            "valueEqual": false,
+            "diffType": "REMOVE",
+            "value1":123.456
         },
         "object.newField":{
-            "equal": false,
-            "type": "REMOVE"
+            "path": "object.newField",
+            "valueEqual": false,
+            "diffType": "REMOVE",
+            "value1":123
         },
         "array[0].object.boolean":{
-            "equal": false,
-            "type": "REMOVE"
+            "path": "array[0].object.boolean",
+            "valueEqual": false,
+            "diffType": "REMOVE",
+            "value1": true
         },
         "number":{
-            "equal": false,
-            "type": "ADD"
+            "path": "number",
+            "valueEqual": false,
+            "diffType": "ADD",
+            "value2":123
         }
     },
     "script":{
