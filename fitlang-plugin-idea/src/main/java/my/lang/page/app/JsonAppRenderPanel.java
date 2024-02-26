@@ -71,7 +71,7 @@ public class JsonAppRenderPanel extends JPanel {
     JButton saveButton;
 
     JButton compareButton;
-
+    JCheckBox compareSortCheckBox;
     JButton openChromeDevButton;
     JButton switchViewButton;
     JButton switchFormButton;
@@ -152,20 +152,6 @@ public class JsonAppRenderPanel extends JPanel {
 
         showGraph = Boolean.TRUE.equals(uiDefine.getBoolean("showGraph"));
 
-        JSONArray hideButtons = uiDefine.getJSONArray("hideButtons");
-        if (hideButtons == null) {
-            hideButtons = new JSONArray();
-        }
-
-        showReloadButton = !hideButtons.contains("reload");
-        showActionList = !hideButtons.contains("actionList");
-        showClearOutputButton = !hideButtons.contains("clearOutput");
-        showExchangeButton = !hideButtons.contains("exchange");
-        showSaveButton = !hideButtons.contains("save");
-        showExecuteButton = !hideButtons.contains("execute");
-        showCompareButton = !hideButtons.contains("compare");
-        showSwitchFormButton = !hideButtons.contains("switchForm");
-
         actions = uiDefine.getJSONArray("actions");
 
         inputForm = uiDefine.getJSONObject("inputForm");
@@ -209,6 +195,7 @@ public class JsonAppRenderPanel extends JPanel {
         resetAllTitle(uiDefine);
         resetView(uiDefine);
         resetAllButtonName(uiDefine);
+        restAllButtonVisible(uiDefine);
         readLayoutConfig(uiDefine);
 
     }
@@ -270,6 +257,36 @@ public class JsonAppRenderPanel extends JPanel {
         if (switchViewButton != null) switchViewButton.setText(switchViewButtonTitle);
         if (switchFormButton != null) switchFormButton.setText(switchFormButtonTitle);
         if (resetLayoutButton != null) resetLayoutButton.setText(resetLayoutButtonTitle);
+    }
+
+    private void restAllButtonVisible(JSONObject uiDefine) {
+
+        JSONArray hideButtons = uiDefine.getJSONArray("hideButtons");
+        if (hideButtons == null) {
+            hideButtons = new JSONArray();
+        }
+
+        showReloadButton = !hideButtons.contains("reload");
+        showActionList = !hideButtons.contains("actionList");
+        showClearOutputButton = !hideButtons.contains("clearOutput");
+        showExchangeButton = !hideButtons.contains("exchange");
+        showSaveButton = !hideButtons.contains("save");
+        showExecuteButton = !hideButtons.contains("execute");
+        showCompareButton = !hideButtons.contains("compare");
+        showSwitchFormButton = !hideButtons.contains("switchForm");
+
+        actionComBox.setVisible(showActionList);
+        saveButton.setVisible(showSaveButton);
+        exchangeButton.setVisible(showExchangeButton);
+        clearOutputButton.setVisible(showClearOutputButton);
+        executeButton.setVisible(showExecuteButton);
+        saveButton.setVisible(showSaveButton);
+        compareButton.setVisible(showCompareButton);
+        compareSortCheckBox.setVisible(showCompareButton);
+        openChromeDevButton.setVisible(showGraph);
+        switchViewButton.setVisible(showGraph);
+        switchFormButton.setVisible(showSwitchFormButton);
+//        resetLayoutButton.setVisible(showRe);
     }
 
     @NotNull
@@ -399,307 +416,308 @@ public class JsonAppRenderPanel extends JPanel {
 //        }
 
         //switchForm
-        if (showGraph) {
-            {
-                switchViewButton = new JButton(switchViewButtonTitle);
-                switchViewButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+//        if (showGraph) {
+        {
+            switchViewButton = new JButton(switchViewButtonTitle);
+            switchViewButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-                        inputEditor.switchView();
-                        outputEditor.switchView();
+                    inputEditor.switchView();
+                    outputEditor.switchView();
 
-                        // TODO BUG
-                        scriptEditor.cardLayout.next(scriptEditor.cardPanel);
+                    // TODO BUG
+                    scriptEditor.cardLayout.next(scriptEditor.cardPanel);
 
-                    }
-                });
-                toolBar.add(switchViewButton);
-            }
+                }
+            });
+            toolBar.add(switchViewButton);
         }
+//        }
 
-        if (showGraph) {
-            {
-                openChromeDevButton = new JButton(openChromeDevButtonTitle);
-                openChromeDevButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+//        if (showGraph) {
+        {
+            openChromeDevButton = new JButton(openChromeDevButtonTitle);
+            openChromeDevButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-                        scriptEditor.jsonGraphScriptPanel.openDevtools();
+                    scriptEditor.jsonGraphScriptPanel.openDevtools();
 
-                    }
-                });
-                toolBar.add(openChromeDevButton);
-            }
+                }
+            });
+            toolBar.add(openChromeDevButton);
         }
+//        }
 
         //reload
-        if (showReloadButton) {
+//        if (showReloadButton) {
 
-            //add reload Button
-            {
-                reloadButton = new JButton(reloadButtonTitle);
-                reloadButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+        //add reload Button
+        {
+            reloadButton = new JButton(reloadButtonTitle);
+            reloadButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-                        JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
+                    JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
 //
-                        JSONObject input = theAppDefine.getJSONObject("input");
-                        JSONObject output = theAppDefine.getJSONObject("output");
-                        JSONObject script = theAppDefine.getJSONObject("script");
+                    JSONObject input = theAppDefine.getJSONObject("input");
+                    JSONObject output = theAppDefine.getJSONObject("output");
+                    JSONObject script = theAppDefine.getJSONObject("script");
 
-                        setOutputJson(output);
-                        setInputJson(input);
+                    setOutputJson(output);
+                    setInputJson(input);
 
-                        scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
+                    scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
 
-                        JSONObject uiDefine = theAppDefine.getJSONObject("ui");
-                        if (uiDefine != null) {
-                            actions = uiDefine.getJSONArray("actions");
-                            addActionButtons(actions);
+                    JSONObject uiDefine = theAppDefine.getJSONObject("ui");
+                    if (uiDefine != null) {
+                        actions = uiDefine.getJSONArray("actions");
+                        addActionButtons(actions);
 
-                            appTitleLabel.requestFocus();
+                        appTitleLabel.requestFocus();
 
-                            readLayoutConfig(uiDefine);
+                        readLayoutConfig(uiDefine);
 
-                            resetAllTitle(uiDefine);
-                            resetView(uiDefine);
-                            resetAllButtonName(uiDefine);
-                        }
+                        resetAllTitle(uiDefine);
+                        resetView(uiDefine);
+                        resetAllButtonName(uiDefine);
+                        restAllButtonVisible(uiDefine);
 
                     }
-                });
-                toolBar.add(reloadButton);
-            }
+
+                }
+            });
+            toolBar.add(reloadButton);
         }
+//        }
 
         //add switch view Button
-        if (showSwitchFormButton) {
-            {
-                switchFormButton = new JButton(switchFormButtonTitle);
-                switchFormButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+//        if (showSwitchFormButton) {
+        {
+            switchFormButton = new JButton(switchFormButtonTitle);
+            switchFormButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-                        inputEditor.switchView();
-                        outputEditor.switchView();
+                    inputEditor.switchView();
+                    outputEditor.switchView();
 
-                    }
-                });
-                toolBar.add(switchFormButton);
-            }
+                }
+            });
+            toolBar.add(switchFormButton);
         }
+//        }
 
-        if (showExchangeButton) {
+//        if (showExchangeButton) {
 
-            //add exchange Button
-            {
-                exchangeButton = new JButton("<->");
-                exchangeButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+        //add exchange Button
+        exchangeButton = new JButton("<->");
+        exchangeButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                        JSONObject input = getInputJson();
+                JSONObject input = getInputJson();
 
-                        JSONObject output = getOutputJson();
+                JSONObject output = getOutputJson();
 
-                        setOutputJson(input);
-                        setInputJson(output);
+                setOutputJson(input);
+                setInputJson(output);
 
-                    }
-                });
-                toolBar.add(exchangeButton);
             }
-        }
+        });
+        toolBar.add(exchangeButton);
+//        }
 
         //add 比较 Button
-        if (showCompareButton) {
-            JCheckBox isNeedSort = new JCheckBox(needSortButtonTitle);
-            toolBar.add(isNeedSort);
+//        if (showCompareButton)
+        {
+            compareSortCheckBox = new JCheckBox(needSortButtonTitle);
+            toolBar.add(compareSortCheckBox);
 
             compareButton = new JButton(compareButtonTitle);
             compareButton.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    scriptEditor.jsonDiffResultPanel.showDiff(inputEditor.getJsonObject(), outputEditor.getJsonObject(), isNeedSort.isSelected());
+                    scriptEditor.jsonDiffResultPanel.showDiff(inputEditor.getJsonObject(), outputEditor.getJsonObject(), compareSortCheckBox.isSelected());
                     scriptEditor.cardLayout.last(scriptEditor.cardPanel);
                 }
             });
             toolBar.add(compareButton);
         }
 
-        if (showClearOutputButton) {
+//        if (showClearOutputButton) {
 
-            //add clear output Button
-            {
-                clearOutputButton = new JButton(clearOutputButtonTitle);
-                clearOutputButton.addActionListener(new AbstractAction() {
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
+        //add clear output Button
+        {
+            clearOutputButton = new JButton(clearOutputButtonTitle);
+            clearOutputButton.addActionListener(new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
 
-                        JSONObject output = new JSONObject();
-                        setOutputJson(output);
+                    JSONObject output = new JSONObject();
+                    setOutputJson(output);
 
-                    }
-                });
-                toolBar.add(clearOutputButton);
-            }
+                }
+            });
+            toolBar.add(clearOutputButton);
         }
+//        }
 
         //下拉选择action
-        if (showActionList) {
-            String[] actionList = new String[]{"Default", "New"};
-            actionComBox = new ComboBox<>(actionList);
+//        if (showActionList) {
+        String[] actionList = new String[]{"Default", "New"};
+        actionComBox = new ComboBox<>(actionList);
 
-            actionComBox.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    JSONObject script = new JSONObject();
-                    Object selected = actionComBox.getSelectedItem();
+        actionComBox.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JSONObject script = new JSONObject();
+                Object selected = actionComBox.getSelectedItem();
 
-                    if ("Default".equals(selected)) {
-                        script = scriptDefine;
-                    } else if ("New".equals(selected)) {
-                        script = scriptDefine;
-                    } else {
-                        for (Object action : actions) {
-                            JSONObject actionJson = ((JSONObject) action);
-                            String title = actionJson.getString("title");
-                            if (title.equals(selected)) {
-                                script = actionJson.getJSONObject("script");
-                            }
+                if ("Default".equals(selected)) {
+                    script = scriptDefine;
+                } else if ("New".equals(selected)) {
+                    script = scriptDefine;
+                } else {
+                    for (Object action : actions) {
+                        JSONObject actionJson = ((JSONObject) action);
+                        String title = actionJson.getString("title");
+                        if (title.equals(selected)) {
+                            script = actionJson.getJSONObject("script");
                         }
                     }
-
-                    scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
                 }
-            });
-            toolBar.add(actionComBox);
-        }
+
+                scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
+            }
+        });
+        toolBar.add(actionComBox);
+//        }
 
         //add default execute Button
-        if (showExecuteButton) {
-            executeButton = new JButton(executeButtonTitle);
-            executeButton.addActionListener(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
+//        if (showExecuteButton) {
+        executeButton = new JButton(executeButtonTitle);
+        executeButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                    JSONObject script = getScriptDefine();
+                JSONObject script = getScriptDefine();
 
-                    JSONObject input = getInputJson();
+                JSONObject input = getInputJson();
 
-                    execute(input, script);
-                    scriptEditor.cardLayout.first(scriptEditor.cardPanel);
+                execute(input, script);
+                scriptEditor.cardLayout.first(scriptEditor.cardPanel);
 
-                }
-            });
-            toolBar.add(executeButton);
-        }
+            }
+        });
+        toolBar.add(executeButton);
+//        }
 
-        if (showSaveButton) {
-            saveButton = new JButton(saveButtonTitle);
-            saveButton.addActionListener(new AbstractAction() {
+//        if (showSaveButton) {
+        saveButton = new JButton(saveButtonTitle);
+        saveButton.addActionListener(new AbstractAction() {
 
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
 
-                    Object selectItem = actionComBox.getSelectedItem();
-                    String newActionTitle = "";
-                    if ("New".equals(selectItem)) {
-                        newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
-                        if (StrUtil.isBlank(newActionTitle)) {
-                            return;
-                        }
+                Object selectItem = actionComBox.getSelectedItem();
+                String newActionTitle = "";
+                if ("New".equals(selectItem)) {
+                    newActionTitle = Messages.showInputDialog("New action name:", "Input", null);
+                    if (StrUtil.isBlank(newActionTitle)) {
+                        return;
                     }
+                }
 
-                    String finalNewActionTitle = newActionTitle;
-                    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                JSONObject appletDefine = new JSONObject();
-                                appletDefine.put("uni", "applet");
-                                appletDefine.put("input", getInputJson());
-                                appletDefine.put("output", getOutputJson());
-                                JSONObject script = getScriptDefine();
-                                appletDefine.put("script", script);
-                                String content = new String(IoUtil.readBytes(appFile.getInputStream()));
-                                if (StrUtil.isBlank(content)) {
-                                    content = "{'uni':'hello'}";
-                                }
-                                JSONObject rawAppletDefine = JSONObject.parse(content);
-                                if ("applet".equals(rawAppletDefine.getString("uni"))) {
-                                    rawAppletDefine.putAll(appletDefine);
-                                } else {
-                                    appletDefine.put("script", rawAppletDefine);
-                                    rawAppletDefine.remove("input");
-                                    rawAppletDefine = appletDefine;
-                                }
-                                if (rawAppletDefine.containsKey("ui")) {
-                                    JSONObject ui = rawAppletDefine.getJSONObject("ui");
-                                    appletDefine.put("ui", ui);
+                String finalNewActionTitle = newActionTitle;
+                ApplicationManager.getApplication().runWriteAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject appletDefine = new JSONObject();
+                            appletDefine.put("uni", "applet");
+                            appletDefine.put("input", getInputJson());
+                            appletDefine.put("output", getOutputJson());
+                            JSONObject script = getScriptDefine();
+                            appletDefine.put("script", script);
+                            String content = new String(IoUtil.readBytes(appFile.getInputStream()));
+                            if (StrUtil.isBlank(content)) {
+                                content = "{'uni':'hello'}";
+                            }
+                            JSONObject rawAppletDefine = JSONObject.parse(content);
+                            if ("applet".equals(rawAppletDefine.getString("uni"))) {
+                                rawAppletDefine.putAll(appletDefine);
+                            } else {
+                                appletDefine.put("script", rawAppletDefine);
+                                rawAppletDefine.remove("input");
+                                rawAppletDefine = appletDefine;
+                            }
+                            if (rawAppletDefine.containsKey("ui")) {
+                                JSONObject ui = rawAppletDefine.getJSONObject("ui");
+                                appletDefine.put("ui", ui);
 
-                                    //deal action
+                                //deal action
+                                JSONArray actions = ui.getJSONArray("actions");
+                                if (actions == null) {
+                                    actions = new JSONArray();
+                                    ui.put("actions", actions);
+                                }
+                                for (Object action : actions) {
+                                    JSONObject actionJson = (JSONObject) action;
+                                    String title = actionJson.getString("title");
+                                    if (title.equals(selectItem)) {
+                                        actionJson.put("script", script);
+                                        break;
+                                    }
+                                }
+
+                                if (!ui.containsKey("hideButtons")) {
+                                    ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
+                                }
+                            } else {
+                                rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
+                            }
+                            {
+
+                                if ("New".equals(selectItem)) {
+                                    JSONObject ui = appletDefine.getJSONObject("ui");
+                                    if (ui == null) {
+                                        ui = new JSONObject();
+                                        appletDefine.put("ui", ui);
+                                    }
                                     JSONArray actions = ui.getJSONArray("actions");
                                     if (actions == null) {
                                         actions = new JSONArray();
                                         ui.put("actions", actions);
                                     }
-                                    for (Object action : actions) {
-                                        JSONObject actionJson = (JSONObject) action;
-                                        String title = actionJson.getString("title");
-                                        if (title.equals(selectItem)) {
-                                            actionJson.put("script", script);
-                                            break;
-                                        }
-                                    }
 
-                                    if (!ui.containsKey("hideButtons")) {
-                                        ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
-                                    }
-                                } else {
-                                    rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
+                                    JSONObject newAction = new JSONObject();
+                                    newAction.put("title", finalNewActionTitle);
+                                    newAction.put("script", script);
+                                    actions.add(newAction);
                                 }
-                                {
-
-                                    if ("New".equals(selectItem)) {
-                                        JSONObject ui = appletDefine.getJSONObject("ui");
-                                        if (ui == null) {
-                                            ui = new JSONObject();
-                                            appletDefine.put("ui", ui);
-                                        }
-                                        JSONArray actions = ui.getJSONArray("actions");
-                                        if (actions == null) {
-                                            actions = new JSONArray();
-                                            ui.put("actions", actions);
-                                        }
-
-                                        JSONObject newAction = new JSONObject();
-                                        newAction.put("title", finalNewActionTitle);
-                                        newAction.put("script", script);
-                                        actions.add(newAction);
-                                    }
-                                }
-                                String newJsonText = toJsonTextWithFormat(appletDefine);
-                                appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
-                                appFile.refresh(false, false);
-                                ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Messages.showInfoMessage("Save OK!", "Info");
-                                    }
-                                });
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
                             }
+                            String newJsonText = toJsonTextWithFormat(appletDefine);
+                            appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
+                            appFile.refresh(false, false);
+                            ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Messages.showInfoMessage("Save OK!", "Info");
+                                }
+                            });
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
+                    }
+                });
 
-                }
-            });
-            toolBar.add(saveButton);
-        }
+            }
+        });
+        toolBar.add(saveButton);
+//        }
 
         return toolBar;
     }
