@@ -733,6 +733,7 @@
                     "clearOutput",
                     "exchange",
                     "compare",
+                    "actionList",
                     "save",
                     "execute"
                 ],

@@ -104,6 +104,8 @@ public class JsonAppRenderPanel extends JPanel {
 
     boolean showClearOutputButton = true;
 
+    boolean showActionList = true;
+
     boolean showExecuteButton = true;
 
     boolean showSaveButton = true;
@@ -156,6 +158,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         showReloadButton = !hideButtons.contains("reload");
+        showActionList = !hideButtons.contains("actionList");
         showClearOutputButton = !hideButtons.contains("clearOutput");
         showExchangeButton = !hideButtons.contains("exchange");
         showSaveButton = !hideButtons.contains("save");
@@ -545,7 +548,7 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         //下拉选择action
-        {
+        if (showActionList) {
             String[] actionList = new String[]{"Default", "New"};
             actionComBox = new ComboBox<>(actionList);
 
