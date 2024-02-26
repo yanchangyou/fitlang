@@ -17,6 +17,10 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject inputJson = input.getData();
 
+        boolean onlyDiff = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("onlyDiff"));
+
+        boolean toArray = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("toArray"));
+
         String json1Field = parseStringField("json1Field", input);
         String json2Field = parseStringField("json2Field", input);
 
@@ -31,7 +35,20 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        JSONObject outputJson = CompareUtils.compare(json1, json2);
+        JSONObject outputJson = new JSONObject();
+        if (toArray) {
+            if (onlyDiff) {
+                outputJson.put("array", CompareUtils.diffToArray(json1, json2));
+            } else {
+                outputJson.put("array", CompareUtils.compareToArray(json1, json2));
+            }
+        } else {
+            if (onlyDiff) {
+                outputJson = CompareUtils.diff(json1, json2);
+            } else {
+                outputJson = CompareUtils.compare(json1, json2);
+            }
+        }
 
         output.setData(outputJson);
     }
