@@ -275,4 +275,37 @@ public class CompareUtilsTest extends TestCase {
         Object expected = false;
         Assert.assertEquals(expected, result);
     }
+
+
+    @Test
+    public void testSum() {
+        JSONObject json1 = JSONObject.parseObject("{" +
+//                "'number':'abc'," +
+                "'string':123," +
+                "'object': {'number':'abc','string':123,}," +
+                "'array': [{'number':'abc','string':123,}]," +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{" +
+                "'number':1," +
+//                "'string':'abc'," +
+//                "'object': {'number':123,'string':'abc',}," +
+                "'array': [{'number':123,'string':'abc',}]," +
+                "}");
+        JSONArray list = CompareUtils.diffToArray(json1, json2);
+        JSONObject result = CompareUtils.sum(list);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        Object expected = "{\n" +
+                "\t\"equal\":false,\n" +
+                "\t\"total\":6,\n" +
+                "\t\"valueEqualCount\":0,\n" +
+                "\t\"typeEqualCount\":2,\n" +
+                "\t\"diffCount\":6,\n" +
+                "\t\"addCount\":1,\n" +
+                "\t\"removeCount\":3,\n" +
+                "\t\"modifyCount\":2\n" +
+                "}";
+        Assert.assertEquals(expected, result.toString(JSONWriter.Feature.PrettyFormat));
+    }
+
+
 }

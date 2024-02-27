@@ -30,6 +30,57 @@ public class CompareUtils {
     public static final String FIELD_NAME_OF_DIFF_TYPE = "diffType";
 
     /**
+     * 总结比较结果
+     *
+     * @param list compare result list
+     * @return summary
+     */
+    public static JSONObject sum(JSONArray list) {
+        JSONObject result = new JSONObject();
+        boolean equal = true;
+        int diffCount = 0;
+        int modifyCount = 0;
+        int addCount = 0;
+        int removeCount = 0;
+        int valueEqualCount = 0;
+        int typeEqualCount = 0;
+
+        for (Object itemObject : list) {
+            JSONObject item = (JSONObject) itemObject;
+            if (Boolean.FALSE.equals(item.get(FIELD_NAME_OF_VALUE_EQUAL))) {
+                equal = false;
+            } else {
+                valueEqualCount++;
+            }
+            if (Boolean.FALSE.equals(item.get(FIELD_NAME_OF_TYPE_EQUAL))) {
+                typeEqualCount++;
+            }
+            String diffType = item.getString(FIELD_NAME_OF_DIFF_TYPE);
+            switch (diffType) {
+                case DIFF_TYPE_OF_MODIFY:
+                    modifyCount++;
+                    break;
+                case DIFF_TYPE_OF_ADD:
+                    addCount++;
+                    break;
+                case DIFF_TYPE_OF_REMOVE:
+                    removeCount++;
+            }
+
+        }
+        result.put("equal", equal);
+        result.put("total", list.size());
+        result.put("valueEqualCount", valueEqualCount);
+        result.put("typeEqualCount", typeEqualCount);
+        result.put("diffCount", addCount + removeCount + modifyCount);
+        result.put("addCount", addCount);
+        result.put("removeCount", removeCount);
+        result.put("modifyCount", modifyCount);
+
+        return result;
+    }
+
+    /**
      * 比较json是否相同
      *
      * @param json1 json1
@@ -214,6 +265,17 @@ public class CompareUtils {
             }
         }
         return equalPathList;
+    }
+
+    private static boolean equals(JSONArray list) {
+        boolean equal = true;
+        for (Object item : list) {
+            if (Boolean.FALSE.equals(((JSONObject) item).get(FIELD_NAME_OF_VALUE_EQUAL))) {
+                equal = false;
+                break;
+            }
+        }
+        return equal;
     }
 
     /**

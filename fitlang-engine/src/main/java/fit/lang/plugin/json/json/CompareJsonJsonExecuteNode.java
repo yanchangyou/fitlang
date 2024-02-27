@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.CompareUtils;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -35,20 +36,25 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        JSONObject outputJson = new JSONObject();
+        Object result = null;
         if (toArray) {
             if (onlyDiff) {
-                outputJson.put("array", CompareUtils.diffToArray(json1, json2));
+                result = CompareUtils.diffToArray(json1, json2);
             } else {
-                outputJson.put("array", CompareUtils.compareToArray(json1, json2));
+                result = CompareUtils.compareToArray(json1, json2);
             }
         } else {
             if (onlyDiff) {
-                outputJson = CompareUtils.diff(json1, json2);
+                result = CompareUtils.diff(json1, json2);
+
             } else {
-                outputJson = CompareUtils.compare(json1, json2);
+                result = CompareUtils.compare(json1, json2);
             }
         }
+        JSONArray list = CompareUtils.diffToArray(json1, json2);
+        JSONObject outputJson = CompareUtils.sum(list);
+
+        outputJson.put("result", result);
 
         output.setData(outputJson);
     }

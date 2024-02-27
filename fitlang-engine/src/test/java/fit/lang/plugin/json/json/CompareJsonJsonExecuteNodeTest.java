@@ -14,7 +14,54 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
                 "'json1':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "'json2':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "}");
-        Object expected = "{\"number\":{\"equal\":true},\"double\":{\"equal\":true},\"string\":{\"equal\":true},\"object.number\":{\"equal\":true},\"object.double\":{\"equal\":true},\"object.string\":{\"equal\":true},\"array[0].key\":{\"equal\":true},\"array[1].key\":{\"equal\":true},\"array[2].key\":{\"equal\":true}}";
+        Object expected = "{\n" +
+                "\t\"equal\":true,\n" +
+                "\t\"total\":0,\n" +
+                "\t\"valueEqualCount\":0,\n" +
+                "\t\"typeEqualCount\":0,\n" +
+                "\t\"diffCount\":0,\n" +
+                "\t\"addCount\":0,\n" +
+                "\t\"removeCount\":0,\n" +
+                "\t\"modifyCount\":0,\n" +
+                "\t\"result\":{\n" +
+                "\t\t\"number\":{\n" +
+                "\t\t\t\"path\":\"number\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"double\":{\n" +
+                "\t\t\t\"path\":\"double\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"string\":{\n" +
+                "\t\t\t\"path\":\"string\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"object.number\":{\n" +
+                "\t\t\t\"path\":\"object.number\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"object.double\":{\n" +
+                "\t\t\t\"path\":\"object.double\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"object.string\":{\n" +
+                "\t\t\t\"path\":\"object.string\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[0].key\":{\n" +
+                "\t\t\t\"path\":\"array[0].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[1].key\":{\n" +
+                "\t\t\t\"path\":\"array[1].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[2].key\":{\n" +
+                "\t\t\t\"path\":\"array[2].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}";
         String flow = "{" +//
                 "   'uni': 'compare'," +
                 "}";
@@ -29,7 +76,7 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
         System.out.println(output);
 
 
-        Assert.assertEquals(expected, outputJson.toString());
+        Assert.assertEquals(expected, outputJson.toString(JSONWriter.Feature.PrettyFormat));
 
     }
 
@@ -38,7 +85,58 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
                 "'json1':{\"string\":123,\"object\":{\"number\":\"abc\",\"string\":123},\"array\":[{\"number\":\"abc\",\"string\":123}]}," +
                 "'json2':{\"number\":1,\"array\":[{\"number\":123,\"string\":\"abc\"}]}" +
                 "}");
-        Object expected = "{\"string\":{\"equal\":false,\"type\":\"REMOVE\"},\"object.number\":{\"equal\":false,\"type\":\"REMOVE\"},\"object.string\":{\"equal\":false,\"type\":\"REMOVE\"},\"array[0].number\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"array[0].string\":{\"equal\":false,\"typeEqual\":false,\"type\":\"MODIFY\"},\"number\":{\"equal\":false,\"type\":\"ADD\"}}";
+        Object expected = "{\n" +
+                "\t\"equal\":false,\n" +
+                "\t\"total\":6,\n" +
+                "\t\"valueEqualCount\":0,\n" +
+                "\t\"typeEqualCount\":2,\n" +
+                "\t\"diffCount\":6,\n" +
+                "\t\"addCount\":1,\n" +
+                "\t\"removeCount\":3,\n" +
+                "\t\"modifyCount\":2,\n" +
+                "\t\"result\":{\n" +
+                "\t\t\"string\":{\n" +
+                "\t\t\t\"path\":\"string\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"REMOVE\",\n" +
+                "\t\t\t\"value1\":123\n" +
+                "\t\t},\n" +
+                "\t\t\"object.number\":{\n" +
+                "\t\t\t\"path\":\"object.number\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"REMOVE\",\n" +
+                "\t\t\t\"value1\":\"abc\"\n" +
+                "\t\t},\n" +
+                "\t\t\"object.string\":{\n" +
+                "\t\t\t\"path\":\"object.string\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"REMOVE\",\n" +
+                "\t\t\t\"value1\":123\n" +
+                "\t\t},\n" +
+                "\t\t\"array[0].number\":{\n" +
+                "\t\t\t\"path\":\"array[0].number\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"typeEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"MODIFY\",\n" +
+                "\t\t\t\"value1\":\"abc\",\n" +
+                "\t\t\t\"value2\":123\n" +
+                "\t\t},\n" +
+                "\t\t\"array[0].string\":{\n" +
+                "\t\t\t\"path\":\"array[0].string\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"typeEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"MODIFY\",\n" +
+                "\t\t\t\"value1\":123,\n" +
+                "\t\t\t\"value2\":\"abc\"\n" +
+                "\t\t},\n" +
+                "\t\t\"number\":{\n" +
+                "\t\t\t\"path\":\"number\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"diffType\":\"ADD\",\n" +
+                "\t\t\t\"value2\":1\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}";
         String flow = "{" +//
                 "   'uni': 'compare'," +
                 "}";
@@ -50,7 +148,7 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
         JSONObject outputJson = JSON.parseObject(output);
         System.out.println(outputJson.toJSONString(JSONWriter.Feature.PrettyFormat));
 
-        Assert.assertEquals(expected, outputJson.toString());
+        Assert.assertEquals(expected, outputJson.toString(JSONWriter.Feature.PrettyFormat));
 
     }
 
@@ -59,7 +157,66 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
                 "'json1':{'number':123,'double':1.230,'string':'abcd','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "'json2':{'number':1,'double':1.0,'string':'abc','object':{'number':1,'double':1.0,'string':'abc'},'array': [{\"key\":1},{\"key\":2},{\"key\":3}]}," +
                 "}");
-        Object expected = "{\"number\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"double\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"string\":{\"equal\":false,\"typeEqual\":true,\"type\":\"MODIFY\"},\"object.number\":{\"equal\":true},\"object.double\":{\"equal\":true},\"object.string\":{\"equal\":true},\"array[0].key\":{\"equal\":true},\"array[1].key\":{\"equal\":true},\"array[2].key\":{\"equal\":true}}";
+        Object expected = "{\n" +
+                "\t\"equal\":false,\n" +
+                "\t\"total\":3,\n" +
+                "\t\"valueEqualCount\":0,\n" +
+                "\t\"typeEqualCount\":0,\n" +
+                "\t\"diffCount\":3,\n" +
+                "\t\"addCount\":0,\n" +
+                "\t\"removeCount\":0,\n" +
+                "\t\"modifyCount\":3,\n" +
+                "\t\"result\":{\n" +
+                "\t\t\"number\":{\n" +
+                "\t\t\t\"path\":\"number\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"typeEqual\":true,\n" +
+                "\t\t\t\"diffType\":\"MODIFY\",\n" +
+                "\t\t\t\"value1\":123,\n" +
+                "\t\t\t\"value2\":1\n" +
+                "\t\t},\n" +
+                "\t\t\"double\":{\n" +
+                "\t\t\t\"path\":\"double\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"typeEqual\":true,\n" +
+                "\t\t\t\"diffType\":\"MODIFY\",\n" +
+                "\t\t\t\"value1\":1.230,\n" +
+                "\t\t\t\"value2\":1.0\n" +
+                "\t\t},\n" +
+                "\t\t\"string\":{\n" +
+                "\t\t\t\"path\":\"string\",\n" +
+                "\t\t\t\"valueEqual\":false,\n" +
+                "\t\t\t\"typeEqual\":true,\n" +
+                "\t\t\t\"diffType\":\"MODIFY\",\n" +
+                "\t\t\t\"value1\":\"abcd\",\n" +
+                "\t\t\t\"value2\":\"abc\"\n" +
+                "\t\t},\n" +
+                "\t\t\"object.number\":{\n" +
+                "\t\t\t\"path\":\"object.number\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"object.double\":{\n" +
+                "\t\t\t\"path\":\"object.double\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"object.string\":{\n" +
+                "\t\t\t\"path\":\"object.string\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[0].key\":{\n" +
+                "\t\t\t\"path\":\"array[0].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[1].key\":{\n" +
+                "\t\t\t\"path\":\"array[1].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t},\n" +
+                "\t\t\"array[2].key\":{\n" +
+                "\t\t\t\"path\":\"array[2].key\",\n" +
+                "\t\t\t\"valueEqual\":true\n" +
+                "\t\t}\n" +
+                "\t}\n" +
+                "}";
         String flow = "{" +//
                 "   'uni': 'compare'," +
                 "}";
@@ -71,10 +228,10 @@ public class CompareJsonJsonExecuteNodeTest extends TestCase {
 
         Assert.assertFalse(output.isEmpty());
 
-        System.out.println(output);
+        System.out.println(outputJson.toString(JSONWriter.Feature.PrettyFormat));
 
 
-        Assert.assertEquals(expected, outputJson.toString());
+        Assert.assertEquals(expected, outputJson.toString(JSONWriter.Feature.PrettyFormat));
 
     }
 }
