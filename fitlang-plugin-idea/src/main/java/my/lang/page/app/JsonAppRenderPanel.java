@@ -122,7 +122,7 @@ public class JsonAppRenderPanel extends JPanel {
 
     private Double inputOutputSplitRatio = 0.5;
 
-    private Double scriptSplitRatio = 0.4;
+    private Double scriptSplitRatio = 0.5;
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
 
@@ -480,14 +480,13 @@ public class JsonAppRenderPanel extends JPanel {
 
                         appTitleLabel.requestFocus();
 
-                        readLayoutConfig(uiDefine);
-
                         resetAllTitle(uiDefine);
                         resetView(uiDefine);
                         resetAllButtonName(uiDefine);
                         restAllButtonVisible(uiDefine);
-
                     }
+
+                    readLayoutConfig(uiDefine);
 
                 }
             });
