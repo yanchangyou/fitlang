@@ -52,8 +52,8 @@
         "valueEqualCount":0,
         "typeEqualCount":2,
         "diffCount":9,
-        "addCount":5,
-        "removeCount":1,
+        "addCount":1,
+        "removeCount":5,
         "modifyCount":3,
         "result":{
             "field":{
@@ -61,60 +61,60 @@
                 "valueEqual": false,
                 "typeEqual": false,
                 "diffType": "MODIFY",
-                "value1": "abc",
-                "value2":123456
+                "value1":123456,
+                "value2": "abc"
             },
-            "number":{
-                "path": "number",
+            "double":{
+                "path": "double",
                 "valueEqual": false,
                 "diffType": "REMOVE",
-                "value1":123
+                "value1":123.456789
             },
             "string":{
                 "path": "string",
                 "valueEqual": false,
                 "typeEqual": true,
                 "diffType": "MODIFY",
-                "value1": "abc",
-                "value2": "abcd"
+                "value1": "abcd",
+                "value2": "abc"
+            },
+            "boolean":{
+                "path": "boolean",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1": true
             },
             "object.field":{
                 "path": "object.field",
                 "valueEqual": false,
                 "typeEqual": false,
                 "diffType": "MODIFY",
-                "value1": "abc",
-                "value2":123456
-            },
-            "double":{
-                "path": "double",
-                "valueEqual": false,
-                "diffType": "ADD",
-                "value2":123.456789
-            },
-            "boolean":{
-                "path": "boolean",
-                "valueEqual": false,
-                "diffType": "ADD",
-                "value2": true
+                "value1":123456,
+                "value2": "abc"
             },
             "object.double":{
                 "path": "object.double",
                 "valueEqual": false,
-                "diffType": "ADD",
-                "value2":123.456
+                "diffType": "REMOVE",
+                "value1":123.456
             },
             "object.newField":{
                 "path": "object.newField",
                 "valueEqual": false,
-                "diffType": "ADD",
-                "value2":123
+                "diffType": "REMOVE",
+                "value1":123
             },
             "array[0].object.boolean":{
                 "path": "array[0].object.boolean",
                 "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1": true
+            },
+            "number":{
+                "path": "number",
+                "valueEqual": false,
                 "diffType": "ADD",
-                "value2": true
+                "value2":123
             }
         }
     },
@@ -141,7 +141,7 @@
         "showGraph": false,
         "showInputForm": true,
         "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.73,
+        "scriptSplitRatio":0.72,
         "hideButtons":[
             "compare",
             "clearOutput"
