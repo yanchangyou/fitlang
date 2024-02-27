@@ -11,7 +11,7 @@ import fit.intellij.json.JsonLanguage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
@@ -23,7 +23,10 @@ public class JsonNativeFormPanel extends JPanel {
 
     Dimension LABEL_DIMENSION = new Dimension(100, 35);
 
-    Map<String, JComponent> fieldMap = new HashMap<>();
+    /**
+     * 需要保持顺序
+     */
+    Map<String, JComponent> fieldMap = new LinkedHashMap<>();
 
     public JsonNativeFormPanel(JSONObject formData, Project project) {
         buildForm(formData, project);

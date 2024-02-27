@@ -141,7 +141,7 @@
         "showGraph": false,
         "showInputForm": true,
         "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.74,
+        "scriptSplitRatio":0.73,
         "hideButtons":[
             "compare",
             "clearOutput"
