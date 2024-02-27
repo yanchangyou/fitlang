@@ -191,6 +191,7 @@ public class JsonAppRenderPanel extends JPanel {
         setAppTitle(appTitle);
 
         scriptSplitPane = buildMainPanel(input, output, actions);
+        scriptSplitPane.setDividerLocation(scriptSplitRatio);
 
         resetAllTitle(uiDefine);
         resetView(uiDefine);
