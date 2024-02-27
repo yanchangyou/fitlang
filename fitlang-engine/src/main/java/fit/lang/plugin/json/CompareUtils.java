@@ -38,7 +38,6 @@ public class CompareUtils {
     public static JSONObject sum(JSONArray list) {
         JSONObject result = new JSONObject();
         boolean equal = true;
-        int diffCount = 0;
         int modifyCount = 0;
         int addCount = 0;
         int removeCount = 0;
@@ -134,9 +133,8 @@ public class CompareUtils {
         JSONObject jsonPath2 = convertWithJsonPath(json2);
 
         JSONObject result = new JSONObject();
-        List<String> jsonPathList = new ArrayList<>();
 
-        jsonPathList.addAll(jsonPath1.keySet());
+        List<String> jsonPathList = new ArrayList<>(jsonPath1.keySet());
         for (String path : jsonPath2.keySet()) {
             if (!jsonPathList.contains(path)) {
                 jsonPathList.add(path);
@@ -160,7 +158,7 @@ public class CompareUtils {
                 pathResult.put(FIELD_NAME_OF_DIFF_TYPE, DIFF_TYPE_OF_ADD);
                 Object value2 = json2.getByPath(path);
                 pathResult.put("value2", value2);
-            } else if (json1Contain && json2Contain) {
+            } else if (json1Contain) {
                 Object value1 = json1.getByPath(path);
                 Object value2 = json2.getByPath(path);
                 pathResult.putAll(compareValue(value1, value2));
@@ -267,22 +265,11 @@ public class CompareUtils {
         return equalPathList;
     }
 
-    private static boolean equals(JSONArray list) {
-        boolean equal = true;
-        for (Object item : list) {
-            if (Boolean.FALSE.equals(((JSONObject) item).get(FIELD_NAME_OF_VALUE_EQUAL))) {
-                equal = false;
-                break;
-            }
-        }
-        return equal;
-    }
-
     /**
      * 处理特殊key，key中有点号，然后冲突
      *
-     * @param key
-     * @return
+     * @param key field key
+     * @return norm key
      */
     static String buildJsonPathKey(String key) {
         //TODO 避免json path解析报错，key包含特殊字符
