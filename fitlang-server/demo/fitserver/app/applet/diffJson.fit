@@ -2,26 +2,6 @@
     "uni": "applet",
     "input":{
         "json1":{
-            "field": "abc",
-            "number":123,
-            "string": "abc",
-            "object":{
-                "field": "abc",
-                "number":123,
-                "string": "abc",
-                "boolean": true
-            },
-            "array":[
-                {
-                    "object":{
-                        "number":123,
-                        "double":123.456,
-                        "string": "abc"
-                    }
-                }
-            ]
-        },
-        "json2":{
             "field":123456,
             "double":123.456789,
             "string": "abcd",
@@ -44,68 +24,98 @@
                     }
                 }
             ]
+        },
+        "json2":{
+            "field": "abc",
+            "number":123,
+            "string": "abc",
+            "object":{
+                "field": "abc",
+                "number":123,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc"
+                    }
+                }
+            ]
         }
     },
     "output":{
-        "field":{
-            "path": "field",
-            "valueEqual": false,
-            "typeEqual": false,
-            "diffType": "MODIFY",
-            "value1":123456,
-            "value2": "abc"
-        },
-        "double":{
-            "path": "double",
-            "valueEqual": false,
-            "diffType": "REMOVE",
-            "value1":123.456789
-        },
-        "string":{
-            "path": "string",
-            "valueEqual": false,
-            "typeEqual": true,
-            "diffType": "MODIFY",
-            "value1": "abcd",
-            "value2": "abc"
-        },
-        "boolean":{
-            "path": "boolean",
-            "valueEqual": false,
-            "diffType": "REMOVE",
-            "value1": true
-        },
-        "object.field":{
-            "path": "object.field",
-            "valueEqual": false,
-            "typeEqual": false,
-            "diffType": "MODIFY",
-            "value1":123456,
-            "value2": "abc"
-        },
-        "object.double":{
-            "path": "object.double",
-            "valueEqual": false,
-            "diffType": "REMOVE",
-            "value1":123.456
-        },
-        "object.newField":{
-            "path": "object.newField",
-            "valueEqual": false,
-            "diffType": "REMOVE",
-            "value1":123
-        },
-        "array[0].object.boolean":{
-            "path": "array[0].object.boolean",
-            "valueEqual": false,
-            "diffType": "REMOVE",
-            "value1": true
-        },
-        "number":{
-            "path": "number",
-            "valueEqual": false,
-            "diffType": "ADD",
-            "value2":123
+        "equal": false,
+        "total":9,
+        "valueEqualCount":0,
+        "typeEqualCount":2,
+        "diffCount":9,
+        "addCount":5,
+        "removeCount":1,
+        "modifyCount":3,
+        "result":{
+            "field":{
+                "path": "field",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1": "abc",
+                "value2":123456
+            },
+            "number":{
+                "path": "number",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1":123
+            },
+            "string":{
+                "path": "string",
+                "valueEqual": false,
+                "typeEqual": true,
+                "diffType": "MODIFY",
+                "value1": "abc",
+                "value2": "abcd"
+            },
+            "object.field":{
+                "path": "object.field",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1": "abc",
+                "value2":123456
+            },
+            "double":{
+                "path": "double",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2":123.456789
+            },
+            "boolean":{
+                "path": "boolean",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2": true
+            },
+            "object.double":{
+                "path": "object.double",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2":123.456
+            },
+            "object.newField":{
+                "path": "object.newField",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2":123
+            },
+            "array[0].object.boolean":{
+                "path": "array[0].object.boolean",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2": true
+            }
         }
     },
     "script":{
@@ -131,7 +141,7 @@
         "showGraph": false,
         "showInputForm": true,
         "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.75,
+        "scriptSplitRatio":0.74,
         "hideButtons":[
             "compare",
             "clearOutput"
