@@ -676,6 +676,9 @@ public class JsonAppRenderPanel extends JPanel {
                                 }
                             }
 
+                            ui.put("scriptSplitRatio", Math.round(scriptSplitPane.getDividerLocation() * 100.0 / scriptSplitPane.getHeight()) / 100.0);
+                            ui.put("inputOutputSplitRatio", Math.round(inputOutputSplitPane.getDividerLocation() * 100.0 / inputOutputSplitPane.getWidth()) / 100.0);
+
                             if (!ui.containsKey("hideButtons")) {
                                 ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
                             }
