@@ -656,50 +656,35 @@ public class JsonAppRenderPanel extends JPanel {
                                 rawAppletDefine.remove("input");
                                 rawAppletDefine = appletDefine;
                             }
-                            if (rawAppletDefine.containsKey("ui")) {
-                                JSONObject ui = rawAppletDefine.getJSONObject("ui");
-                                appletDefine.put("ui", ui);
-
-                                //deal action
-                                JSONArray actions = ui.getJSONArray("actions");
-                                if (actions == null) {
-                                    actions = new JSONArray();
-                                    ui.put("actions", actions);
-                                }
-                                for (Object action : actions) {
-                                    JSONObject actionJson = (JSONObject) action;
-                                    String title = actionJson.getString("title");
-                                    if (title.equals(selectItem)) {
-                                        actionJson.put("script", script);
-                                        break;
-                                    }
-                                }
-
-                                if (!ui.containsKey("hideButtons")) {
-                                    ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
-                                }
-                            } else {
+                            if (!rawAppletDefine.containsKey("ui")) {
                                 rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
                             }
-                            {
+                            JSONObject ui = rawAppletDefine.getJSONObject("ui");
+                            appletDefine.put("ui", ui);
 
-                                if ("New".equals(selectItem)) {
-                                    JSONObject ui = appletDefine.getJSONObject("ui");
-                                    if (ui == null) {
-                                        ui = new JSONObject();
-                                        appletDefine.put("ui", ui);
-                                    }
-                                    JSONArray actions = ui.getJSONArray("actions");
-                                    if (actions == null) {
-                                        actions = new JSONArray();
-                                        ui.put("actions", actions);
-                                    }
-
-                                    JSONObject newAction = new JSONObject();
-                                    newAction.put("title", finalNewActionTitle);
-                                    newAction.put("script", script);
-                                    actions.add(newAction);
+                            //deal action
+                            JSONArray actions = ui.getJSONArray("actions");
+                            if (actions == null) {
+                                actions = new JSONArray();
+                                ui.put("actions", actions);
+                            }
+                            for (Object action : actions) {
+                                JSONObject actionJson = (JSONObject) action;
+                                String title = actionJson.getString("title");
+                                if (title.equals(selectItem)) {
+                                    actionJson.put("script", script);
+                                    break;
                                 }
+                            }
+
+                            if (!ui.containsKey("hideButtons")) {
+                                ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
+                            }
+                            if ("New".equals(selectItem)) {
+                                JSONObject newAction = new JSONObject();
+                                newAction.put("title", finalNewActionTitle);
+                                newAction.put("script", script);
+                                actions.add(newAction);
                             }
                             String newJsonText = toJsonTextWithFormat(appletDefine);
                             appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
