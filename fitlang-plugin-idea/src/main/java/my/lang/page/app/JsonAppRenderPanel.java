@@ -293,6 +293,7 @@ public class JsonAppRenderPanel extends JPanel {
     private JSplitPane buildMainPanel(JSONObject input, JSONObject output, JSONArray actions) {
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
+        splitPane.setDividerLocation(scriptSplitRatio);
 
         JComponent inputOutputEditor = buildInputAndOutputObjectPanel(input, output);
 
@@ -747,6 +748,8 @@ public class JsonAppRenderPanel extends JPanel {
 
         inputOutputSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         inputOutputSplitPane.setDividerSize(3);
+        inputOutputSplitPane.setDividerLocation(inputOutputSplitRatio);
+
         inputOutputSplitPane.setBorder(null);
 
         inputEditor = new JsonObjectEditorPanel(inputForm, input, inputTitle, SwingConstants.LEFT, showGraph, project);
