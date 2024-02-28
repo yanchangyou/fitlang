@@ -36,7 +36,7 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        Object result = null;
+        Object result;
         if (toArray) {
             if (onlyDiff) {
                 result = CompareUtils.diffToArray(json1, json2);
@@ -51,7 +51,7 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
                 result = CompareUtils.compare(json1, json2);
             }
         }
-        JSONArray list = CompareUtils.diffToArray(json1, json2);
+        JSONArray list = CompareUtils.compareToArray(json1, json2);
         JSONObject outputJson = CompareUtils.sum(list);
 
         outputJson.put("result", result);
