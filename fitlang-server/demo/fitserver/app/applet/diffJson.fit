@@ -4,7 +4,8 @@
         "json1":{
             "field":123456,
             "double":123.456789,
-            "string": "abcd",
+            "text": "ab",
+            "string": "abc",
             "boolean": true,
             "object":{
                 "field":123456,
@@ -27,6 +28,7 @@
         },
         "json2":{
             "field": "abc",
+            "text": "abc",
             "number":123,
             "string": "abc",
             "object":{
@@ -48,15 +50,15 @@
     },
     "output":{
         "equal": false,
-        "total":9,
-        "valueEqualCount":0,
-        "typeEqualCount":2,
+        "total":16,
+        "valueEqualCount":7,
+        "typeEqualCount":1,
         "diffCount":9,
         "addCount":1,
         "removeCount":5,
         "modifyCount":3,
-        "result":{
-            "field":{
+        "result":[
+            {
                 "path": "field",
                 "valueEqual": false,
                 "typeEqual": false,
@@ -64,27 +66,31 @@
                 "value1":123456,
                 "value2": "abc"
             },
-            "double":{
+            {
                 "path": "double",
                 "valueEqual": false,
                 "diffType": "REMOVE",
                 "value1":123.456789
             },
-            "string":{
-                "path": "string",
+            {
+                "path": "text",
                 "valueEqual": false,
                 "typeEqual": true,
                 "diffType": "MODIFY",
-                "value1": "abcd",
+                "value1": "ab",
                 "value2": "abc"
             },
-            "boolean":{
+            {
+                "path": "string",
+                "valueEqual": true
+            },
+            {
                 "path": "boolean",
                 "valueEqual": false,
                 "diffType": "REMOVE",
                 "value1": true
             },
-            "object.field":{
+            {
                 "path": "object.field",
                 "valueEqual": false,
                 "typeEqual": false,
@@ -92,36 +98,60 @@
                 "value1":123456,
                 "value2": "abc"
             },
-            "object.double":{
+            {
+                "path": "object.number",
+                "valueEqual": true
+            },
+            {
                 "path": "object.double",
                 "valueEqual": false,
                 "diffType": "REMOVE",
                 "value1":123.456
             },
-            "object.newField":{
+            {
+                "path": "object.string",
+                "valueEqual": true
+            },
+            {
+                "path": "object.boolean",
+                "valueEqual": true
+            },
+            {
                 "path": "object.newField",
                 "valueEqual": false,
                 "diffType": "REMOVE",
                 "value1":123
             },
-            "array[0].object.boolean":{
+            {
+                "path": "array[0].object.number",
+                "valueEqual": true
+            },
+            {
+                "path": "array[0].object.double",
+                "valueEqual": true
+            },
+            {
+                "path": "array[0].object.string",
+                "valueEqual": true
+            },
+            {
                 "path": "array[0].object.boolean",
                 "valueEqual": false,
                 "diffType": "REMOVE",
                 "value1": true
             },
-            "number":{
+            {
                 "path": "number",
                 "valueEqual": false,
                 "diffType": "ADD",
                 "value2":123
             }
-        }
+        ]
     },
     "script":{
         "uni": "compare",
-        "onlyDiff": true,
-        "toArray": false
+        "onlyDiff": false,
+        "toArray": true
     },
     "ui":{
         "title": "JSON对比",
@@ -140,8 +170,8 @@
         "switchFormButtonTitle": "切换",
         "showGraph": false,
         "showInputForm": true,
-        "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.72,
+        "inputOutputSplitRatio":0.49,
+        "scriptSplitRatio":0.74,
         "hideButtons":[
             "compare",
             "clearOutput"
