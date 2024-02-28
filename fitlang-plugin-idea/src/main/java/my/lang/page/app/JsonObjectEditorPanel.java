@@ -35,10 +35,6 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
 
     }
 
-//    public JsonFormPanel getJsonFormEditor() {
-//        return jsonFormEditor;
-//    }
-
     public void setJsonObject(JSONObject jsonObject) {
         jsonNativeFormEditor.buildForm(jsonObject, project);
         jsonTextEditor.setText(toJsonTextWithFormat(jsonObject));

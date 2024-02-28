@@ -62,6 +62,8 @@ public class JsonAppRenderPanel extends JPanel {
 
     JButton exchangeButton;
 
+    JButton formatButton;
+
     JButton reloadButton;
 
     JButton clearOutputButton;
@@ -87,6 +89,7 @@ public class JsonAppRenderPanel extends JPanel {
     String openChromeDevButtonTitle = "Open Chrome Dev";
     String switchViewButtonTitle = "Switch View";
     String switchFormButtonTitle = "Switch";
+    String formatButtonTitle = "Format";
 
     /**
      * 是否使用图形界面，chrome有内存泄露问题
@@ -94,6 +97,8 @@ public class JsonAppRenderPanel extends JPanel {
     boolean showGraph;
 
     boolean showSwitchFormButton = true;
+
+    boolean showFormatButton = true;
 
     /**
      * 出入参结构不同，导致不能交换
@@ -238,6 +243,7 @@ public class JsonAppRenderPanel extends JPanel {
         openChromeDevButtonTitle = uiDefine.containsKey("openChromeDevButtonTitle") ? uiDefine.getString("openChromeDevButtonTitle") : openChromeDevButtonTitle;
         switchViewButtonTitle = uiDefine.containsKey("switchViewButtonTitle") ? uiDefine.getString("switchViewButtonTitle") : switchViewButtonTitle;
         switchFormButtonTitle = uiDefine.containsKey("switchFormButtonTitle") ? uiDefine.getString("switchFormButtonTitle") : switchFormButtonTitle;
+        formatButtonTitle = uiDefine.containsKey("formatButtonTitle") ? uiDefine.getString("formatButtonTitle") : formatButtonTitle;
 
         if (exchangeButton != null) exchangeButton.setText("<->");
         if (reloadButton != null) reloadButton.setText(reloadButtonTitle);
@@ -248,6 +254,7 @@ public class JsonAppRenderPanel extends JPanel {
         if (openChromeDevButton != null) openChromeDevButton.setText(openChromeDevButtonTitle);
         if (switchViewButton != null) switchViewButton.setText(switchViewButtonTitle);
         if (switchFormButton != null) switchFormButton.setText(switchFormButtonTitle);
+        if (formatButton != null) formatButton.setText(formatButtonTitle);
         if (resetLayoutButton != null) resetLayoutButton.setText(resetLayoutButtonTitle);
     }
 
@@ -266,6 +273,7 @@ public class JsonAppRenderPanel extends JPanel {
         showExecuteButton = !hideButtons.contains("execute");
         showCompareButton = !hideButtons.contains("compare");
         showSwitchFormButton = !hideButtons.contains("switchForm");
+        showFormatButton = !hideButtons.contains("format");
 
         actionComBox.setVisible(showActionList);
         saveButton.setVisible(showSaveButton);
@@ -278,6 +286,7 @@ public class JsonAppRenderPanel extends JPanel {
         openChromeDevButton.setVisible(showGraph);
         switchViewButton.setVisible(showGraph);
         switchFormButton.setVisible(showSwitchFormButton);
+        formatButton.setVisible(showFormatButton);
     }
 
     @NotNull
@@ -470,6 +479,19 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(switchFormButton);
         }
+
+        //add format Button
+        formatButton = new JButton(formatButtonTitle);
+        formatButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JSONObject input = getInputJson();
+                JSONObject output = getOutputJson();
+                setInputJson(input);
+                setOutputJson(output);
+            }
+        });
+        toolBar.add(formatButton);
 
         //add exchange Button
         exchangeButton = new JButton("<->");

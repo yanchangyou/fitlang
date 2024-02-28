@@ -737,6 +737,7 @@
                     "reload",
                     "clearOutput",
                     "exchange",
+                    "format",
                     "compare",
                     "actionList",
                     "save",
