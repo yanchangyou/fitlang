@@ -125,7 +125,6 @@ public class JsonAppRenderPanel extends JPanel {
     private Double scriptSplitRatio = 0.5;
 
     public JsonAppRenderPanel(@NotNull Project project, JSONObject appDefine, VirtualFile appFile, JSONObject contextParam) {
-
         if (contextParam == null) {
             contextParam = new JSONObject();
         }
@@ -138,10 +137,8 @@ public class JsonAppRenderPanel extends JPanel {
         init(appDefine);
 
         scriptSplitPane.setBorder(null);
-//        splitPane.setDividerSize(4);
 
         implementIdeOperator(null, project);
-
     }
 
     private void init(JSONObject appDefine) {
@@ -198,11 +195,9 @@ public class JsonAppRenderPanel extends JPanel {
         resetAllButtonName(uiDefine);
         restAllButtonVisible(uiDefine);
         readLayoutConfig(uiDefine);
-
     }
 
     private void resetAllTitle(JSONObject uiDefine) {
-
         appTitle = uiDefine.containsKey("title") ? uiDefine.getString("title") : appTitle;
         inputTitle = uiDefine.containsKey("inputTitle") ? uiDefine.getString("inputTitle") : inputTitle;
         outputTitle = uiDefine.containsKey("outputTitle") ? uiDefine.getString("outputTitle") : outputTitle;
@@ -212,21 +207,17 @@ public class JsonAppRenderPanel extends JPanel {
         inputEditor.setTitle(inputTitle);
         outputEditor.setTitle(outputTitle);
         scriptEditor.setTitle(scriptTitle);
-
     }
 
     private void resetView(JSONObject uiDefine) {
-
         showInputForm = Boolean.TRUE.equals(uiDefine.getBoolean("showInputForm"));
         showOutputForm = Boolean.TRUE.equals(uiDefine.getBoolean("showOutputForm"));
 
         inputEditor.initView(showInputForm);
         outputEditor.initView(showOutputForm);
-
     }
 
     private void readLayoutConfig(JSONObject uiDefine) {
-
         if (uiDefine != null) {
             inputOutputSplitRatio = uiDefine.containsKey("inputOutputSplitRatio") ? uiDefine.getDouble("inputOutputSplitRatio") : inputOutputSplitRatio;
             scriptSplitRatio = uiDefine.containsKey("scriptSplitRatio") ? uiDefine.getDouble("scriptSplitRatio") : scriptSplitRatio;
@@ -287,7 +278,6 @@ public class JsonAppRenderPanel extends JPanel {
         openChromeDevButton.setVisible(showGraph);
         switchViewButton.setVisible(showGraph);
         switchFormButton.setVisible(showSwitchFormButton);
-//        resetLayoutButton.setVisible(showRe);
     }
 
     @NotNull
@@ -323,7 +313,6 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     JPanel buildScriptPanel(JSONArray actions) {
-
         JPanel panel = new JPanel(new BorderLayout());
 
         JPanel toolBar = buildToolBar();
@@ -353,13 +342,11 @@ public class JsonAppRenderPanel extends JPanel {
         }
 
         if (actions != null) {
-
             while (actionComBox.getItemCount() > 2) {
                 actionComBox.removeItemAt(2);
             }
 
             for (int i = 0; i < actions.size(); i++) {
-
                 JSONObject action = actions.getJSONObject(i);
                 String title = action.getString("title");
                 JSONObject script = action.getJSONObject("script");
@@ -377,7 +364,6 @@ public class JsonAppRenderPanel extends JPanel {
                 buttonsPanel.add(button);
 
                 actionComBox.addItem(title);
-
             }
         }
     }
@@ -405,20 +391,7 @@ public class JsonAppRenderPanel extends JPanel {
     private JPanel buildToolBar() {
         JPanel toolBar = new JPanel();
 
-        //reset layout
-//        {
-//            resetLayoutButton = new JButton(resetLayoutButtonTitle);
-//            resetLayoutButton.addActionListener(new AbstractAction() {
-//                @Override
-//                public void actionPerformed(ActionEvent actionEvent) {
-//                    readLayoutConfig(null);
-//                }
-//            });
-//            toolBar.add(resetLayoutButton);
-//        }
-
         //switchForm
-//        if (showGraph) {
         {
             switchViewButton = new JButton(switchViewButtonTitle);
             switchViewButton.addActionListener(new AbstractAction() {
@@ -435,9 +408,7 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(switchViewButton);
         }
-//        }
 
-//        if (showGraph) {
         {
             openChromeDevButton = new JButton(openChromeDevButtonTitle);
             openChromeDevButton.addActionListener(new AbstractAction() {
@@ -450,10 +421,6 @@ public class JsonAppRenderPanel extends JPanel {
             });
             toolBar.add(openChromeDevButton);
         }
-//        }
-
-        //reload
-//        if (showReloadButton) {
 
         //add reload Button
         {
@@ -461,9 +428,8 @@ public class JsonAppRenderPanel extends JPanel {
             reloadButton.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-
                     JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
-//
+
                     JSONObject input = theAppDefine.getJSONObject("input");
                     JSONObject output = theAppDefine.getJSONObject("output");
                     JSONObject script = theAppDefine.getJSONObject("script");
@@ -487,38 +453,29 @@ public class JsonAppRenderPanel extends JPanel {
                     }
 
                     readLayoutConfig(uiDefine);
-
                 }
             });
             toolBar.add(reloadButton);
         }
-//        }
 
         //add switch view Button
-//        if (showSwitchFormButton) {
         {
             switchFormButton = new JButton(switchFormButtonTitle);
             switchFormButton.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-
                     inputEditor.switchView();
                     outputEditor.switchView();
-
                 }
             });
             toolBar.add(switchFormButton);
         }
-//        }
-
-//        if (showExchangeButton) {
 
         //add exchange Button
         exchangeButton = new JButton("<->");
         exchangeButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
                 JSONObject input = getInputJson();
 
                 JSONObject output = getOutputJson();
@@ -529,10 +486,8 @@ public class JsonAppRenderPanel extends JPanel {
             }
         });
         toolBar.add(exchangeButton);
-//        }
 
         //add 比较 Button
-//        if (showCompareButton)
         {
             compareSortCheckBox = new JCheckBox(needSortButtonTitle);
             toolBar.add(compareSortCheckBox);
@@ -548,26 +503,20 @@ public class JsonAppRenderPanel extends JPanel {
             toolBar.add(compareButton);
         }
 
-//        if (showClearOutputButton) {
-
         //add clear output Button
         {
             clearOutputButton = new JButton(clearOutputButtonTitle);
             clearOutputButton.addActionListener(new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-
                     JSONObject output = new JSONObject();
                     setOutputJson(output);
-
                 }
             });
             toolBar.add(clearOutputButton);
         }
-//        }
 
         //下拉选择action
-//        if (showActionList) {
         String[] actionList = new String[]{"Default", "New"};
         actionComBox = new ComboBox<>(actionList);
 
@@ -590,33 +539,26 @@ public class JsonAppRenderPanel extends JPanel {
                         }
                     }
                 }
-
                 scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
             }
         });
         toolBar.add(actionComBox);
-//        }
 
         //add default execute Button
-//        if (showExecuteButton) {
         executeButton = new JButton(executeButtonTitle);
         executeButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
                 JSONObject script = getScriptDefine();
 
                 JSONObject input = getInputJson();
 
                 execute(input, script);
                 scriptEditor.cardLayout.first(scriptEditor.cardPanel);
-
             }
         });
         toolBar.add(executeButton);
-//        }
 
-//        if (showSaveButton) {
         saveButton = new JButton(saveButtonTitle);
         saveButton.addActionListener(new AbstractAction() {
 
@@ -702,11 +644,9 @@ public class JsonAppRenderPanel extends JPanel {
                         }
                     }
                 });
-
             }
         });
         toolBar.add(saveButton);
-//        }
 
         return toolBar;
     }
@@ -749,7 +689,6 @@ public class JsonAppRenderPanel extends JPanel {
         inputOutputSplitPane.add(outputEditor);
 
         return inputOutputSplitPane;
-
     }
 
     private static void adjustSplitPanel(JSplitPane splitPane, double splitRatio) {
