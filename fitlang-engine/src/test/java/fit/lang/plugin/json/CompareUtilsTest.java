@@ -634,4 +634,67 @@ public class CompareUtilsTest extends TestCase {
                 "}";
         Assert.assertEquals(expected, result.toString(JSONWriter.Feature.PrettyFormat));
     }
+
+    @Test
+    public void testSum1() {
+        JSONObject json1 = JSONObject.parseObject("{\n" +
+                "    \"field\":123456,\n" +
+                "    \"double\":123.456789,\n" +
+                "    \"string\": \"abc\",\n" +
+                "    \"boolean\": true,\n" +
+                "    \"object\":{\n" +
+                "        \"field\":123456,\n" +
+                "        \"number\":123,\n" +
+                "        \"double\":123.456,\n" +
+                "        \"string\": \"abc\",\n" +
+                "        \"boolean\": true,\n" +
+                "        \"newField\":123\n" +
+                "    },\n" +
+                "    \"array\":[\n" +
+                "        {\n" +
+                "            \"object\":{\n" +
+                "                \"number\":123,\n" +
+                "                \"double\":123.456,\n" +
+                "                \"string\": \"abc\",\n" +
+                "                \"boolean\": true\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}");
+        JSONObject json2 = JSONObject.parseObject("{\n" +
+                "    \"field\": \"abc\",\n" +
+                "    \"number\":123,\n" +
+                "    \"string\": \"abc\",\n" +
+                "    \"object\":{\n" +
+                "        \"field\": \"abc\",\n" +
+                "        \"number\":123,\n" +
+                "        \"string\": \"abc\",\n" +
+                "        \"boolean\": true\n" +
+                "    },\n" +
+                "    \"array\":[\n" +
+                "        {\n" +
+                "            \"object\":{\n" +
+                "                \"number\":123,\n" +
+                "                \"double\":123.456,\n" +
+                "                \"string\": \"abc\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}");
+        JSONArray list = CompareUtils.compareToArray(json1, json2);
+        System.out.println(list.toString(JSONWriter.Feature.PrettyFormat));
+        JSONObject result = CompareUtils.sum(list);
+        System.out.println(result.toJSONString(JSONWriter.Feature.PrettyFormat));
+        Object expected = "{\n" +
+                "\t\"equal\":false,\n" +
+                "\t\"total\":8,\n" +
+                "\t\"valueEqualCount\":1,\n" +
+                "\t\"typeEqualCount\":1,\n" +
+                "\t\"diffCount\":7,\n" +
+                "\t\"addCount\":1,\n" +
+                "\t\"removeCount\":3,\n" +
+                "\t\"modifyCount\":3\n" +
+                "}";
+        Assert.assertEquals(expected, result.toString(JSONWriter.Feature.PrettyFormat));
+    }
 }
