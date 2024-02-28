@@ -168,6 +168,7 @@
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
         "switchFormButtonTitle": "切换",
+        "formatButtonTitle": "格式化",
         "showGraph": false,
         "showInputForm": true,
         "inputOutputSplitRatio":0.49,
