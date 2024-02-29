@@ -7,9 +7,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextArea;
+import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.JBUI;
 import fit.intellij.json.JsonLanguage;
 
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -37,13 +40,14 @@ public class JsonNativeFormPanel extends JPanel {
 
     public void buildForm(JSONObject formData, Project project) {
 
-        GridLayout layout = new GridLayout(formData.keySet().size(), 1);
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
         setLayout(layout);
-        layout.setVgap(3);
 
         fieldMap.clear();
         this.removeAll();
 
+        int index = 0;
         for (String key : formData.keySet()) {
             JPanel itemPanel = new JPanel(new BorderLayout());
             JLabel label = new JLabel(key.concat("  :  "));
@@ -67,16 +71,27 @@ public class JsonNativeFormPanel extends JPanel {
                 fieldEditor.setOneLineMode(false);
                 field = fieldEditor;
             } else {
-                field = new JBTextArea(formData.getString(key));
+                if (value instanceof String) {
+                    field = new JBTextArea(formData.getString(key));
+                } else {
+                    field = new JBTextField(formData.getString(key));
+                }
             }
 
             fieldMap.put(key, field);
             fieldClass.put(key, value.getClass());
+            gbc.anchor = GridBagConstraints.EAST;
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.ipadx = 100;
+            gbc.ipady = 10;
+            gbc.insets = JBUI.insets(5);
+            gbc.gridx = 0;
+            gbc.gridy = index++;
 
             JBScrollPane jbScrollPane = new JBScrollPane(field);
             itemPanel.add(label, BorderLayout.WEST);
             itemPanel.add(jbScrollPane, BorderLayout.CENTER);
-            this.add(itemPanel);
+            this.add(itemPanel, gbc);
         }
     }
 
@@ -87,8 +102,8 @@ public class JsonNativeFormPanel extends JPanel {
             JComponent field = entry.getValue();
             String key = entry.getKey();
             Object value;
-            if (field instanceof JBTextArea) {
-                String text = ((JBTextArea) field).getText();
+            if (field instanceof JTextComponent) {
+                String text = ((JTextComponent) field).getText();
                 Class<?> clazz = fieldClass.get(key);
                 if (String.class.equals(clazz)) {
                     value = text;

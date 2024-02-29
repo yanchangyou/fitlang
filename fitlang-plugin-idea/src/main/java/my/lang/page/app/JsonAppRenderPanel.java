@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.Gray;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBUI;
 import fit.lang.plugin.json.function.JsonPackageExecuteNode;
@@ -707,8 +708,9 @@ public class JsonAppRenderPanel extends JPanel {
     private JComponent buildInputAndOutputObjectPanel(JSONObject input, JSONObject output) {
 
         inputOutputSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        inputOutputSplitPane.setDividerSize(3);
+//        inputOutputSplitPane.setDividerSize(3);
         inputOutputSplitPane.setDividerLocation(inputOutputSplitRatio);
+        inputOutputSplitPane.setBackground(Gray._250);
 
         inputOutputSplitPane.setBorder(null);
 
