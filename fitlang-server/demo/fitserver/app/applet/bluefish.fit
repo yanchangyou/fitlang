@@ -2,8 +2,7 @@
     "uni": "applet",
     "input":{
         "a":3,
-        "b":2,
-        "null": null
+        "b":2
     },
     "output":{
         "a":3,
@@ -75,7 +74,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.66,
-        "inputOutputSplitRatio":0.53
+        "scriptSplitRatio":0.68,
+        "inputOutputSplitRatio":0.55
     }
 }
