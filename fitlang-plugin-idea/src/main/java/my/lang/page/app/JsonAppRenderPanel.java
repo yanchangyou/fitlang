@@ -600,73 +600,65 @@ public class JsonAppRenderPanel extends JPanel {
                 }
 
                 String finalNewActionTitle = newActionTitle;
-                ApplicationManager.getApplication().runWriteAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject appletDefine = new JSONObject();
-                            appletDefine.put("uni", "applet");
-                            appletDefine.put("input", getInputJson());
-                            appletDefine.put("output", getOutputJson());
-                            JSONObject script = getScriptDefine();
-                            appletDefine.put("script", script);
-                            String content = new String(IoUtil.readBytes(appFile.getInputStream()));
-                            if (StrUtil.isBlank(content)) {
-                                content = "{'uni':'hello'}";
-                            }
-                            JSONObject rawAppletDefine = JSONObject.parse(content);
-                            if ("applet".equals(rawAppletDefine.getString("uni"))) {
-                                rawAppletDefine.putAll(appletDefine);
-                            } else {
-                                appletDefine.put("script", rawAppletDefine);
-                                rawAppletDefine.remove("input");
-                                rawAppletDefine = appletDefine;
-                            }
-                            if (!rawAppletDefine.containsKey("ui")) {
-                                rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
-                            }
-                            JSONObject ui = rawAppletDefine.getJSONObject("ui");
-                            appletDefine.put("ui", ui);
-
-                            //deal action
-                            JSONArray actions = ui.getJSONArray("actions");
-                            if (actions == null) {
-                                actions = new JSONArray();
-                                ui.put("actions", actions);
-                            }
-                            for (Object action : actions) {
-                                JSONObject actionJson = (JSONObject) action;
-                                String title = actionJson.getString("title");
-                                if (title.equals(selectItem)) {
-                                    actionJson.put("script", script);
-                                    break;
-                                }
-                            }
-
-                            ui.put("scriptSplitRatio", Math.round(scriptSplitPane.getDividerLocation() * 100.0 / scriptSplitPane.getHeight()) / 100.0);
-                            ui.put("inputOutputSplitRatio", Math.round(inputOutputSplitPane.getDividerLocation() * 100.0 / inputOutputSplitPane.getWidth()) / 100.0);
-
-                            if (!ui.containsKey("hideButtons")) {
-                                ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
-                            }
-                            if ("New".equals(selectItem)) {
-                                JSONObject newAction = new JSONObject();
-                                newAction.put("title", finalNewActionTitle);
-                                newAction.put("script", script);
-                                actions.add(newAction);
-                            }
-                            String newJsonText = toJsonTextWithFormat(appletDefine);
-                            appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
-                            appFile.refresh(false, false);
-                            ApplicationManager.getApplication().invokeLaterOnWriteThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Messages.showInfoMessage("Save OK!", "Info");
-                                }
-                            });
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                ApplicationManager.getApplication().runWriteAction(() -> {
+                    try {
+                        JSONObject appletDefine = new JSONObject();
+                        appletDefine.put("uni", "applet");
+                        appletDefine.put("input", getInputJson());
+                        appletDefine.put("output", getOutputJson());
+                        JSONObject script = getScriptDefine();
+                        appletDefine.put("script", script);
+                        String content = new String(IoUtil.readBytes(appFile.getInputStream()));
+                        if (StrUtil.isBlank(content)) {
+                            content = "{'uni':'hello'}";
                         }
+                        JSONObject rawAppletDefine = JSONObject.parse(content);
+                        if ("applet".equals(rawAppletDefine.getString("uni"))) {
+                            rawAppletDefine.putAll(appletDefine);
+                        } else {
+                            appletDefine.put("script", rawAppletDefine);
+                            rawAppletDefine.remove("input");
+                            rawAppletDefine = appletDefine;
+                        }
+                        if (!rawAppletDefine.containsKey("ui")) {
+                            rawAppletDefine.put("ui", JSONObject.parse("{'hideButtons':['clearOutput','compare']}"));
+                        }
+                        JSONObject ui = rawAppletDefine.getJSONObject("ui");
+                        appletDefine.put("ui", ui);
+
+                        //deal action
+                        JSONArray actions = ui.getJSONArray("actions");
+                        if (actions == null) {
+                            actions = new JSONArray();
+                            ui.put("actions", actions);
+                        }
+                        for (Object action : actions) {
+                            JSONObject actionJson = (JSONObject) action;
+                            String title = actionJson.getString("title");
+                            if (title.equals(selectItem)) {
+                                actionJson.put("script", script);
+                                break;
+                            }
+                        }
+
+                        ui.put("scriptSplitRatio", Math.round(scriptSplitPane.getDividerLocation() * 100.0 / scriptSplitPane.getHeight()) / 100.0);
+                        ui.put("inputOutputSplitRatio", Math.round(inputOutputSplitPane.getDividerLocation() * 100.0 / inputOutputSplitPane.getWidth()) / 100.0);
+
+                        if (!ui.containsKey("hideButtons")) {
+                            ui.put("hideButtons", JSONArray.parse("['clearOutput','compare']"));
+                        }
+                        if ("New".equals(selectItem)) {
+                            JSONObject newAction = new JSONObject();
+                            newAction.put("title", finalNewActionTitle);
+                            newAction.put("script", script);
+                            actions.add(newAction);
+                        }
+                        String newJsonText = toJsonTextWithFormat(appletDefine);
+                        appFile.setBinaryContent(newJsonText.getBytes(StandardCharsets.UTF_8));
+                        appFile.refresh(false, false);
+                        ApplicationManager.getApplication().invokeLaterOnWriteThread(() -> Messages.showInfoMessage("Save OK!", "Info"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 });
             }

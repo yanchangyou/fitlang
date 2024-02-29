@@ -32,7 +32,7 @@ public class JsonNativeFormPanel extends JPanel {
      * 需要保持顺序
      */
     Map<String, JComponent> fieldMap = new LinkedHashMap<>();
-    Map<String, Class> fieldClass = new LinkedHashMap<>();
+    Map<String, Class<?>> fieldClass = new LinkedHashMap<>();
 
     public JsonNativeFormPanel(JSONObject formData, Project project) {
         buildForm(formData, project);
