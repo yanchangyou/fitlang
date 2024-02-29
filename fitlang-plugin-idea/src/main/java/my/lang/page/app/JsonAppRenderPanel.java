@@ -364,7 +364,6 @@ public class JsonAppRenderPanel extends JPanel {
                 button.addActionListener(new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-
                         scriptEditor.getJsonTextEditor().setText(toJsonTextWithFormat(script));
                         JSONObject input = getInputJson();
                         execute(input, script);
@@ -483,12 +482,15 @@ public class JsonAppRenderPanel extends JPanel {
         //add format Button
         formatButton = new JButton(formatButtonTitle);
         formatButton.addActionListener(new AbstractAction() {
+            boolean format = true;
+
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JSONObject input = getInputJson();
                 JSONObject output = getOutputJson();
-                setInputJson(input);
-                setOutputJson(output);
+                format = !format;
+                setInputJson(input, format);
+                setOutputJson(output, format);
             }
         });
         toolBar.add(formatButton);
@@ -674,7 +676,11 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setInputJson(JSONObject input) {
-        inputEditor.setJsonObject(input);
+        setInputJson(input, true);
+    }
+
+    private void setInputJson(JSONObject input, boolean format) {
+        inputEditor.setJsonObject(input, format);
     }
 
     private JSONObject getOutputJson() {
@@ -686,7 +692,11 @@ public class JsonAppRenderPanel extends JPanel {
     }
 
     private void setOutputJson(JSONObject output) {
-        outputEditor.setJsonObject(output);
+        setOutputJson(output, true);
+    }
+
+    private void setOutputJson(JSONObject output, boolean format) {
+        outputEditor.setJsonObject(output, format);
     }
 
     @NotNull

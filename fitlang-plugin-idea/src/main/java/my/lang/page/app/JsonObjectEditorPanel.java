@@ -36,8 +36,18 @@ public class JsonObjectEditorPanel extends JsonBaseEditorPanel {
     }
 
     public void setJsonObject(JSONObject jsonObject) {
+        setJsonObject(jsonObject, true);
+    }
+
+    public void setJsonObject(JSONObject jsonObject, boolean format) {
         jsonNativeFormEditor.buildForm(jsonObject, project);
-        jsonTextEditor.setText(toJsonTextWithFormat(jsonObject));
+        String text;
+        if (format) {
+            text = toJsonTextWithFormat(jsonObject);
+        } else {
+            text = jsonObject.toString();
+        }
+        jsonTextEditor.setText(text);
     }
 
     public JSONObject getJsonObject() {
