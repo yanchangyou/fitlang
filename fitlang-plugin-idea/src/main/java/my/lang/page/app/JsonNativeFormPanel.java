@@ -11,6 +11,8 @@ import fit.intellij.json.JsonLanguage;
 
 import javax.swing.*;
 import java.awt.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public class JsonNativeFormPanel extends JPanel {
      * 需要保持顺序
      */
     Map<String, JComponent> fieldMap = new LinkedHashMap<>();
+    Map<String, Class> fieldClass = new LinkedHashMap<>();
 
     public JsonNativeFormPanel(JSONObject formData, Project project) {
         buildForm(formData, project);
@@ -68,6 +71,8 @@ public class JsonNativeFormPanel extends JPanel {
             }
 
             fieldMap.put(key, field);
+            fieldClass.put(key, value.getClass());
+
             JBScrollPane jbScrollPane = new JBScrollPane(field);
             itemPanel.add(label, BorderLayout.WEST);
             itemPanel.add(jbScrollPane, BorderLayout.CENTER);
@@ -80,9 +85,20 @@ public class JsonNativeFormPanel extends JPanel {
 
         for (Map.Entry<String, JComponent> entry : fieldMap.entrySet()) {
             JComponent field = entry.getValue();
+            String key = entry.getKey();
             Object value;
             if (field instanceof JBTextArea) {
-                value = ((JBTextArea) field).getText();
+                String text = ((JBTextArea) field).getText();
+                Class<?> clazz = fieldClass.get(key);
+                if (String.class.equals(clazz)) {
+                    value = text;
+                } else if (Boolean.class.equals(clazz)) {
+                    value = Boolean.valueOf(text);
+                } else if (Integer.class.equals(clazz) || BigInteger.class.equals(clazz)) {
+                    value = new BigInteger(text);
+                } else {
+                    value = new BigDecimal(text);
+                }
             } else {
                 String text = ((LanguageTextField) field).getText();
                 if (text.startsWith("{")) {
