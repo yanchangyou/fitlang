@@ -33,7 +33,8 @@
         "formatButtonTitle": "格式化",
         "showGraph": false,
         "hideButtons":[
-            
+            "compare",
+            "clearOutput"
         ],
         "actions":[
             {
@@ -73,7 +74,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.49,
-        "inputOutputSplitRatio":0.5
+        "scriptSplitRatio":0.69,
+        "inputOutputSplitRatio":0.56
     }
 }
