@@ -74,7 +74,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.69,
-        "inputOutputSplitRatio":0.56
+        "scriptSplitRatio":0.68,
+        "inputOutputSplitRatio":0.55
     }
 }

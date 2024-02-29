@@ -80,13 +80,25 @@ public class JsonNativeFormPanel extends JPanel {
 
             fieldMap.put(key, field);
             fieldClass.put(key, value.getClass());
+
             gbc.anchor = GridBagConstraints.EAST;
             gbc.fill = GridBagConstraints.BOTH;
-            gbc.ipadx = 100;
-            gbc.ipady = 10;
-            gbc.insets = JBUI.insets(5);
+
+            if (field instanceof LanguageTextField) {
+                gbc.weightx = 10;
+                gbc.weighty = 10;
+            } else if (field instanceof JBTextField) {
+                gbc.ipadx = 100;
+                gbc.ipady = 1;
+            } else {
+                gbc.ipadx = 100;
+                gbc.ipady = 10;
+            }
+
             gbc.gridx = 0;
             gbc.gridy = index++;
+
+            gbc.insets = JBUI.insets(5);
 
             JBScrollPane jbScrollPane = new JBScrollPane(field);
             itemPanel.add(label, BorderLayout.WEST);
