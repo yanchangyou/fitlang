@@ -84,15 +84,14 @@ public class JsonNativeFormPanel extends JPanel {
             gbc.anchor = GridBagConstraints.EAST;
             gbc.fill = GridBagConstraints.BOTH;
 
+            gbc.weightx = 10;
+
             if (field instanceof LanguageTextField) {
-                gbc.weightx = 10;
                 gbc.weighty = 10;
             } else if (field instanceof JBTextField) {
-                gbc.ipadx = 100;
                 gbc.ipady = 1;
             } else {
-                gbc.ipadx = 100;
-                gbc.ipady = 10;
+                gbc.ipady = 1;
             }
 
             gbc.gridx = 0;
