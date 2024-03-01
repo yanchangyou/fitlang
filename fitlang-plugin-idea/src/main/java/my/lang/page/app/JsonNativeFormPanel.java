@@ -59,6 +59,10 @@ public class JsonNativeFormPanel extends JPanel {
 
             JComponent field;
             Object value = formData.get(key);
+            //默认空字符串
+            if (value == null) {
+                value = "";
+            }
             if (value instanceof JSONObject || value instanceof JSONArray) {
                 String text;
                 if (value instanceof JSONObject) {
