@@ -1,6 +1,7 @@
 package my.lang.action;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
@@ -35,6 +36,10 @@ public class NodeConfigAction extends AnAction {
 
     public NodeConfigAction(JSONObject config) {
         resetConfig(config, null);
+    }
+
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     public void resetConfig(JSONObject config, Project project) {

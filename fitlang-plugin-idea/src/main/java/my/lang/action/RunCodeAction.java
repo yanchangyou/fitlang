@@ -10,10 +10,7 @@ import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.find.SearchReplaceComponent;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileChooser.FileChooser;
@@ -32,6 +29,7 @@ import fit.lang.plugin.json.util.ExecuteNodeLogActionable;
 import fit.lang.plugin.json.util.LogJsonExecuteNode;
 import fit.lang.plugin.json.web.ServerJsonExecuteNode;
 import my.lang.dialog.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.io.File;
@@ -54,6 +52,7 @@ import static my.lang.MyLanguage.isFitLanguageFile;
  */
 public abstract class RunCodeAction extends AnAction {
 
+
     static final Map<Project, ConsoleView> projectConsoleViewMap = new ConcurrentHashMap<>();
 
     /**
@@ -75,6 +74,10 @@ public abstract class RunCodeAction extends AnAction {
 
     protected RunCodeAction(String title) {
         super(title);
+    }
+
+    public @NotNull ActionUpdateThread getActionUpdateThread() {
+        return ActionUpdateThread.BGT;
     }
 
     /**
