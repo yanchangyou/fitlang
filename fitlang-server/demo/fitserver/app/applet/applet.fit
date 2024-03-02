@@ -1,22 +1,38 @@
 {
     "uni": "applet",
-    "input": {
-        "a": 3,
-        "b": 2
+    "input":{
+        "number1":123.456,
+        "int1":123,
+        "string1": "abc",
+        "boolean1": true,
+        "object1":{
+            "number":123.456,
+            "int":123,
+            "string": "abc",
+            "boolean": true
+        },
+        "array1":[
+            {
+                "object":{
+                    "number":123.456,
+                    "int":123,
+                    "string": "abc",
+                    "boolean": true
+                }
+            }
+        ]
     },
-    "output": {
-        "a": 3,
-        "b": 2,
-        "result": 1.5
+    "output":{
+        "result":246.456
     },
-    "script": {
-        "uni": "mix",
-        "json": {
-            "result": "${a/b}"
+    "script":{
+        "uni": "eval",
+        "json":{
+            "result": "${number1+int1}"
         }
     },
-    "ui": {
-        "title": "简单计算器",
+    "ui":{
+        "title": "Applet Demo",
         "inputTitle": "输入",
         "outputTitle": "输出",
         "scriptTitle": "脚本",
@@ -30,50 +46,23 @@
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
         "showGraph": false,
-        "hideButtons": [
-            //            "reload",
-            //            "exchange",
-            //            "compare",
-            //            "save",
-            //            "execute"
+        "hideButtons":[
+            "compare",
+            "clearOutput",
+            "format"
         ],
-        "actions": [
+        "actions":[
             {
                 "title": "+",
-                "script": {
-                    "uni": "mix",
-                    "json": {
-                        "result": "${a+b}"
-                    }
-                }
-            },
-            {
-                "title": "-",
-                "script": {
-                    "uni": "mix",
-                    "json": {
-                        "result": "${a-b}"
-                    }
-                }
-            },
-            {
-                "title": "*",
-                "script": {
-                    "uni": "mix",
-                    "json": {
-                        "result": "${a*b}"
-                    }
-                }
-            },
-            {
-                "title": "/",
-                "script": {
-                    "uni": "mix",
-                    "json": {
-                        "result": "${a/b}"
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${number1+int1}"
                     }
                 }
             }
-        ]
+        ],
+        "scriptSplitRatio":0.71,
+        "inputOutputSplitRatio":0.5
     }
 }
