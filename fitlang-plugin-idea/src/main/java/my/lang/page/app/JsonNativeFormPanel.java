@@ -26,7 +26,7 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
  */
 public class JsonNativeFormPanel extends JPanel {
 
-    Dimension LABEL_DIMENSION = new Dimension(100, 35);
+    Dimension LABEL_DIMENSION = new Dimension(130, 35);
 
     /**
      * 需要保持顺序
@@ -50,12 +50,12 @@ public class JsonNativeFormPanel extends JPanel {
         int index = 0;
         for (String key : formData.keySet()) {
             JPanel itemPanel = new JPanel(new BorderLayout());
-            JLabel label = new JLabel(key.concat("  :  "));
+            JLabel label = new JLabel(key.concat(": "));
             label.setMinimumSize(LABEL_DIMENSION);
             label.setPreferredSize(LABEL_DIMENSION);
             label.setMaximumSize(LABEL_DIMENSION);
             label.setHorizontalAlignment(JLabel.RIGHT);
-            label.setMinimumSize(new Dimension(100, 30));
+            label.setMinimumSize(LABEL_DIMENSION);
 
             JComponent field;
             Object value = formData.get(key);
