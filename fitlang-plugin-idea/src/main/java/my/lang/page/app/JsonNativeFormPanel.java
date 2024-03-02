@@ -79,7 +79,7 @@ public class JsonNativeFormPanel extends JPanel {
                 fieldEditor.setOneLineMode(false);
                 field = fieldEditor;
             } else {
-                if (value instanceof String) {
+                if (key.endsWith("_text")) {
                     field = new JBTextArea(formData.getString(key));
                 } else {
                     field = new JBTextField(formData.getString(key));
