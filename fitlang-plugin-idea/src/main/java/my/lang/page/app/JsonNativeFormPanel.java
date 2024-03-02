@@ -83,11 +83,13 @@ public class JsonNativeFormPanel extends JPanel {
             } else {
                 String text = formData.getString(key);
 
-                if (key.endsWith("_password")) {
+                if (value instanceof Boolean) {
+                    field = new JCheckBox("", (boolean) value);
+                } else if (key.endsWith("_PASSWORD")) {
                     field = new JPasswordField(text);
-                } else if (key.endsWith("_file")) {
+                } else if (key.endsWith("_FILE")) {
                     field = new FileFieldComponent(text, project);
-                } else if (key.endsWith("_text")) {
+                } else if (key.endsWith("_TEXT")) {
                     field = new JBTextArea(text);
                 } else {
                     field = new JBTextField(text);
@@ -132,7 +134,9 @@ public class JsonNativeFormPanel extends JPanel {
             JComponent field = entry.getValue();
             String key = entry.getKey();
             Object value;
-            if (field instanceof FileFieldComponent) {
+            if (field instanceof JCheckBox) {
+                value = ((JCheckBox) field).isSelected();
+            } else if (field instanceof FileFieldComponent) {
                 value = ((FileFieldComponent) field).getText();
             } else if (field instanceof JTextComponent) {
                 String text = ((JTextComponent) field).getText();
