@@ -52,11 +52,12 @@ public class JsonNativeFormPanel extends JPanel {
 
         int index = 0;
         for (String key : formData.keySet()) {
+            String labelTitle = key.replace("_text", "").replace("_password", "");
             JPanel itemPanel = new JPanel(new BorderLayout());
-            JLabel label = new JBLabel(key.concat(": "));
+            JLabel label = new JBLabel(labelTitle.concat(": "));
             label.setMinimumSize(LABEL_DIMENSION);
             label.setPreferredSize(LABEL_DIMENSION);
-//            label.setMaximumSize(LABEL_DIMENSION_MAX);
+            label.setMaximumSize(LABEL_DIMENSION_MAX);
 
             label.setHorizontalAlignment(JLabel.RIGHT);
             label.setFont(EditorUtil.getEditorFont());
@@ -79,10 +80,13 @@ public class JsonNativeFormPanel extends JPanel {
                 fieldEditor.setOneLineMode(false);
                 field = fieldEditor;
             } else {
-                if (key.endsWith("_text")) {
-                    field = new JBTextArea(formData.getString(key));
+                String text = formData.getString(key);
+                if (key.endsWith("_password")) {
+                    field = new JPasswordField(text);
+                } else if (key.endsWith("_text")) {
+                    field = new JBTextArea(text);
                 } else {
-                    field = new JBTextField(formData.getString(key));
+                    field = new JBTextField(text);
                 }
             }
             label.setLabelFor(field);
