@@ -3,7 +3,10 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
+import com.intellij.openapi.fileChooser.FileChooser;
+import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
@@ -16,6 +19,8 @@ import fit.intellij.json.JsonLanguage;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
@@ -52,7 +57,7 @@ public class JsonNativeFormPanel extends JPanel {
 
         int index = 0;
         for (String key : formData.keySet()) {
-            String labelTitle = key.replace("_text", "").replace("_password", "");
+            String labelTitle = key.split("_")[0];
             JPanel itemPanel = new JPanel(new BorderLayout());
             JLabel label = new JBLabel(labelTitle.concat(": "));
             label.setMinimumSize(LABEL_DIMENSION);
@@ -81,8 +86,34 @@ public class JsonNativeFormPanel extends JPanel {
                 field = fieldEditor;
             } else {
                 String text = formData.getString(key);
+
                 if (key.endsWith("_password")) {
                     field = new JPasswordField(text);
+                } else if (key.endsWith("_file")) {
+                    JBTextField textField = new JBTextField(text);
+                    field = textField;
+                    field.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            boolean chooseFiles = true;
+                            boolean chooseFolders = false;
+                            boolean chooseJars = false;
+                            boolean chooseJarsAsFiles = false;
+                            boolean chooseJarContents = false;
+                            boolean chooseMultiple = false;
+                            FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(chooseFiles,
+                                    chooseFolders,
+                                    chooseJars,
+                                    chooseJarsAsFiles,
+                                    chooseJarContents,
+                                    chooseMultiple);
+                            VirtualFile file = FileChooser.chooseFile(fileChooserDescriptor, project, null);
+                            if (file != null) {
+                                textField.setText(file.getPath());
+                            }
+                        }
+                    });
                 } else if (key.endsWith("_text")) {
                     field = new JBTextArea(text);
                 } else {
