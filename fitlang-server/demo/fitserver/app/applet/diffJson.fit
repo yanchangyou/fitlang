@@ -24,6 +24,11 @@
                         "boolean": true
                     }
                 }
+            ],
+            "field1":[
+                {
+                    "test": "123"
+                }
             ]
         },
         "json2":{
@@ -45,18 +50,21 @@
                         "string": "abc"
                     }
                 }
-            ]
+            ],
+            "field1":{
+                "test": "123"
+            }
         }
     },
     "output":{
         "equal": false,
-        "total":16,
+        "total":17,
         "valueEqualCount":7,
         "typeEqualCount":1,
-        "diffCount":9,
+        "diffCount":10,
         "addCount":1,
         "removeCount":5,
-        "modifyCount":3,
+        "modifyCount":4,
         "result":[
             {
                 "path": "field",
@@ -141,6 +149,20 @@
                 "value1": true
             },
             {
+                "path": "field1",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1":[
+                    {
+                        "test": "123"
+                    }
+                ],
+                "value2":{
+                    "test": "123"
+                }
+            },
+            {
                 "path": "number",
                 "valueEqual": false,
                 "diffType": "ADD",
@@ -171,8 +193,8 @@
         "formatButtonTitle": "格式化",
         "showGraph": false,
         "showInputForm": true,
-        "inputOutputSplitRatio":0.49,
-        "scriptSplitRatio":0.74,
+        "inputOutputSplitRatio":0.48,
+        "scriptSplitRatio":0.73,
         "hideButtons":[
             "compare",
             "clearOutput"
