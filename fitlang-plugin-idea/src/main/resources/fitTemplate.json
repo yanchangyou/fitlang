@@ -739,6 +739,7 @@
                     "exchange",
                     "format",
                     "compare",
+                    "switchForm",
                     "actionList",
                     "save",
                     "execute"

@@ -252,6 +252,7 @@ public class JsonAppRenderPanel extends JPanel {
         if (executeButton != null) executeButton.setText(executeButtonTitle);
         if (saveButton != null) saveButton.setText(saveButtonTitle);
         if (compareButton != null) compareButton.setText(compareButtonTitle);
+        if (compareSortCheckBox != null) compareSortCheckBox.setText(needSortButtonTitle);
         if (openChromeDevButton != null) openChromeDevButton.setText(openChromeDevButtonTitle);
         if (switchViewButton != null) switchViewButton.setText(switchViewButtonTitle);
         if (switchFormButton != null) switchFormButton.setText(switchFormButtonTitle);
