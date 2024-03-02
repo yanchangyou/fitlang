@@ -3,10 +3,7 @@ package my.lang.page.app;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
@@ -15,12 +12,11 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.JBEmptyBorder;
 import com.intellij.util.ui.JBUI;
 import fit.intellij.json.JsonLanguage;
+import my.lang.page.field.FileFieldComponent;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
@@ -90,30 +86,7 @@ public class JsonNativeFormPanel extends JPanel {
                 if (key.endsWith("_password")) {
                     field = new JPasswordField(text);
                 } else if (key.endsWith("_file")) {
-                    JBTextField textField = new JBTextField(text);
-                    field = textField;
-                    field.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            super.mouseClicked(e);
-                            boolean chooseFiles = true;
-                            boolean chooseFolders = false;
-                            boolean chooseJars = false;
-                            boolean chooseJarsAsFiles = false;
-                            boolean chooseJarContents = false;
-                            boolean chooseMultiple = false;
-                            FileChooserDescriptor fileChooserDescriptor = new FileChooserDescriptor(chooseFiles,
-                                    chooseFolders,
-                                    chooseJars,
-                                    chooseJarsAsFiles,
-                                    chooseJarContents,
-                                    chooseMultiple);
-                            VirtualFile file = FileChooser.chooseFile(fileChooserDescriptor, project, null);
-                            if (file != null) {
-                                textField.setText(file.getPath());
-                            }
-                        }
-                    });
+                    field = new FileFieldComponent(text, project);
                 } else if (key.endsWith("_text")) {
                     field = new JBTextArea(text);
                 } else {
@@ -159,7 +132,9 @@ public class JsonNativeFormPanel extends JPanel {
             JComponent field = entry.getValue();
             String key = entry.getKey();
             Object value;
-            if (field instanceof JTextComponent) {
+            if (field instanceof FileFieldComponent) {
+                value = ((FileFieldComponent) field).getText();
+            } else if (field instanceof JTextComponent) {
                 String text = ((JTextComponent) field).getText();
                 Class<?> clazz = fieldClass.get(key);
                 if (String.class.equals(clazz)) {
