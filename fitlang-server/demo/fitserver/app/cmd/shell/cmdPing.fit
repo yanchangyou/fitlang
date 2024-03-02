@@ -1,8 +1,45 @@
 {
-    "uni": "cmd:ping",
-    "target": "www.baidu.com",
-    "param": {
-        "-c": 2,
-        "-i": 1
+    "uni": "applet",
+    "input": {
+        "target": "www.baidu.com",
+        "count": 4
+    },
+    "output": {
+        "result": {
+            "cmd": "ping www.baidu.com -c 4 -i 1",
+            "out": [
+                "PING www.a.shifen.com (180.101.50.188): 56 data bytes",
+                "64 bytes from 180.101.50.188: icmp_seq=0 ttl=54 time=4.664 ms",
+                "64 bytes from 180.101.50.188: icmp_seq=1 ttl=54 time=5.962 ms",
+                "64 bytes from 180.101.50.188: icmp_seq=2 ttl=54 time=5.591 ms",
+                "64 bytes from 180.101.50.188: icmp_seq=3 ttl=54 time=5.516 ms",
+                "",
+                "--- www.a.shifen.com ping statistics ---",
+                "4 packets transmitted, 4 packets received, 0.0% packet loss",
+                "round-trip min/avg/max/stddev = 4.664/5.433/5.962/0.475 ms"
+            ]
+        }
+    },
+    "script": {
+        "uni": "cmd:ping",
+        "target": "${target}",
+        "param": {
+            "-c": "${count}",
+            "-i": 1
+        }
+    },
+    "ui": {
+        "hideButtons": [
+            "clearOutput",
+            "compare",
+            "format",
+            "exchange",
+            "actionList"
+            //            "switchForm"
+        ],
+        "actions": [
+        ],
+        "scriptSplitRatio": 0.47,
+        "inputOutputSplitRatio": 0.5
     }
 }
