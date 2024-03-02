@@ -5,9 +5,11 @@ import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.LanguageTextField;
+import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextArea;
 import com.intellij.ui.components.JBTextField;
+import com.intellij.util.ui.JBEmptyBorder;
 import com.intellij.util.ui.JBUI;
 import fit.intellij.json.JsonLanguage;
 
@@ -26,7 +28,8 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
  */
 public class JsonNativeFormPanel extends JPanel {
 
-    Dimension LABEL_DIMENSION = new Dimension(130, 35);
+    Dimension LABEL_DIMENSION = new Dimension(110, 35);
+    Dimension LABEL_DIMENSION_MAX = new Dimension(120, 35);
 
     /**
      * 需要保持顺序
@@ -50,12 +53,13 @@ public class JsonNativeFormPanel extends JPanel {
         int index = 0;
         for (String key : formData.keySet()) {
             JPanel itemPanel = new JPanel(new BorderLayout());
-            JLabel label = new JLabel(key.concat(": "));
+            JLabel label = new JBLabel(key.concat(": "));
             label.setMinimumSize(LABEL_DIMENSION);
             label.setPreferredSize(LABEL_DIMENSION);
-            label.setMaximumSize(LABEL_DIMENSION);
+//            label.setMaximumSize(LABEL_DIMENSION_MAX);
+
             label.setHorizontalAlignment(JLabel.RIGHT);
-            label.setMinimumSize(LABEL_DIMENSION);
+            label.setFont(EditorUtil.getEditorFont());
 
             JComponent field;
             Object value = formData.get(key);
@@ -81,6 +85,9 @@ public class JsonNativeFormPanel extends JPanel {
                     field = new JBTextField(formData.getString(key));
                 }
             }
+            label.setLabelFor(field);
+
+            field.setBorder(new JBEmptyBorder(0));
 
             fieldMap.put(key, field);
             fieldClass.put(key, value.getClass());
