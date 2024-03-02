@@ -83,7 +83,9 @@ public class JsonNativeFormPanel extends JPanel {
             } else {
                 String text = formData.getString(key);
 
-                if (value instanceof Boolean) {
+                if (value instanceof Number) {
+                    field = buildNumberInput(text);
+                } else if (value instanceof Boolean) {
                     field = new JCheckBox("", (boolean) value);
                 } else if (key.endsWith("_PASSWORD")) {
                     field = new JPasswordField(text);
@@ -125,6 +127,20 @@ public class JsonNativeFormPanel extends JPanel {
             itemPanel.add(jbScrollPane, BorderLayout.CENTER);
             this.add(itemPanel, gbc);
         }
+    }
+
+    private static JBTextField buildNumberInput(String text) {
+        JBTextField numberField = new JBTextField(text);
+        InputVerifier inputVerifier = new InputVerifier() {
+            @Override
+            public boolean verify(JComponent jComponent) {
+                String text = numberField.getText();
+                return text.matches("^[+-]?\\d*\\d(\\.\\d*)?$");
+            }
+        };
+        numberField.setInputVerifier(inputVerifier);
+        numberField.setVerifyInputWhenFocusTarget(true);
+        return numberField;
     }
 
     public JSONObject getFormData() {

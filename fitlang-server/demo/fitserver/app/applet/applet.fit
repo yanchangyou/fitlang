@@ -46,6 +46,8 @@
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
         "showGraph": false,
+        "showInputForm": true,
+        "showOutputForm": true,
         "hideButtons":[
             "compare",
             "clearOutput",
@@ -62,7 +64,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.71,
+        "scriptSplitRatio":0.7,
         "inputOutputSplitRatio":0.5
     }
 }
