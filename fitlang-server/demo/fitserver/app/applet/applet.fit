@@ -5,6 +5,9 @@
         "int1":123,
         "string1": "abc",
         "boolean1": true,
+        "password_PASSWORD": "secret",
+        "file_FILE": "/opt/github/fitlang/build/distributions/fitserver/start.bat",
+        "text_TEXT": "foo\nbar",
         "object1":{
             "number":123.456,
             "int":123,
@@ -64,7 +67,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.7,
-        "inputOutputSplitRatio":0.5
+        "scriptSplitRatio":0.74,
+        "inputOutputSplitRatio":0.63
     }
 }
