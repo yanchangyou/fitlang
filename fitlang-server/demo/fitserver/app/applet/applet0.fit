@@ -1,22 +1,17 @@
 {
     "uni": "applet",
     "input":{
-        "null1$1number$3布尔1":0.0,
-        "null2$1boolean$3布尔2": false,
-        "number1$3数字":123.456,
-        "int1$3整数":1233,
-        "string1$3字符串": "abc",
-        "boolean1$3布尔": true,
-        "password$2password$3密码": "secret",
-        "file$2file$3文件": "/opt/github/fitlang/build/distributions/fitserver/start-with-jdk.bat",
-        "text$2text$3文本框": "foo\nbar",
-        "object1$3对象":{
+        "number1":-123.456,
+        "int1":123,
+        "string1": "abc",
+        "boolean1": true,
+        "object1":{
             "number":123.456,
             "int":123,
             "string": "abc",
             "boolean": true
         },
-        "array1$3数组":[
+        "array1":[
             {
                 "object":{
                     "number":123.456,
@@ -28,7 +23,7 @@
         ]
     },
     "output":{
-        "result":1356.456
+        "result":-0.456
     },
     "script":{
         "uni": "eval",
@@ -69,7 +64,7 @@
                 }
             }
         ],
-        "scriptSplitRatio":0.8,
-        "inputOutputSplitRatio":0.61
+        "scriptSplitRatio":0.69,
+        "inputOutputSplitRatio":0.5
     }
 }

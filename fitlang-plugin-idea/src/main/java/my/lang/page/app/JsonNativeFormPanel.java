@@ -53,7 +53,18 @@ public class JsonNativeFormPanel extends JPanel {
 
         int index = 0;
         for (String key : formData.keySet()) {
-            String labelTitle = key.split("_")[0];
+            String labelTitle = key.split("\\$")[0];
+            if (key.contains("$3")) {
+                labelTitle = key.split("\\$3")[1].split("\\$")[0];
+            }
+            String editType = "default";
+            if (key.contains("$2")) {
+                editType = key.split("\\$2")[1].split("\\$")[0];
+            }
+            String dataType = "default";
+            if (key.contains("$1")) {
+                dataType = key.split("\\$1")[1].split("\\$")[0];
+            }
             JPanel itemPanel = new JPanel(new BorderLayout());
             JLabel label = new JBLabel(labelTitle.concat(": "));
             label.setMinimumSize(LABEL_DIMENSION);
@@ -67,7 +78,15 @@ public class JsonNativeFormPanel extends JPanel {
             Object value = formData.get(key);
             //默认空字符串
             if (value == null) {
-                value = "";
+                if ("boolean".equals(dataType)) {
+                    value = false;
+                } else if ("number".equals(dataType)) {
+                    value = 0.0;
+                } else if ("int".equals(dataType)) {
+                    value = 0;
+                } else {
+                    value = "";
+                }
             }
             if (value instanceof JSONObject || value instanceof JSONArray) {
                 String text;
@@ -81,17 +100,17 @@ public class JsonNativeFormPanel extends JPanel {
                 fieldEditor.setOneLineMode(false);
                 field = fieldEditor;
             } else {
-                String text = formData.getString(key);
+                String text = value.toString();
 
-                if (value instanceof Number) {
+                if (value instanceof Number || "number".equals(dataType)) {
                     field = buildNumberInput(text);
-                } else if (value instanceof Boolean) {
+                } else if (value instanceof Boolean || "boolean".equals(dataType)) {
                     field = new JCheckBox("", (boolean) value);
-                } else if (key.endsWith("_PASSWORD")) {
+                } else if ("password".equals(editType)) {
                     field = new JPasswordField(text);
-                } else if (key.endsWith("_FILE")) {
+                } else if ("file".equals(editType)) {
                     field = new FileFieldComponent(text, project);
-                } else if (key.endsWith("_TEXT")) {
+                } else if ("text".equals(editType)) {
                     field = new JBTextArea(text);
                 } else {
                     field = new JBTextField(text);
@@ -143,6 +162,15 @@ public class JsonNativeFormPanel extends JPanel {
         return numberField;
     }
 
+    public static JSONObject parseRealFormData(JSONObject formData) {
+        JSONObject realFormData = new JSONObject();
+        for (String key : formData.keySet()) {
+            String realKey = key.split("\\$")[0];
+            realFormData.put(realKey, formData.get(key));
+        }
+        return realFormData;
+    }
+
     public JSONObject getFormData() {
         JSONObject formData = new JSONObject();
 
@@ -174,7 +202,7 @@ public class JsonNativeFormPanel extends JPanel {
                     value = JSONArray.parse(text);
                 }
             }
-            formData.put(entry.getKey(), value);
+            formData.put(key, value);
         }
         return formData;
     }
