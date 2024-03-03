@@ -50,6 +50,7 @@ dependencies {
     implementation "net.java.dev.jna:jna:${jnaVersion}"
 //    implementation "io.netty:netty-all:${nettyVersion}"
     implementation "jexcelapi:jxl:${jexcelapiVersion}"
+//    implementation 'uk.co.caprica:vlcj:4.8.2'
 //    implementation "com.alibaba:easyexcel:${easyexcelVersion}"
 }
 
