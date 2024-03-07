@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
@@ -401,9 +402,12 @@ public class JsonAppRenderPanel extends JPanel {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        String result = executeCode(input, script, contextParam);
-                        JSONObject output = JSONObject.parse(result);
-                        setOutputJson(output);
+
+                        WriteCommandAction.runWriteCommandAction(project, () -> {
+                            String result = executeCode(input, script, contextParam);
+                            JSONObject output = JSONObject.parse(result);
+                            setOutputJson(output);
+                        });
                     }
                 }).start();
             } else {
