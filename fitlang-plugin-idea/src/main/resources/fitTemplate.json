@@ -713,6 +713,7 @@
                     "result": "${a+b}"
                 }
             },
+            "synchronize": false,
             "ui": {
                 "title": "App",
                 "inputTitle": "Input",

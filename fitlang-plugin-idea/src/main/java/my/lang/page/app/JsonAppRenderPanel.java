@@ -36,6 +36,11 @@ public class JsonAppRenderPanel extends JPanel {
 
     JSONObject scriptDefine = JSONObject.parse("{'uni':'hello'}");
 
+    /**
+     * 是否异步执行
+     */
+    boolean isSynchronized;
+
     VirtualFile appFile;
 
     JsonObjectEditorPanel inputEditor;
@@ -149,6 +154,9 @@ public class JsonAppRenderPanel extends JPanel {
 
     private void init(JSONObject appDefine) {
         JSONObject uiDefine = appDefine;
+
+        isSynchronized = Boolean.TRUE.equals(appDefine.getBoolean("synchronize"));
+
         if (appDefine.containsKey("ui")) {
             uiDefine = appDefine.getJSONObject("ui");
         }
@@ -388,10 +396,22 @@ public class JsonAppRenderPanel extends JPanel {
 
             JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
             contextParam.putAll(newContextParam);
-            String result = executeCode(input, script, contextParam);
+            //异步执行
+            if (isSynchronized) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String result = executeCode(input, script, contextParam);
+                        JSONObject output = JSONObject.parse(result);
+                        setOutputJson(output);
+                    }
+                }).start();
+            } else {
+                String result = executeCode(input, script, contextParam);
+                JSONObject output = JSONObject.parse(result);
+                setOutputJson(output);
+            }
 
-            JSONObject output = JSONObject.parse(result);
-            setOutputJson(output);
         } catch (Exception e) {
             Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
         }
@@ -439,6 +459,8 @@ public class JsonAppRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
+
+                    isSynchronized = Boolean.TRUE.equals(theAppDefine.getBoolean("synchronize"));
 
                     JSONObject input = theAppDefine.getJSONObject("input");
                     JSONObject output = theAppDefine.getJSONObject("output");
