@@ -397,25 +397,18 @@ public class JsonAppRenderPanel extends JPanel {
 
             JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
             contextParam.putAll(newContextParam);
-            //异步执行
+            //是否同步执行
             if (isSynchronized) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        WriteCommandAction.runWriteCommandAction(project, () -> {
-                            String result = executeCode(input, script, contextParam);
-                            JSONObject output = JSONObject.parse(result);
-                            setOutputJson(output);
-                        });
-                    }
-                }).start();
-            } else {
                 String result = executeCode(input, script, contextParam);
                 JSONObject output = JSONObject.parse(result);
                 setOutputJson(output);
+            } else {
+                new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
+                    String result = executeCode(input, script, contextParam);
+                    JSONObject output = JSONObject.parse(result);
+                    setOutputJson(output);
+                })).start();
             }
-
         } catch (Exception e) {
             Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
         }
