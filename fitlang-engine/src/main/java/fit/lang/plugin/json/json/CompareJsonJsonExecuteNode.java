@@ -1,6 +1,7 @@
 package fit.lang.plugin.json.json;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.plugin.json.CompareUtils;
 import fit.lang.plugin.json.define.JsonExecuteNode;
@@ -17,6 +18,10 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject inputJson = input.getData();
 
+        boolean onlyDiff = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("onlyDiff"));
+
+        boolean toArray = Boolean.TRUE.equals(nodeJsonDefine.getBoolean("toArray"));
+
         String json1Field = parseStringField("json1Field", input);
         String json2Field = parseStringField("json2Field", input);
 
@@ -31,7 +36,25 @@ public class CompareJsonJsonExecuteNode extends JsonExecuteNode {
         JSONObject json1 = inputJson.getJSONObject(json1Field);
         JSONObject json2 = inputJson.getJSONObject(json2Field);
 
-        JSONObject outputJson = CompareUtils.compare(json1, json2);
+        Object result;
+        if (toArray) {
+            if (onlyDiff) {
+                result = CompareUtils.diffToArray(json1, json2);
+            } else {
+                result = CompareUtils.compareToArray(json1, json2);
+            }
+        } else {
+            if (onlyDiff) {
+                result = CompareUtils.diff(json1, json2);
+
+            } else {
+                result = CompareUtils.compare(json1, json2);
+            }
+        }
+        JSONArray list = CompareUtils.compareToArray(json1, json2);
+        JSONObject outputJson = CompareUtils.sum(list);
+
+        outputJson.put("result", result);
 
         output.setData(outputJson);
     }

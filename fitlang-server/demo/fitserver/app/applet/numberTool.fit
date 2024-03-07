@@ -25,6 +25,8 @@
         "needSortButtonTitle": "排序",
         "compareButtonTitle": "比较",
         "saveButtonTitle": "保存",
+        "switchFormButtonTitle": "切换",
+        "formatButtonTitle": "格式化",
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
         "showGraph": false,

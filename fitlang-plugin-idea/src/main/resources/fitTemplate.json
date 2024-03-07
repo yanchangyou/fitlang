@@ -692,6 +692,11 @@
             }
         },
         {
+            "uni": "compare",
+            "onlyDiff": true,
+            "toArray": false
+        },
+        {
             "uni": "applet",
             "input": {
                 "a": 3,
@@ -728,11 +733,14 @@
                 "showOutputForm": false,
                 "inputOutputSplitRatio": 0.5,
                 "scriptSplitRatio": 0.4,
-                "hideButtonsAll": [
+                "hideButtonsOptions": [
                     "reload",
                     "clearOutput",
                     "exchange",
+                    "format",
                     "compare",
+                    "switchForm",
+                    "actionList",
                     "save",
                     "execute"
                 ],

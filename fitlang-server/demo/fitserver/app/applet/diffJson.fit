@@ -1,30 +1,11 @@
 {
     "uni": "applet",
     "input":{
-        "json2":{
-            "field": "abc",
-            "number":123,
-            "string": "abc",
-            "object":{
-                "field": "abc",
-                "number":123,
-                "string": "abc",
-                "boolean": true
-            },
-            "array":[
-                {
-                    "object":{
-                        "number":123,
-                        "double":123.456,
-                        "string": "abc"
-                    }
-                }
-            ]
-        },
         "json1":{
             "field":123456,
             "double":123.456789,
-            "string": "abcd",
+            "text": "ab",
+            "string": "abc",
             "boolean": true,
             "object":{
                 "field":123456,
@@ -43,52 +24,156 @@
                         "boolean": true
                     }
                 }
+            ],
+            "field1":[
+                {
+                    "test": "123"
+                }
             ]
+        },
+        "json2":{
+            "field": "abc",
+            "text": "abc",
+            "number":123,
+            "string": "abc",
+            "object":{
+                "field": "abc",
+                "number":123,
+                "string": "abc",
+                "boolean": true
+            },
+            "array":[
+                {
+                    "object":{
+                        "number":123,
+                        "double":123.456,
+                        "string": "abc"
+                    }
+                }
+            ],
+            "field1":{
+                "test": "123"
+            }
         }
     },
     "output":{
-        "field":{
-            "equal": false,
-            "typeEqual": false,
-            "type": "MODIFY"
-        },
-        "double":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "string":{
-            "equal": false,
-            "typeEqual": true,
-            "type": "MODIFY"
-        },
-        "boolean":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "object.field":{
-            "equal": false,
-            "typeEqual": false,
-            "type": "MODIFY"
-        },
-        "object.double":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "object.newField":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "array[0].object.boolean":{
-            "equal": false,
-            "type": "REMOVE"
-        },
-        "number":{
-            "equal": false,
-            "type": "ADD"
-        }
+        "equal": false,
+        "total":17,
+        "valueEqualCount":7,
+        "typeEqualCount":1,
+        "diffCount":10,
+        "addCount":1,
+        "removeCount":5,
+        "modifyCount":4,
+        "result":[
+            {
+                "path": "field",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1":123456,
+                "value2": "abc"
+            },
+            {
+                "path": "double",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1":123.456789
+            },
+            {
+                "path": "text",
+                "valueEqual": false,
+                "typeEqual": true,
+                "diffType": "MODIFY",
+                "value1": "ab",
+                "value2": "abc"
+            },
+            {
+                "path": "string",
+                "valueEqual": true
+            },
+            {
+                "path": "boolean",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1": true
+            },
+            {
+                "path": "object.field",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1":123456,
+                "value2": "abc"
+            },
+            {
+                "path": "object.number",
+                "valueEqual": true
+            },
+            {
+                "path": "object.double",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1":123.456
+            },
+            {
+                "path": "object.string",
+                "valueEqual": true
+            },
+            {
+                "path": "object.boolean",
+                "valueEqual": true
+            },
+            {
+                "path": "object.newField",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1":123
+            },
+            {
+                "path": "array[0].object.number",
+                "valueEqual": true
+            },
+            {
+                "path": "array[0].object.double",
+                "valueEqual": true
+            },
+            {
+                "path": "array[0].object.string",
+                "valueEqual": true
+            },
+            {
+                "path": "array[0].object.boolean",
+                "valueEqual": false,
+                "diffType": "REMOVE",
+                "value1": true
+            },
+            {
+                "path": "field1",
+                "valueEqual": false,
+                "typeEqual": false,
+                "diffType": "MODIFY",
+                "value1":[
+                    {
+                        "test": "123"
+                    }
+                ],
+                "value2":{
+                    "test": "123"
+                }
+            },
+            {
+                "path": "number",
+                "valueEqual": false,
+                "diffType": "ADD",
+                "value2":123
+            }
+        ]
     },
     "script":{
-        "uni": "diff"
+        "uni": "compare",
+        "onlyDiff": false,
+        "toArray": true
     },
     "ui":{
         "title": "JSON对比",
@@ -105,10 +190,11 @@
         "openChromeDevButtonTitle": "打开Chrome Dev",
         "switchViewButtonTitle": "切换视图",
         "switchFormButtonTitle": "切换",
+        "formatButtonTitle": "格式化",
         "showGraph": false,
         "showInputForm": true,
-        "inputOutputSplitRatio":0.65,
-        "scriptSplitRatio":0.92,
+        "inputOutputSplitRatio":0.48,
+        "scriptSplitRatio":0.73,
         "hideButtons":[
             "compare",
             "clearOutput"

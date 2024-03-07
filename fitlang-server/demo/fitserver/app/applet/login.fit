@@ -1,0 +1,51 @@
+{
+    "uni": "applet",
+    "input":{
+        "手机": "18911223344",
+        "密码_password": "abc123456"
+    },
+    "output":{
+        
+    },
+    "script":{
+        "uni": "eval",
+        "json":{
+            "result": "${number1+int1}"
+        }
+    },
+    "ui":{
+        "title": "Start HelloWorld!",
+        "inputTitle": "输入",
+        "outputTitle": "输出",
+        "scriptTitle": "脚本",
+        "reloadButtonTitle": "刷新",
+        "clearOutputButtonTitle": "清空出参",
+        "executeButtonTitle": "执行",
+        "resetLayoutButtonTitle": "重置布局",
+        "needSortButtonTitle": "排序",
+        "compareButtonTitle": "比较",
+        "saveButtonTitle": "保存",
+        "openChromeDevButtonTitle": "打开Chrome Dev",
+        "switchViewButtonTitle": "切换视图",
+        "showGraph": false,
+        "hideButtons":[
+            "compare",
+            "clearOutput",
+            "format",
+            "exchange"
+        ],
+        "actions":[
+            {
+                "title": "+",
+                "script":{
+                    "uni": "eval",
+                    "json":{
+                        "result": "${number1+int1}"
+                    }
+                }
+            }
+        ],
+        "scriptSplitRatio":0.7,
+        "inputOutputSplitRatio":0.5
+    }
+}
