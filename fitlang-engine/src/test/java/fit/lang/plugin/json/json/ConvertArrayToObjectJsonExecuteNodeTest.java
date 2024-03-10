@@ -29,9 +29,9 @@ public class ConvertArrayToObjectJsonExecuteNodeTest extends TestCase {
 
         System.out.println(output);
 
-        Assert.assertTrue(outputJson.containsKey("list"));
+        Assert.assertTrue(outputJson.containsKey("json"));
 
-        Assert.assertEquals("{\"name\":\"cat\",\"code\":\"001\"}", outputJson.getString("list"));
+        Assert.assertEquals("{\"name\":\"cat\",\"code\":\"001\"}", outputJson.getString("json"));
 
     }
 }

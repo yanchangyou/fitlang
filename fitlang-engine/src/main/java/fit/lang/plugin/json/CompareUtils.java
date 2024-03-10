@@ -200,13 +200,17 @@ public class CompareUtils {
         return result;
     }
 
+    public static JSONObject convertWithJsonPath(JSONObject json) {
+        return convertWithJsonPath(json, false);
+    }
+
     /**
      * 按照json path平铺展开
      *
      * @param json 入参json
      * @return 返回 json object
      */
-    public static JSONObject convertWithJsonPath(JSONObject json) {
+    public static JSONObject convertWithJsonPath(JSONObject json, boolean onlyBasic) {
         JSONObject newMap = new JSONObject();
         if (json == null) {
             return newMap;
@@ -224,7 +228,9 @@ public class CompareUtils {
                 } else {
                     array = (JSONArray) value;
                 }
-                newMap.put((fieldName), value);
+                if (!onlyBasic) {
+                    newMap.put((fieldName), value);
+                }
 
                 int index = 0;
                 for (Object item : array) {
@@ -299,7 +305,7 @@ public class CompareUtils {
      * @param key field key
      * @return norm key
      */
-    static String buildJsonPathKey(String key) {
+    public static String buildJsonPathKey(String key) {
         if (key.contains("[")) {
             key = key.replace("[", "").replace("]", "");
         }

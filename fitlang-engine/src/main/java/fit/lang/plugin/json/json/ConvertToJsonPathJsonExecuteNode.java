@@ -16,7 +16,7 @@ public class ConvertToJsonPathJsonExecuteNode extends JsonExecuteNode {
 
         JSONObject inputJson = input.getData();
 
-        JSONObject outputJson = CompareUtils.convertWithJsonPath(inputJson);
+        JSONObject outputJson = CompareUtils.convertWithJsonPath(inputJson, true);
 
         output.setData(outputJson);
     }
