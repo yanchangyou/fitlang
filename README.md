@@ -121,7 +121,6 @@ FitServer 使用fit语言开发的中间件，相当于轻量级的Nginx，tomca
 - eval: 表达式计算
 - parseJson: 解析json
 - stringifyJson: json转字符串
-- convertKeyValueList: key value list转换对象（废弃）
 - convertObjectToArray: 对象转数组
 - convertArrayToObject: 数组转换对象
 - convertToObjectArray: 转换为对象数组

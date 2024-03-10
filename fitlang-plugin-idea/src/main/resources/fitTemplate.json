@@ -133,12 +133,6 @@
             "format": true
         },
         {
-            "uni": "convertKeyValueList",
-            "listField": "list",
-            "keyField": "key",
-            "valueField": "value"
-        },
-        {
             "uni": "convertObjectToArray",
             "arrayField": "array",
             "objectField": "object",

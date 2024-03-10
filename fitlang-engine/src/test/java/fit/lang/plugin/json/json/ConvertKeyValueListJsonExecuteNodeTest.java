@@ -13,7 +13,7 @@ public class ConvertKeyValueListJsonExecuteNodeTest extends TestCase {
 
     public void testExecute() {
         String flow = "{" +//
-                "   'uni': 'convertKeyValueList'," +
+                "   'uni': 'convertArrayToObject'," +
                 "   'jsonField': 'json'," +
                 "   'listField': 'list'," +
                 "   'keyField': 'key'," +

@@ -23,7 +23,7 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
         String valueField = nodeJsonDefine.getString("valueField");
 
         if (StrUtil.isBlank(objectField)) {
-            throw new ExecuteNodeException("convertArrayToObject objectField field is required!");
+            objectField = arrayField;
         }
 
         if (StrUtil.isBlank(arrayField)) {
@@ -50,8 +50,7 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
                 JSONObject itemObject = (JSONObject) item;
                 jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
             }
-            JSONPath.set(outputJson, arrayField, jsonObject);
-
+            JSONPath.set(outputJson, objectField, jsonObject);
         }
         output.setData(outputJson);
     }

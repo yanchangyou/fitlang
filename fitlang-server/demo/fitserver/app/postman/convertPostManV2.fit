@@ -96,7 +96,7 @@
                                             "y":1060
                                         },
                                         {
-                                            "uni": "convertKeyValueList",
+                                            "uni": "convertArrayToObject",
                                             "listField": "content.query",
                                             "keyField": "key",
                                             "valueField": "value",
@@ -105,7 +105,7 @@
                                             "y":1060
                                         },
                                         {
-                                            "uni": "convertKeyValueList",
+                                            "uni": "convertArrayToObject",
                                             "listField": "content.header",
                                             "keyField": "key",
                                             "valueField": "value",
