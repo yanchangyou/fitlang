@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
+import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.buildOutputData;
+import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.parseRealFormData;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
 
 public class JsonAppRenderPanel extends JPanel {
@@ -32,6 +34,10 @@ public class JsonAppRenderPanel extends JPanel {
     Project project;
 
     JSONObject appDefine;
+
+    JSONObject inputDefine;
+
+    JSONObject outputDefine;
 
     JSONObject contextParam;
 
@@ -177,23 +183,23 @@ public class JsonAppRenderPanel extends JPanel {
             outputForm = new JSONObject();
         }
 
-        JSONObject input = appDefine.getJSONObject("input");
-        JSONObject output = appDefine.getJSONObject("output");
+        inputDefine = appDefine.getJSONObject("input");
+        outputDefine = appDefine.getJSONObject("output");
 
         if (appDefine.containsKey("script")) {
             scriptDefine = appDefine.getJSONObject("script");
         }
 
-        if (input == null) {
-            input = new JSONObject();
+        if (inputDefine == null) {
+            inputDefine = new JSONObject();
         }
 
-        if (output == null) {
-            output = new JSONObject();
+        if (outputDefine == null) {
+            outputDefine = new JSONObject();
         }
 
-        inputForm.put("schema", parseJsonSchema(input));
-        outputForm.put("schema", parseJsonSchema(output));
+        inputForm.put("schema", parseJsonSchema(inputDefine));
+        outputForm.put("schema", parseJsonSchema(outputDefine));
 
         setBorder(null);
         setLayout(new BorderLayout());
@@ -202,7 +208,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         setAppTitle(appTitle);
 
-        scriptSplitPane = buildMainPanel(input, output, actions);
+        scriptSplitPane = buildMainPanel(inputDefine, outputDefine, actions);
         scriptSplitPane.setDividerLocation(scriptSplitRatio);
 
         resetAllTitle(uiDefine);
@@ -397,15 +403,20 @@ public class JsonAppRenderPanel extends JPanel {
 
             JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
             contextParam.putAll(newContextParam);
+            input.putAll(newContextParam);
+            input = parseRealFormData(input);
             //是否同步执行
             if (isSynchronized) {
                 String result = executeCode(input, script, contextParam);
                 JSONObject output = JSONObject.parse(result);
+                output = buildOutputData(outputDefine, output);
                 setOutputJson(output);
             } else {
+                JSONObject finalInput = input;
                 new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
-                    String result = executeCode(input, script, contextParam);
+                    String result = executeCode(finalInput, script, contextParam);
                     JSONObject output = JSONObject.parse(result);
+                    output = buildOutputData(outputDefine, output);
                     setOutputJson(output);
                 })).start();
             }
