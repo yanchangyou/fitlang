@@ -34,10 +34,6 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
             keyField = "key";
         }
 
-        if (StrUtil.isBlank(valueField)) {
-            valueField = "value";
-        }
-
         JSONObject outputJson = input.getData().clone();
         Object list = outputJson.getByPath(arrayField);
         if (list instanceof JSONArray) {
@@ -48,7 +44,11 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
                     throw new ExecuteNodeException("convertArrayToObject item must be object type!");
                 }
                 JSONObject itemObject = (JSONObject) item;
-                jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
+                Object value = itemObject;
+                if (StrUtil.isNotBlank(valueField)) {
+                    value = itemObject.get(valueField);
+                }
+                jsonObject.put(itemObject.getString(keyField), value);
             }
             JSONPath.set(outputJson, objectField, jsonObject);
         }
