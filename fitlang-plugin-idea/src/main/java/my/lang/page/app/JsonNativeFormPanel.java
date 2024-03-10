@@ -162,15 +162,6 @@ public class JsonNativeFormPanel extends JPanel {
         return numberField;
     }
 
-    public static JSONObject parseRealFormData(JSONObject formData) {
-        JSONObject realFormData = new JSONObject();
-        for (String key : formData.keySet()) {
-            String realKey = key.split("\\$")[0];
-            realFormData.put(realKey, formData.get(key));
-        }
-        return realFormData;
-    }
-
     public JSONObject getFormData() {
         JSONObject formData = new JSONObject();
 

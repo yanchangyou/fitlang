@@ -37,6 +37,7 @@ public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNod
         if (inputJson == null) {
             inputJson = new JSONObject();
         }
+        inputJson = parseRealFormData(inputJson);
         if (outputJson == null) {
             outputJson = new JSONObject();
         }
@@ -61,4 +62,23 @@ public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNod
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
 
     }
+
+    /**
+     * 获取真实数据，input支持$N格式，表示入参元数据定义：
+     * $1 dataType
+     * $2 editType
+     * $3 title
+     *
+     * @param formData
+     * @return
+     */
+    static JSONObject parseRealFormData(JSONObject formData) {
+        JSONObject realFormData = new JSONObject();
+        for (String key : formData.keySet()) {
+            String realKey = key.split("\\$")[0];
+            realFormData.put(realKey, formData.get(key));
+        }
+        return realFormData;
+    }
+
 }

@@ -595,8 +595,7 @@ public class JsonAppRenderPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JSONObject script = getScriptDefine();
-
-                JSONObject input = JsonNativeFormPanel.parseRealFormData(getInputJson());
+                JSONObject input = getInputJson();
 
                 execute(input, script);
                 scriptEditor.cardLayout.first(scriptEditor.cardPanel);
