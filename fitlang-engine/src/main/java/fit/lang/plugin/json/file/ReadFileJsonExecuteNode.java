@@ -70,12 +70,14 @@ public class ReadFileJsonExecuteNode extends JsonExecuteNode {
             output.set("files", fileNames);
             File[] files = file.listFiles();
             JSONArray fileList = new JSONArray();
-            for (File subFile : files) {
-                JSONObject subFileJson = new JSONObject();
-                subFileJson.put("name", subFile.getName());
-                subFileJson.put("path", subFile.getAbsoluteFile());
-                subFileJson.put("isFile", subFile.isFile());
-                fileList.add(subFileJson);
+            if (files != null) {
+                for (File subFile : files) {
+                    JSONObject subFileJson = new JSONObject();
+                    subFileJson.put("name", subFile.getName());
+                    subFileJson.put("path", subFile.getAbsoluteFile());
+                    subFileJson.put("isFile", subFile.isFile());
+                    fileList.add(subFileJson);
+                }
             }
             output.set("files", fileList);
         }

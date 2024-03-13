@@ -3,7 +3,6 @@ package fit.lang.plugin.json.net;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.LineHandler;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
@@ -15,7 +14,9 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.*;
+import java.net.Proxy;
+import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class TelnetHttpJsonExecuteNode extends JsonExecuteNode {
             output.set("port", port);
             output.set("inputHeader", header);
             output.set("input", JSON.toJSON(inputLines));
-            if (outputLines.size() > 0) {
+            if (!outputLines.isEmpty()) {
                 String statusLine = outputLines.get(0);
                 String[] parts = statusLine.split(" ");
                 if (parts.length >= 3) {

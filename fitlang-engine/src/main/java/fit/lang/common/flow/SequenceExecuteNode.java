@@ -56,7 +56,7 @@ public class SequenceExecuteNode extends AbstractExecuteNode {
                 input.getNodeData().setData(input.getNodeData().cloneData());
             }
             childNode.executeAndNext(input, output);
-            if (isBagsMode) {
+            if (isBagsMode && bags != null) {
                 bags.add(output.getNodeData().cloneData());
             }
         }

@@ -24,7 +24,7 @@ public class SwitchJsonExecuteNodeTest extends TestCase {
 
     }
 
-    public void testExecuteCase(String type, String outputFieldName, String expect) {
+    private void testExecuteCase(String type, String outputFieldName, String expect) {
 
         JSONObject nodeDefine = JSON.parseObject("{'uni':'switch','switchField':'type','case':{'1':{'uni':'hello'},'2':{'uni':'echo'}}}");
         ExecuteNode executeNode = new JsonDynamicFlowExecuteEngine(nodeDefine);

@@ -138,9 +138,7 @@ public abstract class AbstractExecuteNode implements ExecuteNode {
 
     @Override
     public void addNextNodes(List<ExecuteNode> nodes) {
-        for (ExecuteNode node : nodes) {
-            nextNodes.add(node);
-        }
+        nextNodes.addAll(nodes);
     }
 
     @Override

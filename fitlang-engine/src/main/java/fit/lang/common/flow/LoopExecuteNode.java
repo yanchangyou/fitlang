@@ -105,7 +105,7 @@ public abstract class LoopExecuteNode extends AbstractParallelExecuteNode {
 
         for (int i = 0; i < getLoopTimes(); i++) {
 
-            Future<Object> submit = executorService.submit(new Callable<Object>() {
+            Future<Object> submit = executorService.submit(new Callable<>() {
 
                 @Override
                 public Object call() throws Exception {

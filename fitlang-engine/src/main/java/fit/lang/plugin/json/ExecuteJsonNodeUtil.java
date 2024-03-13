@@ -523,7 +523,7 @@ public class ExecuteJsonNodeUtil {
         if (value == null) {
             value = nodeJsonDefine.get(fieldName);
         }
-        return value != null && value instanceof JSONArray;
+        return value instanceof JSONArray;
     }
 
     /**
@@ -543,7 +543,7 @@ public class ExecuteJsonNodeUtil {
         if (value == null) {
             return null;
         }
-        JSONArray array = null;
+        JSONArray array;
         if (value instanceof JSONArray) {
             array = (JSONArray) value;
         } else {

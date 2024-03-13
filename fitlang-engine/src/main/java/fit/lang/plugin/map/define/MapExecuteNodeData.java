@@ -30,9 +30,7 @@ public class MapExecuteNodeData implements ExecuteNodeData {
 
     @Override
     public Object cloneData() {
-        Map<String, Object> cloneMap = new HashMap<>();
-        cloneMap.putAll(data);
-        return cloneMap;
+        return new HashMap<>(data);
     }
 
     @Override

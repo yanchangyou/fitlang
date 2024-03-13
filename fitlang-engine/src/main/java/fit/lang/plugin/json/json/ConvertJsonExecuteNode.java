@@ -111,7 +111,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < parts.length; i++) {
             if (i > 0) {
-                builder.append("[" + index[i - 1] + "]");
+                builder.append("[").append(index[i - 1]).append("]");
             }
             builder.append(parts[i]);
         }
@@ -121,9 +121,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
     void buildLength(JSONObject root, String[] pathParts, int[] length, int[] index, int level) {
         StringBuilder jsonPath = new StringBuilder();
         for (int i = 0; i < level + 1; i++) {
-            if (i > 0) {
-                jsonPath.append("[" + index[i - 1] + "]");
-            }
+            if (i > 0) jsonPath.append("[").append(index[i - 1]).append("]");
             jsonPath.append(pathParts[i]);
             List array = (List) JSONPath.eval(root, jsonPath.toString());
             if (array != null) {

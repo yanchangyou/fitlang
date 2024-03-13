@@ -651,9 +651,11 @@ public class ServerJsonExecuteNode extends JsonExecuteNode {
         List<JSONObject> serviceDefineList = new ArrayList<>();
         if (serviceFile.isDirectory()) {
             File[] subFiles = serviceFile.listFiles();
-            for (File subFile : subFiles) {
-                List<JSONObject> subDefineList = loadServiceDir(serviceRootDir, subFile, serverInstance);
-                serviceDefineList.addAll(subDefineList);
+            if (subFiles != null) {
+                for (File subFile : subFiles) {
+                    List<JSONObject> subDefineList = loadServiceDir(serviceRootDir, subFile, serverInstance);
+                    serviceDefineList.addAll(subDefineList);
+                }
             }
         } else if (serviceFile.getName().endsWith(".fit") || serviceFile.getName().endsWith(".fit.json")) {
             String serviceDefineText = readNodeDefineFile(serviceFile);
