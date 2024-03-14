@@ -4,5 +4,5 @@
     "input1Title": "输入1",
     "input2Title": "输入2",
     "input1": "text1\nhello, world",
-    "input2": "text2\nhello, fit"
+    "input2": "text2\nhello, fit\nabc"
 }
