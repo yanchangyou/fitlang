@@ -411,7 +411,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.11.0 applet support synchronize execute; remove convertKeyValueList, replace by convertArrayToObject;</li>
+            <li>0.11.0 applet support synchronize execute; remove convertKeyValueList, replace by convertArrayToObject; refine diff page</li>
             <li>0.10.16 native form support data type, edit type and title config</li>
             <li>0.10.15 applet support format, field type; fix json compare</li>
             <li>0.10.14 refine applet button and split; compare node support onlyDiff, toArray and sum; remove node diff</li>
