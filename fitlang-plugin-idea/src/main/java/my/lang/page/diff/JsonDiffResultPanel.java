@@ -10,6 +10,7 @@ import com.intellij.json.json5.Json5FileType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.impl.DocumentImpl;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsContexts;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
@@ -65,13 +66,19 @@ public class JsonDiffResultPanel extends JPanel {
                 Object object1 = input1;
                 Object object2 = input2;
 
+                boolean isJson1 = false;
+
+                boolean isJson2 = false;
+
                 if (input1 instanceof JSONObject) {
+                    isJson1 = true;
                     if (needSort) {
                         object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
                     }
                     object1 = toJsonTextWithFormat((JSONObject) object1);
                 }
                 if (input2 instanceof JSONObject) {
+                    isJson2 = true;
                     if (needSort) {
                         object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
                     }
@@ -84,8 +91,19 @@ public class JsonDiffResultPanel extends JPanel {
                 document1.setReadOnly(true);
                 document2.setReadOnly(true);
 
-                DocumentContentImpl diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
-                DocumentContentImpl diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);
+                DocumentContentImpl diffContent1;
+                if (isJson1) {
+                    diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
+                } else {
+                    diffContent1 = new DocumentContentImpl(project, document1, PlainTextFileType.INSTANCE);
+                }
+
+                DocumentContentImpl diffContent2;
+                if (isJson2) {
+                    diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);
+                } else {
+                    diffContent2 = new DocumentContentImpl(project, document2, PlainTextFileType.INSTANCE);
+                }
 
                 List<DiffContent> list = new ArrayList<>();
                 list.add(diffContent1);
