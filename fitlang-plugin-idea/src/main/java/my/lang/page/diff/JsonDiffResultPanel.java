@@ -1,5 +1,7 @@
 package my.lang.page.diff;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.diff.DiffManager;
 import com.intellij.diff.DiffRequestPanel;
@@ -21,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.intellij.ui.ComponentUtil.getWindow;
@@ -70,19 +73,46 @@ public class JsonDiffResultPanel extends JPanel {
 
                 boolean isJson2 = false;
 
-                if (input1 instanceof JSONObject) {
+                if (input1 instanceof JSONObject || input1 instanceof JSONArray) {
                     isJson1 = true;
                     if (needSort) {
-                        object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
+                        if (input1 instanceof JSONArray) {
+                            object1 = ExecuteJsonNodeUtil.sortJsonField((JSONArray) input1);
+                        } else {
+                            object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
+                        }
                     }
-                    object1 = toJsonTextWithFormat((JSONObject) object1);
+                    if (input1 instanceof JSONArray) {
+                        object1 = toJsonTextWithFormat((JSONArray) object1);
+                    } else {
+                        object1 = toJsonTextWithFormat((JSONObject) object1);
+                    }
+                } else if (needSort) {
+                    String text = object1.toString();
+                    String[] lines = text.split("\r\n|\r|\n");
+                    Arrays.sort(lines);
+                    object1 = StrUtil.join("\n", (Object) lines);
                 }
-                if (input2 instanceof JSONObject) {
+
+                if (input2 instanceof JSONObject || input2 instanceof JSONArray) {
                     isJson2 = true;
                     if (needSort) {
-                        object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
+                        if (input2 instanceof JSONArray) {
+                            object2 = ExecuteJsonNodeUtil.sortJsonField((JSONArray) input2);
+                        } else {
+                            object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
+                        }
                     }
-                    object2 = toJsonTextWithFormat((JSONObject) object2);
+                    if (input2 instanceof JSONArray) {
+                        object2 = toJsonTextWithFormat((JSONArray) object2);
+                    } else {
+                        object2 = toJsonTextWithFormat((JSONObject) object2);
+                    }
+                } else if (needSort) {
+                    String text = object2.toString();
+                    String[] lines = text.split("\r\n|\r|\n");
+                    Arrays.sort(lines);
+                    object2 = StrUtil.join("\n", (Object) lines);
                 }
 
                 Document document1 = new DocumentImpl(object1.toString());
