@@ -337,6 +337,7 @@ applet: 小应用<br/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <fileEditorProvider implementation="my.lang.page.web.WebPageRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.render.JsonPageRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.action.JsonActionRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.app.JsonAppRenderProvider"/>
