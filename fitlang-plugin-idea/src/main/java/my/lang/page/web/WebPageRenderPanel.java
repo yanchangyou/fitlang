@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -320,11 +319,11 @@ public class WebPageRenderPanel extends JPanel {
 //                setOutputJson(output);
 //            } else {
             JSONObject finalInput = input;
-            new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
+//            new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
                 String result = executeCode(finalInput, script, newContextParam);
                 JSONObject output = JSONObject.parse(result);
                 resultTextEditor.setText(toJsonTextWithFormat(output));
-            })).start();
+//            })).start();
 //            }
         } catch (Exception e) {
             Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
