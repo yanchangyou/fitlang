@@ -262,7 +262,11 @@ public class WebPageRenderPanel extends JPanel {
                     String jsInject = jsQuery.inject("fetchData");
                     String jsCode = "" +
                             "var fetchDom = document.querySelector('" + selector + "');\n" +
-                            "var fetchData = JSON.stringify({'" + key + "': (fetchDom==null?'':fetchDom.textContent)});\n" +
+                            "   var fetchData = JSON.stringify({\n" +
+                            "       '" + key + "': (fetchDom==null?'':fetchDom.textContent),\n" +
+                            "       'url': '" + url + "',\n" +
+//                                "       'value': '" + value + "',\n" +
+                            "    });\n" +
                             "" + jsInject +
                             "";
                     browser.getCefBrowser().executeJavaScript(
@@ -320,9 +324,9 @@ public class WebPageRenderPanel extends JPanel {
 //            } else {
             JSONObject finalInput = input;
 //            new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
-                String result = executeCode(finalInput, script, newContextParam);
-                JSONObject output = JSONObject.parse(result);
-                resultTextEditor.setText(toJsonTextWithFormat(output));
+            String result = executeCode(finalInput, script, newContextParam);
+            JSONObject output = JSONObject.parse(result);
+            resultTextEditor.setText(toJsonTextWithFormat(output));
 //            })).start();
 //            }
         } catch (Exception e) {

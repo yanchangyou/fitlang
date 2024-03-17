@@ -15,10 +15,6 @@ import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
 import com.intellij.ui.jcef.JBCefJSQuery;
 import fit.lang.ExecuteNodeUtil;
-import fit.lang.plugin.json.function.JsonPackageExecuteNode;
-import fit.lang.plugin.json.ide.jcef.FitJcefManager;
-import fit.lang.plugin.json.web.ServerJsonExecuteNode;
-import org.cef.browser.CefBrowser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,10 +22,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
+import java.util.ArrayList;
 
-import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
-import static my.lang.action.RunCodeAction.implementIdeOperator;
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
 
 public class PickPageRenderPanel extends JPanel {
@@ -42,20 +37,22 @@ public class PickPageRenderPanel extends JPanel {
 
     JSONObject pageDefine;
 
-    Integer number;
+    Integer pageSize;
+    Integer pageNo;
 
-    String[] urls;
+    JSONArray urls;
 
     JSONObject fetchConfig;
     JSONObject fetchResult;
+
+    JTextField pageNoText;
+    JTextField pageSizeText;
 
     JBCefBrowser[] browsers;
 
     double devAndBrowserSplitRatio = 0.35;
     double devSplitPanelRatio = 0.65;
     double configAndResultPanelRatio = 0.5;
-
-    boolean showDev = true;
 
     LanguageTextField configTextEditor;
     LanguageTextField resultTextEditor;
@@ -66,23 +63,6 @@ public class PickPageRenderPanel extends JPanel {
 
         this.pageDefine = pickDefine;
         this.virtualFile = virtualFile;
-
-        number = pickDefine.getInteger("number");
-        if (number == null) {
-            number = 4;
-        }
-        JSONArray urlArray = pickDefine.getJSONArray("urls");
-        if (number < urlArray.size()) {
-            number = urlArray.size();
-        }
-        urls = new String[urlArray.size()];
-        for (int i = 0; i < urlArray.size(); i++) {
-            urls[i] = urlArray.getString(i);
-        }
-        Integer poolSize = pickDefine.getInteger("poolSize");
-        if (poolSize == null) {
-            poolSize = 1000;
-        }
 
         this.script = pickDefine.getJSONObject("script");
         if (script == null) {
@@ -97,6 +77,20 @@ public class PickPageRenderPanel extends JPanel {
             fetchConfig.put("selector", new JSONObject());
         }
 
+        pageNo = fetchConfig.getInteger("pageNo");
+        if (pageNo == null) {
+            pageNo = 1;
+        }
+        pageSize = fetchConfig.getInteger("pageSize");
+        if (pageSize == null) {
+            pageSize = 4;
+        }
+        urls = fetchConfig.getJSONArray("urls");
+        if (urls == null) {
+            urls = new JSONArray();
+        }
+
+
         this.fetchResult = pickDefine.getJSONObject("fetchResult");
         if (fetchResult == null) {
             fetchResult = new JSONObject();
@@ -108,12 +102,16 @@ public class PickPageRenderPanel extends JPanel {
             pickDefine.put("ui", uiConfig);
         }
 
+        Integer poolSize = uiConfig.getInteger("poolSize");
+        if (poolSize == null) {
+            poolSize = 1000;
+        }
+
         devAndBrowserSplitRatio = uiConfig.getDouble("devAndBrowserSplitRatio") != null ? uiConfig.getDouble("devAndBrowserSplitRatio") : devAndBrowserSplitRatio;
         devSplitPanelRatio = uiConfig.getDouble("devSplitPanelRatio") != null ? uiConfig.getDouble("devSplitPanelRatio") : devSplitPanelRatio;
         configAndResultPanelRatio = uiConfig.getDouble("configAndResultPanelRatio") != null ? uiConfig.getDouble("configAndResultPanelRatio") : configAndResultPanelRatio;
-        showDev = uiConfig.getBoolean("showDev") != null ? uiConfig.getBoolean("showDev") : showDev;
 
-        browsers = new JBCefBrowser[number];
+        browsers = new JBCefBrowser[pageSize];
         for (int i = 0; i < browsers.length; i++) {
             browsers[i] = new JBCefBrowser();
             browsers[i].getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, poolSize);
@@ -124,6 +122,7 @@ public class PickPageRenderPanel extends JPanel {
         init();
 
         render();
+
 
     }
 
@@ -160,11 +159,9 @@ public class PickPageRenderPanel extends JPanel {
         configTextEditor.setText(toJsonTextWithFormat(fetchConfig));
         resultTextEditor.setText(toJsonTextWithFormat(fetchResult));
 
-        JSplitPane configAndResultPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-
         splitPane.add(devSplitPanel);
 
-        JPanel browserPanel = new JPanel(new GridLayout((number + 3) / 4, (number + 3) / 4));
+        JPanel browserPanel = new JPanel(new GridLayout((pageSize + 3) / 4, (pageSize + 3) / 4));
 
         splitPane.add(browserPanel);
 
@@ -172,55 +169,18 @@ public class PickPageRenderPanel extends JPanel {
             browserPanel.add(browsers[i].getComponent());
         }
 
-        JPanel devPanel = new JPanel(new BorderLayout());
+        devSplitPanel.add(new JBScrollPane(configTextEditor));
+        devSplitPanel.add(new JBScrollPane(resultTextEditor));
+        adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
-        if (showDev) {
-            devSplitPanel.add(devPanel);
-
-            configAndResultPanel.add(new JBScrollPane(configTextEditor));
-            configAndResultPanel.add(new JBScrollPane(resultTextEditor));
-
-            devSplitPanel.add(configAndResultPanel);
-
-            adjustSplitPanel(devSplitPanel, devSplitPanelRatio);
-            adjustSplitPanel(configAndResultPanel, configAndResultPanelRatio);
-
-            buildDevPanel(devPanel);
-        } else {
-            devSplitPanel.add(new JBScrollPane(configTextEditor));
-            devSplitPanel.add(new JBScrollPane(resultTextEditor));
-            adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
-        }
 
         // toolbar
         JPanel toolBar = new JPanel();
         add(toolBar, BorderLayout.NORTH);
 
-        JButton refreshButton = new JButton("刷新");
-        toolBar.add(refreshButton);
-        refreshButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-                render();
-
-                if (showDev) {
-                    buildDevPanel(devPanel);
-                    adjustSplitPanel(devSplitPanel, devSplitPanelRatio);
-                    adjustSplitPanel(configAndResultPanel, configAndResultPanelRatio);
-                } else {
-                    adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
-                }
-
-                adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
-
-                resultTextEditor.setText("{\n}");
-            }
-        });
-
         JLabel selectorLabel = new JLabel("selector:");
         JTextField selectorText = new JTextField(20);
+
 
         toolBar.add(selectorLabel);
         toolBar.add(selectorText);
@@ -256,6 +216,54 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
+        JLabel pageNoLabel = new JLabel("PageNo:");
+        pageNoText = new JTextField(pageNo + "", 5);
+
+        toolBar.add(pageNoLabel);
+        toolBar.add(pageNoText);
+
+        JLabel pageSizeLabel = new JLabel("PageSize:");
+        pageSizeText = new JTextField(pageSize + "", 4);
+
+        toolBar.add(pageSizeLabel);
+        toolBar.add(pageSizeText);
+
+        JButton refreshButton = new JButton("刷新");
+        toolBar.add(refreshButton);
+        refreshButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                render();
+
+                adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
+
+                adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
+            }
+        });
+
+
+        JButton nextPageButton = new JButton("下一页");
+        toolBar.add(nextPageButton);
+
+        nextPageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int pageNo = Integer.parseInt(pageNoText.getText());
+                int pageSize = Integer.parseInt(pageSizeText.getText());
+                if (pageNo * pageSize + pageSize > urls.size() + pageSize - 1) {
+                    Messages.showErrorDialog("超过最大页数！", "Error");
+                    return;
+                }
+
+                pageNoText.setText((pageNo + 1) + "");
+
+                render();
+
+            }
+        });
+
         JButton fetchDataButton = new JButton("采集数据");
         toolBar.add(fetchDataButton);
 
@@ -266,7 +274,16 @@ public class PickPageRenderPanel extends JPanel {
                 String configText = configTextEditor.getText();
                 JSONObject fetchConfig = JSONObject.parse(configText).getJSONObject("selector");
 
-                for (JBCefBrowser browser : browsers) {
+                JSONArray list = new JSONArray(browsers.length);
+                int pageNo = Integer.parseInt(pageNoText.getText());
+                int pageSize = Integer.parseInt(pageSizeText.getText());
+                java.util.List<String> listData = new ArrayList<>();
+                for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
+                    listData.add(urls.get(i).toString());
+                }
+
+                for (int i = 0; i < listData.size(); i++) {
+                    JBCefBrowser browser = browsers[i];
                     JSONObject result = new JSONObject();
                     for (String key : fetchConfig.keySet()) {
 
@@ -282,12 +299,8 @@ public class PickPageRenderPanel extends JPanel {
                                 @Override
                                 public void run() {
                                     JSONObject fetchData = JSONObject.parse(resultTextEditor.getText());
-                                    JSONArray list = fetchData.getJSONArray("list");
-                                    if (list == null) {
-                                        list = new JSONArray();
-                                        fetchData.put("list", list);
-                                    }
                                     list.add(result);
+                                    fetchData.put("p" + pageNo, list);
                                     resultTextEditor.setText(toJsonTextWithFormat(fetchData));
                                 }
                             });
@@ -313,89 +326,24 @@ public class PickPageRenderPanel extends JPanel {
         });
 
 
-        JButton executeButton = new JButton("执行");
-        toolBar.add(executeButton);
+        adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
-        executeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-                JSONObject config = JSONObject.parse(configTextEditor.getText());
-                JSONObject input = config.getJSONObject("input");
-                JSONObject script = config.getJSONObject("script");
-                if (input == null) {
-                    input = new JSONObject();
-                }
-                if (script == null) {
-                    script = new JSONObject();
-                }
-                execute(input, script);
-
-            }
-        });
-    }
-
-    private void execute(JSONObject input, JSONObject script) {
-        try {
-
-            FitJcefManager.setResultTextEditor(resultTextEditor);
-            FitJcefManager.setBrowsers(browsers);
-
-            implementIdeOperator(null, project);
-
-            ServerJsonExecuteNode.setCurrentServerFilePath(virtualFile.getPath());
-            JsonPackageExecuteNode.addImportPath(ServerJsonExecuteNode.getServerFileDir());
-//
-            JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(virtualFile.getPath()));
-//            contextParam.putAll(newContextParam);
-            input.putAll(newContextParam);
-//            input = parseRealFormData(input);
-            //是否同步执行
-//            if (isSynchronized) {
-//                String result = executeCode(input, script, contextParam);
-//                JSONObject output = JSONObject.parse(result);
-//                output = buildOutputData(outputDefine, output);
-//                setOutputJson(output);
-//            } else {
-            JSONObject finalInput = input;
-//            new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
-            String result = executeCode(finalInput, script, newContextParam);
-            JSONObject output = JSONObject.parse(result);
-            resultTextEditor.setText(toJsonTextWithFormat(output));
-//            })).start();
-//            }
-        } catch (Exception e) {
-            Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
-        }
-    }
-
-    private void buildDevPanel(JPanel devPanel) {
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                CefBrowser devTools = browsers[0].getCefBrowser().getDevTools();
-//                JBCefBrowser devToolsBrowser = JBCefBrowser.createBuilder()
-//                        .setCefBrowser(devTools)
-//                        .setClient(browser.getJBCefClient())
-//                        .build();
-//                devToolsBrowser.getComponent().setVisible(true);
-
-                devPanel.removeAll();
-                devPanel.add(devTools.getUIComponent());
-
-            }
-        }.start();
+        adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
     }
 
     //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
     void render() {
-        for (int i = 0; i < number && i < urls.length; i++) {
-            browsers[i].loadURL(urls[i]);
+
+        //获取分页数据
+        int pageNo = Integer.parseInt(pageNoText.getText());
+        int pageSize = Integer.parseInt(pageSizeText.getText());
+        java.util.List<String> listData = new ArrayList<>();
+        for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
+            listData.add(urls.get(i).toString());
+        }
+
+        for (int i = 0; i < pageSize && i < listData.size(); i++) {
+            browsers[i].loadURL(listData.get(i));
         }
     }
 
