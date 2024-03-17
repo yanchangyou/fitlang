@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorState;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.Nls;
@@ -16,13 +17,16 @@ import java.beans.PropertyChangeListener;
 
 public class WebPageRender implements FileEditor {
 
+    Project project;
+
     WebPageRenderPanel panel;
 
     VirtualFile file;
 
     String url = "https://www.baidu.com/";
 
-    public WebPageRender(@NotNull VirtualFile virtualFile) {
+    public WebPageRender(@NotNull VirtualFile virtualFile, Project project) {
+        this.project = project;
         file = virtualFile;
         String path = file.getPath();
 
@@ -36,7 +40,7 @@ public class WebPageRender implements FileEditor {
         if (pageDefine.containsKey("url")) {
             url = pageDefine.getString("url");
         }
-        panel = new WebPageRenderPanel(pageDefine, virtualFile);
+        panel = new WebPageRenderPanel(pageDefine, virtualFile, project);
     }
 
     @Override

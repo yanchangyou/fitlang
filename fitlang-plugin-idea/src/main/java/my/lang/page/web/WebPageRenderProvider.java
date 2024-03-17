@@ -24,7 +24,7 @@ public class WebPageRenderProvider implements FileEditorProvider, DumbAware {
 
     @Override
     public @NotNull FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        webPageRender = new WebPageRender(virtualFile);
+        webPageRender = new WebPageRender(virtualFile, project);
         return webPageRender;
     }
 

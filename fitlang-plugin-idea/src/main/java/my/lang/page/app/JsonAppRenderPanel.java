@@ -28,6 +28,7 @@ import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
 import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.buildOutputData;
 import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.parseRealFormData;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
+import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
 
 public class JsonAppRenderPanel extends JPanel {
 
@@ -747,18 +748,6 @@ public class JsonAppRenderPanel extends JPanel {
         return inputOutputSplitPane;
     }
 
-    private static void adjustSplitPanel(JSplitPane splitPane, double splitRatio) {
-        new Thread(() -> {
-            for (int i = 0; i < 4; i++) {
-                try {
-                    Thread.sleep(500L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                splitPane.setDividerLocation(splitRatio);
-            }
-        }).start();
-    }
 
     public void dispose() {
         inputEditor.dispose();
