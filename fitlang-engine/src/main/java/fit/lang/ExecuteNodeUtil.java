@@ -8,6 +8,10 @@ import fit.lang.common.AbstractExecuteNode;
 import fit.lang.define.ExecuteNode;
 import fit.lang.plugin.json.JsonDynamicFlowExecuteEngine;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -204,4 +208,23 @@ public class ExecuteNodeUtil {
         return userHome;
     }
 
+    /**
+     * 获取剪贴板内容
+     *
+     * @return
+     */
+    public static String getClipboard() {
+
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        Transferable contentTransferable = clipboard.getContents(null);
+        if (contentTransferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            try {
+                return (String) contentTransferable.getTransferData(DataFlavor.stringFlavor);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return "";
+    }
 }

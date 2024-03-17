@@ -2,7 +2,6 @@ package my.lang.page.web;
 
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONWriter;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -13,13 +12,17 @@ import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
 import com.intellij.ui.jcef.JBCefJSQuery;
+import fit.lang.ExecuteNodeUtil;
 import org.cef.browser.CefBrowser;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
 
 public class WebPageRenderPanel extends JPanel {
@@ -39,7 +42,7 @@ public class WebPageRenderPanel extends JPanel {
     JBCefBrowser browser;
 
     double devAndBrowserSplitRatio = 0.35;
-    double devSplitPanelRatio = 0.6;
+    double devSplitPanelRatio = 0.65;
     double configAndResultPanelRatio = 0.5;
 
     LanguageTextField configTextEditor;
@@ -113,8 +116,8 @@ public class WebPageRenderPanel extends JPanel {
         configTextEditor.setOneLineMode(false);
         resultTextEditor.setOneLineMode(false);
 
-        configTextEditor.setText(fetchSelector.toJSONString(JSONWriter.Feature.PrettyFormat));
-        resultTextEditor.setText(fetchResult.toJSONString(JSONWriter.Feature.PrettyFormat));
+        configTextEditor.setText(toJsonTextWithFormat(fetchSelector));
+        resultTextEditor.setText(toJsonTextWithFormat(fetchResult));
 
         JSplitPane configAndResultPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
@@ -159,6 +162,39 @@ public class WebPageRenderPanel extends JPanel {
             }
         });
 
+        JLabel selectorLabel = new JLabel("selector:");
+        JTextField selectorText = new JTextField(20);
+
+        toolBar.add(selectorLabel);
+        toolBar.add(selectorText);
+
+        selectorText.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                String selector = ExecuteNodeUtil.getClipboard();
+                if (selector.contains("body")
+                        || selector.contains("#")
+                        || selector.contains(">")) {
+                    selectorText.setText(selector);
+                }
+            }
+        });
+
+        JButton addSelectorButton = new JButton("添加采集");
+        toolBar.add(addSelectorButton);
+
+        addSelectorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String selector = selectorText.getText();
+                String key = "data" + System.currentTimeMillis() % 1000;
+                JSONObject config = JSONObject.parse(configTextEditor.getText());
+                config.put(key, selector);
+
+                configTextEditor.setText(toJsonTextWithFormat(config));
+            }
+        });
+
         JButton fetchDataButton = new JButton("采集数据");
         toolBar.add(fetchDataButton);
 
@@ -182,7 +218,7 @@ public class WebPageRenderPanel extends JPanel {
                         ApplicationManager.getApplication().invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                resultTextEditor.setText(result.toString(JSONWriter.Feature.PrettyFormat));
+                                resultTextEditor.setText(toJsonTextWithFormat(result));
                             }
                         });
 
