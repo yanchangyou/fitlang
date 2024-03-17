@@ -15,6 +15,7 @@ public class FitJcefManager {
 
     static LanguageTextField resultTextEditor;
 
+    static JBCefBrowser[] browsers;
 
     static JBCefBrowser browser;
 
@@ -24,6 +25,14 @@ public class FitJcefManager {
 
     public static void setResultTextEditor(LanguageTextField resultTextEditor) {
         FitJcefManager.resultTextEditor = resultTextEditor;
+    }
+
+    public static JBCefBrowser[] getBrowsers() {
+        return browsers;
+    }
+
+    public static void setBrowsers(JBCefBrowser[] browsers) {
+        FitJcefManager.browsers = browsers;
     }
 
     public static JBCefBrowser getBrowser() {
@@ -51,5 +60,12 @@ public class FitJcefManager {
         ApplicationManager.getApplication().invokeLater(() -> {
             resultTextEditor.setText(toJsonTextWithFormat(resultJson));
         });
+    }
+
+    public static void open(String[] urls) {
+
+        for (int i = 0; i < browsers.length && i < urls.length; i++) {
+            browsers[i].loadURL(urls[i]);
+        }
     }
 }
