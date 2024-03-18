@@ -159,7 +159,7 @@ public class PickPageRenderPanel extends JPanel {
 
         splitPane.add(devSplitPanel);
 
-        JPanel browserPanel = new JPanel(new GridLayout((pageSize + 3) / 4, (pageSize + 3) / 4));
+        JPanel browserPanel = new JPanel(new GridLayout((pageSize + 3) / 4, (pageSize + 3) / 4, 3, 3));
 
         splitPane.add(browserPanel);
 
@@ -362,8 +362,12 @@ public class PickPageRenderPanel extends JPanel {
             listData.add(urls.get(i).toString());
         }
 
-        for (int i = 0; i < pageSize && i < listData.size(); i++) {
-            browsers[i].loadURL(listData.get(i));
+        for (int i = 0; i < pageSize; i++) {
+            if (i < listData.size()) {
+                browsers[i].loadURL(listData.get(i));
+            } else {
+                browsers[i].loadHTML("<center><h2>ⓧ</h2></center>");
+            }
         }
     }
 
