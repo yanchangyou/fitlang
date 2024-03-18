@@ -122,8 +122,6 @@ public class PickPageRenderPanel extends JPanel {
         init();
 
         render();
-
-
     }
 
     private VirtualFile getDataFileOrCreate() {
@@ -227,6 +225,25 @@ public class PickPageRenderPanel extends JPanel {
 
         toolBar.add(pageSizeLabel);
         toolBar.add(pageSizeText);
+
+        JButton prePageButton = new JButton("上一页");
+        toolBar.add(prePageButton);
+
+        prePageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int pageNo = Integer.parseInt(pageNoText.getText());
+                if (pageNo == 1) {
+                    Messages.showErrorDialog("已到第1页！", "Error");
+                    return;
+                }
+
+                pageNoText.setText((pageNo - 1) + "");
+
+                render();
+
+            }
+        });
 
         JButton refreshButton = new JButton("刷新");
         toolBar.add(refreshButton);
