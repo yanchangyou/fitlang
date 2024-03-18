@@ -187,9 +187,12 @@ public class PickPageRenderPanel extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 String selector = ExecuteNodeUtil.getClipboard();
-                if (selector.contains("body")
+                if ((selector.contains("body")
                         || selector.contains("#")
-                        || selector.contains(">")) {
+                        || selector.contains(">"))
+                        && !selector.contains("!")
+                        && !selector.contains("{")
+                        && !selector.contains("}")) {
                     selectorText.setText(selector);
                 }
             }
