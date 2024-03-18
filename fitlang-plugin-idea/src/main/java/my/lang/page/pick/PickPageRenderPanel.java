@@ -47,6 +47,7 @@ public class PickPageRenderPanel extends JPanel {
 
     JTextField pageNoText;
     JTextField pageSizeText;
+    JTextField secondText;
 
     JBCefBrowser[] browsers;
 
@@ -177,7 +178,7 @@ public class PickPageRenderPanel extends JPanel {
         add(toolBar, BorderLayout.NORTH);
 
         JLabel selectorLabel = new JLabel("selector:");
-        JTextField selectorText = new JTextField(20);
+        JTextField selectorText = new JTextField(10);
 
 
         toolBar.add(selectorLabel);
@@ -218,13 +219,13 @@ public class PickPageRenderPanel extends JPanel {
         });
 
         JLabel pageNoLabel = new JLabel("PageNo:");
-        pageNoText = new JTextField(pageNo + "", 5);
+        pageNoText = new JTextField(pageNo + "", 4);
 
         toolBar.add(pageNoLabel);
         toolBar.add(pageNoText);
 
         JLabel pageSizeLabel = new JLabel("PageSize:");
-        pageSizeText = new JTextField(pageSize + "", 4);
+        pageSizeText = new JTextField(pageSize + "", 3);
 
         toolBar.add(pageSizeLabel);
         toolBar.add(pageSizeText);
@@ -341,6 +342,45 @@ public class PickPageRenderPanel extends JPanel {
                                 "";
                         browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
                     }
+                }
+            }
+        });
+
+        JLabel secondLabel = new JLabel("Second:");
+        secondText = new JTextField("1", 4);
+
+        toolBar.add(secondLabel);
+        toolBar.add(secondText);
+
+        JButton continuePickButton = new JButton("连续采集");
+        toolBar.add(continuePickButton);
+
+        continuePickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int pageSize = Integer.parseInt(pageSizeText.getText());
+                int totalPageNum = (urls.size() + pageSize - 1) / pageSize;
+
+                double second = Double.parseDouble(secondText.getText());
+
+                fetchDataButton.doClick();
+
+                final int[] index = {0};
+                for (int i = pageNo - 1; i < totalPageNum; i++) {
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                index[0]++;
+                                Thread.sleep((long) (index[0] * second * 1000));
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            fetchDataButton.doClick();
+                            nextPageButton.doClick();
+                        }
+                    }.start();
+
                 }
             }
         });
