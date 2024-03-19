@@ -1,6 +1,5 @@
 package my.lang.page.pick;
 
-import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
@@ -37,18 +36,14 @@ public class PickPageRenderPanel extends JPanel {
 
     JSONObject pageDefine;
 
-    Integer pageSize;
-    Integer pageNo;
-
-    JSONArray urls;
-
-    JSONObject fetchConfig;
+    JSONObject config;
     JSONObject fetchResult;
 
     JTextField pageNoText;
     JTextField pageSizeText;
     JTextField secondText;
 
+    JPanel browserPanel;
     JBCefBrowser[] browsers;
 
     double devAndBrowserSplitRatio = 0.35;
@@ -58,39 +53,31 @@ public class PickPageRenderPanel extends JPanel {
     LanguageTextField configTextEditor;
     LanguageTextField resultTextEditor;
 
+    JSplitPane devSplitPanel;
+    JSplitPane splitPane;
+
     public PickPageRenderPanel(JSONObject pickDefine, VirtualFile virtualFile, Project project) {
         super(true);
         this.project = project;
 
+        setLayout(new BorderLayout());
+
         this.pageDefine = pickDefine;
         this.virtualFile = virtualFile;
+
 
         this.script = pickDefine.getJSONObject("script");
         if (script == null) {
             script = JSONObject.parse("{'uni':'hello'}");
         }
 
-        fetchConfig = pickDefine.getJSONObject("fetchConfig");
-        if (fetchConfig == null) {
-            fetchConfig = new JSONObject();
+        config = pickDefine.getJSONObject("config");
+        if (config == null) {
+            config = new JSONObject();
         }
-        if (!fetchConfig.containsKey("selector")) {
-            fetchConfig.put("selector", new JSONObject());
+        if (!config.containsKey("selectorConfig")) {
+            config.put("selectorConfig", new JSONObject());
         }
-
-        pageNo = fetchConfig.getInteger("pageNo");
-        if (pageNo == null) {
-            pageNo = 1;
-        }
-        pageSize = fetchConfig.getInteger("pageSize");
-        if (pageSize == null) {
-            pageSize = 4;
-        }
-        urls = fetchConfig.getJSONArray("urls");
-        if (urls == null) {
-            urls = new JSONArray();
-        }
-
 
         this.fetchResult = pickDefine.getJSONObject("fetchResult");
         if (fetchResult == null) {
@@ -103,64 +90,46 @@ public class PickPageRenderPanel extends JPanel {
             pickDefine.put("ui", uiConfig);
         }
 
-        Integer poolSize = uiConfig.getInteger("poolSize");
-        if (poolSize == null) {
-            poolSize = 1000;
-        }
-
         devAndBrowserSplitRatio = uiConfig.getDouble("devAndBrowserSplitRatio") != null ? uiConfig.getDouble("devAndBrowserSplitRatio") : devAndBrowserSplitRatio;
         devSplitPanelRatio = uiConfig.getDouble("devSplitPanelRatio") != null ? uiConfig.getDouble("devSplitPanelRatio") : devSplitPanelRatio;
         configAndResultPanelRatio = uiConfig.getDouble("configAndResultPanelRatio") != null ? uiConfig.getDouble("configAndResultPanelRatio") : configAndResultPanelRatio;
 
-        browsers = new JBCefBrowser[pageSize];
+        PickConfig pickConfig = PickConfig.parse(config);
+
+        init(pickConfig);
+
+        render(pickConfig);
+    }
+
+    void init(PickConfig pickConfig) {
+
+        JSONArray urls = pickConfig.getUrls();
+
+        Integer pageSize = pickConfig.getPageSize();
+        Integer pageNo = pickConfig.getPageNo();
+
+        browsers = new JBCefBrowser[pickConfig.getGridTotal()];
         for (int i = 0; i < browsers.length; i++) {
             browsers[i] = new JBCefBrowser();
-            browsers[i].getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, poolSize);
+            browsers[i].getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, pickConfig.getPoolSize());
         }
 
-        setLayout(new BorderLayout());
-
-        init();
-
-        render();
-    }
-
-    private VirtualFile getDataFileOrCreate() {
-        String name = virtualFile.getName();
-        String dataName = name.replace(".page.", ".");
-        VirtualFile dataFile = virtualFile.getParent().findChild(dataName);
-        if (dataFile == null || !dataFile.exists()) {
-            FileUtil.writeUtf8String("{}", virtualFile.getPath().replace(".page.", "."));
-            dataFile = virtualFile.getParent().findChild(dataName);
-        }
-        return dataFile;
-    }
-
-    String readData() {
-        VirtualFile dataFile = getDataFileOrCreate();
-        if (dataFile != null) {
-            return FileUtil.readUtf8String(dataFile.getPath());
-        }
-        return "";
-    }
-
-    void init() {
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         add(splitPane, BorderLayout.CENTER);
 
-        JSplitPane devSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        devSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
         configTextEditor = new LanguageTextField(JsonLanguage.INSTANCE, project, "{}");
         resultTextEditor = new LanguageTextField(JsonLanguage.INSTANCE, project, "{}");
         configTextEditor.setOneLineMode(false);
         resultTextEditor.setOneLineMode(false);
 
-        configTextEditor.setText(toJsonTextWithFormat(fetchConfig));
+        configTextEditor.setText(toJsonTextWithFormat(config));
         resultTextEditor.setText(toJsonTextWithFormat(fetchResult));
 
         splitPane.add(devSplitPanel);
 
-        JPanel browserPanel = new JPanel(new GridLayout((pageSize + 3) / 4, (pageSize + 3) / 4, 3, 3));
+        browserPanel = new JPanel(new GridLayout(pickConfig.getRows(), pickConfig.getColumns(), 3, 3));
 
         splitPane.add(browserPanel);
 
@@ -172,10 +141,20 @@ public class PickPageRenderPanel extends JPanel {
         devSplitPanel.add(new JBScrollPane(resultTextEditor));
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
-
         // toolbar
         JPanel toolBar = new JPanel();
         add(toolBar, BorderLayout.NORTH);
+
+        JButton initButton = new JButton("初始化");
+        toolBar.add(initButton);
+
+        initButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PickConfig pickConfig = parsePickConfig();
+                reset(pickConfig);
+            }
+        });
 
         JLabel selectorLabel = new JLabel("selector:");
         JTextField selectorText = new JTextField(10);
@@ -207,14 +186,13 @@ public class PickPageRenderPanel extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String selector = selectorText.getText();
                 String key = "data" + System.currentTimeMillis() % 1000;
-                JSONObject config = JSONObject.parse(configTextEditor.getText());
-                JSONObject fetchSelector = config.getJSONObject("selector");
-                if (fetchSelector == null) {
-                    fetchSelector = new JSONObject();
-                }
+                PickConfig pickConfig = parsePickConfig();
+
+                JSONObject fetchSelector = pickConfig.getSelectorConfig();
+
                 fetchSelector.put(key, selector);
 
-                configTextEditor.setText(toJsonTextWithFormat(config));
+                configTextEditor.setText(toJsonTextWithFormat(JSONObject.parseObject(JSONObject.toJSONString(pickConfig))));
             }
         });
 
@@ -243,8 +221,8 @@ public class PickPageRenderPanel extends JPanel {
                 }
 
                 pageNoText.setText((pageNo - 1) + "");
-
-                render();
+                PickConfig pickConfig = parsePickConfig();
+                render(pickConfig);
 
             }
         });
@@ -255,15 +233,14 @@ public class PickPageRenderPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                render();
+                PickConfig pickConfig = parsePickConfig();
+                render(pickConfig);
 
                 adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
                 adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
             }
         });
-
 
         JButton nextPageButton = new JButton("下一页");
         toolBar.add(nextPageButton);
@@ -280,7 +257,8 @@ public class PickPageRenderPanel extends JPanel {
 
                 pageNoText.setText((pageNo + 1) + "");
 
-                render();
+                PickConfig pickConfig = parsePickConfig();
+                render(pickConfig);
 
             }
         });
@@ -292,12 +270,14 @@ public class PickPageRenderPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                String configText = configTextEditor.getText();
-                JSONObject fetchConfig = JSONObject.parse(configText).getJSONObject("selector");
+                PickConfig pickConfig = parsePickConfig();
+                JSONArray urls = pickConfig.getUrls();
+                JSONObject selectorConfig = pickConfig.getSelectorConfig();
 
+                JBCefBrowser[] browsers = getBrowsers();
                 JSONArray list = new JSONArray(browsers.length);
-                int pageNo = Integer.parseInt(pageNoText.getText());
-                int pageSize = Integer.parseInt(pageSizeText.getText());
+                int pageNo = pickConfig.getPageNo();
+                int pageSize = pickConfig.getPageSize();
                 java.util.List<String> listData = new ArrayList<>();
                 for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
                     listData.add(urls.get(i).toString());
@@ -306,9 +286,9 @@ public class PickPageRenderPanel extends JPanel {
                 for (int i = 0; i < listData.size(); i++) {
                     JBCefBrowser browser = browsers[i];
                     JSONObject result = new JSONObject();
-                    for (String key : fetchConfig.keySet()) {
+                    for (String key : selectorConfig.keySet()) {
 
-                        String selector = fetchConfig.getString(key);
+                        String selector = selectorConfig.getString(key);
 
                         JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
@@ -334,11 +314,10 @@ public class PickPageRenderPanel extends JPanel {
                         String url = browser.getCefBrowser().getURL();
                         String jsCode = "" +
                                 "var fetchDom = document.querySelector('" + selector + "');\n" +
-                                "   var fetchData = JSON.stringify({\n" +
-                                "       '" + key + "': (fetchDom==null?'':fetchDom.textContent),\n" +
-                                "       'url': '" + url + "',\n" +
-//                                "       'value': '" + value + "',\n" +
-                                "    });\n" + "" + jsInject +
+                                "var fetchData = JSON.stringify({\n" +
+                                "    '" + key + "': (fetchDom==null?'':fetchDom.textContent),\n" +
+                                "    'url': '" + url + "',\n" +
+                                "});\n" + "" + jsInject +
                                 "";
                         browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
                     }
@@ -385,18 +364,61 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
+        JButton debugButton = new JButton("调试");
+        toolBar.add(debugButton);
+
+        debugButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                browsers[0].openDevtools();
+            }
+        });
+
 
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
         adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
     }
 
-    //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
-    void render() {
+    private PickConfig parsePickConfig() {
+        String configText = configTextEditor.getText();
+        PickConfig pickConfig = JSONObject.parseObject(configText, PickConfig.class);
+        return pickConfig;
+    }
 
+    void reset(PickConfig pickConfig) {
+
+        pageNoText.setText(pickConfig.getPageNo().toString());
+        pageSizeText.setText(pickConfig.getPageSize().toString());
+        secondText.setText(pickConfig.getSecond() + "");
+
+        dispose();
+
+        browsers = new JBCefBrowser[pickConfig.getGridTotal()];
+        for (int i = 0; i < browsers.length; i++) {
+            browsers[i] = new JBCefBrowser();
+            browsers[i].getJBCefClient().setProperty(JBCefClient.Properties.JS_QUERY_POOL_SIZE, pickConfig.getPoolSize());
+        }
+
+        browserPanel.setLayout(new GridLayout(pickConfig.getRows(), pickConfig.getColumns(), 3, 3));
+        browserPanel.removeAll();
+        for (int i = 0; i < browsers.length; i++) {
+            browserPanel.add(browsers[i].getComponent());
+        }
+
+        render(pickConfig);
+
+        adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
+        adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
+    }
+
+    //http://www.hzhcontrols.com/new-1696665.html  JCEF中js与java交互、js与java相互调用
+    void render(PickConfig pickConfig) {
+
+        JSONArray urls = pickConfig.getUrls();
         //获取分页数据
-        int pageNo = Integer.parseInt(pageNoText.getText());
-        int pageSize = Integer.parseInt(pageSizeText.getText());
+        int pageNo = pickConfig.getPageNo();
+        int pageSize = pickConfig.getPageSize();
         java.util.List<String> listData = new ArrayList<>();
         for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
             listData.add(urls.get(i).toString());
@@ -415,5 +437,9 @@ public class PickPageRenderPanel extends JPanel {
         for (JBCefBrowser browser : browsers) {
             browser.dispose();
         }
+    }
+
+    public JBCefBrowser[] getBrowsers() {
+        return browsers;
     }
 }
