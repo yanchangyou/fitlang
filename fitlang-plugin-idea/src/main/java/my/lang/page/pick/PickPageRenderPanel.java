@@ -204,6 +204,7 @@ public class PickPageRenderPanel extends JPanel {
 
         JLabel pageSizeLabel = new JLabel("PageSize:");
         pageSizeText = new JTextField(pageSize + "", 3);
+        pageSizeText.setEditable(false);
 
         toolBar.add(pageSizeLabel);
         toolBar.add(pageSizeText);
@@ -222,6 +223,8 @@ public class PickPageRenderPanel extends JPanel {
 
                 pageNoText.setText((pageNo - 1) + "");
                 PickConfig pickConfig = parsePickConfig();
+                pickConfig.setPageNo(pageNo - 1);
+
                 render(pickConfig);
 
             }
@@ -255,9 +258,10 @@ public class PickPageRenderPanel extends JPanel {
                     return;
                 }
 
+                PickConfig pickConfig = parsePickConfig();
+                pickConfig.setPageNo(pageNo + 1);
                 pageNoText.setText((pageNo + 1) + "");
 
-                PickConfig pickConfig = parsePickConfig();
                 render(pickConfig);
 
             }
@@ -275,7 +279,6 @@ public class PickPageRenderPanel extends JPanel {
                 JSONObject selectorConfig = pickConfig.getSelectorConfig();
 
                 JBCefBrowser[] browsers = getBrowsers();
-                JSONArray list = new JSONArray(browsers.length);
                 int pageNo = pickConfig.getPageNo();
                 int pageSize = pickConfig.getPageSize();
                 java.util.List<String> listData = new ArrayList<>();
@@ -285,42 +288,39 @@ public class PickPageRenderPanel extends JPanel {
 
                 for (int i = 0; i < listData.size(); i++) {
                     JBCefBrowser browser = browsers[i];
-                    JSONObject result = new JSONObject();
-                    for (String key : selectorConfig.keySet()) {
 
-                        String selector = selectorConfig.getString(key);
+                    JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
-                        JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+                    jsQuery.addHandler((data) -> {
 
-                        jsQuery.addHandler((data) -> {
-                            JSONObject fetchData = JSONObject.parse(data);
-                            result.putAll(fetchData);
-
-                            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    JSONObject fetchData = JSONObject.parse(resultTextEditor.getText());
-                                    list.add(result);
-                                    fetchData.put("p" + pageNo, list);
-                                    resultTextEditor.setText(toJsonTextWithFormat(fetchData));
-                                }
-                            });
-
-                            return new JBCefJSQuery.Response(data) {
-                            };
+                        ApplicationManager.getApplication().invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONObject thisFetchData = JSONObject.parse(data);
+                                JSONObject fetchData = JSONObject.parse(resultTextEditor.getText());
+                                fetchData.putAll(thisFetchData);
+                                resultTextEditor.setText(toJsonTextWithFormat(fetchData));
+                            }
                         });
-                        //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
-                        String jsInject = jsQuery.inject("fetchData");
-                        String url = browser.getCefBrowser().getURL();
-                        String jsCode = "" +
-                                "var fetchDom = document.querySelector('" + selector + "');\n" +
-                                "var fetchData = JSON.stringify({\n" +
-                                "    '" + key + "': (fetchDom==null?'':fetchDom.textContent),\n" +
-                                "    'url': '" + url + "',\n" +
-                                "});\n" + "" + jsInject +
-                                "";
-                        browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
-                    }
+
+                        return new JBCefJSQuery.Response(data) {
+                        };
+                    });
+                    //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
+                    String jsInject = jsQuery.inject("thisFetchData");
+                    String url = browser.getCefBrowser().getURL();
+                    String jsCode = "\n" +
+                            "var selectorConfig = " + selectorConfig + ";\n" +
+                            "var fetchData = {};\n" +
+                            "for(var key in selectorConfig) {" +
+                            "   var fetchDom = document.querySelector(selectorConfig[key]);\n" +
+                            "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent);\n" +
+                            "}\n" +
+                            "var thisFetchData= JSON.stringify({'" + url + "':fetchData});\n" +
+                            "console.info(thisFetchData);\n" +
+                            "\n" + jsInject +
+                            "\n";
+                    browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
                 }
             }
         });
@@ -383,6 +383,11 @@ public class PickPageRenderPanel extends JPanel {
     private PickConfig parsePickConfig() {
         String configText = configTextEditor.getText();
         PickConfig pickConfig = JSONObject.parseObject(configText, PickConfig.class);
+        int pageNo = Integer.parseInt(pageNoText.getText());
+        pickConfig.setPageNo(pageNo);
+        double second = Double.parseDouble(secondText.getText());
+        pickConfig.setSecond(second);
+
         return pickConfig;
     }
 
