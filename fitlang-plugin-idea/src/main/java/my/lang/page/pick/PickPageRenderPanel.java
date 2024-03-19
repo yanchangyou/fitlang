@@ -1,5 +1,6 @@
 package my.lang.page.pick;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
@@ -157,7 +158,7 @@ public class PickPageRenderPanel extends JPanel {
         });
 
         JLabel selectorLabel = new JLabel("selector:");
-        JTextField selectorText = new JTextField(10);
+        JTextField selectorText = new JTextField(6);
 
 
         toolBar.add(selectorLabel);
@@ -206,8 +207,8 @@ public class PickPageRenderPanel extends JPanel {
         pageSizeText = new JTextField(pageSize + "", 3);
         pageSizeText.setEditable(false);
 
-        toolBar.add(pageSizeLabel);
-        toolBar.add(pageSizeText);
+//        toolBar.add(pageSizeLabel);
+//        toolBar.add(pageSizeText);
 
         JButton prePageButton = new JButton("上一页");
         toolBar.add(prePageButton);
@@ -314,7 +315,7 @@ public class PickPageRenderPanel extends JPanel {
                             "var fetchData = {};\n" +
                             "for(var key in selectorConfig) {" +
                             "   var fetchDom = document.querySelector(selectorConfig[key]);\n" +
-                            "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent);\n" +
+                            "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent.trim());\n" +
                             "}\n" +
                             "var thisFetchData= JSON.stringify({'" + url + "':fetchData});\n" +
                             "console.info(thisFetchData);\n" +
@@ -326,7 +327,7 @@ public class PickPageRenderPanel extends JPanel {
         });
 
         JLabel secondLabel = new JLabel("Second:");
-        secondText = new JTextField("1", 4);
+        secondText = new JTextField("1", 2);
 
         toolBar.add(secondLabel);
         toolBar.add(secondText);
@@ -342,25 +343,27 @@ public class PickPageRenderPanel extends JPanel {
 
                 double second = Double.parseDouble(secondText.getText());
 
-                fetchDataButton.doClick();
-
-                final int[] index = {0};
-                for (int i = pageNo - 1; i < totalPageNum; i++) {
-                    new Thread() {
-                        @Override
-                        public void run() {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        int index = 0;
+                        for (int i = pageNo - 1; i < totalPageNum; i++) {
+                            fetchDataButton.doClick();
                             try {
-                                index[0]++;
-                                Thread.sleep((long) (index[0] * second * 1000));
+                                Thread.sleep((long) (index++ * second * 1000));
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
-                            fetchDataButton.doClick();
-                            nextPageButton.doClick();
+                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    nextPageButton.doClick();
+                                }
+                            });
                         }
-                    }.start();
-
-                }
+                        fetchDataButton.doClick();
+                    }
+                }.start();
             }
         });
 
@@ -383,8 +386,11 @@ public class PickPageRenderPanel extends JPanel {
     private PickConfig parsePickConfig() {
         String configText = configTextEditor.getText();
         PickConfig pickConfig = JSONObject.parseObject(configText, PickConfig.class);
-        int pageNo = Integer.parseInt(pageNoText.getText());
-        pickConfig.setPageNo(pageNo);
+        String page = pageNoText.getText();
+        if (StrUtil.isNotBlank(page)) {
+            int pageNo = Integer.parseInt(pageNoText.getText());
+            pickConfig.setPageNo(pageNo);
+        }
         double second = Double.parseDouble(secondText.getText());
         pickConfig.setSecond(second);
 
