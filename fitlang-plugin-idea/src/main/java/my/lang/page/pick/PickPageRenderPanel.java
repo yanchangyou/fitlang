@@ -289,6 +289,9 @@ public class PickPageRenderPanel extends JPanel {
 
                 for (int i = 0; i < listData.size(); i++) {
                     JBCefBrowser browser = browsers[i];
+                    if (browser.getCefBrowser().getURL().contains("jbcefbrowser")) {
+                        continue;
+                    }
 
                     JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
 
@@ -327,7 +330,7 @@ public class PickPageRenderPanel extends JPanel {
         });
 
         JLabel secondLabel = new JLabel("Second:");
-        secondText = new JTextField("1", 2);
+        secondText = new JTextField(pickConfig.getSecond().toString(), 4);
 
         toolBar.add(secondLabel);
         toolBar.add(secondText);
