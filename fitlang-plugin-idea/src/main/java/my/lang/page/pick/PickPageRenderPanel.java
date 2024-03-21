@@ -320,6 +320,15 @@ public class PickPageRenderPanel extends JPanel {
 
             private void dataToResult(String data, PickConfig pickConfig) {
                 JSONObject thisFetchData = JSONObject.parse(data);
+                for (String key : thisFetchData.keySet()) {
+                    JSONObject jsonObject = thisFetchData.getJSONObject(key);
+                    for (String key2 : jsonObject.keySet()) {
+                        jsonObject.put(key2, jsonObject.get(key2).toString()
+                                .replaceAll(" +", " ")
+                                .replaceAll("\n+", "\n")
+                                .replaceAll("(\n )+", "\n"));
+                    }
+                }
                 JSONObject result = JSONObject.parse(resultTextEditor.getText());
                 JSONArray fetchArray = result.getJSONArray("list");
                 if (fetchArray == null) {
