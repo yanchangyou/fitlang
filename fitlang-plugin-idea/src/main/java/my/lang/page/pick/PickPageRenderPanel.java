@@ -376,13 +376,14 @@ public class PickPageRenderPanel extends JPanel {
                     @Override
                     public void run() {
                         int index = 0;
+                        fetchDataButton.doClick();
                         for (int i = pageNo - 1; i < totalPageNum; i++) {
-                            fetchDataButton.doClick();
                             try {
                                 Thread.sleep((long) (index++ * second * 1000));
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             }
+                            fetchDataButton.doClick();
                             ApplicationManager.getApplication().invokeLater(new Runnable() {
                                 @Override
                                 public void run() {
@@ -390,7 +391,6 @@ public class PickPageRenderPanel extends JPanel {
                                 }
                             });
                         }
-                        fetchDataButton.doClick();
                     }
                 }.start();
             }
