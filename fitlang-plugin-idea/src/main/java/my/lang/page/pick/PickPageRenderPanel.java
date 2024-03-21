@@ -292,10 +292,7 @@ public class PickPageRenderPanel extends JPanel {
                         ApplicationManager.getApplication().invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                JSONObject thisFetchData = JSONObject.parse(data);
-                                JSONObject fetchData = JSONObject.parse(resultTextEditor.getText());
-                                fetchData.putAll(thisFetchData);
-                                resultTextEditor.setText(toJsonTextWithFormat(fetchData));
+                                dataToResult(data, pickConfig);
                             }
                         });
 
@@ -307,7 +304,7 @@ public class PickPageRenderPanel extends JPanel {
                     String url = browser.getCefBrowser().getURL();
                     String jsCode = "\n" +
                             "var selectorConfig = " + selectorConfig + ";\n" +
-                            "var fetchData = {};\n" +
+                            "var fetchData = {'url':'" + url + "'};\n" +
                             "for(var key in selectorConfig) {" +
                             "   var fetchDom = document.querySelector(selectorConfig[key]);\n" +
                             "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent.trim());\n" +
@@ -319,6 +316,42 @@ public class PickPageRenderPanel extends JPanel {
                     browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
                 }
             }
+
+            private void dataToResult(String data, PickConfig pickConfig) {
+                JSONObject thisFetchData = JSONObject.parse(data);
+                JSONObject result = JSONObject.parse(resultTextEditor.getText());
+                JSONArray fetchArray = result.getJSONArray("list");
+                if (fetchArray == null) {
+                    fetchArray = new JSONArray();
+                    result.put("list", fetchArray);
+                }
+                JSONObject fetchData = arrayToObject(fetchArray, "url");
+                fetchData.putAll(thisFetchData);
+                fetchArray = objectToArray(fetchData, pickConfig.getUrls());
+                result.put("list", fetchArray);
+                resultTextEditor.setText(toJsonTextWithFormat(result));
+            }
+
+            JSONObject arrayToObject(JSONArray array, String keyField) {
+                JSONObject jsonObject = new JSONObject();
+                for (Object item : array) {
+                    JSONObject itemObject = (JSONObject) item;
+                    String key = itemObject.getString(keyField);
+                    jsonObject.put(key, itemObject);
+                }
+                return jsonObject;
+            }
+
+            JSONArray objectToArray(JSONObject jsonObject, JSONArray keyOrders) {
+                JSONArray array = new JSONArray(jsonObject.size());
+                for (Object key : keyOrders) {
+                    if (jsonObject.containsKey(key)) {
+                        array.add(jsonObject.get(key));
+                    }
+                }
+                return array;
+            }
+
         });
 
         JLabel secondLabel = new JLabel("Second:");
