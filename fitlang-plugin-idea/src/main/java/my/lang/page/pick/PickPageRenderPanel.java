@@ -55,6 +55,7 @@ public class PickPageRenderPanel extends JPanel {
 
     JSplitPane devSplitPanel;
     JSplitPane splitPane;
+    boolean isStop;
 
     public PickPageRenderPanel(JSONObject pickDefine, VirtualFile virtualFile, Project project) {
         super(true);
@@ -363,6 +364,7 @@ public class PickPageRenderPanel extends JPanel {
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
 
+
         continuePickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -371,17 +373,23 @@ public class PickPageRenderPanel extends JPanel {
                 int totalPageNum = (urls.size() + pageSize - 1) / pageSize;
 
                 double second = Double.parseDouble(secondText.getText());
-
+                isStop = false;
                 new Thread() {
                     @Override
                     public void run() {
                         int index = 0;
                         fetchDataButton.doClick();
                         for (int i = pageNo - 1; i < totalPageNum; i++) {
+                            if (isStop) {
+                                break;
+                            }
                             try {
                                 Thread.sleep((long) (index++ * second * 1000));
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
+                            }
+                            if (isStop) {
+                                break;
                             }
                             fetchDataButton.doClick();
                             ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -396,6 +404,17 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
+        JButton stopButton = new JButton("停止");
+        toolBar.add(stopButton);
+
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                isStop = true;
+            }
+        });
+
+
         JButton debugButton = new JButton("调试");
         toolBar.add(debugButton);
 
@@ -405,7 +424,6 @@ public class PickPageRenderPanel extends JPanel {
                 browsers[0].openDevtools();
             }
         });
-
 
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
