@@ -41,7 +41,6 @@ public class PickPageRenderPanel extends JPanel {
     JSONObject fetchResult;
 
     JTextField pageNoText;
-    JTextField pageSizeText;
     JTextField secondText;
 
     JPanel browserPanel;
@@ -203,13 +202,6 @@ public class PickPageRenderPanel extends JPanel {
         toolBar.add(pageNoLabel);
         toolBar.add(pageNoText);
 
-        JLabel pageSizeLabel = new JLabel("PageSize:");
-        pageSizeText = new JTextField(pageSize + "", 3);
-        pageSizeText.setEditable(false);
-
-//        toolBar.add(pageSizeLabel);
-//        toolBar.add(pageSizeText);
-
         JButton prePageButton = new JButton("上一页");
         toolBar.add(prePageButton);
 
@@ -252,14 +244,14 @@ public class PickPageRenderPanel extends JPanel {
         nextPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                PickConfig pickConfig = parsePickConfig();
+
                 int pageNo = Integer.parseInt(pageNoText.getText());
-                int pageSize = Integer.parseInt(pageSizeText.getText());
+                int pageSize = pickConfig.getGridTotal();
                 if (pageNo * pageSize + pageSize > urls.size() + pageSize - 1) {
                     Messages.showErrorDialog("超过最大页数！", "Error");
                     return;
                 }
-
-                PickConfig pickConfig = parsePickConfig();
                 pickConfig.setPageNo(pageNo + 1);
                 pageNoText.setText((pageNo + 1) + "");
 
@@ -341,7 +333,8 @@ public class PickPageRenderPanel extends JPanel {
         continuePickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int pageSize = Integer.parseInt(pageSizeText.getText());
+                PickConfig pickConfig = parsePickConfig();
+                int pageSize = pickConfig.getGridTotal();
                 int totalPageNum = (urls.size() + pageSize - 1) / pageSize;
 
                 double second = Double.parseDouble(secondText.getText());
@@ -403,7 +396,6 @@ public class PickPageRenderPanel extends JPanel {
     void reset(PickConfig pickConfig) {
 
         pageNoText.setText(pickConfig.getPageNo().toString());
-        pageSizeText.setText(pickConfig.getPageSize().toString());
         secondText.setText(pickConfig.getSecond() + "");
 
         dispose();
