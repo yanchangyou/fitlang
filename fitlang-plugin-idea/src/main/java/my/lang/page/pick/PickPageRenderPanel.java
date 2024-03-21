@@ -203,13 +203,6 @@ public class PickPageRenderPanel extends JPanel {
         toolBar.add(pageNoLabel);
         toolBar.add(pageNoText);
 
-        JLabel pageSizeLabel = new JLabel("PageSize:");
-        pageSizeText = new JTextField(pageSize + "", 3);
-        pageSizeText.setEditable(false);
-
-//        toolBar.add(pageSizeLabel);
-//        toolBar.add(pageSizeText);
-
         JButton prePageButton = new JButton("上一页");
         toolBar.add(prePageButton);
 
