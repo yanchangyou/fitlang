@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.ex.util.EditorUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -132,7 +133,11 @@ public class WebPageRenderPanel extends JPanel {
         JSplitPane devSplitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 
         configTextEditor = new LanguageTextField(JsonLanguage.INSTANCE, project, "{}");
+        configTextEditor.setFont(EditorUtil.getEditorFont());
+
         resultTextEditor = new LanguageTextField(JsonLanguage.INSTANCE, project, "{}");
+        configTextEditor.setFont(EditorUtil.getEditorFont());
+
         configTextEditor.setOneLineMode(false);
         resultTextEditor.setOneLineMode(false);
 

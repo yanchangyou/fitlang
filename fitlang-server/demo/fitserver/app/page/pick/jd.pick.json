@@ -1,0 +1,25 @@
+{
+    "config": {
+        "urls": [
+            "https://item.jd.com/10076156726310.html",
+            "https://item.jd.com/10085143756152.html",
+            "https://item.jd.com/10095133481239.html",
+            "https://item.jd.com/10095450029052.html",
+            "https://item.jd.com/10070536377997.html"
+        ],
+        "selectorConfig": {
+            "price": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.summary.summary-first > div > div.summary-price.J-summary-price > div.dd > span.p-price > span.price"
+        },
+        "pageNo": 1,
+        "rows": 1,
+        "columns": 2,
+        "second": 1.5
+    },
+    "ui": {
+        "devAndBrowserSplitRatio": 0.35,
+        "devSplitPanelRatio": 0.65,
+        "configAndResultPanelRatio": 0.5,
+        "showDev": false,
+        "poolSize": 1000
+    }
+}
