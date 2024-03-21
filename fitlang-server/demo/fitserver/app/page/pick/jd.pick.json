@@ -8,13 +8,13 @@
             "https://item.jd.com/10070536377997.html"
         ],
         "selectorConfig": {
-            "price": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.summary.summary-first > div > div.summary-price.J-summary-price > div.dd > span.p-price > span.price",
             "skuName": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.sku-name",
-            "shopName": "#crumb-wrap > div > div.contact.fr.clearfix.shieldShopInfo > div.J-hove-wrap.EDropdown.fr > div:nth-child(1) > div > a",
+            "brand": "#parameter-brand > li",
+            "price": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.summary.summary-first > div > div.summary-price.J-summary-price > div.dd > span.p-price > span.price",
             "param": "#detail > div.tab-con > div:nth-child(1) > div.p-parameter > ul.parameter2.p-parameter-list",
             "comments": "#detail > div.tab-main.large > ul > li:nth-child(5) > s",
+            "shopName": "#crumb-wrap > div > div.contact.fr.clearfix.shieldShopInfo > div.J-hove-wrap.EDropdown.fr > div:nth-child(1) > div > a",
             "shopScore": "#popbox > div > div.mc > div > a > div.score-parts",
-            "brand": "#parameter-brand > li"
         },
         "pageNo": 1,
         "rows": 1,
