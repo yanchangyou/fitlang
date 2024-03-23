@@ -278,7 +278,7 @@ public class PickPageRenderPanel extends JPanel {
                                     System.out.println("1:检查页面数据：" + url + " " + fetchTimes + "次");
 
                                     urlRetryTimesMap.put(url, ++fetchTimes);
-                                    if (fetchTimes > 5) {
+                                    if (fetchTimes > pickConfig.getRetryTimes()) {
                                         return true;
                                     }
 

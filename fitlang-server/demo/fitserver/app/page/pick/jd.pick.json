@@ -21,7 +21,9 @@
         ],
         "rows": 2,
         "columns": 2,
-        "second": 0.5
+        "second": 0.5,
+        "retryTimes": 5,
+        "poolSize": 10000
     },
     "ui": {
         "devAndBrowserSplitRatio": 0.35,

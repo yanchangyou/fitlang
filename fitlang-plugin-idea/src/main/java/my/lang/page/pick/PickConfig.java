@@ -16,6 +16,8 @@ public class PickConfig {
 
     Double second = 1.0;
 
+    Integer retryTimes = 5;
+
     Integer poolSize;
 
     public JSONArray getUrls() {
@@ -76,6 +78,17 @@ public class PickConfig {
 
     public int getGridTotal() {
         return rows * columns;
+    }
+
+    public Integer getRetryTimes() {
+        if (retryTimes == null) {
+            retryTimes = 3;
+        }
+        return retryTimes;
+    }
+
+    public void setRetryTimes(Integer retryTimes) {
+        this.retryTimes = retryTimes;
     }
 
     public Integer getPoolSize() {
