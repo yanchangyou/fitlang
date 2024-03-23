@@ -15,6 +15,8 @@ import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
 import com.intellij.ui.jcef.JBCefJSQuery;
 import fit.lang.ExecuteNodeUtil;
+import my.lang.page.web.DealFetchResult;
+import my.lang.page.web.EmptyDealFetchResult;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
@@ -106,7 +110,6 @@ public class PickPageRenderPanel extends JPanel {
 
         JSONArray urls = pickConfig.getUrls();
 
-        Integer pageSize = pickConfig.getPageSize();
         Integer pageNo = pickConfig.getPageNo();
 
         browsers = new JBCefBrowser[pickConfig.getGridTotal()];
@@ -267,101 +270,8 @@ public class PickPageRenderPanel extends JPanel {
         fetchDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                PickConfig pickConfig = parsePickConfig();
-                JSONArray urls = pickConfig.getUrls();
-                JSONObject selectorConfig = pickConfig.getSelectorConfig();
-
-                JBCefBrowser[] browsers = getBrowsers();
-                int pageNo = pickConfig.getPageNo();
-                int pageSize = pickConfig.getPageSize();
-                java.util.List<String> listData = new ArrayList<>();
-                for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
-                    listData.add(urls.get(i).toString());
-                }
-
-                for (int i = 0; i < listData.size(); i++) {
-                    JBCefBrowser browser = browsers[i];
-                    if (browser.getCefBrowser().getURL().contains("jbcefbrowser")) {
-                        continue;
-                    }
-
-                    JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
-
-                    jsQuery.addHandler((data) -> {
-
-                        ApplicationManager.getApplication().invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                dataToResult(data, pickConfig);
-                            }
-                        });
-
-                        return new JBCefJSQuery.Response(data) {
-                        };
-                    });
-                    //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
-                    String jsInject = jsQuery.inject("thisFetchData");
-                    String url = browser.getCefBrowser().getURL();
-                    String jsCode = "\n" +
-                            "var selectorConfig = " + selectorConfig + ";\n" +
-                            "var fetchData = {'url':'" + url + "'};\n" +
-                            "for(var key in selectorConfig) {" +
-                            "   var fetchDom = document.querySelector(selectorConfig[key]);\n" +
-                            "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent.trim());\n" +
-                            "}\n" +
-                            "var thisFetchData= JSON.stringify({'" + url + "':fetchData});\n" +
-                            "console.info(thisFetchData);\n" +
-                            "\n" + jsInject +
-                            "\n";
-                    browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
-                }
+                fetchData(new EmptyDealFetchResult());
             }
-
-            private synchronized void dataToResult(String data, PickConfig pickConfig) {
-                JSONObject thisFetchData = JSONObject.parse(data);
-                for (String key : thisFetchData.keySet()) {
-                    JSONObject jsonObject = thisFetchData.getJSONObject(key);
-                    for (String key2 : jsonObject.keySet()) {
-                        jsonObject.put(key2, jsonObject.get(key2).toString()
-                                .replaceAll(" +", " ")
-                                .replaceAll("\n+", "\n")
-                                .replaceAll("(\n )+", "\n"));
-                    }
-                }
-                JSONObject result = JSONObject.parse(resultTextEditor.getText());
-                JSONArray fetchArray = result.getJSONArray("list");
-                if (fetchArray == null) {
-                    fetchArray = new JSONArray();
-                    result.put("list", fetchArray);
-                }
-                JSONObject fetchData = arrayToObject(fetchArray, "url");
-                fetchData.putAll(thisFetchData);
-                fetchArray = objectToArray(fetchData, pickConfig.getUrls());
-                result.put("list", fetchArray);
-                resultTextEditor.setText(toJsonTextWithFormat(result));
-            }
-
-            JSONObject arrayToObject(JSONArray array, String keyField) {
-                JSONObject jsonObject = new JSONObject();
-                for (Object item : array) {
-                    JSONObject itemObject = (JSONObject) item;
-                    String key = itemObject.getString(keyField);
-                    jsonObject.put(key, itemObject);
-                }
-                return jsonObject;
-            }
-
-            JSONArray objectToArray(JSONObject jsonObject, JSONArray keyOrders) {
-                JSONArray array = new JSONArray(jsonObject.size());
-                for (Object key : keyOrders) {
-                    if (jsonObject.containsKey(key)) {
-                        array.add(jsonObject.get(key));
-                    }
-                }
-                return array;
-            }
-
         });
 
         JLabel secondLabel = new JLabel("Second:");
@@ -372,7 +282,6 @@ public class PickPageRenderPanel extends JPanel {
 
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
-
 
         continuePickButton.addActionListener(new ActionListener() {
             @Override
@@ -413,6 +322,69 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
+
+        JButton wisdomPickButton = new JButton("智能采集");
+        toolBar.add(wisdomPickButton);
+
+        wisdomPickButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PickConfig pickConfig = parsePickConfig();
+                double second = Double.parseDouble(secondText.getText());
+                isStop = false;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        final int[] index = {0};
+
+                        Map<String, Integer> urlRetryTimesMap = new HashMap<>();
+
+                        while (!isStop && index[0] < pickConfig.getUrls().size()) {
+                            fetchData(new DealFetchResult() {
+                                @Override
+                                public boolean check(JSONObject data, JBCefBrowser browser) {
+                                    //重试次数限制，超过5次放弃
+                                    String url = browser.getCefBrowser().getURL();
+                                    Integer fetchTimes = urlRetryTimesMap.get(url);
+                                    if (fetchTimes == null) {
+                                        fetchTimes = 0;
+                                    }
+                                    urlRetryTimesMap.put(url, ++fetchTimes);
+                                    if (fetchTimes > 5) {
+                                        return true;
+                                    }
+
+                                    for (Object item : data.values()) {
+                                        JSONObject fetchData = (JSONObject) item;
+                                        for (Object value : fetchData.values()) {
+                                            if ("".equals(value)) {
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                    return true;
+                                }
+
+                                @Override
+                                public void doNext(JSONObject data, JBCefBrowser browser) {
+                                    index[0]++;
+                                    if (index[0] < pickConfig.urls.size()) {
+                                        String url = pickConfig.getUrls().get(index[0]).toString();
+                                        browser.loadURL(url);
+                                    }
+                                }
+                            });
+                            try {
+                                Thread.sleep((long) (second * 1000));
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }.start();
+            }
+        });
+
         JButton stopButton = new JButton("停止");
         toolBar.add(stopButton);
 
@@ -437,6 +409,104 @@ public class PickPageRenderPanel extends JPanel {
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
         adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
+    }
+
+    synchronized void dataToResult(JSONObject thisFetchData, PickConfig pickConfig) {
+
+        JSONObject result = JSONObject.parse(resultTextEditor.getText());
+        JSONArray fetchArray = result.getJSONArray("list");
+        if (fetchArray == null) {
+            fetchArray = new JSONArray();
+            result.put("list", fetchArray);
+        }
+        JSONObject fetchData = arrayToObject(fetchArray, "url");
+        fetchData.putAll(thisFetchData);
+        fetchArray = objectToArray(fetchData, pickConfig.getUrls());
+        result.put("list", fetchArray);
+        resultTextEditor.setText(toJsonTextWithFormat(result));
+    }
+
+    private void fetchData(DealFetchResult callback) {
+        PickConfig pickConfig = parsePickConfig();
+        JSONArray urls = pickConfig.getUrls();
+        JSONObject selectorConfig = pickConfig.getSelectorConfig();
+
+        JBCefBrowser[] browsers = getBrowsers();
+        int pageNo = pickConfig.getPageNo();
+        int pageSize = pickConfig.getPageSize();
+        java.util.List<String> listData = new ArrayList<>();
+        for (int i = pageNo * pageSize - pageSize; i < pageSize * pageNo && i < urls.size(); i++) {
+            listData.add(urls.get(i).toString());
+        }
+
+        for (int i = 0; i < listData.size(); i++) {
+            JBCefBrowser browser = browsers[i];
+            if (browser.getCefBrowser().getURL().contains("jbcefbrowser")) {
+                continue;
+            }
+
+            JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+
+            jsQuery.addHandler((data) -> {
+                JSONObject thisFetchData = JSONObject.parse(data);
+                for (String key : thisFetchData.keySet()) {
+                    JSONObject jsonObject = thisFetchData.getJSONObject(key);
+                    for (String key2 : jsonObject.keySet()) {
+                        jsonObject.put(key2, jsonObject.get(key2).toString()
+                                .replaceAll(" +", " ")
+                                .replaceAll("\n+", "\n")
+                                .replaceAll("(\n )+", "\n"));
+                    }
+                }
+                if (callback.check(thisFetchData, browser)) {
+                    ApplicationManager.getApplication().invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            dataToResult(thisFetchData, pickConfig);
+                            callback.doNext(thisFetchData, browser);
+                        }
+                    });
+                }
+
+                return new JBCefJSQuery.Response(data) {
+                };
+            });
+            //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
+            String jsInject = jsQuery.inject("thisFetchData");
+            String url = browser.getCefBrowser().getURL();
+            String jsCode = "\n" +
+                    "var selectorConfig = " + selectorConfig + ";\n" +
+                    "var fetchData = {'url':'" + url + "'};\n" +
+                    "for(var key in selectorConfig) {" +
+                    "   var fetchDom = document.querySelector(selectorConfig[key]);\n" +
+                    "   fetchData[key] = (fetchDom==null?'':fetchDom.textContent.trim());\n" +
+                    "}\n" +
+                    "var thisFetchData= JSON.stringify({'" + url + "':fetchData});\n" +
+                    "console.info(thisFetchData);\n" +
+                    "\n" + jsInject +
+                    "\n";
+            browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
+        }
+    }
+
+    JSONObject arrayToObject(JSONArray array, String keyField) {
+        JSONObject jsonObject = new JSONObject();
+        for (Object item : array) {
+            JSONObject itemObject = (JSONObject) item;
+            String key = itemObject.getString(keyField);
+            jsonObject.put(key, itemObject);
+        }
+        return jsonObject;
+    }
+
+    JSONArray objectToArray(JSONObject jsonObject, JSONArray keyOrders) {
+        JSONArray array = new JSONArray(jsonObject.size());
+        for (Object key : keyOrders) {
+            if (jsonObject.containsKey(key)) {
+                array.add(jsonObject.get(key));
+            }
+        }
+        return array;
     }
 
     private PickConfig parsePickConfig() {
