@@ -327,7 +327,7 @@ public class PickPageRenderPanel extends JPanel {
                                 throw new RuntimeException(e);
                             }
                         }
-                        pickLogFrame.setVisible(true);
+                        pickLogFrame.showFrame();
                     }
                 }.start();
             }
@@ -339,7 +339,7 @@ public class PickPageRenderPanel extends JPanel {
         viewLogButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                pickLogFrame.setVisible(true);
+                pickLogFrame.showFrame();
             }
         });
 

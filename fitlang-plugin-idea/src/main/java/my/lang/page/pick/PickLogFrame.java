@@ -12,17 +12,15 @@ public class PickLogFrame extends JFrame {
 
     public PickLogFrame() {
         setSize(800, 600);
-        textArea = new JTextArea("LOG:\n");
+        textArea = new JTextArea("Start log at " + ExecuteNodeUtil.getNow() + "\n");
         setLayout(new BorderLayout());
         scrollPane = new JScrollPane(textArea);
         scrollPane.setSize(800, 600);
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public void addLog(String log) {
-        StringBuffer text = new StringBuffer(textArea.getText());
-        text.append(ExecuteNodeUtil.getNow()).append(" ").append(log).append("\n");
-        textArea.setText(text.toString());
+    public synchronized void addLog(String log) {
+        textArea.append(ExecuteNodeUtil.getNow() + " " + log + "\n");
     }
 
     public String getAllLog() {
@@ -43,5 +41,10 @@ public class PickLogFrame extends JFrame {
 
     public void setTextArea(JTextArea textArea) {
         this.textArea = textArea;
+    }
+
+    public void showFrame() {
+        setVisible(false);
+        setVisible(true);
     }
 }
