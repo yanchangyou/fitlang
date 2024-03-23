@@ -17,6 +17,7 @@ import com.intellij.ui.jcef.JBCefJSQuery;
 import fit.lang.ExecuteNodeUtil;
 import my.lang.page.web.DealFetchResult;
 import my.lang.page.web.EmptyDealFetchResult;
+import org.apache.commons.collections.set.SynchronizedSet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,9 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
@@ -335,20 +334,39 @@ public class PickPageRenderPanel extends JPanel {
                 new Thread() {
                     @Override
                     public void run() {
-                        final int[] index = {0};
+                        final int[] index = {pickConfig.getGridTotal() - 1};
 
                         Map<String, Integer> urlRetryTimesMap = new HashMap<>();
+                        Set<String> fetchOkSet = SynchronizedSet.decorate(new HashSet<>());
 
-                        while (!isStop && index[0] < pickConfig.getUrls().size()) {
+                        //初始化第1页
+                        pageNoText.setText("1");
+                        refreshButton.doClick();
+                        try {
+                            Thread.sleep((long) (second * 1000 * 4));
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        //循环：采集、加载
+                        while (!isStop && index[0] - pickConfig.getGridTotal() + 1 < pickConfig.getUrls().size()) {
                             fetchData(new DealFetchResult() {
                                 @Override
-                                public boolean check(JSONObject data, JBCefBrowser browser) {
+                                public boolean isSuccess(JBCefBrowser browser) {
+                                    return fetchOkSet.contains(browser.getCefBrowser().getURL());
+                                }
+
+                                @Override
+                                public boolean checkData(JSONObject data, JBCefBrowser browser) {
                                     //重试次数限制，超过5次放弃
                                     String url = browser.getCefBrowser().getURL();
+
                                     Integer fetchTimes = urlRetryTimesMap.get(url);
                                     if (fetchTimes == null) {
                                         fetchTimes = 0;
                                     }
+                                    System.out.println("1:检查页面数据：" + url + " " + fetchTimes + "次");
+
                                     urlRetryTimesMap.put(url, ++fetchTimes);
                                     if (fetchTimes > 5) {
                                         return true;
@@ -362,15 +380,22 @@ public class PickPageRenderPanel extends JPanel {
                                             }
                                         }
                                     }
+                                    System.out.println("2:开始抓取数据：" + url);
                                     return true;
                                 }
 
                                 @Override
                                 public void doNext(JSONObject data, JBCefBrowser browser) {
-                                    index[0]++;
-                                    if (index[0] < pickConfig.urls.size()) {
-                                        String url = pickConfig.getUrls().get(index[0]).toString();
-                                        browser.loadURL(url);
+                                    String url = browser.getCefBrowser().getURL();
+                                    System.out.println("3:成功抓取数据：" + url);
+                                    if (!fetchOkSet.contains(url)) {
+                                        fetchOkSet.add(url);
+                                        index[0]++;
+                                        if (index[0] < pickConfig.urls.size()) {
+                                            url = pickConfig.getUrls().get(index[0]).toString();
+                                            browser.loadURL(url);
+                                            System.out.println("4:加载页面：" + url);
+                                        }
                                     }
                                 }
                             });
@@ -380,6 +405,12 @@ public class PickPageRenderPanel extends JPanel {
                                 throw new RuntimeException(e);
                             }
                         }
+                        ApplicationManager.getApplication().invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Messages.showInfoMessage("fetch OK!", "Info");
+                            }
+                        });
                     }
                 }.start();
             }
@@ -441,7 +472,12 @@ public class PickPageRenderPanel extends JPanel {
 
         for (int i = 0; i < listData.size(); i++) {
             JBCefBrowser browser = browsers[i];
+
             if (browser.getCefBrowser().getURL().contains("jbcefbrowser")) {
+                continue;
+            }
+
+            if (callback.isSuccess(browser)) {
                 continue;
             }
 
@@ -458,7 +494,7 @@ public class PickPageRenderPanel extends JPanel {
                                 .replaceAll("(\n )+", "\n"));
                     }
                 }
-                if (callback.check(thisFetchData, browser)) {
+                if (callback.checkData(thisFetchData, browser)) {
                     ApplicationManager.getApplication().invokeLater(new Runnable() {
                         @Override
                         public void run() {

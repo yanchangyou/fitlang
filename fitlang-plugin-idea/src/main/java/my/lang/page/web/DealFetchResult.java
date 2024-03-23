@@ -5,7 +5,9 @@ import com.intellij.ui.jcef.JBCefBrowser;
 
 public interface DealFetchResult {
 
-    boolean check(JSONObject data, JBCefBrowser browser);
+    boolean isSuccess(JBCefBrowser browser);
+
+    boolean checkData(JSONObject data, JBCefBrowser browser);
 
     void doNext(JSONObject data, JBCefBrowser browser);
 
