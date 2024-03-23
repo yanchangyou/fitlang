@@ -282,7 +282,10 @@ public class PickPageRenderPanel extends JPanel {
                                         return true;
                                     }
 
-                                    JSONObject fetchData = data.getJSONObject("url");
+                                    JSONObject fetchData = data.getJSONObject(url);
+                                    if (fetchData == null) {
+                                        return false;
+                                    }
                                     for (Object key : pickConfig.getCheckFields()) {
                                         String value = fetchData.getString(key.toString());
                                         if ("".equals(value)) {
