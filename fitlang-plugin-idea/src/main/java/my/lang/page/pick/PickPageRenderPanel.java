@@ -318,7 +318,7 @@ public class PickPageRenderPanel extends JPanel {
                 }
             }
 
-            private void dataToResult(String data, PickConfig pickConfig) {
+            private synchronized void dataToResult(String data, PickConfig pickConfig) {
                 JSONObject thisFetchData = JSONObject.parse(data);
                 for (String key : thisFetchData.keySet()) {
                     JSONObject jsonObject = thisFetchData.getJSONObject(key);
