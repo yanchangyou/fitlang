@@ -84,6 +84,12 @@ public class PickPageRenderPanel extends JPanel {
             config.put("selectorConfig", new JSONObject());
         }
 
+        JSONArray checkFields = config.getJSONArray("checkFields");
+        if (checkFields == null) {
+            checkFields = new JSONArray();
+            config.put("checkFields", checkFields);
+        }
+
         this.fetchResult = pickDefine.getJSONObject("fetchResult");
         if (fetchResult == null) {
             fetchResult = new JSONObject();
@@ -276,12 +282,10 @@ public class PickPageRenderPanel extends JPanel {
                                         return true;
                                     }
 
-                                    for (Object item : data.values()) {
-                                        JSONObject fetchData = (JSONObject) item;
-                                        for (Object value : fetchData.values()) {
-                                            if ("".equals(value)) {
-                                                return false;
-                                            }
+                                    for (Object key : pickConfig.getCheckFields()) {
+                                        String value = data.getString(key.toString());
+                                        if ("".equals(value)) {
+                                            return false;
                                         }
                                     }
                                     System.out.println("2:开始抓取数据：" + url);

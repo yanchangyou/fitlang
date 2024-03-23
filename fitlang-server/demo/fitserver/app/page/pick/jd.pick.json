@@ -16,7 +16,9 @@
             "shopName": "#crumb-wrap > div > div.contact.fr.clearfix.shieldShopInfo > div.J-hove-wrap.EDropdown.fr > div:nth-child(1) > div > a",
             "shopScore": "#popbox > div > div.mc > div > a > div.score-parts"
         },
-        "pageNo": 1,
+        "checkFields": [
+            "price"
+        ],
         "rows": 2,
         "columns": 2,
         "second": 0.5

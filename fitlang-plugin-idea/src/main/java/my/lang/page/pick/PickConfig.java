@@ -7,12 +7,12 @@ public class PickConfig {
 
     JSONArray urls;
 
-    Integer pageNo = 1;
-
     Integer rows = 2;
     Integer columns = 2;
 
     JSONObject selectorConfig;
+
+    JSONArray checkFields;
 
     Double second = 1.0;
 
@@ -24,21 +24,6 @@ public class PickConfig {
 
     public void setUrls(JSONArray urls) {
         this.urls = urls;
-    }
-
-    public Integer getPageSize() {
-        return getGridTotal();
-    }
-
-    public Integer getPageNo() {
-        if (pageNo == null) {
-            pageNo = 1;
-        }
-        return pageNo;
-    }
-
-    public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo;
     }
 
     public Integer getRows() {
@@ -72,6 +57,21 @@ public class PickConfig {
 
     public void setSelectorConfig(JSONObject selectorConfig) {
         this.selectorConfig = selectorConfig;
+    }
+
+    public JSONArray getCheckFields() {
+        if (checkFields == null) {
+            checkFields = new JSONArray(0);
+        }
+        return checkFields;
+    }
+
+    public void setCheckFields(JSONArray checkFields) {
+        this.checkFields = checkFields;
+    }
+
+    public void setSecond(Double second) {
+        this.second = second;
     }
 
     public int getGridTotal() {
