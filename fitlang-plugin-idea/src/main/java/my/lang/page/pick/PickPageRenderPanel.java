@@ -493,6 +493,19 @@ public class PickPageRenderPanel extends JPanel {
         for (int i = 0; i < pageSize; i++) {
             if (i < listData.size()) {
                 browsers[i].loadURL(listData.get(i));
+                int finalI = i;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(1000L);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        // TODO 无效
+                        browsers[finalI].getCefBrowser().setZoomLevel(0.5);
+                    }
+                }).start();
             } else {
                 browsers[i].loadHTML("<center><h2>ⓧ</h2></center>");
             }
