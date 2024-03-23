@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBScrollPane;
@@ -61,6 +60,8 @@ public class PickPageRenderPanel extends JPanel {
     JSplitPane splitPane;
     boolean isStop;
 
+    PickLogFrame pickLogFrame;
+
     public PickPageRenderPanel(JSONObject pickDefine, VirtualFile virtualFile, Project project) {
         super(true);
         this.project = project;
@@ -105,6 +106,8 @@ public class PickPageRenderPanel extends JPanel {
         devSplitPanelRatio = uiConfig.getDouble("devSplitPanelRatio") != null ? uiConfig.getDouble("devSplitPanelRatio") : devSplitPanelRatio;
         configAndResultPanelRatio = uiConfig.getDouble("configAndResultPanelRatio") != null ? uiConfig.getDouble("configAndResultPanelRatio") : configAndResultPanelRatio;
 
+        pickLogFrame = new PickLogFrame();
+
         PickConfig pickConfig = PickConfig.parse(config);
 
         init(pickConfig);
@@ -145,13 +148,14 @@ public class PickPageRenderPanel extends JPanel {
 
         devSplitPanel.add(new JBScrollPane(configTextEditor));
         devSplitPanel.add(new JBScrollPane(resultTextEditor));
+
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
         // toolbar
         JPanel toolBar = new JPanel();
         add(toolBar, BorderLayout.NORTH);
 
-        JButton initButton = new JButton("初始化");
+        JButton initButton = new JButton("重置");
         toolBar.add(initButton);
 
         initButton.addActionListener(new ActionListener() {
@@ -184,7 +188,7 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
-        JButton addSelectorButton = new JButton("添加采集");
+        JButton addSelectorButton = new JButton("添加");
         toolBar.add(addSelectorButton);
 
         addSelectorButton.addActionListener(new ActionListener() {
@@ -217,7 +221,7 @@ public class PickPageRenderPanel extends JPanel {
             }
         });
 
-        JButton fetchDataButton = new JButton("采集数据");
+        JButton fetchDataButton = new JButton("采集");
         toolBar.add(fetchDataButton);
 
         fetchDataButton.addActionListener(new ActionListener() {
@@ -233,6 +237,8 @@ public class PickPageRenderPanel extends JPanel {
         toolBar.add(secondLabel);
         toolBar.add(secondText);
 
+//        PickLogDialogWrapper pickLogDialogWrapper = new PickLogDialogWrapper(project);
+
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
 
@@ -242,6 +248,10 @@ public class PickPageRenderPanel extends JPanel {
                 PickConfig pickConfig = parsePickConfig();
                 double second = Double.parseDouble(secondText.getText());
                 isStop = false;
+
+                pickLogFrame.addLog("\n\n==============开始采集============");
+
+
                 new Thread() {
                     @Override
                     public void run() {
@@ -275,7 +285,7 @@ public class PickPageRenderPanel extends JPanel {
                                     if (fetchTimes == null) {
                                         fetchTimes = 0;
                                     }
-                                    System.out.println("1:检查页面数据：" + url + " " + fetchTimes + "次");
+                                    pickLogFrame.addLog("1:检查页面数据：" + url + " " + fetchTimes + "次");
 
                                     urlRetryTimesMap.put(url, ++fetchTimes);
                                     if (fetchTimes > pickConfig.getRetryTimes()) {
@@ -292,21 +302,21 @@ public class PickPageRenderPanel extends JPanel {
                                             return false;
                                         }
                                     }
-                                    System.out.println("2:开始抓取数据：" + url);
+                                    pickLogFrame.addLog("2:开始抓取数据：" + url);
                                     return true;
                                 }
 
                                 @Override
                                 public void doNext(JSONObject data, JBCefBrowser browser) {
                                     String url = browser.getCefBrowser().getURL();
-                                    System.out.println("3:成功抓取数据：" + url);
+                                    pickLogFrame.addLog("3:成功抓取数据：" + url);
                                     if (!fetchOkSet.contains(url)) {
                                         fetchOkSet.add(url);
                                         index[0]++;
                                         if (index[0] < pickConfig.urls.size()) {
                                             url = pickConfig.getUrls().get(index[0]).toString();
                                             browser.loadURL(url);
-                                            System.out.println("4:加载页面：" + url);
+                                            pickLogFrame.addLog("4:加载下一页面：" + url);
                                         }
                                     }
                                 }
@@ -317,14 +327,19 @@ public class PickPageRenderPanel extends JPanel {
                                 throw new RuntimeException(e);
                             }
                         }
-                        ApplicationManager.getApplication().invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                Messages.showInfoMessage("fetch OK!", "Info");
-                            }
-                        });
+                        pickLogFrame.setVisible(true);
                     }
                 }.start();
+            }
+        });
+
+        JButton viewLogButton = new JButton("查看日志");
+        toolBar.add(viewLogButton);
+
+        viewLogButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                pickLogFrame.setVisible(true);
             }
         });
 
