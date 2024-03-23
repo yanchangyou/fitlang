@@ -107,7 +107,7 @@ public class PickPageRenderPanel extends JPanel {
 
     void init(PickConfig pickConfig) {
 
-        JSONArray urls = pickConfig.getUrls();
+//        JSONArray urls = pickConfig.getUrls();
 
         Integer pageNo = pickConfig.getPageNo();
 
@@ -202,29 +202,29 @@ public class PickPageRenderPanel extends JPanel {
         JLabel pageNoLabel = new JLabel("PageNo:");
         pageNoText = new JTextField(pageNo + "", 4);
 
-        toolBar.add(pageNoLabel);
-        toolBar.add(pageNoText);
+//        toolBar.add(pageNoLabel);
+//        toolBar.add(pageNoText);
 
-        JButton prePageButton = new JButton("上一页");
-        toolBar.add(prePageButton);
-
-        prePageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int pageNo = Integer.parseInt(pageNoText.getText());
-                if (pageNo == 1) {
-                    Messages.showErrorDialog("已到第1页！", "Error");
-                    return;
-                }
-
-                pageNoText.setText((pageNo - 1) + "");
-                PickConfig pickConfig = parsePickConfig();
-                pickConfig.setPageNo(pageNo - 1);
-
-                render(pickConfig);
-
-            }
-        });
+//        JButton prePageButton = new JButton("上一页");
+//        toolBar.add(prePageButton);
+//
+//        prePageButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                int pageNo = Integer.parseInt(pageNoText.getText());
+//                if (pageNo == 1) {
+//                    Messages.showErrorDialog("已到第1页！", "Error");
+//                    return;
+//                }
+//
+//                pageNoText.setText((pageNo - 1) + "");
+//                PickConfig pickConfig = parsePickConfig();
+//                pickConfig.setPageNo(pageNo - 1);
+//
+//                render(pickConfig);
+//
+//            }
+//        });
 
         JButton refreshButton = new JButton("刷新");
         toolBar.add(refreshButton);
@@ -240,28 +240,28 @@ public class PickPageRenderPanel extends JPanel {
                 adjustSplitPanel(splitPane, devAndBrowserSplitRatio);
             }
         });
-
-        JButton nextPageButton = new JButton("下一页");
-        toolBar.add(nextPageButton);
-
-        nextPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                PickConfig pickConfig = parsePickConfig();
-
-                int pageNo = Integer.parseInt(pageNoText.getText());
-                int pageSize = pickConfig.getGridTotal();
-                if (pageNo * pageSize + pageSize > urls.size() + pageSize - 1) {
-                    Messages.showErrorDialog("超过最大页数！", "Error");
-                    return;
-                }
-                pickConfig.setPageNo(pageNo + 1);
-                pageNoText.setText((pageNo + 1) + "");
-
-                render(pickConfig);
-
-            }
-        });
+//
+//        JButton nextPageButton = new JButton("下一页");
+//        toolBar.add(nextPageButton);
+//
+//        nextPageButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                PickConfig pickConfig = parsePickConfig();
+//
+//                int pageNo = Integer.parseInt(pageNoText.getText());
+//                int pageSize = pickConfig.getGridTotal();
+//                if (pageNo * pageSize + pageSize > urls.size() + pageSize - 1) {
+//                    Messages.showErrorDialog("超过最大页数！", "Error");
+//                    return;
+//                }
+//                pickConfig.setPageNo(pageNo + 1);
+//                pageNoText.setText((pageNo + 1) + "");
+//
+//                render(pickConfig);
+//
+//            }
+//        });
 
         JButton fetchDataButton = new JButton("采集数据");
         toolBar.add(fetchDataButton);
@@ -278,54 +278,54 @@ public class PickPageRenderPanel extends JPanel {
 
         toolBar.add(secondLabel);
         toolBar.add(secondText);
+//
+//        JButton continuePickButton = new JButton("连续采集");
+//        toolBar.add(continuePickButton);
+//
+//        continuePickButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                PickConfig pickConfig = parsePickConfig();
+//                int pageSize = pickConfig.getGridTotal();
+//                int totalPageNum = (urls.size() + pageSize - 1) / pageSize;
+//
+//                double second = Double.parseDouble(secondText.getText());
+//                isStop = false;
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        int index = 0;
+//                        fetchDataButton.doClick();
+//                        for (int i = pageNo - 1; i < totalPageNum; i++) {
+//                            if (isStop) {
+//                                break;
+//                            }
+//                            try {
+//                                Thread.sleep((long) (index++ * second * 1000));
+//                            } catch (InterruptedException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                            if (isStop) {
+//                                break;
+//                            }
+//                            fetchDataButton.doClick();
+//                            ApplicationManager.getApplication().invokeLater(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    nextPageButton.doClick();
+//                                }
+//                            });
+//                        }
+//                    }
+//                }.start();
+//            }
+//        });
+
 
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
 
         continuePickButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                PickConfig pickConfig = parsePickConfig();
-                int pageSize = pickConfig.getGridTotal();
-                int totalPageNum = (urls.size() + pageSize - 1) / pageSize;
-
-                double second = Double.parseDouble(secondText.getText());
-                isStop = false;
-                new Thread() {
-                    @Override
-                    public void run() {
-                        int index = 0;
-                        fetchDataButton.doClick();
-                        for (int i = pageNo - 1; i < totalPageNum; i++) {
-                            if (isStop) {
-                                break;
-                            }
-                            try {
-                                Thread.sleep((long) (index++ * second * 1000));
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            if (isStop) {
-                                break;
-                            }
-                            fetchDataButton.doClick();
-                            ApplicationManager.getApplication().invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    nextPageButton.doClick();
-                                }
-                            });
-                        }
-                    }
-                }.start();
-            }
-        });
-
-
-        JButton wisdomPickButton = new JButton("智能采集");
-        toolBar.add(wisdomPickButton);
-
-        wisdomPickButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 PickConfig pickConfig = parsePickConfig();

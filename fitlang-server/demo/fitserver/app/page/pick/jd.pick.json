@@ -17,9 +17,9 @@
             "shopScore": "#popbox > div > div.mc > div > a > div.score-parts"
         },
         "pageNo": 1,
-        "rows": 1,
+        "rows": 2,
         "columns": 2,
-        "second": 1.5
+        "second": 0.5
     },
     "ui": {
         "devAndBrowserSplitRatio": 0.35,
