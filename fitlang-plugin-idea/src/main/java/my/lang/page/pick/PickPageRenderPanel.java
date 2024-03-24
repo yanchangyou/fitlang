@@ -60,6 +60,9 @@ public class PickPageRenderPanel extends JPanel {
     JSplitPane splitPane;
     boolean isStop;
 
+    long startTime;
+    long stopTime;
+
     PickLogFrame pickLogFrame;
 
     public PickPageRenderPanel(JSONObject pickDefine, VirtualFile virtualFile, Project project) {
@@ -253,6 +256,9 @@ public class PickPageRenderPanel extends JPanel {
                 double second = Double.parseDouble(secondText.getText());
                 isStop = false;
 
+                startTime = System.currentTimeMillis();
+                stopTime = -1;
+
                 pickLogFrame.addLog("\n\n==============开始采集============");
 
                 new Thread() {
@@ -332,16 +338,15 @@ public class PickPageRenderPanel extends JPanel {
                                 public void doNext(JSONObject data, JBCefBrowser browser) {
                                     String url = browser.getCefBrowser().getURL();
                                     pickLogFrame.addLog("3:成功抓取数据：" + url);
-                                    if (!fetchOkSet.contains(url)) {
-                                        fetchOkSet.add(url);
-                                        index[0]++;
-                                        if (index[0] < pickConfig.urls.size()) {
-                                            url = pickConfig.getUrls().get(index[0]).toString();
-                                            browser.loadURL(url);
-                                            pickLogFrame.addLog("4:加载下一页面：" + url);
 
-                                            urlIndexText.setText(String.valueOf(index[0]));
-                                        }
+                                    index[0]++;
+                                    urlIndexText.setText(String.valueOf(index[0]));
+
+                                    fetchOkSet.add(url);
+                                    if (index[0] < pickConfig.urls.size()) {
+                                        url = pickConfig.getUrls().get(index[0]).toString();
+                                        browser.loadURL(url);
+                                        pickLogFrame.addLog("4:加载下一页面：" + url);
                                     }
                                 }
                             });
@@ -351,6 +356,9 @@ public class PickPageRenderPanel extends JPanel {
                                 throw new RuntimeException(e);
                             }
                         }
+                        stopTime = System.currentTimeMillis();
+
+                        pickLogFrame.addLog("==============采集结束============");
                         pickLogFrame.showFrame();
                     }
                 }.start();
@@ -404,6 +412,14 @@ public class PickPageRenderPanel extends JPanel {
         JSONObject fetchData = arrayToObject(fetchArray, "url");
         fetchData.putAll(thisFetchData);
         fetchArray = objectToArray(fetchData, pickConfig.getUrls());
+
+        int total = fetchArray.size();
+
+        result.put("startTime", ExecuteNodeUtil.format(startTime, ExecuteNodeUtil.DATE_FORMAT_DATETIME));
+        result.put("nowTime", ExecuteNodeUtil.getNow());
+        result.put("cost", (System.currentTimeMillis() - startTime) / 1000);
+        result.put("tps", (total * 100 / ((System.currentTimeMillis() - startTime) / 1000)) / 100.0);
+        result.put("total", total);
         result.put("list", fetchArray);
         resultTextEditor.setText(toJsonTextWithFormat(result));
     }

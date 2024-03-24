@@ -22,9 +22,9 @@ import java.util.UUID;
  */
 public class ExecuteNodeUtil {
 
-    static String DATE_FORMAT_TIMESTAMP = "yyyy-MM-dd HH:mm:ss.SSS";
+    public static String DATE_FORMAT_TIMESTAMP = "yyyy-MM-dd HH:mm:ss.SSS";
 
-    static String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
+    public static String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
     /**
      * uuid
