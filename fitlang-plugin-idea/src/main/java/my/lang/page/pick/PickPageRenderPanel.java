@@ -60,8 +60,8 @@ public class PickPageRenderPanel extends JPanel {
     JSplitPane splitPane;
     boolean isStop;
 
-    long startTime;
-    long stopTime;
+    long startTime = -1;
+    long stopTime = -1;
 
     PickLogFrame pickLogFrame;
 
@@ -256,7 +256,9 @@ public class PickPageRenderPanel extends JPanel {
                 double second = Double.parseDouble(secondText.getText());
                 isStop = false;
 
-                startTime = System.currentTimeMillis();
+                if (startTime == -1) {
+                    startTime = System.currentTimeMillis();
+                }
                 stopTime = -1;
 
                 pickLogFrame.addLog("\n\n==============开始采集============");
@@ -357,7 +359,7 @@ public class PickPageRenderPanel extends JPanel {
                             }
                         }
                         stopTime = System.currentTimeMillis();
-
+                        startTime = -1;
                         pickLogFrame.addLog("==============采集结束============");
                         pickLogFrame.showFrame();
                     }
