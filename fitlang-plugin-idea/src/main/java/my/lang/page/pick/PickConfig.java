@@ -14,6 +14,8 @@ public class PickConfig {
 
     JSONArray checkFields;
 
+    JSONArray stopUrls;
+
     Double second = 1.0;
 
     Integer retryTimes = 5;
@@ -70,6 +72,17 @@ public class PickConfig {
 
     public void setCheckFields(JSONArray checkFields) {
         this.checkFields = checkFields;
+    }
+
+    public JSONArray getStopUrls() {
+        if (stopUrls == null) {
+            stopUrls = new JSONArray(0);
+        }
+        return stopUrls;
+    }
+
+    public void setStopUrls(JSONArray stopUrls) {
+        this.stopUrls = stopUrls;
     }
 
     public void setSecond(Double second) {

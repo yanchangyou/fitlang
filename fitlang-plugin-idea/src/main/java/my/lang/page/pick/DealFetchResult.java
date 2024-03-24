@@ -1,4 +1,4 @@
-package my.lang.page.web;
+package my.lang.page.pick;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.ui.jcef.JBCefBrowser;

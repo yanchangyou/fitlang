@@ -13,8 +13,6 @@ import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefClient;
 import com.intellij.ui.jcef.JBCefJSQuery;
 import fit.lang.ExecuteNodeUtil;
-import my.lang.page.web.DealFetchResult;
-import my.lang.page.web.EmptyDealFetchResult;
 import org.apache.commons.collections.set.SynchronizedSet;
 
 import javax.swing.*;
@@ -278,9 +276,18 @@ public class PickPageRenderPanel extends JPanel {
 
                                 @Override
                                 public boolean checkData(JSONObject data, JBCefBrowser browser) {
-                                    //重试次数限制，超过5次放弃
                                     String url = browser.getCefBrowser().getURL();
 
+                                    //是否停止
+                                    JSONArray stopUrls = pickConfig.getStopUrls();
+                                    for (Object stopUrl : stopUrls) {
+                                        if (url.contains(stopUrl.toString())) {
+                                            isStop = true;
+                                            return false;
+                                        }
+                                    }
+
+                                    //重试次数限制，超过5次放弃
                                     Integer fetchTimes = urlRetryTimesMap.get(url);
                                     if (fetchTimes == null) {
                                         fetchTimes = 0;
