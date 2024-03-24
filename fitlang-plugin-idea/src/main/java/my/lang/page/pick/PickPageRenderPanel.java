@@ -64,6 +64,7 @@ public class PickPageRenderPanel extends JPanel {
     long stopTime = -1;
 
     PickLogFrame pickLogFrame;
+    transient int urlIndex;
 
     public PickPageRenderPanel(JSONObject pickDefine, VirtualFile virtualFile, Project project) {
         super(true);
@@ -266,8 +267,7 @@ public class PickPageRenderPanel extends JPanel {
                 new Thread() {
                     @Override
                     public void run() {
-                        int urlIndex = Integer.parseInt(urlIndexText.getText());
-                        final int[] index = {urlIndex};
+                        urlIndex = Integer.parseInt(urlIndexText.getText());
 
                         Map<String, Integer> urlRetryTimesMap = new HashMap<>();
                         Set<String> fetchOkSet = SynchronizedSet.decorate(new HashSet<>());
@@ -281,7 +281,7 @@ public class PickPageRenderPanel extends JPanel {
                         }
 
                         //循环：采集、加载
-                        while (!isStop && index[0] - pickConfig.getGridTotal() + 1 < pickConfig.getUrls().size()) {
+                        while (!isStop && urlIndex - pickConfig.getGridTotal() + 1 < pickConfig.getUrls().size()) {
                             fetchData(new DealFetchResult() {
                                 @Override
                                 public boolean isSuccess(JBCefBrowser browser) {
@@ -341,12 +341,12 @@ public class PickPageRenderPanel extends JPanel {
                                     String url = browser.getCefBrowser().getURL();
                                     pickLogFrame.addLog("3:成功抓取数据：" + url);
 
-                                    index[0]++;
-                                    urlIndexText.setText(String.valueOf(index[0]));
+                                    urlIndex++;
+                                    urlIndexText.setText(String.valueOf(urlIndex));
 
                                     fetchOkSet.add(url);
-                                    if (index[0] < pickConfig.urls.size()) {
-                                        url = pickConfig.getUrls().get(index[0]).toString();
+                                    if (urlIndex < pickConfig.urls.size()) {
+                                        url = pickConfig.getUrls().get(urlIndex).toString();
                                         browser.loadURL(url);
                                         pickLogFrame.addLog("4:加载下一页面：" + url);
                                     }
