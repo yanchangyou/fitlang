@@ -44,6 +44,7 @@ public class PickPageRenderPanel extends JPanel {
     JSONObject fetchResult;
 
     JTextField secondText;
+    JTextField urlIndexText;
 
     JPanel browserPanel;
     JBCefBrowser[] browsers;
@@ -236,6 +237,12 @@ public class PickPageRenderPanel extends JPanel {
         toolBar.add(secondLabel);
         toolBar.add(secondText);
 
+        JLabel urlIndexLabel = new JLabel("Index:");
+        urlIndexText = new JTextField("" + (pickConfig.getGridTotal() - 1), 5);
+
+        toolBar.add(urlIndexLabel);
+        toolBar.add(urlIndexText);
+
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
 
@@ -251,7 +258,8 @@ public class PickPageRenderPanel extends JPanel {
                 new Thread() {
                     @Override
                     public void run() {
-                        final int[] index = {pickConfig.getGridTotal() - 1};
+                        int urlIndex = Integer.parseInt(urlIndexText.getText());
+                        final int[] index = {urlIndex};
 
                         Map<String, Integer> urlRetryTimesMap = new HashMap<>();
                         Set<String> fetchOkSet = SynchronizedSet.decorate(new HashSet<>());
@@ -331,6 +339,8 @@ public class PickPageRenderPanel extends JPanel {
                                             url = pickConfig.getUrls().get(index[0]).toString();
                                             browser.loadURL(url);
                                             pickLogFrame.addLog("4:加载下一页面：" + url);
+
+                                            urlIndexText.setText(String.valueOf(index[0]));
                                         }
                                     }
                                 }
