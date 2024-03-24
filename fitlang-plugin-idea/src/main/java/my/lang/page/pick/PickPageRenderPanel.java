@@ -341,7 +341,7 @@ public class PickPageRenderPanel extends JPanel {
                                     String url = browser.getCefBrowser().getURL();
                                     pickLogFrame.addLog("3:成功抓取数据：" + url);
 
-                                    if (urlIndex <= pickConfig.urls.size()) {
+                                    if (!fetchOkSet.contains(url) && urlIndex <= pickConfig.urls.size()) {
                                         urlIndex++;
                                         urlIndexText.setText(String.valueOf(urlIndex));
                                     }
@@ -359,45 +359,54 @@ public class PickPageRenderPanel extends JPanel {
                                 throw new RuntimeException(e);
                             }
                         }
+
                         stopTime = System.currentTimeMillis();
                         startTime = -1;
                         pickLogFrame.addLog("==============采集结束============");
                         pickLogFrame.showFrame();
                     }
-                }.start();
+                }.
+
+                        start();
             }
         });
 
         JButton viewLogButton = new JButton("查看日志");
         toolBar.add(viewLogButton);
 
-        viewLogButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                pickLogFrame.showFrame();
-            }
-        });
+        viewLogButton.addActionListener(new
+
+                                                ActionListener() {
+                                                    @Override
+                                                    public void actionPerformed(ActionEvent actionEvent) {
+                                                        pickLogFrame.showFrame();
+                                                    }
+                                                });
 
         JButton stopButton = new JButton("停止");
         toolBar.add(stopButton);
 
-        stopButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                isStop = true;
-            }
-        });
+        stopButton.addActionListener(new
+
+                                             ActionListener() {
+                                                 @Override
+                                                 public void actionPerformed(ActionEvent actionEvent) {
+                                                     isStop = true;
+                                                 }
+                                             });
 
 
         JButton debugButton = new JButton("调试");
         toolBar.add(debugButton);
 
-        debugButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                browsers[0].openDevtools();
-            }
-        });
+        debugButton.addActionListener(new
+
+                                              ActionListener() {
+                                                  @Override
+                                                  public void actionPerformed(ActionEvent actionEvent) {
+                                                      browsers[0].openDevtools();
+                                                  }
+                                              });
 
         adjustSplitPanel(devSplitPanel, configAndResultPanelRatio);
 
