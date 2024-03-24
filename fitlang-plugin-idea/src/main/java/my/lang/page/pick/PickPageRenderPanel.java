@@ -341,9 +341,10 @@ public class PickPageRenderPanel extends JPanel {
                                     String url = browser.getCefBrowser().getURL();
                                     pickLogFrame.addLog("3:成功抓取数据：" + url);
 
-                                    urlIndex++;
-                                    urlIndexText.setText(String.valueOf(urlIndex));
-
+                                    if (urlIndex <= pickConfig.urls.size()) {
+                                        urlIndex++;
+                                        urlIndexText.setText(String.valueOf(urlIndex));
+                                    }
                                     fetchOkSet.add(url);
                                     if (urlIndex < pickConfig.urls.size()) {
                                         url = pickConfig.getUrls().get(urlIndex).toString();
