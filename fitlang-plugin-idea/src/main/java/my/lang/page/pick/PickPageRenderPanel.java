@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.LanguageTextField;
 import com.intellij.ui.components.JBScrollPane;
@@ -235,8 +236,6 @@ public class PickPageRenderPanel extends JPanel {
         toolBar.add(secondLabel);
         toolBar.add(secondText);
 
-//        PickLogDialogWrapper pickLogDialogWrapper = new PickLogDialogWrapper(project);
-
         JButton continuePickButton = new JButton("连续采集");
         toolBar.add(continuePickButton);
 
@@ -248,7 +247,6 @@ public class PickPageRenderPanel extends JPanel {
                 isStop = false;
 
                 pickLogFrame.addLog("\n\n==============开始采集============");
-
 
                 new Thread() {
                     @Override
@@ -282,7 +280,16 @@ public class PickPageRenderPanel extends JPanel {
                                     JSONArray stopUrls = pickConfig.getStopUrls();
                                     for (Object stopUrl : stopUrls) {
                                         if (url.contains(stopUrl.toString())) {
-                                            isStop = true;
+                                            pickLogFrame.addLog("0:停止页面采集：" + url);
+                                            if (!isStop) {
+                                                isStop = true;
+                                                ApplicationManager.getApplication().invokeLater(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Messages.showErrorDialog("请处理异常页面!", "异常");
+                                                    }
+                                                });
+                                            }
                                             return false;
                                         }
                                     }
