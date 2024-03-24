@@ -518,6 +518,9 @@ public class PickPageRenderPanel extends JPanel {
 
     void reset(PickConfig pickConfig) {
 
+        startTime = -1;
+        stopTime = -1;
+
         secondText.setText(pickConfig.getSecond() + "");
 
         dispose();
