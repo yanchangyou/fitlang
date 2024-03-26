@@ -11,11 +11,11 @@ public class PickLogFrame extends JFrame {
     JScrollPane scrollPane;
 
     public PickLogFrame() {
-        setSize(800, 600);
+        setSize(900, 600);
         textArea = new JTextArea("Start log at " + ExecuteNodeUtil.getNow() + "\n");
         setLayout(new BorderLayout());
         scrollPane = new JScrollPane(textArea);
-        scrollPane.setSize(800, 600);
+        scrollPane.setSize(900, 600);
         add(scrollPane, BorderLayout.CENTER);
     }
 
