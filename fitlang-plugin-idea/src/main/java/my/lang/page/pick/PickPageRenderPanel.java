@@ -341,15 +341,20 @@ public class PickPageRenderPanel extends JPanel {
                                     String url = browser.getCefBrowser().getURL();
                                     pickLogFrame.addLog("3:成功抓取数据：" + url);
 
-                                    urlIndex++;
                                     if (!fetchOkSet.contains(url) && urlIndex <= pickConfig.urls.size()) {
                                         urlIndexText.setText(String.valueOf(urlIndex));
                                     }
                                     fetchOkSet.add(url);
+
+                                    do {
+                                        url = pickConfig.getUrls().get(++urlIndex).toString();
+                                    } while (fetchOkSet.contains(url));
+
                                     if (urlIndex < pickConfig.urls.size()) {
-                                        url = pickConfig.getUrls().get(urlIndex).toString();
                                         browser.loadURL(url);
                                         pickLogFrame.addLog("4:加载下一页面：" + url);
+                                    } else {
+                                        pickLogFrame.addLog("5:无下一页面：" + url);
                                     }
                                 }
                             });
@@ -549,8 +554,9 @@ public class PickPageRenderPanel extends JPanel {
     void render(PickConfig pickConfig) {
 
         JSONArray urls = pickConfig.getUrls();
-        //获取分页数据
-
+        if (urls == null) {
+            return;
+        }
         for (int i = 0; i < pickConfig.getGridTotal(); i++) {
             if (i < urls.size()) {
                 browsers[i].loadURL(urls.getString(i));
