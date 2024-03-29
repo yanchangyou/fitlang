@@ -413,7 +413,7 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.11.3 </li>
+            <li>0.11.3 refine pick page</li>
             <li>0.11.2 refine pick page</li>
             <li>0.11.1 add web page and pick page</li>
             <li>0.11.0 applet support synchronize execute; remove convertKeyValueList, replace by convertArrayToObject; refine diff page</li>

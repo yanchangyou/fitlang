@@ -1,5 +1,6 @@
 package my.lang.page.pick;
 
+import cn.hutool.core.util.NumberUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
@@ -22,10 +23,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.toJsonTextWithFormat;
 import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
@@ -422,6 +423,17 @@ public class PickPageRenderPanel extends JPanel {
         fetchData.putAll(thisFetchData);
         fetchArray = objectToArray(fetchData, pickConfig.getUrls());
 
+        for (Object item : fetchArray) {
+            JSONObject itemObject = (JSONObject) item;
+            String url = itemObject.getString("url");
+            try {
+                Long urlId = NumberUtil.max(parseNumbers(url).toArray(new Long[0]));
+                itemObject.put("id", urlId);
+            } catch (Exception e) {
+                //todo
+            }
+        }
+
         int total = fetchArray.size();
 
         result.put("startTime", ExecuteNodeUtil.format(startTime, ExecuteNodeUtil.DATE_FORMAT_DATETIME));
@@ -574,5 +586,16 @@ public class PickPageRenderPanel extends JPanel {
 
     public JBCefBrowser[] getBrowsers() {
         return browsers;
+    }
+
+    public static java.util.List<Number> parseNumbers(String text) {
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(text);
+        List<Number> list = new ArrayList<>();
+        while (matcher.find()) {
+            String one = matcher.group();
+            list.add(Long.parseLong(one));
+        }
+        return list;
     }
 }
