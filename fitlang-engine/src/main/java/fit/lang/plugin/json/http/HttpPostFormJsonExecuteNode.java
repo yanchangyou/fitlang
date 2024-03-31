@@ -14,7 +14,7 @@ public class HttpPostFormJsonExecuteNode extends JsonExecuteNode {
 
     @Override
     public void execute(JsonExecuteNodeInput input, JsonExecuteNodeOutput output) {
-        request(input, output, nodeJsonDefine, Method.GET);
+        nodeJsonDefine.put("isPostForm", true);
+        request(input, output, nodeJsonDefine, Method.POST);
     }
-
 }
