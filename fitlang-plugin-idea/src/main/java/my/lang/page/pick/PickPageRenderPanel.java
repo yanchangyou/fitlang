@@ -349,7 +349,7 @@ public class PickPageRenderPanel extends JPanel {
 
                                     do {
                                         url = pickConfig.getUrls().get(++urlIndex).toString();
-                                    } while (fetchOkSet.contains(url));
+                                    } while (fetchOkSet.contains(url) && urlIndex - 1 < pickConfig.urls.size());
 
                                     if (urlIndex < pickConfig.urls.size()) {
                                         browser.loadURL(url);
