@@ -347,11 +347,14 @@ public class PickPageRenderPanel extends JPanel {
                                     }
                                     fetchOkSet.add(url);
 
-                                    do {
-                                        url = pickConfig.getUrls().get(++urlIndex).toString();
-                                    } while (fetchOkSet.contains(url) && urlIndex - 1 < pickConfig.urls.size());
-
+                                    urlIndex++;
+                                    while (fetchOkSet.contains(url) && urlIndex < pickConfig.urls.size()) {
+                                        url = pickConfig.getUrls().get(urlIndex).toString();
+                                        urlIndexText.setText(String.valueOf(urlIndex));
+                                        urlIndex++;
+                                    }
                                     if (urlIndex < pickConfig.urls.size()) {
+                                        url = pickConfig.getUrls().get(urlIndex).toString();
                                         browser.loadURL(url);
                                         pickLogFrame.addLog("4:加载下一页面：" + url);
                                     } else {
