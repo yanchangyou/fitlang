@@ -1,6 +1,7 @@
 package my.lang.page.pick;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.json.JsonLanguage;
@@ -168,6 +169,78 @@ public class PickPageRenderPanel extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 PickConfig pickConfig = parsePickConfig();
                 reset(pickConfig);
+            }
+        });
+
+        JButton loginButton = new JButton("登录");
+        toolBar.add(loginButton);
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PickConfig pickConfig = parsePickConfig();
+                JSONObject loginConfig = pickConfig.getLoginConfig();
+                String url = loginConfig.getString("url");
+                JSONObject loginFields = loginConfig.getJSONObject("fields");
+                String loginButtonSelector = loginConfig.getString("loginButtonSelector");
+                Double sleep = loginConfig.getDouble("sleep");
+                if (sleep == null) {
+                    sleep = 3.0;
+                }
+
+                JBCefBrowserBase browser = browsers[0];
+                browser.loadURL(url);
+
+                Double finalSleep = sleep;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        try {
+                            Thread.sleep((long) (1000 * finalSleep));
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        JBCefJSQuery jsQuery = JBCefJSQuery.create((JBCefBrowserBase) browser);
+
+                        jsQuery.addHandler((data) -> {
+                            System.out.println("data:" + data);
+                            return new JBCefJSQuery.Response(data) {
+                            };
+                        });
+                        //window.cefQuery_2090759864_1({request: '' + 'test',onSuccess: function(response) {},onFailure: function(error_code, error_message) {}});
+                        String jsInject = jsQuery.inject("loginFields");
+                        String jsCode = "\n" +
+                                "var loginFields = " + loginFields + ";\n" +
+                                "for(var key in loginFields) {" +
+                                "   document.querySelector(key).click();\n" +
+                                "   document.querySelector(key).value = loginFields[key];\n" +
+                                "}\n" +
+                                "setTimeout(function(){\n" +
+                                "   document.querySelector('" + loginButtonSelector + "').click();\n" +
+                                "}, 500);\n" +
+                                "\n" + jsInject +
+                                "\n";
+                        browser.getCefBrowser().executeJavaScript(jsCode, browser.getCefBrowser().getURL(), 0);
+                    }
+                }).start();
+            }
+        });
+
+        JButton logoutButton = new JButton("退出");
+        toolBar.add(logoutButton);
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                PickConfig pickConfig = parsePickConfig();
+                JSONObject logoutConfig = pickConfig.getLogoutConfig();
+                String url = logoutConfig.getString("url");
+                if (StrUtil.isNotBlank(url)) {
+                    JBCefBrowserBase browser = browsers[0];
+                    browser.loadURL(url);
+                }
             }
         });
 

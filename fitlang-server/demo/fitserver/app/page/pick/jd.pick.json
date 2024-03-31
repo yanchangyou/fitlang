@@ -7,6 +7,18 @@
             "https://item.jd.com/10095450029052.html",
             "https://item.jd.com/10070536377997.html"
         ],
+        "loginConfig": {
+            "url": "https://passport.jd.com/uc/login",
+            "fields": {
+                "#loginname": "18911000011",
+                "#nloginpwd": "123456"
+            },
+            "loginButtonSelector": "#loginsubmit",
+            "sleep": 3
+        },
+        "logoutConfig": {
+            "url": "https://passport.jd.com/uc/login?ltype=logout"
+        },
         "selectorConfig": {
             "skuName": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.sku-name",
             "brand": "#parameter-brand > li",

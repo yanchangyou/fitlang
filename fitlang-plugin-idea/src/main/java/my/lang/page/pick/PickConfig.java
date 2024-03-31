@@ -10,6 +10,9 @@ public class PickConfig {
     Integer rows = 2;
     Integer columns = 2;
 
+    JSONObject loginConfig;
+    JSONObject logoutConfig;
+
     JSONObject selectorConfig;
 
     JSONArray checkFields;
@@ -61,6 +64,28 @@ public class PickConfig {
 
     public void setSelectorConfig(JSONObject selectorConfig) {
         this.selectorConfig = selectorConfig;
+    }
+
+    public JSONObject getLoginConfig() {
+        if (loginConfig == null) {
+            loginConfig = new JSONObject();
+        }
+        return loginConfig;
+    }
+
+    public void setLoginConfig(JSONObject loginConfig) {
+        this.loginConfig = loginConfig;
+    }
+
+    public JSONObject getLogoutConfig() {
+        if (logoutConfig == null) {
+            logoutConfig = new JSONObject();
+        }
+        return logoutConfig;
+    }
+
+    public void setLogoutConfig(JSONObject logoutConfig) {
+        this.logoutConfig = logoutConfig;
     }
 
     public JSONArray getCheckFields() {
