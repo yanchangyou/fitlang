@@ -55,6 +55,10 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
             }
         }
 
+        convert(input.getData(), output.getData());
+    }
+
+    private void convert(JSONObject inputData, JSONObject outputData) {
         for (String to : express.keySet()) {
 
             Object from = express.get(to);
@@ -68,26 +72,26 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
                     String frommInnerExpress = getInnerExpress(fromString);
                     //处理数组
                     if (frommInnerExpress.contains("[]")) {
-                        convertArray(input, output, frommInnerExpress, to);
+                        convertArray(inputData, outputData, frommInnerExpress, to);
                         continue;
                     } else {
-                        value = JSONPath.eval(input.getData(), frommInnerExpress);
+                        value = JSONPath.eval(inputData, frommInnerExpress);
                         value = valueMapping(to, value);
                     }
                 }
             }
-            JSONPath.set(output.getData(), to, value);
+            JSONPath.set(outputData, to, value);
         }
     }
 
-    private void convertArray(JsonExecuteNodeInput input, JsonExecuteNodeOutput output, String from, String to) {
+    private void convertArray(JSONObject inputData, JSONObject outputData, String from, String to) {
         Object value;
         String[] fromParts = from.split("\\[]");
         String[] toParts = to.split("\\[]");
-        List array = (List) JSONPath.eval(input.getData(), fromParts[0]);
+        List array = (List) JSONPath.eval(inputData, fromParts[0]);
 
         if (array == null) {
-            JSONPath.set(output.getData(), to.split("\\[]")[0], (Object) null);
+            JSONPath.set(outputData, to.split("\\[]")[0], (Object) null);
             return;
         }
 
@@ -96,14 +100,14 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
 
         index[index.length - 1] = -1;
 
-        buildLength(input.getData(), fromParts, length, index, index.length - 1);
+        buildLength(inputData, fromParts, length, index, index.length - 1);
 
-        while (next(input.getData(), fromParts, length, index, index.length - 1)) {
+        while (next(inputData, fromParts, length, index, index.length - 1)) {
             String fromPath = buildPath(fromParts, index);
             String toPath = buildPath(toParts, index);
-            value = JSONPath.eval(input.getData(), fromPath);
+            value = JSONPath.eval(inputData, fromPath);
             value = valueMapping(toPath, value);
-            JSONPath.set(output.getData(), toPath, value);
+            JSONPath.set(outputData, toPath, value);
         }
     }
 
