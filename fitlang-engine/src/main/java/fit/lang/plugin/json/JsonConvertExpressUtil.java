@@ -8,7 +8,21 @@ import java.util.List;
 /**
  * json转换工具类
  */
-public class JsonConvertUtil {
+public class JsonConvertExpressUtil {
+
+    /**
+     * json表达式转换
+     *
+     * @param input
+     * @param express
+     * @param config
+     * @return
+     */
+    public static JSONObject convertJson(JSONObject input, JSONObject express, JSONObject config) {
+        JSONObject output = new JSONObject();
+        convertJson(input, express, output, config);
+        return output;
+    }
 
     public static void convertJson(JSONObject input, JSONObject express, JSONObject output, JSONObject config) {
         for (String to : express.keySet()) {

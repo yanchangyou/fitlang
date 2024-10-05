@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSONObject;
 import fit.lang.ExecuteNodeException;
 import fit.lang.define.ExecuteNodeBuildable;
 import fit.lang.define.ExecuteNodeData;
-import fit.lang.plugin.json.JsonConvertUtil;
+import fit.lang.plugin.json.JsonConvertExpressUtil;
 import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
@@ -56,7 +56,7 @@ public class ConvertJsonExecuteNode extends JsonExecuteNode implements ExecuteNo
         JSONObject convertConfig = new JSONObject();
         convertConfig.put("valueMapping", valueMapping);
 
-        JsonConvertUtil.convertJson(input.getData(), express, output.getData(), convertConfig);
+        JsonConvertExpressUtil.convertJson(input.getData(), express, output.getData(), convertConfig);
     }
 
     @Override
