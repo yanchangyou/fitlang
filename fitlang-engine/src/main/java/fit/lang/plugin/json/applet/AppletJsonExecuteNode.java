@@ -10,6 +10,8 @@ import fit.lang.plugin.json.define.JsonExecuteNode;
 import fit.lang.plugin.json.define.JsonExecuteNodeInput;
 import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 
+import java.util.Set;
+
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.getJsonData;
 
 /**
@@ -37,6 +39,7 @@ public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNod
         if (inputJson == null) {
             inputJson = new JSONObject();
         }
+        inputJson = parseRealFormData(inputJson);
         if (outputJson == null) {
             outputJson = new JSONObject();
         }
@@ -61,4 +64,46 @@ public class AppletJsonExecuteNode extends JsonExecuteNode implements ExecuteNod
         ExecuteNodeSimpleAop.afterExecute(input, this, output);
 
     }
+
+    /**
+     * 获取真实数据，input支持$N格式，表示入参元数据定义：
+     * $1 dataType
+     * $2 editType
+     * $3 title
+     *
+     * @param formData
+     * @return
+     */
+    public static JSONObject parseRealFormData(JSONObject formData) {
+        JSONObject realFormData = new JSONObject();
+        for (String key : formData.keySet()) {
+            String realKey = key.split("\\$")[0];
+            realFormData.put(realKey, formData.get(key));
+        }
+        return realFormData;
+    }
+
+    public static JSONObject buildOutputData(JSONObject outputDefine, JSONObject rawOutputData) {
+        JSONObject outputData = new JSONObject();
+        Set<String> defineKeys = outputDefine.keySet();
+        for (String key : rawOutputData.keySet()) {
+            String newKey = key;
+            for (String outputKey : defineKeys) {
+                if (outputKey.startsWith(key.concat("$"))) {
+                    newKey = outputKey;
+                    break;
+                }
+            }
+            outputData.put(newKey, rawOutputData.get(key));
+        }
+        Set<String> newKeys = outputData.keySet();
+        //补充缺少的key， TODO data type deal
+        for (String defineKey : defineKeys) {
+            if (!newKeys.contains(defineKey)) {
+                outputData.put(defineKey, "");
+            }
+        }
+        return outputData;
+    }
+
 }

@@ -1,5 +1,8 @@
 package fit.lang.plugin.json.ide;
 
+import fit.lang.plugin.json.ide.jcef.JcefFetchJsonExecuteNode;
+import fit.lang.plugin.json.ide.jcef.JcefLoadAndFetchJsonExecuteNode;
+import fit.lang.plugin.json.ide.jcef.JcefOpenJsonExecuteNode;
 import fit.lang.plugin.json.ide.node.*;
 import fit.lang.plugin.json.ide.node.message.*;
 
@@ -29,6 +32,11 @@ public class FitPluginInit {
         register("showCheckboxOkCancelDialog", ShowCheckboxOkCancelDialogJsonExecuteNode.class);
         register("showPasswordDialog", ShowPasswordDialogJsonExecuteNode.class);
         register("showDiff", ShowDiffJsonExecuteNode.class);
+
+        //jcef
+        register("jcefOpen", JcefOpenJsonExecuteNode.class);
+        register("jcefFetch", JcefFetchJsonExecuteNode.class);
+        register("jcefLoadAndFetch", JcefLoadAndFetchJsonExecuteNode.class);
 
     }
 

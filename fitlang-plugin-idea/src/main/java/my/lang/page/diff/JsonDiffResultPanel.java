@@ -1,5 +1,7 @@
 package my.lang.page.diff;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.diff.DiffManager;
 import com.intellij.diff.DiffRequestPanel;
@@ -10,6 +12,7 @@ import com.intellij.json.json5.Json5FileType;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.impl.DocumentImpl;
+import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.NlsContexts;
 import fit.lang.plugin.json.ExecuteJsonNodeUtil;
@@ -20,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.intellij.ui.ComponentUtil.getWindow;
@@ -65,17 +69,50 @@ public class JsonDiffResultPanel extends JPanel {
                 Object object1 = input1;
                 Object object2 = input2;
 
-                if (input1 instanceof JSONObject) {
+                boolean isJson1 = false;
+
+                boolean isJson2 = false;
+
+                if (input1 instanceof JSONObject || input1 instanceof JSONArray) {
+                    isJson1 = true;
                     if (needSort) {
-                        object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
+                        if (input1 instanceof JSONArray) {
+                            object1 = ExecuteJsonNodeUtil.sortJsonField((JSONArray) input1);
+                        } else {
+                            object1 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input1);
+                        }
                     }
-                    object1 = toJsonTextWithFormat((JSONObject) object1);
+                    if (input1 instanceof JSONArray) {
+                        object1 = toJsonTextWithFormat((JSONArray) object1);
+                    } else {
+                        object1 = toJsonTextWithFormat((JSONObject) object1);
+                    }
+                } else if (needSort) {
+                    String text = object1.toString();
+                    String[] lines = text.split("\r\n|\r|\n");
+                    Arrays.sort(lines);
+                    object1 = StrUtil.join("\n", (Object) lines);
                 }
-                if (input2 instanceof JSONObject) {
+
+                if (input2 instanceof JSONObject || input2 instanceof JSONArray) {
+                    isJson2 = true;
                     if (needSort) {
-                        object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
+                        if (input2 instanceof JSONArray) {
+                            object2 = ExecuteJsonNodeUtil.sortJsonField((JSONArray) input2);
+                        } else {
+                            object2 = ExecuteJsonNodeUtil.sortJsonField((JSONObject) input2);
+                        }
                     }
-                    object2 = toJsonTextWithFormat((JSONObject) object2);
+                    if (input2 instanceof JSONArray) {
+                        object2 = toJsonTextWithFormat((JSONArray) object2);
+                    } else {
+                        object2 = toJsonTextWithFormat((JSONObject) object2);
+                    }
+                } else if (needSort) {
+                    String text = object2.toString();
+                    String[] lines = text.split("\r\n|\r|\n");
+                    Arrays.sort(lines);
+                    object2 = StrUtil.join("\n", (Object) lines);
                 }
 
                 Document document1 = new DocumentImpl(object1.toString());
@@ -84,8 +121,19 @@ public class JsonDiffResultPanel extends JPanel {
                 document1.setReadOnly(true);
                 document2.setReadOnly(true);
 
-                DocumentContentImpl diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
-                DocumentContentImpl diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);
+                DocumentContentImpl diffContent1;
+                if (isJson1) {
+                    diffContent1 = new DocumentContentImpl(project, document1, Json5FileType.INSTANCE);
+                } else {
+                    diffContent1 = new DocumentContentImpl(project, document1, PlainTextFileType.INSTANCE);
+                }
+
+                DocumentContentImpl diffContent2;
+                if (isJson2) {
+                    diffContent2 = new DocumentContentImpl(project, document2, Json5FileType.INSTANCE);
+                } else {
+                    diffContent2 = new DocumentContentImpl(project, document2, PlainTextFileType.INSTANCE);
+                }
 
                 List<DiffContent> list = new ArrayList<>();
                 list.add(diffContent1);

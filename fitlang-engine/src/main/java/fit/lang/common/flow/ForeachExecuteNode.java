@@ -31,7 +31,7 @@ public abstract class ForeachExecuteNode extends AbstractParallelExecuteNode {
             ExecuteNodeOutput subOutput = getCurrentOutput(output);
 
             int index = i;
-            Future<ExecuteNodeData> submit = executorService.submit(new Callable<ExecuteNodeData>() {
+            Future<ExecuteNodeData> submit = executorService.submit(new Callable<>() {
                 @Override
                 public ExecuteNodeData call() {
                     input.getNodeContext().setAttribute(getIndexName(), index);

@@ -1,0 +1,17 @@
+{
+    "uni": "add",
+    "child": [
+        {
+            "uni": "const",
+            "value": 3
+        },
+        {
+            "uni": "const",
+            "value": 2
+        },
+        {
+            "uni": "var",
+            "name": "a"
+        }
+    ]
+}

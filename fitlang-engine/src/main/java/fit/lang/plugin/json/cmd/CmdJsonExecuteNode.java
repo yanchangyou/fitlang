@@ -186,7 +186,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
             List list = (List) target;
             StringBuilder builder = new StringBuilder();
             for (Object item : list) {
-                if (builder.length() > 0) {
+                if (!builder.isEmpty()) {
                     builder.append(" ");
                 }
                 builder.append(item);
@@ -206,7 +206,7 @@ public class CmdJsonExecuteNode extends JsonExecuteNode {
         }
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<String, Object> entry : param.entrySet()) {
-            if (builder.length() > 0) {
+            if (!builder.isEmpty()) {
                 builder.append(" ");
             }
             String key = entry.getKey();

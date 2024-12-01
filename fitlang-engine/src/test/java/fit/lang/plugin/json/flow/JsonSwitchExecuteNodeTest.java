@@ -25,7 +25,7 @@ public class JsonSwitchExecuteNodeTest extends TestCase {
 
     }
 
-    public void testExecute(String type, String outputFieldName, String expect) {
+    private void testExecute(String type, String outputFieldName, String expect) {
         String flow = "{" +//
                 "   'uni': 'switch'," +
                 "   'switchField': 'type'," +

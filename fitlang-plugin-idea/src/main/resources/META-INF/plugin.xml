@@ -60,7 +60,6 @@ replaceContent: find and replace content<br/>
 json nodes<br/>
 add: supports JSON addition<br/>
 convert: Transform node, supports JSON to JSON conversion, using conversion expressions<br/>
-convertKeyValueList: key value lis(deprecated)<br/>
 convertObjectToArray: convert object to array<br/>
 convertArrayToObject: convert array to object<br/>
 convertToObjectArray: convert to object array<br/>
@@ -216,7 +215,6 @@ replaceContent: 查找并替换文本内容<br/>
 JSON节点<br/>
 add: 支持json相加<br/>
 convert: 转换节点，支持json到json的转换，使用转换表达式<br/>
-convertKeyValueList: key value list转换对象（废弃）<br/>
 convertObjectToArray: 对象转数组<br/>
 convertArrayToObject: 数组转换对象<br/>
 convertToObjectArray: 转换为对象数组<br/>
@@ -339,6 +337,8 @@ applet: 小应用<br/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <fileEditorProvider implementation="my.lang.page.web.WebPageRenderProvider"/>
+        <fileEditorProvider implementation="my.lang.page.pick.PickPageRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.render.JsonPageRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.action.JsonActionRenderProvider"/>
         <fileEditorProvider implementation="my.lang.page.app.JsonAppRenderProvider"/>
@@ -413,7 +413,10 @@ applet: 小应用<br/>
         <![CDATA[
         FitLang update list:<br/>
         <ul>
-            <li>0.11.0 </li>
+            <li>0.11.3 refine pick page</li>
+            <li>0.11.2 refine pick page</li>
+            <li>0.11.1 add web page and pick page</li>
+            <li>0.11.0 applet support synchronize execute; remove convertKeyValueList, replace by convertArrayToObject; refine diff page</li>
             <li>0.10.16 native form support data type, edit type and title config</li>
             <li>0.10.15 applet support format, field type; fix json compare</li>
             <li>0.10.14 refine applet button and split; compare node support onlyDiff, toArray and sum; remove node diff</li>

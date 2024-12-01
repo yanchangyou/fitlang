@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.Messages;
@@ -24,7 +25,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.*;
+import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.buildOutputData;
+import static fit.lang.plugin.json.applet.AppletJsonExecuteNode.parseRealFormData;
 import static my.lang.action.RunCodeAction.implementIdeOperator;
+import static my.lang.page.util.JsonPageUtil.adjustSplitPanel;
 
 public class JsonAppRenderPanel extends JPanel {
 
@@ -32,9 +36,18 @@ public class JsonAppRenderPanel extends JPanel {
 
     JSONObject appDefine;
 
+    JSONObject inputDefine;
+
+    JSONObject outputDefine;
+
     JSONObject contextParam;
 
     JSONObject scriptDefine = JSONObject.parse("{'uni':'hello'}");
+
+    /**
+     * 是否异步执行
+     */
+    boolean isSynchronized;
 
     VirtualFile appFile;
 
@@ -149,6 +162,9 @@ public class JsonAppRenderPanel extends JPanel {
 
     private void init(JSONObject appDefine) {
         JSONObject uiDefine = appDefine;
+
+        isSynchronized = Boolean.TRUE.equals(appDefine.getBoolean("synchronize"));
+
         if (appDefine.containsKey("ui")) {
             uiDefine = appDefine.getJSONObject("ui");
         }
@@ -168,23 +184,23 @@ public class JsonAppRenderPanel extends JPanel {
             outputForm = new JSONObject();
         }
 
-        JSONObject input = appDefine.getJSONObject("input");
-        JSONObject output = appDefine.getJSONObject("output");
+        inputDefine = appDefine.getJSONObject("input");
+        outputDefine = appDefine.getJSONObject("output");
 
         if (appDefine.containsKey("script")) {
             scriptDefine = appDefine.getJSONObject("script");
         }
 
-        if (input == null) {
-            input = new JSONObject();
+        if (inputDefine == null) {
+            inputDefine = new JSONObject();
         }
 
-        if (output == null) {
-            output = new JSONObject();
+        if (outputDefine == null) {
+            outputDefine = new JSONObject();
         }
 
-        inputForm.put("schema", parseJsonSchema(input));
-        outputForm.put("schema", parseJsonSchema(output));
+        inputForm.put("schema", parseJsonSchema(inputDefine));
+        outputForm.put("schema", parseJsonSchema(outputDefine));
 
         setBorder(null);
         setLayout(new BorderLayout());
@@ -193,7 +209,7 @@ public class JsonAppRenderPanel extends JPanel {
 
         setAppTitle(appTitle);
 
-        scriptSplitPane = buildMainPanel(input, output, actions);
+        scriptSplitPane = buildMainPanel(inputDefine, outputDefine, actions);
         scriptSplitPane.setDividerLocation(scriptSplitRatio);
 
         resetAllTitle(uiDefine);
@@ -388,10 +404,23 @@ public class JsonAppRenderPanel extends JPanel {
 
             JSONObject newContextParam = buildContextParam(project.getBasePath(), new File(appFile.getPath()));
             contextParam.putAll(newContextParam);
-            String result = executeCode(input, script, contextParam);
-
-            JSONObject output = JSONObject.parse(result);
-            setOutputJson(output);
+            input.putAll(newContextParam);
+            input = parseRealFormData(input);
+            //是否同步执行
+            if (isSynchronized) {
+                String result = executeCode(input, script, contextParam);
+                JSONObject output = JSONObject.parse(result);
+                output = buildOutputData(outputDefine, output);
+                setOutputJson(output);
+            } else {
+                JSONObject finalInput = input;
+                new Thread(() -> WriteCommandAction.runWriteCommandAction(project, () -> {
+                    String result = executeCode(finalInput, script, contextParam);
+                    JSONObject output = JSONObject.parse(result);
+                    output = buildOutputData(outputDefine, output);
+                    setOutputJson(output);
+                })).start();
+            }
         } catch (Exception e) {
             Messages.showErrorDialog("ERROR: " + e.getLocalizedMessage(), "Error");
         }
@@ -439,6 +468,8 @@ public class JsonAppRenderPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     JSONObject theAppDefine = JsonAppRender.readAppDefine(appFile.getPath());
+
+                    isSynchronized = Boolean.TRUE.equals(theAppDefine.getBoolean("synchronize"));
 
                     JSONObject input = theAppDefine.getJSONObject("input");
                     JSONObject output = theAppDefine.getJSONObject("output");
@@ -576,8 +607,7 @@ public class JsonAppRenderPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JSONObject script = getScriptDefine();
-
-                JSONObject input = JsonNativeFormPanel.parseRealFormData(getInputJson());
+                JSONObject input = getInputJson();
 
                 execute(input, script);
                 scriptEditor.cardLayout.first(scriptEditor.cardPanel);
@@ -718,18 +748,6 @@ public class JsonAppRenderPanel extends JPanel {
         return inputOutputSplitPane;
     }
 
-    private static void adjustSplitPanel(JSplitPane splitPane, double splitRatio) {
-        new Thread(() -> {
-            for (int i = 0; i < 4; i++) {
-                try {
-                    Thread.sleep(500L);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                splitPane.setDividerLocation(splitRatio);
-            }
-        }).start();
-    }
 
     public void dispose() {
         inputEditor.dispose();

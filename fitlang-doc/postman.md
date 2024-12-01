@@ -158,13 +158,7 @@ fitlang-project-plugin/plugins/default/plugin.fit
                                         }
                                     },
                                     {
-                                        "uni": "convertKeyValueList",
-                                        "listField": "content.query",
-                                        "keyField": "key",
-                                        "valueField": "value"
-                                    },
-                                    {
-                                        "uni": "convertKeyValueList",
+                                        "uni": "convertArrayToObject",
                                         "listField": "content.header",
                                         "keyField": "key",
                                         "valueField": "value"

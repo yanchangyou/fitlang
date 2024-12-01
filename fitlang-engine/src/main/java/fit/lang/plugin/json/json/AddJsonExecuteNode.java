@@ -25,7 +25,7 @@ public class AddJsonExecuteNode extends JsonExecuteNode implements ExecuteNodeBu
             throw new ExecuteNodeException("AddJsonExecuteNode addField is null!");
         }
         Object result = null;
-        Integer sumInt = 0;
+        int sumInt = 0;
         double sum = 0;
         StringBuilder builder = new StringBuilder();
         JSONArray array = new JSONArray();
@@ -45,7 +45,7 @@ public class AddJsonExecuteNode extends JsonExecuteNode implements ExecuteNodeBu
                 result = object;
             }
         }
-        if (builder.length() > 0) {
+        if (!builder.isEmpty()) {
             result = builder.toString();
         }
 

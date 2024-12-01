@@ -13,7 +13,8 @@ import fit.lang.plugin.json.define.JsonExecuteNodeOutput;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.parseHttpResult;
 import static fit.lang.plugin.json.ExecuteJsonNodeUtil.setProxy;
 import static fit.lang.plugin.json.monitor.JsonExecuteNodeMonitorUtil.*;
-import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.*;
+import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.buildCpuPoint;
+import static fit.lang.plugin.json.monitor.StartMonitorJsonExecuteNode.buildMemoryPoint;
 
 /**
  * 推送监控数据
@@ -33,7 +34,7 @@ public class PushClientMonitorDataJsonExecuteNode extends JsonExecuteNode {
         JSONObject pushResult;
         if (pushUrl instanceof JSONArray) {
             JSONArray pushUrls = (JSONArray) pushUrl;
-            pushResult = pushMonitorData(pushUrls.toArray(new String[0]), clientId, pushData, pushProxy);
+            pushResult = pushMonitorData(pushUrls.toArray(new Object[0]), clientId, pushData, pushProxy);
         } else if (pushUrl instanceof String) {
             pushResult = pushMonitorData((String) pushUrl, clientId, pushData, pushProxy);
         } else {

@@ -31,7 +31,7 @@ public class WriteExcelJsonExecuteNode extends JsonExecuteNode {
 
         JSONArray rows = input.getJsonArray(arrayField);
 
-        JSONObject result = null;
+        JSONObject result;
         try {
             result = writeExcel(file, sheetName, rows, isAppend, header);
         } catch (Exception e) {

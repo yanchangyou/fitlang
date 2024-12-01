@@ -54,6 +54,7 @@ public class NodeConfigAction extends AnAction {
             for (String key : config.keySet()) {
                 if (!this.config.containsKey(key)) {
                     isContainAllKey = false;
+                    break;
                 }
             }
             if (isContainAllKey) {

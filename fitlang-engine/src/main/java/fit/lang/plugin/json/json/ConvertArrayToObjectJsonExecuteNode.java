@@ -21,21 +21,18 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
         String objectField = nodeJsonDefine.getString("objectField");
         String keyField = nodeJsonDefine.getString("keyField");
         String valueField = nodeJsonDefine.getString("valueField");
-
-        if (StrUtil.isBlank(objectField)) {
-            throw new ExecuteNodeException("convertArrayToObject objectField field is required!");
-        }
+        JSONArray extKeyFields = nodeJsonDefine.getJSONArray("extKeyFields");
 
         if (StrUtil.isBlank(arrayField)) {
             arrayField = "array";
         }
 
-        if (StrUtil.isBlank(keyField)) {
-            keyField = "key";
+        if (StrUtil.isBlank(objectField)) {
+            objectField = arrayField;
         }
 
-        if (StrUtil.isBlank(valueField)) {
-            valueField = "value";
+        if (StrUtil.isBlank(keyField)) {
+            keyField = "key";
         }
 
         JSONObject outputJson = input.getData().clone();
@@ -48,10 +45,22 @@ public class ConvertArrayToObjectJsonExecuteNode extends JsonExecuteNode {
                     throw new ExecuteNodeException("convertArrayToObject item must be object type!");
                 }
                 JSONObject itemObject = (JSONObject) item;
-                jsonObject.put(itemObject.getString(keyField), itemObject.get(valueField));
+                Object value = itemObject;
+                if (StrUtil.isNotBlank(valueField)) {
+                    value = itemObject.get(valueField);
+                }
+                StringBuilder key = new StringBuilder(itemObject.getString(keyField));
+                if (extKeyFields != null && !extKeyFields.isEmpty()) {
+                    for (Object extKeyField : extKeyFields) {
+                        key.append("_").append(itemObject.getString(extKeyField.toString()));
+                    }
+                }
+                if (!Character.isAlphabetic(key.charAt(0))) {
+                    key = new StringBuilder("f_").append(key);
+                }
+                jsonObject.put(key.toString(), value);
             }
-            JSONPath.set(outputJson, arrayField, jsonObject);
-
+            JSONPath.set(outputJson, objectField, jsonObject);
         }
         output.setData(outputJson);
     }

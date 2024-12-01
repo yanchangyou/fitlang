@@ -14,10 +14,10 @@ import java.net.Socket;
  */
 public class TelnetNodeUtil {
 
-    static {
-        //调试日志
+//    static {
+//    调试日志
 //        System.setProperty("javax.net.debug", "ssl:handshake");
-    }
+//    }
 
     static Socket buildSocket(String host, int port, Proxy proxy) throws IOException {
         if (proxy == null) {

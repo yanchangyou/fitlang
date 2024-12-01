@@ -10,6 +10,7 @@
     "input2": {
         "foo": "bar",
         "hello": "fit",
-        "more": 1
+        "more": 1,
+        "abc": 123
     }
 }

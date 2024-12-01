@@ -63,7 +63,7 @@
                                         }
                                     },
                                     {
-                                        "uni": "convertKeyValueList",
+                                        "uni": "convertArrayToObject",
                                         "listField": "content.param1",
                                         "keyField": "key",
                                         "valueField": "value"

@@ -1,0 +1,52 @@
+{
+    "config": {
+        "urls": [
+            "https://item.jd.com/10076156726310.html",
+            "https://item.jd.com/10085143756152.html",
+            "https://item.jd.com/10095133481239.html",
+            "https://item.jd.com/10095450029052.html",
+            "https://item.jd.com/10070536377997.html"
+        ],
+        "loginConfig": {
+            "url": "https://passport.jd.com/uc/login",
+            "fields": {
+                "#loginname": "18911000011",
+                "#nloginpwd": "123456"
+            },
+            "loginButtonSelector": "#loginsubmit",
+            "sleep": 3
+        },
+        "logoutConfig": {
+            "url": "https://passport.jd.com/uc/login?ltype=logout"
+        },
+        "selectorConfig": {
+            "skuName": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.sku-name",
+            "brand": "#parameter-brand > li",
+            "price": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.summary.summary-first > div > div.summary-price.J-summary-price > div.dd > span.p-price > span.price",
+            "param": "#detail > div.tab-con > div:nth-child(1) > div.p-parameter > ul.parameter2.p-parameter-list",
+            "comments": "#detail > div.tab-main.large > ul > li:nth-child(5) > s",
+            "shopName": "#crumb-wrap > div > div.contact.fr.clearfix.shieldShopInfo > div.J-hove-wrap.EDropdown.fr > div:nth-child(1) > div > a",
+            "shopScore": "#popbox > div > div.mc > div > a > div.score-parts",
+            "skuTip": "body > div:nth-child(11) > div > div.itemInfo-wrap > div.itemover-tip"
+        },
+        "checkFields": [
+            "price"
+        ],
+        "stopUrls": [
+            "passport.jd.com",
+            "cfe.m.jd.com"
+        ],
+        "rows": 2,
+        "columns": 2,
+        "second": 0.5,
+        "retryTimes": 5,
+        "poolSize": 10000
+    },
+    "ui": {
+        "devAndBrowserSplitRatio": 0.35,
+        "devSplitPanelRatio": 0.65,
+        "configAndResultPanelRatio": 0.5,
+        "showDev": false,
+        "poolSize": 1000
+    }
+}
